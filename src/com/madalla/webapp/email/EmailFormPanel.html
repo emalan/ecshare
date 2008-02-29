@@ -1,0 +1,33 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+        form div label {width:5em;}
+        form div textarea {width:15em; height:10em;}
+    </style>
+</wicket:head>
+<body>
+    <wicket:panel>
+        <form id="emailForm" wicket:id="emailForm">
+            <span class="feedbackPanel" wicket:id="feedback"/>
+            <div style="width:100%;">
+                <label wicket:id="nameLabel">Name:</label>
+                <input class="inputText" wicket:id="name" type="text" />
+                <span class="feedbackPanel" wicket:id="nameFeedback"/>
+            </div>
+            <div style="width:100%;">
+                <label wicket:id="emailLabel">Email:</label>
+                <input class="inputText" wicket:id="email" type="text" />
+                <span class="feedbackPanel" wicket:id="emailFeedback"/>
+            </div>
+            <div style="width:100%;" >
+                <label wicket:id="commentLabel">Comment:</label>
+                <textarea class="inputText" wicket:id="comment" type="textArea"></textarea>
+                <span class="feedbackPanel" wicket:id="commentFeedback"/>
+            </div>
+            <div style="width:100%;" class="formButtons">
+                <input type="submit" name="submit" value="Send Email"/>
+            </div>
+        </form>
+    </wicket:panel>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<html xmlns:wicket>
+<body>
+    <wicket:panel>
+        <form wicket:id="signInForm">
+            <div style="width:100%;">
+                <label wicket:id="usernameLabel">User Name:</label>
+                <input class="inputText" wicket:id="username" type="text" value="foo@goo.moo" />
+            </div>
+            <div style="width:100%;">
+                <label wicket:id="passwordLabel">Password:</label>
+                <input class="inputText" wicket:id="password" type="password" value="password" />
+            </div>
+            <div style="width:100%;" wicket:id="rememberMeRow">
+                <input style="float:left;" class="checkbox" wicket:id="rememberMe" type="checkbox"/>
+                <label style="float:left;" for="">Remember Me</label>
+            </div>
+            <div style="width:100%;" class="formButtons">
+                <input type="submit" name="submit" value="Sign In"/>
+                <input type="reset" value="Reset"/>
+            </div>
+        </form>
+    </wicket:panel>
+</body>
+</html>
