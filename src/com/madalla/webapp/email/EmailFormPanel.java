@@ -3,6 +3,7 @@ package com.madalla.webapp.email;
 import java.text.MessageFormat;
 
 import org.apache.wicket.RequestCycle;
+import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
@@ -27,7 +28,9 @@ public abstract class EmailFormPanel extends Panel {
     public EmailFormPanel(String id, String subject) {
         super(id);
         this.subject = subject;
-        add(new EmailForm("emailForm"));
+        Form emailForm = new EmailForm("emailForm"); 
+        add(emailForm);
+        //AjaxFormValidatingBehavior.addToAllFormComponents(emailForm,"onBlur");
     }
 
     public class EmailForm extends Form {
