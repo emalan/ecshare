@@ -22,9 +22,11 @@ import com.madalla.service.email.IEmailSender;
 
 public abstract class EmailFormPanel extends Panel {
     private static final long serialVersionUID = -1643728343421366820L;
-
-    public EmailFormPanel(String id) {
+    private String subject;
+    
+    public EmailFormPanel(String id, String subject) {
         super(id);
+        this.subject = subject;
         add(new EmailForm("emailForm"));
     }
 
@@ -60,7 +62,6 @@ public abstract class EmailFormPanel extends Panel {
 
         protected void onSubmit() {
             IEmailSender email = getEmailSender();
-            String subject = "Sent from emalancom website";
             String body = getEmailBody(properties.getString("name"),properties.getString("email"),properties.getString("comment"));
             boolean result = email.sendEmail(subject, body);
             if (result){
@@ -69,6 +70,7 @@ public abstract class EmailFormPanel extends Panel {
                 error("Failed to send email!");
             }
         }
+        
         private String getEmailBody(String from, String email, String comment){
             Object[] args = {from,email,comment};
             String body = MessageFormat.format(getEmailtemplate(),args);
