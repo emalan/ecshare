@@ -27,7 +27,7 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
     
     private final static String SQL_EVENT_SELECT = "select ENTRY_ID, CATEGORY_ID, ENTRY_DATE, ENTRY_TEXT from ENTRY where ENTRY_ID = ?";
     
-    private final static String SQL_INSERT = "insert into ENTRY () values(:text,:date,)";
+    private final static String SQL_INSERT = "insert into ENTRY (CATEGORY_ID,ENTRY_DATE,ENTRY_TEXT) values(:category,:date,:text)";
     private final static String SQL_UPDATE = "update ENTRY :text :date :category :id";
     private final static String SQL_DELETE = "delete from ENTRY where ENTRY.ENTRY_ID = ?";
     
