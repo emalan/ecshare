@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import com.madalla.dao.blog.BlogDao;
+
 public class BlogService implements IBlogService{
-    private String site;
+    
+    private BlogDao dao;
 
     public List<BlogEntry> getBlogEntries(String category) {
         return getBlogEntries();
@@ -24,8 +27,16 @@ public class BlogService implements IBlogService{
         return entry;
     }
 
-    public void setSite(String site) {
-        this.site = site;
+    public BlogEntry getBlogEntry(int id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    public int saveBlogEntry(BlogEntry blogEntry) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+    public void setDao(BlogDao dao) {
+        this.dao = dao;
     }
 
         

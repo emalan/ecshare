@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class BlogEntry implements Serializable{
     private static final long serialVersionUID = 1L;
+    private int id;
     private String text;
     private Date date;
     private String category;
@@ -28,5 +29,13 @@ public class BlogEntry implements Serializable{
     }
     public void setText(String text) {
         this.text = text;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
