@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    <bean id="blogService" class="com.madalla.service.blog.BlogService">
+        <property name="dao" ref="blogDao"/>
+    </bean>
+
+    <bean id="blogDao" class="com.madalla.dao.blog.JdbcBlogDao">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="site" value="${site.code}"/>
+    </bean>
+</beans>

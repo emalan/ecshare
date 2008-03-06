@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ec-share-lib" basedir=".">
+	
+	<path id="database-local-classpath">
+	    <fileset dir="ddlutils">
+    	    <include name="**/*.jar"/>
+	    </fileset>
+	  <fileset dir="jackrabbit">
+			<include name="derby*.jar"></include>
+	  </fileset>
+	</path>
+	
+	<target name="database-setup-local"
+	        description="Creates the derby database and schema">
+	  <taskdef name="ddlToDatabase"
+	           classname="org.apache.ddlutils.task.DdlToDatabaseTask">
+	    <classpath refid="database-local-classpath"/>
+	  </taskdef>
+
+	  <ddlToDatabase>
+	    <database url="jdbc:derby:database;create=true"
+	              driverClassName="org.apache.derby.jdbc.EmbeddedDriver" />
+	    <fileset dir="src/resources">
+	      <include name="db-schema.xml"/>
+	    </fileset>
+
+	    <createDatabase failonerror="false"/>
+
+	    <writeSchemaToDatabase/> 
+	    <writeDataToDatabase datafile="src/resources/db-data.xml"/> 
+	  </ddlToDatabase>
+	</target>
+	
+	<target name="database-dump" description="Dumps the database structure">
+	  <taskdef name="databaseToDdl"
+	           classname="org.apache.ddlutils.task.DatabaseToDdlTask">
+	    <classpath refid="database-local-classpath"/>
+
+	  </taskdef>
+	  <databaseToDdl modelName="ecmodel">
+	    <database url="jdbc:derby:testing/tempDatabase"
+	              driverClassName="org.apache.derby.jdbc.EmbeddedDriver"/>
+
+	    <writeSchemaToFile outputFile="resources/db-schema.xml"/>
+	    <writeDataToFile outputFile="resources/db-data.xml"/>
+	  </databaseToDdl>
+
+	</target>
+	
+</project>

@@ -15,11 +15,11 @@ public class BlogService implements IBlogService{
     }
     public List<BlogEntry> getBlogEntries() {
         List entries = new ArrayList();
-        entries.add(createBlogEntry("travel","First entry"));
+        entries.add(createBlogEntry(1,"First entry"));
         return entries;
     }
     
-    private BlogEntry createBlogEntry(String category, String text){
+    private BlogEntry createBlogEntry(int category, String text){
         BlogEntry entry = new BlogEntry();
         entry.setCategory(category);
         entry.setDate(Calendar.getInstance().getTime());

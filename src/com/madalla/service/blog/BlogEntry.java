@@ -8,13 +8,13 @@ public class BlogEntry implements Serializable{
     private int id;
     private String text;
     private Date date;
-    private String category;
+    private int category;
     
-    public String getCategory() {
+    public int getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(int category) {
         this.category = category;
     }
 
