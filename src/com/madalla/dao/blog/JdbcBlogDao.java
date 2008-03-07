@@ -2,7 +2,7 @@ package com.madalla.dao.blog;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
+import java.util.List;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -38,7 +38,7 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
         siteId = getSiteId();
     }
     
-    public Collection<BlogCategory> getBlogCategories(){
+    public List<BlogCategory> getBlogCategories(){
         return getJdbcTemplate().query(SQL_CATEGORY, new RowMapper(){
 
             public Object mapRow(ResultSet resultSet, int rowNum) throws SQLException {
@@ -51,12 +51,12 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
         });
     }
     
-    public Collection<BlogEntry> getBlogEntriesForSite(){
+    public List<BlogEntry> getBlogEntriesForSite(){
         SqlParameterSource namedParameters = new MapSqlParameterSource("siteId", siteId);
         return getNamedParameterJdbcTemplate().query(SQL_EVENT_ALL, namedParameters, new BlogRowMapper());
     }
     
-    public Collection<BlogEntry> getBlogEntriesForCategory(int category) {
+    public List<BlogEntry> getBlogEntriesForCategory(int category) {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource("siteId", siteId);
         parameterSource.addValue("category", category);
         return getNamedParameterJdbcTemplate().query(SQL_EVENT_CATEGORY, parameterSource, new BlogRowMapper());

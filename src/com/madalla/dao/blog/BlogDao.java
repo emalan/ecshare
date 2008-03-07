@@ -1,15 +1,15 @@
 package com.madalla.dao.blog;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.madalla.service.blog.BlogCategory;
 import com.madalla.service.blog.BlogEntry;
 
 public interface BlogDao {
 
-    public Collection<BlogCategory> getBlogCategories();
-    public Collection<BlogEntry> getBlogEntriesForSite();
-    public Collection<BlogEntry> getBlogEntriesForCategory(int category);
+    public List<BlogCategory> getBlogCategories();
+    public List<BlogEntry> getBlogEntriesForSite();
+    public List<BlogEntry> getBlogEntriesForCategory(int category);
     public BlogEntry getBlogEntry(int blogEntryId);
     public int insertBlogEntry(BlogEntry blogEntry);
     public int saveBlogEntry(BlogEntry blogEntry);

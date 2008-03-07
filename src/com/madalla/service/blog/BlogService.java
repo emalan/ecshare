@@ -1,7 +1,7 @@
 package com.madalla.service.blog;
 
 import java.util.Calendar;
-import java.util.Collection;
+import java.util.List;
 
 import com.madalla.dao.blog.BlogDao;
 
@@ -9,7 +9,7 @@ public class BlogService implements IBlogService{
     
     private BlogDao dao;
 
-    public Collection<BlogCategory> getBlogCategories(){
+    public List<BlogCategory> getBlogCategories(){
         return dao.getBlogCategories();
     }
     public int saveBlogEntry(BlogEntry blogEntry) {
@@ -24,11 +24,11 @@ public class BlogService implements IBlogService{
         return dao.getBlogEntry(id);
     }
     
-    public Collection<BlogEntry> getBlogEntries(int categoryId) {
+    public List<BlogEntry> getBlogEntries(int categoryId) {
         return dao.getBlogEntriesForCategory(categoryId);
     }
     
-    public Collection<BlogEntry> getBlogEntries() {
+    public List<BlogEntry> getBlogEntries() {
         return dao.getBlogEntriesForSite();
     }
     

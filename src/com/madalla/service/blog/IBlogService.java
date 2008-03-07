@@ -1,10 +1,10 @@
 package com.madalla.service.blog;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface IBlogService {
-    public abstract Collection<BlogEntry> getBlogEntries(int categoryId);
-    public abstract Collection<BlogEntry> getBlogEntries();
+    public abstract List<BlogEntry> getBlogEntries(int categoryId);
+    public abstract List<BlogEntry> getBlogEntries();
     public abstract BlogEntry getBlogEntry(int id);
     public abstract int saveBlogEntry(BlogEntry blogEntry);
 }
