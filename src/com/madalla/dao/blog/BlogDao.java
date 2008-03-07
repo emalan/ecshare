@@ -2,10 +2,12 @@ package com.madalla.dao.blog;
 
 import java.util.Collection;
 
+import com.madalla.service.blog.BlogCategory;
 import com.madalla.service.blog.BlogEntry;
 
 public interface BlogDao {
 
+    public Collection<BlogCategory> getBlogCategories();
     public Collection<BlogEntry> getBlogEntriesForSite();
     public Collection<BlogEntry> getBlogEntriesForCategory(int category);
     public BlogEntry getBlogEntry(int blogEntryId);

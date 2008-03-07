@@ -14,6 +14,7 @@ import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 import com.madalla.dao.blog.JdbcBlogDao;
 import com.madalla.service.blog.BlogCategory;
 import com.madalla.service.blog.BlogEntry;
+import com.madalla.service.blog.BlogServiceTest;
 
 public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests{
 	
@@ -41,10 +42,7 @@ public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests
 			log.debug("Category : id="+category.getId()+ " name="+category.getName());
 		}
         
-        BlogEntry blogEntry = new BlogEntry();
-        blogEntry.setCategory(1);
-        blogEntry.setDate(Calendar.getInstance().getTime());
-        blogEntry.setText("Test entry");
+        BlogEntry blogEntry = BlogServiceTest.createBlogEntry();
         int id = dao.insertBlogEntry(blogEntry);
         log.debug("Inserted Blog Entry. "+blogEntry);
         
@@ -105,5 +103,7 @@ public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests
         assertEquals(1, testCategory2.size());
 
     }
+    
+
  
 }

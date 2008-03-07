@@ -1,8 +1,7 @@
 package com.madalla.service.blog;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+import java.util.Collection;
 
 import com.madalla.dao.blog.BlogDao;
 
@@ -10,13 +9,27 @@ public class BlogService implements IBlogService{
     
     private BlogDao dao;
 
-    public List<BlogEntry> getBlogEntries(String category) {
-        return getBlogEntries();
+    public Collection<BlogCategory> getBlogCategories(){
+        return dao.getBlogCategories();
     }
-    public List<BlogEntry> getBlogEntries() {
-        List entries = new ArrayList();
-        entries.add(createBlogEntry(1,"First entry"));
-        return entries;
+    public int saveBlogEntry(BlogEntry blogEntry) {
+        if (blogEntry.getId() == 0){
+            return dao.insertBlogEntry(blogEntry);
+        } else {
+            return dao.saveBlogEntry(blogEntry);
+        }
+    }
+    
+    public BlogEntry getBlogEntry(int id) {
+        return dao.getBlogEntry(id);
+    }
+    
+    public Collection<BlogEntry> getBlogEntries(int categoryId) {
+        return dao.getBlogEntriesForCategory(categoryId);
+    }
+    
+    public Collection<BlogEntry> getBlogEntries() {
+        return dao.getBlogEntriesForSite();
     }
     
     private BlogEntry createBlogEntry(int category, String text){
@@ -27,14 +40,7 @@ public class BlogService implements IBlogService{
         return entry;
     }
 
-    public BlogEntry getBlogEntry(int id) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    public int saveBlogEntry(BlogEntry blogEntry) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
+
     public void setDao(BlogDao dao) {
         this.dao = dao;
     }

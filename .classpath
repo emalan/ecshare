@@ -52,5 +52,6 @@
 	<classpathentry kind="lib" path="ddlutils/log4j-1.2.8.jar"/>
 	<classpathentry kind="lib" path="ddlutils/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="ddlutils/wstx-asl-3.0.2.jar"/>
+	<classpathentry kind="lib" path="testing/easymock.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
