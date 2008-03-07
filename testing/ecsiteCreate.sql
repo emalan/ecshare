@@ -5,14 +5,14 @@ DROP TABLE site;
 CREATE TABLE site
 (
     site_id INTEGER NOT NULL,
-    name VARCHAR(128) NOT NULL,
+    site_name VARCHAR(128) NOT NULL,
     description VARCHAR(128) NOT NULL,
     PRIMARY KEY(site_id));
 
 CREATE TABLE category
 (
     category_id INTEGER NOT NULL,
-    name VARCHAR(128) NOT NULL,
+    category_name VARCHAR(128) NOT NULL,
     PRIMARY KEY(category_id));
 
 CREATE TABLE entry

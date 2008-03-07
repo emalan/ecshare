@@ -3,7 +3,7 @@
   <database name="ecmodel">
     <table name="CATEGORY">
       <column name="CATEGORY_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="128" autoIncrement="false"/>
+      <column name="CATEGORY_NAME" primaryKey="false" required="true" type="VARCHAR" size="128" autoIncrement="false"/>
     </table>
     <table name="ENTRY">
       <column name="ENTRY_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
@@ -20,7 +20,7 @@
     </table>
     <table name="SITE">
       <column name="SITE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="128" autoIncrement="false"/>
+      <column name="SITE_NAME" primaryKey="false" required="true" type="VARCHAR" size="128" autoIncrement="false"/>
       <column name="DESCRIPTION" primaryKey="false" required="true" type="VARCHAR" size="128" autoIncrement="false"/>
     </table>
   </database>

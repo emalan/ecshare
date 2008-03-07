@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 import com.madalla.service.blog.BlogCategory;
@@ -27,7 +28,7 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
     
     private final static String SQL_EVENT_SELECT = "select ENTRY_ID, CATEGORY_ID, ENTRY_DATE, ENTRY_TEXT from ENTRY where ENTRY_ID = ?";
     
-    private final static String SQL_INSERT = "insert into ENTRY (CATEGORY_ID,ENTRY_DATE,ENTRY_TEXT) values(:category,:date,:text)";
+    private final static String SQL_INSERT = "insert into ENTRY (CATEGORY_ID,ENTRY_DATE,ENTRY_TEXT,SITE_ID) values(:category,:date,:text,:siteId)";
     private final static String SQL_UPDATE = "update ENTRY set CATEGORY_ID = :category, ENTRY_TEXT =:text, ENTRY_DATE = :date where ENTRY_ID = :id";
     private final static String SQL_DELETE = "delete from ENTRY where ENTRY.ENTRY_ID = ?";
     
@@ -61,7 +62,8 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
 
     public int insertBlogEntry(BlogEntry blogEntry) {
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(blogEntry);
-        return getNamedParameterJdbcTemplate().update(SQL_INSERT, parameterSource);
+        getNamedParameterJdbcTemplate().update(SQL_INSERT, parameterSource);
+        return getJdbcTemplate().queryForInt("values IDENTITY_VAL_LOCAL()");
     }
 
     public int saveBlogEntry(BlogEntry blogEntry) {
@@ -80,7 +82,7 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
             blogEntry.setId(resultSet.getInt("ENTRY_ID"));
             blogEntry.setCategory(resultSet.getInt("CATEGORY_ID"));
             blogEntry.setDate(resultSet.getDate("ENTRY_DATE"));
-            blogEntry.setText(resultSet.getString("SITE_NAME"));
+            blogEntry.setText(resultSet.getString("ENTRY_TEXT"));
             return blogEntry;
         }   
     }

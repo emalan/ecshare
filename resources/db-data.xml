@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <data>
-  <CATEGORY CATEGORY_ID="1" NAME="personal" />
-  <SITE SITE_ID="1" NAME="ecsite" DESCRIPTION="Demo site" />
+  <CATEGORY CATEGORY_ID="1" CATEGORY_NAME="personal" />
+  <SITE SITE_ID="1" SITE_NAME="ecsite" DESCRIPTION="Demo site" />
   <ENTRY ENTRY_ID="1" ENTRY_DATE="2008-02-28" ENTRY_TEXT="First entry" CATEGORY_ID="1" SITE_ID="1" />
 </data>
