@@ -10,6 +10,8 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import com.madalla.service.blog.BlogCategory;
 import com.madalla.service.blog.BlogEntry;
@@ -61,9 +63,12 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
     }
 
     public int insertBlogEntry(BlogEntry blogEntry) {
+    	
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(blogEntry);
-        getNamedParameterJdbcTemplate().update(SQL_INSERT, parameterSource);
-        return getJdbcTemplate().queryForInt("values IDENTITY_VAL_LOCAL()");
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        getNamedParameterJdbcTemplate().update(SQL_INSERT, parameterSource, keyHolder);
+        //return getJdbcTemplate().queryForInt("values IDENTITY_VAL_LOCAL()");
+        return keyHolder.getKey().intValue();
     }
 
     public int saveBlogEntry(BlogEntry blogEntry) {

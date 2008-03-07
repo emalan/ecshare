@@ -1,6 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <data>
   <CATEGORY CATEGORY_ID="1" CATEGORY_NAME="personal" />
-  <SITE SITE_ID="1" SITE_NAME="ecsite" DESCRIPTION="Demo site" />
-  <ENTRY ENTRY_ID="1" ENTRY_DATE="2008-02-28" ENTRY_TEXT="First entry" CATEGORY_ID="1" SITE_ID="1" />
+  <CATEGORY CATEGORY_ID="2" CATEGORY_NAME="travel" />
+  <CATEGORY CATEGORY_ID="3" CATEGORY_NAME="work" />
+  <SITE SITE_ID="1" SITE_NAME="test" DESCRIPTION="Used for testing" />
+  <SITE SITE_ID="2" SITE_NAME="ecsite" DESCRIPTION="Demo site" />
+  <SITE SITE_ID="3" SITE_NAME="emalancom" DESCRIPTION="Site at www.emalan.com" />
+  <SITE SITE_ID="4" SITE_NAME="ecmalancom" DESCRIPTION="Personal Site at www.ecmalan.com" />
+  <SITE SITE_ID="5" SITE_NAME="littlebrak" DESCRIPTION="Coming soon to a sit near you" />
+  <SITE SITE_ID="6" SITE_NAME="williamsburg" DESCRIPTION="One day, Sigh..." />
 </data>
