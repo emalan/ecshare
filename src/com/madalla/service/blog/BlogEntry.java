@@ -3,6 +3,8 @@ package com.madalla.service.blog;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+
 public class BlogEntry implements Serializable{
     private static final long serialVersionUID = 1L;
     private int id;
@@ -47,4 +49,9 @@ public class BlogEntry implements Serializable{
 	public void setSiteId(int siteId) {
 		this.siteId = siteId;
 	}
+    
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this).toString();
+    }
+
 }

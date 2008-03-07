@@ -2,6 +2,12 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
+    <bean id="propertyConfigurer" 
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <value>classpath:com/madalla/dao/test/JdbcDaoTests.properties</value>
+        </property>
+    </bean>
     <bean id="dataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource"
         >

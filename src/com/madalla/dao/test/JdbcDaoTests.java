@@ -3,7 +3,6 @@ package com.madalla.dao.test;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
@@ -34,7 +33,6 @@ public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests
 
     public void testBlogInsertSaveDelete(){
         JdbcBlogDao dao = (JdbcBlogDao) getApplicationContext().getBean("blogDao");
-        dao.setSite("test");
     
         //get Categories
         Collection<BlogCategory> categories = dao.getBlogCategories();
@@ -47,8 +45,8 @@ public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests
         blogEntry.setCategory(1);
         blogEntry.setDate(Calendar.getInstance().getTime());
         blogEntry.setText("Test entry");
-        blogEntry.setSiteId(1);
         int id = dao.insertBlogEntry(blogEntry);
+        log.debug("Inserted Blog Entry. "+blogEntry);
         
         //test insert
         BlogEntry testInsert = dao.getBlogEntry(id);
@@ -62,6 +60,7 @@ public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests
         BlogEntry testUpdate = dao.getBlogEntry(id);
         assertNotNull(testUpdate);
         assertEquals(testUpdate.getText(), blogEntry.getText());
+        log.debug("Saved Blog Entry. "+blogEntry);
         
         //test delete
         dao.deleteBlogEntry(id);
@@ -75,6 +74,7 @@ public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests
         //make sure there are none
         {
         	Collection<BlogEntry> entries = dao.getBlogEntriesForSite();
+            log.debug("Deleting Blog Entry. count="+ entries.size());
         	for (Iterator iter = entries.iterator(); iter.hasNext();) {
         		BlogEntry entry = (BlogEntry) iter.next();
         		dao.deleteBlogEntry(entry.getId());
@@ -84,18 +84,24 @@ public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests
         //insert 3
         {
         	dao.insertBlogEntry(blogEntry);
+            log.debug("Inserted Blog Entry. "+blogEntry);
         	dao.insertBlogEntry(blogEntry);
+            log.debug("Inserted Blog Entry. "+blogEntry);
         	blogEntry.setCategory(2);
         	dao.insertBlogEntry(blogEntry);
+            log.debug("Inserted Blog Entry. "+blogEntry);
         }
         //get all for site
         Collection<BlogEntry> testSelect = dao.getBlogEntriesForSite();
+        log.debug("Site blog Entries = "+testSelect.size());
         assertEquals(3, testSelect.size());
         
         //get for category
         Collection<BlogEntry> testCategory1 = dao.getBlogEntriesForCategory(1);
+        log.debug("Category 1 blog Entries = "+testCategory1.size());
         assertEquals(2, testCategory1.size());
         Collection<BlogEntry> testCategory2 = dao.getBlogEntriesForCategory(2);
+        log.debug("Category 2 blog Entries = "+testCategory2.size());
         assertEquals(1, testCategory2.size());
 
     }

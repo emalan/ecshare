@@ -6,7 +6,7 @@
         <property name="dao" ref="blogDao"/>
     </bean>
 
-    <bean id="blogDao" class="com.madalla.dao.blog.JdbcBlogDao">
+    <bean id="blogDao" class="com.madalla.dao.blog.JdbcBlogDao" init-method="init">
         <property name="dataSource" ref="dataSource"/>
         <property name="site" value="${site.code}"/>
     </bean>
