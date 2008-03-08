@@ -35,7 +35,6 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
     private final static String SQL_DELETE = "delete from ENTRY where ENTRY.ENTRY_ID = ?";
     
     public void init(){
-        siteId = getSiteId();
     }
     
     public List<BlogCategory> getBlogCategories(){
@@ -52,12 +51,12 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
     }
     
     public List<BlogEntry> getBlogEntriesForSite(){
-        SqlParameterSource namedParameters = new MapSqlParameterSource("siteId", siteId);
+        SqlParameterSource namedParameters = new MapSqlParameterSource("siteId", getSiteId());
         return getNamedParameterJdbcTemplate().query(SQL_EVENT_ALL, namedParameters, new BlogRowMapper());
     }
     
     public List<BlogEntry> getBlogEntriesForCategory(int category) {
-        MapSqlParameterSource parameterSource = new MapSqlParameterSource("siteId", siteId);
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource("siteId", getSiteId());
         parameterSource.addValue("category", category);
         return getNamedParameterJdbcTemplate().query(SQL_EVENT_CATEGORY, parameterSource, new BlogRowMapper());
     }
@@ -67,7 +66,7 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
     }
 
     public int insertBlogEntry(BlogEntry blogEntry) {
-    	blogEntry.setSiteId(siteId);
+    	blogEntry.setSiteId(getSiteId());
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(blogEntry);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         getNamedParameterJdbcTemplate().update(SQL_INSERT, parameterSource, keyHolder);
@@ -76,7 +75,7 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
     }
 
     public int saveBlogEntry(BlogEntry blogEntry) {
-        blogEntry.setSiteId(siteId);
+        blogEntry.setSiteId(getSiteId());
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(blogEntry);
         return getNamedParameterJdbcTemplate().update(SQL_UPDATE,parameterSource);
     }
@@ -98,7 +97,10 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
     }
     
     private int getSiteId(){
-        return getJdbcTemplate().queryForInt(SQL_SITE_ID,new String[]{site});
+    	if (siteId == 0){
+            siteId = getJdbcTemplate().queryForInt(SQL_SITE_ID,new String[]{site});
+    	}
+    	return siteId;
     }
 
     public void setSite(String site) {

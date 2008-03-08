@@ -1,4 +1,6 @@
-package com.madalla.dao.test;
+package com.madalla.dao.utils;
+
+import java.io.InputStream;
 
 import javax.sql.DataSource;
 
@@ -8,19 +10,35 @@ import org.apache.ddlutils.io.DatabaseDataIO;
 import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.platform.derby.DerbyPlatform;
+import org.xml.sax.InputSource;
 
-public class TestDatabaseUtils {
+public class JdbcDatabaseSetup {
+	private DataSource dataSource;
+	private InputStream schema;
+	private InputStream data;
+	
+	public void setData(InputStream data) {
+		this.data = data;
+	}
 
-    public static void setupDatabase(DataSource dataSource) {
+	public void setSchema(InputStream schema) {
+		this.schema = schema;
+	}
+
+	public void init(){
+		setupDatabase(dataSource);
+	}
+	
+	public void setupDatabase(DataSource dataSource) {
         try {
-            Database database = new DatabaseIO().read("resources/db-schema.xml");
-            String[] dataScripts = new String[]{"resources/db-data.xml"};
+        	Database database = new DatabaseIO().read(new InputSource(schema));
             changeDatabase(dataSource, database, true);
             
             Platform platform = new DerbyPlatform();
             platform.setDataSource(dataSource);
             DatabaseDataIO dataIO = new DatabaseDataIO();
-            dataIO.writeDataToDatabase(platform, database, dataScripts);
+            InputStream[] dataSources = new InputStream[]{data};
+            dataIO.writeDataToDatabase(platform, database, dataSources);
         } catch (Exception e) {
             System.out.println("Could not populate database with schema." + e);
         }
@@ -38,5 +56,8 @@ public class TestDatabaseUtils {
             platform.createTables(targetModel, true, false);
         }
     }
-    
+
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
 }

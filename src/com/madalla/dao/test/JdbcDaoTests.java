@@ -1,10 +1,7 @@
 package com.madalla.dao.test;
 
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
-
-import javax.sql.DataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,8 +18,6 @@ public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests
 	Log log = LogFactory.getLog(this.getClass());
  
     protected void onSetUp() throws Exception {
-    	DataSource dataSource = (DataSource) getApplicationContext().getBean("dataSource");
-        TestDatabaseUtils.setupDatabase(dataSource);
     }
 
     protected String[] getConfigLocations() {

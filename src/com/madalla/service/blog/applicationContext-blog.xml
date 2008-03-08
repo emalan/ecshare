@@ -2,11 +2,11 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
-    <bean id="blogService" class="com.madalla.service.blog.BlogService">
+    <bean id="blogService" class="com.madalla.service.blog.BlogService" lazy-init="true">
         <property name="dao" ref="blogDao"/>
     </bean>
 
-    <bean id="blogDao" class="com.madalla.dao.blog.JdbcBlogDao" init-method="init">
+    <bean id="blogDao" class="com.madalla.dao.blog.JdbcBlogDao" init-method="init" lazy-init="true">
         <property name="dataSource" ref="dataSource"/>
         <property name="site" value="${site.code}"/>
     </bean>
