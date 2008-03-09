@@ -7,6 +7,8 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 public class BlogEntry implements Serializable{
     private static final long serialVersionUID = 1L;
+    public final static String BLOG_ENTRY_ID = "blogEntryId";
+    
     private int id;
     private String text;
     private Date date;
