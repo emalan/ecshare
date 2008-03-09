@@ -1,13 +1,15 @@
 package com.madalla.service.blog;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 
 import com.madalla.dao.blog.BlogDao;
 
-public class BlogService implements IBlogService{
+public class BlogService implements IBlogService, Serializable{
     
-    private BlogDao dao;
+	private static final long serialVersionUID = 1L;
+	private BlogDao dao;
 
     public List<BlogCategory> getBlogCategories(){
         return dao.getBlogCategories();

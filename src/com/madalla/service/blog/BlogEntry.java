@@ -12,14 +12,14 @@ public class BlogEntry implements Serializable{
     private int id;
     private String text;
     private Date date;
-    private int category;
+    private Integer category;
     private int siteId;
     
-    public int getCategory() {
+    public Integer getCategory() {
         return category;
     }
 
-    public void setCategory(int category) {
+    public void setCategory(Integer category) {
         this.category = category;
     }
 

@@ -1,5 +1,6 @@
 package com.madalla.dao.blog;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -15,7 +16,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import com.madalla.service.blog.BlogCategory;
 import com.madalla.service.blog.BlogEntry;
 
-public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao{
+public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao, Serializable{
     
     private String site ;
     private int siteId;

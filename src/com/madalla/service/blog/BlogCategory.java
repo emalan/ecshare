@@ -1,8 +1,11 @@
 package com.madalla.service.blog;
 
-public class BlogCategory {
+import java.io.Serializable;
 
-    private int id;
+public class BlogCategory implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
+	private int id;
     private String name;
     public int getId() {
         return id;
