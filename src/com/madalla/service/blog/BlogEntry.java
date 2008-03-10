@@ -12,17 +12,9 @@ public class BlogEntry implements Serializable{
     private int id;
     private String text;
     private Date date;
-    private Integer category;
+    private BlogCategory blogCategory;
     private int siteId;
     
-    public Integer getCategory() {
-        return category;
-    }
-
-    public void setCategory(Integer category) {
-        this.category = category;
-    }
-
     public Date getDate() {
         return date;
     }
@@ -52,6 +44,15 @@ public class BlogEntry implements Serializable{
 		this.siteId = siteId;
 	}
     
+    public BlogCategory getBlogCategory() {
+        return blogCategory;
+    }
+    public void setBlogCategory(BlogCategory blogCategory) {
+        this.blogCategory = blogCategory;
+    }
+    public int getBlogCategoryId(){
+        return blogCategory.getId();
+    }
     public String toString() {
         return ReflectionToStringBuilder.toString(this).toString();
     }

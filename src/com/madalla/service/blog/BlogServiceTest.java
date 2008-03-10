@@ -73,7 +73,7 @@ public class BlogServiceTest extends TestCase{
     
     public static BlogEntry createBlogEntry(){
         BlogEntry blogEntry = new BlogEntry();
-        blogEntry.setCategory(1);
+        blogEntry.setBlogCategory(new BlogCategory(1,"test"));
         blogEntry.setDate(Calendar.getInstance().getTime());
         blogEntry.setText("Test entry");
         return blogEntry;

@@ -31,8 +31,8 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
     
     private final static String SQL_EVENT_SELECT = "select ENTRY_ID, CATEGORY_ID, ENTRY_DATE, ENTRY_TEXT from ENTRY where ENTRY_ID = ?";
     
-    private final static String SQL_INSERT = "insert into ENTRY (CATEGORY_ID,ENTRY_DATE,ENTRY_TEXT,SITE_ID) values(:category,:date,:text,:siteId)";
-    private final static String SQL_UPDATE = "update ENTRY set CATEGORY_ID = :category, ENTRY_TEXT =:text, ENTRY_DATE = :date where ENTRY_ID = :id";
+    private final static String SQL_INSERT = "insert into ENTRY (CATEGORY_ID,ENTRY_DATE,ENTRY_TEXT,SITE_ID) values(:blogCategoryId,:date,:text,:siteId)";
+    private final static String SQL_UPDATE = "update ENTRY set CATEGORY_ID = :blogCategoryId, ENTRY_TEXT =:text, ENTRY_DATE = :date where ENTRY_ID = :id";
     private final static String SQL_DELETE = "delete from ENTRY where ENTRY.ENTRY_ID = ?";
     
     public void init(){
@@ -42,10 +42,7 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
         return getJdbcTemplate().query(SQL_CATEGORY, new RowMapper(){
 
             public Object mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-                BlogCategory category = new BlogCategory();
-                category.setId(resultSet.getInt("CATEGORY_ID"));
-                category.setName(resultSet.getString("CATEGORY_NAME"));
-                return category;
+                return new BlogCategory(resultSet.getInt("CATEGORY_ID"),resultSet.getString("CATEGORY_NAME") );
             }
             
         });
@@ -71,7 +68,6 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(blogEntry);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         getNamedParameterJdbcTemplate().update(SQL_INSERT, parameterSource, keyHolder);
-        //return getJdbcTemplate().queryForInt("values IDENTITY_VAL_LOCAL()");
         return keyHolder.getKey().intValue();
     }
 
@@ -90,7 +86,7 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
         public Object mapRow(ResultSet resultSet, int rowNum) throws SQLException {
             BlogEntry blogEntry = new BlogEntry();
             blogEntry.setId(resultSet.getInt("ENTRY_ID"));
-            blogEntry.setCategory(resultSet.getInt("CATEGORY_ID"));
+            blogEntry.setBlogCategory(new BlogCategory(resultSet.getInt("CATEGORY_ID"),"dummy"));
             blogEntry.setDate(resultSet.getDate("ENTRY_DATE"));
             blogEntry.setText(resultSet.getString("ENTRY_TEXT"));
             return blogEntry;

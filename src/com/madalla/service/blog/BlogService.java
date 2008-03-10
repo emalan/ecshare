@@ -34,9 +34,9 @@ public class BlogService implements IBlogService, Serializable{
         return dao.getBlogEntriesForSite();
     }
     
-    private BlogEntry createBlogEntry(int category, String text){
+    private BlogEntry createBlogEntry(BlogCategory category, String text){
         BlogEntry entry = new BlogEntry();
-        entry.setCategory(category);
+        entry.setBlogCategory(category);
         entry.setDate(Calendar.getInstance().getTime());
         entry.setText("First Entry");
         return entry;

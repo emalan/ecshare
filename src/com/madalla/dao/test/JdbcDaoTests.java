@@ -80,7 +80,7 @@ public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests
             log.debug("Inserted Blog Entry. "+blogEntry);
         	dao.insertBlogEntry(blogEntry);
             log.debug("Inserted Blog Entry. "+blogEntry);
-        	blogEntry.setCategory(2);
+        	blogEntry.setBlogCategory(new BlogCategory(2,"test"));
         	dao.insertBlogEntry(blogEntry);
             log.debug("Inserted Blog Entry. "+blogEntry);
         }

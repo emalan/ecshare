@@ -4,6 +4,7 @@ import java.io.InputStream;
 
 import javax.sql.DataSource;
 
+import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.PlatformFactory;
 import org.apache.ddlutils.io.DatabaseDataIO;
@@ -38,7 +39,11 @@ public class JdbcDatabaseSetup {
             platform.setDataSource(dataSource);
             DatabaseDataIO dataIO = new DatabaseDataIO();
             InputStream[] dataSources = new InputStream[]{data};
-            dataIO.writeDataToDatabase(platform, database, dataSources);
+            try {
+                dataIO.writeDataToDatabase(platform, database, dataSources);
+            } catch(DatabaseOperationException e){
+                System.out.println("Warning: Could not populate database with data."+e.getMessage());
+            }
         } catch (Exception e) {
             System.out.println("Could not populate database with schema." + e);
         }
