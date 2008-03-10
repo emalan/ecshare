@@ -3,11 +3,13 @@ package com.madalla.service.blog;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 public class BlogEntry implements Serializable{
     private static final long serialVersionUID = 1L;
     public final static String BLOG_ENTRY_ID = "blogEntryId";
+    private final static int summaryLength = 2000;
     
     private int id;
     private String text;
@@ -52,6 +54,23 @@ public class BlogEntry implements Serializable{
     }
     public int getBlogCategoryId(){
         return blogCategory.getId();
+    }
+    public String getSummary(){
+        if (StringUtils.isEmpty(text)){
+            return text;
+        }
+        int textLength = text.length();
+        if (textLength <= summaryLength){
+            return text;
+        }
+        
+        String para1 = StringUtils.substringBefore(StringUtils.substringBefore(text,"</p>"),"</P>");
+        if (summaryLength >= para1.length()){ //too big
+            //TODO split on " " and add </p>
+        } else { // to small
+            //TODO get next paragraph as well
+        }
+        return para1;
     }
     public String toString() {
         return ReflectionToStringBuilder.toString(this).toString();
