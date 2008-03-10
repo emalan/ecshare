@@ -2,6 +2,8 @@ package com.madalla.service.blog;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+
 public class BlogCategory implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
@@ -18,5 +20,9 @@ public class BlogCategory implements Serializable{
     }
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this).toString();
     }
 }
