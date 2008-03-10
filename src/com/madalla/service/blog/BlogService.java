@@ -34,6 +34,10 @@ public class BlogService implements IBlogService, Serializable{
         return dao.getBlogEntriesForSite();
     }
     
+    public void deleteBlogEntry(int id){
+        dao.deleteBlogEntry(id);
+    }
+    
     private BlogEntry createBlogEntry(BlogCategory category, String text){
         BlogEntry entry = new BlogEntry();
         entry.setBlogCategory(category);

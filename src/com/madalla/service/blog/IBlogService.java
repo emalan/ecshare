@@ -8,4 +8,5 @@ public interface IBlogService {
     public abstract List<BlogEntry> getBlogEntries();
     public abstract BlogEntry getBlogEntry(int id);
     public abstract int saveBlogEntry(BlogEntry blogEntry);
+    public void deleteBlogEntry(int id);
 }
