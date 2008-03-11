@@ -1,0 +1,28 @@
+<html xmlns:wicket>
+<wicket:head>
+       <style type="text/css">
+        	form { float:left;}
+            form div {float:left; clear:both;}
+            form textarea {float:left; clear:both;}
+            form span {float:left; clear:both;}
+    	</style>
+</wicket:head>
+<body>
+    <wicket:panel>
+        <form wicket:id="contentForm">
+            <div>
+                <a href="javascript:;" onmousedown="tinyMCE.get('text').show();">[Show]</a>
+                <a href="javascript:;" onmousedown="tinyMCE.get('text').hide();">[Hide]</a>
+            </div>
+            <textarea style="textarea" wicket:id="text" rows="25" cols="60">Input comes here</textarea>
+            <div>
+                <input type="submit" value="Save" />
+                <input type="submit" value="Cancel" />
+            </div>
+            <span wicket:id="feedback">feedbackmessages will be put here</span>
+        </form>
+    </wicket:panel>
+</body>
+</html>    
+    
+    

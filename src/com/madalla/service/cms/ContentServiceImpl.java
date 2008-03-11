@@ -1,6 +1,7 @@
 package com.madalla.service.cms;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
@@ -15,8 +16,9 @@ import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.webapp.cms.Content;
 
-public class ContentServiceImpl implements IContentService {
+public class ContentServiceImpl implements IContentService, Serializable {
     
+    private static final long serialVersionUID = 1L;
     private JcrTemplate template;
     private final Log log = LogFactory.getLog(this.getClass());
 
