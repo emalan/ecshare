@@ -70,7 +70,6 @@ public class ContentPanel extends Panel implements IContentAware {
 
         }
         protected void onBeforeRender() {
-            // TODO Change class depending on admin mode
             super.onBeforeRender();
         }
     }
