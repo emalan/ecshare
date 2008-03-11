@@ -21,28 +21,24 @@ public class ContentEntryPanel extends Panel implements IContentAware {
     private static final CompressedResourceReference JAVASCRIPT = 
         new CompressedResourceReference(ContentEntryPanel.class, "ContentEntryPanel.js");
     Log log = LogFactory.getLog(this.getClass());
-    IContentService service;
     private final Content content = new Content();
 
     public ContentEntryPanel(String name, final PageParameters parameters, IContentService service) {
         super(name);
-        this.service = service;
         add(HeaderContributor.forJavaScript(TinyMce.class,"tiny_mce.js"));
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
         content.setClassName(parameters.getString(CONTENT_CLASS));
         content.setContentId(parameters.getString(CONTENT_ID));
-        add(new ContentForm("contentForm"));
-    }
-    
-    protected void setContent(Content content) throws RepositoryException{
-        service.setContent(content);
+        add(new ContentForm("contentForm", service));
     }
     
     final class ContentForm extends Form {
         private static final long serialVersionUID = -3526743712542402160L;
-
-        public ContentForm(final String name) {
+        IContentService service;
+        
+        public ContentForm(final String name, IContentService service) {
             super(name);
+            this.service = service;
             String text = service.getContentData(content.getClassName(), content.getContentId());
             content.setText(text);
             add(new TextArea("text", new PropertyModel(content, "text")));
@@ -53,7 +49,7 @@ public class ContentEntryPanel extends Panel implements IContentAware {
             log.debug("Submiting populated Content object to Content service. content="
                       + content);
             try {
-                setContent(content);
+                service.setContent(content);
             } catch (RepositoryException e) {
                 info("There was a problem saving content. " + e.getMessage());
                 log.error("Exception while saving content to repository.", e);
