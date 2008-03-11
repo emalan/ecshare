@@ -1,0 +1,26 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+        .blogContainer {float: left; border-style : none;}
+    </style>
+</wicket:head>
+<body>
+    <wicket:panel>
+            <a href="#" wicket:id="CreateNew">Create new blog</a>
+            <span wicket:id="comments">
+                <p>
+                    <span wicket:id="date"/><br>
+                    <span wicket:id="text"/>
+                    <a href="#" wicket:id="EditBlog">Edit Entry</a>
+                    <a href="#" wicket:id="DeleteBlog">Delete Entry</a>
+                </p>
+                <hr/>
+            </span>
+            <wicket:remove>
+                <p>1/2/2004<br/>
+                    More comment text here.
+                </p>
+            </wicket:remove>
+    </wicket:panel>
+</body>
+</html>
