@@ -31,7 +31,7 @@ public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests
         JdbcBlogDao dao = (JdbcBlogDao) getApplicationContext().getBean("blogDao");
     
         //get Categories
-        Collection<BlogCategory> categories = dao.getBlogCategories();
+        Collection categories = dao.getBlogCategories();
         for (Iterator iter = categories.iterator(); iter.hasNext();) {
 			BlogCategory category = (BlogCategory) iter.next();
 			log.debug("Category : id="+category.getId()+ " name="+category.getName());
@@ -66,7 +66,7 @@ public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests
         
         //make sure there are none
         {
-        	Collection<BlogEntry> entries = dao.getBlogEntriesForSite();
+        	Collection entries = dao.getBlogEntriesForSite();
             log.debug("Deleting Blog Entry. count="+ entries.size());
         	for (Iterator iter = entries.iterator(); iter.hasNext();) {
         		BlogEntry entry = (BlogEntry) iter.next();
@@ -85,15 +85,15 @@ public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests
             log.debug("Inserted Blog Entry. "+blogEntry);
         }
         //get all for site
-        Collection<BlogEntry> testSelect = dao.getBlogEntriesForSite();
+        Collection testSelect = dao.getBlogEntriesForSite();
         log.debug("Site blog Entries = "+testSelect.size());
         assertEquals(3, testSelect.size());
         
         //get for category
-        Collection<BlogEntry> testCategory1 = dao.getBlogEntriesForCategory(1);
+        Collection testCategory1 = dao.getBlogEntriesForCategory(1);
         log.debug("Category 1 blog Entries = "+testCategory1.size());
         assertEquals(2, testCategory1.size());
-        Collection<BlogEntry> testCategory2 = dao.getBlogEntriesForCategory(2);
+        Collection testCategory2 = dao.getBlogEntriesForCategory(2);
         log.debug("Category 2 blog Entries = "+testCategory2.size());
         assertEquals(1, testCategory2.size());
 

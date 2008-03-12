@@ -53,21 +53,21 @@ public class BlogServiceTest extends TestCase{
     
     public void testGetAllBlogEntries(){
         mockDao.getBlogEntriesForSite();
-        Collection<BlogEntry> test = new ArrayList();
+        Collection test = new ArrayList();
         test.add(createBlogEntry());
         control.setReturnValue(test);
         control.replay();
-        Collection<BlogEntry> entries = service.getBlogEntries();
+        Collection entries = service.getBlogEntries();
         control.verify();
     }
     
     public void testGetAllBlogEntriesForCategory(){
         mockDao.getBlogEntriesForCategory(1);
-        Collection<BlogEntry> test = new ArrayList();
+        Collection test = new ArrayList();
         test.add(createBlogEntry());
         control.setReturnValue(test);
         control.replay();
-        Collection<BlogEntry> entries = service.getBlogEntries(1);
+        Collection entries = service.getBlogEntries(1);
         control.verify();
     }
     

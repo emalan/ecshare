@@ -11,7 +11,7 @@ public class BlogService implements IBlogService, Serializable{
 	private static final long serialVersionUID = 1L;
 	private BlogDao dao;
 
-    public List<BlogCategory> getBlogCategories(){
+    public List getBlogCategories(){
         return dao.getBlogCategories();
     }
     public int saveBlogEntry(BlogEntry blogEntry) {
@@ -26,11 +26,11 @@ public class BlogService implements IBlogService, Serializable{
         return dao.getBlogEntry(id);
     }
     
-    public List<BlogEntry> getBlogEntries(int categoryId) {
+    public List getBlogEntries(int categoryId) {
         return dao.getBlogEntriesForCategory(categoryId);
     }
     
-    public List<BlogEntry> getBlogEntries() {
+    public List getBlogEntries() {
         return dao.getBlogEntriesForSite();
     }
     

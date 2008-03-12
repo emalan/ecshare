@@ -47,7 +47,7 @@ public class BlogDisplayPanel extends Panel implements IBlogAware  {
 
                 //Edit link
                 Map params = new HashMap();
-                params.put(BLOG_ENTRY_ID,entry.getId());
+                params.put(BLOG_ENTRY_ID,new Integer(entry.getId()));
                 listItem.add(new BookmarkablePageLink("EditBlog",blogEntryPage,new PageParameters(BLOG_ENTRY_ID+"="+entry.getId())){
                     private static final long serialVersionUID = 1L;
                     protected final void onBeforeRender(){
