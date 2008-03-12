@@ -6,8 +6,11 @@
 </wicket:head>
 <body>
     <wicket:panel>
+        <div id="blogDisplayHeader">
             <a href="#" wicket:id="CreateNew">Create new blog</a>
-            <span wicket:id="comments">
+        </div>
+        <span wicket:id="comments">
+            <div class="blogEntry">
                 <p>
                     <span wicket:id="date"/><br>
                     <span wicket:id="text"/>
@@ -15,12 +18,8 @@
                     <a href="#" wicket:id="DeleteBlog">Delete Entry</a>
                 </p>
                 <hr/>
-            </span>
-            <wicket:remove>
-                <p>1/2/2004<br/>
-                    More comment text here.
-                </p>
-            </wicket:remove>
+            </div>
+        </span>
     </wicket:panel>
 </body>
 </html>

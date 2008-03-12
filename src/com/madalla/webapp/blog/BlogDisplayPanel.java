@@ -28,9 +28,9 @@ public class BlogDisplayPanel extends Panel implements IBlogAware  {
 
             protected final void onBeforeRender(){
                 if (adminMode){
-                    setEnabled(true);
+                    setVisible(true);
                 } else {
-                    setEnabled(false);
+                    setVisible(false);
                 }
                 super.onBeforeRender();
             }
