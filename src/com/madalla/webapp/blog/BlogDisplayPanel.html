@@ -1,7 +1,22 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
-        .blogContainer {float: left; border-style : none;}
+        div#blogDisplayHeader{float: left; width: 100%;}
+        div.blogEntry{
+            float:left; clear: both;
+            margin-top: 10px;
+            border-top: thin solid #444444;
+            padding-top:5px;
+            width:100%;
+        }
+        .blogDate {margin-top:4px;}
+        
+        .blogText {
+            margin-top: 4px;
+        }
+        .blogText h1,h2,h3,h4,p{
+           margin:0pt;
+        }    
     </style>
 </wicket:head>
 <body>
@@ -11,13 +26,11 @@
         </div>
         <span wicket:id="comments">
             <div class="blogEntry">
-                <p>
-                    <span wicket:id="date"/><br>
-                    <span wicket:id="text"/>
-                    <a href="#" wicket:id="EditBlog">Edit Entry</a>
-                    <a href="#" wicket:id="DeleteBlog">Delete Entry</a>
-                </p>
-                <hr/>
+                <wicket:message key="label.date">Label Contents :</wicket:message>
+                <span class="blogDate" wicket:id="date"/>
+                <span class="blogText" wicket:id="text"/>
+                <a href="#" wicket:id="EditBlog">Edit Entry</a>
+                <a href="#" wicket:id="DeleteBlog">Delete Entry</a>
             </div>
         </span>
     </wicket:panel>

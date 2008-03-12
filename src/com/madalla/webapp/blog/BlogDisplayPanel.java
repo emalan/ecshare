@@ -5,13 +5,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.datetime.DateConverter;
+import org.apache.wicket.datetime.StyleDateConverter;
+import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 
 import com.madalla.service.blog.BlogEntry;
 import com.madalla.service.blog.IBlogService;
@@ -42,7 +45,7 @@ public class BlogDisplayPanel extends Panel implements IBlogAware  {
         add(new ListView("comments", commentList) {
             public void populateItem(final ListItem listItem) {
                 final BlogEntry entry = (BlogEntry) listItem.getModelObject();
-                listItem.add(new Label("date", entry.getDate().toString()));
+                listItem.add(new DateLabel("date", new Model(entry.getDate()), new StyleDateConverter("MS",true)));
                 listItem.add(new MultiLineLabel("text", entry.getText()).setEscapeModelStrings(false));
 
                 //Edit link
@@ -52,9 +55,9 @@ public class BlogDisplayPanel extends Panel implements IBlogAware  {
                     private static final long serialVersionUID = 1L;
                     protected final void onBeforeRender(){
                         if (adminMode){
-                            setEnabled(true);
+                            setVisible(true);
                         } else {
-                            setEnabled(false);
+                            setVisible(false);
                         }
                         super.onBeforeRender();
                     }
@@ -65,9 +68,9 @@ public class BlogDisplayPanel extends Panel implements IBlogAware  {
                     private static final long serialVersionUID = 1L;
                     protected final void onBeforeRender(){
                         if (adminMode){
-                            setEnabled(true);
+                            setVisible(true);
                         } else {
-                            setEnabled(false);
+                            setVisible(false);
                         }
                         super.onBeforeRender();
                     }
