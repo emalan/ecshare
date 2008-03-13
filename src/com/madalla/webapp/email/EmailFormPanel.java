@@ -3,6 +3,7 @@ package com.madalla.webapp.email;
 import java.text.MessageFormat;
 
 import org.apache.wicket.RequestCycle;
+import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.ComponentTag;
@@ -47,7 +48,7 @@ public abstract class EmailFormPanel extends Panel {
     public class EmailForm extends Form {
         private static final long serialVersionUID = -2684823497770522924L;
         private final ValueMap properties = new ValueMap();
-        private FeedbackPanel feedback;
+        
         private final CaptchaImageResource captchaImageResource;
         
         public EmailForm(String id) {
@@ -55,22 +56,23 @@ public abstract class EmailFormPanel extends Panel {
             
             captchaImageResource = new CaptchaImageResource(imagePass);
             
-            TextField name = new RequiredTextField("name",new PropertyModel(properties,"name"));
+            TextField name = new RequiredTextField("name",new PropertyModel(properties,"Name"));
+            //name.setOutputMarkupId(true);
             add(name);
             add(new FormComponentLabel("nameLabel",name));
-            add(new FeedbackPanel("nameFeedback", new ComponentFeedbackMessageFilter(name)));
+            add(new FeedbackPanel("nameFeedback", new ComponentFeedbackMessageFilter(name)).setOutputMarkupId(true));
             
             RequiredTextField email = new RequiredTextField("email",new PropertyModel(properties,"email"));
             email.add(EmailAddressValidator.getInstance());
             add(email);
             add(new FormComponentLabel("emailLabel",email));
-            add(new FeedbackPanel("emailFeedback",new ComponentFeedbackMessageFilter(email)));
+            add(new FeedbackPanel("emailFeedback",new ComponentFeedbackMessageFilter(email)).setOutputMarkupId(true));
             
             TextArea comment = new TextArea("comment",new PropertyModel(properties,"comment"));
             add(comment);
             
             add(new FormComponentLabel("commentLabel",comment));
-            add(new FeedbackPanel("commentFeedback", new ComponentFeedbackMessageFilter(comment)));
+            add(new FeedbackPanel("commentFeedback", new ComponentFeedbackMessageFilter(comment)).setOutputMarkupId(true));
             
             add(new Image("captchaImage", captchaImageResource));
             RequiredTextField password = new RequiredTextField("password", new PropertyModel(properties, "password")){
@@ -92,11 +94,10 @@ public abstract class EmailFormPanel extends Panel {
                 }
             });
             add(password);
-            add(new FeedbackPanel("captchaFeedback", new ComponentFeedbackMessageFilter(password)));
+            add(new FeedbackPanel("captchaFeedback", new ComponentFeedbackMessageFilter(password)).setOutputMarkupId(true));
             
             
-            feedback = new FeedbackPanel("feedback", new ComponentFeedbackMessageFilter(this));
-            add(feedback);
+            add(new FeedbackPanel("feedback", new ComponentFeedbackMessageFilter(this)).setOutputMarkupId(true));
             
         }
 
