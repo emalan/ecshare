@@ -4,8 +4,9 @@ import javax.jcr.RepositoryException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.PageParameters;
+import org.apache.wicket.Page;
 import org.apache.wicket.behavior.HeaderContributor;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -22,13 +23,15 @@ public class ContentEntryPanel extends Panel implements IContentAware {
         new CompressedResourceReference(ContentEntryPanel.class, "ContentEntryPanel.js");
     Log log = LogFactory.getLog(this.getClass());
     private final Content content = new Content();
+    private Page contentPage;
 
-    public ContentEntryPanel(String name, final PageParameters parameters, IContentService service) {
+    public ContentEntryPanel(String name, Page contentPage, String id, IContentService service) {
         super(name);
+        this.contentPage = contentPage;
         add(HeaderContributor.forJavaScript(TinyMce.class,"tiny_mce.js"));
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
-        content.setClassName(parameters.getString(CONTENT_CLASS));
-        content.setContentId(parameters.getString(CONTENT_ID));
+        content.setClassName(contentPage.getClass().getName());
+        content.setContentId(id);
         add(new ContentForm("contentForm", service));
     }
     
@@ -43,6 +46,18 @@ public class ContentEntryPanel extends Panel implements IContentAware {
             content.setText(text);
             add(new TextArea("text", new PropertyModel(content, "text")));
             add(new FeedbackPanel("feedback"));
+            
+            Button cancelButton = new Button("cancelButton"){
+				private static final long serialVersionUID = 1L;
+
+				public void onSubmit() {
+					
+					setResponsePage(contentPage);
+					
+				}
+            };
+            cancelButton.setDefaultFormProcessing(false);
+            add(cancelButton);
         }
 
         public void onSubmit() {

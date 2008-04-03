@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.datetime.StyleDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -29,9 +31,11 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
     private Log log = LogFactory.getLog(this.getClass());
     private final IBlogService service;
     private BlogEntry blogEntry;
+    private Page returnPage;
     
-    public BlogEntryPanel(String id, final PageParameters parameters, IBlogService service) {
+    public BlogEntryPanel(String id, final PageParameters parameters, IBlogService service, Page returnPage) {
         super(id);
+        this.returnPage = returnPage;
         this.service = service;
         add(HeaderContributor.forJavaScript(TinyMce.class,"tiny_mce.js"));
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
@@ -67,6 +71,19 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             add(dateTextField);
             dateTextField.add(new DatePicker());
             
+            Button cancelButton = new Button("cancelButton"){
+				private static final long serialVersionUID = 1L;
+
+				public void onSubmit() {
+					
+					setResponsePage(returnPage);
+					
+				}
+            };
+            cancelButton.setDefaultFormProcessing(false);
+            add(cancelButton);
+            
+            
             add(new FeedbackPanel("feedback"));
         }
         
@@ -80,6 +97,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             }
             info("Blog Entry saved to repository");
             log.info("Blog Entry successfully saved. " + blogEntry);
+            
         }
 
     }

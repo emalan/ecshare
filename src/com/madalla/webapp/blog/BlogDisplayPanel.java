@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.datetime.DateConverter;
 import org.apache.wicket.datetime.StyleDateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
