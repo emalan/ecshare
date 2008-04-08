@@ -15,8 +15,14 @@ import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.service.cms.IContentService;
+import com.madalla.service.cms.IContentServiceProvider;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 
+/**
+ * The Wicket application must implement the IContentServiceProvider interface
+ * @author exmalan
+ *
+ */
 public class ContentEntryPanel extends Panel implements IContentAware {
     private static final long serialVersionUID = 1L;
     private static final CompressedResourceReference JAVASCRIPT = 
@@ -37,11 +43,9 @@ public class ContentEntryPanel extends Panel implements IContentAware {
     
     final class ContentForm extends Form {
         private static final long serialVersionUID = -3526743712542402160L;
-        IContentService service;
         
         public ContentForm(final String name, IContentService service) {
             super(name);
-            this.service = service;
             String text = service.getContentData(content.getClassName(), content.getContentId());
             content.setText(text);
             add(new TextArea("text", new PropertyModel(content, "text")));
@@ -64,6 +68,7 @@ public class ContentEntryPanel extends Panel implements IContentAware {
             log.debug("Submiting populated Content object to Content service. content="
                       + content);
             try {
+            	IContentService service = ((IContentServiceProvider)getPage().getApplication()).getContentService();
                 service.setContent(content);
             } catch (RepositoryException e) {
                 info("There was a problem saving content. " + e.getMessage());
@@ -73,6 +78,8 @@ public class ContentEntryPanel extends Panel implements IContentAware {
             log.info("Content successfully saved to repository. content="
                     + content);
         }
+        
+        
     }
 
 
