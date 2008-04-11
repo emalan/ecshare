@@ -64,10 +64,12 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             //category drop down
             List categories = service.getBlogCategories();
             FormComponent categoryDropDown = new DropDownChoice("category", new PropertyModel(blogEntry,"blogCategory"), categories, new ChoiceRenderer("name","id"));
+            categoryDropDown.setRequired(true);
             add(categoryDropDown);
             
             //Date
             DateTextField dateTextField = new DateTextField("dateTextField", new PropertyModel(blogEntry,"date"), new StyleDateConverter("S-",true));
+            dateTextField.setRequired(true);
             add(dateTextField);
             dateTextField.add(new DatePicker());
             
@@ -91,13 +93,14 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             log.debug("onSubmit - Saving populated Blog Entry to Blog service. " + blogEntry);
             try {
                 service.saveBlogEntry(blogEntry);
+                info("Blog Entry saved to repository");
+                log.info("Blog Entry successfully saved. " + blogEntry);
+                setResponsePage(returnPage);
             } catch (Exception e) {
-                info("There was a problem saving Entry. " + e.getMessage());
+                info("There was a problem saving Entry.");
+                info(e.getMessage());
                 log.error("Exception while saving entry to blog service.", e);
             }
-            info("Blog Entry saved to repository");
-            log.info("Blog Entry successfully saved. " + blogEntry);
-            
         }
 
     }
