@@ -15,9 +15,9 @@
                 <a href="javascript:;" onmousedown="tinyMCE.get('text').hide();">[Hide]</a>
             </div>
             <textarea style="textarea" wicket:id="text" rows="25" cols="60">Input comes here</textarea>
-            <div>
-                <input type="submit" value="Save" />
+            <div class="formButtons">
                 <input wicket:id="cancelButton" type="submit" value="Cancel" />
+				<input type="submit" value="Save" />
             </div>
             <span wicket:id="feedback">feedbackmessages will be put here</span>
         </form>

@@ -1,20 +1,27 @@
 <html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+    	form.signInForm div{clear: both; float: left; width: 100%;}
+    	form.signInForm div label {float: left;}
+    	form.signInForm div input {float: left;}
+    </style>
+</wicket:head>
 <body>
     <wicket:panel>
-        <form wicket:id="signInForm">
-            <div style="width:100%;">
-                <label wicket:id="usernameLabel">User Name:</label>
-                <input class="inputText" wicket:id="username" type="text" value="foo@goo.moo" />
+        <form class="signInForm" wicket:id="signInForm">
+            <div>
+                <label wicket:id="usernameLabel"><wicket:message key="label.name">Label Contents</wicket:message></label>
+                <input class="inputText" wicket:id="username" type="text" />
             </div>
-            <div style="width:100%;">
-                <label wicket:id="passwordLabel">Password:</label>
+            <div>
+                <label wicket:id="passwordLabel"><wicket:message key="label.password">Label Contents</wicket:message></label>
                 <input class="inputText" wicket:id="password" type="password" value="password" />
             </div>
-            <div style="width:100%;" wicket:id="rememberMeRow">
-                <input style="float:left;" class="checkbox" wicket:id="rememberMe" type="checkbox"/>
-                <label style="float:left;" for="">Remember Me</label>
+            <div wicket:id="rememberMeRow">
+                <input class="checkbox" id="rememberMe" wicket:id="rememberMe" type="checkbox"/>
+                <label for="rememberMe"><wicket:message key="label.remember">Label Contents</wicket:message></label>
             </div>
-            <div style="width:100%;" class="formButtons">
+            <div class="formButtons">
                 <input type="submit" name="submit" value="Sign In"/>
                 <input type="reset" value="Reset"/>
             </div>
