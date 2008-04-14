@@ -13,7 +13,6 @@ import com.madalla.service.cms.IContentService;
 
 public class ContentPanel extends Panel implements IContentAware {
     private static final long serialVersionUID = 1L;
-    private String contentBody;
     private Page contentEditPage;
 
     /**
@@ -26,8 +25,8 @@ public class ContentPanel extends Panel implements IContentAware {
     public ContentPanel(String id, String className , Page contentEditPage, IContentService contentService, final IContentAdmin contentAdmin) {
         super(id);
         this.contentEditPage = contentEditPage;
-        this.contentBody = contentService.getContentData(className, id);
-        Component contentBlock = new ContentContainer("contentBlock", id, contentAdmin);
+        String contentBody = contentService.getContentData(className, id);
+        Component contentBlock = new ContentContainer("contentBlock", id,contentBody, contentAdmin);
         contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel() {
             public Object getObject() {
                 String cssClass;
@@ -44,7 +43,7 @@ public class ContentPanel extends Panel implements IContentAware {
     
     public class ContentContainer extends WebMarkupContainer{
         private static final long serialVersionUID = 1L;
-        public ContentContainer(String id, String contentId, final IContentAdmin contentAdmin){
+        public ContentContainer(String id, String contentId, String contentBody, final IContentAdmin contentAdmin){
             super(id);
             
             //add content

@@ -38,15 +38,15 @@ public class ContentEntryPanel extends Panel implements IContentAware {
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
         content.setClassName(contentPage.getClass().getName());
         content.setContentId(id);
-        add(new ContentForm("contentForm", service));
+        String text = service.getContentData(content.getClassName(), content.getContentId());
+        add(new ContentForm("contentForm", text));
     }
     
     final class ContentForm extends Form {
         private static final long serialVersionUID = -3526743712542402160L;
         
-        public ContentForm(final String name, IContentService service) {
+        public ContentForm(final String name, String text) {
             super(name);
-            String text = service.getContentData(content.getClassName(), content.getContentId());
             content.setText(text);
             add(new TextArea("text", new PropertyModel(content, "text")));
             add(new FeedbackPanel("feedback"));
@@ -70,13 +70,15 @@ public class ContentEntryPanel extends Panel implements IContentAware {
             try {
             	IContentService service = ((IContentServiceProvider)getPage().getApplication()).getContentService();
                 service.setContent(content);
+                info("Content saved to repository");
+                log.info("Content successfully saved to repository. content="
+                        + content);
+                contentPage.render();
+                setResponsePage(contentPage);
             } catch (RepositoryException e) {
                 info("There was a problem saving content. " + e.getMessage());
                 log.error("Exception while saving content to repository.", e);
             }
-            info("Content saved to repository");
-            log.info("Content successfully saved to repository. content="
-                    + content);
         }
         
         
