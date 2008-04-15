@@ -55,9 +55,7 @@ public class ContentEntryPanel extends Panel implements IContentAware {
 				private static final long serialVersionUID = 1L;
 
 				public void onSubmit() {
-					
 					setResponsePage(contentPage);
-					
 				}
             };
             cancelButton.setDefaultFormProcessing(false);
@@ -74,7 +72,7 @@ public class ContentEntryPanel extends Panel implements IContentAware {
                 log.info("Content successfully saved to repository. content="
                         + content);
                 contentPage.render();
-                setResponsePage(contentPage);
+                setResponsePage(contentPage.getClass());
             } catch (RepositoryException e) {
                 info("There was a problem saving content. " + e.getMessage());
                 log.error("Exception while saving content to repository.", e);
