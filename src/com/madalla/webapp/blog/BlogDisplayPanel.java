@@ -39,7 +39,6 @@ public class BlogDisplayPanel extends Panel implements IBlogAware  {
         });
         
         //List existing Blogs
-        //TODO Sort Blogs latest date first
         List commentList = service.getBlogEntries();
         add(new ListView("comments", commentList) {
             public void populateItem(final ListItem listItem) {

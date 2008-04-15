@@ -93,7 +93,7 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
         }   
     }
     
-    private Integer getSiteId(){
+    public Integer getSiteId(){
     	if (siteId == 0){
             siteId = getJdbcTemplate().queryForInt(SQL_SITE_ID,new String[]{site});
     	}

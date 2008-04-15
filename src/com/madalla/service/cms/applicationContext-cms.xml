@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<bean id="cmsAuthenticator" class="com.madalla.webapp.security.CmsAuthenticator">
+    	<property name="credentials">
+        	<bean class="com.madalla.webapp.security.Credentials">
+            	<constructor-arg index="0" value="${cms.user}"/>
+            	<!-- create the credentials using a bean factory -->
+            	<constructor-arg index="1">
+                	<bean factory-bean="cmsPassword" factory-method="toCharArray"/>
+            	</constructor-arg>
+        	</bean>
+    	</property>
+	</bean>
+
+	<!-- Content service setup -->
+	<bean id="contentService" class="com.madalla.service.cms.ContentServiceImpl">
+    	<property name="template" ref="jcrTemplate"/>
+	</bean>
+
+	<bean id="jcrTemplate" class="org.springmodules.jcr.JcrTemplate">
+    	<property name="sessionFactory" ref="jcrSessionFactory"/>
+    	<property name="allowCreate" value="true"/>
+	</bean>
+
+	<bean id="jcrSessionFactory" class="org.springmodules.jcr.JcrSessionFactory">
+    	<property name="repository" ref="repository"/>
+    	<property name="credentials">
+        	<bean class="javax.jcr.SimpleCredentials">
+            	<constructor-arg index="0" value="${repository.user}"/>
+            	<!-- create the credentials using a bean factory -->
+            	<constructor-arg index="1">
+                	<bean factory-bean="password" factory-method="toCharArray"/>
+            	</constructor-arg>
+        	</bean>
+    	</property>
+	</bean>
+
+	<bean id="repository" class="org.springmodules.jcr.jackrabbit.RepositoryFactoryBean">
+    	<!-- normal factory beans params -->
+    	<property name="configuration" value="${repository.config}"/>
+    	<property name="homeDir" value="${repository.home}"/>
+	</bean>
+
+	<!-- CMS login Form and Authentication setup -->
+	<bean id="cmsPassword" class="java.lang.String">
+    	<constructor-arg index="0" value="${cms.password}"/>
+	</bean>
+	
+	<bean id="password" class="java.lang.String">
+    	<constructor-arg index="0" value="${repository.password}"/>
+	</bean>
+
+</beans>
+
+
+
