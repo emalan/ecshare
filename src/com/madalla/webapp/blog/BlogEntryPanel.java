@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.behavior.HeaderContributor;
@@ -23,20 +24,19 @@ import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.service.blog.BlogEntry;
 import com.madalla.service.blog.IBlogService;
+import com.madalla.service.blog.IBlogServiceProvider;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 
 public class BlogEntryPanel extends Panel implements IBlogAware{
     private static final long serialVersionUID = 1L;
     private static final CompressedResourceReference JAVASCRIPT = new CompressedResourceReference(BlogEntryPanel.class, "BlogEntryPanel.js");
     private Log log = LogFactory.getLog(this.getClass());
-    private final IBlogService service;
     private BlogEntry blogEntry;
     private Page returnPage;
     
-    public BlogEntryPanel(String id, final PageParameters parameters, IBlogService service, Page returnPage) {
+    public BlogEntryPanel(String id, final PageParameters parameters, Page returnPage) {
         super(id);
         this.returnPage = returnPage;
-        this.service = service;
         add(HeaderContributor.forJavaScript(TinyMce.class,"tiny_mce.js"));
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
 
@@ -44,6 +44,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
         int blogEntryId = parameters.getInt(BLOG_ENTRY_ID);
         log.debug("Constructing Blog Entry. id="+blogEntryId);
         if (blogEntryId > 0){
+        	IBlogService service = ((IBlogServiceProvider)getApplication()).getBlogService();
             blogEntry = service.getBlogEntry(blogEntryId);
             log.debug("Retrieved Blog Entry from Service."+blogEntry);
         } else {
@@ -62,6 +63,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             add(new TextArea("text", new PropertyModel(blogEntry, "text")));
             
             //category drop down
+        	IBlogService service = ((IBlogServiceProvider)getApplication()).getBlogService();
             List categories = service.getBlogCategories();
             FormComponent categoryDropDown = new DropDownChoice("category", new PropertyModel(blogEntry,"blogCategory"), categories, new ChoiceRenderer("name","id"));
             categoryDropDown.setRequired(true);
@@ -92,6 +94,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
         public void onSubmit() {
             log.debug("onSubmit - Saving populated Blog Entry to Blog service. " + blogEntry);
             try {
+            	IBlogService service = ((IBlogServiceProvider)getPage().getApplication()).getBlogService();
                 service.saveBlogEntry(blogEntry);
                 info("Blog Entry saved to repository");
                 log.info("Blog Entry successfully saved. " + blogEntry);

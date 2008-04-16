@@ -22,30 +22,36 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
     private int siteId;
     private final static String SQL_SITE_ID = "select SITE_ID from SITE where SITE_NAME = ?";
     private final static String SQL_CATEGORY = "select CATEGORY_ID, CATEGORY_NAME from CATEGORY";
-    private final static String SQL_SELECT = "select ENTRY_ID, CATEGORY_ID, ENTRY_DATE, ENTRY_TEXT from ENTRY";
+    private final static String SQL_CATEGORY_WHERE = " where CATEGORY_ID = ?";
+    private final static String SQL_SELECT = "select ENTRY_ID, CATEGORY_ID, ENTRY_DATE, SITE_ID from ENTRY";
     private final static String SQL_SELECT_SITE_WHERE = " where SITE_ID = :siteId";
     private final static String SQL_SELECT_CATEGORY_WHERE = " and CATEGORY_ID = :category";
     
     private final static String SQL_EVENT_ALL = SQL_SELECT + SQL_SELECT_SITE_WHERE;
     private final static String SQL_EVENT_CATEGORY = SQL_EVENT_ALL + SQL_SELECT_CATEGORY_WHERE;
     
-    private final static String SQL_EVENT_SELECT = "select ENTRY_ID, CATEGORY_ID, ENTRY_DATE, ENTRY_TEXT from ENTRY where ENTRY_ID = ?";
+    private final static String SQL_EVENT_SELECT = "select ENTRY_ID, CATEGORY_ID, ENTRY_DATE, SITE_ID from ENTRY where ENTRY_ID = ?";
     
-    private final static String SQL_INSERT = "insert into ENTRY (CATEGORY_ID,ENTRY_DATE,ENTRY_TEXT,SITE_ID) values(:blogCategoryId,:date,:text,:siteId)";
-    private final static String SQL_UPDATE = "update ENTRY set CATEGORY_ID = :blogCategoryId, ENTRY_TEXT =:text, ENTRY_DATE = :date where ENTRY_ID = :id";
+    private final static String SQL_INSERT = "insert into ENTRY (CATEGORY_ID,ENTRY_DATE,SITE_ID) values(:blogCategoryId,:date,:siteId)";
+    private final static String SQL_UPDATE = "update ENTRY set CATEGORY_ID = :blogCategoryId, ENTRY_DATE = :date where ENTRY_ID = :id";
     private final static String SQL_DELETE = "delete from ENTRY where ENTRY.ENTRY_ID = ?";
     
     public void init(){
     }
     
     public List getBlogCategories(){
-        return getJdbcTemplate().query(SQL_CATEGORY, new RowMapper(){
+        return getJdbcTemplate().query(SQL_CATEGORY, new BlogCategoryRowMapper());
+    }
+    
+    public BlogCategory getBlogCategory(int category){
+    	return (BlogCategory) getJdbcTemplate().queryForObject(SQL_CATEGORY + SQL_CATEGORY_WHERE, new Object[]{new Integer(category)}, new BlogCategoryRowMapper());
+    }
 
-            public Object mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-                return new BlogCategory(resultSet.getInt("CATEGORY_ID"),resultSet.getString("CATEGORY_NAME") );
-            }
-            
-        });
+    private static final class BlogCategoryRowMapper implements RowMapper{
+        
+        public Object mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+        	return new BlogCategory(resultSet.getInt("CATEGORY_ID"),resultSet.getString("CATEGORY_NAME") );
+        }   
     }
     
     public List getBlogEntriesForSite(){
@@ -88,7 +94,7 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
             blogEntry.setId(resultSet.getInt("ENTRY_ID"));
             blogEntry.setBlogCategory(new BlogCategory(resultSet.getInt("CATEGORY_ID"),"dummy"));
             blogEntry.setDate(resultSet.getDate("ENTRY_DATE"));
-            blogEntry.setText(resultSet.getString("ENTRY_TEXT"));
+            blogEntry.setSiteId(resultSet.getInt("SITE_ID"));
             return blogEntry;
         }   
     }
@@ -103,6 +109,10 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
     public void setSite(String site) {
         this.site = site;
     }
+
+	public String getSite() {
+		return site;
+	}
 
 
 

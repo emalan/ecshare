@@ -1,37 +1,68 @@
 package com.madalla.service.blog;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.jcr.RepositoryException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.madalla.dao.blog.BlogDao;
 import com.madalla.service.cms.IContentService;
+import com.madalla.webapp.cms.Content;
 
 public class BlogService implements IBlogService, Serializable{
     
 	private static final long serialVersionUID = 1L;
+	private static final String BLOG_PREFIX = "blog";
 	private BlogDao dao;
 	private IContentService contentService;
+	private Log log = LogFactory.getLog(this.getClass());
 
     public List getBlogCategories(){
         return dao.getBlogCategories();
     }
+
     public int saveBlogEntry(BlogEntry blogEntry) {
+    	int blogId;
         if (blogEntry.getId() == 0){
-            return dao.insertBlogEntry(blogEntry);
+        	log.debug("saveBlogEntry - inserting "+blogEntry);
+        	blogId = dao.insertBlogEntry(blogEntry);
         } else {
-            return dao.saveBlogEntry(blogEntry);
+        	log.debug("saveBlogEntry - updating "+blogEntry);
+        	blogId = dao.saveBlogEntry(blogEntry);
         }
+        //save content to CMS
+        Content content = new Content();
+        content.setClassName(dao.getSite());
+        content.setContentId(getBlogId(blogId));
+        content.setText(blogEntry.getText());
+        try {
+        	log.debug("saveBlogEntry - saving Content "+content);
+			contentService.setContent(content);
+		} catch (RepositoryException e) {
+			log.error("saveBlogEntry - ", e);
+		}
+        
+        return blogId;
     }
     
     public BlogEntry getBlogEntry(int id) {
-        return dao.getBlogEntry(id);
+        BlogEntry blogEntry = dao.getBlogEntry(id);
+        populateContentFromCMS(blogEntry);
+        return blogEntry;
     }
     
     //TODO Sort Blogs latest date first
     public List getBlogEntries(int categoryId) {
-        return dao.getBlogEntriesForCategory(categoryId);
+        List list = dao.getBlogEntriesForCategory(categoryId);
+        for (Iterator iter = list.iterator(); iter.hasNext();) {
+			BlogEntry blogEntry = (BlogEntry) iter.next();
+			populateContentFromCMS(blogEntry);
+		}
+        return list;
     }
     
     //TODO Sort Blogs latest date first
@@ -40,10 +71,7 @@ public class BlogService implements IBlogService, Serializable{
         List list = dao.getBlogEntriesForSite();
         for (Iterator iter = list.iterator(); iter.hasNext();) {
 			BlogEntry blogEntry = (BlogEntry) iter.next();
-			String node = dao.getSiteId().toString();
-			String id = Integer.toString(blogEntry.getId());
-			String content = contentService.getContentData(node, id);
-			blogEntry.setText(content);
+			populateContentFromCMS(blogEntry);
 		}
         return list;
     }
@@ -52,14 +80,20 @@ public class BlogService implements IBlogService, Serializable{
         dao.deleteBlogEntry(id);
     }
     
-    private BlogEntry createBlogEntry(BlogCategory category, String text){
-        BlogEntry entry = new BlogEntry();
-        entry.setBlogCategory(category);
-        entry.setDate(Calendar.getInstance().getTime());
-        entry.setText("First Entry");
-        return entry;
+    private void populateContentFromCMS(BlogEntry blogEntry){
+    	log.debug("populateContent - before Content :"+blogEntry);
+    	String node = dao.getSite();
+		String id = getBlogId(blogEntry.getId());
+		
+		log.debug("populateContent - retrieve content from CMS for node="+node+" id="+id);
+		String content = contentService.getContentData(node, id);
+		log.debug("populateContent - content="+content);
+		blogEntry.setText(content);
     }
-
+    
+    private String getBlogId(int id){
+    	return BLOG_PREFIX + Integer.toString(id);
+    }
 
     public void setDao(BlogDao dao) {
         this.dao = dao;

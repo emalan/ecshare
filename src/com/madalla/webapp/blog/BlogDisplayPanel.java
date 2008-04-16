@@ -17,7 +17,13 @@ import org.apache.wicket.model.Model;
 
 import com.madalla.service.blog.BlogEntry;
 import com.madalla.service.blog.IBlogService;
+import com.madalla.service.blog.IBlogServiceProvider;
 
+/**
+ * The wicket application must implement the IBlogserviceProvider interface
+ * @author exmalan
+ *
+ */
 public class BlogDisplayPanel extends Panel implements IBlogAware  {
 
     private static final long serialVersionUID = 1L;
@@ -73,7 +79,8 @@ public class BlogDisplayPanel extends Panel implements IBlogAware  {
                         super.onBeforeRender();
                     }
                     public void onClick() {
-                        service.deleteBlogEntry(entry.getId());
+                    	IBlogService blogService = ((IBlogServiceProvider)getPage().getApplication()).getBlogService();
+                    	blogService.deleteBlogEntry(entry.getId());
                         getParent().setVisible(false);
                         getPage().render();
                     }
