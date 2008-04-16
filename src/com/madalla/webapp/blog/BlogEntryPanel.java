@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.behavior.HeaderContributor;
@@ -98,7 +97,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
                 service.saveBlogEntry(blogEntry);
                 info("Blog Entry saved to repository");
                 log.info("Blog Entry successfully saved. " + blogEntry);
-                setResponsePage(returnPage);
+                setResponsePage(returnPage.getClass());
             } catch (Exception e) {
                 info("There was a problem saving Entry.");
                 info(e.getMessage());

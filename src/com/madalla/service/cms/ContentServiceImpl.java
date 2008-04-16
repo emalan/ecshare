@@ -52,7 +52,13 @@ public class ContentServiceImpl implements IContentService, Serializable {
 
             public Object doInJcr(Session session) throws IOException, RepositoryException {
                 Node classNode = getClassNode(content.getClassName(),session.getRootNode());
-                Node node = classNode.getNode(content.getContentId());
+                Node node;
+                try {
+                    node = classNode.getNode(content.getContentId());
+                } catch (PathNotFoundException e){
+                	log.debug("Path Content Not found, now adding it. contentId="+content.getContentId());
+                	node = classNode.addNode(content.getContentId());
+                }
                 node.setProperty(CONTENT, content.getText());
                 session.save();
                 return null;

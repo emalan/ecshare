@@ -32,7 +32,8 @@ public class BlogService implements IBlogService, Serializable{
         	blogId = dao.insertBlogEntry(blogEntry);
         } else {
         	log.debug("saveBlogEntry - updating "+blogEntry);
-        	blogId = dao.saveBlogEntry(blogEntry);
+        	dao.saveBlogEntry(blogEntry);
+        	blogId = blogEntry.getId();
         }
         //save content to CMS
         Content content = new Content();
