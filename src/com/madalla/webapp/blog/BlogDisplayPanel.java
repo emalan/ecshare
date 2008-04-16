@@ -7,7 +7,7 @@ import java.util.Map;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.datetime.StyleDateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
-import org.apache.wicket.markup.html.basic.MultiLineLabel;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -50,7 +50,7 @@ public class BlogDisplayPanel extends Panel implements IBlogAware  {
             public void populateItem(final ListItem listItem) {
                 final BlogEntry entry = (BlogEntry) listItem.getModelObject();
                 listItem.add(new DateLabel("date", new Model(entry.getDate()), new StyleDateConverter("MS",true)));
-                listItem.add(new MultiLineLabel("text", entry.getText()).setEscapeModelStrings(false));
+                listItem.add(new Label("text", entry.getText()).setEscapeModelStrings(false));
 
                 //Edit link
                 Map params = new HashMap();
