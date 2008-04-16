@@ -1,6 +1,7 @@
 package com.madalla.service.blog;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -63,6 +64,7 @@ public class BlogService implements IBlogService, Serializable{
 			BlogEntry blogEntry = (BlogEntry) iter.next();
 			populateContentFromCMS(blogEntry);
 		}
+        Collections.sort(list);
         return list;
     }
     
@@ -74,6 +76,7 @@ public class BlogService implements IBlogService, Serializable{
 			BlogEntry blogEntry = (BlogEntry) iter.next();
 			populateContentFromCMS(blogEntry);
 		}
+        Collections.sort(list);
         return list;
     }
     

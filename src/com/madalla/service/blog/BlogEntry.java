@@ -6,8 +6,8 @@ import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
-public class BlogEntry implements Serializable{
-    private static final long serialVersionUID = 1L;
+public class BlogEntry implements Serializable, Comparable{
+	private static final long serialVersionUID = 1L;
     private final static int summaryLength = 2000;
     
     private int id;
@@ -74,5 +74,24 @@ public class BlogEntry implements Serializable{
     public String toString() {
         return ReflectionToStringBuilder.toString(this).toString();
     }
+	public boolean equals(Object obj) {
+		if (date.equals(obj)) return true;
+		if (!(obj instanceof BlogEntry)) return false;
+		BlogEntry compare = (BlogEntry)obj; 
+		if (date.equals(compare.getDate())){
+			if (id == compare.id){
+				return true;
+			}
+		}
+		return false;
+	}
+	public int compareTo(Object o) {
+		BlogEntry compare = (BlogEntry) o;
+		if (date.after(compare.getDate())){
+			return -1;
+		} else {
+			return 1;
+		}
+	}
 
 }
