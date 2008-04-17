@@ -66,8 +66,12 @@ public class BlogServiceTest extends TestCase{
         Collection test = new ArrayList();
         test.add(createBlogEntry());
         control.setReturnValue(test);
+
+        mockDao.getSite();
+        control.setReturnValue("ecsite");
+        
         control.replay();
-        Collection entries = service.getBlogEntries(1);
+        Collection entries = service.getBlogEntriesForCategory(1);
         control.verify();
     }
     

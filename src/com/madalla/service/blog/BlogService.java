@@ -57,21 +57,23 @@ public class BlogService implements IBlogService, Serializable{
         return blogEntry;
     }
     
-    //TODO Sort Blogs latest date first
-    public List getBlogEntries(int categoryId) {
+    public List getBlogEntriesForCategory(int categoryId) {
         List list = dao.getBlogEntriesForCategory(categoryId);
-        for (Iterator iter = list.iterator(); iter.hasNext();) {
-			BlogEntry blogEntry = (BlogEntry) iter.next();
-			populateContentFromCMS(blogEntry);
-		}
-        Collections.sort(list);
-        return list;
+        return getBlogEntries(list);
     }
     
-    //TODO Sort Blogs latest date first
     public List getBlogEntries() {
     	//get Metadata from database
         List list = dao.getBlogEntriesForSite();
+        return getBlogEntries(list);
+    }
+
+    /**
+     * Content from CMS repository and sorts it
+     * @param list
+     * @return
+     */
+    private List getBlogEntries(List list){
         for (Iterator iter = list.iterator(); iter.hasNext();) {
 			BlogEntry blogEntry = (BlogEntry) iter.next();
 			populateContentFromCMS(blogEntry);
@@ -79,7 +81,7 @@ public class BlogService implements IBlogService, Serializable{
         Collections.sort(list);
         return list;
     }
-    
+
     public void deleteBlogEntry(int id){
         dao.deleteBlogEntry(id);
     }

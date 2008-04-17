@@ -17,8 +17,8 @@ import com.madalla.service.blog.BlogCategory;
 import com.madalla.service.blog.BlogEntry;
 
 public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao, Serializable{
-    
-    private String site ;
+	private static final long serialVersionUID = 5574089597621630838L;
+	private String site ;
     private int siteId;
     private final static String SQL_SITE_ID = "select SITE_ID from SITE where SITE_NAME = ?";
     private final static String SQL_CATEGORY = "select CATEGORY_ID, CATEGORY_NAME from CATEGORY";

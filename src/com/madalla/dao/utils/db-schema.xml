@@ -8,6 +8,8 @@
     <table name="ENTRY">
       <column name="ENTRY_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="ENTRY_DATE" primaryKey="false" required="true" type="DATE" size="10" autoIncrement="false"/>
+      <column name="ENTRY_TITLE" primaryKey="false" required="false" type="VARCHAR" size="128" autoIncrement="false"/>
+      <column name="ENTRY_KEYWORDS" primaryKey="false" required="false" type="VARCHAR" size="128" autoIncrement="false"/>
       <column name="ENTRY_DESCRIPTION" primaryKey="false" required="false" type="VARCHAR" size="255" autoIncrement="false"/>
       <column name="CATEGORY_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="SITE_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
