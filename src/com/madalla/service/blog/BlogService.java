@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 import javax.jcr.RepositoryException;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeModel;
 
 import org.apache.commons.logging.Log;
@@ -88,14 +90,25 @@ public class BlogService implements IBlogService, Serializable{
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Blog Archive");
         TreeModel model = new DefaultTreeModel(rootNode);
         
-        //TODO Iterate calendar from present backwards until list is empty
-        GregorianCalendar calendar = new GregorianCalendar();
         DateFormat df = new SimpleDateFormat("MMMMM yyyy");
+        DateFormat blogFormat = DateFormat.getDateInstance();
         
-        for(int i = 0; i <= 65; i++){
-        	rootNode.add(new DefaultMutableTreeNode(df.format(calendar.getTime())));
-        	calendar.add(Calendar.MONTH, -1);
-        }
+        
+        //Get Blogs in tree of months
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        
+        for (Iterator iter = list.iterator(); iter.hasNext();) {
+			BlogEntry blogEntry = (BlogEntry) iter.next();
+			Date date = blogEntry.getDate();
+			while (calendar.getTime().after(date)){
+				calendar.add(Calendar.MONTH, -1);
+			}
+			DefaultMutableTreeNode node = new DefaultMutableTreeNode(df.format(calendar.getTime()));
+			rootNode.add(node);
+			node.add(new DefaultMutableTreeNode(blogFormat.format(blogEntry.getDate())+" Blog Entry Title goes here"));
+			
+		}
         
         return model;
     }
