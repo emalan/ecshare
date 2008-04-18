@@ -1,7 +1,11 @@
 package com.madalla.service.blog;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -85,9 +89,13 @@ public class BlogService implements IBlogService, Serializable{
         TreeModel model = new DefaultTreeModel(rootNode);
         
         //TODO Iterate calendar from present backwards until list is empty
-        rootNode.add(new DefaultMutableTreeNode("January 2008"));
-        rootNode.add(new DefaultMutableTreeNode("February 2008"));
-        rootNode.add(new DefaultMutableTreeNode("March 2008"));
+        GregorianCalendar calendar = new GregorianCalendar();
+        DateFormat df = new SimpleDateFormat("MMMMM yyyy");
+        
+        for(int i = 0; i <= 65; i++){
+        	rootNode.add(new DefaultMutableTreeNode(df.format(calendar.getTime())));
+        	calendar.add(Calendar.MONTH, -1);
+        }
         
         return model;
     }
