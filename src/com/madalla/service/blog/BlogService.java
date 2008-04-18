@@ -98,13 +98,14 @@ public class BlogService implements IBlogService, Serializable{
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         
+        DefaultMutableTreeNode node = new DefaultMutableTreeNode(df.format(calendar.getTime()));
         for (Iterator iter = list.iterator(); iter.hasNext();) {
 			BlogEntry blogEntry = (BlogEntry) iter.next();
 			Date date = blogEntry.getDate();
 			while (calendar.getTime().after(date)){
 				calendar.add(Calendar.MONTH, -1);
+				node = new DefaultMutableTreeNode(df.format(calendar.getTime()));
 			}
-			DefaultMutableTreeNode node = new DefaultMutableTreeNode(df.format(calendar.getTime()));
 			rootNode.add(node);
 			node.add(new DefaultMutableTreeNode(blogFormat.format(blogEntry.getDate())+" Blog Entry Title goes here"));
 			
