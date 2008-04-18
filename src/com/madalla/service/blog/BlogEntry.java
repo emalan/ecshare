@@ -8,7 +8,7 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 public class BlogEntry implements Serializable, Comparable{
 	private static final long serialVersionUID = 1L;
-    private final static int summaryLength = 2000;
+    private final static int summaryLength = 200;
     
     private int id;
     private String text;
@@ -54,7 +54,7 @@ public class BlogEntry implements Serializable, Comparable{
     public int getBlogCategoryId(){
         return blogCategory.getId();
     }
-    public String getSummary(){
+    public String getSummary(String moreLink){
         if (StringUtils.isEmpty(text)){
             return text;
         }
@@ -63,17 +63,21 @@ public class BlogEntry implements Serializable, Comparable{
             return text;
         }
         
-        String para1 = StringUtils.substringBefore(StringUtils.substringBefore(text,"</p>"),"</P>");
-        if (summaryLength >= para1.length()){ //too big
-            //TODO split on " " and add </p>
-        } else { // to small
-            //TODO get next paragraph as well
+        //Shorten text and add more link
+        String firstParagraph = StringUtils.substringBefore(StringUtils.substringBefore(text,"</p>"),"</P>")+"</p>";
+        if (summaryLength >= firstParagraph.length()){ //too small
+            
+        } else { // too big
+        	//TODO split on " " and add </p>
+        	String[] words = StringUtils.split(firstParagraph,' ');
         }
-        return para1;
+        return firstParagraph+moreLink;
     }
+    
     public String toString() {
         return ReflectionToStringBuilder.toString(this).toString();
     }
+    
 	public boolean equals(Object obj) {
 		if (date.equals(obj)) return true;
 		if (!(obj instanceof BlogEntry)) return false;

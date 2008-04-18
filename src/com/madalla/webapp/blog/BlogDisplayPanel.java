@@ -12,7 +12,7 @@ public class BlogDisplayPanel extends AbstractBlogDisplayPanel{
 	private Log log = LogFactory.getLog(this.getClass());
 	
 	public BlogDisplayPanel(String id, final PageParameters parameters, Class blogEntryPage, boolean adminMode) {
-		super(id, blogEntryPage, adminMode);
+		super(id);
 		
 		int blogEntryId = parameters.getInt(BLOG_ENTRY_ID);
         log.debug("Constructing Blog Entry. id="+blogEntryId);

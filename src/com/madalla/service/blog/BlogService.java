@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.RepositoryException;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -68,22 +71,25 @@ public class BlogService implements IBlogService, Serializable{
         return getBlogEntries(list);
     }
 
-    /**
-     * Content from CMS repository and sorts it
-     * @param list
-     * @return
-     */
-    private List getBlogEntries(List list){
-        for (Iterator iter = list.iterator(); iter.hasNext();) {
-			BlogEntry blogEntry = (BlogEntry) iter.next();
-			populateContentFromCMS(blogEntry);
-		}
-        Collections.sort(list);
-        return list;
+    public TreeModel getBlogEntriesAsTree(){
+    	List list = getBlogEntries();
+    	return createBlogArchive(list);
     }
-
+    
     public void deleteBlogEntry(int id){
         dao.deleteBlogEntry(id);
+    }
+
+    private TreeModel createBlogArchive(List list) {
+        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Blog Archive");
+        TreeModel model = new DefaultTreeModel(rootNode);
+        
+        //TODO Iterate calendar from present backwards until list is empty
+        rootNode.add(new DefaultMutableTreeNode("January 2008"));
+        rootNode.add(new DefaultMutableTreeNode("February 2008"));
+        rootNode.add(new DefaultMutableTreeNode("March 2008"));
+        
+        return model;
     }
     
     private void populateContentFromCMS(BlogEntry blogEntry){
@@ -99,6 +105,20 @@ public class BlogService implements IBlogService, Serializable{
     
     private String getBlogId(int id){
     	return BLOG_PREFIX + Integer.toString(id);
+    }
+
+    /**
+     * Content from CMS repository and sorts it
+     * @param list
+     * @return
+     */
+    private List getBlogEntries(List list){
+        for (Iterator iter = list.iterator(); iter.hasNext();) {
+			BlogEntry blogEntry = (BlogEntry) iter.next();
+			populateContentFromCMS(blogEntry);
+		}
+        Collections.sort(list);
+        return list;
     }
 
     public void setDao(BlogDao dao) {

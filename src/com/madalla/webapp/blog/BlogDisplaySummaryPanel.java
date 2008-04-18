@@ -1,8 +1,6 @@
 package com.madalla.webapp.blog;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,8 +18,8 @@ public class BlogDisplaySummaryPanel extends AbstractBlogDisplayPanel {
 	private Log log = LogFactory.getLog(this.getClass());
 	private int displayCount = 5;
 	
-	public BlogDisplaySummaryPanel(String id, final Class blogEntryPage, final Class blogDisplayPage, final boolean adminMode) {
-		super(id, blogEntryPage, adminMode);
+	public BlogDisplaySummaryPanel(String id, final Class blogEntryPage, final Class blogDisplayPage, final Class blogArchivePage, final boolean adminMode) {
+		super(id);
         
 		//new Blog link
         add(new BookmarkablePageLink("CreateNew",blogEntryPage, new PageParameters(BLOG_ENTRY_ID+"=0")){
@@ -43,19 +41,25 @@ public class BlogDisplaySummaryPanel extends AbstractBlogDisplayPanel {
         List commentList = service.getBlogEntries();
         log.debug("construtor - retrieved blog entries. count="+commentList.size());
         ListView listView = new ListView("comments", commentList) {
-            public void populateItem(final ListItem listItem) {
-                final BlogEntry blogEntry = (BlogEntry) listItem.getModelObject();
+			private static final long serialVersionUID = 1L;
+
+			public void populateItem(final ListItem listItem) {
+				final BlogEntry blogEntry = (BlogEntry) listItem.getModelObject();
                 populateBlogEntryDisplay(listItem, blogEntry, blogEntryPage, adminMode);
-                listItem.add(new Label("text", blogEntry.getSummary()).setEscapeModelStrings(false));
+
+                //more... link to Blog Display Page
+                CharSequence url = urlFor(blogDisplayPage,new PageParameters(BLOG_ENTRY_ID+"="+blogEntry.getId()) );
+                log.debug("populateItem - url="+url);
+                String htmlLink = "... <a href=\"" + url + "\">"+getString("label.more")+"</a>";
                 
-                //Link to Blog Display Page
-                Map params = new HashMap();
-                params.put(BLOG_ENTRY_ID,new Integer(blogEntry.getId()));
-                listItem.add(new BookmarkablePageLink("DisplayBlog",blogDisplayPage,new PageParameters(BLOG_ENTRY_ID+"="+blogEntry.getId())));
+                listItem.add(new Label("text", blogEntry.getSummary(htmlLink)).setEscapeModelStrings(false));
             }
         };
         listView.setViewSize(displayCount);
         add(listView);
+        
+		//Blog archive link
+        add(new BookmarkablePageLink("archive",blogArchivePage));
 
 	}
 

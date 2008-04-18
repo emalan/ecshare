@@ -26,7 +26,7 @@ public abstract class AbstractBlogDisplayPanel extends Panel implements IBlogAwa
     private static final long serialVersionUID = 1L;
     
     
-    public AbstractBlogDisplayPanel(String id, final Class blogEntryPage, final boolean adminMode) {
+    public AbstractBlogDisplayPanel(String id) {
         super(id);
         
     }

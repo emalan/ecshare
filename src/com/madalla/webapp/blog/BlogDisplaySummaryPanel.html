@@ -22,7 +22,7 @@
 <body>
     <wicket:panel>
         <div id="blogDisplayHeader">
-            <a href="#" wicket:id="CreateNew">Create new blog</a>
+            <a href="#" wicket:id="CreateNew"><wicket:message key="label.create">Label Contents</wicket:message></a>
         </div>
         
         <span wicket:id="comments">
@@ -30,11 +30,15 @@
             <wicket:message key="label.date">Label Contents :</wicket:message>
             <span class="blogDate" wicket:id="date"/>
             <span class="blogText" wicket:id="text"/>
-            <a href="#" wicket:id="EditBlog">Edit Entry</a>
-            <a href="#" wicket:id="DeleteBlog">Delete Entry</a>
-            <a href="#" wicket:id="DisplayBlog">Show Blog Entry</a>
+            <a href="#" wicket:id="EditBlog"><wicket:message key="label.edit">Label Contents</wicket:message></a>
+            <a href="#" wicket:id="DeleteBlog"><wicket:message key="label.delete">Label Contents</wicket:message></a>
+            
         </div>
         </span>
+        
+        <div id="blogDisplayFooter">
+        	<a href="#" wicket:id="archive"><wicket:message key="label.archive">Label Contents</wicket:message></a>
+        </div>
     </wicket:panel>
 </body>
 </html>
