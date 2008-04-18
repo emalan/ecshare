@@ -43,8 +43,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
         int blogEntryId = parameters.getInt(BLOG_ENTRY_ID);
         log.debug("Constructing Blog Entry. id="+blogEntryId);
         if (blogEntryId > 0){
-        	IBlogService service = ((IBlogServiceProvider)getApplication()).getBlogService();
-            blogEntry = service.getBlogEntry(blogEntryId);
+            blogEntry = getBlogService().getBlogEntry(blogEntryId);
             log.debug("Retrieved Blog Entry from Service."+blogEntry);
         } else {
             blogEntry = new BlogEntry();
@@ -62,8 +61,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             add(new TextArea("text", new PropertyModel(blogEntry, "text")));
             
             //category drop down
-        	IBlogService service = ((IBlogServiceProvider)getApplication()).getBlogService();
-            List categories = service.getBlogCategories();
+            List categories = getBlogService().getBlogCategories();
             FormComponent categoryDropDown = new DropDownChoice("category", new PropertyModel(blogEntry,"blogCategory"), categories, new ChoiceRenderer("name","id"));
             categoryDropDown.setRequired(true);
             add(categoryDropDown);
@@ -93,8 +91,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
         public void onSubmit() {
             log.debug("onSubmit - Saving populated Blog Entry to Blog service. " + blogEntry);
             try {
-            	IBlogService service = ((IBlogServiceProvider)getPage().getApplication()).getBlogService();
-                service.saveBlogEntry(blogEntry);
+                getBlogService().saveBlogEntry(blogEntry);
                 info("Blog Entry saved to repository");
                 log.info("Blog Entry successfully saved. " + blogEntry);
                 setResponsePage(returnPage.getClass());
@@ -105,6 +102,10 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             }
         }
 
+    }
+    
+    private IBlogService getBlogService(){
+    	return ((IBlogServiceProvider)getApplication()).getBlogService();
     }
 
 
