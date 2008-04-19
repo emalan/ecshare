@@ -1,22 +1,51 @@
 package com.madalla.service.blog;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
-public class BlogEntry implements Serializable, Comparable{
+import com.madalla.util.ui.ITreeInput;
+
+public class BlogEntry implements Serializable, Comparable, ITreeInput{
 	private static final long serialVersionUID = 1L;
     private final static int summaryLength = 200;
+    private static DateFormat df = DateFormat.getDateInstance();
     
     private int id;
     private String text;
     private Date date;
     private BlogCategory blogCategory;
     private int siteId;
+    private String title;
+    private String description;
+    private String keywords;
     
-    public Date getDate() {
+    public String getURL(){
+    	return "";
+    }
+    
+    public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getKeywords() {
+		return keywords;
+	}
+	public void setKeywords(String keywords) {
+		this.keywords = keywords;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public Date getDate() {
         return date;
     }
     public void setDate(Date date) {
@@ -72,6 +101,10 @@ public class BlogEntry implements Serializable, Comparable{
         	String[] words = StringUtils.split(firstParagraph,' ');
         }
         return firstParagraph+moreLink;
+    }
+    
+    public String getTitleDisplay(){
+    	return df.format(date) + " - " + title;
     }
     
     public String toString() {

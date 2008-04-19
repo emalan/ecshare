@@ -22,7 +22,9 @@ public class BlogArchivePanel extends AbstractBlogDisplayPanel {
         TreeModel blogEntries = service.getBlogEntriesAsTree();
         log.debug("construtor - retrieved blog entries. root="+blogEntries.getRoot());
         
-        BaseTree tree = new LinkTree("BlogTree",blogEntries);
+        BaseTree tree = new LinkTree("BlogTree",blogEntries){
+        	
+        };
         tree.getTreeState().collapseAll();
         add(tree);
         
