@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -19,7 +18,6 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -84,19 +82,24 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             FormComponent categoryDropDown = new DropDownChoice("category", new PropertyModel(blogEntry,"blogCategory"), categories, new ChoiceRenderer("name","id"));
             categoryDropDown.setRequired(true);
             categoryDropDown.add(new ValidationStyleBehaviour());
+            categoryDropDown.add(new AjaxFormComponentUpdatingBehavior("onchange"){
+            	protected void onUpdate(AjaxRequestTarget target){
+            		target.addComponent(getFormComponent());
+            	}
+            });
             add(categoryDropDown);
 
             TextField title = new TextField("title",new PropertyModel(blogEntry,"title"));
             title.add(new ValidationStyleBehaviour());
             title.setRequired(true);
-            title.add(new AjaxFormComponentUpdatingBehavior("onblur"){
+            title.add(new AjaxFormComponentUpdatingBehavior("onchange"){
 				protected void onUpdate(AjaxRequestTarget target) {
 					target.addComponent(getFormComponent());
 				}
             });
             add(title);
             
-            add(new TextField("description",new PropertyModel(blogEntry,"description")).setConvertEmptyInputStringToNull(false));
+            add(new TextArea("description",new PropertyModel(blogEntry,"description")).setConvertEmptyInputStringToNull(false));
             add(new TextField("keywords",new PropertyModel(blogEntry,"keywords")).setConvertEmptyInputStringToNull(false));
             
             add(new TextArea("text", new PropertyModel(blogEntry, "text")));

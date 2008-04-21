@@ -4,7 +4,7 @@
         form { float:left;}
         form div {float:left; clear:both;}
         form div#textControl {margin-top:20px;}
-        form textarea {float:left; clear:both;}
+        form textarea#text {float:left; clear:both;}
         form div label { width: 100px;}
         form span {float:left;}
         form .feedbackPanel ul li {
@@ -51,14 +51,7 @@
             	<label for="title">
                     <wicket:message key="label.title">Label Contents</wicket:message>
                 </label>
-            	<input id="title" class="inputText" wicket:id="title" type="text" />
-            </div>
-
-            <div id="description">
-            	<label for="description">
-                    <wicket:message key="label.description">Label Contents</wicket:message>
-                </label>
-            	<input id="description" class="inputText" wicket:id="description" type="text" />
+            	<input id="title" class="inputText" wicket:id="title" type="text" size="50" />
             </div>
 
             <div id="keywords">
@@ -68,13 +61,20 @@
             	<input id="keywords" class="inputText" wicket:id="keywords" type="text" />
             </div>
 
+            <div id="description">
+            	<label for="description">
+                    <wicket:message key="label.description">Label Contents</wicket:message>
+                </label>
+            	<textarea id="description" wicket:id="description" rows="5" cols="50">Input goes here</textArea>
+            </div>
+
             <div id="textControl">
                 <a href="javascript:;" onmousedown="tinyMCE.get('text').show();">[Show]</a>
                 <a href="javascript:;" onmousedown="tinyMCE.get('text').hide();">[Hide]</a>
             </div>
 
             <div id="textDiv">
-                <textarea style="textarea" wicket:id="text" rows="25" cols="60">Input comes here</textarea>
+                <textarea style="textarea" id="text" wicket:id="text" rows="25" cols="60">Input comes here</textarea>
             </div>
 
 
