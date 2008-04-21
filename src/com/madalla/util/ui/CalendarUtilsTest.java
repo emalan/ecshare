@@ -57,6 +57,13 @@ public class CalendarUtilsTest extends TestCase{
         calendar.add(Calendar.MONTH, -2);
         calendar.set(Calendar.DAY_OF_MONTH, 5);
         
+        //2 months old
+        //3 months beginning of month
+        //3 months end of month
+        
+        //1 year old
+        //3 years old
+        
         
         return list;
 	}
