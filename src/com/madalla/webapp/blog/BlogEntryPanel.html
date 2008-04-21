@@ -3,7 +3,9 @@
     <style type="text/css">
         form { float:left;}
         form div {float:left; clear:both;}
+        form div.textControl {margin-top:20px;}
         form textarea {float:left; clear:both;}
+        form div label { width: 100px;}
         form span {float:left;}
         .yui-skin-sam {margin-top: 8px;}
     </style>
@@ -14,14 +16,17 @@
         <form wicket:id="blogForm">
 
             <div id=dateDiv>
-                <input class="inputText" size="14" type="text" wicket:id="dateTextField" /> 
+	            <label for="date">
+                    <wicket:message key="label.date">Label Contents</wicket:message>
+                </label>
+                <input id="date" class="inputText" size="14" type="text" wicket:id="dateTextField" /> 
             </div>
 
             <div id="categoryDiv">
                 <label for="category">
                     <wicket:message key="label.category">Label Contents</wicket:message>
                 </label>
-                <select wicket:id="category">
+                <select id="category" wicket:id="category">
                     <option>category 1</option>
                     <option>category 2</option>
                 </select>
@@ -31,24 +36,24 @@
             	<label for="title">
                     <wicket:message key="label.title">Label Contents</wicket:message>
                 </label>
-            	<input class="inputText" wicket:id="title" type="text" />
+            	<input id="title" class="inputText" wicket:id="title" type="text" />
             </div>
 
             <div id="description">
             	<label for="description">
                     <wicket:message key="label.description">Label Contents</wicket:message>
                 </label>
-            	<input class="inputText" wicket:id="description" type="text" />
+            	<input id="description" class="inputText" wicket:id="description" type="text" />
             </div>
 
             <div id="keywords">
             	<label for="keywords">
                     <wicket:message key="label.keywords">Label Contents</wicket:message>
                 </label>
-            	<input class="inputText" wicket:id="keywords" type="text" />
+            	<input id="keywords" class="inputText" wicket:id="keywords" type="text" />
             </div>
 
-            <div>
+            <div id="textControl">
                 <a href="javascript:;" onmousedown="tinyMCE.get('text').show();">[Show]</a>
                 <a href="javascript:;" onmousedown="tinyMCE.get('text').hide();">[Hide]</a>
             </div>
@@ -61,7 +66,7 @@
 
             <div class="formButtons">
                 <input wicket:id="cancelButton" type="submit" value="Cancel" />
-                <input type="submit" value="Save" />
+                <input wicket:id="saveButton" type="submit" value="Save" />
             </div>
 
             <span wicket:id="feedback">feedbackmessages will be put here</span>

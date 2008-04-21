@@ -66,6 +66,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             blogEntry.setDate(Calendar.getInstance().getTime());
             DateTextField dateTextField = new DateTextField("dateTextField", new PropertyModel(blogEntry,"date"), new StyleDateConverter("S-",true));
             dateTextField.setRequired(true);
+            
             add(dateTextField);
             dateTextField.add(new DatePicker());
 
@@ -80,6 +81,10 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             add(new TextField("keywords",new PropertyModel(blogEntry,"keywords")).setConvertEmptyInputStringToNull(false));
             
             add(new TextArea("text", new PropertyModel(blogEntry, "text")));
+            
+            Button saveButton = new Button("saveButton");
+            setDefaultButton(saveButton);
+            add(saveButton);
             
             Button cancelButton = new Button("cancelButton"){
 				private static final long serialVersionUID = 1L;
