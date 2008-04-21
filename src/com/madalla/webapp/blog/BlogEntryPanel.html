@@ -3,10 +3,22 @@
     <style type="text/css">
         form { float:left;}
         form div {float:left; clear:both;}
-        form div.textControl {margin-top:20px;}
+        form div#textControl {margin-top:20px;}
         form textarea {float:left; clear:both;}
         form div label { width: 100px;}
         form span {float:left;}
+        form .feedbackPanel ul li {
+			color:red;
+			font-style:normal;
+			list-style-image:none;
+			list-style-position: inside;
+			list-style-type: none;
+			padding-left:1em;
+			padding-top:7px;
+			text-indent:0pt;
+			float: left;
+			clear: both;
+		}
         .yui-skin-sam {margin-top: 8px;}
     </style>
 </wicket:head>
@@ -14,6 +26,9 @@
     <wicket:panel>
         
         <form wicket:id="blogForm">
+            <span class="feedbackPanel" wicket:id="feedback">
+                feedbackmessages will be put here
+            </span>
 
             <div id=dateDiv>
 	            <label for="date">
@@ -69,7 +84,6 @@
                 <input wicket:id="saveButton" type="submit" value="Save" />
             </div>
 
-            <span wicket:id="feedback">feedbackmessages will be put here</span>
 
         </form>
         
