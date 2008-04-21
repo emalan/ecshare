@@ -5,19 +5,16 @@
         form div {float:left; clear:both;}
         form textarea {float:left; clear:both;}
         form span {float:left;}
+        .yui-skin-sam {margin-top: 8px;}
     </style>
 </wicket:head>
 <body>
     <wicket:panel>
         
         <form wicket:id="blogForm">
-            <div>
-                <a href="javascript:;" onmousedown="tinyMCE.get('text').show();">[Show]</a>
-                <a href="javascript:;" onmousedown="tinyMCE.get('text').hide();">[Hide]</a>
-            </div>
 
-            <div id="textDiv">
-                <textarea style="textarea" wicket:id="text" rows="25" cols="60">Input comes here</textarea>
+            <div id=dateDiv>
+                <input class="inputText" size="14" type="text" wicket:id="dateTextField" /> 
             </div>
 
             <div id="categoryDiv">
@@ -29,10 +26,38 @@
                     <option>category 2</option>
                 </select>
             </div>
-
-            <div id=dateDiv>
-                <input type="text" wicket:id="dateTextField" /> 
+            
+            <div id="title">
+            	<label for="title">
+                    <wicket:message key="label.title">Label Contents</wicket:message>
+                </label>
+            	<input class="inputText" wicket:id="title" type="text" />
             </div>
+
+            <div id="description">
+            	<label for="description">
+                    <wicket:message key="label.description">Label Contents</wicket:message>
+                </label>
+            	<input class="inputText" wicket:id="description" type="text" />
+            </div>
+
+            <div id="keywords">
+            	<label for="keywords">
+                    <wicket:message key="label.keywords">Label Contents</wicket:message>
+                </label>
+            	<input class="inputText" wicket:id="keywords" type="text" />
+            </div>
+
+            <div>
+                <a href="javascript:;" onmousedown="tinyMCE.get('text').show();">[Show]</a>
+                <a href="javascript:;" onmousedown="tinyMCE.get('text').hide();">[Hide]</a>
+            </div>
+
+            <div id="textDiv">
+                <textarea style="textarea" wicket:id="text" rows="25" cols="60">Input comes here</textarea>
+            </div>
+
+
 
             <div class="formButtons">
                 <input wicket:id="cancelButton" type="submit" value="Cancel" />

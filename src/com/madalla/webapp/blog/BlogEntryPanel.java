@@ -1,5 +1,6 @@
 package com.madalla.webapp.blog;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -15,7 +16,9 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
@@ -58,19 +61,25 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
         
         public BlogEntryForm(final String name) {
             super(name);
-            add(new TextArea("text", new PropertyModel(blogEntry, "text")));
-            
+
+            //Date
+            blogEntry.setDate(Calendar.getInstance().getTime());
+            DateTextField dateTextField = new DateTextField("dateTextField", new PropertyModel(blogEntry,"date"), new StyleDateConverter("S-",true));
+            dateTextField.setRequired(true);
+            add(dateTextField);
+            dateTextField.add(new DatePicker());
+
             //category drop down
             List categories = getBlogService().getBlogCategories();
             FormComponent categoryDropDown = new DropDownChoice("category", new PropertyModel(blogEntry,"blogCategory"), categories, new ChoiceRenderer("name","id"));
             categoryDropDown.setRequired(true);
             add(categoryDropDown);
+
+            add(new RequiredTextField("title",new PropertyModel(blogEntry,"title")));
+            add(new TextField("description",new PropertyModel(blogEntry,"description")).setConvertEmptyInputStringToNull(false));
+            add(new TextField("keywords",new PropertyModel(blogEntry,"keywords")).setConvertEmptyInputStringToNull(false));
             
-            //Date
-            DateTextField dateTextField = new DateTextField("dateTextField", new PropertyModel(blogEntry,"date"), new StyleDateConverter("S-",true));
-            dateTextField.setRequired(true);
-            add(dateTextField);
-            dateTextField.add(new DatePicker());
+            add(new TextArea("text", new PropertyModel(blogEntry, "text")));
             
             Button cancelButton = new Button("cancelButton"){
 				private static final long serialVersionUID = 1L;
