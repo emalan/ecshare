@@ -44,15 +44,19 @@ public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests
         //test insert
         BlogEntry testInsert = dao.getBlogEntry(id);
         assertNotNull(testInsert);
-        assertEquals(blogEntry.getText(), testInsert.getText());
+        assertEquals(blogEntry.getTitle(), testInsert.getTitle());
+        assertEquals(blogEntry.getDescription(), testInsert.getDescription());
+        assertEquals(blogEntry.getKeywords(), testInsert.getKeywords());
         
         //test update
         blogEntry.setId(id);
-        blogEntry.setText("Test Save Entry");
+        blogEntry.setTitle("Test Save Title");
         dao.saveBlogEntry(blogEntry);
         BlogEntry testUpdate = dao.getBlogEntry(id);
         assertNotNull(testUpdate);
-        assertEquals(testUpdate.getText(), blogEntry.getText());
+        assertEquals(testUpdate.getTitle(), blogEntry.getTitle());
+        assertEquals(testUpdate.getDescription(), blogEntry.getDescription());
+        assertEquals(testUpdate.getKeywords(), blogEntry.getKeywords());
         log.debug("Saved Blog Entry. "+blogEntry);
         
         //test delete

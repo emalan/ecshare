@@ -9,27 +9,38 @@ import junit.framework.TestCase;
 import org.easymock.MockControl;
 
 import com.madalla.dao.blog.BlogDao;
+import com.madalla.service.cms.IContentService;
 
 public class BlogServiceTest extends TestCase{
 
     BlogService service ;
     BlogDao mockDao;
-    private MockControl control;
+    IContentService mockContentService;
+    private MockControl daoControl;
+    private MockControl contentControl;
     
     protected void setUp() {
-        control = MockControl.createControl(BlogDao.class);
-        mockDao = (BlogDao) control.getMock();
+        daoControl = MockControl.createControl(BlogDao.class);
+        mockDao = (BlogDao) daoControl.getMock();
+        
+        contentControl = MockControl.createControl(IContentService.class);
+        mockContentService = (IContentService) contentControl.getMock();
+        
         service = new BlogService();
         service.setDao(mockDao);
+        service.setContentService(mockContentService);
     }
     
     public void testInsert(){
         BlogEntry blogEntry = createBlogEntry();
         mockDao.insertBlogEntry(blogEntry);
-        control.setReturnValue(1);
-        control.replay();
+        daoControl.setReturnValue(1);
+        mockDao.getSite();
+        daoControl.setReturnValue("ecsite");
+        daoControl.replay();
+
         int id = service.saveBlogEntry(blogEntry);
-        control.verify();
+        daoControl.verify();
         
     }
     
@@ -37,42 +48,54 @@ public class BlogServiceTest extends TestCase{
         BlogEntry blogEntry = createBlogEntry();
         blogEntry.setId(1);
         mockDao.saveBlogEntry(blogEntry);
-        control.setReturnValue(1);
-        control.replay();
+        daoControl.setReturnValue(1);
+        mockDao.getSite();
+        daoControl.setReturnValue("ecsite");
+        daoControl.replay();
+
         int id = service.saveBlogEntry(blogEntry);
-        control.verify(); 
+        daoControl.verify(); 
     }
     
     public void testGetBlogEntry(){
         mockDao.getBlogEntry(1);
-        control.setReturnValue(createBlogEntry());
-        control.replay();
+        daoControl.setReturnValue(createBlogEntry());
+        mockDao.getSite();
+        daoControl.setReturnValue("ecsite");
+        daoControl.replay();
+
         BlogEntry blogEntry = service.getBlogEntry(1);
-        control.verify();
+        daoControl.verify();
     }
     
     public void testGetAllBlogEntries(){
         mockDao.getBlogEntriesForSite();
         Collection test = new ArrayList();
-        test.add(createBlogEntry());
-        control.setReturnValue(test);
-        control.replay();
+        BlogEntry entry = createBlogEntry();
+        test.add(entry);
+        daoControl.setReturnValue(test);
+
+        mockDao.getSite();
+        daoControl.setReturnValue("ecsite");
+
+        daoControl.replay();
+        
         Collection entries = service.getBlogEntries();
-        control.verify();
+        daoControl.verify();
     }
     
     public void testGetAllBlogEntriesForCategory(){
         mockDao.getBlogEntriesForCategory(1);
         Collection test = new ArrayList();
         test.add(createBlogEntry());
-        control.setReturnValue(test);
+        daoControl.setReturnValue(test);
 
         mockDao.getSite();
-        control.setReturnValue("ecsite");
+        daoControl.setReturnValue("ecsite");
         
-        control.replay();
+        daoControl.replay();
         Collection entries = service.getBlogEntriesForCategory(1);
-        control.verify();
+        daoControl.verify();
     }
     
     public static BlogEntry createBlogEntry(){
@@ -80,6 +103,9 @@ public class BlogServiceTest extends TestCase{
         blogEntry.setBlogCategory(new BlogCategory(1,"test"));
         blogEntry.setDate(Calendar.getInstance().getTime());
         blogEntry.setText("Test entry");
+        blogEntry.setTitle("test title");
+        blogEntry.setDescription("test description");
+        blogEntry.setKeywords("test keywords");
         return blogEntry;
     }
     
