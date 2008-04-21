@@ -5,8 +5,11 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.datetime.StyleDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
@@ -28,6 +31,7 @@ import com.madalla.service.blog.BlogEntry;
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
+import com.madalla.wicket.ValidationStyleBehaviour;
 
 public class BlogEntryPanel extends Panel implements IBlogAware{
     private static final long serialVersionUID = 1L;
@@ -66,7 +70,12 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             blogEntry.setDate(Calendar.getInstance().getTime());
             DateTextField dateTextField = new DateTextField("dateTextField", new PropertyModel(blogEntry,"date"), new StyleDateConverter("S-",true));
             dateTextField.setRequired(true);
-            
+            dateTextField.add(new ValidationStyleBehaviour());
+            dateTextField.add(new AjaxFormComponentUpdatingBehavior("onchange"){
+            	protected void onUpdate(AjaxRequestTarget target) {
+					target.addComponent(getFormComponent());
+				}
+            });
             add(dateTextField);
             dateTextField.add(new DatePicker());
 
@@ -74,9 +83,19 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             List categories = getBlogService().getBlogCategories();
             FormComponent categoryDropDown = new DropDownChoice("category", new PropertyModel(blogEntry,"blogCategory"), categories, new ChoiceRenderer("name","id"));
             categoryDropDown.setRequired(true);
+            categoryDropDown.add(new ValidationStyleBehaviour());
             add(categoryDropDown);
 
-            add(new RequiredTextField("title",new PropertyModel(blogEntry,"title")));
+            TextField title = new TextField("title",new PropertyModel(blogEntry,"title"));
+            title.add(new ValidationStyleBehaviour());
+            title.setRequired(true);
+            title.add(new AjaxFormComponentUpdatingBehavior("onblur"){
+				protected void onUpdate(AjaxRequestTarget target) {
+					target.addComponent(getFormComponent());
+				}
+            });
+            add(title);
+            
             add(new TextField("description",new PropertyModel(blogEntry,"description")).setConvertEmptyInputStringToNull(false));
             add(new TextField("keywords",new PropertyModel(blogEntry,"keywords")).setConvertEmptyInputStringToNull(false));
             
@@ -121,7 +140,5 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
     private IBlogService getBlogService(){
     	return ((IBlogServiceProvider)getApplication()).getBlogService();
     }
-
-
 
 }
