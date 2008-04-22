@@ -13,11 +13,14 @@ public class BlogDisplayPanel extends AbstractBlogDisplayPanel{
 	private Log log = LogFactory.getLog(this.getClass());
 	
 	public BlogDisplayPanel(String id, final PageParameters parameters, Class blogEntryPage, 
-			Class blogMainPage, boolean adminMode) {
+			Class blogMainPage, Class blogArchivePage, boolean adminMode) {
 		super(id);
-		add(new BookmarkablePageLink("back",blogMainPage));
+		
 		int blogEntryId = parameters.getInt(BLOG_ENTRY_ID);
-        log.debug("Constructing Blog Entry. id="+blogEntryId);
+		add(new BookmarkablePageLink("main",blogMainPage));
+		add(new BookmarkablePageLink("archive",blogArchivePage));
+		
+		log.debug("Constructing Blog Entry. id="+blogEntryId);
         BlogEntry blogEntry = getBlogService().getBlogEntry(blogEntryId);
 		populateBlogEntryDisplay(this, blogEntry, blogEntryPage, adminMode);
 		add(new Label("text", blogEntry.getText()).setEscapeModelStrings(false));

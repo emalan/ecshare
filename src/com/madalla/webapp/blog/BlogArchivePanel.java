@@ -76,18 +76,6 @@ public class BlogArchivePanel extends AbstractBlogDisplayPanel {
 				};
 			}
 
-			protected void onNodeLinkClicked(TreeNode treeNode,
-					BaseTree baseTree, AjaxRequestTarget target) {
-				log.debug("onNodeLinkClicked - treeNode=" + treeNode
-						+ ", baseTree=" + baseTree + ", target=" + target);
-				if (treeNode.isLeaf()) {
-
-					PageParameters pageParameters = new PageParameters(
-							BLOG_ENTRY_ID + "=blog1");
-					setResponsePage(blogDisplayPage, pageParameters);
-				}
-			}
-
 		};
 		tree.getTreeState().collapseAll();
 		add(tree);
