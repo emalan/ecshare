@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -23,6 +24,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.service.blog.BlogEntry;
@@ -55,13 +57,13 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             log.debug("Created new Blog Entry");
         }
         
-        add(new BlogEntryForm("blogForm"));
+        add(new BlogEntryForm("blogForm",this));
     }
     
     final class BlogEntryForm extends Form{
         private static final long serialVersionUID = 1L;
         
-        public BlogEntryForm(final String name) {
+        public BlogEntryForm(final String name, Component panel) {
             super(name);
 
             //Date
@@ -74,6 +76,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
 					target.addComponent(getFormComponent());
 				}
             });
+            dateTextField.setLabel(new Model(panel.getString("label.date")));
             add(dateTextField);
             dateTextField.add(new DatePicker());
 
@@ -87,11 +90,13 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             		target.addComponent(getFormComponent());
             	}
             });
+            categoryDropDown.setLabel(new Model(panel.getString("label.category")));
             add(categoryDropDown);
 
             TextField title = new TextField("title",new PropertyModel(blogEntry,"title"));
             title.add(new ValidationStyleBehaviour());
             title.setRequired(true);
+            title.setLabel(new Model(panel.getString("label.title")));
             title.add(new AjaxFormComponentUpdatingBehavior("onchange"){
 				protected void onUpdate(AjaxRequestTarget target) {
 					target.addComponent(getFormComponent());
@@ -128,7 +133,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             log.debug("onSubmit - Saving populated Blog Entry to Blog service. " + blogEntry);
             try {
                 getBlogService().saveBlogEntry(blogEntry);
-                info("Blog Entry saved to repository");
+                info("Success");
                 log.info("Blog Entry successfully saved. " + blogEntry);
                 setResponsePage(returnPage.getClass());
             } catch (Exception e) {
