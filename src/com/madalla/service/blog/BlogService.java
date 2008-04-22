@@ -20,6 +20,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.madalla.dao.blog.BlogDao;
 import com.madalla.service.cms.IContentService;
+import com.madalla.util.ui.CalendarUtils;
 import com.madalla.webapp.cms.Content;
 
 public class BlogService implements IBlogService, Serializable{
@@ -78,7 +79,8 @@ public class BlogService implements IBlogService, Serializable{
 
     public TreeModel getBlogEntriesAsTree(){
     	List list = getBlogEntries();
-    	return createBlogArchive(list);
+    	//return createBlogArchive(list);
+    	return CalendarUtils.createMonthlyTree("Blog Archive", list);
     }
     
     public void deleteBlogEntry(int id){
@@ -91,7 +93,6 @@ public class BlogService implements IBlogService, Serializable{
         
         DateFormat df = new SimpleDateFormat("MMMMM yyyy");
         DateFormat blogFormat = DateFormat.getDateInstance();
-        
         
         //Get Blogs in tree of months
         GregorianCalendar calendar = new GregorianCalendar();
