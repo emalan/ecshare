@@ -39,7 +39,21 @@ public class CalendarUtilsTest extends TestCase{
 				log.debug(" entry = " + entry);
 			}
 		}
-		
+		{
+			Enumeration e = node.children();
+			MutableTreeNode currentMonth = (MutableTreeNode)e.nextElement();
+			assertNotNull(currentMonth);
+			assertEquals(3, currentMonth.getChildCount());
+			
+			MutableTreeNode twoMonthOld = (MutableTreeNode)e.nextElement();
+			assertNotNull(twoMonthOld);
+			assertEquals(2, twoMonthOld.getChildCount());
+
+			MutableTreeNode threeMonthOld = (MutableTreeNode)e.nextElement();
+			assertNotNull(threeMonthOld);
+			assertEquals(2, threeMonthOld.getChildCount());
+
+		}
 	}
 	
 	private List createList(){
@@ -56,14 +70,19 @@ public class CalendarUtilsTest extends TestCase{
         
         calendar.add(Calendar.MONTH, -2);
         calendar.set(Calendar.DAY_OF_MONTH, 5);
+        list.add(new TreeEntry(calendar.getTime(),"2 month old", description));
+        list.add(new TreeEntry(calendar.getTime(),"another 2 month old", description));
         
-        //2 months old
-        //3 months beginning of month
-        //3 months end of month
+        calendar.add(Calendar.MONTH, -1);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        list.add(new TreeEntry(calendar.getTime(),"3 month old - 1st day of month", description));
+        calendar.set(Calendar.DAY_OF_MONTH, 31);
+        list.add(new TreeEntry(calendar.getTime(),"3 month old - last day of month", description));
         
-        //1 year old
-        //3 years old
-        
+        calendar.add(Calendar.YEAR, -1);
+        list.add(new TreeEntry(calendar.getTime(),"1 year old", description));
+        calendar.add(Calendar.YEAR, -3);
+        list.add(new TreeEntry(calendar.getTime(),"3 years old", description));
         
         return list;
 	}
@@ -74,7 +93,7 @@ public class CalendarUtilsTest extends TestCase{
 		private String description;
 		private String title;
 		
-		public TreeEntry(Date date, String description, String title){
+		public TreeEntry(Date date, String title, String description){
 			this.date = date;
 			this.description = description;
 			this.title = title;
@@ -97,7 +116,7 @@ public class CalendarUtilsTest extends TestCase{
 		}
 		
 		public String getTitleDisplay(){
-			return df.format(date);
+			return df.format(date) + " - " + title;
 		}
 		
 	}

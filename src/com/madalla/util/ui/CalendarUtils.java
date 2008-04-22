@@ -18,19 +18,20 @@ public class CalendarUtils {
 
 	public static TreeModel createMonthlyTree(String rootTitle, List list){
 		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(rootTitle);
-        TreeModel model = new DefaultTreeModel(rootNode){
-        	
-        };
+        TreeModel model = new DefaultTreeModel(rootNode);
         
         //Get Blogs in tree of months
         GregorianCalendar calendar = new GregorianCalendar();
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.DATE, 1);
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
         
         DefaultMutableTreeNode node = new DefaultMutableTreeNode(df.format(calendar.getTime()));
         for (Iterator iter = list.iterator(); iter.hasNext();) {
 			ITreeInput entry = (ITreeInput) iter.next();
 			Date date = entry.getDate();
-			while (calendar.getTime().after(date)){
+			while (date.before(calendar.getTime())){
 				calendar.add(Calendar.MONTH, -1);
 				node = new DefaultMutableTreeNode(df.format(calendar.getTime()));
 			}

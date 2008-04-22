@@ -13,7 +13,6 @@ import java.util.List;
 import javax.jcr.RepositoryException;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeModel;
 
 import org.apache.commons.logging.Log;
