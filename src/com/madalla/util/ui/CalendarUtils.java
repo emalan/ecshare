@@ -14,7 +14,6 @@ import javax.swing.tree.TreeModel;
 
 public class CalendarUtils {
     private static DateFormat df = new SimpleDateFormat("MMMMM yyyy");
-    private static DateFormat blogFormat = DateFormat.getDateInstance();
 
 	public static TreeModel createMonthlyTree(String rootTitle, List list){
 		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(rootTitle);
@@ -36,15 +35,7 @@ public class CalendarUtils {
 				node = new DefaultMutableTreeNode(df.format(calendar.getTime()));
 			}
 			rootNode.add(node);
-			node.add(new DefaultMutableTreeNode(entry){
-
-				public String toString() {
-					ITreeInput input = (ITreeInput) getUserObject();
-					return input.getTitleDisplay();
-				}
-				
-			});
-			
+			node.add(new DefaultMutableTreeNode(entry));
 		}
         
         return model;

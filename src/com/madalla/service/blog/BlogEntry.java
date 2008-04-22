@@ -103,10 +103,6 @@ public class BlogEntry implements Serializable, Comparable, ITreeInput{
         return firstParagraph+moreLink;
     }
     
-    public String getTitleDisplay(){
-    	return df.format(date) + (null == title?"":" - " + title);
-    }
-    
     public String toString() {
         return ReflectionToStringBuilder.toString(this).toString();
     }

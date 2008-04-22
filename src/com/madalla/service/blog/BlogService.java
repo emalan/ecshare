@@ -1,18 +1,11 @@
 package com.madalla.service.blog;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.RepositoryException;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 
 import org.apache.commons.logging.Log;
@@ -79,39 +72,11 @@ public class BlogService implements IBlogService, Serializable{
 
     public TreeModel getBlogEntriesAsTree(){
     	List list = getBlogEntries();
-    	//return createBlogArchive(list);
     	return CalendarUtils.createMonthlyTree("Blog Archive", list);
     }
     
     public void deleteBlogEntry(int id){
         dao.deleteBlogEntry(id);
-    }
-
-    private TreeModel createBlogArchive(List list) {
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Blog Archive");
-        TreeModel model = new DefaultTreeModel(rootNode);
-        
-        DateFormat df = new SimpleDateFormat("MMMMM yyyy");
-        DateFormat blogFormat = DateFormat.getDateInstance();
-        
-        //Get Blogs in tree of months
-        GregorianCalendar calendar = new GregorianCalendar();
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        
-        DefaultMutableTreeNode node = new DefaultMutableTreeNode(df.format(calendar.getTime()));
-        for (Iterator iter = list.iterator(); iter.hasNext();) {
-			BlogEntry blogEntry = (BlogEntry) iter.next();
-			Date date = blogEntry.getDate();
-			while (calendar.getTime().after(date)){
-				calendar.add(Calendar.MONTH, -1);
-				node = new DefaultMutableTreeNode(df.format(calendar.getTime()));
-			}
-			rootNode.add(node);
-			node.add(new DefaultMutableTreeNode(blogFormat.format(blogEntry.getDate())+" Blog Entry Title goes here"));
-			
-		}
-        
-        return model;
     }
     
     private void populateContentFromCMS(BlogEntry blogEntry){

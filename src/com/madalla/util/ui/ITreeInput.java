@@ -6,6 +6,4 @@ public interface ITreeInput {
 	Date getDate();
 	String getTitle();
 	String getDescription();
-	String getURL();
-	String getTitleDisplay();
 }

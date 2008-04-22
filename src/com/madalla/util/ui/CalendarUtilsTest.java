@@ -11,10 +11,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeModel;
 
+import junit.framework.TestCase;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import junit.framework.TestCase;
 
 public class CalendarUtilsTest extends TestCase{
 	private Log log = LogFactory.getLog(this.getClass());
@@ -113,10 +113,6 @@ public class CalendarUtilsTest extends TestCase{
 		
 		public String getURL(){
 			return "http://www.ecmalan.com";
-		}
-		
-		public String getTitleDisplay(){
-			return df.format(date) + " - " + title;
 		}
 		
 	}
