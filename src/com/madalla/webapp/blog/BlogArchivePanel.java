@@ -4,6 +4,7 @@ import javax.swing.tree.TreeModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.LinkTree;
 
@@ -13,9 +14,9 @@ public class BlogArchivePanel extends AbstractBlogDisplayPanel {
 	private static final long serialVersionUID = 1L;
 	private Log log = LogFactory.getLog(this.getClass());
 
-	public BlogArchivePanel(String id, Class blogDisplayPage , Class blogEntryPage, boolean adminMode) {
+	public BlogArchivePanel(String id, Class blogDisplayPage , Class blogEntryPage, Class blogMainPage,  boolean adminMode) {
 		super(id);
-		
+		add(new BookmarkablePageLink("back",blogMainPage));
         //List existing Blogs
         log.debug("construtor - retrieving blog entries from service.");
         IBlogService service = getBlogService();
