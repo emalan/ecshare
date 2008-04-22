@@ -7,6 +7,8 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.datetime.StyleDateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -41,6 +43,7 @@ public abstract class AbstractBlogDisplayPanel extends Panel implements IBlogAwa
     
 	protected void populateBlogEntryDisplay(final MarkupContainer blogDisplay, final BlogEntry blogEntry,final Class blogEntryPage,
 			final boolean adminMode) {
+		blogDisplay.add(new Label("title", new Model(blogEntry.getTitle())));
 		blogDisplay.add(new DateLabel("date", new Model(blogEntry.getDate()), new StyleDateConverter("MS",true)));
         
         

@@ -77,8 +77,10 @@ public class BlogArchivePanel extends AbstractBlogDisplayPanel {
 			}
 
 		};
-		tree.getTreeState().collapseAll();
+		tree.getTreeState().expandAll();
 		add(tree);
+		
+		
 
 	}
 

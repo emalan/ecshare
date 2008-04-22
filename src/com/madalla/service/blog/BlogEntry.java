@@ -23,10 +23,6 @@ public class BlogEntry implements Serializable, Comparable, ITreeInput{
     private String description;
     private String keywords;
     
-    public String getURL(){
-    	return "";
-    }
-    
     public String getDescription() {
 		return description;
 	}

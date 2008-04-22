@@ -27,9 +27,11 @@
         
         <span wicket:id="comments">
         <div class="blogEntry">
+            <span class="blogTitle" wicket:id="title"/>
+            <span class="blogText" wicket:id="text"/>
             <wicket:message key="label.date">Label Contents :</wicket:message>
             <span class="blogDate" wicket:id="date"/>
-            <span class="blogText" wicket:id="text"/>
+            
             <a href="#" wicket:id="EditBlog"><wicket:message key="label.edit">Label Contents</wicket:message></a>
             <a href="#" wicket:id="DeleteBlog"><wicket:message key="label.delete">Label Contents</wicket:message></a>
             
