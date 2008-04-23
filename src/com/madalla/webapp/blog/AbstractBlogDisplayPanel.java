@@ -45,7 +45,7 @@ public abstract class AbstractBlogDisplayPanel extends Panel implements IBlogAwa
 			final boolean adminMode) {
 		blogDisplay.add(new Label("title", new Model(blogEntry.getTitle())));
 		blogDisplay.add(new DateLabel("date", new Model(blogEntry.getDate()), new StyleDateConverter("MS",true)));
-        
+		blogDisplay.add(new Label("keywords", new Model(blogEntry.getKeywords())));
         
         //Edit link
         Map params = new HashMap();
