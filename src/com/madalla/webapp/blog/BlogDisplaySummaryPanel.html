@@ -8,6 +8,9 @@
         	padding-top: 10px;
         	border-top: thin solid #999999;
         }
+        span.blogEntries{
+        	float:left;
+        }
         div.blogEntry{
             float:left; clear: both;
             width: 100%;
@@ -44,7 +47,7 @@
             <a href="#" wicket:id="CreateNew"><wicket:message key="label.create">Label Contents</wicket:message></a>
         </div>
         
-        <span wicket:id="comments">
+        <span class="blogEntries" wicket:id="comments">
         <div class="blogEntry">
             <h3 class="blogTitle" wicket:id="title"/>
             
