@@ -2,19 +2,23 @@ package com.madalla.webapp.email;
 
 import java.text.MessageFormat;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Component;
 import org.apache.wicket.RequestCycle;
-import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebRequestCycle;
@@ -28,9 +32,11 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import com.madalla.service.captcha.CaptchaUtils;
 import com.madalla.service.email.IEmailSender;
+import com.madalla.wicket.ValidationStyleBehaviour;
 
 public abstract class EmailFormPanel extends Panel {
     private static final long serialVersionUID = -1643728343421366820L;
+    private Log log = LogFactory.getLog(this.getClass());
     
     private String imagePass = CaptchaUtils.randomString(4, 6);
     
@@ -40,9 +46,8 @@ public abstract class EmailFormPanel extends Panel {
     public EmailFormPanel(String id, String subject) {
         super(id);
         this.subject = subject;
-        Form emailForm = new EmailForm("emailForm"); 
+        Form emailForm = new EmailForm("emailForm", this); 
         add(emailForm);
-        //AjaxFormValidatingBehavior.addToAllFormComponents(emailForm,"onBlur");
     }
 
     public class EmailForm extends Form {
@@ -51,28 +56,33 @@ public abstract class EmailFormPanel extends Panel {
         
         private final CaptchaImageResource captchaImageResource;
         
-        public EmailForm(String id) {
+        public EmailForm(String id, Component panel) {
             super(id);
             
             captchaImageResource = new CaptchaImageResource(imagePass);
             
             TextField name = new RequiredTextField("name",new PropertyModel(properties,"Name"));
-            //name.setOutputMarkupId(true);
+            name.add(new ValidationStyleBehaviour());
+            name.setLabel(new Model(panel.getString("label.name")));
+            name.add(new AjaxFormComponentUpdatingBehavior("onchange"){
+            	protected void onUpdate(AjaxRequestTarget target) {
+					target.addComponent(getFormComponent());
+				}
+            });
             add(name);
-            add(new FormComponentLabel("nameLabel",name));
-            add(new FeedbackPanel("nameFeedback", new ComponentFeedbackMessageFilter(name)).setOutputMarkupId(true));
             
             RequiredTextField email = new RequiredTextField("email",new PropertyModel(properties,"email"));
             email.add(EmailAddressValidator.getInstance());
+            email.add(new ValidationStyleBehaviour());
+            email.add(new AjaxFormComponentUpdatingBehavior("onchange"){
+            	protected void onUpdate(AjaxRequestTarget target) {
+					target.addComponent(getFormComponent());
+				}
+            });
             add(email);
-            add(new FormComponentLabel("emailLabel",email));
-            add(new FeedbackPanel("emailFeedback",new ComponentFeedbackMessageFilter(email)).setOutputMarkupId(true));
             
             TextArea comment = new TextArea("comment",new PropertyModel(properties,"comment"));
             add(comment);
-            
-            add(new FormComponentLabel("commentLabel",comment));
-            add(new FeedbackPanel("commentFeedback", new ComponentFeedbackMessageFilter(comment)).setOutputMarkupId(true));
             
             add(new Image("captchaImage", captchaImageResource));
             RequiredTextField password = new RequiredTextField("password", new PropertyModel(properties, "password")){
@@ -86,6 +96,7 @@ public abstract class EmailFormPanel extends Panel {
                 protected void onValidate(IValidatable validatable) {
                     String password = (String)validatable.getValue();
                     if (!imagePass.equals(password)) {
+                    	log.debug("onValidate - entered:"+password+" should be:"+imagePass);
                         IValidationError error = new ValidationError().addMessageKey("message.captcha");
                         validatable.error(error);
                         //"You entered '" + password + "' You should have entered '" + imagePass + "'"
@@ -93,11 +104,16 @@ public abstract class EmailFormPanel extends Panel {
                     captchaImageResource.invalidate();
                 }
             });
+            password.add(new ValidationStyleBehaviour());
+            password.add(new AjaxFormComponentUpdatingBehavior("onchange"){
+            	protected void onUpdate(AjaxRequestTarget target) {
+					target.addComponent(getFormComponent());
+				}
+            });
+
             add(password);
-            add(new FeedbackPanel("captchaFeedback", new ComponentFeedbackMessageFilter(password)).setOutputMarkupId(true));
             
-            
-            add(new FeedbackPanel("feedback", new ComponentFeedbackMessageFilter(this)).setOutputMarkupId(true));
+            add(new FeedbackPanel("feedback"));
             
         }
 

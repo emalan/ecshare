@@ -3,38 +3,46 @@
     <style type="text/css">
         form {width:100%;}
         form div {float:left; width:100%;}
-        form div label {width:10em; text-align: right;}
+        form div label {width:12em;}
         form div textarea {width:15em; height:10em;}
         form div #captcha {float:left; width:15em; padding-top:10px;}
+        form .feedbackPanel ul li {
+			float: left;
+			clear: both;
+		}
+        
     </style>
 </wicket:head>
 <body>
     <wicket:panel>
         <form id="emailForm" wicket:id="emailForm">
             <span class="feedbackPanel" wicket:id="feedback"/>
-            <div>
-                <label wicket:id="nameLabel"><wicket:message key="label.name">Label Contents</wicket:message></label>
-                <input class="inputText" wicket:id="name" type="text" />
-                <span class="feedbackPanel" wicket:id="nameFeedback"/>
+            <div id="nameDiv">
+                <label for="name">
+                    <wicket:message key="label.name">Label Contents</wicket:message>
+                </label>
+                <input id="name" class="inputText" wicket:id="name" type="text" />
             </div>
-            <div>
-                <label wicket:id="emailLabel"><wicket:message key="label.email">Label Contents</wicket:message></label>
-                <input class="inputText" wicket:id="email" type="text" />
-                <span class="feedbackPanel" wicket:id="emailFeedback"/>
+            <div id="emailDiv">
+                <label for="email">
+                    <wicket:message key="label.email">Label Contents</wicket:message>
+                </label>
+                <input id="email" class="inputText" wicket:id="email" type="text" />
             </div>
-            <div>
-                 <img id="captcha" wicket:id="captchaImage" />
+            <div id="captchaDiv">
                  <div style="width:25em; clear:none;">
-                     <label style="text-align:left; width:15em;"><wicket:message key="label.captcha">Label contents</wicket:message></label>
-                     <input style="clear:both; margin-left:5px;" class="inputText" wicket:id="password" id="password" type="text" />
-                     
+                     <label for="password">
+                         <wicket:message key="label.captcha">Label contents</wicket:message>
+                     </label>
+                     <input id="password" class="inputText" wicket:id="password" type="text" />
                  </div>
-                 <span style="clear:both; width:100%;" class="feedbackPanel" wicket:id="captchaFeedback"/>
+                 <img id="captcha" wicket:id="captchaImage" />
             </div>
-            <div>
-                <label wicket:id="commentLabel"><wicket:message key="label.comment">Label Contents</wicket:message></label>
-                <textarea class="inputText" wicket:id="comment" type="textArea"></textarea>
-                <span class="feedbackPanel" wicket:id="commentFeedback"/>
+            <div id="commentDiv">
+                <label for="comment">
+                    <wicket:message key="label.comment">Label Contents</wicket:message>
+                </label>
+                <textarea id="comment" class="inputText" wicket:id="comment" type="textArea" rows="7" cols="40">Content goes here</textarea>
             </div>
             <div style="width:100%;" class="formButtons">
                 <input type="submit" name="submit" value="Send Email"/>
