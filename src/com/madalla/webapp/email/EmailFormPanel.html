@@ -1,14 +1,22 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
+        #mainContent {
+            width: 90%;
+            max-width: 90%;
+        }
         form {width:100%;}
         form div {float:left; width:100%;}
         form div label {width:12em;}
         form div textarea {width:15em; height:10em;}
-        form div #captcha {float:left; width:15em; padding-top:10px;}
+        form div#captcha {float:left; width:15em; padding-top:10px;}
         form .feedbackPanel ul li {
 			float: left;
 			clear: both;
+		}
+		img#captcha {
+		    float:left;
+		    margin-left: 20px;
 		}
         
     </style>
@@ -30,13 +38,12 @@
                 <input id="email" class="inputText" wicket:id="email" type="text" />
             </div>
             <div id="captchaDiv">
-                 <div style="width:25em; clear:none;">
-                     <label for="password">
-                         <wicket:message key="label.captcha">Label contents</wicket:message>
-                     </label>
-                     <input id="password" class="inputText" wicket:id="password" type="text" />
-                 </div>
-                 <img id="captcha" wicket:id="captchaImage" />
+                 <label for="password">
+                     <wicket:message key="label.captcha">Label contents</wicket:message>
+                 </label>
+                 <input id="password" class="inputText" wicket:id="password" type="text" />
+                 <img id="captcha" wicket:id="captchaImage"  />
+  
             </div>
             <div id="commentDiv">
                 <label for="comment">

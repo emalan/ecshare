@@ -71,7 +71,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             DateTextField dateTextField = new DateTextField("dateTextField", new PropertyModel(blogEntry,"date"), new StyleDateConverter("S-",true));
             dateTextField.setRequired(true);
             dateTextField.add(new ValidationStyleBehaviour());
-            dateTextField.add(new AjaxFormComponentUpdatingBehavior("onchange"){
+            dateTextField.add(new AjaxFormComponentUpdatingBehavior("onblur"){
             	protected void onUpdate(AjaxRequestTarget target) {
 					target.addComponent(getFormComponent());
 				}
@@ -85,7 +85,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             FormComponent categoryDropDown = new DropDownChoice("category", new PropertyModel(blogEntry,"blogCategory"), categories, new ChoiceRenderer("name","id"));
             categoryDropDown.setRequired(true);
             categoryDropDown.add(new ValidationStyleBehaviour());
-            categoryDropDown.add(new AjaxFormComponentUpdatingBehavior("onchange"){
+            categoryDropDown.add(new AjaxFormComponentUpdatingBehavior("onblur"){
             	protected void onUpdate(AjaxRequestTarget target){
             		target.addComponent(getFormComponent());
             	}
@@ -97,7 +97,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             title.add(new ValidationStyleBehaviour());
             title.setRequired(true);
             title.setLabel(new Model(panel.getString("label.title")));
-            title.add(new AjaxFormComponentUpdatingBehavior("onchange"){
+            title.add(new AjaxFormComponentUpdatingBehavior("onblur"){
 				protected void onUpdate(AjaxRequestTarget target) {
 					target.addComponent(getFormComponent());
 				}

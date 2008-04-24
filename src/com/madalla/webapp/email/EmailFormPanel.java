@@ -64,7 +64,7 @@ public abstract class EmailFormPanel extends Panel {
             TextField name = new RequiredTextField("name",new PropertyModel(properties,"Name"));
             name.add(new ValidationStyleBehaviour());
             name.setLabel(new Model(panel.getString("label.name")));
-            name.add(new AjaxFormComponentUpdatingBehavior("onchange"){
+            name.add(new AjaxFormComponentUpdatingBehavior("onblur"){
             	protected void onUpdate(AjaxRequestTarget target) {
 					target.addComponent(getFormComponent());
 				}
@@ -74,7 +74,7 @@ public abstract class EmailFormPanel extends Panel {
             RequiredTextField email = new RequiredTextField("email",new PropertyModel(properties,"email"));
             email.add(EmailAddressValidator.getInstance());
             email.add(new ValidationStyleBehaviour());
-            email.add(new AjaxFormComponentUpdatingBehavior("onchange"){
+            email.add(new AjaxFormComponentUpdatingBehavior("onblur"){
             	protected void onUpdate(AjaxRequestTarget target) {
 					target.addComponent(getFormComponent());
 				}
@@ -89,7 +89,7 @@ public abstract class EmailFormPanel extends Panel {
                 protected final void onComponentTag(final ComponentTag tag) {
                         super.onComponentTag(tag);
                         // clear the field after each render
-                        tag.put("value", "");
+                        //tag.put("value", "");
                 }
             };
             password.add(new AbstractValidator(){
@@ -105,7 +105,7 @@ public abstract class EmailFormPanel extends Panel {
                 }
             });
             password.add(new ValidationStyleBehaviour());
-            password.add(new AjaxFormComponentUpdatingBehavior("onchange"){
+            password.add(new AjaxFormComponentUpdatingBehavior("onblur"){
             	protected void onUpdate(AjaxRequestTarget target) {
 					target.addComponent(getFormComponent());
 				}
