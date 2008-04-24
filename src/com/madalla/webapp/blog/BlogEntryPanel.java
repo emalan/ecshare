@@ -66,6 +66,10 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
         public BlogEntryForm(final String name, Component panel) {
             super(name);
 
+            final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+            feedbackPanel.setOutputMarkupId(true);
+            add(feedbackPanel);
+            
             //Date
             blogEntry.setDate(Calendar.getInstance().getTime());
             DateTextField dateTextField = new DateTextField("dateTextField", new PropertyModel(blogEntry,"date"), new StyleDateConverter("S-",true));
@@ -100,6 +104,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             title.add(new AjaxFormComponentUpdatingBehavior("onblur"){
 				protected void onUpdate(AjaxRequestTarget target) {
 					target.addComponent(getFormComponent());
+					target.addComponent(feedbackPanel);
 				}
             });
             add(title);
@@ -126,7 +131,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             add(cancelButton);
             
             
-            add(new FeedbackPanel("feedback"));
+            
         }
         
         public void onSubmit() {

@@ -8,8 +8,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
-import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -46,7 +46,8 @@ public abstract class EmailFormPanel extends Panel {
     public EmailFormPanel(String id, String subject) {
         super(id);
         this.subject = subject;
-        Form emailForm = new EmailForm("emailForm", this); 
+        Form emailForm = new EmailForm("emailForm", this);
+        //AjaxFormValidatingBehavior.addToAllFormComponents(emailForm,"onblur");
         add(emailForm);
     }
 
@@ -60,6 +61,10 @@ public abstract class EmailFormPanel extends Panel {
             super(id);
             
             captchaImageResource = new CaptchaImageResource(imagePass);
+            
+            final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+            feedbackPanel.setOutputMarkupId(true);
+            add(feedbackPanel);
             
             TextField name = new RequiredTextField("name",new PropertyModel(properties,"Name"));
             name.add(new ValidationStyleBehaviour());
@@ -110,10 +115,8 @@ public abstract class EmailFormPanel extends Panel {
 					target.addComponent(getFormComponent());
 				}
             });
-
             add(password);
             
-            add(new FeedbackPanel("feedback"));
             
         }
 
