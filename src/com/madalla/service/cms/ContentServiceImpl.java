@@ -21,21 +21,23 @@ public class ContentServiceImpl implements IContentService, Serializable {
     private static final long serialVersionUID = 1L;
     private JcrTemplate template;
     private final Log log = LogFactory.getLog(this.getClass());
+    private String site ;
 
     public void loadContent(String className) {
         // TODO load all data for class
 
     }
 
-    public String getContentData(final String className, final String id) {
+    public String getContentData(final String pageName, final String id) {
         
         return (String) template.execute(new JcrCallback(){
 
             public Object doInJcr(Session session) throws IOException, RepositoryException {
                 String content = null;
                 try {
-                    Node classNode = getClassNode(className, session.getRootNode());
-                    content = getContent(classNode, id);
+                	Node siteNode = getCreateNode(site, session.getRootNode());
+                    Node page = getCreateNode(pageName, siteNode);
+                    content = getContent(page, id);
                 } catch (RepositoryException e) {
                     log.error("Exception getting content.", e);
                     content = "There has been a technical difficulty accessing the Content Repository. " + e.getMessage();
@@ -51,7 +53,8 @@ public class ContentServiceImpl implements IContentService, Serializable {
         template.execute(new JcrCallback(){
 
             public Object doInJcr(Session session) throws IOException, RepositoryException {
-                Node classNode = getClassNode(content.getClassName(),session.getRootNode());
+            	Node siteNode = getCreateNode(site, session.getRootNode());
+                Node classNode = getCreateNode(content.getClassName(),siteNode);
                 Node node;
                 try {
                     node = classNode.getNode(content.getContentId());
@@ -70,15 +73,15 @@ public class ContentServiceImpl implements IContentService, Serializable {
     /**
      *  returns the class name node -- creates it if its not there
      */
-    private Node getClassNode(String className, Node root) throws RepositoryException{
-        Node classNode = null;
+    private Node getCreateNode(String nodeName, Node root) throws RepositoryException{
+        Node node = null;
         try {
-            classNode = root.getNode(className);
+            node = root.getNode(nodeName);
         } catch (PathNotFoundException e){
-            log.debug("Class node not found in repository, now adding. class="+className);
-            classNode = root.addNode(className);
+            log.debug("Node not found in repository, now adding. new node="+nodeName);
+            node = root.addNode(nodeName);
         }
-        return classNode;
+        return node;
         
     }
     
@@ -115,5 +118,9 @@ public class ContentServiceImpl implements IContentService, Serializable {
     public JcrTemplate getTemplate() {
         return template;
     }
+
+	public void setSite(String site) {
+		this.site = site;
+	}
 
 }

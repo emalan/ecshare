@@ -20,6 +20,8 @@ public class BlogService implements IBlogService, Serializable{
     
 	private static final long serialVersionUID = 1L;
 	private static final String BLOG_PREFIX = "blog";
+	//TODO refactor to allow multiple blogs per site
+	private static final String BLOG_NAME = "mainBlog";
 	private BlogDao dao;
 	private IContentService contentService;
 	private Log log = LogFactory.getLog(this.getClass());
@@ -81,11 +83,10 @@ public class BlogService implements IBlogService, Serializable{
     
     private void populateContentFromCMS(BlogEntry blogEntry){
     	log.debug("populateContent - before Content :"+blogEntry);
-    	String node = dao.getSite();
 		String id = getBlogId(blogEntry.getId());
 		
-		log.debug("populateContent - retrieve content from CMS for node="+node+" id="+id);
-		String content = contentService.getContentData(node, id);
+		log.debug("populateContent - retrieve content from CMS for node="+BLOG_NAME+" id="+id);
+		String content = contentService.getContentData(BLOG_NAME, id);
 		log.debug("populateContent - content="+content);
 		blogEntry.setText(content);
     }

@@ -18,6 +18,7 @@
 	<!-- Content service setup -->
 	<bean id="contentService" class="com.madalla.service.cms.ContentServiceImpl">
     	<property name="template" ref="jcrTemplate"/>
+    	<property name="site" value="${site.code}"/>
 	</bean>
 
 	<bean id="jcrTemplate" class="org.springmodules.jcr.JcrTemplate">

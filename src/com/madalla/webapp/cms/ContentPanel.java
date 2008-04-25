@@ -10,11 +10,12 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 
 import com.madalla.service.cms.IContentService;
+import com.madalla.service.cms.IContentServiceProvider;
 
 public class ContentPanel extends Panel implements IContentAware {
     private static final long serialVersionUID = 1L;
     private Page contentEditPage;
-
+    
     /**
      * 
      * @param id
@@ -22,9 +23,10 @@ public class ContentPanel extends Panel implements IContentAware {
      * @param contentService
      * @param contentAdmin
      */
-    public ContentPanel(String id, String className , Page contentEditPage, IContentService contentService, final IContentAdmin contentAdmin) {
+    public ContentPanel(String id, String className , Page contentEditPage, final IContentAdmin contentAdmin) {
         super(id);
         this.contentEditPage = contentEditPage;
+        IContentService contentService = ((IContentServiceProvider)getApplication()).getContentService();
         String contentBody = contentService.getContentData(className, id);
         Component contentBlock = new ContentContainer("contentBlock", id,contentBody, contentAdmin);
         contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel() {

@@ -1,7 +1,6 @@
 package com.madalla.service.blog;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
@@ -12,7 +11,6 @@ import com.madalla.util.ui.ITreeInput;
 public class BlogEntry implements Serializable, Comparable, ITreeInput{
 	private static final long serialVersionUID = 1L;
     private final static int summaryLength = 200;
-    private static DateFormat df = DateFormat.getDateInstance();
     
     private int id;
     private String text;

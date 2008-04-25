@@ -31,13 +31,14 @@ public class ContentEntryPanel extends Panel implements IContentAware {
     private final Content content = new Content();
     private Page contentPage;
 
-    public ContentEntryPanel(String name, Page contentPage, String id, IContentService service) {
+    public ContentEntryPanel(String name, Page contentPage, String id) {
         super(name);
         this.contentPage = contentPage;
         add(HeaderContributor.forJavaScript(TinyMce.class,"tiny_mce.js"));
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
         content.setClassName(contentPage.getClass().getName());
         content.setContentId(id);
+        IContentService service = ((IContentServiceProvider)getApplication()).getContentService();
         String text = service.getContentData(content.getClassName(), content.getContentId());
         add(new ContentForm("contentForm", text));
     }
