@@ -19,6 +19,7 @@
 	<bean id="contentService" class="com.madalla.service.cms.ContentServiceImpl">
     	<property name="template" ref="jcrTemplate"/>
     	<property name="site" value="${site.code}"/>
+    	<property name="locales" ref="siteLocales"/>
 	</bean>
 
 	<bean id="jcrTemplate" class="org.springmodules.jcr.JcrTemplate">

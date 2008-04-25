@@ -1,5 +1,7 @@
 package com.madalla.webapp.cms;
 
+import java.util.Locale;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
@@ -27,8 +29,9 @@ public class ContentPanel extends Panel implements IContentAware {
         super(id);
         this.contentEditPage = contentEditPage;
         IContentService contentService = ((IContentServiceProvider)getApplication()).getContentService();
-        String contentBody = contentService.getContentData(className, id);
-        Component contentBlock = new ContentContainer("contentBlock", id,contentBody, contentAdmin);
+        Locale locale = getSession().getLocale();
+        String contentBody = contentService.getContentData(className, contentService.getLocaleId(id, locale));
+        Component contentBlock = new ContentContainer("contentBlock", contentBody, contentAdmin);
         contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel() {
             public Object getObject() {
                 String cssClass;
@@ -45,7 +48,7 @@ public class ContentPanel extends Panel implements IContentAware {
     
     public class ContentContainer extends WebMarkupContainer{
         private static final long serialVersionUID = 1L;
-        public ContentContainer(String id, String contentId, String contentBody, final IContentAdmin contentAdmin){
+        public ContentContainer(String id, String contentBody, final IContentAdmin contentAdmin){
             super(id);
             
             //add content

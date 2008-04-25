@@ -1,5 +1,7 @@
 package com.madalla.webapp.cms;
 
+import java.util.Locale;
+
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.logging.Log;
@@ -37,8 +39,9 @@ public class ContentEntryPanel extends Panel implements IContentAware {
         add(HeaderContributor.forJavaScript(TinyMce.class,"tiny_mce.js"));
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
         content.setClassName(contentPage.getClass().getName());
-        content.setContentId(id);
         IContentService service = ((IContentServiceProvider)getApplication()).getContentService();
+        Locale locale = getSession().getLocale();
+        content.setContentId(service.getLocaleId(id, locale));
         String text = service.getContentData(content.getClassName(), content.getContentId());
         add(new ContentForm("contentForm", text));
     }

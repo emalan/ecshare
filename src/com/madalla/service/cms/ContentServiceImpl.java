@@ -2,6 +2,8 @@ package com.madalla.service.cms;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Locale;
 
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
@@ -22,10 +24,28 @@ public class ContentServiceImpl implements IContentService, Serializable {
     private JcrTemplate template;
     private final Log log = LogFactory.getLog(this.getClass());
     private String site ;
+    private List locales;
+    private Locale[] supportedLangs;
+    
+    public ContentServiceImpl(){
+    	supportedLangs = new Locale[]{new Locale("af"),Locale.FRENCH};
+    }
 
-    public void loadContent(String className) {
-        // TODO load all data for class
-
+	public String getLocaleId(String id, Locale locale) {
+		
+		Locale found = null;
+		for (int i = 0; i < supportedLangs.length; i++) {
+			Locale l = supportedLangs[i];
+			if (l.getLanguage().equals(locale.getLanguage())){
+			    found = l;
+			    break;
+			}
+		}
+		if (null == found){
+			return id;
+		} else {
+			return id + "_"+ found.getLanguage();
+		}
     }
 
     public String getContentData(final String pageName, final String id) {
@@ -37,7 +57,7 @@ public class ContentServiceImpl implements IContentService, Serializable {
                 try {
                 	Node siteNode = getCreateNode(site, session.getRootNode());
                     Node page = getCreateNode(pageName, siteNode);
-                    content = getContent(page, id);
+                    content = getContent(page, id, CONTENT_DEFAULT);
                 } catch (RepositoryException e) {
                     log.error("Exception getting content.", e);
                     content = "There has been a technical difficulty accessing the Content Repository. " + e.getMessage();
@@ -85,7 +105,7 @@ public class ContentServiceImpl implements IContentService, Serializable {
         
     }
     
-    private String getContent(Node mainNode, String id) {
+    private String getContent(Node mainNode, String id, String defaultValue) {
         String content = "Content placeholder : there is no content in the repository at present.";
         Node node;
         try {
@@ -99,7 +119,7 @@ public class ContentServiceImpl implements IContentService, Serializable {
                 content = node.getProperty(CONTENT).getString();
             } catch (PathNotFoundException e) {
                 log.debug("No Content found in repository, now adding default value. id="+id);
-                Property property = node.setProperty(CONTENT,CONTENT_DEFAULT);
+                Property property = node.setProperty(CONTENT,defaultValue);
                 content = property.getString();
             }
         } catch (Exception e) {
@@ -122,5 +142,15 @@ public class ContentServiceImpl implements IContentService, Serializable {
 	public void setSite(String site) {
 		this.site = site;
 	}
+
+	public void setSupportedLangs(Locale[] supportedLangs) {
+		this.supportedLangs = supportedLangs;
+	}
+
+	public void setLocales(List locales) {
+		this.locales = locales;
+	}
+
+
 
 }
