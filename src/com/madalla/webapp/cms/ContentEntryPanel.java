@@ -6,7 +6,7 @@ import javax.jcr.RepositoryException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.Page;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -31,14 +31,21 @@ public class ContentEntryPanel extends Panel implements IContentAware {
         new CompressedResourceReference(ContentEntryPanel.class, "ContentEntryPanel.js");
     Log log = LogFactory.getLog(this.getClass());
     private final Content content = new Content();
-    private Page contentPage;
+    private Class contentPage;
 
-    public ContentEntryPanel(String name, Page contentPage, String id) {
+    public ContentEntryPanel(String name, final PageParameters parameters) {
         super(name);
-        this.contentPage = contentPage;
+        String nodeName = parameters.getString(CONTENT_NODE);
+        String id = parameters.getString(CONTENT_ID);
+        String returnPage = parameters.getString(CONTENT_PAGE);
+        try {
+			this.contentPage = Class.forName(returnPage);
+		} catch (ClassNotFoundException e) {
+			log.error("constructor - Exception while getting return Class.", e);
+		}
         add(HeaderContributor.forJavaScript(TinyMce.class,"tiny_mce.js"));
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
-        content.setClassName(contentPage.getClass().getName());
+        content.setClassName(nodeName);
         IContentService service = ((IContentServiceProvider)getApplication()).getContentService();
         Locale locale = getSession().getLocale();
         content.setContentId(service.getLocaleId(id, locale));
@@ -75,8 +82,7 @@ public class ContentEntryPanel extends Panel implements IContentAware {
                 info("Content saved to repository");
                 log.info("Content successfully saved to repository. content="
                         + content);
-                contentPage.render();
-                setResponsePage(contentPage.getClass());
+                setResponsePage(contentPage);
             } catch (RepositoryException e) {
                 info("There was a problem saving content. " + e.getMessage());
                 log.error("Exception while saving content to repository.", e);
