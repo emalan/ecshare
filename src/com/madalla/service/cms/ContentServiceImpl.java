@@ -48,7 +48,7 @@ public class ContentServiceImpl implements IContentService, Serializable {
 		}
     }
 
-    public String getContentData(final String pageName, final String id) {
+    public String getContentData(final String nodeName, final String id) {
         
         return (String) template.execute(new JcrCallback(){
 
@@ -56,7 +56,7 @@ public class ContentServiceImpl implements IContentService, Serializable {
                 String content = null;
                 try {
                 	Node siteNode = getCreateNode(site, session.getRootNode());
-                    Node page = getCreateNode(pageName, siteNode);
+                    Node page = getCreateNode(nodeName, siteNode);
                     content = getContent(page, id, CONTENT_DEFAULT);
                 } catch (RepositoryException e) {
                     log.error("Exception getting content.", e);

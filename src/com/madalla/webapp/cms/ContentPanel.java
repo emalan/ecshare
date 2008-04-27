@@ -13,6 +13,8 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 import com.madalla.service.cms.IContentService;
 import com.madalla.service.cms.IContentServiceProvider;
@@ -22,6 +24,8 @@ public class ContentPanel extends Panel implements IContentAware {
     private Log log = LogFactory.getLog(this.getClass());
     private Class contentEditPage;
     private Class returnPage;
+    private String nodeName;
+    private String nodeId;
 
     /**
      * 
@@ -33,6 +37,8 @@ public class ContentPanel extends Panel implements IContentAware {
     public ContentPanel(String id, String node, Class returnPage, Class contentEditPage,
             final IContentAdmin contentAdmin) {
         super(id);
+        this.nodeName = node;
+        this.nodeId = id;
         this.contentEditPage = contentEditPage;
         this.returnPage = returnPage;
         log.debug("Content Panel being created for node=" + node + " id=" + id);
@@ -61,8 +67,20 @@ public class ContentPanel extends Panel implements IContentAware {
                 final IContentAdmin contentAdmin) {
             super(id);
 
+            final Model contentModel = new Model(contentBody);
+            
             // add content
-            Component label = new Label("contentBody", contentBody).setEscapeModelStrings(false);
+            Component label = new Label("contentBody", contentModel){
+                protected void onBeforeRender(){
+                    IContentService contentService = ((IContentServiceProvider) getApplication()).getContentService();
+                    Locale locale = getSession().getLocale();
+                    String contentBody = contentService.getContentData(nodeName, contentService.getLocaleId(nodeId, locale));
+                    log.debug("onBeforeRender - setting new Content = "+contentBody);
+                    contentModel.setObject(contentBody);
+                    super.onBeforeRender();
+                }
+            };
+            label.setEscapeModelStrings(false);
             add(label);
 
             // add link to edit it
@@ -86,10 +104,7 @@ public class ContentPanel extends Panel implements IContentAware {
             add(link);
 
         }
-
-        protected void onBeforeRender() {
-            super.onBeforeRender();
-        }
+ 
     }
 
 }
