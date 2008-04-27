@@ -2,6 +2,7 @@ package com.madalla.service.cms;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,30 +25,19 @@ public class ContentServiceImpl implements IContentService, Serializable {
     private JcrTemplate template;
     private final Log log = LogFactory.getLog(this.getClass());
     private String site ;
+    //TODO use Spring configures List instead of Array
     private List locales;
-    private Locale[] supportedLangs;
+    //private Locale[] supportedLangs;
     
     public ContentServiceImpl(){
-    	supportedLangs = new Locale[]{new Locale("af"),Locale.FRENCH};
+    	//supportedLangs = new Locale[]{new Locale("af"),Locale.FRENCH};
     }
 
-	public String getLocaleId(String id, Locale locale) {
-		
-		Locale found = null;
-		for (int i = 0; i < supportedLangs.length; i++) {
-			Locale l = supportedLangs[i];
-			if (l.getLanguage().equals(locale.getLanguage())){
-			    found = l;
-			    break;
-			}
-		}
-		if (null == found){
-			return id;
-		} else {
-			return id + "_"+ found.getLanguage();
-		}
+    public String getContentData(final String nodeName, final String id, Locale locale) {
+        String localeId = getLocaleId(id, locale);
+        return getContentData(nodeName, localeId);
     }
-
+    
     public String getContentData(final String nodeName, final String id) {
         
         return (String) template.execute(new JcrCallback(){
@@ -68,21 +58,31 @@ public class ContentServiceImpl implements IContentService, Serializable {
             
         });
     }
+    
+    public void setContent(final Content content, Locale locale) throws RepositoryException {
+        String localeId = getLocaleId(content.getContentId(), locale);
+        setContent(content.getClassName(), localeId, content.getText());
+    }
 
     public void setContent(final Content content) throws RepositoryException {
+        setContent(content.getClassName(), content.getContentId(), content.getText());
+    }
+    
+    private void setContent(final String nodeName, final String contentId, final String text){
         template.execute(new JcrCallback(){
 
             public Object doInJcr(Session session) throws IOException, RepositoryException {
-            	Node siteNode = getCreateNode(site, session.getRootNode());
-                Node classNode = getCreateNode(content.getClassName(),siteNode);
+                Node siteNode = getCreateNode(site, session.getRootNode());
+                Node classNode = getCreateNode(nodeName,siteNode);
                 Node node;
                 try {
-                    node = classNode.getNode(content.getContentId());
+                    node = classNode.getNode(contentId);
                 } catch (PathNotFoundException e){
-                	log.debug("Path Content Not found, now adding it. contentId="+content.getContentId());
-                	node = classNode.addNode(content.getContentId());
+                    log.debug("Path Content Not found, now adding it. contentId="+contentId);
+                    node = classNode.addNode(contentId);
                 }
-                node.setProperty(CONTENT, content.getText());
+                node.setProperty(CONTENT, text);
+                log.debug("setContent - Saving Content. parentNode="+nodeName+" node="+contentId);
                 session.save();
                 return null;
             }
@@ -90,6 +90,23 @@ public class ContentServiceImpl implements IContentService, Serializable {
         });
     }
     
+    private String getLocaleId(String id, Locale locale) {
+        
+        Locale found = null;
+        for (Iterator iter = locales.iterator(); iter.hasNext();) {
+            Locale current = (Locale) iter.next();
+            if (current.getLanguage().equals(locale.getLanguage())){
+                found = current;
+                break;
+            }
+        }
+        if (null == found){
+            return id;
+        } else {
+            return id + "_"+ found.getLanguage();
+        }
+    }
+
     /**
      *  returns the class name node -- creates it if its not there
      */
@@ -141,10 +158,6 @@ public class ContentServiceImpl implements IContentService, Serializable {
 
 	public void setSite(String site) {
 		this.site = site;
-	}
-
-	public void setSupportedLangs(Locale[] supportedLangs) {
-		this.supportedLangs = supportedLangs;
 	}
 
 	public void setLocales(List locales) {

@@ -1,7 +1,5 @@
 package com.madalla.webapp.cms;
 
-import java.util.Locale;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
@@ -13,7 +11,6 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import com.madalla.service.cms.IContentService;
@@ -43,8 +40,7 @@ public class ContentPanel extends Panel implements IContentAware {
         this.returnPage = returnPage;
         log.debug("Content Panel being created for node=" + node + " id=" + id);
         IContentService contentService = ((IContentServiceProvider) getApplication()).getContentService();
-        Locale locale = getSession().getLocale();
-        String contentBody = contentService.getContentData(node, contentService.getLocaleId(id, locale));
+        String contentBody = contentService.getContentData(node, id , getSession().getLocale());
         Component contentBlock = new ContentContainer("contentBlock", id, node, contentBody, contentAdmin);
         contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel() {
             public Object getObject() {
@@ -73,8 +69,7 @@ public class ContentPanel extends Panel implements IContentAware {
             Component label = new Label("contentBody", contentModel){
                 protected void onBeforeRender(){
                     IContentService contentService = ((IContentServiceProvider) getApplication()).getContentService();
-                    Locale locale = getSession().getLocale();
-                    String contentBody = contentService.getContentData(nodeName, contentService.getLocaleId(nodeId, locale));
+                    String contentBody = contentService.getContentData(nodeName, nodeId, getSession().getLocale());
                     log.debug("onBeforeRender - setting new Content = "+contentBody);
                     contentModel.setObject(contentBody);
                     super.onBeforeRender();

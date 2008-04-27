@@ -12,8 +12,9 @@ public interface IContentService {
 	final String CONTENT = "content";
 	final String CONTENT_DEFAULT = "Content";
 
-    public abstract String getContentData(String nodeName, String id);
+    public String getContentData(String nodeName, String id);
+    public String getContentData(String nodeName, String id, Locale locale);
     public void setContent(Content content) throws RepositoryException;
-    public String getLocaleId(String id ,Locale locale);
+    public void setContent(Content content, Locale locale) throws RepositoryException;
 
 }

@@ -22,13 +22,14 @@ import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 
 /**
  * The Wicket application must implement the IContentServiceProvider interface
+ * 
  * @author exmalan
- *
+ * 
  */
 public class ContentEntryPanel extends Panel implements IContentAware {
     private static final long serialVersionUID = 1L;
-    private static final CompressedResourceReference JAVASCRIPT = 
-        new CompressedResourceReference(ContentEntryPanel.class, "ContentEntryPanel.js");
+    private static final CompressedResourceReference JAVASCRIPT = new CompressedResourceReference(
+            ContentEntryPanel.class, "ContentEntryPanel.js");
     Log log = LogFactory.getLog(this.getClass());
     private final Content content = new Content();
     private Class contentPage;
@@ -39,59 +40,55 @@ public class ContentEntryPanel extends Panel implements IContentAware {
         String id = parameters.getString(CONTENT_ID);
         String returnPage = parameters.getString(CONTENT_PAGE);
         try {
-			this.contentPage = Class.forName(returnPage);
-		} catch (ClassNotFoundException e) {
-			log.error("constructor - Exception while getting return Class.", e);
-		}
-        add(HeaderContributor.forJavaScript(TinyMce.class,"tiny_mce.js"));
+            this.contentPage = Class.forName(returnPage);
+        } catch (ClassNotFoundException e) {
+            log.error("constructor - Exception while getting return Class.", e);
+        }
+        add(HeaderContributor.forJavaScript(TinyMce.class, "tiny_mce.js"));
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
+
         content.setClassName(nodeName);
-        IContentService service = ((IContentServiceProvider)getApplication()).getContentService();
-        Locale locale = getSession().getLocale();
-        content.setContentId(service.getLocaleId(id, locale));
-        String text = service.getContentData(content.getClassName(), content.getContentId());
+        content.setContentId(id);
+
+        IContentService service = ((IContentServiceProvider) getApplication()).getContentService();
+        String text = service.getContentData(content.getClassName(), content.getContentId(), getSession().getLocale());
         add(new ContentForm("contentForm", text));
     }
-    
+
     final class ContentForm extends Form {
         private static final long serialVersionUID = -3526743712542402160L;
-        
+
         public ContentForm(final String name, String text) {
             super(name);
             content.setText(text);
             add(new TextArea("text", new PropertyModel(content, "text")));
             add(new FeedbackPanel("feedback"));
-            
-            Button cancelButton = new Button("cancelButton"){
-				private static final long serialVersionUID = 1L;
 
-				public void onSubmit() {
-					setResponsePage(contentPage);
-				}
+            Button cancelButton = new Button("cancelButton") {
+                private static final long serialVersionUID = 1L;
+
+                public void onSubmit() {
+                    setResponsePage(contentPage);
+                }
             };
             cancelButton.setDefaultFormProcessing(false);
             add(cancelButton);
         }
 
         public void onSubmit() {
-            log.debug("Submiting populated Content object to Content service. content="
-                      + content);
+            log.debug("Submiting populated Content object to Content service. content=" + content);
             try {
-            	IContentService service = ((IContentServiceProvider)getPage().getApplication()).getContentService();
-                service.setContent(content);
+                IContentService service = ((IContentServiceProvider) getPage().getApplication()).getContentService();
+                service.setContent(content, getSession().getLocale());
                 info("Content saved to repository");
-                log.info("Content successfully saved to repository. content="
-                        + content);
+                log.info("Content successfully saved to repository. content=" + content);
                 setResponsePage(contentPage);
             } catch (RepositoryException e) {
                 info("There was a problem saving content. " + e.getMessage());
                 log.error("Exception while saving content to repository.", e);
             }
         }
-        
-        
+
     }
-
-
 
 }

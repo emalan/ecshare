@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 public class Content implements Serializable {
-
+    private static final long serialVersionUID = 1L;
     private String className;
     private String contentId;
     private String text;
