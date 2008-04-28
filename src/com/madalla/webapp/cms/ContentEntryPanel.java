@@ -73,6 +73,14 @@ public class ContentEntryPanel extends Panel implements IContentAware {
             };
             cancelButton.setDefaultFormProcessing(false);
             add(cancelButton);
+            
+            Button explore = new Button("exploreButton"){
+                private static final long serialVersionUID = 1L;
+
+                public void onSubmit() {
+                    setResponsePage(contentPage);
+                }
+            };
         }
 
         public void onSubmit() {
