@@ -1,4 +1,4 @@
-package com.madalla.util.jcr;
+package com.madalla.util.jcr.model;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +9,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+
 
 public class JcrNodeModel extends ItemModelWrapper implements IPluginModel {
     private static final long serialVersionUID = 1L;
@@ -38,8 +39,8 @@ public class JcrNodeModel extends ItemModelWrapper implements IPluginModel {
         return map;
     }
 
-    public HippoNode getNode() {
-        return (HippoNode) itemModel.getObject();
+    public Node getNode() {
+        return (Node) itemModel.getObject();
     }
 
     public JcrNodeModel getParentModel() {

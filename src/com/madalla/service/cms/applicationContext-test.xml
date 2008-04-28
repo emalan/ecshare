@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+    
+    <bean id="propertyConfigurer" 
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <value>classpath:com/madalla/service/cms/ContentServiceTest.properties</value>
+        </property>
+    </bean>
+    
+    <!-- These are defined in the client webapps so that they can decide which languages they support -->
+    <util:list id="siteLocales">
+    	<ref bean="french"/>
+    	<ref bean="afrikaans"/>
+	</util:list>
+
+	<bean id="french" class="java.util.Locale">
+    	<constructor-arg value="fr"/>
+    	<constructor-arg value=""/>
+    	<constructor-arg value=""/>
+	</bean>
+	<bean id="afrikaans" class="java.util.Locale">
+    	<constructor-arg value="af"/>
+    	<constructor-arg value=""/>
+    	<constructor-arg value=""/>
+	</bean>
+    
+</beans>

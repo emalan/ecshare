@@ -18,7 +18,10 @@ import org.apache.commons.logging.LogFactory;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
-import com.madalla.util.jcr.JcrTreeModel;
+import com.madalla.util.jcr.model.JcrItemModel;
+import com.madalla.util.jcr.model.JcrNodeModel;
+import com.madalla.util.jcr.model.tree.JcrTreeModel;
+import com.madalla.util.jcr.model.tree.JcrTreeNode;
 import com.madalla.webapp.cms.Content;
 
 public class ContentServiceImpl implements IContentService, Serializable {
@@ -64,17 +67,21 @@ public class ContentServiceImpl implements IContentService, Serializable {
         setContent(content.getClassName(), localeId, content.getText());
     }
 
-    public void setContent(final Content content) throws RepositoryException {
+    public void setContent(final Content content)  {
         setContent(content.getClassName(), content.getContentId(), content.getText());
     }
     
     public TreeModel getSiteContent(){
-        template.execute(new JcrCallback(){
+    	return (TreeModel) template.execute(new JcrCallback(){
             
             public Object doInJcr(Session session) throws IOException, RepositoryException {
-                Node node = session.getRootNode();
+                Node root = session.getRootNode();
+                Node node = root.getNode(site);
                 //TODO change to using site Node
-                return new JcrTreeModel();
+                JcrItemModel itemModel = new JcrItemModel(node);
+                JcrNodeModel nodeModel = new JcrNodeModel(itemModel);
+                JcrTreeNode treeNode = new JcrTreeNode(nodeModel);
+                return new JcrTreeModel(treeNode);
             }
         });
     }

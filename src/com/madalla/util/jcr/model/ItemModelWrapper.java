@@ -1,4 +1,4 @@
-package com.madalla.util.jcr;
+package com.madalla.util.jcr.model;
 
 import javax.jcr.Item;
 

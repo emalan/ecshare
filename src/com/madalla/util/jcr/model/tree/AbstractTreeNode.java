@@ -1,7 +1,22 @@
-package com.madalla.util.jcr;
+package com.madalla.util.jcr.model.tree;
 
-public class AbstractTreeNode {
-    static final Logger log = LoggerFactory.getLogger(AbstractTreeNode.class);
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.jcr.RepositoryException;
+import javax.swing.tree.TreeNode;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.madalla.util.jcr.model.JcrNodeModel;
+import com.madalla.util.jcr.model.NodeModelWrapper;
+
+public abstract class AbstractTreeNode extends NodeModelWrapper implements TreeNode {
+    static final Log log = LogFactory.getLog(AbstractTreeNode.class);
 
     private JcrTreeModel treeModel;
     private List<AbstractTreeNode> children = new ArrayList<AbstractTreeNode>();
