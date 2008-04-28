@@ -11,12 +11,14 @@ import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.swing.tree.TreeModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
+import com.madalla.util.jcr.JcrTreeModel;
 import com.madalla.webapp.cms.Content;
 
 public class ContentServiceImpl implements IContentService, Serializable {
@@ -25,12 +27,10 @@ public class ContentServiceImpl implements IContentService, Serializable {
     private JcrTemplate template;
     private final Log log = LogFactory.getLog(this.getClass());
     private String site ;
-    //TODO use Spring configures List instead of Array
     private List locales;
-    //private Locale[] supportedLangs;
     
     public ContentServiceImpl(){
-    	//supportedLangs = new Locale[]{new Locale("af"),Locale.FRENCH};
+
     }
 
     public String getContentData(final String nodeName, final String id, Locale locale) {
@@ -66,6 +66,17 @@ public class ContentServiceImpl implements IContentService, Serializable {
 
     public void setContent(final Content content) throws RepositoryException {
         setContent(content.getClassName(), content.getContentId(), content.getText());
+    }
+    
+    public TreeModel getSiteContent(){
+        template.execute(new JcrCallback(){
+            
+            public Object doInJcr(Session session) throws IOException, RepositoryException {
+                Node node = session.getRootNode();
+                //TODO change to using site Node
+                return new JcrTreeModel();
+            }
+        });
     }
     
     private void setContent(final String nodeName, final String contentId, final String text){
