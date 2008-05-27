@@ -10,7 +10,6 @@ import com.madalla.webapp.cms.Content;
 
 public interface IContentService {
 	
-	final String CONTENT = "content";
 	final String CONTENT_DEFAULT = "Content";
 
     public String getContentData(String nodeName, String id);

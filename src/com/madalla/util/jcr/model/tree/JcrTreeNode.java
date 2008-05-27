@@ -18,8 +18,6 @@ import com.madalla.util.jcr.model.JcrNodeModel;
 public class JcrTreeNode extends AbstractTreeNode{
 	private static final long serialVersionUID = 1L;
 
-    private final static int MAXCOUNT = 25;
-
     public JcrTreeNode(JcrNodeModel nodeModel) {
         super(nodeModel);
     }
@@ -38,37 +36,23 @@ public class JcrTreeNode extends AbstractTreeNode{
         return null;
     }
 
-    @Override
     protected int loadChildcount() throws RepositoryException {
         int result = 1;
         Node node = nodeModel.getNode();
-//        if (node.isNodeType(HippoNodeType.NT_FACETRESULT) || node.isNodeType(HippoNodeType.NT_FACETSEARCH)) {
-//            result = 1;
-//        } else {
-//            result = (int) node.getNodes().getSize();
-//        }
+        result = (int) node.getNodes().getSize();
         return result;
     }
 
-    @Override
-    protected List<AbstractTreeNode> loadChildren() throws RepositoryException {
+    protected List loadChildren() throws RepositoryException {
         Node node = nodeModel.getNode();
-        List<AbstractTreeNode> newChildren = new ArrayList();
-        NodeIterator jcrChildren = node.getNodes();
-        int count = 0;
-        while (jcrChildren.hasNext() && count < MAXCOUNT) {
+        List newChildren = new ArrayList();
+        for (NodeIterator jcrChildren = node.getNodes();jcrChildren.hasNext();) {
             Node jcrChild = jcrChildren.nextNode();
             if (jcrChild != null) {
-                ++count;
                 JcrNodeModel childModel = new JcrNodeModel(jcrChild);
                 JcrTreeNode treeNodeModel = new JcrTreeNode(childModel, getTreeModel());
                 newChildren.add(treeNodeModel);
             }
-        }
-        if(jcrChildren.hasNext()) {
-          LabelTreeNode treeNodeModel = new LabelTreeNode(nodeModel, getTreeModel(),
-                                                          jcrChildren.getSize() - jcrChildren.getPosition());
-          newChildren.add(treeNodeModel);
         }
         return newChildren;
     }
@@ -90,14 +74,11 @@ public class JcrTreeNode extends AbstractTreeNode{
         return result;
     }
 
-
-    @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("nodeModel", nodeModel.toString())
                 .toString();
     }
 
-    @Override
     public boolean equals(Object object) {
         if (object instanceof JcrTreeNode == false) {
             return false;
@@ -109,7 +90,6 @@ public class JcrTreeNode extends AbstractTreeNode{
         return new EqualsBuilder().append(nodeModel, treeNode.nodeModel).isEquals();
     }
 
-    @Override
     public int hashCode() {
         return new HashCodeBuilder(87, 335).append(nodeModel).toHashCode();
     }

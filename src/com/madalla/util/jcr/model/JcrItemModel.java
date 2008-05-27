@@ -2,7 +2,6 @@ package com.madalla.util.jcr.model;
 
 import javax.jcr.Item;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -39,16 +38,16 @@ public class JcrItemModel extends LoadableDetachableModel {
         return path;
     }
 
-    public boolean exists() {
-        boolean result = false;
+//    public boolean exists() {
+//        boolean result = false;
 //        try {
 //            UserSession sessionProvider = (UserSession) Session.get();
 //            result = sessionProvider.getJcrSession().itemExists(path);
 //        } catch (RepositoryException e) {
 //            log.error(e.getMessage());
 //        }
-        return result;
-    }
+//        return result;
+//    }
 
     public JcrItemModel getParentModel() {
         int idx = path.lastIndexOf('/');
@@ -68,7 +67,6 @@ public class JcrItemModel extends LoadableDetachableModel {
 
     // LoadableDetachableModel
 
-    @Override
     protected Object load() {
         Item result = null;
 //        try {
@@ -82,12 +80,10 @@ public class JcrItemModel extends LoadableDetachableModel {
 
     // override Object
 
-    @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("path", path).toString();
     }
 
-    @Override
     public boolean equals(Object object) {
         if (object instanceof JcrItemModel == false) {
             return false;
@@ -99,7 +95,6 @@ public class JcrItemModel extends LoadableDetachableModel {
         return new EqualsBuilder().append(normalizePath(path), normalizePath(itemModel.path)).isEquals();
     }
 
-    @Override
     public int hashCode() {
         return new HashCodeBuilder(177, 3).append(path).toHashCode();
     }

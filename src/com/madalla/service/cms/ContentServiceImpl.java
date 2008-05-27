@@ -24,7 +24,7 @@ import com.madalla.util.jcr.model.tree.JcrTreeModel;
 import com.madalla.util.jcr.model.tree.JcrTreeNode;
 import com.madalla.webapp.cms.Content;
 
-public class ContentServiceImpl implements IContentService, Serializable {
+public class ContentServiceImpl implements IContentData, IContentService, Serializable {
     
     private static final long serialVersionUID = 1L;
     private JcrTemplate template;
@@ -75,10 +75,9 @@ public class ContentServiceImpl implements IContentService, Serializable {
     	return (TreeModel) template.execute(new JcrCallback(){
             
             public Object doInJcr(Session session) throws IOException, RepositoryException {
-                Node root = session.getRootNode();
-                Node node = root.getNode(site);
+            	Node siteNode = getCreateNode(site, session.getRootNode());
                 //TODO change to using site Node
-                JcrItemModel itemModel = new JcrItemModel(node);
+                JcrItemModel itemModel = new JcrItemModel(siteNode);
                 JcrNodeModel nodeModel = new JcrNodeModel(itemModel);
                 JcrTreeNode treeNode = new JcrTreeNode(nodeModel);
                 return new JcrTreeModel(treeNode);
@@ -129,6 +128,10 @@ public class ContentServiceImpl implements IContentService, Serializable {
      *  returns the class name node -- creates it if its not there
      */
     private Node getCreateNode(String nodeName, Node root) throws RepositoryException{
+    	if (null == nodeName){
+    		log.error("getCreateNode - Parameter nodeName cannot be null");
+    		return null;
+    	}
         Node node = null;
         try {
             node = root.getNode(nodeName);

@@ -1,5 +1,7 @@
 package com.madalla.service.cms;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import javax.jcr.RepositoryException;
@@ -7,11 +9,12 @@ import javax.swing.tree.TreeModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
+import org.apache.wicket.markup.html.tree.LinkTree;
 
+import com.madalla.test.AbstractSpringWicketTester;
 import com.madalla.webapp.cms.Content;
 
-public class ContentServiceTest extends  AbstractDependencyInjectionSpringContextTests{
+public class ContentServiceTest extends  AbstractSpringWicketTester{
 
 	Log log = LogFactory.getLog(this.getClass());
 	private IContentService contentService;
@@ -19,19 +22,24 @@ public class ContentServiceTest extends  AbstractDependencyInjectionSpringContex
 	private final static String CONTENT_PARENT = "testParentNode";
 	private final static String CONTENT_TEXT = "Content text";
 	
-    protected void onSetUp() throws Exception {
-    }
+	protected List getTestConfigLocations() {
+		List configLocations = new ArrayList();
+		configLocations.add("classpath:com/madalla/service/cms/applicationContext-cms.xml");
+		return configLocations;
+	}
 
-    protected String[] getConfigLocations() {
-        
-        return new String[]{
-        		"classpath:com/madalla/service/cms/applicationContext-cms.xml",
-                "classpath:com/madalla/service/cms/applicationContext-test.xml"};
-    }
-    
     public void testContentExplorer(){
     	TreeModel treeModel = contentService.getSiteContent();
     	assertNotNull(treeModel);
+    	
+    	LinkTree tree = new LinkTree("test", treeModel);
+    	
+    	appTester.startComponent(tree);
+    	//tree.render();
+    	//int size = tree.size();
+    	//tree.g
+    	//tree.render();
+    	
     }
     
     public void testContentGetSet() throws RepositoryException{
@@ -60,5 +68,7 @@ public class ContentServiceTest extends  AbstractDependencyInjectionSpringContex
     public void setContentService(IContentService contentService) {
 		this.contentService = contentService;
 	}
+
+
 
 }

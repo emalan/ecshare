@@ -65,14 +65,11 @@ public class JcrNodeModel extends ItemModelWrapper implements IPluginModel {
     }
 
     // override Object
-
-    @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("itemModel", itemModel.toString())
                 .toString();
     }
 
-    @Override
     public boolean equals(Object object) {
         if (object instanceof JcrNodeModel == false) {
             return false;
@@ -84,7 +81,6 @@ public class JcrNodeModel extends ItemModelWrapper implements IPluginModel {
         return new EqualsBuilder().append(itemModel, nodeModel.itemModel).isEquals();
     }
 
-    @Override
     public int hashCode() {
         return new HashCodeBuilder(57, 433).append(itemModel).toHashCode();
     }
