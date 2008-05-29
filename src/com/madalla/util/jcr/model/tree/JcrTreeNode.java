@@ -6,6 +6,7 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.swing.tree.TreeNode;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -38,15 +39,14 @@ public class JcrTreeNode extends AbstractTreeNode{
 
     protected int loadChildcount() throws RepositoryException {
         int result = 1;
-        Node node = nodeModel.getNode();
-        result = (int) node.getNodes().getSize();
+        result = nodeModel.getChildCount();
         return result;
     }
 
     protected List loadChildren() throws RepositoryException {
-        Node node = nodeModel.getNode();
+        //Node node = nodeModel.getNode();
         List newChildren = new ArrayList();
-        for (NodeIterator jcrChildren = node.getNodes();jcrChildren.hasNext();) {
+        for (NodeIterator jcrChildren = nodeModel.getNodes();jcrChildren.hasNext();) {
             Node jcrChild = jcrChildren.nextNode();
             if (jcrChild != null) {
                 JcrNodeModel childModel = new JcrNodeModel(jcrChild);

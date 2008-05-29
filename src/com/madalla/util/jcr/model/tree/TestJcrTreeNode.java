@@ -22,7 +22,7 @@ import com.madalla.util.jcr.test.AbstractJcrTester;
 public class TestJcrTreeNode extends AbstractJcrTester {
 
 	Log log = LogFactory.getLog(this.getClass());
-	private JcrTemplate template;
+	public JcrTemplate template;
 	private String site = "test" ;
 	final String CONTENT = "Testcontent";
 
@@ -80,8 +80,8 @@ public class TestJcrTreeNode extends AbstractJcrTester {
 				Node siteNode = root.getNode(site);
 				int count = (int) siteNode.getNodes().getSize();
 				assertNotNull(siteNode);
-                JcrItemModel itemModel = new JcrItemModel(siteNode);
-                JcrNodeModel nodeModel = new JcrNodeModel(itemModel);
+                JcrItemModel itemModel = new JcrItemModel(root, template);
+                JcrNodeModel nodeModel = new JcrNodeModel(itemModel, template);
                 JcrTreeNode treeNode = new JcrTreeNode(nodeModel);
                 JcrTreeModel jcrTreeModel = new JcrTreeModel(treeNode);
                 assertNotNull(treeNode);

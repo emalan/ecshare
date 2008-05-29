@@ -4,16 +4,18 @@ import javax.jcr.Item;
 
 import org.apache.wicket.model.IChainingModel;
 import org.apache.wicket.model.IModel;
+import org.springmodules.jcr.JcrTemplate;
 
 public abstract class ItemModelWrapper implements IChainingModel {
     protected JcrItemModel itemModel;
+    protected JcrTemplate template;
 
     public ItemModelWrapper(JcrItemModel model) {
         itemModel = model;
     }
 
     public ItemModelWrapper(Item item) {
-        itemModel = new JcrItemModel(item);
+        itemModel = new JcrItemModel(item, template);
     }
 
     public ItemModelWrapper(String path) {

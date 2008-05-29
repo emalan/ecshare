@@ -1,7 +1,10 @@
 package com.madalla.util.jcr.model;
 
+import java.io.IOException;
+
 import javax.jcr.Item;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -10,18 +13,21 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.springmodules.jcr.JcrCallback;
+import org.springmodules.jcr.JcrTemplate;
 
 public class JcrItemModel extends LoadableDetachableModel {
 	private static final long serialVersionUID = 1L;
-
+	private JcrTemplate template;
     static final Log log = LogFactory.getLog(JcrItemModel.class);
 
     protected String path;
 
     // constructors
 
-    public JcrItemModel(Item item) {
+    public JcrItemModel(Item item, JcrTemplate template) {
         super(item);
+        this.template = template;
         try {
             this.path = item.getPath();
         } catch (RepositoryException e) {
@@ -38,16 +44,17 @@ public class JcrItemModel extends LoadableDetachableModel {
         return path;
     }
 
-//    public boolean exists() {
-//        boolean result = false;
+    public boolean exists() {
+        boolean result = false;
+
 //        try {
-//            UserSession sessionProvider = (UserSession) Session.get();
-//            result = sessionProvider.getJcrSession().itemExists(path);
+//            //UserSession sessionProvider = (UserSession) Session.get();
+//            //result = sessionProvider.getJcrSession().itemExists(path);
 //        } catch (RepositoryException e) {
 //            log.error(e.getMessage());
 //        }
-//        return result;
-//    }
+        return result;
+    }
 
     public JcrItemModel getParentModel() {
         int idx = path.lastIndexOf('/');
@@ -68,13 +75,15 @@ public class JcrItemModel extends LoadableDetachableModel {
     // LoadableDetachableModel
 
     protected Object load() {
-        Item result = null;
-//        try {
-//            UserSession sessionProvider = (UserSession) Session.get();
-//            result = sessionProvider.getJcrSession().getItem(path);
-//        } catch (RepositoryException e) {
-//            log.warn("failed to load " + e.getMessage());
-//        }
+    	log.debug("load - loading item from repository with path="+path);
+    	Item result = (Item) template.execute(new JcrCallback(){
+
+			public Object doInJcr(Session session) throws IOException,
+					RepositoryException {
+				return session.getItem(path);
+			}
+        	
+        });
         return result;
     }
 

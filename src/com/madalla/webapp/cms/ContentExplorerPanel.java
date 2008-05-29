@@ -42,7 +42,6 @@ public class ContentExplorerPanel extends Panel implements IContentData{
 			protected IModel getNodeTextModel(IModel model) {
 				AbstractTreeNode treeNode = (JcrTreeNode) model.getObject();
 				JcrNodeModel nodeModel = treeNode.getNodeModel();
-				Node node = nodeModel.getNode(); 
 				return new Model("test");
 //				if (treeNode.getUserObject() instanceof ITreeInput) {
 //					ITreeInput treeInput = (ITreeInput) treeNode.getUserObject();

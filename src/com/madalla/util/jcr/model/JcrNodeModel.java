@@ -1,24 +1,33 @@
 package com.madalla.util.jcr.model;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.springmodules.jcr.JcrCallback;
+import org.springmodules.jcr.JcrTemplate;
 
 
 public class JcrNodeModel extends ItemModelWrapper implements IPluginModel {
     private static final long serialVersionUID = 1L;
+    
+    
 
     private transient boolean parentCached = false;
     private transient JcrNodeModel parent;
 
-    public JcrNodeModel(JcrItemModel model) {
+    public JcrNodeModel(JcrItemModel model, JcrTemplate jcrTemplate) {
         super(model);
+        this.template = template;
     }
 
     public JcrNodeModel(Node node) {
@@ -39,15 +48,40 @@ public class JcrNodeModel extends ItemModelWrapper implements IPluginModel {
         return map;
     }
 
-    public Node getNode() {
+    private Node getNode() {
         return (Node) itemModel.getObject();
+    }
+    
+    public boolean hasNode(){
+    	return itemModel.getObject() == null? false: true; 
+    }
+    
+    public int getChildCount(){
+    	NodeIterator iterator = getNodes();
+    	return (int) iterator.getSize();
+    }
+    
+    public NodeIterator getNodes(){
+    	return (NodeIterator) template.execute(new JcrCallback(){
+
+			public Object doInJcr(Session session) throws IOException,
+					RepositoryException {
+				
+				Node node = getNode();
+				if (!node.getSession().isLive()){
+					node = (Node) session.getItem(node.getPath());
+				}
+				return node.getNodes();
+			}
+    		
+    	});
     }
 
     public JcrNodeModel getParentModel() {
         if (!parentCached) {
             JcrItemModel parentModel = itemModel.getParentModel();
             if (parentModel != null) {
-                parent = new JcrNodeModel(parentModel);
+                parent = new JcrNodeModel(parentModel, template);
             } else {
                 parent = null;
             }
