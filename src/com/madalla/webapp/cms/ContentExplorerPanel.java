@@ -16,8 +16,6 @@ import com.madalla.service.cms.IContentData;
 import com.madalla.service.cms.IContentService;
 import com.madalla.service.cms.IContentServiceProvider;
 import com.madalla.util.jcr.model.ContentNode;
-import com.madalla.util.jcr.model.JcrNodeModel;
-import com.madalla.util.jcr.model.tree.AbstractTreeNode;
 import com.madalla.util.jcr.model.tree.JcrTreeNode;
 
 public class ContentExplorerPanel extends Panel implements IContentData{
@@ -41,17 +39,8 @@ public class ContentExplorerPanel extends Panel implements IContentData{
 
 			protected IModel getNodeTextModel(IModel model) {
 				JcrTreeNode jcrTreeNode = (JcrTreeNode) model.getObject();
-				jcrTreeNode.getObject();
-				return new Model("test");
-//				if (treeNode.getUserObject() instanceof ITreeInput) {
-//					ITreeInput treeInput = (ITreeInput) treeNode.getUserObject();
-//					String title = treeInput.getTitle();
-//					return new Model(df.format(treeInput.getDate())
-//							+ (null == title ? "" : " - " + title));
-//				} else {
-//					return model;
-//				}
-				//return model;
+				ContentNode contentNode = (ContentNode)jcrTreeNode.getObject();
+				return new Model(contentNode.getName());
 			}
 
 		};
