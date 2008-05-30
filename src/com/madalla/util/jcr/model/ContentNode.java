@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 
 public class ContentNode extends AbstractReadOnlyModel  implements Serializable{
@@ -34,4 +35,8 @@ public class ContentNode extends AbstractReadOnlyModel  implements Serializable{
 	public String getName() {
 		return name;
 	}
+	
+    public String toString() {
+        return new ToStringBuilder(this).append("path",path).append("name", name).toString();
+    }
 }
