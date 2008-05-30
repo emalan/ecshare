@@ -78,10 +78,11 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
             	Node rootNode = session.getRootNode();
             	Node siteNode = getCreateNode(site, rootNode);
                 //TODO change to using site Node. Site Nood must act like root.
-                JcrItemModel itemModel = new JcrItemModel(rootNode, getTemplate());
-                JcrNodeModel nodeModel = new JcrNodeModel(itemModel, getTemplate());
+                JcrNodeModel nodeModel = new JcrNodeModel(rootNode);
                 JcrTreeNode treeNode = new JcrTreeNode(nodeModel);
-                return new JcrTreeModel(treeNode);
+                JcrTreeModel jcrTreeModel = new JcrTreeModel(treeNode);
+                treeNode.init(rootNode);
+                return jcrTreeModel;
             }
         });
     }
@@ -175,7 +176,7 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
     }
 
     public JcrTemplate getTemplate() {
-        return template;
+        return new JcrTemplate();
     }
 
 	public void setSite(String site) {

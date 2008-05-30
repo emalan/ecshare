@@ -1,9 +1,13 @@
 package com.madalla.util.jcr.model;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.jcr.AccessDeniedException;
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
@@ -16,77 +20,38 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
+import com.madalla.util.jcr.model.tree.JcrTreeNode;
 
-public class JcrNodeModel extends ItemModelWrapper implements IPluginModel {
+
+public class JcrNodeModel implements IPluginModel {
     private static final long serialVersionUID = 1L;
     
-    
-
+    private ContentNode contentNode;
     private transient boolean parentCached = false;
-    private transient JcrNodeModel parent;
-
-    public JcrNodeModel(JcrItemModel model, JcrTemplate jcrTemplate) {
-        super(model);
-        this.template = template;
-    }
+    private JcrNodeModel parent = null;
 
     public JcrNodeModel(Node node) {
-        super(node);
+    	contentNode = new ContentNode(node);
+    	Node parentNode = null;
+		try {
+			parentNode = node.getParent();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	if (parentNode != null){
+    		parent = new JcrNodeModel(parentNode);
+    		parentCached = true;
+    	}
     }
     
-    public JcrNodeModel(String path) {
-        super(path);
-    }
-
-    public JcrNodeModel(IPluginModel model) {
-        super((String) model.getMapRepresentation().get("node"));
-    }
-
     public Map<String, Object> getMapRepresentation() {
         Map map = new HashMap();
-        map.put("node", itemModel.getPath());
+        map.put("node", contentNode.getPath());
         return map;
     }
 
-    private Node getNode() {
-        return (Node) itemModel.getObject();
-    }
-    
-    public boolean hasNode(){
-    	return itemModel.getObject() == null? false: true; 
-    }
-    
-    public int getChildCount(){
-    	NodeIterator iterator = getNodes();
-    	return (int) iterator.getSize();
-    }
-    
-    public NodeIterator getNodes(){
-    	return (NodeIterator) template.execute(new JcrCallback(){
-
-			public Object doInJcr(Session session) throws IOException,
-					RepositoryException {
-				
-				Node node = getNode();
-				if (!node.getSession().isLive()){
-					node = (Node) session.getItem(node.getPath());
-				}
-				return node.getNodes();
-			}
-    		
-    	});
-    }
-
     public JcrNodeModel getParentModel() {
-        if (!parentCached) {
-            JcrItemModel parentModel = itemModel.getParentModel();
-            if (parentModel != null) {
-                parent = new JcrNodeModel(parentModel, template);
-            } else {
-                parent = null;
-            }
-            parentCached = true;
-        }
         return parent;
     }
 
@@ -100,7 +65,7 @@ public class JcrNodeModel extends ItemModelWrapper implements IPluginModel {
 
     // override Object
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("itemModel", itemModel.toString())
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("contentNode", contentNode.toString())
                 .toString();
     }
 
@@ -112,10 +77,26 @@ public class JcrNodeModel extends ItemModelWrapper implements IPluginModel {
             return true;
         }
         JcrNodeModel nodeModel = (JcrNodeModel) object;
-        return new EqualsBuilder().append(itemModel, nodeModel.itemModel).isEquals();
+        return new EqualsBuilder().append(contentNode, nodeModel.contentNode).isEquals();
     }
 
     public int hashCode() {
-        return new HashCodeBuilder(57, 433).append(itemModel).toHashCode();
+        return new HashCodeBuilder(57, 433).append(contentNode).toHashCode();
     }
+
+	public Object getObject() {
+		return contentNode;
+	}
+
+	public void setObject(Object obj) {
+		contentNode = (ContentNode) obj;
+	}
+
+	public void detach() {
+		//contentNode = null;
+	}
+
+	public ContentNode getContentNode() {
+		return contentNode;
+	}
 }

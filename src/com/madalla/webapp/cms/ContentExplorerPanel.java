@@ -2,7 +2,6 @@ package com.madalla.webapp.cms;
 
 import java.text.DateFormat;
 
-import javax.jcr.Node;
 import javax.swing.tree.TreeModel;
 
 import org.apache.commons.logging.Log;
@@ -16,6 +15,7 @@ import org.apache.wicket.model.Model;
 import com.madalla.service.cms.IContentData;
 import com.madalla.service.cms.IContentService;
 import com.madalla.service.cms.IContentServiceProvider;
+import com.madalla.util.jcr.model.ContentNode;
 import com.madalla.util.jcr.model.JcrNodeModel;
 import com.madalla.util.jcr.model.tree.AbstractTreeNode;
 import com.madalla.util.jcr.model.tree.JcrTreeNode;
@@ -40,8 +40,8 @@ public class ContentExplorerPanel extends Panel implements IContentData{
 			private static final long serialVersionUID = 1L;
 
 			protected IModel getNodeTextModel(IModel model) {
-				AbstractTreeNode treeNode = (JcrTreeNode) model.getObject();
-				JcrNodeModel nodeModel = treeNode.getNodeModel();
+				JcrTreeNode jcrTreeNode = (JcrTreeNode) model.getObject();
+				jcrTreeNode.getObject();
 				return new Model("test");
 //				if (treeNode.getUserObject() instanceof ITreeInput) {
 //					ITreeInput treeInput = (ITreeInput) treeNode.getUserObject();

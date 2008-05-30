@@ -15,19 +15,18 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
+import org.springmodules.jcr.SessionFactory;
 
 public class JcrItemModel extends LoadableDetachableModel {
 	private static final long serialVersionUID = 1L;
-	private JcrTemplate template;
     static final Log log = LogFactory.getLog(JcrItemModel.class);
 
     protected String path;
 
     // constructors
 
-    public JcrItemModel(Item item, JcrTemplate template) {
+    public JcrItemModel(Item item) {
         super(item);
-        this.template = template;
         try {
             this.path = item.getPath();
         } catch (RepositoryException e) {
@@ -76,15 +75,16 @@ public class JcrItemModel extends LoadableDetachableModel {
 
     protected Object load() {
     	log.debug("load - loading item from repository with path="+path);
-    	Item result = (Item) template.execute(new JcrCallback(){
-
-			public Object doInJcr(Session session) throws IOException,
-					RepositoryException {
-				return session.getItem(path);
-			}
-        	
-        });
-        return result;
+//    	Item result = (Item) template.execute(new JcrCallback(){
+//
+//			public Object doInJcr(Session session) throws IOException,
+//					RepositoryException {
+//				return session.getItem(path);
+//			}
+//        	
+//        });
+//        return result;
+    	return null;
     }
 
     // override Object
@@ -117,4 +117,5 @@ public class JcrItemModel extends LoadableDetachableModel {
         }
         return path;
     }
+
 }

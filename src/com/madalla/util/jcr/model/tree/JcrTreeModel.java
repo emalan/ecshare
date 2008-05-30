@@ -23,18 +23,14 @@ public class JcrTreeModel extends DefaultTreeModel{
     }
     
     public void register(AbstractTreeNode treeNodeModel) {
-        String key = treeNodeModel.getNodeModel().getItemModel().getPath();
+        String key = treeNodeModel.getNodeModel().getContentNode().getPath();
         registry.put(key, treeNodeModel);
     }
     
     public AbstractTreeNode lookup(JcrNodeModel nodeModel) {
-        String key = nodeModel.getItemModel().getPath();
+        String key = nodeModel.getContentNode().getPath();
         if((AbstractTreeNode) registry.get(key) == null) {
             AbstractTreeNode parentNode = lookup(nodeModel.getParentModel());
-            if(parentNode!=null) {
-                // load children which get registered
-                parentNode.children();
-            } 
         }
         
         return (AbstractTreeNode) registry.get(key);

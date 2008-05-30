@@ -80,8 +80,7 @@ public class TestJcrTreeNode extends AbstractJcrTester {
 				Node siteNode = root.getNode(site);
 				int count = (int) siteNode.getNodes().getSize();
 				assertNotNull(siteNode);
-                JcrItemModel itemModel = new JcrItemModel(root, template);
-                JcrNodeModel nodeModel = new JcrNodeModel(itemModel, template);
+                JcrNodeModel nodeModel = new JcrNodeModel(root);
                 JcrTreeNode treeNode = new JcrTreeNode(nodeModel);
                 JcrTreeModel jcrTreeModel = new JcrTreeModel(treeNode);
                 assertNotNull(treeNode);

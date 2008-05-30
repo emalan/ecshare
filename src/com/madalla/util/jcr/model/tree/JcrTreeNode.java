@@ -6,7 +6,6 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.swing.tree.TreeNode;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -28,6 +27,12 @@ public class JcrTreeNode extends AbstractTreeNode{
         setTreeModel(treeModel);
         treeModel.register(this);
     }
+    
+    //Do in session
+    public void init(Node node) throws RepositoryException{
+    	List children = loadChildren(node);
+    	super.setChildren(children);
+    }
 
     public TreeNode getParent() {
         JcrNodeModel parentModel = nodeModel.getParentModel();
@@ -37,27 +42,21 @@ public class JcrTreeNode extends AbstractTreeNode{
         return null;
     }
 
-    protected int loadChildcount() throws RepositoryException {
-        int result = 1;
-        result = nodeModel.getChildCount();
-        return result;
-    }
-
-    protected List loadChildren() throws RepositoryException {
-        //Node node = nodeModel.getNode();
+    //init code
+    private List loadChildren(Node node) throws RepositoryException {
         List newChildren = new ArrayList();
-        for (NodeIterator jcrChildren = nodeModel.getNodes();jcrChildren.hasNext();) {
+        for (NodeIterator jcrChildren = node.getNodes();jcrChildren.hasNext();) {
             Node jcrChild = jcrChildren.nextNode();
             if (jcrChild != null) {
                 JcrNodeModel childModel = new JcrNodeModel(jcrChild);
-                JcrTreeNode treeNodeModel = new JcrTreeNode(childModel, getTreeModel());
-                newChildren.add(treeNodeModel);
+                JcrTreeNode childTreeNode = new JcrTreeNode(childModel, getTreeModel());
+                childTreeNode.init(jcrChild);
+                newChildren.add(childTreeNode);
             }
         }
         return newChildren;
     }
 
-    @Override
     public String renderNode() {
         //HippoNode node = getNodeModel().getNode();
         String result = "null";
