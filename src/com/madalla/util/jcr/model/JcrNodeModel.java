@@ -45,7 +45,7 @@ public class JcrNodeModel implements IPluginModel {
     	}
     }
     
-    public Map<String, Object> getMapRepresentation() {
+    public Map getMapRepresentation() {
         Map map = new HashMap();
         map.put("node", contentNode.getPath());
         return map;

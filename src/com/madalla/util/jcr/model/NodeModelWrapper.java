@@ -46,7 +46,7 @@ public class NodeModelWrapper implements IChainingModel, IPluginModel {
     
     // implement IPluginModel
     
-    public Map<String, Object> getMapRepresentation() {
+    public Map getMapRepresentation() {
         return nodeModel.getMapRepresentation();
     }
 }
