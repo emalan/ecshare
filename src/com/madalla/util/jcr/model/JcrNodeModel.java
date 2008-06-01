@@ -18,22 +18,9 @@ public class JcrNodeModel implements IPluginModel {
     private static final Log log = LogFactory.getLog(JcrNodeModel.class);
     
     private ContentNode contentNode;
-//    private transient boolean parentCached = false;
-//    private JcrNodeModel parent = null;
 
     public JcrNodeModel(Node node) {
     	contentNode = new ContentNode(node);
-//    	Node parentNode = null;
-//		try {
-//            //if (node.)
-//			parentNode = node.getParent();
-//		} catch (Exception e) {
-//            log.error("constructor - Failed to set parent Node. "+ this +e.getMessage());
-//		}
-//    	if (parentNode != null){
-//    		parent = new JcrNodeModel(parentNode);
-//    		parentCached = true;
-//    	}
     }
     
     public Map getMapRepresentation() {
@@ -41,10 +28,6 @@ public class JcrNodeModel implements IPluginModel {
         map.put("node", contentNode.getPath());
         return map;
     }
-
-//    public JcrNodeModel getParentModel() {
-//        return parent;
-//    }
 
     // override Object
     public String toString() {
@@ -79,7 +62,11 @@ public class JcrNodeModel implements IPluginModel {
 		//contentNode = null;
 	}
 
-	public ContentNode getContentNode() {
+	public IContentNode getContentNode() {
 		return contentNode;
 	}
+
+    public String render() {
+        return contentNode.render();
+    }
 }

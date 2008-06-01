@@ -56,18 +56,7 @@ public class JcrTreeNode extends AbstractTreeNode{
     }
 
     public String renderNode() {
-        //HippoNode node = getNodeModel().getNode();
-        String result = "null";
-//        if (node != null) {
-//            try {
-//                result = ISO9075Helper.decodeLocalName(node.getDisplayName());
-//                if (node.hasProperty(HippoNodeType.HIPPO_COUNT)) {
-//                    result += " [" + node.getProperty(HippoNodeType.HIPPO_COUNT).getLong() + "]";
-//                }
-//            } catch (RepositoryException e) {
-//                result = e.getMessage();
-//            }
-//        }
+        String result = nodeModel.render();
         return result;
     }
 

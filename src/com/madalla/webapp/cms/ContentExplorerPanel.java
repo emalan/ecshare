@@ -24,6 +24,7 @@ import com.madalla.service.cms.IContentData;
 import com.madalla.service.cms.IContentService;
 import com.madalla.service.cms.IContentServiceProvider;
 import com.madalla.util.jcr.model.ContentNode;
+import com.madalla.util.jcr.model.IContentNode;
 import com.madalla.util.jcr.model.tree.JcrTreeNode;
 
 public class ContentExplorerPanel extends Panel implements IContentData{
@@ -47,8 +48,7 @@ public class ContentExplorerPanel extends Panel implements IContentData{
 
 			protected IModel getNodeTextModel(IModel model) {
 				JcrTreeNode jcrTreeNode = (JcrTreeNode) model.getObject();
-				ContentNode contentNode = (ContentNode)jcrTreeNode.getObject();
-				return new Model(contentNode.getName());
+                return new Model(jcrTreeNode.renderNode());
 			}
 			
 			protected Component newNodeComponent(String id, IModel model) {
@@ -61,7 +61,7 @@ public class ContentExplorerPanel extends Panel implements IContentData{
 							log.debug("onNodeLinkClicked - "+node);
 							JcrTreeNode jcrTreeNode = (JcrTreeNode) node;
 							if (jcrTreeNode.getObject() instanceof ContentNode){
-								ContentNode contentNode = (ContentNode) jcrTreeNode.getObject();
+								IContentNode contentNode = (IContentNode) jcrTreeNode.getObject();
 								//TODO get parameters needed for editing content
 								//TODO update a text entry area
 							}
