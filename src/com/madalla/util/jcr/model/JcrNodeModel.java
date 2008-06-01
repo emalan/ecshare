@@ -1,30 +1,21 @@
 package com.madalla.util.jcr.model;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import javax.jcr.AccessDeniedException;
-import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.springmodules.jcr.JcrCallback;
-import org.springmodules.jcr.JcrTemplate;
-
-import com.madalla.util.jcr.model.tree.JcrTreeNode;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 public class JcrNodeModel implements IPluginModel {
     private static final long serialVersionUID = 1L;
+    private static final Log log = LogFactory.getLog(JcrNodeModel.class);
     
     private ContentNode contentNode;
     private transient boolean parentCached = false;
@@ -34,10 +25,10 @@ public class JcrNodeModel implements IPluginModel {
     	contentNode = new ContentNode(node);
     	Node parentNode = null;
 		try {
+            //if (node.)
 			parentNode = node.getParent();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+            log.error("constructor - Failed to set parent Node. "+ this +e.getMessage());
 		}
     	if (parentNode != null){
     		parent = new JcrNodeModel(parentNode);

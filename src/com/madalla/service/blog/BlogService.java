@@ -42,7 +42,7 @@ public class BlogService implements IBlogService, Serializable{
         }
         //save content to CMS
         Content content = new Content();
-        content.setClassName(BLOG_NAME);
+        content.setPageName(BLOG_NAME);
         content.setContentId(getBlogId(blogId));
         content.setText(blogEntry.getText());
         try {

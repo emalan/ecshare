@@ -6,14 +6,14 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 public class Content implements Serializable {
     private static final long serialVersionUID = 1L;
-    private String className;
+    private String pageName;
     private String contentId;
     private String text;
-    public void setClassName(String className) {
-        this.className = className;
+    public void setPageName(String className) {
+        this.pageName = className;
     }
-    public String getClassName() {
-        return className;
+    public String getPageName() {
+        return pageName;
     }
     public void setContentId(String contentId) {
         this.contentId = contentId;

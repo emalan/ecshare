@@ -22,6 +22,11 @@
             	</constructor-arg>
         	</bean>
     	</property>
+    	<property name="namespaces">
+    	    <props>
+    	        <prop key="ec">http://madalla.com/jcr</prop>
+    	    </props>
+    	</property>
 	</bean>
 
 	<bean id="repository" class="org.springmodules.jcr.jackrabbit.RepositoryFactoryBean">

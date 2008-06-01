@@ -1,10 +1,7 @@
 package com.madalla.util.jcr.model;
 
-import java.io.IOException;
-
 import javax.jcr.Item;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -13,9 +10,6 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.springmodules.jcr.JcrCallback;
-import org.springmodules.jcr.JcrTemplate;
-import org.springmodules.jcr.SessionFactory;
 
 public class JcrItemModel extends LoadableDetachableModel {
 	private static final long serialVersionUID = 1L;

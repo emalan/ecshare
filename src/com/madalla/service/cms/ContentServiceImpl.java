@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
-import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.swing.tree.TreeModel;
@@ -23,6 +23,10 @@ import com.madalla.util.jcr.model.tree.JcrTreeModel;
 import com.madalla.util.jcr.model.tree.JcrTreeNode;
 import com.madalla.webapp.cms.Content;
 
+/**
+ * @author emalan
+ *
+ */
 public class ContentServiceImpl implements IContentData, IContentService, Serializable {
     
     private static final long serialVersionUID = 1L;
@@ -31,51 +35,12 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
     private String site ;
     private List locales;
     
-    public ContentServiceImpl(){
-
-    }
-
-    public String getContentData(final String nodeName, final String id, Locale locale) {
-        String localeId = getLocaleId(id, locale);
-        return getContentData(nodeName, localeId);
-    }
-    
-    public String getContentData(final String nodeName, final String id) {
-        
-        return (String) template.execute(new JcrCallback(){
-
-            public Object doInJcr(Session session) throws IOException, RepositoryException {
-                String content = null;
-                try {
-                	Node siteNode = getCreateNode(site, session.getRootNode());
-                    Node page = getCreateNode(nodeName, siteNode);
-                    content = getContent(page, id, CONTENT_DEFAULT);
-                } catch (RepositoryException e) {
-                    log.error("Exception getting content.", e);
-                    content = "There has been a technical difficulty accessing the Content Repository. " + e.getMessage();
-                }
-                session.save();
-                return content;
-            }
-            
-        });
-    }
-    
-    public void setContent(final Content content, Locale locale) throws RepositoryException {
-        String localeId = getLocaleId(content.getContentId(), locale);
-        setContent(content.getClassName(), localeId, content.getText());
-    }
-
-    public void setContent(final Content content)  {
-        setContent(content.getClassName(), content.getContentId(), content.getText());
-    }
-    
     public TreeModel getSiteContent(){
-    	return (TreeModel) template.execute(new JcrCallback(){
+        return (TreeModel) template.execute(new JcrCallback(){
             
             public Object doInJcr(Session session) throws IOException, RepositoryException {
-            	Node rootNode = session.getRootNode();
-            	Node siteNode = getCreateNode(site, rootNode);
+                Node rootNode = session.getRootNode();
+                Node siteNode = getCreateNode(site, rootNode);
                 //TODO change to using site Node. Site Nood must act like root.
                 JcrNodeModel nodeModel = new JcrNodeModel(rootNode);
                 JcrTreeNode treeNode = new JcrTreeNode(nodeModel);
@@ -85,24 +50,55 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
             }
         });
     }
+
+    public String getContentData(final String nodeName, final String id, Locale locale) {
+        String localeId = getLocaleId(id, locale);
+        return getContentData(nodeName, localeId);
+    }
     
-    private void setContent(final String nodeName, final String contentId, final String text){
-        template.execute(new JcrCallback(){
+    public String getContentData(final String page, final String contentId) {
+        return processContentEntry(page, contentId, CONTENT_DEFAULT, false);
+    }
+    
+    public void setContent(final Content content, Locale locale) throws RepositoryException {
+        String localeId = getLocaleId(content.getContentId(), locale);
+        processContentEntry(content.getPageName(), localeId, content.getText());
+    }
+
+    public void setContent(final Content content)  {
+        processContentEntry(content.getPageName(), content.getContentId(), content.getText());
+    }
+    
+    /**
+     * Create or get Content Entry from repository 
+     * @param page
+     * @param contentId
+     * @param text
+     * @return Content value
+     */
+    private String processContentEntry(final String page, final String contentId, final String text){
+        return processContentEntry(page, contentId, text, true);
+    }
+    
+    /**
+     * @param page
+     * @param contentId
+     * @param text
+     * @param overwrite - if true then replace value in repository even if it exists
+     * @return
+     */
+    private String processContentEntry(final String page, final String contentId, final String defaultValue, final boolean overwrite){
+        return (String) template.execute(new JcrCallback(){
 
             public Object doInJcr(Session session) throws IOException, RepositoryException {
-                Node siteNode = getCreateNode(site, session.getRootNode());
-                Node classNode = getCreateNode(nodeName,siteNode);
-                Node node;
-                try {
-                    node = classNode.getNode(contentId);
-                } catch (PathNotFoundException e){
-                    log.debug("Path Content Not found, now adding it. contentId="+contentId);
-                    node = classNode.addNode(contentId);
-                }
-                node.setProperty(CONTENT, text);
-                log.debug("setContent - Saving Content. parentNode="+nodeName+" node="+contentId);
+                Node rootContentNode = getCreateAppNode(session.getRootNode());
+                Node siteNode = getCreateSiteNode(rootContentNode, site);
+                Node pageNode = getCreatePageNode(siteNode, page);
+                
+                Node node = getCreateContentEntry(pageNode, contentId, defaultValue, overwrite);
+                log.debug("setContent - Saving Content. page="+page+" contentId="+contentId);
                 session.save();
-                return null;
+                return node.getProperty(EC_PROP_CONTENT).getString();
             }
             
         });
@@ -124,52 +120,87 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
             return id + "_"+ found.getLanguage();
         }
     }
+    
+    private Node getCreateAppNode(Node root) throws RepositoryException{
+        return getCreateNode(EC_NODE_APP, root);
+    }
+    
+    private Node getCreateSiteNode(Node parent, String title) throws RepositoryException{
+        return getCreateNode(EC_NODE_SITE, title, parent);
+    }
+    
+    private Node getCreatePageNode(Node parent, String title) throws RepositoryException{
+        return getCreateNode(EC_NODE_PAGE, title, parent);
+    }
+    
+    private Node getCreateBlogNode(Node parent, String title) throws RepositoryException{
+        return getCreateNode(EC_NODE_BLOG, title, parent);
+    }
+    
+    private Node getCreateContentEntry(Node parent, String title, String text, boolean overwrite) throws RepositoryException{
+        Node node = getCreateNode(EC_NODE_CONTENTENTRY, title, parent);
+        if (node.isNew() || overwrite){
+            node.setProperty(EC_PROP_CONTENT, text);
+        }
+        log.debug("setContent - Saving Content. title="+title);
+        return node;
+    }
+    
+    private Node getCreateBlogEntry(Node parent, String title, String text) throws RepositoryException{
+        Node node = getCreateNode(EC_NODE_BLOGENTRY, title, parent);
+        //node.setProperty(EC_PROP_, text);
+        log.debug("setContent - Saving Blog. title="+title);
+        return node;
+    }
 
     /**
      *  returns the class name node -- creates it if its not there
      */
-    private Node getCreateNode(String nodeName, Node root) throws RepositoryException{
-    	if (null == nodeName){
-    		log.error("getCreateNode - Parameter nodeName cannot be null");
+    private Node getCreateNode(String nodeName, Node parent) throws RepositoryException{
+    	if (null == nodeName || null == parent){
+    		log.error("getCreateNode - all parameters must be supplied");
     		return null;
     	}
         Node node = null;
         try {
-            node = root.getNode(nodeName);
+            node = parent.getNode(nodeName);
         } catch (PathNotFoundException e){
             log.debug("Node not found in repository, now adding. new node="+nodeName);
-            node = root.addNode(nodeName);
+            node = parent.addNode(nodeName);
         }
         return node;
         
     }
     
-    private String getContent(Node mainNode, String id, String defaultValue) {
-        String content = "Content placeholder : there is no content in the repository at present.";
-        Node node;
-        try {
-            try {
-                node = mainNode.getNode(id);
-            } catch (PathNotFoundException e) {
-                log.debug("Content ID not found in repository, now adding. id="+id);
-                node = mainNode.addNode(id);
-            }
-            try {
-                content = node.getProperty(CONTENT).getString();
-            } catch (PathNotFoundException e) {
-                log.debug("No Content found in repository, now adding default value. id="+id);
-                Property property = node.setProperty(CONTENT,defaultValue);
-                content = property.getString();
-            }
-        } catch (Exception e) {
-            log.error("Exception while getting content from repository.", e);
-            throw new RuntimeException(e);
+    private Node getCreateNode(String nodeName, String title, Node parent) throws RepositoryException{
+        if (null == nodeName || null == title || null == parent){
+            log.error("getCreateNode - all parameters must be provided");
+            return null;
         }
         
+        // check for existing node with title
+        Node node = null;
+        for (NodeIterator iterator = parent.getNodes(nodeName);iterator.hasNext();){
+            Node nextNode = iterator.nextNode();
+            if (nextNode.hasProperties() && nextNode.hasProperty(EC_PROP_TITLE)){
+                String testTitle = nextNode.getProperty(EC_PROP_TITLE).getString();
+                if (testTitle.equals(title)){
+                    node = nextNode;
+                    break;
+                }
+            }
+        }
         
-        return content;
-    }
+        // if node not found then create a new one
+        if (null == node){
+            log.debug("getCreateNode - Node not found. Now creating. nodeName="+nodeName+" title="+title);
+            node = parent.addNode(nodeName);
+            node.setProperty(EC_PROP_TITLE, title);
+        }
 
+        return node;
+    }
+    
     public void setTemplate(JcrTemplate template) {
         this.template = template;
     }
@@ -185,7 +216,5 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
 	public void setLocales(List locales) {
 		this.locales = locales;
 	}
-
-
 
 }

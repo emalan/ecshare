@@ -47,11 +47,11 @@ public class ContentEntryPanel extends Panel implements IContentAware {
         add(HeaderContributor.forJavaScript(TinyMce.class, "tiny_mce.js"));
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
 
-        content.setClassName(nodeName);
+        content.setPageName(nodeName);
         content.setContentId(id);
 
         IContentService service = ((IContentServiceProvider) getApplication()).getContentService();
-        String text = service.getContentData(content.getClassName(), content.getContentId(), getSession().getLocale());
+        String text = service.getContentData(content.getPageName(), content.getContentId(), getSession().getLocale());
         add(new ContentForm("contentForm", text));
     }
 

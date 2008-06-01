@@ -1,4 +1,4 @@
-package com.madalla.service.cms;
+package com.madalla.test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +11,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.tree.LinkTree;
 
-import com.madalla.test.AbstractSpringWicketTester;
+import com.madalla.service.cms.IContentService;
 import com.madalla.webapp.cms.Content;
 
-public class ContentServiceTest extends  AbstractSpringWicketTester{
+public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
 	Log log = LogFactory.getLog(this.getClass());
 	private IContentService contentService;
@@ -25,6 +25,8 @@ public class ContentServiceTest extends  AbstractSpringWicketTester{
 	protected List getTestConfigLocations() {
 		List configLocations = new ArrayList();
 		configLocations.add("classpath:com/madalla/service/cms/applicationContext-cms.xml");
+        configLocations.add("classpath:com/madalla/util/jcr/model/applicationContext-jcr.xml");
+        
 		return configLocations;
 	}
 
@@ -45,7 +47,7 @@ public class ContentServiceTest extends  AbstractSpringWicketTester{
     public void testContentGetSet() throws RepositoryException{
     	Content content = new Content();
     	content.setContentId(CONTENT_ID);
-    	content.setClassName(CONTENT_PARENT);
+    	content.setPageName(CONTENT_PARENT);
     	content.setText(CONTENT_TEXT);
     	contentService.setContent(content);
     	
@@ -57,7 +59,7 @@ public class ContentServiceTest extends  AbstractSpringWicketTester{
     	String french = CONTENT_TEXT + "french stuff";
     	Content content = new Content();
     	content.setContentId(CONTENT_ID);
-    	content.setClassName(CONTENT_PARENT);
+    	content.setPageName(CONTENT_PARENT);
     	content.setText(french);
     	contentService.setContent(content, Locale.FRENCH);
     	
