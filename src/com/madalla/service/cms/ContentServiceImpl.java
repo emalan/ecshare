@@ -39,13 +39,14 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
         return (TreeModel) template.execute(new JcrCallback(){
             
             public Object doInJcr(Session session) throws IOException, RepositoryException {
-                Node rootNode = session.getRootNode();
-                Node siteNode = getCreateNode(site, rootNode);
+                Node rootContentNode = getCreateAppNode(session.getRootNode());
+                Node siteNode = getCreateSiteNode(rootContentNode, site);
+
                 //TODO change to using site Node. Site Nood must act like root.
-                JcrNodeModel nodeModel = new JcrNodeModel(rootNode);
+                JcrNodeModel nodeModel = new JcrNodeModel(rootContentNode);
                 JcrTreeNode treeNode = new JcrTreeNode(nodeModel);
                 JcrTreeModel jcrTreeModel = new JcrTreeModel(treeNode);
-                treeNode.init(rootNode);
+                treeNode.init(rootContentNode);
                 return jcrTreeModel;
             }
         });

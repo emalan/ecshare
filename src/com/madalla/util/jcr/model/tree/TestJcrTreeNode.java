@@ -15,7 +15,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
-import com.madalla.util.jcr.model.JcrItemModel;
 import com.madalla.util.jcr.model.JcrNodeModel;
 import com.madalla.util.jcr.test.AbstractJcrTester;
 

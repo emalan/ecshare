@@ -17,15 +17,17 @@ import com.madalla.util.jcr.model.JcrNodeModel;
 
 public class JcrTreeNode extends AbstractTreeNode{
 	private static final long serialVersionUID = 1L;
+    private JcrTreeNode parent = null;
 
     public JcrTreeNode(JcrNodeModel nodeModel) {
         super(nodeModel);
     }
 
-    public JcrTreeNode(JcrNodeModel nodeModel, JcrTreeModel treeModel) {
+    public JcrTreeNode(JcrNodeModel nodeModel, JcrTreeModel treeModel, JcrTreeNode parent) {
         super(nodeModel);
         setTreeModel(treeModel);
         treeModel.register(this);
+        this.parent = parent;
     }
     
     //Do in session
@@ -35,11 +37,7 @@ public class JcrTreeNode extends AbstractTreeNode{
     }
 
     public TreeNode getParent() {
-        JcrNodeModel parentModel = nodeModel.getParentModel();
-        if (parentModel != null) {
-            return getTreeModel().lookup(parentModel);
-        }
-        return null;
+        return parent;
     }
 
     //init code
@@ -49,7 +47,7 @@ public class JcrTreeNode extends AbstractTreeNode{
             Node jcrChild = jcrChildren.nextNode();
             if (jcrChild != null) {
                 JcrNodeModel childModel = new JcrNodeModel(jcrChild);
-                JcrTreeNode childTreeNode = new JcrTreeNode(childModel, getTreeModel());
+                JcrTreeNode childTreeNode = new JcrTreeNode(childModel, getTreeModel(), this);
                 childTreeNode.init(jcrChild);
                 newChildren.add(childTreeNode);
             }

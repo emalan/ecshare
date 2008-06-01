@@ -5,12 +5,11 @@ import java.util.Map;
 
 import javax.swing.tree.DefaultTreeModel;
 
-import com.madalla.util.jcr.model.JcrNodeModel;
-
 
 public class JcrTreeModel extends DefaultTreeModel{
 
-	private Map registry;
+    private static final long serialVersionUID = 3495335448944545206L;
+    private Map registry;
 	
     public JcrTreeModel(AbstractTreeNode rootModel) {
         super(rootModel);
@@ -18,8 +17,6 @@ public class JcrTreeModel extends DefaultTreeModel{
 
         registry = new HashMap();
         register(rootModel);
- 
-
     }
     
     public void register(AbstractTreeNode treeNodeModel) {
@@ -27,13 +24,4 @@ public class JcrTreeModel extends DefaultTreeModel{
         registry.put(key, treeNodeModel);
     }
     
-    public AbstractTreeNode lookup(JcrNodeModel nodeModel) {
-        String key = nodeModel.getContentNode().getPath();
-        if((AbstractTreeNode) registry.get(key) == null) {
-            AbstractTreeNode parentNode = lookup(nodeModel.getParentModel());
-        }
-        
-        return (AbstractTreeNode) registry.get(key);
-    }
-
 }
