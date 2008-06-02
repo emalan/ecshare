@@ -2,14 +2,12 @@ package com.madalla.webapp.cms;
 
 import java.text.DateFormat;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -19,7 +17,6 @@ import org.apache.wicket.markup.html.tree.LinkTree;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import com.madalla.service.blog.BlogEntry;
 import com.madalla.service.cms.IContentData;
 import com.madalla.service.cms.IContentService;
 import com.madalla.service.cms.IContentServiceProvider;

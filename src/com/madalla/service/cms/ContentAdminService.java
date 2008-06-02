@@ -55,12 +55,20 @@ public class ContentAdminService implements IContentData, IContentAdminService {
                 Node siteNode = rootContentNode.getNode(EC_NODE_SITE);
 				
 				String homeDir = session.getRepository().getDescriptor("homeDir");
-				String backupFileName = homeDir + File.pathSeparator +site+FILE_SUFFIX;
-				log.debug("Attempting to backup repository. "+backupFileName);
-                FileOutputStream fileOut = new FileOutputStream(backupFileName);
-                OutputStream out = new BufferedOutputStream(fileOut);
+				File backupDir = new File(homeDir);
+				File backupFile = new File(backupDir,site+FILE_SUFFIX );
+				if (backupFile.exists()){
+					//TODO Use jakarta Commons FileUtils to move old backup
+					//FileUtils
+				}
+
+				log.debug("Attempting to backup repository. "+backupFile);
+                FileOutputStream fileOut = new FileOutputStream(backupFile);
                 
-                session.exportDocumentView(rootContentNode.getPath(), out, true, false);
+                // I am assuming there is some buffering already done 
+                //OutputStream out = new BufferedOutputStream(fileOut);
+                
+                session.exportDocumentView(rootContentNode.getPath(), fileOut, true, false);
 				
 				//session.exportSystemView(rootContentNode.getPath(), out, true, false);
 				return null;
