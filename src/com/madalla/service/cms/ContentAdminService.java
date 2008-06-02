@@ -1,5 +1,8 @@
 package com.madalla.service.cms;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -20,8 +23,11 @@ import com.madalla.util.jcr.model.tree.JcrTreeNode;
 public class ContentAdminService implements IContentData, IContentAdminService {
 	
     private static final long serialVersionUID = 1L;
+    private static final String FILE_SUFFIX = "-backup.xml";
     private JcrTemplate template;
+    private String site ;
     private final Log log = LogFactory.getLog(this.getClass());
+    
 
     public TreeModel getSiteContent(){
         return (TreeModel) template.execute(new JcrCallback(){
@@ -48,9 +54,12 @@ public class ContentAdminService implements IContentData, IContentAdminService {
                 Node rootContentNode = session.getRootNode().getNode(EC_NODE_APP);
                 Node siteNode = rootContentNode.getNode(EC_NODE_SITE);
 				
-                OutputStream out = null;
+				String homeDir = session.getRepository().getDescriptor("homeDir");
+				String backupFileName = homeDir + File.pathSeparator +site+FILE_SUFFIX;
+                FileOutputStream fileOut = new FileOutputStream(backupFileName);
+                OutputStream out = new BufferedOutputStream(fileOut);
+                
                 session.exportDocumentView(rootContentNode.getPath(), out, true, false);
-				
 				
 				//session.exportSystemView(rootContentNode.getPath(), out, true, false);
 				return null;
@@ -58,4 +67,9 @@ public class ContentAdminService implements IContentData, IContentAdminService {
     		
     	});
     }
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+    
 }
