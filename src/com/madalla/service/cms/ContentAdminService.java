@@ -56,6 +56,7 @@ public class ContentAdminService implements IContentData, IContentAdminService {
 				
 				String homeDir = session.getRepository().getDescriptor("homeDir");
 				String backupFileName = homeDir + File.pathSeparator +site+FILE_SUFFIX;
+				log.debug("Attempting to backup repository. "+backupFileName);
                 FileOutputStream fileOut = new FileOutputStream(backupFileName);
                 OutputStream out = new BufferedOutputStream(fileOut);
                 
@@ -70,6 +71,10 @@ public class ContentAdminService implements IContentData, IContentAdminService {
 
 	public void setSite(String site) {
 		this.site = site;
+	}
+
+	public void setTemplate(JcrTemplate template) {
+		this.template = template;
 	}
     
 }
