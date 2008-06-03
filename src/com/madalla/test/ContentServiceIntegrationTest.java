@@ -33,7 +33,9 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 	}
     
     public void testContentBackup(){
-        contentAdminService.backupContent();
+        contentAdminService.backupContentRoot();
+        contentAdminService.backupContentApps();
+        contentAdminService.backupContentSite();
     }
 
     public void testContentExplorer(){

@@ -5,5 +5,7 @@ import javax.swing.tree.TreeModel;
 public interface IContentAdminService {
 
 	public TreeModel getSiteContent();
-    public void backupContent();
+	public void backupContentRoot();
+	public void backupContentApps();
+	public void backupContentSite();
 }

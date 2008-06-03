@@ -11,16 +11,12 @@ import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.swing.tree.TreeModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
-import com.madalla.util.jcr.model.JcrNodeModel;
-import com.madalla.util.jcr.model.tree.JcrTreeModel;
-import com.madalla.util.jcr.model.tree.JcrTreeNode;
 import com.madalla.webapp.cms.Content;
 
 /**
@@ -35,23 +31,6 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
     private String site ;
     private List locales;
     
-//    public TreeModel getSiteContent(){
-//        return (TreeModel) template.execute(new JcrCallback(){
-//            
-//            public Object doInJcr(Session session) throws IOException, RepositoryException {
-//                Node rootContentNode = getCreateAppNode(session.getRootNode());
-//                Node siteNode = getCreateSiteNode(rootContentNode, site);
-//
-//                //TODO change to using site Node. Site Nood must act like root.
-//                JcrNodeModel nodeModel = new JcrNodeModel(rootContentNode);
-//                JcrTreeNode treeNode = new JcrTreeNode(nodeModel);
-//                JcrTreeModel jcrTreeModel = new JcrTreeModel(treeNode);
-//                treeNode.init(rootContentNode);
-//                return jcrTreeModel;
-//            }
-//        });
-//    }
-
     public String getContentData(final String nodeName, final String id, Locale locale) {
         String localeId = getLocaleId(id, locale);
         return getContentData(nodeName, localeId);
