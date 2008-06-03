@@ -16,6 +16,7 @@
 	<bean id="contentAdminService" class="com.madalla.service.cms.ContentAdminService">
     	<property name="template" ref="jcrTemplate"/>
     	<property name="site" value="${site.code}"/>
+    	<property name="repositoryHome" value="${repository.home}"/>
 	</bean>
 
 </beans>

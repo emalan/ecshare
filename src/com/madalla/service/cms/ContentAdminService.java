@@ -1,10 +1,8 @@
 package com.madalla.service.cms;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -13,6 +11,8 @@ import javax.swing.tree.TreeModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
@@ -26,6 +26,7 @@ public class ContentAdminService implements IContentData, IContentAdminService {
     private static final String FILE_SUFFIX = "-backup.xml";
     private JcrTemplate template;
     private String site ;
+    private String repositoryHome;
     private final Log log = LogFactory.getLog(this.getClass());
     
 
@@ -54,23 +55,16 @@ public class ContentAdminService implements IContentData, IContentAdminService {
                 Node rootContentNode = session.getRootNode().getNode(EC_NODE_APP);
                 Node siteNode = rootContentNode.getNode(EC_NODE_SITE);
 				
-                //get DEscriptors
-                
-                String[] keys = session.getAttributeNames();
-                for (int i = 0; i < keys.length; i++) {
-                    String key = keys[i];
-                    String value = session.getRepository().getDescriptor(key);
-                    log.debug("key="+key+" value="+value);
-                }
-                
-				String homeDir = session.getRepository().getDescriptor("homeDir");
-				File backupDir = new File(homeDir);
-				File backupFile = new File(backupDir,site+FILE_SUFFIX );
-				if (backupFile.exists()){
+                //Get repository home directory and create File
+                DefaultResourceLoader loader = new DefaultResourceLoader();
+                Resource resource = loader.getResource(repositoryHome);
+                File repositoryHomeDir = resource.getFile();
+                File backupFile = new File(repositoryHomeDir,site+FILE_SUFFIX);
+                if (backupFile.exists()){
 					//TODO Use jakarta Commons FileUtils to move old backup
 					//FileUtils
 				}
-
+                
 				log.debug("Attempting to backup repository. "+backupFile);
                 FileOutputStream fileOut = new FileOutputStream(backupFile);
                 
@@ -92,6 +86,10 @@ public class ContentAdminService implements IContentData, IContentAdminService {
 
 	public void setTemplate(JcrTemplate template) {
 		this.template = template;
+	}
+
+	public void setRepositoryHome(String repositoryHome) {
+		this.repositoryHome = repositoryHome;
 	}
     
 }
