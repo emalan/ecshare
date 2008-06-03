@@ -35,22 +35,22 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
     private String site ;
     private List locales;
     
-    public TreeModel getSiteContent(){
-        return (TreeModel) template.execute(new JcrCallback(){
-            
-            public Object doInJcr(Session session) throws IOException, RepositoryException {
-                Node rootContentNode = getCreateAppNode(session.getRootNode());
-                Node siteNode = getCreateSiteNode(rootContentNode, site);
-
-                //TODO change to using site Node. Site Nood must act like root.
-                JcrNodeModel nodeModel = new JcrNodeModel(rootContentNode);
-                JcrTreeNode treeNode = new JcrTreeNode(nodeModel);
-                JcrTreeModel jcrTreeModel = new JcrTreeModel(treeNode);
-                treeNode.init(rootContentNode);
-                return jcrTreeModel;
-            }
-        });
-    }
+//    public TreeModel getSiteContent(){
+//        return (TreeModel) template.execute(new JcrCallback(){
+//            
+//            public Object doInJcr(Session session) throws IOException, RepositoryException {
+//                Node rootContentNode = getCreateAppNode(session.getRootNode());
+//                Node siteNode = getCreateSiteNode(rootContentNode, site);
+//
+//                //TODO change to using site Node. Site Nood must act like root.
+//                JcrNodeModel nodeModel = new JcrNodeModel(rootContentNode);
+//                JcrTreeNode treeNode = new JcrTreeNode(nodeModel);
+//                JcrTreeModel jcrTreeModel = new JcrTreeModel(treeNode);
+//                treeNode.init(rootContentNode);
+//                return jcrTreeModel;
+//            }
+//        });
+//    }
 
     public String getContentData(final String nodeName, final String id, Locale locale) {
         String localeId = getLocaleId(id, locale);

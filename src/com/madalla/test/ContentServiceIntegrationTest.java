@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.tree.LinkTree;
 
+import com.madalla.service.cms.IContentAdminService;
 import com.madalla.service.cms.IContentService;
 import com.madalla.webapp.cms.Content;
 
@@ -18,6 +19,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
 	Log log = LogFactory.getLog(this.getClass());
 	private IContentService contentService;
+    private IContentAdminService contentAdminService;
 	private final static String CONTENT_ID = "testContent";
 	private final static String CONTENT_PARENT = "testParentNode";
 	private final static String CONTENT_TEXT = "Content text";
@@ -29,9 +31,13 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
         
 		return configLocations;
 	}
+    
+    public void testContentBackup(){
+        contentAdminService.backupContent();
+    }
 
     public void testContentExplorer(){
-    	TreeModel treeModel = contentService.getSiteContent();
+    	TreeModel treeModel = contentAdminService.getSiteContent();
     	assertNotNull(treeModel);
     	
     	LinkTree tree = new LinkTree("test", treeModel);
@@ -70,6 +76,10 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     public void setContentService(IContentService contentService) {
 		this.contentService = contentService;
 	}
+
+    public void setContentAdminService(IContentAdminService contentAdminService) {
+        this.contentAdminService = contentAdminService;
+    }
 
 
 

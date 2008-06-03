@@ -1,7 +1,5 @@
 package com.madalla.webapp.cms;
 
-import java.text.DateFormat;
-
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
@@ -17,6 +15,8 @@ import org.apache.wicket.markup.html.tree.LinkTree;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import com.madalla.service.cms.IContentAdminService;
+import com.madalla.service.cms.IContentAdminServiceProvider;
 import com.madalla.service.cms.IContentData;
 import com.madalla.service.cms.IContentService;
 import com.madalla.service.cms.IContentServiceProvider;
@@ -27,15 +27,13 @@ import com.madalla.util.jcr.model.tree.JcrTreeNode;
 public class ContentExplorerPanel extends Panel implements IContentData{
 	private static final long serialVersionUID = 1L;
 
-	private static DateFormat df = DateFormat.getDateInstance();
-
 	private Log log = LogFactory.getLog(this.getClass());
 
 	public ContentExplorerPanel(String name) {
 		super(name);
 		// List existing Blogs
 		log.debug("construtor - retrieving blog entries from service.");
-		IContentService service = getContentService();
+		IContentAdminService service = getContentAdminService();
 		TreeModel treeModel = service.getSiteContent();
 		log.debug("construtor - retrieved content entries. root="
 				+ treeModel.getRoot());
@@ -80,5 +78,9 @@ public class ContentExplorerPanel extends Panel implements IContentData{
 	protected IContentService getContentService() {
 		return ((IContentServiceProvider) getApplication()).getContentService();
 	}
+    
+    protected IContentAdminService getContentAdminService() {
+        return ((IContentAdminServiceProvider) getApplication()).getContentAdminService();
+    }
 
 }

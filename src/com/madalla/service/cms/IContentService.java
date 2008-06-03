@@ -16,6 +16,5 @@ public interface IContentService {
     public String getContentData(String nodeName, String id, Locale locale);
     public void setContent(Content content) throws RepositoryException;
     public void setContent(Content content, Locale locale) throws RepositoryException;
-    public TreeModel getSiteContent();
 
 }

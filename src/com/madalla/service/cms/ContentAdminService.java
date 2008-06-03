@@ -54,6 +54,15 @@ public class ContentAdminService implements IContentData, IContentAdminService {
                 Node rootContentNode = session.getRootNode().getNode(EC_NODE_APP);
                 Node siteNode = rootContentNode.getNode(EC_NODE_SITE);
 				
+                //get DEscriptors
+                
+                String[] keys = session.getAttributeNames();
+                for (int i = 0; i < keys.length; i++) {
+                    String key = keys[i];
+                    String value = session.getRepository().getDescriptor(key);
+                    log.debug("key="+key+" value="+value);
+                }
+                
 				String homeDir = session.getRepository().getDescriptor("homeDir");
 				File backupDir = new File(homeDir);
 				File backupFile = new File(backupDir,site+FILE_SUFFIX );
