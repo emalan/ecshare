@@ -1,5 +1,6 @@
 package com.madalla.test;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -30,6 +31,15 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
         configLocations.add("classpath:com/madalla/util/jcr/model/applicationContext-jcr.xml");
         
 		return configLocations;
+	}
+	
+	public void testGetBackupFiles(){
+		File[] files = contentAdminService.getBackupFileList();
+		for (int i = 0; i < files.length; i++) {
+			if ("test-backup.xml".equals(files[i].getName())){
+				contentAdminService.restoreContentSite(files[i]);
+			}
+		}
 	}
     
     public void testContentBackup(){

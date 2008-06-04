@@ -1,7 +1,9 @@
 package com.madalla.service.cms;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -76,16 +78,6 @@ public class ContentAdminService implements IContentData, IContentAdminService {
     	});
     }
     
-    public void restoreFromFile(final InputStream in){
-        template.execute(new JcrCallback(){
-            public Object doInJcr(Session session) throws IOException, RepositoryException {
-                Node node = getSiteNode(session);
-                session.importXML(node.getPath(), in, ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
-                return null;
-            }
-        });
-    }
-    
     public void backupContentSite(){
     	template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
@@ -97,13 +89,42 @@ public class ContentAdminService implements IContentData, IContentAdminService {
 			}
     	});
     }
+    
+    public File[] getBackupFileList() {
+    	File repositoryHomeDir;
+		try {
+			repositoryHomeDir = getRepositoryHomeDir();
+		} catch (IOException e) {
+			log.error("Unable to get Repository Home Directory.", e);
+			return null;
+		}
+    	File[] files = repositoryHomeDir.listFiles(new FilenameFilter(){
+			public boolean accept(File dir, String name) {
+				if(name.endsWith(FILE_SUFFIX)){
+					return true;
+				}
+				return false;
+			}
+    	});
+    	return files;
+    }
+    
+    public void restoreContentSite(final File backupFile) {
+    	template.execute(new JcrCallback(){
+			public Object doInJcr(Session session) throws IOException,
+					RepositoryException {
+				Node node = getSiteNode(session);
+				InputStream in = new FileInputStream(backupFile);
+                session.importXML(node.getPath(), in, ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+				return null;
+			}
+    	});
+    }
 
 	private OutputStream getBackupFile(String fileName) throws IOException {
 		
         //Get repository home directory and create File
-        DefaultResourceLoader loader = new DefaultResourceLoader();
-        Resource resource = loader.getResource(repositoryHome);
-        File repositoryHomeDir = resource.getFile();
+		File repositoryHomeDir = getRepositoryHomeDir();
         File backupFile = new File(repositoryHomeDir,fileName+FILE_SUFFIX);
         if (backupFile.exists()){
         	log.debug("Backup file exists, we should move old one.");
@@ -113,6 +134,12 @@ public class ContentAdminService implements IContentData, IContentAdminService {
         log.debug("Backup file name. fileName="+backupFile);
         FileOutputStream fileOut = new FileOutputStream(backupFile);
 		return fileOut;
+	}
+	
+	private File getRepositoryHomeDir() throws IOException{
+        DefaultResourceLoader loader = new DefaultResourceLoader();
+        Resource resource = loader.getResource(repositoryHome);
+        return resource.getFile();
 	}
 
 	private Node getRootNode(Session session) throws RepositoryException {
