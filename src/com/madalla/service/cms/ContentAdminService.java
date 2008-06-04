@@ -3,8 +3,10 @@ package com.madalla.service.cms;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
@@ -72,6 +74,16 @@ public class ContentAdminService implements IContentData, IContentAdminService {
 				return null;
 			}
     	});
+    }
+    
+    public void restoreFromFile(final InputStream in){
+        template.execute(new JcrCallback(){
+            public Object doInJcr(Session session) throws IOException, RepositoryException {
+                Node node = getSiteNode(session);
+                session.importXML(node.getPath(), in, ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+                return null;
+            }
+        });
     }
     
     public void backupContentSite(){
