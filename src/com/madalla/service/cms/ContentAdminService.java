@@ -41,8 +41,8 @@ public class ContentAdminService implements IContentData, IContentAdminService {
         return (TreeModel) template.execute(new JcrCallback(){
             
             public Object doInJcr(Session session) throws IOException, RepositoryException {
-                Node rootContentNode = session.getRootNode().getNode(EC_NODE_APP);
-                Node siteNode = rootContentNode.getNode(EC_NODE_SITE);
+                Node rootContentNode = getSiteAppNode(session);
+                Node siteNode = getSiteNode(session);
 
                 //TODO change to using site Node. Site Nood must act like root.
                 JcrNodeModel nodeModel = new JcrNodeModel(rootContentNode);

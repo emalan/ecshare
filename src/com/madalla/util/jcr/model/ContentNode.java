@@ -6,11 +6,14 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 
 //TODO Move this to service package cause it is aware of Schema - might involve some refactoring
 public class ContentNode extends AbstractReadOnlyModel  implements Serializable, IContentNode{
 	private static final long serialVersionUID = 6274872365809010643L;
+	private static Log log = LogFactory.getLog(ContentNode.class);
 
 	private String path;
 	private String name;
@@ -20,10 +23,11 @@ public class ContentNode extends AbstractReadOnlyModel  implements Serializable,
 		try {
 			this.path = node.getPath();
 			this.name = node.getName();
-            this.title = node.getProperty("ec:title").getString();
+			if (node.hasProperties() && node.hasProperty("ec:title")){
+				this.title = node.getProperty("ec:title").getString();
+			}
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Exception creating Content Node", e);
 		}
 	}
 
