@@ -8,9 +8,9 @@ import org.apache.wicket.Component;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -39,6 +39,8 @@ public abstract class EmailFormPanel extends Panel {
     private Log log = LogFactory.getLog(this.getClass());
     
     private String imagePass = CaptchaUtils.randomString(4, 6);
+    private Integer first = CaptchaUtils.randomInt(1, 20);
+    private Integer second = CaptchaUtils.randomInt(1, 12);
     
     private String subject;
     
@@ -55,12 +57,12 @@ public abstract class EmailFormPanel extends Panel {
         private static final long serialVersionUID = -2684823497770522924L;
         private final ValueMap properties = new ValueMap();
         
-        private final CaptchaImageResource captchaImageResource;
+        //private final CaptchaImageResource captchaImageResource;
         
         public EmailForm(String id, Component panel) {
             super(id);
             
-            captchaImageResource = new CaptchaImageResource(imagePass);
+            //captchaImageResource = new CaptchaImageResource(imagePass);
             
             final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
             feedbackPanel.setOutputMarkupId(true);
@@ -89,7 +91,7 @@ public abstract class EmailFormPanel extends Panel {
             TextArea comment = new TextArea("comment",new PropertyModel(properties,"comment"));
             add(comment);
             
-            add(new Image("captchaImage", captchaImageResource));
+            add(new Label("captchaString", first+" + "+second+" = "));
             RequiredTextField password = new RequiredTextField("password", new PropertyModel(properties, "password")){
                 protected final void onComponentTag(final ComponentTag tag) {
                         super.onComponentTag(tag);
@@ -100,13 +102,23 @@ public abstract class EmailFormPanel extends Panel {
             password.add(new AbstractValidator(){
                 protected void onValidate(IValidatable validatable) {
                     String password = (String)validatable.getValue();
-                    if (!imagePass.equals(password)) {
-                    	log.debug("onValidate - entered:"+password+" should be:"+imagePass);
-                        IValidationError error = new ValidationError().addMessageKey("message.captcha");
-                        validatable.error(error);
-                        //"You entered '" + password + "' You should have entered '" + imagePass + "'"
+                    try {
+                        int answer = Integer.parseInt(password);
+                        if (answer != first + second){
+                        	log.debug("onValidate - entered:"+password+" should be:"+first+"+"+second);
+                            IValidationError error = new ValidationError().addMessageKey("message.captcha");
+                            validatable.error(error);
+                        }
+                    } catch (Exception e){
+                    	
                     }
-                    captchaImageResource.invalidate();
+//                    if (!imagePass.equals(password)) {
+//                    	log.debug("onValidate - entered:"+password+" should be:"+imagePass);
+//                        IValidationError error = new ValidationError().addMessageKey("message.captcha");
+//                        validatable.error(error);
+//                        //"You entered '" + password + "' You should have entered '" + imagePass + "'"
+//                    }
+//                    captchaImageResource.invalidate();
                 }
             });
             password.add(new ValidationStyleBehaviour());
