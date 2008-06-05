@@ -101,21 +101,26 @@ public class ContentAdminService implements IContentData, IContentAdminService {
     	File[] files = repositoryHomeDir.listFiles(new FilenameFilter(){
 			public boolean accept(File dir, String name) {
 				if(name.endsWith(FILE_SUFFIX)){
-					return true;
+                    if (name.startsWith(site)){
+                        return true;
+                    }
 				}
 				return false;
 			}
     	});
+        log.debug("getBackupFileList - Number of backup files found="+files.length);
     	return files;
     }
     
     public void restoreContentSite(final File backupFile) {
+        log.info("Importing data to repository from file. file ="+backupFile.getPath());
     	template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
-				Node node = getSiteNode(session);
+				Node node = getSiteAppNode(session);
 				InputStream in = new FileInputStream(backupFile);
                 session.importXML(node.getPath(), in, ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+                session.save();
 				return null;
 			}
     	});
