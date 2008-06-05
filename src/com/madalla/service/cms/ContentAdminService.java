@@ -117,9 +117,15 @@ public class ContentAdminService implements IContentData, IContentAdminService {
     	template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
+				
 				Node node = getSiteAppNode(session);
 				InputStream in = new FileInputStream(backupFile);
-                session.importXML(node.getPath(), in, ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+				
+				//first delete site node
+				Node siteNode = getSiteNode(session);
+				siteNode.remove();
+				session.save();
+				session.importXML(node.getPath(), in, ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
                 session.save();
 				return null;
 			}
