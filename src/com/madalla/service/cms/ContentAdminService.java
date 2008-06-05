@@ -84,7 +84,7 @@ public class ContentAdminService implements IContentData, IContentAdminService {
 					RepositoryException {
 				Node node = getSiteNode(session);
 				OutputStream out = getBackupFile(site);
-                session.exportDocumentView(node.getPath(), out, true, false);
+                session.exportSystemView(node.getPath(), out, true, false);
 				return null;
 			}
     	});
