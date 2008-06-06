@@ -2,6 +2,9 @@ package com.madalla.service.captcha;
 
 public class CaptchaUtils {
     
+    public static Integer randomInteger (int min, int max){
+        return new Integer(randomInt(min, max));
+    }
     public static int randomInt(int min, int max){
         return (int)(Math.random() * (max - min) + min);
     }

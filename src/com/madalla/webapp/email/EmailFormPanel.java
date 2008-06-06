@@ -39,8 +39,8 @@ public abstract class EmailFormPanel extends Panel {
     private Log log = LogFactory.getLog(this.getClass());
     
     private String imagePass = CaptchaUtils.randomString(4, 6);
-    private Integer first = CaptchaUtils.randomInt(1, 20);
-    private Integer second = CaptchaUtils.randomInt(1, 12);
+    private Integer first = CaptchaUtils.randomInteger(1, 20);
+    private Integer second = CaptchaUtils.randomInteger(1, 12);
     
     private String subject;
     
@@ -104,7 +104,7 @@ public abstract class EmailFormPanel extends Panel {
                     String password = (String)validatable.getValue();
                     try {
                         int answer = Integer.parseInt(password);
-                        if (answer != first + second){
+                        if (answer != first.intValue() + second.intValue()){
                         	log.debug("onValidate - entered:"+password+" should be:"+first+"+"+second);
                             IValidationError error = new ValidationError().addMessageKey("message.captcha");
                             validatable.error(error);
