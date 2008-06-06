@@ -2,6 +2,8 @@ package com.madalla.service.cms;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -11,12 +13,17 @@ import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.ValueFormatException;
+import javax.jcr.lock.LockException;
+import javax.jcr.nodetype.ConstraintViolationException;
+import javax.jcr.version.VersionException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
+import com.madalla.service.blog.BlogEntry;
 import com.madalla.webapp.cms.Content;
 
 /**
@@ -48,6 +55,21 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
     public void setContent(final Content content)  {
         processContentEntry(content.getPageName(), content.getContentId(), content.getText());
     }
+    
+	public void setBlogEntry(BlogEntry blogEntry) {
+		processBlogEntry(blogEntry, true, false);
+	}
+	
+	public BlogEntry getBlogEntryData(final String blog, final long date){
+		BlogEntry blogEntry = new BlogEntry();
+		blogEntry.setDate(new Date(date));
+		processBlogEntry(blogEntry, false, false);
+		return blogEntry;
+	}
+	
+	public void deleteBlogEntry(final String blog, final long Date){
+		processBlogEntry(null, false, false);
+	}
     
     /**
      * Create or get Content Entry from repository 
@@ -84,6 +106,30 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
         });
     }
     
+    /**
+     * @param page
+     * @param contentId
+     * @param text
+     * @param overwrite - if true then replace value in repository even if it exists
+     * @return
+     */
+    private BlogEntry processBlogEntry(final BlogEntry blogEntry, final boolean overwrite, final boolean delete){
+        return (BlogEntry) template.execute(new JcrCallback(){
+
+            public Object doInJcr(Session session) throws IOException, RepositoryException {
+                Node rootContentNode = getCreateAppNode(session.getRootNode());
+                Node siteNode = getCreateSiteNode(rootContentNode, site);
+                Node blogNode = getCreateBlogNode(siteNode, blogEntry.getBlog());
+                
+                Node node = getCreateBlogEntry(blogNode, blogEntry, overwrite);
+                log.debug("processBlogEntry - Saving Blog. " + blogEntry);
+                session.save();
+                return node.getProperty(EC_PROP_CONTENT).getString();
+            }
+            
+        });
+    }
+    
     private String getLocaleId(String id, Locale locale) {
         
         Locale found = null;
@@ -106,19 +152,19 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
     }
     
     private Node getCreateSiteNode(Node parent, String title) throws RepositoryException{
-        return getCreateNode(EC_NODE_SITE, title, parent);
+        return getCreateNodeTitle(EC_NODE_SITE, title, parent);
     }
     
     private Node getCreatePageNode(Node parent, String title) throws RepositoryException{
-        return getCreateNode(EC_NODE_PAGE, title, parent);
+        return getCreateNodeTitle(EC_NODE_PAGE, title, parent);
     }
     
     private Node getCreateBlogNode(Node parent, String title) throws RepositoryException{
-        return getCreateNode(EC_NODE_BLOG, title, parent);
+        return getCreateNodeTitle(EC_NODE_BLOG, title, parent);
     }
     
     private Node getCreateContentEntry(Node parent, String title, String text, boolean overwrite) throws RepositoryException{
-        Node node = getCreateNode(EC_NODE_CONTENTENTRY, title, parent);
+        Node node = getCreateNodeTitle(EC_NODE_CONTENTENTRY, title, parent);
         if (node.isNew() || overwrite){
             node.setProperty(EC_PROP_CONTENT, text);
         }
@@ -126,10 +172,13 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
         return node;
     }
     
-    private Node getCreateBlogEntry(Node parent, String title, String text) throws RepositoryException{
-        Node node = getCreateNode(EC_NODE_BLOGENTRY, title, parent);
-        //node.setProperty(EC_PROP_, text);
-        log.debug("setContent - Saving Blog. title="+title);
+    private Node getCreateBlogEntry(Node parent, BlogEntry blogEntry, boolean overwrite) throws RepositoryException{
+        Node node = getCreateNodeDate(EC_NODE_BLOGENTRY, blogEntry.getDate(), parent);
+        if (node.isNew() || overwrite){
+            node.setProperty(EC_PROP_CONTENT, blogEntry.getText());
+            //TODO keywords, description etc...
+        }
+        log.debug("setContent - Saving Blog. date="+blogEntry);
         return node;
     }
 
@@ -152,7 +201,7 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
         
     }
     
-    private Node getCreateNode(String nodeName, String title, Node parent) throws RepositoryException{
+    private Node getCreateNodeTitle(String nodeName, String title, Node parent) throws RepositoryException{
         if (null == nodeName || null == title || null == parent){
             log.error("getCreateNode - all parameters must be provided");
             return null;
@@ -173,7 +222,7 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
         
         // if node not found then create a new one
         if (null == node){
-            log.debug("getCreateNode - Node not found. Now creating. nodeName="+nodeName+" title="+title);
+            log.debug("getCreateNodeTitle - Node not found. Now creating. nodeName="+nodeName+" title="+title);
             node = parent.addNode(nodeName);
             node.setProperty(EC_PROP_TITLE, title);
         }
@@ -181,6 +230,37 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
         return node;
     }
     
+    private Node getCreateNodeDate(String nodeName, Date date, Node parent) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
+        if (null == nodeName || null == date || null == parent){
+            log.error("getCreateNode - all parameters must be provided");
+            return null;
+        }
+        
+        // check for existing node with date
+        Node node = null;
+        for (NodeIterator iterator = parent.getNodes(nodeName);iterator.hasNext();){
+            Node nextNode = iterator.nextNode();
+            if (nextNode.hasProperties() && nextNode.hasProperty(EC_PROP_ENTRYDATE)){
+                Calendar testDate = nextNode.getProperty(EC_PROP_ENTRYDATE).getDate();
+                if (testDate.getTime().equals(date)){
+                    node = nextNode;
+                    break;
+                }
+            }
+        }
+        
+        // if node not found then create a new one
+        if (null == node){
+            log.debug("getCreateNodeDate - Node not found. Now creating. nodeName="+nodeName+" date="+date);
+            node = parent.addNode(nodeName);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            node.setProperty(EC_PROP_ENTRYDATE, calendar);
+        }
+        
+        return node;
+    }
+ 
     public void setTemplate(JcrTemplate template) {
         this.template = template;
     }
@@ -196,5 +276,6 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
 	public void setLocales(List locales) {
 		this.locales = locales;
 	}
+
 
 }

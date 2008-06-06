@@ -16,5 +16,4 @@ public interface BlogDao {
     public int saveBlogEntry(BlogEntry blogEntry);
     public void deleteBlogEntry(int blogEntryId);
     public Integer getSiteId();
-    public String getSite();
 }

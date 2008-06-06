@@ -12,11 +12,10 @@ public class BlogEntry implements Serializable, Comparable, ITreeInput{
 	private static final long serialVersionUID = 1L;
     private final static int summaryLength = 200;
     
-    private int id;
+    private String blog;
     private String text;
     private Date date;
-    private BlogCategory blogCategory;
-    private int siteId;
+    private String blogCategory;
     private String title;
     private String description;
     private String keywords;
@@ -52,31 +51,6 @@ public class BlogEntry implements Serializable, Comparable, ITreeInput{
         this.text = text;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-	public int getSiteId() {
-		return siteId;
-	}
-
-	public void setSiteId(int siteId) {
-		this.siteId = siteId;
-	}
-    
-    public BlogCategory getBlogCategory() {
-        return blogCategory;
-    }
-    public void setBlogCategory(BlogCategory blogCategory) {
-        this.blogCategory = blogCategory;
-    }
-    public int getBlogCategoryId(){
-        return blogCategory.getId();
-    }
     public String getSummary(String moreLink){
         if (StringUtils.isEmpty(text)){
             return text;
@@ -106,9 +80,7 @@ public class BlogEntry implements Serializable, Comparable, ITreeInput{
 		if (!(obj instanceof BlogEntry)) return false;
 		BlogEntry compare = (BlogEntry)obj; 
 		if (date.equals(compare.getDate())){
-			if (id == compare.id){
-				return true;
-			}
+			return true;
 		}
 		return false;
 	}
@@ -119,6 +91,18 @@ public class BlogEntry implements Serializable, Comparable, ITreeInput{
 		} else {
 			return 1;
 		}
+	}
+	public String getBlog() {
+		return blog;
+	}
+	public void setBlog(String blog) {
+		this.blog = blog;
+	}
+	public String getBlogCategory() {
+		return blogCategory;
+	}
+	public void setBlogCategory(String blogCategory) {
+		this.blogCategory = blogCategory;
 	}
 
 }

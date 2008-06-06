@@ -35,8 +35,6 @@ public class BlogServiceTest extends TestCase{
         BlogEntry blogEntry = createBlogEntry();
         mockDao.insertBlogEntry(blogEntry);
         daoControl.setReturnValue(1);
-        mockDao.getSite();
-        daoControl.setReturnValue("ecsite");
         daoControl.replay();
 
         int id = service.saveBlogEntry(blogEntry);
@@ -49,8 +47,6 @@ public class BlogServiceTest extends TestCase{
         blogEntry.setId(1);
         mockDao.saveBlogEntry(blogEntry);
         daoControl.setReturnValue(1);
-        mockDao.getSite();
-        daoControl.setReturnValue("ecsite");
         daoControl.replay();
 
         int id = service.saveBlogEntry(blogEntry);
@@ -60,8 +56,6 @@ public class BlogServiceTest extends TestCase{
     public void testGetBlogEntry(){
         mockDao.getBlogEntry(1);
         daoControl.setReturnValue(createBlogEntry());
-        mockDao.getSite();
-        daoControl.setReturnValue("ecsite");
         daoControl.replay();
 
         BlogEntry blogEntry = service.getBlogEntry(1);
@@ -75,8 +69,6 @@ public class BlogServiceTest extends TestCase{
         test.add(entry);
         daoControl.setReturnValue(test);
 
-        mockDao.getSite();
-        daoControl.setReturnValue("ecsite");
 
         daoControl.replay();
         
@@ -90,8 +82,6 @@ public class BlogServiceTest extends TestCase{
         test.add(createBlogEntry());
         daoControl.setReturnValue(test);
 
-        mockDao.getSite();
-        daoControl.setReturnValue("ecsite");
         
         daoControl.replay();
         Collection entries = service.getBlogEntriesForCategory(1);

@@ -86,7 +86,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
 
             //category drop down
             List categories = getBlogService().getBlogCategories();
-            FormComponent categoryDropDown = new DropDownChoice("category", new PropertyModel(blogEntry,"blogCategory"), categories, new ChoiceRenderer("name","id"));
+            FormComponent categoryDropDown = new DropDownChoice("category", new PropertyModel(blogEntry,"blogCategory"), categories);
             categoryDropDown.setRequired(true);
             categoryDropDown.add(new ValidationStyleBehaviour());
             categoryDropDown.add(new AjaxFormComponentUpdatingBehavior("onblur"){

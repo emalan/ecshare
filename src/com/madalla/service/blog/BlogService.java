@@ -1,6 +1,7 @@
 package com.madalla.service.blog;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -22,48 +23,25 @@ public class BlogService implements IBlogService, Serializable{
 	private static final String BLOG_PREFIX = "blog";
 	//TODO refactor to allow multiple blogs per site
 	private static final String BLOG_NAME = "mainBlog";
-	private BlogDao dao;
 	private IContentService contentService;
 	private Log log = LogFactory.getLog(this.getClass());
 
     public List getBlogCategories(){
-        return dao.getBlogCategories();
+    	List list = new ArrayList();
+    	list.add("work");
+    	list.add("travel");
+        return list;
     }
 
-    public int saveBlogEntry(BlogEntry blogEntry) {
-    	int blogId;
-        if (blogEntry.getId() == 0){
-        	log.debug("saveBlogEntry - inserting "+blogEntry);
-        	blogId = dao.insertBlogEntry(blogEntry);
-        } else {
-        	log.debug("saveBlogEntry - updating "+blogEntry);
-        	dao.saveBlogEntry(blogEntry);
-        	blogId = blogEntry.getId();
-        }
-        //save content to CMS
-        Content content = new Content();
-        content.setPageName(BLOG_NAME);
-        content.setContentId(getBlogId(blogId));
-        content.setText(blogEntry.getText());
-        try {
-        	log.debug("saveBlogEntry - saving Content "+content);
-			contentService.setContent(content);
-		} catch (RepositoryException e) {
-			log.error("saveBlogEntry - ", e);
-		}
-        
-        return blogId;
+    public void saveBlogEntry(BlogEntry blogEntry) {
+    	contentService.setBlog(blogEntry);
     }
     
     public BlogEntry getBlogEntry(int id) {
+    	contentService.
         BlogEntry blogEntry = dao.getBlogEntry(id);
         populateContentFromCMS(blogEntry);
         return blogEntry;
-    }
-    
-    public List getBlogEntriesForCategory(int categoryId) {
-        List list = dao.getBlogEntriesForCategory(categoryId);
-        return getBlogEntries(list);
     }
     
     public List getBlogEntries() {

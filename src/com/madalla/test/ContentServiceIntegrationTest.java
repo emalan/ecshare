@@ -12,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.tree.LinkTree;
 
+import com.madalla.service.blog.BlogEntry;
 import com.madalla.service.cms.IContentAdminService;
 import com.madalla.service.cms.IContentService;
 import com.madalla.webapp.cms.Content;
@@ -83,6 +84,22 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	
     	String text = contentService.getContentData(CONTENT_PARENT, CONTENT_ID, Locale.FRENCH);
     	assertEquals(text, french);
+    }
+    
+    public void testBlogGetSet(){
+    	BlogEntry blogEntry = createBlogEntry();
+    	contentService.setBlog(blogEntry);
+    }
+    
+    private BlogEntry createBlogEntry(){
+    	BlogEntry entry = new BlogEntry();
+    	entry.setBlogCategory(blogCategory)
+    	entry.setDate(date);
+    	entry.setDescription(description);
+    	entry.setKeywords(keywords);
+    	entry.setText(text);
+    	entry.setTitle(title);
+    	return entry;    	
     }
 
     public void setContentService(IContentService contentService) {
