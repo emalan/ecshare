@@ -16,7 +16,7 @@ public class BlogDisplayPanel extends AbstractBlogDisplayPanel{
 			Class blogMainPage, Class blogArchivePage, boolean adminMode) {
 		super(id);
 		
-		int blogEntryId = parameters.getInt(BLOG_ENTRY_ID);
+		String blogEntryId = parameters.getString(BLOG_ENTRY_ID);
 		add(new BookmarkablePageLink("main",blogMainPage));
 		add(new BookmarkablePageLink("archive",blogArchivePage));
 		

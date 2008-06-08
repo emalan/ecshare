@@ -12,6 +12,7 @@ public class BlogEntry implements Serializable, Comparable, ITreeInput{
 	private static final long serialVersionUID = 1L;
     private final static int summaryLength = 200;
     
+    private String id;
     private String blog;
     private String text;
     private Date date;
@@ -104,5 +105,11 @@ public class BlogEntry implements Serializable, Comparable, ITreeInput{
 	public void setBlogCategory(String blogCategory) {
 		this.blogCategory = blogCategory;
 	}
+    public String getId() {
+        return id;
+    }
+    public void setId(String id){
+        this.id = id;
+    }
 
 }

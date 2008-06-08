@@ -2,8 +2,7 @@ package com.madalla.service.cms;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -13,11 +12,8 @@ import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.ValueFormatException;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
-import javax.jcr.version.VersionException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springmodules.jcr.JcrCallback;
@@ -56,20 +52,102 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
         processContentEntry(content.getPageName(), content.getContentId(), content.getText());
     }
     
-	public void setBlogEntry(BlogEntry blogEntry) {
-		processBlogEntry(blogEntry, true, false);
+	public String insertBlogEntry(BlogEntry blogEntry) {
+		return processBlogEntry(blogEntry);
 	}
+    
+    public void updateBlogEntry(BlogEntry blogEntry){
+        processBlogEntry(blogEntry);
+    }
+    
+    public BlogEntry getBlogEntry(final String uuid) {
+        if (StringUtils.isEmpty(uuid)){
+            log.error("getBlogEntry - uuid is required.");
+            return null;
+        }
+        return (BlogEntry) template.execute(new JcrCallback(){
+            public Object doInJcr(Session session) throws IOException, RepositoryException {
+                Node node = session.getNodeByUUID(uuid);
+                BlogEntry blogEntry = new BlogEntry();
+                BlogEntryConvertor.populateBlogEntry(node, blogEntry);
+                return blogEntry;
+            }
+        });
+    }
+    
+    public void deleteBlogEntry(final String uuid) {
+        if (StringUtils.isEmpty(uuid)) {
+            log.error("deleteBlogEntry - uuid is required.");
+        } else {
+            template.execute(new JcrCallback() {
+                public Object doInJcr(Session session) throws IOException, RepositoryException {
+                    Node node = session.getNodeByUUID(uuid);
+                    node.remove();
+                    session.save();
+                    return null;
+                }
+            });
+        }
+    }
+    
+    public List getBlogEntries(final String blog){
+        return (List) template.execute(new JcrCallback(){
+            List list = new ArrayList();
+            public Object doInJcr(Session session) throws IOException, RepositoryException {
+                Node rootContentNode = getCreateAppNode(session.getRootNode());
+                Node siteNode = getCreateSiteNode(rootContentNode, site);
+                Node blogNode = getCreateBlogNode(siteNode, blog);
+                
+                for (NodeIterator iterator = blogNode.getNodes(EC_NODE_BLOGENTRY); iterator.hasNext();){
+                    Node nextNode = iterator.nextNode();
+                    BlogEntry blogEntry = new BlogEntry();
+                    blogEntry.setBlog(blog);
+                    BlogEntryConvertor.populateBlogEntry(nextNode, blogEntry);
+                    list.add(blogEntry);
+                }
+                return list;
+            }
+        });
+    }
+    
+    /**
+     * @param page
+     * @param contentId
+     * @param text
+     * @param overwrite - if true then replace value in repository even if it exists
+     * @return
+     */
+    private String processBlogEntry(final BlogEntry blogEntry){
+        return (String) template.execute(new JcrCallback(){
+
+            public Object doInJcr(Session session) throws IOException, RepositoryException {
+                log.debug("processBlogEntry - Processing Blog. " + blogEntry);
+                
+                Node node ;
+                if (StringUtils.isEmpty(blogEntry.getId())){
+                    log.debug("processBlogEntry - creating new referenceable Node.");
+                    Node rootContentNode = getCreateAppNode(session.getRootNode());
+                    Node siteNode = getCreateSiteNode(rootContentNode, site);
+                    Node blogNode = getCreateBlogNode(siteNode, blogEntry.getBlog());
+                    node = blogNode.addNode(EC_NODE_BLOGENTRY);
+                    node.addMixin("mix:referenceable");
+                } else {
+                    log.debug("processBlogEntry - retrieving node by UUID. uuid="+blogEntry.getId());
+                    node = session.getNodeByUUID(blogEntry.getId());
+                }
+               
+                BlogEntryConvertor.populateNode(node, blogEntry);
+                
+                session.save();
+                return node.getUUID();
+            }
+            
+        });
+    }
 	
-	public BlogEntry getBlogEntryData(final String blog, final long date){
-		BlogEntry blogEntry = new BlogEntry();
-		blogEntry.setDate(new Date(date));
-		processBlogEntry(blogEntry, false, false);
-		return blogEntry;
-	}
+
 	
-	public void deleteBlogEntry(final String blog, final long Date){
-		processBlogEntry(null, false, false);
-	}
+
     
     /**
      * Create or get Content Entry from repository 
@@ -106,29 +184,7 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
         });
     }
     
-    /**
-     * @param page
-     * @param contentId
-     * @param text
-     * @param overwrite - if true then replace value in repository even if it exists
-     * @return
-     */
-    private BlogEntry processBlogEntry(final BlogEntry blogEntry, final boolean overwrite, final boolean delete){
-        return (BlogEntry) template.execute(new JcrCallback(){
 
-            public Object doInJcr(Session session) throws IOException, RepositoryException {
-                Node rootContentNode = getCreateAppNode(session.getRootNode());
-                Node siteNode = getCreateSiteNode(rootContentNode, site);
-                Node blogNode = getCreateBlogNode(siteNode, blogEntry.getBlog());
-                
-                Node node = getCreateBlogEntry(blogNode, blogEntry, overwrite);
-                log.debug("processBlogEntry - Saving Blog. " + blogEntry);
-                session.save();
-                return node.getProperty(EC_PROP_CONTENT).getString();
-            }
-            
-        });
-    }
     
     private String getLocaleId(String id, Locale locale) {
         
@@ -168,20 +224,10 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
         if (node.isNew() || overwrite){
             node.setProperty(EC_PROP_CONTENT, text);
         }
-        log.debug("setContent - Saving Content. title="+title);
+        log.debug("getCreateContentEntry - Saving Content. title="+title);
         return node;
     }
     
-    private Node getCreateBlogEntry(Node parent, BlogEntry blogEntry, boolean overwrite) throws RepositoryException{
-        Node node = getCreateNodeDate(EC_NODE_BLOGENTRY, blogEntry.getDate(), parent);
-        if (node.isNew() || overwrite){
-            node.setProperty(EC_PROP_CONTENT, blogEntry.getText());
-            //TODO keywords, description etc...
-        }
-        log.debug("setContent - Saving Blog. date="+blogEntry);
-        return node;
-    }
-
     /**
      *  returns the class name node -- creates it if its not there
      */
@@ -230,37 +276,6 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
         return node;
     }
     
-    private Node getCreateNodeDate(String nodeName, Date date, Node parent) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
-        if (null == nodeName || null == date || null == parent){
-            log.error("getCreateNode - all parameters must be provided");
-            return null;
-        }
-        
-        // check for existing node with date
-        Node node = null;
-        for (NodeIterator iterator = parent.getNodes(nodeName);iterator.hasNext();){
-            Node nextNode = iterator.nextNode();
-            if (nextNode.hasProperties() && nextNode.hasProperty(EC_PROP_ENTRYDATE)){
-                Calendar testDate = nextNode.getProperty(EC_PROP_ENTRYDATE).getDate();
-                if (testDate.getTime().equals(date)){
-                    node = nextNode;
-                    break;
-                }
-            }
-        }
-        
-        // if node not found then create a new one
-        if (null == node){
-            log.debug("getCreateNodeDate - Node not found. Now creating. nodeName="+nodeName+" date="+date);
-            node = parent.addNode(nodeName);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            node.setProperty(EC_PROP_ENTRYDATE, calendar);
-        }
-        
-        return node;
-    }
- 
     public void setTemplate(JcrTemplate template) {
         this.template = template;
     }
@@ -276,6 +291,8 @@ public class ContentServiceImpl implements IContentData, IContentService, Serial
 	public void setLocales(List locales) {
 		this.locales = locales;
 	}
+
+ 
 
 
 }

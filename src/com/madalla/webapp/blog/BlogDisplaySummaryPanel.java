@@ -22,7 +22,7 @@ public class BlogDisplaySummaryPanel extends AbstractBlogDisplayPanel {
 		super(id);
         
 		//new Blog link
-        add(new BookmarkablePageLink("CreateNew",blogEntryPage, new PageParameters(BLOG_ENTRY_ID+"=0")){
+        add(new BookmarkablePageLink("CreateNew",blogEntryPage, new PageParameters(BLOG_ENTRY_ID+"=")){
             private static final long serialVersionUID = 1L;
 
             protected final void onBeforeRender(){

@@ -1,5 +1,6 @@
 package com.madalla.service.cms;
 
+import java.util.List;
 import java.util.Locale;
 
 import javax.jcr.RepositoryException;
@@ -12,10 +13,13 @@ public interface IContentService {
 	
 	final String CONTENT_DEFAULT = "Content";
 
-    public String getContentData(String nodeName, String id);
-    public String getContentData(String nodeName, String id, Locale locale);
-    public void setContent(Content content) throws RepositoryException;
-    public void setContent(Content content, Locale locale) throws RepositoryException;
-    
-    public void setBlog(BlogEntry blogEntry);
+    String getContentData(String nodeName, String id);
+    String getContentData(String nodeName, String id, Locale locale);
+    void setContent(Content content) throws RepositoryException;
+    void setContent(Content content, Locale locale) throws RepositoryException;
+    String insertBlogEntry(BlogEntry blogEntry);
+    void updateBlogEntry(BlogEntry blogEntry);
+    BlogEntry getBlogEntry(final String uuid);
+    void deleteBlogEntry(final String uuid);
+    public List getBlogEntries(final String blog);
 }

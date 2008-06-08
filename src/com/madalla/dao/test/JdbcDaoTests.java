@@ -49,7 +49,7 @@ public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests
         assertEquals(blogEntry.getKeywords(), testInsert.getKeywords());
         
         //test update
-        blogEntry.setId(id);
+        //blogEntry.setId(id);
         blogEntry.setTitle("Test Save Title");
         dao.saveBlogEntry(blogEntry);
         BlogEntry testUpdate = dao.getBlogEntry(id);
@@ -74,7 +74,7 @@ public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests
             log.debug("Deleting Blog Entry. count="+ entries.size());
         	for (Iterator iter = entries.iterator(); iter.hasNext();) {
         		BlogEntry entry = (BlogEntry) iter.next();
-        		dao.deleteBlogEntry(entry.getId());
+        		//dao.deleteBlogEntry(entry.getId());
         	}
         }
         
@@ -84,7 +84,7 @@ public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests
             log.debug("Inserted Blog Entry. "+blogEntry);
         	dao.insertBlogEntry(blogEntry);
             log.debug("Inserted Blog Entry. "+blogEntry);
-        	blogEntry.setBlogCategory(new BlogCategory(2,"test"));
+        	//blogEntry.setBlogCategory(new BlogCategory(2,"test"));
         	dao.insertBlogEntry(blogEntry);
             log.debug("Inserted Blog Entry. "+blogEntry);
         }

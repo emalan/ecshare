@@ -49,7 +49,7 @@ public abstract class AbstractBlogDisplayPanel extends Panel implements IBlogAwa
         
         //Edit link
         Map params = new HashMap();
-        params.put(BLOG_ENTRY_ID,new Integer(blogEntry.getId()));
+        params.put(BLOG_ENTRY_ID,new Long(blogEntry.getDate().getTime()));
         blogDisplay.add(new BookmarkablePageLink("EditBlog",blogEntryPage,new PageParameters(BLOG_ENTRY_ID+"="+blogEntry.getId())){
             private static final long serialVersionUID = 1L;
             protected final void onBeforeRender(){

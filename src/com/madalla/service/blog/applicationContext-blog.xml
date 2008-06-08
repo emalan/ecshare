@@ -3,7 +3,6 @@
 
 <beans>
     <bean id="blogService" class="com.madalla.service.blog.BlogService" lazy-init="true">
-        <property name="dao" ref="blogDao"/>
         <property name="contentService" ref="contentService"/>
     </bean>
 

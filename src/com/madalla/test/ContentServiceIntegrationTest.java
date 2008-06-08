@@ -2,6 +2,7 @@ package com.madalla.test;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -88,17 +89,31 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     
     public void testBlogGetSet(){
     	BlogEntry blogEntry = createBlogEntry();
-    	contentService.setBlog(blogEntry);
+        String uuid = contentService.insertBlogEntry(blogEntry);
+        BlogEntry testBlogEntry = contentService.getBlogEntry(uuid);
+    	assertEquals(blogEntry, testBlogEntry);
+        assertEquals(blogEntry.getTitle(), testBlogEntry.getTitle());
+        
+        contentService.deleteBlogEntry(uuid);
     }
+    
+    private final static String BLOG = "testBlog";
+    private final static String BLOGCATEGORY = "testCategory";
+    private final static String BLOGDESCRIPTION = "Blog Description Test";
+    private final static String BLOGKEYWORDS = "test, keyword";
+    private final static String BLOGTEXT = "test text";
+    private final static String BLOGTITLE = "test title";
+    private final static Date BLOGDATE = new Date();
     
     private BlogEntry createBlogEntry(){
     	BlogEntry entry = new BlogEntry();
-    	entry.setBlogCategory(blogCategory)
-    	entry.setDate(date);
-    	entry.setDescription(description);
-    	entry.setKeywords(keywords);
-    	entry.setText(text);
-    	entry.setTitle(title);
+        entry.setBlog(BLOG);
+    	entry.setBlogCategory(BLOGCATEGORY);
+    	entry.setDate(BLOGDATE);
+    	entry.setDescription(BLOGDESCRIPTION);
+    	entry.setKeywords(BLOGKEYWORDS);
+    	entry.setText(BLOGTEXT);
+    	entry.setTitle(BLOGTITLE);
     	return entry;    	
     }
 

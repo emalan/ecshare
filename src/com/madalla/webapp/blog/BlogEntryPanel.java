@@ -3,6 +3,7 @@ package com.madalla.webapp.blog;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
@@ -47,14 +48,14 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
 
         //construct blog Entry
-        int blogEntryId = parameters.getInt(BLOG_ENTRY_ID);
+        String blogEntryId = parameters.getString(BLOG_ENTRY_ID);
         log.debug("Constructing Blog Entry. id="+blogEntryId);
-        if (blogEntryId > 0){
-            blogEntry = getBlogService().getBlogEntry(blogEntryId);
-            log.debug("Retrieved Blog Entry from Service."+blogEntry);
-        } else {
+        if (StringUtils.isEmpty(blogEntryId)){
             blogEntry = new BlogEntry();
             log.debug("Created new Blog Entry");
+        } else {
+            blogEntry = getBlogService().getBlogEntry(blogEntryId);
+            log.debug("Retrieved Blog Entry from Service."+blogEntry);
         }
         
         add(new BlogEntryForm("blogForm",this));
