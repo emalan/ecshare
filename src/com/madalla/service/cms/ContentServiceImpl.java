@@ -23,7 +23,31 @@ import com.madalla.service.blog.BlogEntry;
 import com.madalla.webapp.cms.Content;
 
 /**
- * @author emalan
+ * Content Service Implementation for JCR Content Reository
+ * 
+ * This class is aware of the structure of the data in the repository 
+ * and will create the structure if it does not exist. The schema is
+ * open and not enforced by the repository. This class is reponsible
+ * for creating the structure and fetching the data. so there should be 
+ * no problems.
+ * 
+ *            ec:apps 
+ *         -----|---------------------------------------                 
+ *        |             |                               |
+ *     <site 1>      <site 2>                        <site 3>
+ *                      |-------------------------
+ *                      |                         |
+ *                    pages                     blogs
+ *              --------|----------               |----------------  
+ *             |        |          |              |                |
+ *         <page 1>  <page 2>   <page 3>        <main Blog>    <other Blog>
+ *                      | 
+ *                   content     
+ *       ---------------|-----------
+ *      |               |           |
+ * <paragraph1>   <paragraph2>   <block1>
+ * 
+ * @author exmalan
  *
  */
 public class ContentServiceImpl implements IContentData, IContentService, Serializable {
