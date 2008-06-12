@@ -27,7 +27,7 @@ import com.madalla.util.jcr.model.JcrNodeModel;
 import com.madalla.util.jcr.model.tree.JcrTreeModel;
 import com.madalla.util.jcr.model.tree.JcrTreeNode;
 
-public class ContentAdminService implements IContentData, IContentAdminService {
+public class ContentAdminService extends AbstractContentService implements IContentAdminService {
 	
     private static final long serialVersionUID = 1L;
     private static final String FILE_SUFFIX = "-backup.xml";
@@ -41,14 +41,11 @@ public class ContentAdminService implements IContentData, IContentAdminService {
         return (TreeModel) template.execute(new JcrCallback(){
             
             public Object doInJcr(Session session) throws IOException, RepositoryException {
-                Node rootContentNode = getSiteAppNode(session);
-                Node siteNode = getSiteNode(session);
-
-                //TODO change to using site Node. Site Nood must act like root.
-                JcrNodeModel nodeModel = new JcrNodeModel(rootContentNode);
+                Node siteNode = getCreateSiteNode(session.getRootNode());
+                JcrNodeModel nodeModel = new JcrNodeModel(siteNode);
                 JcrTreeNode treeNode = new JcrTreeNode(nodeModel);
                 JcrTreeModel jcrTreeModel = new JcrTreeModel(treeNode);
-                treeNode.init(rootContentNode);
+                treeNode.init(siteNode);
                 return jcrTreeModel;
             }
         });
@@ -58,7 +55,7 @@ public class ContentAdminService implements IContentData, IContentAdminService {
     	template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
-				Node node = getRootNode(session);
+				Node node = session.getRootNode();
 				OutputStream out = getBackupFile("root");
                 session.exportDocumentView(node.getPath(), out, true, false);
 				return null;
@@ -70,7 +67,7 @@ public class ContentAdminService implements IContentData, IContentAdminService {
     	template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
-				Node node = getSiteAppNode(session);
+				Node node = getCreateSiteNode(session.getRootNode());
 				OutputStream out = getBackupFile("apps");
                 session.exportDocumentView(node.getPath(), out, true, false);
 				return null;
@@ -82,7 +79,7 @@ public class ContentAdminService implements IContentData, IContentAdminService {
     	template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
-				Node node = getSiteNode(session);
+				Node node = getCreateSiteNode(session.getRootNode());
 				OutputStream out = getBackupFile(site);
                 session.exportSystemView(node.getPath(), out, true, false);
 				return null;
@@ -118,11 +115,11 @@ public class ContentAdminService implements IContentData, IContentAdminService {
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
 				
-				Node node = getSiteAppNode(session);
+				Node node = getCreateSiteNode(session.getRootNode());
 				InputStream in = new FileInputStream(backupFile);
 				
 				//first delete site node
-				Node siteNode = getSiteNode(session);
+				Node siteNode = getCreateSiteNode(session.getRootNode());
 				siteNode.remove();
 				session.save();
 				session.importXML(node.getPath(), in, ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
@@ -151,30 +148,6 @@ public class ContentAdminService implements IContentData, IContentAdminService {
         DefaultResourceLoader loader = new DefaultResourceLoader();
         Resource resource = loader.getResource(repositoryHome);
         return resource.getFile();
-	}
-
-	private Node getRootNode(Session session) throws RepositoryException {
-		return session.getRootNode();
-	}
-	
-	private Node getSiteAppNode(Session session) throws PathNotFoundException, RepositoryException{
-		return session.getRootNode().getNode(EC_NODE_APP);
-	}
-	
-	private Node getSiteNode(Session session) throws PathNotFoundException, RepositoryException{
-		Node appNode = session.getRootNode().getNode(EC_NODE_APP);
-		Node rt = null;
-		for (NodeIterator iter = appNode.getNodes(EC_NODE_SITE); iter.hasNext();){
-			Node test = iter.nextNode();
-			if (test.hasProperties() && test.hasProperty(EC_PROP_TITLE)){
-                String testTitle = test.getProperty(EC_PROP_TITLE).getString();
-                if (testTitle.equals(site)){
-                    rt = test;
-                    break;
-                }
-            }
-		}
-		return rt;
 	}
 
 	public void setSite(String site) {

@@ -15,7 +15,7 @@ import com.madalla.service.blog.BlogEntry;
 public class BlogEntryConvertor implements IContentData {
     
     public static void populateBlogEntry(Node node, BlogEntry blogEntry) throws ValueFormatException, PathNotFoundException, RepositoryException{
-        blogEntry.setId(node.getUUID());
+        blogEntry.setId(node.getPath());
         blogEntry.setBlogCategory(node.getProperty(EC_PROP_CATEGORY).getString());
         blogEntry.setDate(node.getProperty(EC_PROP_ENTRYDATE).getDate().getTime());
         blogEntry.setDescription(node.getProperty(EC_PROP_DESCRIPTION).getString());
