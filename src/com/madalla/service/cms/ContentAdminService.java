@@ -10,8 +10,6 @@ import java.io.OutputStream;
 
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.swing.tree.TreeModel;
@@ -32,7 +30,6 @@ public class ContentAdminService extends AbstractContentService implements ICont
     private static final long serialVersionUID = 1L;
     private static final String FILE_SUFFIX = "-backup.xml";
     private JcrTemplate template;
-    private String site ;
     private String repositoryHome;
     private final Log log = LogFactory.getLog(this.getClass());
     
@@ -41,7 +38,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
         return (TreeModel) template.execute(new JcrCallback(){
             
             public Object doInJcr(Session session) throws IOException, RepositoryException {
-                Node siteNode = getCreateSiteNode(session.getRootNode());
+                Node siteNode = getCreateSiteNode(session);
                 JcrNodeModel nodeModel = new JcrNodeModel(siteNode);
                 JcrTreeNode treeNode = new JcrTreeNode(nodeModel);
                 JcrTreeModel jcrTreeModel = new JcrTreeModel(treeNode);
@@ -58,18 +55,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
 				Node node = session.getRootNode();
 				OutputStream out = getBackupFile("root");
                 session.exportDocumentView(node.getPath(), out, true, false);
-				return null;
-			}
-    	});
-    }
-    
-    public void backupContentApps(){
-    	template.execute(new JcrCallback(){
-			public Object doInJcr(Session session) throws IOException,
-					RepositoryException {
-				Node node = getCreateSiteNode(session.getRootNode());
-				OutputStream out = getBackupFile("apps");
-                session.exportDocumentView(node.getPath(), out, true, false);
+                out.close();
 				return null;
 			}
     	});
@@ -79,9 +65,9 @@ public class ContentAdminService extends AbstractContentService implements ICont
     	template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
-				Node node = getCreateSiteNode(session.getRootNode());
+				Node node = getCreateSiteNode(session);
 				OutputStream out = getBackupFile(site);
-                session.exportSystemView(node.getPath(), out, true, false);
+                session.exportDocumentView(node.getPath(), out, true, false);
 				return null;
 			}
     	});
@@ -115,14 +101,28 @@ public class ContentAdminService extends AbstractContentService implements ICont
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
 				
-				Node node = getCreateSiteNode(session.getRootNode());
 				InputStream in = new FileInputStream(backupFile);
 				
-				//first delete site node
-				Node siteNode = getCreateSiteNode(session.getRootNode());
-				siteNode.remove();
+				Node siteNode = getCreateSiteNode(session);
+				String importPath = siteNode.getParent().getPath();
+				Node backupParent = getCreateBackupNode(session);
 				session.save();
-				session.importXML(node.getPath(), in, ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+				
+				//remove old backup if exists
+				if (backupParent.hasNode(NS+site)){
+					Node oldBackup = backupParent.getNode(NS+site);
+					log.debug("restoreContentSite - removing an old backup.");
+					oldBackup.remove();
+					session.save();
+				}
+				//move site out to backup
+				String srcPath = siteNode.getPath();
+				String destPath = backupParent.getPath()+"/"+siteNode.getName();
+				log.debug("Moving site from "+srcPath + " to "+ destPath);
+				session.move(srcPath, destPath);
+				session.save();
+				
+				session.importXML(importPath, in, ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
                 session.save();
 				return null;
 			}
@@ -148,10 +148,6 @@ public class ContentAdminService extends AbstractContentService implements ICont
         DefaultResourceLoader loader = new DefaultResourceLoader();
         Resource resource = loader.getResource(repositoryHome);
         return resource.getFile();
-	}
-
-	public void setSite(String site) {
-		this.site = site;
 	}
 
 	public void setTemplate(JcrTemplate template) {

@@ -50,7 +50,7 @@ public class ContentNode extends AbstractReadOnlyModel  implements Serializable,
      * @see com.madalla.util.jcr.model.IContentNode#render()
      */
     public String render(){
-        return name + (null ==title?"":" - "+title);
+        return name;
     }
 	
     public String toString() {

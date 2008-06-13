@@ -35,19 +35,15 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 		return configLocations;
 	}
 	
-	public void testGetBackupFiles(){
+    public void testContentBackup(){
+        contentAdminService.backupContentRoot();
+        contentAdminService.backupContentSite();
 		File[] files = contentAdminService.getBackupFileList();
 		for (int i = 0; i < files.length; i++) {
 			if ("test-backup.xml".equals(files[i].getName())){
 				contentAdminService.restoreContentSite(files[i]);
 			}
 		}
-	}
-    
-    public void testContentBackup(){
-        contentAdminService.backupContentRoot();
-        contentAdminService.backupContentApps();
-        contentAdminService.backupContentSite();
     }
 
     public void testContentExplorer(){

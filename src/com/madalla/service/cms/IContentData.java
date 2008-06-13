@@ -2,6 +2,7 @@ package com.madalla.service.cms;
 
 public interface IContentData {
     static final String NS = "ec:";
+    static final String EC_NODE_BACKUP = NS + "backup";
     static final String EC_NODE_APP = NS + "apps";
     static final String EC_NODE_PAGES = NS + "pages";
     static final String EC_NODE_BLOGS = NS + "blogs";

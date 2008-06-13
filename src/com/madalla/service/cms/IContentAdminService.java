@@ -8,7 +8,6 @@ public interface IContentAdminService {
 
 	public TreeModel getSiteContent();
 	public void backupContentRoot();
-	public void backupContentApps();
 	public void backupContentSite();
 	public File[] getBackupFileList();
 	public void restoreContentSite(File backupFile) ;

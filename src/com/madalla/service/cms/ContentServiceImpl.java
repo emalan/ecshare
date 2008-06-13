@@ -115,7 +115,7 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
         return (List) template.execute(new JcrCallback(){
             List list = new ArrayList();
             public Object doInJcr(Session session) throws IOException, RepositoryException {
-            	Node blogParent = getBlogsParent(session.getRootNode());
+            	Node blogParent = getBlogsParent(session);
             	Node blogNode = getCreateNode(NS+blog, blogParent);
                 
                 for (NodeIterator iterator = blogNode.getNodes(); iterator.hasNext();){
@@ -143,7 +143,7 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
                 log.debug("processBlogEntry - Processing Blog. " + blogEntry);
                 Node node ;
                 if (StringUtils.isEmpty(blogEntry.getId())){
-                	Node blogParent = getBlogsParent(session.getRootNode());
+                	Node blogParent = getBlogsParent(session);
                 	Node blogNode = getCreateNode(NS+blogEntry.getBlog(), blogParent);
                     node = getCreateNode(NS+blogEntry.getName(), blogNode);
                 } else {
@@ -169,7 +169,7 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
     private String processContentEntry(final String page, final String contentId, final String defaultValue, final boolean overwrite){
         return (String) template.execute(new JcrCallback(){
             public Object doInJcr(Session session) throws IOException, RepositoryException {
-                Node pageParent = getPagesParent(session.getRootNode());
+                Node pageParent = getPagesParent(session);
                 Node pageNode = getCreateNode(NS+page, pageParent);
                 Node contentNode = getCreateNode(EC_NODE_CONTENT, pageNode);
                 

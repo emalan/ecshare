@@ -3,6 +3,7 @@ package com.madalla.service.cms;
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,19 +14,39 @@ public class AbstractContentService implements IContentData {
 	
     protected String site ;
     
-    protected Node getPagesParent(Node root) throws RepositoryException{
-    	return getCreateNode(EC_NODE_PAGES, getCreateSiteNode(root));
+    protected Node getPagesParent(Session session) throws RepositoryException{
+    	return getCreateNode(EC_NODE_PAGES, getCreateSiteNode(session));
     }
     
-    protected Node getBlogsParent(Node root) throws RepositoryException{
-    	return getCreateNode(EC_NODE_PAGES, getCreateSiteNode(root));
+    protected Node getBlogsParent(Session session) throws RepositoryException{
+    	return getCreateNode(EC_NODE_BLOGS, getCreateSiteNode(session));
     }
     
-    protected Node getCreateSiteNode(Node root) throws RepositoryException{
-    	Node appNode = getCreateNode(EC_NODE_APP, root);
+    protected Node getCreateSiteNode(Session session) throws RepositoryException{
+    	Node appNode = getCreateNode(EC_NODE_APP, session.getRootNode());
     	return getCreateNode(NS+site, appNode);
     }
-
+    
+    protected Node getCreateBackupNode(Session session) throws RepositoryException{
+    	Node appNode = getCreateNode(EC_NODE_APP, session.getRootNode());
+    	return getCreateNode(EC_NODE_BACKUP, appNode);
+    }
+    
+    protected Node getCreateVersionableNode(String nodeName, Node parent) throws RepositoryException{
+        Node node = getCreateNode(nodeName, parent);
+        if (node.isNew() ||  !node.isNodeType("mix:versionable")){
+        	node.addMixin("mix:versionable");
+        }
+        return node;
+    }
+    
+    protected Node getCreateReferenceableNode(String nodeName, Node parent) throws RepositoryException{
+        Node node = getCreateNode(nodeName, parent);
+        if (node.isNew() ||  !node.isNodeType("mix:referenceable")){
+        	node.addMixin("mix:referenceable");
+        }
+        return node;
+    }
     /**
      *  returns the class name node -- creates it if its not there
      */
