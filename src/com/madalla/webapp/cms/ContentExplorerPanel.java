@@ -29,10 +29,9 @@ public class ContentExplorerPanel extends Panel implements IContentData{
 
 	private Log log = LogFactory.getLog(this.getClass());
 
-	public ContentExplorerPanel(String name) {
+	public ContentExplorerPanel(String name, final ContentDisplayPanel display) {
 		super(name);
 		// List existing Blogs
-		log.debug("construtor - retrieving blog entries from service.");
 		IContentAdminService service = getContentAdminService();
 		TreeModel treeModel = service.getSiteContent();
 		log.debug("construtor - retrieved content entries. root="
@@ -50,16 +49,16 @@ public class ContentExplorerPanel extends Panel implements IContentData{
 				return new LinkIconPanel(id, model, this) {
 					private static final long serialVersionUID = 1L;
 
-					protected void onNodeLinkClicked(TreeNode node,	BaseTree tree, AjaxRequestTarget target) {
+					protected void onNodeLinkClicked(TreeNode node,
+							BaseTree tree, AjaxRequestTarget target) {
 						super.onNodeLinkClicked(node, tree, target);
-						if (node.isLeaf()) {
-							log.debug("onNodeLinkClicked - "+node);
-							JcrTreeNode jcrTreeNode = (JcrTreeNode) node;
-							if (jcrTreeNode.getObject() instanceof ContentNode){
-								IContentNode contentNode = (IContentNode) jcrTreeNode.getObject();
-								//TODO get parameters needed for editing content
-								//TODO update a text entry area
-							}
+						log.debug("onNodeLinkClicked - " + node);
+						JcrTreeNode jcrTreeNode = (JcrTreeNode) node;
+						if (jcrTreeNode.getObject() instanceof ContentNode) {
+							IContentNode contentNode = (IContentNode) jcrTreeNode.getObject();
+							String path = contentNode.getPath();
+							log.debug("onNodeLinkClicked - path=" + path);
+							display.refresh(path);
 						}
 					}
 

@@ -32,18 +32,18 @@ import com.madalla.webapp.cms.Content;
  *            ec:apps 
  *         -----|---------------------------------------                 
  *        |             |                               |
- *     <site 1>      <site 2>                        <site 3>
+ *     <ec:site1>   <ec:site2>                       <ec:site3>
  *                      |-------------------------
  *                      |                         |
  *                    ec:pages                 ec:blogs
  *              --------|----------               |----------------  
  *             |        |          |              |                |
- *         <page 1>  <page 2>   <page 3>        <main Blog>    <other Blog>
+ *        <ec:page1> <ec:page2> <ec:page3>    <ec:mainBlog>    <ec:otherBlog>
  *                      |                           |---------------
  *                   ec:content                     |               |
- *       ---------------|-----------           <blog entry 1>  <blog entry 2>
+ *       ---------------|-----------           <ec:blogEntry1>  <ec:blogEntry2>
  *      |               |           |
- * <paragraph1>   <paragraph2>   <block1>
+ * <ec:para1>   <ec:para2>    <ec:block1>
  * 
  * @author exmalan
  *
