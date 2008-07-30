@@ -1,5 +1,6 @@
 package com.madalla.webapp.cms;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
@@ -33,14 +34,27 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 		add(nodePath);
 		
         //Delete Link
-        add(new Link("deleteNode"){
+        Component delete = new Link("deleteNode"){
             private static final long serialVersionUID = 1L;
+            
+            protected final void onBeforeRender(){
+                if (StringUtils.isEmpty(path)){
+                    setVisible(false);
+                } else {
+                    setVisible(true);
+                }
+                super.onBeforeRender();
+            }
+            
             public void onClick() {
             	IContentService service = getContentService();
             	service.deleteBlogEntry(path);
+            	path = "";
                 getPage().render();
             }
-        });
+        };
+        delete.setOutputMarkupId(true);
+        add(delete);
 	}
 	
 	public Component getComponent(){
