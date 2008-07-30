@@ -4,9 +4,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
+import com.madalla.service.blog.IBlogService;
 import com.madalla.service.cms.IContentData;
 import com.madalla.service.cms.IContentService;
 import com.madalla.service.cms.IContentServiceProvider;
@@ -29,6 +31,16 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 		nodePath = new Label("nodeName", model);
 		nodePath.setOutputMarkupId(true);
 		add(nodePath);
+		
+        //Delete Link
+        add(new Link("deleteNode"){
+            private static final long serialVersionUID = 1L;
+            public void onClick() {
+            	IContentService service = getContentService();
+            	service.deleteBlogEntry(path);
+                getPage().render();
+            }
+        });
 	}
 	
 	public Component getComponent(){
