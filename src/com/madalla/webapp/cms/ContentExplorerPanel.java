@@ -29,7 +29,7 @@ public class ContentExplorerPanel extends Panel implements IContentData{
 
 	private Log log = LogFactory.getLog(this.getClass());
 
-	public ContentExplorerPanel(String name, final ContentDisplayPanel display) {
+	public ContentExplorerPanel(String name, final ContentDisplayPanel displayPanel) {
 		super(name);
 		// List existing Blogs
 		IContentAdminService service = getContentAdminService();
@@ -58,7 +58,8 @@ public class ContentExplorerPanel extends Panel implements IContentData{
 							IContentNode contentNode = (IContentNode) jcrTreeNode.getObject();
 							String path = contentNode.getPath();
 							log.debug("onNodeLinkClicked - path=" + path);
-							display.refresh(path);
+							displayPanel.refresh(path);
+							target.addComponent(displayPanel);
 						}
 					}
 
