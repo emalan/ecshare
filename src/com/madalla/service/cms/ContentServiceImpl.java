@@ -19,7 +19,6 @@ import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.service.blog.BlogEntry;
-import com.madalla.webapp.cms.Content;
 
 /**
  * Content Service Implementation for JCR Content Reository
@@ -55,6 +54,30 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
     private final Log log = LogFactory.getLog(this.getClass());
     private List locales;
     
+    public boolean isContentNode(String path){
+    	String[] pathArray = path.split("/");
+    	if (EC_NODE_CONTENT.equals(pathArray[pathArray.length-2])){
+    		return true;
+    	}
+    	return false;
+    }
+    
+    public boolean isBlogNode(String path){
+    	String[] pathArray = path.split("/");
+    	if (EC_NODE_BLOGS.equals(pathArray[pathArray.length-2])){
+    		return true;
+    	}
+    	return false;
+    }
+    
+    public boolean isContentPastNode(String path){
+    	String[] pathArray = path.split("/");
+    	if (EC_NODE_CONTENT.equals(pathArray[pathArray.length-1])){
+    		return true;
+    	}
+    	return false;
+    }
+    
     public String getContentData(final String nodeName, final String id, Locale locale) {
         String localeId = getLocaleId(id, locale);
         return getContentData(nodeName, localeId);
@@ -72,7 +95,19 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
     public void setContent(final Content content)  {
         processContentEntry(content.getPageName(), content.getContentId(), content.getText(), true);
     }
-    
+
+	public Content getContent(final String path) {
+        return (Content) template.execute(new JcrCallback(){
+            public Content doInJcr(Session session) throws IOException, RepositoryException {
+                Node node = (Node) session.getItem(path);
+                Content content = new Content();
+                content.setContentId(node.getName());
+                content.setText(node.getProperty(EC_PROP_CONTENT).getString());
+                return content;
+            }
+        });
+	}
+	
 	public String insertBlogEntry(BlogEntry blogEntry) {
 		return processBlogEntry(blogEntry);
 	}
@@ -96,9 +131,9 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
         });
     }
     
-    public void deleteBlogEntry(final String path) {
+    public void deleteNode(final String path) {
         if (StringUtils.isEmpty(path)) {
-            log.error("deleteBlogEntry - path is required.");
+            log.error("deleteNode - path is required.");
         } else {
             template.execute(new JcrCallback() {
                 public Object doInJcr(Session session) throws IOException, RepositoryException {
@@ -111,10 +146,10 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
         }
     }
     
-    public List getBlogEntries(final String blog){
-        return (List) template.execute(new JcrCallback(){
-            List list = new ArrayList();
-            public Object doInJcr(Session session) throws IOException, RepositoryException {
+    public List<BlogEntry> getBlogEntries(final String blog){
+        return (List<BlogEntry>) template.execute(new JcrCallback(){
+            List<BlogEntry> list = new ArrayList<BlogEntry>();
+            public List<BlogEntry> doInJcr(Session session) throws IOException, RepositoryException {
             	Node blogParent = getBlogsParent(session);
             	Node blogNode = getCreateNode(NS+blog, blogParent);
                 
@@ -218,4 +253,5 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
 	public void setLocales(List locales) {
 		this.locales = locales;
 	}
+
 }

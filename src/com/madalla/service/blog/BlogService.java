@@ -47,8 +47,8 @@ public class BlogService implements IBlogService, Serializable{
     	return CalendarUtils.createMonthlyTree("Blog Archive", list);
     }
     
-    public void deleteBlogEntry(String uuid){
-        contentService.deleteBlogEntry(uuid);
+    public void deleteBlogEntry(String path){
+        contentService.deleteNode(path);
     }
     
 	public void setContentService(IContentService contentService) {

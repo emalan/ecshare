@@ -14,9 +14,9 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.tree.LinkTree;
 
 import com.madalla.service.blog.BlogEntry;
+import com.madalla.service.cms.Content;
 import com.madalla.service.cms.IContentAdminService;
 import com.madalla.service.cms.IContentService;
-import com.madalla.webapp.cms.Content;
 
 public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
@@ -85,12 +85,12 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     
     public void testBlogGetSet(){
     	BlogEntry blogEntry = createBlogEntry();
-        String uuid = contentService.insertBlogEntry(blogEntry);
-        BlogEntry testBlogEntry = contentService.getBlogEntry(uuid);
+        String path = contentService.insertBlogEntry(blogEntry);
+        BlogEntry testBlogEntry = contentService.getBlogEntry(path);
     	assertEquals(blogEntry, testBlogEntry);
         assertEquals(blogEntry.getTitle(), testBlogEntry.getTitle());
         
-        contentService.deleteBlogEntry(uuid);
+        contentService.deleteNode(path);
     }
     
     private final static String BLOG = "testBlog";

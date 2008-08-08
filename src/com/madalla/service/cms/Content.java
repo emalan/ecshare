@@ -1,4 +1,4 @@
-package com.madalla.webapp.cms;
+package com.madalla.service.cms;
 
 import java.io.Serializable;
 

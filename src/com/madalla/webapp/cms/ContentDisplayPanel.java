@@ -1,5 +1,7 @@
 package com.madalla.webapp.cms;
 
+import javax.jcr.Node;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -9,6 +11,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
+import com.madalla.service.cms.Content;
 import com.madalla.service.cms.IContentData;
 import com.madalla.service.cms.IContentService;
 import com.madalla.service.cms.IContentServiceProvider;
@@ -22,6 +25,7 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 	private Component delete;
 	private Component copy;
 	private Component paste;
+	private Content copiedContent;
 	private String path = "";
 	
 	public ContentDisplayPanel(String name) {
@@ -41,16 +45,15 @@ public class ContentDisplayPanel extends Panel implements IContentData{
             
             protected final void onBeforeRender(){
                 if (StringUtils.isEmpty(path)){
-                    setVisible(false);
+                    setEnabled(false);
                 } else {
-                    setVisible(true);
+                    setEnabled(true);
                 }
                 super.onBeforeRender();
             }
             
             public void onClick() {
-            	IContentService service = getContentService();
-            	service.deleteBlogEntry(path);
+            	getContentService().deleteNode(path);
             	path = "";
                 setResponsePage(getPage().getClass());
             }
@@ -65,26 +68,33 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 			
 			@Override
 			protected final void onBeforeRender(){
-                setVisible(false);
+				if (!StringUtils.isEmpty(path) && getContentService().isContentNode(path)){
+					copy.setEnabled(true);
+				} else {
+					copy.setEnabled(false);
+				}
                 super.onBeforeRender();
             }
             
 			@Override
             public void onClick() {
-				//TODO
+				copiedContent = getContentService().getContent(path);
 			}
         };
         copy.setOutputMarkupId(true);
         add(copy);
         
-        //PAste Link
+        //Paste Link
         paste = new Link("pasteNode"){
-            
 			private static final long serialVersionUID = -4315390241296210531L;
 
 			@Override
 			protected final void onBeforeRender(){
-                setVisible(false);
+				if (!StringUtils.isEmpty(path) && getContentService().isContentPastNode(path) && copiedContent != null){
+					paste.setEnabled(true);
+				} else {
+					paste.setEnabled(false);
+				}
                 super.onBeforeRender();
             }
             
@@ -107,7 +117,6 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 		nodePath.modelChanging();
 		this.path = path;
 		nodePath.modelChanged();
-		delete.setVisible(true);
 	}
 	
 	protected IContentService getContentService() {
