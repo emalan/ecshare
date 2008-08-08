@@ -9,7 +9,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import com.madalla.service.blog.IBlogService;
 import com.madalla.service.cms.IContentData;
 import com.madalla.service.cms.IContentService;
 import com.madalla.service.cms.IContentServiceProvider;
@@ -20,6 +19,7 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 
 	private Log log = LogFactory.getLog(this.getClass());
 	private Component nodePath;
+	private Component delete;
 	private String path = "";
 	
 	public ContentDisplayPanel(String name) {
@@ -34,7 +34,7 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 		add(nodePath);
 		
         //Delete Link
-        Component delete = new Link("deleteNode"){
+        delete = new Link("deleteNode"){
             private static final long serialVersionUID = 1L;
             
             protected final void onBeforeRender(){
@@ -50,7 +50,7 @@ public class ContentDisplayPanel extends Panel implements IContentData{
             	IContentService service = getContentService();
             	service.deleteBlogEntry(path);
             	path = "";
-                getPage().render();
+                setResponsePage(getPage().getClass());
             }
         };
         delete.setOutputMarkupId(true);
@@ -66,6 +66,7 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 		nodePath.modelChanging();
 		this.path = path;
 		nodePath.modelChanged();
+		delete.setVisible(true);
 	}
 	
 	protected IContentService getContentService() {
