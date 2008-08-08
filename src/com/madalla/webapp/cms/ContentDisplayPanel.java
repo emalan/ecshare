@@ -20,6 +20,8 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 	private Log log = LogFactory.getLog(this.getClass());
 	private Component nodePath;
 	private Component delete;
+	private Component copy;
+	private Component paste;
 	private String path = "";
 	
 	public ContentDisplayPanel(String name) {
@@ -55,6 +57,45 @@ public class ContentDisplayPanel extends Panel implements IContentData{
         };
         delete.setOutputMarkupId(true);
         add(delete);
+
+        //Copy Link
+        copy = new Link("copyNode"){
+            
+			private static final long serialVersionUID = -1062211579369743790L;
+			
+			@Override
+			protected final void onBeforeRender(){
+                setVisible(false);
+                super.onBeforeRender();
+            }
+            
+			@Override
+            public void onClick() {
+				//TODO
+			}
+        };
+        copy.setOutputMarkupId(true);
+        add(copy);
+        
+        //PAste Link
+        paste = new Link("pasteNode"){
+            
+			private static final long serialVersionUID = -4315390241296210531L;
+
+			@Override
+			protected final void onBeforeRender(){
+                setVisible(false);
+                super.onBeforeRender();
+            }
+            
+			@Override
+            public void onClick() {
+				//TODO
+			}
+        };
+        paste.setOutputMarkupId(true);
+        add(paste);
+
 	}
 	
 	public Component getComponent(){
