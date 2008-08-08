@@ -93,12 +93,16 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
     }
     
     public void pasteContent(final String path, final Content content){
+        log.debug("pasteContent - path="+path+content);
     	template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
-				Node node = (Node) session.getItem(path);
-				getCreateContentEntry(node, content.getContentId(), content.getText(), true);
-				return null;
+				Node parent = (Node) session.getItem(path);
+                Node newNode = getCreateNode(content.getContentId(), parent);
+                newNode.setProperty(EC_PROP_CONTENT, content.getText());
+                session.save();
+                log.debug("pasteContent - Done pasting. path="+path);
+                return null;
 			}
     	});
     }
@@ -250,8 +254,7 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
         }
         log.debug("getCreateContentEntry - Saving Content. title="+contentID);
         return node;
-    }
-    
+    }    
     
     public void setTemplate(JcrTemplate template) {
         this.template = template;
