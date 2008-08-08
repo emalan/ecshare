@@ -100,7 +100,7 @@ public class ContentDisplayPanel extends Panel implements IContentData{
             
 			@Override
             public void onClick() {
-				//TODO
+				getContentService().pasteContent(path, copiedContent);
 			}
         };
         paste.setOutputMarkupId(true);

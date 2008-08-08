@@ -91,6 +91,17 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
         String localeId = getLocaleId(content.getContentId(), locale);
         processContentEntry(content.getPageName(), localeId, content.getText(), true);
     }
+    
+    public void pasteContent(final String path, final Content content){
+    	template.execute(new JcrCallback(){
+			public Object doInJcr(Session session) throws IOException,
+					RepositoryException {
+				Node node = (Node) session.getItem(path);
+				getCreateContentEntry(node, content.getContentId(), content.getText(), true);
+				return null;
+			}
+    	});
+    }
 
     public void setContent(final Content content)  {
         processContentEntry(content.getPageName(), content.getContentId(), content.getText(), true);

@@ -17,6 +17,7 @@ public interface IContentService {
     boolean isContentPastNode(String path);
     String getContentData(String nodeName, String id);
     String getContentData(String nodeName, String id, Locale locale);
+    void pasteContent(final String path, final Content content);
     void setContent(Content content) throws RepositoryException;
     void setContent(Content content, Locale locale) throws RepositoryException;
     String insertBlogEntry(BlogEntry blogEntry);
