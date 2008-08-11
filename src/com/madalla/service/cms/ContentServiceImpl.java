@@ -62,12 +62,12 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
 				Node node = (Node) session.getItem(path);
 				Node root = session.getRootNode();
 				Node parent = node.getParent();
-				do {
+				while (!root.isSame(parent)) {
 					if (parent.getName().equals(EC_NODE_APP)){
 						return parent;
 					}
 					parent = parent.getParent();
-				} while (!root.isSame(parent));
+				}
 
 				return null;
 			}
