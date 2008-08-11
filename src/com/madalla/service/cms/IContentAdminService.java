@@ -11,5 +11,7 @@ public interface IContentAdminService {
 	void backupContentRoot();
 	void backupContentSite();
 	File[] getBackupFileList();
-	void restoreContentSite(File backupFile) ;
+	File[] getApplicationBackupFileList();
+	void restoreContentSite(File backupFile);
+	void restoreContentApplication(final File backupFile);
 }

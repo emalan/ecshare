@@ -30,9 +30,9 @@ public class RepositoryContentAdminPanel extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 IContentAdminServiceProvider provider = (IContentAdminServiceProvider)getPage().getApplication();
                 IContentAdminService service = provider.getContentAdminService();
-                File[] backupFiles = service.getBackupFileList();
+                File[] backupFiles = service.getApplicationBackupFileList();
                 if (backupFiles.length > 0){
-                    service.restoreContentSite(backupFiles[0]);
+                    service.restoreContentApplication(backupFiles[0]);
                 }
             }
             

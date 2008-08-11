@@ -14,6 +14,10 @@ public class AbstractContentService implements IContentData {
 	
     protected String site ;
     
+    protected Node getApplicationNode(Session session) throws RepositoryException{
+    	return getCreateNode(EC_NODE_APP, session.getRootNode());
+    }
+    
     protected Node getPagesParent(Session session) throws RepositoryException{
     	return getCreateNode(EC_NODE_PAGES, getCreateSiteNode(session));
     }
