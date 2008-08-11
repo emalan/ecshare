@@ -30,11 +30,21 @@ public class ContentExplorerPanel extends Panel implements IContentData{
 	private Log log = LogFactory.getLog(this.getClass());
 
 	public ContentExplorerPanel(String name, final ContentDisplayPanel displayPanel) {
+		this(name, displayPanel, false);
+	}
+
+	public ContentExplorerPanel(String name, final ContentDisplayPanel displayPanel, boolean adminMode) {
 		super(name);
-		// List existing Blogs
+		
+		// Get Content tree
 		IContentAdminService service = getContentAdminService();
-		//TreeModel treeModel = service.getSiteContent();
-		TreeModel treeModel = service.getRepositoryContent();
+		TreeModel treeModel;
+		if (adminMode){
+			treeModel = service.getRepositoryContent();
+		} else {
+			treeModel = service.getSiteContent();
+		}
+		
 		log.debug("construtor - retrieved content entries. root="
 				+ treeModel.getRoot());
 
@@ -73,8 +83,8 @@ public class ContentExplorerPanel extends Panel implements IContentData{
 		};
 		tree.getTreeState().expandAll();
 		add(tree);
-
 	}
+
 
 	protected IContentService getContentService() {
 		return ((IContentServiceProvider) getApplication()).getContentService();
