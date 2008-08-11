@@ -1,6 +1,4 @@
-package com.madalla.webapp.cms;
-
-import javax.jcr.Node;
+package com.madalla.webapp.cms.admin;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -18,8 +16,7 @@ import com.madalla.service.cms.IContentServiceProvider;
 
 public class ContentDisplayPanel extends Panel implements IContentData{
 
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = -3450362599578103637L;
 	private Log log = LogFactory.getLog(this.getClass());
 	private Component nodePath;
 	private Component delete;
