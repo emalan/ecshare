@@ -34,6 +34,20 @@ public class ContentAdminService extends AbstractContentService implements ICont
     private final Log log = LogFactory.getLog(this.getClass());
     
 
+    public TreeModel getRepositoryContent(){
+        return (TreeModel) template.execute(new JcrCallback(){
+            
+            public Object doInJcr(Session session) throws IOException, RepositoryException {
+                Node rootNode = session.getRootNode();
+                JcrNodeModel nodeModel = new JcrNodeModel(rootNode);
+                JcrTreeNode treeNode = new JcrTreeNode(nodeModel);
+                JcrTreeModel jcrTreeModel = new JcrTreeModel(treeNode);
+                treeNode.init(rootNode);
+                return jcrTreeModel;
+            }
+        });
+    }
+    
     public TreeModel getSiteContent(){
         return (TreeModel) template.execute(new JcrCallback(){
             

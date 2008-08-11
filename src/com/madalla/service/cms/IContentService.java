@@ -12,9 +12,10 @@ public interface IContentService {
 	
 	final String CONTENT_DEFAULT = "Content";
 
-	boolean isContentNode(String path);
-    boolean isBlogNode(String path);
-    boolean isContentPastNode(String path);
+	boolean isDeletableNode(final String path);
+	boolean isContentNode(final String path);
+    boolean isBlogNode(final String path);
+    boolean isContentPasteNode(final String path);
     String getContentData(String nodeName, String id);
     String getContentData(String nodeName, String id, Locale locale);
     void pasteContent(final String path, final Content content);

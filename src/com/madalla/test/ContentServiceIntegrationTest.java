@@ -93,6 +93,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
         contentService.deleteNode(path);
     }
     
+    
     private final static String BLOG = "testBlog";
     private final static String BLOGCATEGORY = "testCategory";
     private final static String BLOGDESCRIPTION = "Blog Description Test";

@@ -54,7 +54,34 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
     private final Log log = LogFactory.getLog(this.getClass());
     private List locales;
     
-    public boolean isContentNode(String path){
+    public boolean isDeletableNode(final String path){
+    	Node result = (Node) template.execute(new JcrCallback(){
+
+			public Object doInJcr(Session session) throws IOException,
+					RepositoryException {
+				Node node = (Node) session.getItem(path);
+				Node root = session.getRootNode();
+				Node parent = node.getParent();
+				do {
+					if (parent.getName().equals(EC_NODE_APP)){
+						return parent;
+					}
+					parent = parent.getParent();
+				} while (!root.isSame(parent));
+
+				return null;
+			}
+    		
+    	});
+    	if (result == null){
+    		return false;
+    	} else {
+    		return true;
+    	}
+    	
+    }
+    
+    public boolean isContentNode(final String path){
     	String[] pathArray = path.split("/");
     	if (EC_NODE_CONTENT.equals(pathArray[pathArray.length-2])){
     		return true;
@@ -62,7 +89,7 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
     	return false;
     }
     
-    public boolean isBlogNode(String path){
+    public boolean isBlogNode(final String path){
     	String[] pathArray = path.split("/");
     	if (EC_NODE_BLOGS.equals(pathArray[pathArray.length-2])){
     		return true;
@@ -70,7 +97,7 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
     	return false;
     }
     
-    public boolean isContentPastNode(String path){
+    public boolean isContentPasteNode(final String path){
     	String[] pathArray = path.split("/");
     	if (EC_NODE_CONTENT.equals(pathArray[pathArray.length-1])){
     		return true;

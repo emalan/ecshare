@@ -33,7 +33,8 @@ public class ContentExplorerPanel extends Panel implements IContentData{
 		super(name);
 		// List existing Blogs
 		IContentAdminService service = getContentAdminService();
-		TreeModel treeModel = service.getSiteContent();
+		//TreeModel treeModel = service.getSiteContent();
+		TreeModel treeModel = service.getRepositoryContent();
 		log.debug("construtor - retrieved content entries. root="
 				+ treeModel.getRoot());
 

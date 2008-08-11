@@ -41,7 +41,7 @@ public class ContentDisplayPanel extends Panel implements IContentData{
             private static final long serialVersionUID = 1L;
             
             protected final void onBeforeRender(){
-                if (StringUtils.isEmpty(path)){
+                if (StringUtils.isEmpty(path) || !getContentService().isDeletableNode(path)){
                     setEnabled(false);
                 } else {
                     setEnabled(true);
@@ -87,7 +87,7 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 
 			@Override
 			protected final void onBeforeRender(){
-				if (!StringUtils.isEmpty(path) && getContentService().isContentPastNode(path) && copiedContent != null){
+				if (!StringUtils.isEmpty(path) && getContentService().isContentPasteNode(path) && copiedContent != null){
 					paste.setEnabled(true);
 				} else {
 					paste.setEnabled(false);
