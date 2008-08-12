@@ -52,7 +52,7 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
     private static final long serialVersionUID = 1L;
     private JcrTemplate template;
     private final Log log = LogFactory.getLog(this.getClass());
-    private List locales;
+    private List<Locale> locales;
     
     public boolean isDeletableNode(final String path){
     	Node result = (Node) template.execute(new JcrCallback(){
@@ -260,8 +260,8 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
 
     private String getLocaleId(String id, Locale locale) {
         Locale found = null;
-        for (Iterator iter = locales.iterator(); iter.hasNext();) {
-            Locale current = (Locale) iter.next();
+        for (Iterator<Locale> iter = locales.iterator(); iter.hasNext();) {
+            Locale current = iter.next();
             if (current.getLanguage().equals(locale.getLanguage())){
                 found = current;
                 break;
