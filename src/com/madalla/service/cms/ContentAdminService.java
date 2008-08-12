@@ -41,6 +41,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
             
             public Object doInJcr(Session session) throws IOException, RepositoryException {
                 Node rootNode = getApplicationNode(session);
+                session.save();
                 JcrNodeModel nodeModel = new JcrNodeModel(rootNode);
                 JcrTreeNode treeNode = new JcrTreeNode(nodeModel);
                 JcrTreeModel jcrTreeModel = new JcrTreeModel(treeNode);
@@ -55,6 +56,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
             
             public Object doInJcr(Session session) throws IOException, RepositoryException {
                 Node siteNode = getCreateSiteNode(session);
+                session.save();
                 JcrNodeModel nodeModel = new JcrNodeModel(siteNode);
                 JcrTreeNode treeNode = new JcrTreeNode(nodeModel);
                 JcrTreeModel jcrTreeModel = new JcrTreeModel(treeNode);
@@ -69,6 +71,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
 				Node node = getApplicationNode(session);
+                session.save();
 				OutputStream out = getBackupFile(APP);
                 session.exportDocumentView(node.getPath(), out, true, false);
                 out.close();
@@ -82,6 +85,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
 				Node node = getCreateSiteNode(session);
+                session.save();
 				OutputStream out = getBackupFile(site);
                 session.exportDocumentView(node.getPath(), out, true, false);
 				return null;
@@ -129,12 +133,12 @@ public class ContentAdminService extends AbstractContentService implements ICont
 				
 				Node appnode = getApplicationNode(session);
 				String importPath = appnode.getParent().getPath();
-				Node backupParent = getCreateBackupNode(session);
+				Node backupParent = getCreateNode(EC_NODE_BACKUP, session.getRootNode());
 				session.save();
 				
 				//remove old backup if exists
-				if (backupParent.hasNode(NS+site)){
-					Node oldBackup = backupParent.getNode(NS+site);
+				if (backupParent.hasNode(EC_NODE_APP)){
+					Node oldBackup = backupParent.getNode(EC_NODE_APP);
 					log.debug("restoreContentSite - removing an old backup.");
 					oldBackup.remove();
 					session.save();

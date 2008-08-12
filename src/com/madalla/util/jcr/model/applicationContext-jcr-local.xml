@@ -28,7 +28,7 @@
     	    </props>
     	</property>
 	</bean>
-
+	
 	<bean id="repository" class="org.springmodules.jcr.jackrabbit.RepositoryFactoryBean">
     	<!-- normal factory beans params -->
     	<property name="configuration" value="${repository.config}"/>
