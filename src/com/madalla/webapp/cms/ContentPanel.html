@@ -6,14 +6,17 @@
         .contentEdit {float: left; border-style : solid; 
             border-color : blue; border-width: thin;}
         .contentBody {float:left; display:inline; }
-        .contentLink {float: left; clear: both; display:inline; width:100%; text-align:right; font-style: italic; font-size: 0.7em;}
+        .contentLink {float: left; clear: both; display:inline; width:100%; text-align:right; height: 17px;}
+        .contentLink a {padding-left: 15px; padding-bottom: 10px;
+            background: transparent url(../resources/images/pencil_icon.gif) no-repeat scroll center top;
+         }
     </style>
 </wicket:head>
 <body>
     <wicket:panel>
         <div class="contentBlock" wicket:id="contentBlock">
             <div class="contentBody" wicket:id="contentBody">Contact - paragraph 1 - content block...</div>
-            <div class="contentLink">[<a wicket:id="contentLink">Edit</a>]</div>
+            <div class="contentLink"><a class="editLink" wicket:id="contentLink"/></div>
         </div>
     </wicket:panel>
 </body>
