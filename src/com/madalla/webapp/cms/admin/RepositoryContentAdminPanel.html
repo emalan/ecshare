@@ -1,21 +1,28 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
+        #backup {float:left; width:100%;}
+        #contentDisplay { float: left; width:100%; border-style: solid; border-color: black; border-width: 1px; }
+        #explorerPanel {float:left; width:25%; overflow:auto; border-style: solid; border-color: black; border-width: 1px;}
+        #displayPanel {float:right; width:70%; border-style: solid; border-color: black; border-width: 1px;}
     </style>
 </wicket:head>
 <body>
     <wicket:panel>
-        <div id="navigate">
-	        <div id="admin">
-   		        <a href="#" wicket:id="backupLink">Backup</a>
-   	    	    <a href="#" wicket:id="restoreLink">Restore</a>
-        	</div>  
-            <span wicket:id="contentExplorerPanel"/>
-        </div>
 
-        <div id="display">
-        	<span wicket:id="contentDisplayPanel"/>
+    <div id="backup">
+        <a href="#" wicket:id="backupLink">Backup</a>
+   	    <a href="#" wicket:id="restoreLink">Restore</a>
+    </div>
+	
+	<div id="contentDisplay">
+		<div id="explorerPanel">
+        	<span wicket:id="contentExplorerPanel" />
         </div>
+        <div id="displayPanel">
+			<span wicket:id="contentDisplayPanel" />
+		</div>
+    </div>
 
     </wicket:panel>
 </body>
