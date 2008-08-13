@@ -5,9 +5,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.service.cms.Content;
 import com.madalla.service.cms.IContentData;
@@ -19,10 +21,9 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 	private static final long serialVersionUID = -3450362599578103637L;
 	private Log log = LogFactory.getLog(this.getClass());
 	private Component nodePath;
-//	private Component delete;
-//	private Component copy;
-//	private Component paste;
+	private Component contentDisplay;
 	private Content copiedContent;
+	private Content content = new Content();
 	private String path = "";
 	
 	public ContentDisplayPanel(String name) {
@@ -35,6 +36,11 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 		nodePath = new Label("nodeName", model);
 		nodePath.setOutputMarkupId(true);
 		add(nodePath);
+		
+		//Display Content
+		contentDisplay = new TextArea("content", new PropertyModel(content, "text"));
+		contentDisplay.setOutputMarkupId(true);
+		add(contentDisplay);
 		
         //Delete Link
         Component delete = new Link("deleteNode"){
@@ -116,10 +122,16 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 		nodePath.modelChanging();
 		this.path = path;
 		nodePath.modelChanged();
+		
+		if (getContentService().isContentNode(path)){
+			contentDisplay.modelChanging();
+			content = getContentService().getContent(path);
+			contentDisplay.modelChanged();
+		}
 	}
 	
 	protected IContentService getContentService() {
 		return ((IContentServiceProvider) getApplication()).getContentService();
 	}
-    
+
 }

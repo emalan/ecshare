@@ -1,14 +1,26 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
+        #contentName {float: left;}
+        textarea {float: left; clear: both;}
+        #contentActions {float: left; clear: both;}
     </style>
 </wicket:head>
 <body>
     <wicket:panel>
-        <span class="nodeName" wicket:id="nodeName"/>
-        <a href="#" wicket:id="deleteNode">Delete Node</a>
-        <a href="#" wicket:id="copyNode">Copy Node</a>
-        <a href="#" wicket:id="pasteNode">Paste Node</a>
+        
+        <div id="contentName">
+        	<span class="nodeName" wicket:id="nodeName"/>
+        </div>
+        
+        <textarea style="textarea" wicket:id="content" rows="25" cols="60">Input comes here</textarea>
+        
+        <div id="contentActions">
+        	<a href="#" wicket:id="deleteNode">Delete Node</a>
+        	<a href="#" wicket:id="copyNode">Copy Node</a>
+        	<a href="#" wicket:id="pasteNode">Paste Node</a>
+        </div>
+        
     </wicket:panel>
 </body>
 </html>
