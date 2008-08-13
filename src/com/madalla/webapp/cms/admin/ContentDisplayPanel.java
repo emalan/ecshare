@@ -19,9 +19,9 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 	private static final long serialVersionUID = -3450362599578103637L;
 	private Log log = LogFactory.getLog(this.getClass());
 	private Component nodePath;
-	private Component delete;
-	private Component copy;
-	private Component paste;
+//	private Component delete;
+//	private Component copy;
+//	private Component paste;
 	private Content copiedContent;
 	private String path = "";
 	
@@ -37,7 +37,7 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 		add(nodePath);
 		
         //Delete Link
-        delete = new Link("deleteNode"){
+        Component delete = new Link("deleteNode"){
             private static final long serialVersionUID = 1L;
             
             protected final void onBeforeRender(){
@@ -59,16 +59,16 @@ public class ContentDisplayPanel extends Panel implements IContentData{
         add(delete);
 
         //Copy Link
-        copy = new Link("copyNode"){
+        final Component copy = new Link("copyNode"){
             
 			private static final long serialVersionUID = -1062211579369743790L;
 			
 			@Override
 			protected final void onBeforeRender(){
 				if (!StringUtils.isEmpty(path) && getContentService().isContentNode(path)){
-					copy.setEnabled(true);
+					setEnabled(true);
 				} else {
-					copy.setEnabled(false);
+					setEnabled(false);
 				}
                 super.onBeforeRender();
             }
@@ -82,15 +82,15 @@ public class ContentDisplayPanel extends Panel implements IContentData{
         add(copy);
         
         //Paste Link
-        paste = new Link("pasteNode"){
+        final Component paste = new Link("pasteNode"){
 			private static final long serialVersionUID = -4315390241296210531L;
 
 			@Override
 			protected final void onBeforeRender(){
 				if (!StringUtils.isEmpty(path) && getContentService().isContentPasteNode(path) && copiedContent != null){
-					paste.setEnabled(true);
+					setEnabled(true);
 				} else {
-					paste.setEnabled(false);
+					setEnabled(false);
 				}
                 super.onBeforeRender();
             }
