@@ -70,7 +70,7 @@ public class ContentPanel extends Panel implements IContentAware {
                 protected void onBeforeRender(){
                     IContentService contentService = ((IContentServiceProvider) getApplication()).getContentService();
                     String contentBody = contentService.getContentData(nodeName, nodeId, getSession().getLocale());
-                    log.debug("onBeforeRender - setting new Content = "+contentBody);
+                    log.debug("onBeforeRender - setting new Content.");
                     contentModel.setObject(contentBody);
                     super.onBeforeRender();
                 }
