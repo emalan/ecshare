@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!--
+  Build file to consolidate common elements among projects.
+  Import file from your build script.
+  
+  You will need to setup a build.properties in your project folder.
+-->
+<project name="Share" basedir=".">
+
+    <property file="build.properties"/>
+    
+    <property name="javac.target" value="1.5" />
+    <property name="javac.source" value="1.5" />
+  
+    <property name="build-tomcat" value="${share.dir}/build-tomcat.xml"  />
+
+	<property name="build.dir" value="target" />
+	<property name="build.main.classes" value="${build.dir}/classes" />
+	<property name="build.test.classes" value="${build.dir}/test-classes" />
+	<property name="build.test.reports" value="${build.dir}/test-reports" />
+	<property name="build.javadoc.dir" value="${build.dir}/docs/api" />
+
+	<property name="src.share.dir" value="${share.dir}/src" />
+	<property name="src.share.resources" value="${share.dir}/resources" />
+
+	<target name="clean" description="o Cleans up the build artifacts">
+		<delete dir="${build.dir}" failonerror="false" />
+		<delete file="${final.name}.war" failonerror="false" />
+	</target>
+
+	<target name="init" description="o Creates all directories for building">
+		<mkdir dir="${build.dir}" />
+	</target>
+	
+	
+	<target name="compile" depends="init,clean" description="o Compiles the Java sources">
+		<mkdir dir="${build.main.classes}" />
+		<javac destdir="${build.main.classes}"
+			target="${javac.target}"
+			source="${javac.source}"
+			debug="true"
+			deprecation="true"
+			optimize="false"
+			excludes="**/package.html"
+			classpathref="build.classpath"
+		    srcdir="${src.main.dir}">
+		    <src path="${src.share.dir}"/>
+		    <src path="${src.share.resources}"/>
+		</javac>
+		
+		<copy todir="${build.main.classes}">
+			<fileset dir="${src.main.dir}">
+				<include name="**/*.*" />
+				<exclude name="**/*.java" />
+			</fileset>
+			<fileset dir="${src.share.dir}">
+				<include name="**/*.*" />
+				<exclude name="**/*.java" />
+			</fileset>
+			<fileset dir="${src.share.resources}">
+				<include name="**/*.*" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+	
+
+</project>
