@@ -22,8 +22,9 @@
 <project name="Deployer" default="compile" basedir=".">
 
   <property file="deployer.properties"/>
-
-  <property name="webapp.path"     value="${build.dir}"/>
+  
+  <property name="webapp.path" value="${build.dir}"/>
+  <property name="deploy.war" value="${build.dir}/${war.name}.war" />
 
   <path id="deployer.classpath">
     <fileset dir="${share.dir}/deployer">
@@ -34,10 +35,12 @@
   <!-- Configure the custom Ant tasks for the Manager application -->
   <taskdef resource="org/apache/catalina/ant/catalina.tasks"
            classpathref="deployer.classpath"/>
+           
+  <target name="redeploy" depends="stop, undeploy, deploy"></target>         
 
   <target name="deploy" description="Deploy web application">
     <deploy url="${url}" username="${username}" password="${password}"
-            path="${path}" war="${webapp.path}.war" update="true" />
+            path="${path}" war="${deploy.war}" update="true" />
   </target>
 
   <target name="undeploy" description="Undeploy web application">
