@@ -36,7 +36,7 @@
   <taskdef resource="org/apache/catalina/ant/catalina.tasks"
            classpathref="deployer.classpath"/>
            
-  <target name="redeploy" depends="stop, undeploy, deploy"></target>         
+  <target name="undeployDeploy" depends="stop, undeploy, deploy"></target>         
 
   <target name="deploy" description="Deploy web application">
     <deploy url="${url}" username="${username}" password="${password}"
