@@ -1,7 +1,8 @@
 package com.madalla.webapp;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
+import org.apache.wicket.Session;
+import org.apache.wicket.authorization.strategies.page.SimplePageAuthorizationStrategy;
 import org.apache.wicket.protocol.http.WebApplication;
 
 import com.madalla.service.blog.IBlogService;
@@ -23,14 +24,14 @@ public abstract class CmsBlogApplication extends WebApplication implements ICont
         getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
         //getMarkupSettings().setStripWicketTags(true);
         
-//        SimplePageAuthorizationStrategy authorizationStrategy = new SimplePageAuthorizationStrategy(
-//                ContentEditPage.class, Home.class) {
-//            protected boolean isAuthorized() {
-//                return (((AppSession)Session.get()).isCmsAdminMode());
-//            }
-//        };
-// 
-//        getSecuritySettings().setAuthorizationStrategy(authorizationStrategy);
+        SimplePageAuthorizationStrategy authorizationStrategy = new SimplePageAuthorizationStrategy(
+                ISecureWebPage.class, getHomePage()) {
+            protected boolean isAuthorized() {
+                return ((CmsSession)Session.get()).isCmsAdminMode();
+            }
+        };
+ 
+        getSecuritySettings().setAuthorizationStrategy(authorizationStrategy);
     }
     
     public IContentService getContentService(){
