@@ -5,7 +5,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
@@ -28,17 +27,31 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 	
 	public ContentDisplayPanel(String name) {
 		super(name);
-		Model model = new Model(){
+		
+		//Node path
+		Model pathModel = new Model(){
+			
+			@Override
 			public Object getObject(){
 				return path;
 			}
+			
 		};
-		nodePath = new Label("nodeName", model);
+		nodePath = new Label("nodeName", pathModel);
 		nodePath.setOutputMarkupId(true);
 		add(nodePath);
 		
-		//Display Content
-		contentDisplay = new TextArea("content", new PropertyModel(content, "text"));
+		//Content text
+		Model textModel = new Model(){
+
+			@Override
+			public Object getObject() {
+				// TODO Auto-generated method stub
+				return content.getText();
+			}
+			
+		};
+		contentDisplay = new Label("contentText", textModel);
 		contentDisplay.setOutputMarkupId(true);
 		add(contentDisplay);
 		

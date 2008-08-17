@@ -2,7 +2,7 @@
 <wicket:head>
     <style type="text/css">
         #contentName {float: left;}
-        textarea {float: left; clear: both;}
+        #contentText {float: left; clear: both;}
         #contentActions {float: left; clear: both;}
     </style>
 </wicket:head>
@@ -10,10 +10,12 @@
     <wicket:panel>
         
         <div id="contentName">
-        	<span class="nodeName" wicket:id="nodeName"/>
+        	<span wicket:id="nodeName"/>
         </div>
         
-        <textarea style="textarea" wicket:id="content" rows="25" cols="60">Input comes here</textarea>
+        <div id="contentText">
+        	<span wicket:id="contentText"/>
+        </div>
         
         <div id="contentActions">
         	<a href="#" wicket:id="deleteNode">Delete Node</a>
