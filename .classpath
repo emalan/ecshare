@@ -53,5 +53,6 @@
 	<classpathentry kind="lib" path="jackrabbit/lucene-core-2.2.0.jar"/>
 	<classpathentry kind="lib" path="jackrabbit/jackrabbit-spi-commons-1.4.jar"/>
 	<classpathentry kind="lib" path="jackrabbit/jackrabbit-spi-1.4.jar"/>
+	<classpathentry kind="lib" path="common/joda-time-1.5.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

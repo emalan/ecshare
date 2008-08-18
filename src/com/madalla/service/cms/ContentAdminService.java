@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
@@ -16,6 +15,8 @@ import javax.swing.tree.TreeModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.ISODateTimeFormat;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springmodules.jcr.JcrCallback;
@@ -28,7 +29,7 @@ import com.madalla.util.jcr.model.tree.JcrTreeNode;
 public class ContentAdminService extends AbstractContentService implements IContentAdminService {
 	
     private static final long serialVersionUID = 1L;
-    private static final String FILE_SUFFIX = "-backup.xml";
+    private static final String FILE_SUFFIX = ".xml";
     private static final String APP = "applications";
     private JcrTemplate template;
     private String repositoryHome;
@@ -66,29 +67,33 @@ public class ContentAdminService extends AbstractContentService implements ICont
         });
     }
     
-    public void backupContentRoot(){
-    	template.execute(new JcrCallback(){
+    public String backupContentRoot(){
+    	String file = (String) template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
 				Node node = getApplicationNode(session);
                 session.save();
-				OutputStream out = getBackupFile(APP);
+				File backupFile = getBackupFile(APP);
+				FileOutputStream out = new FileOutputStream(backupFile);
                 session.exportDocumentView(node.getPath(), out, true, false);
                 out.close();
-				return null;
+				return backupFile.getName();
 			}
     	});
+    	return file;
     }
     
     public void backupContentSite(){
-    	template.execute(new JcrCallback(){
+    	String file = (String) template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
 				Node node = getCreateSiteNode(session);
                 session.save();
-				OutputStream out = getBackupFile(site);
+				File backupFile = getBackupFile(site);
+				FileOutputStream out = new FileOutputStream(backupFile);
                 session.exportDocumentView(node.getPath(), out, true, false);
-				return null;
+                out.close();
+				return backupFile.getName();
 			}
     	});
     }
@@ -139,14 +144,14 @@ public class ContentAdminService extends AbstractContentService implements ICont
 				//remove old backup if exists
 				if (backupParent.hasNode(EC_NODE_APP)){
 					Node oldBackup = backupParent.getNode(EC_NODE_APP);
-					log.debug("restoreContentSite - removing an old backup.");
+					log.info("restoreContentSite - removing an old backup.");
 					oldBackup.remove();
 					session.save();
 				}
 				//move site out to backup
 				String srcPath = appnode.getPath();
 				String destPath = backupParent.getPath()+"/"+appnode.getName();
-				log.debug("Moving site from "+srcPath + " to "+ destPath);
+				log.info("Moving site from "+srcPath + " to "+ destPath);
 				session.move(srcPath, destPath);
 				session.save();
 				
@@ -173,14 +178,14 @@ public class ContentAdminService extends AbstractContentService implements ICont
 				//remove old backup if exists
 				if (backupParent.hasNode(NS+site)){
 					Node oldBackup = backupParent.getNode(NS+site);
-					log.debug("restoreContentSite - removing an old backup.");
+					log.info("restoreContentSite - removing an old backup.");
 					oldBackup.remove();
 					session.save();
 				}
 				//move site out to backup
 				String srcPath = siteNode.getPath();
 				String destPath = backupParent.getPath()+"/"+siteNode.getName();
-				log.debug("Moving site from "+srcPath + " to "+ destPath);
+				log.info("Moving site from "+srcPath + " to "+ destPath);
 				session.move(srcPath, destPath);
 				session.save();
 				
@@ -190,20 +195,55 @@ public class ContentAdminService extends AbstractContentService implements ICont
 			}
     	});
     }
+    
+    public void rollbackSiteRestore(){
+    	log.info("Attempting to rollback restore. Site ="+site);
+    	template.execute(new JcrCallback(){
+			public Object doInJcr(Session session) throws IOException,
+					RepositoryException {
+				
+				Node siteNode = getCreateSiteNode(session);
+				Node backupParent = getCreateBackupNode(session);
+				session.save();
 
-	private OutputStream getBackupFile(String fileName) throws IOException {
+				//check for backup 
+				if (backupParent.hasNode(NS+site)){
+					Node backup = backupParent.getNode(NS+site);
+					log.info("rollbackSiteRestore - found backup.");
+					
+					//remove site
+					String destPath = siteNode.getPath();
+					siteNode.remove();
+					session.save();
+					
+					//move backup to site
+					String srcPath = backup.getPath();
+					log.info("rollbackSiteRestore - Moving site from "+srcPath + " to "+ destPath);
+					session.move(srcPath, destPath);
+					session.save();
+					log.info("rollbackSiteRestore - rollback success.");
+				} else {
+					log.info("rollbackSiteRestore - No backup found - rollback failed.");
+				}
+				return null;
+			}
+    	});
+
+    }
+
+	private File getBackupFile(String fileName) throws IOException {
 		
         //Get repository home directory and create File
 		File repositoryHomeDir = getRepositoryHomeDir();
-        File backupFile = new File(repositoryHomeDir,fileName+FILE_SUFFIX);
+        String dateTimeString = ISODateTimeFormat.basicDateTime().print(new LocalDateTime());
+
+		File backupFile = new File(repositoryHomeDir,fileName+"-backup-"+dateTimeString+FILE_SUFFIX);
         if (backupFile.exists()){
-        	log.debug("Backup file exists, we should move old one.");
-			//TODO Use jakarta Commons FileUtils to move old backup
-			//FileUtils
+        	log.error("Backup file exists. Should not happen.");
 		}
         log.debug("Backup file name. fileName="+backupFile);
-        FileOutputStream fileOut = new FileOutputStream(backupFile);
-		return fileOut;
+        
+		return backupFile;
 	}
 	
 	private File getRepositoryHomeDir() throws IOException{

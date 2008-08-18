@@ -4,6 +4,8 @@ import java.io.File;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.feedback.FeedbackMessage;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import com.madalla.service.cms.IContentAdminService;
@@ -16,11 +18,22 @@ public class RepositoryContentAdminPanel extends Panel {
 	public RepositoryContentAdminPanel(String name) {
 		super(name);
 		
+		final FeedbackPanel backupMessages = new FeedbackPanel("backupMessages");
+		backupMessages.setOutputMarkupId(true);
+		add(backupMessages);
+		
         add(new AjaxFallbackLink("backupLink"){
             
             public void onClick(AjaxRequestTarget target) {
-                IContentAdminServiceProvider service = (IContentAdminServiceProvider)getPage().getApplication();
-                service.getContentAdminService().backupContentRoot();
+            	target.addComponent(backupMessages);
+            	String fileName;
+            	try {
+            		IContentAdminServiceProvider service = (IContentAdminServiceProvider)getPage().getApplication();
+            		fileName = service.getContentAdminService().backupContentRoot();
+                    info("Content Repository backed up to file. File name=" + fileName);
+            	} catch (Exception e){
+            	    error("Backup failed. "+ e.getLocalizedMessage());	
+            	}
             }
             
         });

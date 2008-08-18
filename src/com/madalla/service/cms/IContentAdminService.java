@@ -8,7 +8,7 @@ public interface IContentAdminService {
 
 	TreeModel getSiteContent();
 	TreeModel getRepositoryContent();
-	void backupContentRoot();
+	String backupContentRoot();
 	void backupContentSite();
 	File[] getBackupFileList();
 	File[] getApplicationBackupFileList();
