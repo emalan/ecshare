@@ -20,7 +20,6 @@ public class ContentAdminPanel extends Panel {
             
             public void onClick(AjaxRequestTarget target) {
                 IContentAdminServiceProvider service = (IContentAdminServiceProvider)getPage().getApplication();
-                service.getContentAdminService().backupContentRoot();
                 service.getContentAdminService().backupContentSite();
             }
             
