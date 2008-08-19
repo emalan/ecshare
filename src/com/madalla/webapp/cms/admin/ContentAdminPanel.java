@@ -1,6 +1,7 @@
 package com.madalla.webapp.cms.admin;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.Component;
@@ -101,7 +102,11 @@ public class ContentAdminPanel extends Panel {
 			
 	        //Restore File List
 	        List<File> backupFiles = getContentAdminService().getBackupFileList();
-	        file = backupFiles.get(0);
+	        if (backupFiles.size() > 0){
+	        	Collections.sort(backupFiles);
+	        	Collections.reverse(backupFiles);
+	        	file = backupFiles.get(0);
+	        }
 	        final ListChoice listChoice = new ListChoice("backupFiles", new PropertyModel(this,"file") ,
 	        		backupFiles, new ChoiceRenderer("name"),10);
 	        add(listChoice);
