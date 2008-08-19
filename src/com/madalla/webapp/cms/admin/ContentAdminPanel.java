@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.service.cms.IContentAdminService;
 import com.madalla.service.cms.IContentAdminServiceProvider;
@@ -101,17 +102,8 @@ public class ContentAdminPanel extends Panel {
 	        //Restore File List
 	        List<File> backupFiles = getContentAdminService().getBackupFileList();
 	        file = backupFiles.get(0);
-	        final ListChoice listChoice = new ListChoice("backupFiles", new Model(file) ,
-	        		backupFiles, new ChoiceRenderer("name"),10){
-
-						@Override
-						protected void onSelectionChanged(Object newSelection) {
-							// TODO Auto-generated method stub
-							super.onSelectionChanged(newSelection);
-						}
-
-	        	
-	        };
+	        final ListChoice listChoice = new ListChoice("backupFiles", new PropertyModel(this,"file") ,
+	        		backupFiles, new ChoiceRenderer("name"),10);
 	        add(listChoice);
 
 		}
@@ -121,8 +113,10 @@ public class ContentAdminPanel extends Panel {
 			if (file != null ){
 				if (adminApp){
 					getContentAdminService().restoreContentApplication(file);
+					info("Content Repository restored from file");
 				} else {
 					getContentAdminService().restoreContentSite(file);
+					info("Site Content Data restored from file");
 				}
 			}
 			super.onSubmit();
@@ -135,8 +129,6 @@ public class ContentAdminPanel extends Panel {
 			}
 			super.validate();
 		}
-		
-		
 
 	}
 	
