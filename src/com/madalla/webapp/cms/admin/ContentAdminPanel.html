@@ -11,9 +11,14 @@
     <wicket:panel>
     
     <div id="backup">
-        <a href="#" wicket:id="backupLink">Backup Content Repository to File</a>
-   	    <a href="#" wicket:id="restoreLink">Restore Content Repository from File</a>
-   	    <a href="#" wicket:id="rollbackLink">Rollback the last restore</a>
+        <a href="#" wicket:id="backupLink"><wicket:message key="label.backup">Label Contents</wicket:message></a>
+   	    <form id="restoreForm" wicket:id="restoreForm">
+   	        <select wicket:id="backupFiles"></select>
+   	        <input type="submit" name="submit" value="Restore" 
+                    wicket:message="value:label.submit.restore"/>
+   	    </form>
+   	    <a href="#" wicket:id="rollbackLink"><wicket:message key="label.rollback">Label Contents</wicket:message></a>
+   	    <span wicket:id="backupMessages"></span>
     </div>
 	
 	<div id="contentDisplay">
