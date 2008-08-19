@@ -1,6 +1,7 @@
 package com.madalla.service.cms;
 
 import java.io.File;
+import java.util.List;
 
 import javax.swing.tree.TreeModel;
 
@@ -9,9 +10,11 @@ public interface IContentAdminService {
 	TreeModel getSiteContent();
 	TreeModel getRepositoryContent();
 	String backupContentRoot();
-	void backupContentSite();
-	File[] getBackupFileList();
-	File[] getApplicationBackupFileList();
+	String backupContentSite();
+	List<File> getBackupFileList();
+	List<File> getApplicationBackupFileList();
 	void restoreContentSite(File backupFile);
 	void restoreContentApplication(final File backupFile);
+	void rollbackSiteRestore();
+	Boolean isRollBackAvailable();
 }

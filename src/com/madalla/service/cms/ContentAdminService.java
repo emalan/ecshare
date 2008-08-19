@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
@@ -83,7 +85,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
     	return file;
     }
     
-    public void backupContentSite(){
+    public String backupContentSite(){
     	String file = (String) template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
@@ -96,17 +98,18 @@ public class ContentAdminService extends AbstractContentService implements ICont
 				return backupFile.getName();
 			}
     	});
+    	return file;
     }
     
-    public File[] getApplicationBackupFileList(){
+    public List<File> getApplicationBackupFileList(){
     	return getFileList(APP);
     }
     
-    public File[] getBackupFileList() {
+    public List<File> getBackupFileList() {
     	return getFileList(site);
     }
     
-    private File[] getFileList(final String fileStart){
+    private List<File> getFileList(final String fileStart){
     	File repositoryHomeDir;
 		try {
 			repositoryHomeDir = getRepositoryHomeDir();
@@ -125,7 +128,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
 			}
     	});
         log.debug("getBackupFileList - Number of backup files found="+files.length);
-    	return files;
+    	return Arrays.asList(files);
     }
     
     public void restoreContentApplication(final File backupFile) {
@@ -194,6 +197,10 @@ public class ContentAdminService extends AbstractContentService implements ICont
 				return null;
 			}
     	});
+    }
+    
+    public Boolean isRollBackAvailable(){
+    	return false;
     }
     
     public void rollbackSiteRestore(){

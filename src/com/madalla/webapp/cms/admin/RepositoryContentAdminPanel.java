@@ -1,10 +1,10 @@
 package com.madalla.webapp.cms.admin;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 
@@ -43,9 +43,9 @@ public class RepositoryContentAdminPanel extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 IContentAdminServiceProvider provider = (IContentAdminServiceProvider)getPage().getApplication();
                 IContentAdminService service = provider.getContentAdminService();
-                File[] backupFiles = service.getApplicationBackupFileList();
-                if (backupFiles.length > 0){
-                    service.restoreContentApplication(backupFiles[0]);
+                List<File> backupFiles = service.getApplicationBackupFileList();
+                if (backupFiles.size() > 0){
+                    service.restoreContentApplication(backupFiles.get(0));
                 }
             }
             
