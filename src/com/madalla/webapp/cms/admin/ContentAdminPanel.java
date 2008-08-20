@@ -85,7 +85,11 @@ public class ContentAdminPanel extends Panel {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				IContentAdminService service = getContentAdminService();
-				service.rollbackSiteRestore();
+				if (adminApp){
+					service.rollbackApplicationRestore();
+				} else {
+					service.rollbackSiteRestore();
+				}
 			}
 			
 			@Override
