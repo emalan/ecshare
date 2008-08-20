@@ -1,4 +1,4 @@
-package com.madalla.webapp.blog;
+package com.madalla.webapp.blog.admin;
 
 import java.util.Calendar;
 import java.util.List;
@@ -30,6 +30,7 @@ import org.apache.wicket.model.PropertyModel;
 import com.madalla.service.blog.BlogEntry;
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
+import com.madalla.webapp.blog.IBlogAware;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 import com.madalla.wicket.ValidationStyleBehaviour;
 
