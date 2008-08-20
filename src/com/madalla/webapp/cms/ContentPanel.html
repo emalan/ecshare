@@ -12,21 +12,24 @@
                     text-align:right; 
                     height: 17px;
                     }
-        div.contentLink a {
-                    padding-left: 15px; 
-                    padding-bottom: 10px;
+        .editLink {
+                    position: absolute;
+                    z-index: 1;
             		background: transparent url(../resources/images/pencil_icon.gif) no-repeat scroll center top;
+            		width: 10px; height: 15px;
+            		visibility: hidden;
                     }
-        .contentBody {float:left; display:inline; clear:both;}
-         }
+        .contentEdit a.editLink{visibility: visible; } 
+        
+        }            
+        .contentBody {display:inline; width: 100%;}
+        
     </style>
 </wicket:head>
 <body>
     <wicket:panel>
         <div class="contentBlock" wicket:id="contentBlock">
-            <div class="contentLink">
-                <a class="editLink" wicket:id="contentLink"></a>
-            </div>
+	        <a class="editLink" wicket:id="contentLink"> </a>
             <div class="contentBody" wicket:id="contentBody">Contact - paragraph 1 - content block...</div>
         </div>
     </wicket:panel>
