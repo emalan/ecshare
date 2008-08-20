@@ -131,6 +131,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
     	return Arrays.asList(files);
     }
     
+    //TODO refactore the 2 restore methods
     public void restoreContentApplication(final File backupFile) {
         log.info("Importing data to repository from file. file ="+backupFile.getPath());
     	template.execute(new JcrCallback(){
@@ -199,28 +200,80 @@ public class ContentAdminService extends AbstractContentService implements ICont
     	});
     }
     
-    public Boolean isRollBackAvailable(){
-    	return false;
+    public Boolean isRollbackSiteAvailable(){
+		return isRollBackAvailable(false);
     }
     
+    public Boolean isRollbackApplicationAvailable(){
+		return isRollBackAvailable(true);
+    }
+    
+    private Boolean isRollBackAvailable(final Boolean application){
+    	//if there is a backup available then rollback is available
+    	Boolean available = (Boolean) template.execute(new JcrCallback(){
+
+			public Object doInJcr(Session session) throws IOException,
+					RepositoryException {
+				if (application){
+					Node backupParent = getCreateNode(EC_NODE_BACKUP, session.getRootNode());
+					session.save();
+					if (backupParent.hasNode(EC_NODE_APP)){
+						return true;
+					} else {
+						return false;
+					}
+				} else {
+					Node backupParent = getCreateBackupNode(session);
+					session.save();
+					if (backupParent.hasNode(NS+site)){
+						return true;
+					} else {
+						return false;
+					}
+
+				}
+			}
+    		
+    	});
+    	return available;
+    }
+
+    public void rollbackApplicationRestore() {
+		rollback(true);
+	}
+    
     public void rollbackSiteRestore(){
+    	rollback(false);
+    }
+    
+    private void rollback(final Boolean application){
     	log.info("Attempting to rollback restore. Site ="+site);
     	template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
 				
-				Node siteNode = getCreateSiteNode(session);
-				Node backupParent = getCreateBackupNode(session);
+				String backupName;
+				Node backupParent;
+				Node destinationNode;
+				if(application){
+					backupName = EC_NODE_APP;
+					backupParent = getCreateNode(EC_NODE_BACKUP, session.getRootNode());
+					destinationNode = getApplicationNode(session);
+				} else {
+					backupName = NS+site;
+					backupParent = getCreateBackupNode(session);
+					destinationNode = getCreateSiteNode(session);
+				}
 				session.save();
 
 				//check for backup 
-				if (backupParent.hasNode(NS+site)){
-					Node backup = backupParent.getNode(NS+site);
+				if (backupParent.hasNode(backupName)){
+					Node backup = backupParent.getNode(backupName);
 					log.info("rollbackSiteRestore - found backup.");
 					
-					//remove site
-					String destPath = siteNode.getPath();
-					siteNode.remove();
+					//remove destination
+					String destPath = destinationNode.getPath();
+					destinationNode.remove();
 					session.save();
 					
 					//move backup to site
@@ -266,5 +319,5 @@ public class ContentAdminService extends AbstractContentService implements ICont
 	public void setRepositoryHome(String repositoryHome) {
 		this.repositoryHome = repositoryHome;
 	}
-    
+
 }

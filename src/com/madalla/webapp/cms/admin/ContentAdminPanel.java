@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -13,7 +12,6 @@ import org.apache.wicket.markup.html.form.ListChoice;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.service.cms.IContentAdminService;
@@ -23,6 +21,7 @@ public class ContentAdminPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
 	private Boolean adminApp;
+	public File file ;
 	
 	public ContentAdminPanel(String name){
 		this(name, false);
@@ -36,10 +35,22 @@ public class ContentAdminPanel extends Panel {
 		backupMessages.setOutputMarkupId(true);
 		add(backupMessages);
 	
-        add(new AjaxFallbackLink("backupLink"){
+        //Restore File List
+        List<File> backupFiles = getContentAdminService().getBackupFileList();
+        if (backupFiles.size() > 0){
+        	Collections.sort(backupFiles);
+        	Collections.reverse(backupFiles);
+        	file = backupFiles.get(0);
+        }
+        final ListChoice listChoice = new ListChoice("backupFiles", new PropertyModel(this,"file") ,
+        		backupFiles, new ChoiceRenderer("name"),10);
+        listChoice.setOutputMarkupId(true);
+        add(new RestoreForm("restoreForm", listChoice));
+		
+		add(new AjaxFallbackLink("backupLink"){
             
             public void onClick(AjaxRequestTarget target) {
-            	target.addComponent(backupMessages);
+            	target.addComponent(listChoice);
             	String fileName;
             	try {
             		IContentAdminService service = getContentAdminService();
@@ -57,7 +68,6 @@ public class ContentAdminPanel extends Panel {
             
         });
         
-        add(new RestoreForm("restoreForm"));
         
         //Rollback link
         Link rollback = new AjaxFallbackLink("rollbackLink"){
@@ -73,7 +83,9 @@ public class ContentAdminPanel extends Panel {
 			@Override
 			protected final void onBeforeRender(){
 				IContentAdminService service = getContentAdminService();
-				if (service.isRollBackAvailable()){
+				if (adminApp && service.isRollbackApplicationAvailable()){
+					setEnabled(true);
+				} else if (!adminApp && service.isRollbackSiteAvailable()){
 					setEnabled(true);
 				} else {
 					setEnabled(false);
@@ -95,22 +107,11 @@ public class ContentAdminPanel extends Panel {
 	public class RestoreForm extends Form{
 
 		private static final long serialVersionUID = 4729370802782788350L;
-		public File file ;
 		
-		public RestoreForm(String id){
+		
+		public RestoreForm(String id, ListChoice listChoice){
 			super(id);
-			
-	        //Restore File List
-	        List<File> backupFiles = getContentAdminService().getBackupFileList();
-	        if (backupFiles.size() > 0){
-	        	Collections.sort(backupFiles);
-	        	Collections.reverse(backupFiles);
-	        	file = backupFiles.get(0);
-	        }
-	        final ListChoice listChoice = new ListChoice("backupFiles", new PropertyModel(this,"file") ,
-	        		backupFiles, new ChoiceRenderer("name"),10);
 	        add(listChoice);
-
 		}
 
 		@Override

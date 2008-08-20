@@ -15,6 +15,9 @@ public interface IContentAdminService {
 	List<File> getApplicationBackupFileList();
 	void restoreContentSite(File backupFile);
 	void restoreContentApplication(final File backupFile);
+	Boolean isRollbackSiteAvailable();
 	void rollbackSiteRestore();
-	Boolean isRollBackAvailable();
+	Boolean isRollbackApplicationAvailable();
+	void rollbackApplicationRestore();
+	
 }
