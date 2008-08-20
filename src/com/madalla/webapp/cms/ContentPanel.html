@@ -1,24 +1,33 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
-        .contentBlock {float: left; border-style : none;}
-        .contentBlock div.contentLink {visibility: hidden;}
+        .contentBlock {border-style : none;}
         .contentEdit {float: left; border-style : solid; 
             border-color : blue; border-width: thin;}
-        .contentBody {float:left; display:inline; }
-        .contentLink {float: left; clear: both; display:inline; width:100%; text-align:right; height: 17px;}
-        .contentLink a {padding-left: 15px; padding-bottom: 10px;
-            background: transparent url(../resources/images/pencil_icon.gif) no-repeat scroll center top;
+        
+        div.contentLink {
+                    float: left; 
+                    display:inline; 
+                    width:100%; 
+                    text-align:right; 
+                    height: 17px;
+                    }
+        div.contentLink a {
+                    padding-left: 15px; 
+                    padding-bottom: 10px;
+            		background: transparent url(../resources/images/pencil_icon.gif) no-repeat scroll center top;
+                    }
+        .contentBody {float:left; display:inline; clear:both;}
          }
     </style>
 </wicket:head>
 <body>
     <wicket:panel>
         <div class="contentBlock" wicket:id="contentBlock">
-            <div class="contentBody" wicket:id="contentBody">Contact - paragraph 1 - content block...</div>
             <div class="contentLink">
                 <a class="editLink" wicket:id="contentLink"></a>
             </div>
+            <div class="contentBody" wicket:id="contentBody">Contact - paragraph 1 - content block...</div>
         </div>
     </wicket:panel>
 </body>
