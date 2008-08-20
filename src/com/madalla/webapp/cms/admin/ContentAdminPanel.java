@@ -43,7 +43,11 @@ public class ContentAdminPanel extends Panel {
 
 			@Override
 			protected void onBeforeRender() {
-				setBackupFileList();
+				if (setBackupFileList()){
+					setEnabled(true);
+				} else {
+					setEnabled(false);
+				}
 		        super.onBeforeRender();
 			}
         	
@@ -147,7 +151,7 @@ public class ContentAdminPanel extends Panel {
 		return provider.getContentAdminService();
 	}
 	
-	public void setBackupFileList(){
+	public Boolean setBackupFileList(){
 		if (adminApp){
 			backupFiles = getContentAdminService().getApplicationBackupFileList();
 		} else {
@@ -159,7 +163,9 @@ public class ContentAdminPanel extends Panel {
         	if (file == null){
         		file = backupFiles.get(0);
         	}
+        	return true;
         }
+        return false;
 	}
 	
 }
