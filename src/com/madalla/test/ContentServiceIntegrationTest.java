@@ -30,7 +30,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 	protected List getTestConfigLocations() {
 		List configLocations = new ArrayList();
 		configLocations.add("classpath:com/madalla/service/cms/applicationContext-cms.xml");
-        configLocations.add("classpath:com/madalla/util/jcr/model/applicationContext-jcr.xml");
+        configLocations.add("classpath:com/madalla/util/jcr/model/applicationContext-jcr-local.xml");
         
 		return configLocations;
 	}
@@ -44,6 +44,14 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 				contentAdminService.restoreContentSite(files.get(i));
 			}
 		}
+
+		if (contentAdminService.isRollbackApplicationAvailable()){
+			contentAdminService.rollbackApplicationRestore();
+		}
+		if (contentAdminService.isRollbackSiteAvailable()){
+			contentAdminService.rollbackSiteRestore();
+		}
+
     }
 
     public void testContentExplorer(){

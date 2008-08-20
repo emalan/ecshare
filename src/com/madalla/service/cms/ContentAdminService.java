@@ -70,6 +70,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
     }
     
     public String backupContentRoot(){
+    	log.info("backupContentRoot - Backing up Content Repository...");
     	String file = (String) template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
@@ -86,6 +87,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
     }
     
     public String backupContentSite(){
+    	log.info("backupContentSite - Backing up Content Repository for Site. Site="+site);
     	String file = (String) template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
@@ -133,7 +135,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
     
     //TODO refactore the 2 restore methods
     public void restoreContentApplication(final File backupFile) {
-        log.info("Importing data to repository from file. file ="+backupFile.getPath());
+        log.info("restoreContentApplication - Importing data to repository from file. file ="+backupFile.getPath());
     	template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
@@ -167,7 +169,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
     }
 
     public void restoreContentSite(final File backupFile) {
-        log.info("Importing data to repository from file. file ="+backupFile.getPath());
+        log.info("restoreContentSite - Importing data to repository from file. file ="+backupFile.getPath());
     	template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
@@ -247,7 +249,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
     }
     
     private void rollback(final Boolean application){
-    	log.info("Attempting to rollback restore. Site ="+site);
+    	log.info("rollback - Attempting to rollback restore. Site ="+site);
     	template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {

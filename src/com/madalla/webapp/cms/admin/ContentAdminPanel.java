@@ -22,6 +22,7 @@ public class ContentAdminPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private Boolean adminApp;
 	public File file ;
+	public List<File> backupFiles ;
 	
 	public ContentAdminPanel(String name){
 		this(name, false);
@@ -35,15 +36,18 @@ public class ContentAdminPanel extends Panel {
 		backupMessages.setOutputMarkupId(true);
 		add(backupMessages);
 	
-        //Restore File List
-        List<File> backupFiles = getContentAdminService().getBackupFileList();
-        if (backupFiles.size() > 0){
-        	Collections.sort(backupFiles);
-        	Collections.reverse(backupFiles);
-        	file = backupFiles.get(0);
-        }
-        final ListChoice listChoice = new ListChoice("backupFiles", new PropertyModel(this,"file") ,
-        		backupFiles, new ChoiceRenderer("name"),10);
+        setBackupFileList();
+        
+        final ListChoice listChoice = new ListChoice("backupFiles", new PropertyModel(this,"file"), 
+        		new PropertyModel(this,"backupFiles"), new ChoiceRenderer("name"), 8){
+
+			@Override
+			protected void onBeforeRender() {
+				setBackupFileList();
+		        super.onBeforeRender();
+			}
+        	
+        };
         listChoice.setOutputMarkupId(true);
         add(new RestoreForm("restoreForm", listChoice));
 		
@@ -141,6 +145,21 @@ public class ContentAdminPanel extends Panel {
 	public IContentAdminService getContentAdminService(){
 		IContentAdminServiceProvider provider = (IContentAdminServiceProvider)getApplication();
 		return provider.getContentAdminService();
+	}
+	
+	public void setBackupFileList(){
+		if (adminApp){
+			backupFiles = getContentAdminService().getApplicationBackupFileList();
+		} else {
+			backupFiles = getContentAdminService().getBackupFileList();
+		}
+        if (backupFiles.size() > 0){
+        	Collections.sort(backupFiles);
+        	Collections.reverse(backupFiles);
+        	if (file == null){
+        		file = backupFiles.get(0);
+        	}
+        }
 	}
 	
 }
