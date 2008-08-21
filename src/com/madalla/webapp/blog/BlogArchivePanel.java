@@ -10,7 +10,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.markup.html.tree.LinkTree;
@@ -58,6 +60,7 @@ public class BlogArchivePanel extends AbstractBlogDisplayPanel {
 							log.debug("onNodeLinkClicked - "+node);
 							DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) node;
 							if (treeNode.getUserObject() instanceof BlogEntry){
+								target.addComponent(display);
 								BlogEntry blogEntry = (BlogEntry) treeNode.getUserObject();
 								String blogEntryId = blogEntry.getId();
 								log.debug("onNodeLinkClicked - blogId="+blogEntryId);
@@ -76,6 +79,18 @@ public class BlogArchivePanel extends AbstractBlogDisplayPanel {
 		tree.getTreeState().expandAll();
 		add(tree);
 		
+		Link home = new AjaxFallbackLink("home"){
+
+			private static final long serialVersionUID = -3613367972403232618L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				target.addComponent(display);
+				
+			}
+			
+		};
+		add(home);
 		
 
 	}

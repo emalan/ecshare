@@ -46,17 +46,18 @@ public class BlogDisplayPanel extends Panel{
                 listItem.add(new Label("keywords", new Model(blogEntry.getKeywords())));
 
                 //more... link for single BlogDisplay
-                IBehavior behavior = new AjaxEventBehavior("onclick") {
-                	@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						// TODO Auto-generated method stub
-						
-					}
-                };
-                
-                CharSequence url = urlFor(behavior,Link.INTERFACE);
-                log.debug("populateItem - url="+url);
-                String htmlLink = "... <a href=\"" + url + "\">"+getString("label.more")+"</a>";
+//                IBehavior behavior = new AjaxEventBehavior("onclick") {
+//                	@Override
+//					protected void onEvent(AjaxRequestTarget target) {
+//						// TODO Auto-generated method stub
+//						
+//					}
+//                };
+//                
+//                CharSequence url = urlFor(behavior,Link.INTERFACE);
+//                log.debug("populateItem - url="+url);
+                String url = "";
+                String htmlLink = "... <a href=\"";// + url + "\">"+getString("label.more")+"</a>";
                 
                 listItem.add(new Label("textSummary", blogEntry.getSummary(htmlLink)).setEscapeModelStrings(false));
                 listItem.add(new Label("textFull", blogEntry.getText()).setEscapeModelStrings(false));
@@ -66,7 +67,6 @@ public class BlogDisplayPanel extends Panel{
         add(listView);
 
 		blogEntry = blogList.get(0);
-		add(new Label("title", new PropertyModel(blogEntry, "title")).setOutputMarkupId(true));
 		add(new Label("title", new PropertyModel(blogEntry, "title")).setOutputMarkupId(true));
 		add(new DateLabel("date", new PropertyModel(blogEntry, "date" ), new StyleDateConverter("MS",true)).setOutputMarkupId(true));
 		add(new Label("keywords", new PropertyModel(blogEntry, "keywords")).setOutputMarkupId(true));

@@ -9,8 +9,11 @@ public class BlogHomePanel extends Panel{
 
 	public BlogHomePanel(String id, String blog) {
 		super(id);
-		BlogDisplayPanel displayPanel = new BlogDisplayPanel("displayPanel", BLOG);
-		//BlogArchivePanel archivePanel = new BlogArchivePanel("explorerPanel", BLOG, displaySummaryPanel);
+		BlogDisplayPanel displayPanel = new BlogDisplayPanel("blogDisplayPanel", BLOG);
+		displayPanel.setOutputMarkupId(true);
+		add(displayPanel);
+		add(new BlogArchivePanel("blogExplorerPanel", BLOG, displayPanel));
+		
 		
 	}
 

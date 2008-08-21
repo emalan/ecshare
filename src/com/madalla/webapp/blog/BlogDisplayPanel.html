@@ -1,7 +1,6 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
-        div#blogDisplayHeader{float: left; width: 100%;}
         div.blogEntry{
             float:left; clear: both;
             width:100%;
@@ -29,10 +28,28 @@
 </wicket:head>
 <body>
     <wicket:panel>
-        <div id="blogDisplayHeader">
-            <a href="#" wicket:id="main"><wicket:message key="label.main">Label Contents</wicket:message></a>
-            <a href="#" wicket:id="archive"><wicket:message key="label.archive">Label Contents</wicket:message></a>
+    
+        <span class="blogEntries" wicket:id="comments">
+        <div class="blogEntry">
+            <h3 class="blogTitle" wicket:id="title"/>
+            
+            <span class="blogText" wicket:id="textSummary"/>
+            <span class="blogText" wicket:id="textFull"/>
+            
+            <div class="blogEntryFooter">
+                <div>
+            		<wicket:message key="label.date">Label Contents :</wicket:message>
+            		<span class="blogDate" wicket:id="date"/>
+                </div>
+                <div>	
+            		<wicket:message key="label.keywords">Label Contents :</wicket:message>
+            		<span class="keywords" wicket:id="keywords"/>
+            	</div>
+            </div>
+            
         </div>
+        </span>
+    
         
         <div class="blogEntry">
             <h3 class="blogTitle" wicket:id="title"/>
@@ -47,8 +64,6 @@
             		<span class="keywords" wicket:id="keywords"/>
             	</div>
             </div>
-            <a href="#" wicket:id="EditBlog">Edit Entry</a>
-            <a href="#" wicket:id="DeleteBlog">Delete Entry</a>
         </div>
 
     </wicket:panel>
