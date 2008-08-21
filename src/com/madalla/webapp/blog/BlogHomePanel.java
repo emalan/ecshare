@@ -8,7 +8,7 @@ public class BlogHomePanel extends Panel{
 
 	public BlogHomePanel(String id) {
 		super(id);
-		BlogDisplaySummaryPanel displaySummaryPanel = new BlogDisplaySummaryPanel("displayPanel"));
+		//BlogDisplaySummaryPanel displaySummaryPanel = new BlogDisplaySummaryPanel("displayPanel"));
 		
 		
 	}
