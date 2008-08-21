@@ -1,6 +1,7 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
+    	div#blogDisplayHeader{float: left; width: 100%;}
         div.blogEntry{
             float:left; clear: both;
             width:100%;
@@ -29,6 +30,10 @@
 <body>
     <wicket:panel>
     
+    	<div id="blogDisplayHeader">
+            <a href="#" wicket:id="createNew"><wicket:message key="label.create">Label Contents</wicket:message></a>
+        </div>
+    
         <span class="blogEntries" wicket:id="comments">
         <div class="blogEntry">
             <h3 class="blogTitle" wicket:id="title"/>
@@ -46,7 +51,7 @@
             		<span class="keywords" wicket:id="keywords"/>
             	</div>
             </div>
-            
+            <a href="#" wicket:id="editBlog"><wicket:message key="label.edit">Label Contents :</wicket:message></a>
         </div>
         </span>
     

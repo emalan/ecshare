@@ -30,6 +30,7 @@ import org.apache.wicket.model.PropertyModel;
 import com.madalla.service.blog.BlogEntry;
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
+import com.madalla.webapp.ISecureWebPage;
 import com.madalla.webapp.blog.IBlogAware;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 import com.madalla.wicket.ValidationStyleBehaviour;
@@ -41,7 +42,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
     private BlogEntry blogEntry;
     private Page returnPage;
     
-    public BlogEntryPanel(String id, final PageParameters parameters, Page returnPage) {
+    public BlogEntryPanel(String id, final PageParameters parameters) {
         super(id);
         this.returnPage = returnPage;
         add(HeaderContributor.forJavaScript(TinyMce.class,"tiny_mce.js"));
