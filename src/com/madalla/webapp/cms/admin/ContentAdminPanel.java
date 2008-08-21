@@ -24,11 +24,20 @@ public class ContentAdminPanel extends Panel {
 	public File file ;
 	public List<File> backupFiles ;
 	
-	public ContentAdminPanel(String name){
+	public static ContentAdminPanel newInstance(String name){
+	    return new ContentAdminPanel(name, false);	
+	}
+	public static ContentAdminPanel newAdminInstance(String name){
+		return new ContentAdminPanel(name, true);
+	}
+	private ContentAdminPanel(){
+		this("");
+	};
+	private ContentAdminPanel(String name){
 		this(name, false);
 	}
 
-	public ContentAdminPanel(String name, final Boolean adminApp) {
+	private ContentAdminPanel(String name, final Boolean adminApp) {
 		super(name);
 		this.adminApp = adminApp;
 		

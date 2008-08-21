@@ -19,7 +19,7 @@ public class BlogService implements IBlogService, Serializable{
 	private static final String BLOG_NAME = "mainBlog";
 	private IContentService contentService;
 	private Log log = LogFactory.getLog(this.getClass());
-
+	
     public List getBlogCategories(){
     	List list = new ArrayList();
     	list.add("work");
