@@ -38,14 +38,14 @@ public class BlogDisplaySummaryPanel extends AbstractBlogDisplayPanel {
         //List existing Blogs
         log.debug("construtor - retrieving blog entries from service.");
         IBlogService service = getBlogService();
-        List commentList = service.getBlogEntries();
+        List commentList = service.getBlogEntries("");
         log.debug("construtor - retrieved blog entries. count="+commentList.size());
         ListView listView = new ListView("comments", commentList) {
 			private static final long serialVersionUID = 1L;
 
 			public void populateItem(final ListItem listItem) {
 				final BlogEntry blogEntry = (BlogEntry) listItem.getModelObject();
-                populateBlogEntryDisplay(listItem, blogEntry, blogEntryPage, adminMode);
+                populateBlogEntryDisplay(listItem, blogEntry);
 
                 //more... link to Blog Display Page
                 CharSequence url = urlFor(blogDisplayPage,new PageParameters(BLOG_ENTRY_ID+"="+blogEntry.getId()) );

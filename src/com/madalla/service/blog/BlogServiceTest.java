@@ -16,6 +16,7 @@ public class BlogServiceTest extends TestCase{
     BlogService service ;
     IContentService mockContentService;
     private MockControl contentControl;
+    private static String BLOG = "testBlog";
     
     protected void setUp() {
         contentControl = MockControl.createControl(IContentService.class);
@@ -47,7 +48,7 @@ public class BlogServiceTest extends TestCase{
         BlogEntry entry = createBlogEntry();
         test.add(entry);
         
-        Collection entries = service.getBlogEntries();
+        Collection entries = service.getBlogEntries(BLOG);
     }
     
     public void testGetAllBlogEntriesForCategory(){
@@ -57,6 +58,7 @@ public class BlogServiceTest extends TestCase{
     
     public static BlogEntry createBlogEntry(){
         BlogEntry blogEntry = new BlogEntry();
+        blogEntry.setBlog(BLOG);
         blogEntry.setBlogCategory("travel");
         blogEntry.setDate(Calendar.getInstance().getTime());
         blogEntry.setText("Test entry");

@@ -9,10 +9,8 @@ import javax.swing.tree.TreeNode;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.markup.html.tree.LinkTree;
@@ -25,18 +23,15 @@ import com.madalla.util.ui.ITreeInput;
 
 public class BlogArchivePanel extends AbstractBlogDisplayPanel {
 	private static final long serialVersionUID = 1L;
-
-	private static DateFormat df = DateFormat.getDateInstance();
 	private Log log = LogFactory.getLog(this.getClass());
 
-	public BlogArchivePanel(String id, final Class blogDisplayPage,
-			Class blogEntryPage, final Class blogMainPage, boolean adminMode) {
+	public BlogArchivePanel(final String id, final String blogName, final BlogDisplayPanel display ) {
 		super(id);
-		add(new BookmarkablePageLink("back", blogMainPage));
+
 		//List existing Blogs
 		log.debug("construtor - retrieving blog entries from service.");
 		IBlogService service = getBlogService();
-		TreeModel blogEntries = service.getBlogEntriesAsTree();
+		TreeModel blogEntries = service.getBlogEntriesAsTree(blogName);
 		log.debug("construtor - retrieved blog entries. root="
 				+ blogEntries.getRoot());
 
@@ -48,7 +43,7 @@ public class BlogArchivePanel extends AbstractBlogDisplayPanel {
 				if (treeNode.getUserObject() instanceof ITreeInput ){
 					ITreeInput treeInput = (ITreeInput) treeNode.getUserObject();
 					String title = treeInput.getTitle();
-					return new Model(df.format(treeInput.getDate()) + (null == title?"":" - " + title));
+					return new Model(DateFormat.getDateInstance().format(treeInput.getDate()) + (null == title?"":" - " + title));
 				} else {
 					return model;
 				}
@@ -64,8 +59,9 @@ public class BlogArchivePanel extends AbstractBlogDisplayPanel {
 							DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) node;
 							if (treeNode.getUserObject() instanceof BlogEntry){
 								BlogEntry blogEntry = (BlogEntry) treeNode.getUserObject();
-								PageParameters pageParameters = new PageParameters(BLOG_ENTRY_ID + "=" + blogEntry.getId());
-								setResponsePage(blogDisplayPage, pageParameters);
+								String blogEntryId = blogEntry.getId();
+								log.debug("onNodeLinkClicked - blogId="+blogEntryId);
+								display.changeModel(blogEntryId);
 							}
 						}
 					}

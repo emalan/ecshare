@@ -26,5 +26,5 @@ public interface IContentService {
     BlogEntry getBlogEntry(final String uuid);
     void deleteNode(final String path);
     Content getContent(final String path);
-    public List getBlogEntries(final String blog);
+    public List<BlogEntry> getBlogEntries(final String blog);
 }

@@ -16,12 +16,12 @@ public class BlogService implements IBlogService, Serializable{
     
 	private static final long serialVersionUID = 1L;
 	//TODO refactor to allow multiple blogs per site
-	private static final String BLOG_NAME = "mainBlog";
+	//private static final String BLOG_NAME = "mainBlog";
 	private IContentService contentService;
 	private Log log = LogFactory.getLog(this.getClass());
 	
-    public List getBlogCategories(){
-    	List list = new ArrayList();
+    public List<String> getBlogCategories(){
+    	List<String> list = new ArrayList<String>();
     	list.add("work");
     	list.add("travel");
         return list;
@@ -34,16 +34,15 @@ public class BlogService implements IBlogService, Serializable{
     
     public BlogEntry getBlogEntry(String id) {
     	BlogEntry blogEntry = contentService.getBlogEntry(id );
-        blogEntry.setBlog(BLOG_NAME);
         return blogEntry;
     }
     
-    public List getBlogEntries() {
-        return contentService.getBlogEntries(BLOG_NAME);
+    public List<BlogEntry> getBlogEntries(String blog) {
+        return contentService.getBlogEntries(blog);
     }
 
-    public TreeModel getBlogEntriesAsTree(){
-    	List list = getBlogEntries();
+    public TreeModel getBlogEntriesAsTree(String blog){
+    	List list = getBlogEntries(blog);
     	return CalendarUtils.createMonthlyTree("Blog Archive", list);
     }
     

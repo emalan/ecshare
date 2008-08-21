@@ -215,6 +215,10 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
      * @return
      */
     private String processBlogEntry(final BlogEntry blogEntry){
+    	if (blogEntry == null || StringUtils.isEmpty(blogEntry.getBlog())){
+            log.error("processBlogEntry - Blog Entry not valid." + blogEntry);
+            return null;
+        }
         return (String) template.execute(new JcrCallback(){
             public Object doInJcr(Session session) throws IOException, RepositoryException {
                 log.debug("processBlogEntry - Processing Blog. " + blogEntry);
