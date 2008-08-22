@@ -13,6 +13,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.markup.html.tree.LinkTree;
@@ -21,9 +22,10 @@ import org.apache.wicket.model.Model;
 
 import com.madalla.service.blog.BlogEntry;
 import com.madalla.service.blog.IBlogService;
+import com.madalla.service.blog.IBlogServiceProvider;
 import com.madalla.util.ui.ITreeInput;
 
-public class BlogArchivePanel extends AbstractBlogDisplayPanel {
+public class BlogArchivePanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private Log log = LogFactory.getLog(this.getClass());
 
@@ -94,5 +96,9 @@ public class BlogArchivePanel extends AbstractBlogDisplayPanel {
 		
 
 	}
+	
+    private IBlogService getBlogService(){
+    	return ((IBlogServiceProvider)getApplication()).getBlogService();
+    }
 
 }
