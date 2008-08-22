@@ -7,7 +7,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
-import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -30,7 +29,6 @@ import org.apache.wicket.model.PropertyModel;
 import com.madalla.service.blog.BlogEntry;
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
-import com.madalla.webapp.ISecureWebPage;
 import com.madalla.webapp.blog.IBlogAware;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 import com.madalla.wicket.ValidationStyleBehaviour;
@@ -40,11 +38,16 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
     private static final CompressedResourceReference JAVASCRIPT = new CompressedResourceReference(BlogEntryPanel.class, "BlogEntryPanel.js");
     private Log log = LogFactory.getLog(this.getClass());
     private BlogEntry blogEntry;
-    private Page returnPage;
+    private Class<?> returnPage;
     
     public BlogEntryPanel(String id, final PageParameters parameters) {
         super(id);
-        this.returnPage = returnPage;
+        String returnPageName = parameters.getString(RETURN_PAGE);
+        try {
+            this.returnPage = Class.forName(returnPageName);
+        } catch (ClassNotFoundException e) {
+            log.error("constructor - Exception while getting return Class.", e);
+        }
         add(HeaderContributor.forJavaScript(TinyMce.class,"tiny_mce.js"));
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
 
@@ -142,7 +145,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
                 getBlogService().saveBlogEntry(blogEntry);
                 info("Success");
                 log.info("Blog Entry successfully saved. " + blogEntry);
-                setResponsePage(returnPage.getClass());
+                setResponsePage(returnPage);
             } catch (Exception e) {
                 info("There was a problem saving Entry.");
                 info(e.getMessage());

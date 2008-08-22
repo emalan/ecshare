@@ -1,7 +1,5 @@
 package com.madalla.webapp.cms;
 
-import java.util.Locale;
-
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.logging.Log;

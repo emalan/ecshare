@@ -1,6 +1,5 @@
 package com.madalla.webapp.pages;
 
-import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 
 import com.madalla.webapp.AdminPage;
