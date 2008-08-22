@@ -39,14 +39,13 @@ public class ContentPanel extends Panel implements IContentAware {
         this.nodeId = id;
         this.returnPage = returnPage;
         log.debug("Content Panel being created for node=" + node + " id=" + id);
-        final boolean adminMode = ((CmsSession)getSession()).isCmsAdminMode();
         IContentService contentService = ((IContentServiceProvider) getApplication()).getContentService();
         String contentBody = contentService.getContentData(node, id , getSession().getLocale());
         Component contentBlock = new ContentContainer("contentBlock", id, node, contentBody);
         contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel() {
             public Object getObject() {
                 String cssClass;
-                if (adminMode) {
+                if (((CmsSession)getSession()).isCmsAdminMode()) {
                     cssClass = "contentEdit";
                 } else {
                     cssClass = "contentBlock";
@@ -86,7 +85,7 @@ public class ContentPanel extends Panel implements IContentAware {
                 private static final long serialVersionUID = 1801145612969874170L;
 
                 protected final void onBeforeRender() {
-                    if (adminMode) {
+                    if (((CmsSession)getSession()).isCmsAdminMode()) {
                         setEnabled(true);
                     } else {
                         setEnabled(false);
