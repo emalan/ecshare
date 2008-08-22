@@ -8,14 +8,12 @@ import org.apache.wicket.Component;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
@@ -32,9 +30,10 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import com.madalla.service.captcha.CaptchaUtils;
 import com.madalla.service.email.IEmailSender;
+import com.madalla.service.email.IEmailServiceProvider;
 import com.madalla.wicket.ValidationStyleBehaviour;
 
-public abstract class EmailFormPanel extends Panel {
+public class EmailFormPanel extends Panel {
     private static final long serialVersionUID = -1643728343421366820L;
     private Log log = LogFactory.getLog(this.getClass());
     
@@ -43,7 +42,6 @@ public abstract class EmailFormPanel extends Panel {
     private Integer second = CaptchaUtils.randomInteger(1, 12);
     
     private String subject;
-    
     
     public EmailFormPanel(String id, String subject) {
         super(id);
@@ -170,6 +168,8 @@ public abstract class EmailFormPanel extends Panel {
         }
 
     }
-    protected abstract IEmailSender getEmailSender();
+    protected IEmailSender getEmailSender(){
+    	return ((IEmailServiceProvider)getApplication()).getEmailSender();
+    }
     
 }

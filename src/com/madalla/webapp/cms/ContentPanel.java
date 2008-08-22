@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -15,12 +16,13 @@ import org.apache.wicket.model.Model;
 
 import com.madalla.service.cms.IContentService;
 import com.madalla.service.cms.IContentServiceProvider;
+import com.madalla.webapp.CmsSession;
+import com.madalla.webapp.pages.ContentEditPage;
 
 public class ContentPanel extends Panel implements IContentAware {
     private static final long serialVersionUID = 1L;
     private Log log = LogFactory.getLog(this.getClass());
-    private Class contentEditPage;
-    private Class returnPage;
+    private Class<? extends Page> returnPage;
     private String nodeName;
     private String nodeId;
 
@@ -31,21 +33,20 @@ public class ContentPanel extends Panel implements IContentAware {
      * @param contentService
      * @param contentAdmin
      */
-    public ContentPanel(String id, String node, Class returnPage, Class contentEditPage,
-            final IContentAdmin contentAdmin) {
+    public ContentPanel(String id, String node, Class<? extends Page> returnPage) {
         super(id);
         this.nodeName = node;
         this.nodeId = id;
-        this.contentEditPage = contentEditPage;
         this.returnPage = returnPage;
         log.debug("Content Panel being created for node=" + node + " id=" + id);
+        final boolean adminMode = ((CmsSession)getSession()).isCmsAdminMode();
         IContentService contentService = ((IContentServiceProvider) getApplication()).getContentService();
         String contentBody = contentService.getContentData(node, id , getSession().getLocale());
-        Component contentBlock = new ContentContainer("contentBlock", id, node, contentBody, contentAdmin);
+        Component contentBlock = new ContentContainer("contentBlock", id, node, contentBody);
         contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel() {
             public Object getObject() {
                 String cssClass;
-                if (contentAdmin.isCmsAdminMode()) {
+                if (adminMode) {
                     cssClass = "contentEdit";
                 } else {
                     cssClass = "contentBlock";
@@ -59,10 +60,10 @@ public class ContentPanel extends Panel implements IContentAware {
     public class ContentContainer extends WebMarkupContainer {
         private static final long serialVersionUID = 1L;
 
-        public ContentContainer(String id, String contentId, String contentNode, String contentBody,
-                final IContentAdmin contentAdmin) {
+        public ContentContainer(String id, String contentId, String contentNode, String contentBody) {
             super(id);
 
+            final Boolean adminMode = ((CmsSession)getSession()).isCmsAdminMode();
             final Model contentModel = new Model(contentBody);
             
             // add content
@@ -79,13 +80,13 @@ public class ContentPanel extends Panel implements IContentAware {
             add(label);
 
             // add link to edit it
-            Link link = new BookmarkablePageLink("contentLink", contentEditPage, new PageParameters(CONTENT_NODE + "="
+            Link link = new BookmarkablePageLink("contentLink", ContentEditPage.class, new PageParameters(CONTENT_NODE + "="
                     + contentNode + "," + CONTENT_ID + "=" + contentId + "," + CONTENT_PAGE + "="
                     + returnPage.getName())) {
                 private static final long serialVersionUID = 1801145612969874170L;
 
                 protected final void onBeforeRender() {
-                    if (contentAdmin.isCmsAdminMode()) {
+                    if (adminMode) {
                         setEnabled(true);
                     } else {
                         setEnabled(false);

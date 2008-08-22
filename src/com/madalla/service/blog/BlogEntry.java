@@ -35,6 +35,7 @@ public class BlogEntry implements Serializable, Comparable, ITreeInput{
 	}
 
 	public BlogEntry(String blog) {
+		this.blog = blog;
 	}
 
 	public String getName(){

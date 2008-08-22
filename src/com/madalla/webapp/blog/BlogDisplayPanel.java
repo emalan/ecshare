@@ -19,6 +19,7 @@ import org.apache.wicket.model.PropertyModel;
 import com.madalla.service.blog.BlogEntry;
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
+import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.BlogEntryPage;
 
 public class BlogDisplayPanel extends Panel implements IBlogAware{
@@ -30,8 +31,7 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
 	public BlogDisplayPanel(String id, final String blog, final Class<? extends Page> returnPage) {
 		super(id);
 		
-		//TODO get adminMode
-		final boolean adminMode = true;
+		final boolean adminMode = ((CmsSession)getSession()).isCmsAdminMode();
 		
 		//new Blog link
         add(new BookmarkablePageLink("createNew",BlogEntryPage.class, 
