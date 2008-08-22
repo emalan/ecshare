@@ -38,7 +38,7 @@ import com.madalla.service.blog.BlogEntry;
  *              --------|----------               |----------------  
  *             |        |          |              |                |
  *        <ec:page1> <ec:page2> <ec:page3>    <ec:mainBlog>    <ec:otherBlog>
- *                      |                           |---------------
+ *                      |                            ---------------
  *                   ec:content                     |               |
  *       ---------------|-----------           <ec:blogEntry1>  <ec:blogEntry2>
  *      |               |           |
@@ -166,9 +166,7 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
         return (BlogEntry) template.execute(new JcrCallback(){
             public Object doInJcr(Session session) throws IOException, RepositoryException {
                 Node node = (Node) session.getItem(path);
-                BlogEntry blogEntry = new BlogEntry();
-                BlogEntryConvertor.populateBlogEntry(node, blogEntry);
-                return blogEntry;
+                return BlogEntryConvertor.createBlogEntry(node);
             }
         });
     }
@@ -197,10 +195,7 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
                 
                 for (NodeIterator iterator = blogNode.getNodes(); iterator.hasNext();){
                     Node nextNode = iterator.nextNode();
-                    BlogEntry blogEntry = new BlogEntry();
-                    blogEntry.setBlog(blog);
-                    BlogEntryConvertor.populateBlogEntry(nextNode, blogEntry);
-                    list.add(blogEntry);
+                    list.add(BlogEntryConvertor.createBlogEntry(nextNode));
                 }
                 return list;
             }

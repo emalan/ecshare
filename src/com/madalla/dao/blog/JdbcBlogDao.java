@@ -91,15 +91,15 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
     private static final class BlogRowMapper implements RowMapper{
         
         public Object mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-            BlogEntry blogEntry = new BlogEntry();
+            //BlogEntry blogEntry = new BlogEntry();
             //blogEntry.setId(resultSet.getInt("ENTRY_ID"));
             //blogEntry.setBlogCategory(new BlogCategory(resultSet.getInt("CATEGORY_ID"),"dummy"));
-            blogEntry.setDate(resultSet.getDate("ENTRY_DATE"));
+            //blogEntry.setDate(resultSet.getDate("ENTRY_DATE"));
             //blogEntry.setSiteId(resultSet.getInt("SITE_ID"));
-            blogEntry.setTitle(resultSet.getString("ENTRY_TITLE"));
-            blogEntry.setDescription(resultSet.getString("ENTRY_DESCRIPTION"));
-            blogEntry.setKeywords(resultSet.getString("ENTRY_KEYWORDS"));
-            return blogEntry;
+            //blogEntry.setTitle(resultSet.getString("ENTRY_TITLE"));
+            //blogEntry.setDescription(resultSet.getString("ENTRY_DESCRIPTION"));
+            //blogEntry.setKeywords(resultSet.getString("ENTRY_KEYWORDS"));
+            return null;
         }   
     }
     

@@ -53,9 +53,10 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
 
         //construct blog Entry
         String blogEntryId = parameters.getString(BLOG_ENTRY_ID);
+        String blogName = parameters.getString(BLOG_NAME);
         log.debug("Constructing Blog Entry. id="+blogEntryId);
         if (StringUtils.isEmpty(blogEntryId)){
-            blogEntry = new BlogEntry();
+            blogEntry = new BlogEntry(blogName);
             log.debug("Created new Blog Entry");
         } else {
             blogEntry = getBlogService().getBlogEntry(blogEntryId);

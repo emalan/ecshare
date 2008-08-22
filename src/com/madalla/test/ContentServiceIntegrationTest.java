@@ -111,14 +111,10 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     private final static Date BLOGDATE = new Date();
     
     private BlogEntry createBlogEntry(){
-    	BlogEntry entry = new BlogEntry();
-        entry.setBlog(BLOG);
-    	entry.setBlogCategory(BLOGCATEGORY);
-    	entry.setDate(BLOGDATE);
+    	BlogEntry entry = new BlogEntry(BLOG, BLOGCATEGORY, BLOGDATE, BLOGTITLE);
     	entry.setDescription(BLOGDESCRIPTION);
     	entry.setKeywords(BLOGKEYWORDS);
     	entry.setText(BLOGTEXT);
-    	entry.setTitle(BLOGTITLE);
     	return entry;    	
     }
 

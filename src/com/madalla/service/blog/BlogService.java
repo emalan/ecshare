@@ -33,7 +33,7 @@ public class BlogService implements IBlogService, Serializable{
     }
     
     public BlogEntry getBlogEntry(String id) {
-    	BlogEntry blogEntry = contentService.getBlogEntry(id );
+    	BlogEntry blogEntry = contentService.getBlogEntry(id);
         return blogEntry;
     }
     

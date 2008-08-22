@@ -58,15 +58,18 @@ public class BlogArchivePanel extends Panel {
 					private static final long serialVersionUID = 1L;
 
 					protected void onNodeLinkClicked(TreeNode node,	BaseTree tree, AjaxRequestTarget target) {
+						super.onNodeLinkClicked(node, tree, target);
+						log.debug("onNodeLinkClicked - " + node);
+
 						if (node.isLeaf()) {
 							log.debug("onNodeLinkClicked - "+node);
 							DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) node;
 							if (treeNode.getUserObject() instanceof BlogEntry){
-								target.addComponent(display);
 								BlogEntry blogEntry = (BlogEntry) treeNode.getUserObject();
 								String blogEntryId = blogEntry.getId();
 								log.debug("onNodeLinkClicked - blogId="+blogEntryId);
 								display.changeModel(blogEntryId);
+								target.addComponent(display);
 							}
 						}
 					}

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.datetime.StyleDateConverter;
@@ -26,9 +25,9 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
 	private static final long serialVersionUID = 1L;
 	private Log log = LogFactory.getLog(this.getClass());
 	private int displayCount = 5;
-	BlogEntry blogEntry;
+	private BlogEntry blogEntry;
 	
-	public BlogDisplayPanel(String id,String blog, final Class<? extends Page> returnPage) {
+	public BlogDisplayPanel(String id, final String blog, final Class<? extends Page> returnPage) {
 		super(id);
 		
 		//TODO get adminMode
@@ -36,7 +35,7 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
 		
 		//new Blog link
         add(new BookmarkablePageLink("createNew",BlogEntryPage.class, 
-        		new PageParameters(RETURN_PAGE+"="+returnPage.getName()+","+BLOG_ENTRY_ID+"=")){
+        		new PageParameters(RETURN_PAGE+"="+returnPage.getName()+","+BLOG_ENTRY_ID+"=,"+BLOG_NAME+"="+blog)){
     		private static final long serialVersionUID = -6335468391788102638L;
     		
     		@Override
@@ -59,7 +58,6 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
 
 			public void populateItem(final ListItem listItem) {
 				final BlogEntry blogEntry = (BlogEntry) listItem.getModelObject();
-                populateBlogEntryDisplay(listItem, blogEntry);
                 listItem.add(new Label("title", new Model(blogEntry.getTitle())));
                 listItem.add(new DateLabel("date", new Model(blogEntry.getDate()), new StyleDateConverter("MS",true)));
                 listItem.add(new Label("keywords", new Model(blogEntry.getKeywords())));
@@ -81,7 +79,7 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
                 listItem.add(new Label("textSummary", blogEntry.getSummary(htmlLink)).setEscapeModelStrings(false));
                 listItem.add(new Label("textFull", blogEntry.getText()).setEscapeModelStrings(false));
                 
-                PageParameters params = new PageParameters(RETURN_PAGE+"="+returnPage.getName()+","+BLOG_ENTRY_ID+"="+blogEntry.getId());
+                PageParameters params = new PageParameters(RETURN_PAGE+"="+returnPage.getName()+","+BLOG_ENTRY_ID+"="+blogEntry.getId()+","+BLOG_NAME+"="+blog);
                 listItem.add(new BookmarkablePageLink("editBlog",BlogEntryPage.class, params){
                     
         			private static final long serialVersionUID = 1L;
@@ -101,18 +99,24 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
         listView.setViewSize(displayCount);
         add(listView);
 
-		blogEntry = blogList.get(0);
-		add(new Label("title", new PropertyModel(blogEntry, "title")).setOutputMarkupId(true));
+        if (blogEntry == null && blogList.size() > 0){
+        	blogEntry = blogList.get(0);
+        }
+		add(new Label("blogTitle", new PropertyModel(blogEntry, "title")).setOutputMarkupId(true));
 		add(new DateLabel("date", new PropertyModel(blogEntry, "date" ), new StyleDateConverter("MS",true)).setOutputMarkupId(true));
 		add(new Label("keywords", new PropertyModel(blogEntry, "keywords")).setOutputMarkupId(true));
 		add(new Label("text", new PropertyModel(blogEntry, "text")).setOutputMarkupId(true).setEscapeModelStrings(false));
 	}
 	
 	public void changeModel(String blogEntryId){
-		blogEntry = getBlogService().getBlogEntry(blogEntryId);
-	}
-	
-	private void populateBlogEntryDisplay(final MarkupContainer blogDisplay, final BlogEntry blogEntry) {
+		BlogEntry newData = getBlogService().getBlogEntry(blogEntryId);
+		blogEntry.setId(newData.getId());
+		blogEntry.setTitle(newData.getTitle());
+		blogEntry.setDate(newData.getDate());
+		blogEntry.setKeywords(newData.getKeywords());
+		blogEntry.setText(newData.getText());
+		blogEntry.setDescription(newData.getDescription());
+		log.debug("changeModel - "+ blogEntry);
 	}
 	
     private IBlogService getBlogService(){

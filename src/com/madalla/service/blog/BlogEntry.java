@@ -21,7 +21,23 @@ public class BlogEntry implements Serializable, Comparable, ITreeInput{
     private String description;
     private String keywords;
     
-    public String getName(){
+    /**
+     * @param blog - Blog Name
+     * @param blogCategory - Category
+     * @param time - Date Time
+     * @param title - 
+     */
+    public BlogEntry(String blog, String blogCategory, Date time, String title) {
+		this.blog = blog;
+		this.blogCategory = blogCategory;
+		this.date = time;
+		this.title = title;
+	}
+
+	public BlogEntry(String blog) {
+	}
+
+	public String getName(){
     	return StringUtils.deleteWhitespace(title);
     }
     
