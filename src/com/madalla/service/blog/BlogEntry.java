@@ -8,34 +8,89 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 import com.madalla.util.ui.ITreeInput;
 
-public class BlogEntry implements Serializable, Comparable, ITreeInput{
-	private static final long serialVersionUID = 1L;
-    private final static int summaryLength = 200;
+public class BlogEntry implements Serializable, Comparable<BlogEntry>, ITreeInput{
+
+	private static final long serialVersionUID = -7829797397130212868L;
+
+	private final static int summaryLength = 200;
     
-    private String id;
-    private String blog;
+    private String id; //immutable
+    private String blog; //immutable
     private String text;
     private Date date;
-    private String blogCategory;
+    private String category;
     private String title;
     private String description;
     private String keywords;
     
+    public static class Builder{
+    	//Required parameters
+    	private final String id;
+    	private final String blog;
+    	private final String title;
+    	private final Date date;
+    	
+    	//Optional parameters
+    	private String text ="";
+    	private String category= "";
+    	private String description = "";
+    	private String keywords = "";
+    	
+    	
+    	/**
+    	 * Constructor for service to create existing Blog entry for use by client
+    	 * @param id
+    	 * @param blog
+    	 * @param title
+    	 * @param date
+    	 */
+    	Builder(String id, String blog, String title, Date date){
+    		this.id = id;
+    		this.blog = blog;
+    		this.title = title;
+    		this.date = date;
+    	}
+    	//creates a new entry that does not yet exist in repository
+    	public Builder(String blog, String title, Date date){
+    		this.id = "";  //
+    		this.blog = blog;
+    		this.title = title;
+    		this.date = date;
+    	}
+    	
+    	public Builder text(String val){
+    		this.text = val; return this;
+    	}
+    	public Builder category(String val){
+    		this.category = val; return this;
+    	}
+    	public Builder desription(String val){
+    		this.description = val; return this;
+    	}
+    	public Builder keywords(String val){
+    		this.keywords = val; return this;
+    	}
+    	
+    	public BlogEntry build() {
+    		return new BlogEntry(this);
+    	}
+    }
+    
     /**
      * @param blog - Blog Name
-     * @param blogCategory - Category
+     * @param category - Category
      * @param time - Date Time
      * @param title - 
      */
-    public BlogEntry(String blog, String blogCategory, Date time, String title) {
-		this.blog = blog;
-		this.blogCategory = blogCategory;
-		this.date = time;
-		this.title = title;
-	}
-
-	public BlogEntry(String blog) {
-		this.blog = blog;
+    private BlogEntry(Builder builder) {
+    	this.id = builder.id;
+		this.blog = builder.blog;
+		this.category = builder.category;
+		this.date = builder.date;
+		this.title = builder.title;
+		this.text = builder.text;
+		this.description = builder.description;
+		this.keywords = builder.keywords;
 	}
 
 	public String getName(){
@@ -97,16 +152,22 @@ public class BlogEntry implements Serializable, Comparable, ITreeInput{
         return ReflectionToStringBuilder.toString(this).toString();
     }
     
+    @Override
 	public boolean equals(Object obj) {
 		if (date.equals(obj)) return true;
 		if (!(obj instanceof BlogEntry)) return false;
 		BlogEntry compare = (BlogEntry)obj; 
-		if (date.equals(compare.getDate())){
+		if (id.equals(compare.getId())){
 			return true;
 		}
 		return false;
 	}
-	public int compareTo(Object o) {
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+
+	public int compareTo(BlogEntry o) {
 		BlogEntry compare = (BlogEntry) o;
 		if (date.after(compare.getDate())){
 			return -1;
@@ -117,20 +178,15 @@ public class BlogEntry implements Serializable, Comparable, ITreeInput{
 	public String getBlog() {
 		return blog;
 	}
-	public void setBlog(String blog) {
-		this.blog = blog;
+	public String getCategory() {
+		return category;
 	}
-	public String getBlogCategory() {
-		return blogCategory;
-	}
-	public void setBlogCategory(String blogCategory) {
-		this.blogCategory = blogCategory;
+	public void setCategory(String category) {
+		this.category = category;
 	}
     public String getId() {
         return id;
     }
-    public void setId(String id){
-        this.id = id;
-    }
+
 
 }

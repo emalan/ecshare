@@ -19,6 +19,7 @@ import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.service.blog.BlogEntry;
+import com.madalla.service.blog.BlogEntryConvertor;
 
 /**
  * Content Service Implementation for JCR Content Reository

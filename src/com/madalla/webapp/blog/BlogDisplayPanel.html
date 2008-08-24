@@ -25,6 +25,10 @@
         .blogDate, .keywords {
             color: #6699CC;
         }
+        .showHome .blogEntries {display: inline; }
+        .showHome #blogEntryDiv {display: none;}
+        .showBlog .blogEntries {display: none;}
+        .showBlog #blogEntryDiv {display: inline;}
     </style>
 </wicket:head>
 <body>
@@ -32,6 +36,21 @@
     
     	<div id="blogDisplayHeader">
             <a href="#" wicket:id="createNew"><wicket:message key="label.create">Label Contents</wicket:message></a>
+        </div>
+
+        <div id="blogEntryDiv" class="blogEntry">
+            <h3 class="blogTitle" wicket:id="blogTitle"/>
+            <span class="blogText" wicket:id="text"/>
+            <div class="blogEntryFooter">
+                <div>
+            		<wicket:message key="label.date">Label Contents :</wicket:message>
+            		<span class="blogDate" wicket:id="date"/>
+                </div>
+                <div>	
+            		<wicket:message key="label.keywords">Label Contents :</wicket:message>
+            		<span class="keywords" wicket:id="keywords"/>
+            	</div>
+            </div>
         </div>
     
         <span class="blogEntries" wicket:id="comments">
@@ -55,22 +74,6 @@
         </div>
         </span>
     
-        
-        <div class="blogEntry">
-            <h3 class="blogTitle" wicket:id="blogTitle"/>
-            <span class="blogText" wicket:id="text"/>
-            <div class="blogEntryFooter">
-                <div>
-            		<wicket:message key="label.date">Label Contents :</wicket:message>
-            		<span class="blogDate" wicket:id="date"/>
-                </div>
-                <div>	
-            		<wicket:message key="label.keywords">Label Contents :</wicket:message>
-            		<span class="keywords" wicket:id="keywords"/>
-            	</div>
-            </div>
-        </div>
-
     </wicket:panel>
 </body>
 </html>

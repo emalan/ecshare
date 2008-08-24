@@ -6,19 +6,13 @@ import java.util.List;
 
 import javax.swing.tree.TreeModel;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.madalla.service.cms.IContentService;
 import com.madalla.util.ui.CalendarUtils;
 
 public class BlogService implements IBlogService, Serializable{
     
 	private static final long serialVersionUID = 1L;
-	//TODO refactor to allow multiple blogs per site
-	//private static final String BLOG_NAME = "mainBlog";
 	private IContentService contentService;
-	private Log log = LogFactory.getLog(this.getClass());
 	
     public List<String> getBlogCategories(){
     	List<String> list = new ArrayList<String>();
@@ -28,7 +22,6 @@ public class BlogService implements IBlogService, Serializable{
     }
 
     public void saveBlogEntry(BlogEntry blogEntry) {
-        blogEntry.setBlog("mainBlog");
     	contentService.updateBlogEntry(blogEntry);
     }
     

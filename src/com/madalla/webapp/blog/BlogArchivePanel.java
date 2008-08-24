@@ -11,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -69,6 +70,7 @@ public class BlogArchivePanel extends Panel {
 								String blogEntryId = blogEntry.getId();
 								log.debug("onNodeLinkClicked - blogId="+blogEntryId);
 								display.changeModel(blogEntryId);
+								display.add(new SimpleAttributeModifier("class","showBlog"));
 								target.addComponent(display);
 							}
 						}
@@ -91,6 +93,7 @@ public class BlogArchivePanel extends Panel {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				target.addComponent(display);
+				display.add(new SimpleAttributeModifier("class","showHome"));
 				
 			}
 			

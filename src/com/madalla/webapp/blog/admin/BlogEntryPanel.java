@@ -29,6 +29,7 @@ import org.apache.wicket.model.PropertyModel;
 import com.madalla.service.blog.BlogEntry;
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
+import com.madalla.webapp.blog.BlogEntryView;
 import com.madalla.webapp.blog.IBlogAware;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 import com.madalla.wicket.ValidationStyleBehaviour;
@@ -37,7 +38,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
     private static final long serialVersionUID = 1L;
     private static final CompressedResourceReference JAVASCRIPT = new CompressedResourceReference(BlogEntryPanel.class, "BlogEntryPanel.js");
     private Log log = LogFactory.getLog(this.getClass());
-    private BlogEntry blogEntry;
+    private BlogEntryView blogEntry = new BlogEntryView();
     private Class<?> returnPage;
     
     public BlogEntryPanel(String id, final PageParameters parameters) {
@@ -56,10 +57,10 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
         String blogName = parameters.getString(BLOG_NAME);
         log.debug("Constructing Blog Entry. id="+blogEntryId);
         if (StringUtils.isEmpty(blogEntryId)){
-            blogEntry = new BlogEntry(blogName);
+            blogEntry.setBlog(blogName);
             log.debug("Created new Blog Entry");
         } else {
-            blogEntry = getBlogService().getBlogEntry(blogEntryId);
+            blogEntry.init(getBlogService().getBlogEntry(blogName));
             log.debug("Retrieved Blog Entry from Service."+blogEntry);
         }
         
@@ -92,7 +93,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
 
             //category drop down
             List categories = getBlogService().getBlogCategories();
-            FormComponent categoryDropDown = new DropDownChoice("category", new PropertyModel(blogEntry,"blogCategory"), categories);
+            FormComponent categoryDropDown = new DropDownChoice("category", new PropertyModel(blogEntry,"category"), categories);
             categoryDropDown.setRequired(true);
             categoryDropDown.add(new ValidationStyleBehaviour());
             categoryDropDown.add(new AjaxFormComponentUpdatingBehavior("onblur"){
@@ -143,7 +144,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
         public void onSubmit() {
             log.debug("onSubmit - Saving populated Blog Entry to Blog service. " + blogEntry);
             try {
-                getBlogService().saveBlogEntry(blogEntry);
+                saveBlogEntry(blogEntry);
                 info("Success");
                 log.info("Blog Entry successfully saved. " + blogEntry);
                 setResponsePage(returnPage);
@@ -158,6 +159,18 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
     
     private IBlogService getBlogService(){
     	return ((IBlogServiceProvider)getApplication()).getBlogService();
+    }
+    
+    private void saveBlogEntry(BlogEntryView view){
+    	BlogEntry blogEntry;
+    	if (StringUtils.isEmpty(view.getId())){
+    		blogEntry = new BlogEntry.Builder(view.getBlog(), view.getTitle(), view.getDate() ).build();
+    		view.populate(blogEntry);
+    	} else {
+    		blogEntry = getBlogService().getBlogEntry(view.getId());
+    		view.populate(blogEntry);
+    	}
+    	getBlogService().saveBlogEntry(blogEntry);
     }
 
 }

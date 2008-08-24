@@ -26,7 +26,7 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
 	private static final long serialVersionUID = 1L;
 	private Log log = LogFactory.getLog(this.getClass());
 	private int displayCount = 5;
-	private BlogEntry blogEntry;
+	private BlogEntryView blogEntry = new BlogEntryView();
 	
 	public BlogDisplayPanel(String id, final String blog, final Class<? extends Page> returnPage) {
 		super(id);
@@ -57,10 +57,10 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
 			private static final long serialVersionUID = 1L;
 
 			public void populateItem(final ListItem listItem) {
-				final BlogEntry blogEntry = (BlogEntry) listItem.getModelObject();
-                listItem.add(new Label("title", new Model(blogEntry.getTitle())));
-                listItem.add(new DateLabel("date", new Model(blogEntry.getDate()), new StyleDateConverter("MS",true)));
-                listItem.add(new Label("keywords", new Model(blogEntry.getKeywords())));
+				final BlogEntry current = (BlogEntry) listItem.getModelObject();
+                listItem.add(new Label("title", new Model(current.getTitle())));
+                listItem.add(new DateLabel("date", new Model(current.getDate()), new StyleDateConverter("MS",true)));
+                listItem.add(new Label("keywords", new Model(current.getKeywords())));
 
                 //more... link for single BlogDisplay
 //                IBehavior behavior = new AjaxEventBehavior("onclick") {
@@ -76,10 +76,10 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
                 String url = "";
                 String htmlLink = "... <a href=\"";// + url + "\">"+getString("label.more")+"</a>";
                 
-                listItem.add(new Label("textSummary", blogEntry.getSummary(htmlLink)).setEscapeModelStrings(false));
-                listItem.add(new Label("textFull", blogEntry.getText()).setEscapeModelStrings(false));
+                listItem.add(new Label("textSummary", current.getSummary(htmlLink)).setEscapeModelStrings(false));
+                listItem.add(new Label("textFull", current.getText()).setEscapeModelStrings(false));
                 
-                PageParameters params = new PageParameters(RETURN_PAGE+"="+returnPage.getName()+","+BLOG_ENTRY_ID+"="+blogEntry.getId()+","+BLOG_NAME+"="+blog);
+                PageParameters params = new PageParameters(RETURN_PAGE+"="+returnPage.getName()+","+BLOG_ENTRY_ID+"="+current.getId()+","+BLOG_NAME+"="+blog);
                 listItem.add(new BookmarkablePageLink("editBlog",BlogEntryPage.class, params){
                     
         			private static final long serialVersionUID = 1L;
@@ -99,8 +99,8 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
         listView.setViewSize(displayCount);
         add(listView);
 
-        if (blogEntry == null && blogList.size() > 0){
-        	blogEntry = blogList.get(0);
+        if (blogList.size() > 0){
+        	blogEntry.init(blogList.get(0));
         }
 		add(new Label("blogTitle", new PropertyModel(blogEntry, "title")).setOutputMarkupId(true));
 		add(new DateLabel("date", new PropertyModel(blogEntry, "date" ), new StyleDateConverter("MS",true)).setOutputMarkupId(true));
@@ -110,12 +110,7 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
 	
 	public void changeModel(String blogEntryId){
 		BlogEntry newData = getBlogService().getBlogEntry(blogEntryId);
-		blogEntry.setId(newData.getId());
-		blogEntry.setTitle(newData.getTitle());
-		blogEntry.setDate(newData.getDate());
-		blogEntry.setKeywords(newData.getKeywords());
-		blogEntry.setText(newData.getText());
-		blogEntry.setDescription(newData.getDescription());
+		blogEntry.init(newData);
 		log.debug("changeModel - "+ blogEntry);
 	}
 	

@@ -1,4 +1,4 @@
-package com.madalla.service.cms;
+package com.madalla.service.blog;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -11,28 +11,32 @@ import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.version.VersionException;
 
-import com.madalla.service.blog.BlogEntry;
+import com.madalla.service.cms.IContentData;
 
+/**
+ * Converts Node to BlogEntry and visa versa
+ * 
+ * @author emalan
+ *
+ */
 public class BlogEntryConvertor implements IContentData {
     
     public static BlogEntry createBlogEntry(Node node) throws ValueFormatException, PathNotFoundException, RepositoryException{
     	String blog = node.getParent().getName().replaceFirst(NS,"");
-    	String category = node.getProperty(EC_PROP_CATEGORY).getString();
     	String title = node.getProperty(EC_PROP_TITLE).getString();
     	Date date = node.getProperty(EC_PROP_ENTRYDATE).getDate().getTime();
+    	String category = node.getProperty(EC_PROP_CATEGORY).getString();
+    	String description = node.getProperty(EC_PROP_DESCRIPTION).getString();
+    	String keywords = node.getProperty(EC_PROP_KEYWORDS).getString();
+    	String text = node.getProperty(EC_PROP_CONTENT).getString();
     	
-    	BlogEntry blogEntry = new BlogEntry(blog, category, date, title );
-    	blogEntry.setBlog(blog);
-        blogEntry.setId(node.getPath());
-        blogEntry.setDescription(node.getProperty(EC_PROP_DESCRIPTION).getString());
-        blogEntry.setKeywords(node.getProperty(EC_PROP_KEYWORDS).getString());
-        blogEntry.setText(node.getProperty(EC_PROP_CONTENT).getString());
-        return blogEntry;
+    	return new BlogEntry.Builder(node.getPath(), blog, title, date).
+    	category(category).desription(description).keywords(keywords).text(text).build();
     }
     
     public static void populateNode(Node node, BlogEntry blogEntry) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
         node.setProperty(EC_PROP_CONTENT, blogEntry.getText());
-        node.setProperty(EC_PROP_CATEGORY, blogEntry.getBlogCategory());
+        node.setProperty(EC_PROP_CATEGORY, blogEntry.getCategory());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(blogEntry.getDate());
         node.setProperty(EC_PROP_ENTRYDATE, calendar );
