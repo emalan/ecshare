@@ -15,7 +15,7 @@ public class HTMLParser {
 	private HTMLParser() {}; // prevent instantiation
 
 	public static String parseHTMLText(final String html, final int length) {
-		final MutableInt ret = new MutableInt();
+		final MutableInt endPos = new MutableInt();
 
 		HTMLEditorKit.ParserCallback callback = new HTMLEditorKit.ParserCallback() {
 			private int total;
@@ -28,7 +28,7 @@ public class HTMLParser {
 					System.out.println("pos=" + pos);
 					System.out.println("total=" + total);
 					if (total >= length) {
-						ret.setValue(pos);
+						endPos.setValue(pos);
 						found = true;
 					}
 				}
@@ -43,9 +43,11 @@ public class HTMLParser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		int lastp = StringUtils.lastIndexOf(html, "</p>");
-		int lastP = StringUtils.lastIndexOf(html, "</P>");
+		
+		String result = StringUtils.substring(html, 0, endPos.intValue());
+		int lastp = StringUtils.lastIndexOf(result, "</p>");
+		int lastP = StringUtils.lastIndexOf(result, "</P>");
 
-		return StringUtils.substring(html,0, lastp >= lastP? lastp : lastP);
+		return StringUtils.substring(result,0, lastp >= lastP? lastp : lastP);
 	}
 }

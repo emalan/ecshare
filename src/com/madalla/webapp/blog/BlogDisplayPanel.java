@@ -11,6 +11,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.datetime.StyleDateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
+import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -69,8 +70,8 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
                 listItem.add(textSummary);
 
                 final Component textFull = new Label("textFull", current.getText())
-                	.setEscapeModelStrings(false).setOutputMarkupId(true);
-                //textFull.setVisible(false);
+                	.setEscapeModelStrings(false).setOutputMarkupPlaceholderTag(true);	
+                textFull.setVisible(false);
                 listItem.add(textFull);
                 
                 AjaxFallbackLink link = new AjaxFallbackLink("showFullText"){
@@ -79,11 +80,10 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-						target.addComponent(textSummary);
-						target.addComponent(textFull);
-						textSummary.setVisible(false);
 						textFull.setVisible(true);
-						this.setVisible(false);
+						textSummary.setVisible(false);
+						target.addComponent(textFull);
+						this.setEnabled(false);
 					}
                 	
                 };
