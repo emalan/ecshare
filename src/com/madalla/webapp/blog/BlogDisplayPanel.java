@@ -64,18 +64,6 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
                 listItem.add(new DateLabel("date", new Model(current.getDate()), new StyleDateConverter("MS",true)));
                 listItem.add(new Label("keywords", new Model(current.getKeywords())));
 
-                //more... link for single BlogDisplay
-//                IBehavior behavior = new AjaxEventBehavior("onclick") {
-//                	@Override
-//					protected void onEvent(AjaxRequestTarget target) {
-//						// TODO Auto-generated method stub
-//						
-//					}
-//                };
-//                
-//                CharSequence url = urlFor(behavior,Link.INTERFACE);
-//                log.debug("populateItem - url="+url);
-                
                 final Component textSummary = new Label("textSummary", current.getSummary()).
                 	setEscapeModelStrings(false).setOutputMarkupId(true);
                 listItem.add(textSummary);
