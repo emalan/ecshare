@@ -6,13 +6,14 @@ import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
+import com.madalla.util.ui.HTMLParser;
 import com.madalla.util.ui.ITreeInput;
 
 public class BlogEntry implements Serializable, Comparable<BlogEntry>, ITreeInput{
 
 	private static final long serialVersionUID = -7829797397130212868L;
 
-	private final static int summaryLength = 200;
+	private final static int summaryLength = 500;
     
     private String id; //immutable
     private String blog; //immutable
@@ -137,15 +138,8 @@ public class BlogEntry implements Serializable, Comparable<BlogEntry>, ITreeInpu
             return text;
         }
         
-        //Shorten text and add more link
-        String firstParagraph = StringUtils.substringBefore(StringUtils.substringBefore(text,"</p>"),"</P>")+"</p>";
-        if (summaryLength >= firstParagraph.length()){ //too small
-            
-        } else { // too big
-        	//TODO split on " " and add </p>
-        	String[] words = StringUtils.split(firstParagraph,' ');
-        }
-        return firstParagraph;
+        return HTMLParser.parseHTMLText(text, summaryLength);
+        
     }
 
     public String getSummary(String moreLink){
