@@ -4,12 +4,16 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.datetime.StyleDateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -73,10 +77,27 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
 //                
 //                CharSequence url = urlFor(behavior,Link.INTERFACE);
 //                log.debug("populateItem - url="+url);
-                String url = "";
-                String htmlLink = "... <a href=\"";// + url + "\">"+getString("label.more")+"</a>";
                 
-                listItem.add(new Label("textSummary", current.getSummary(htmlLink)).setEscapeModelStrings(false));
+                Component textSummary = new Label("textSummary").setEscapeModelStrings(false).setOutputMarkupId(true);
+                
+                AjaxFallbackLink link = new AjaxFallbackLink("temp"){
+
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						// TODO Auto-generated method stub
+						
+					}
+                	
+                };
+                //CharSequence url = urlFor(link.);
+
+                String script = "javascript:ecHide("+textSummary.getMarkupId()+");";
+                String htmlLink = "... <a href=\"" + script + "\">"+getString("label.more")+"</a>";
+                textSummary.setModel(new Model(current.getSummary(htmlLink)));
+                
+                //target.appendJavascript("ECPopupWindow.showPopupWindow('signInPanel','Logon to enter Admin Mode')");
+                
+                listItem.add(textSummary);
                 listItem.add(new Label("textFull", current.getText()).setEscapeModelStrings(false));
                 
                 PageParameters params = new PageParameters(RETURN_PAGE+"="+returnPage.getName()+","+BLOG_ENTRY_ID+"="+current.getId()+","+BLOG_NAME+"="+blog);

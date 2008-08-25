@@ -60,7 +60,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             blogEntry.setBlog(blogName);
             log.debug("Created new Blog Entry");
         } else {
-            blogEntry.init(getBlogService().getBlogEntry(blogName));
+            blogEntry.init(getBlogService().getBlogEntry(blogEntryId));
             log.debug("Retrieved Blog Entry from Service."+blogEntry);
         }
         
