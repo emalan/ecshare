@@ -27,8 +27,8 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 	private final static String CONTENT_PARENT = "testParentNode";
 	private final static String CONTENT_TEXT = "Content text";
 	
-	protected List getTestConfigLocations() {
-		List configLocations = new ArrayList();
+	protected List<String> getTestConfigLocations() {
+		List<String> configLocations = new ArrayList<String>();
 		configLocations.add("classpath:com/madalla/service/cms/applicationContext-cms.xml");
         configLocations.add("classpath:com/madalla/util/jcr/model/applicationContext-jcr-local.xml");
         
@@ -69,9 +69,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     }
     
     public void testContentGetSet() throws RepositoryException{
-    	Content content = new Content();
-    	content.setContentId(CONTENT_ID);
-    	content.setPageName(CONTENT_PARENT);
+    	Content content = new Content(CONTENT_PARENT,CONTENT_ID );
     	content.setText(CONTENT_TEXT);
     	contentService.setContent(content);
     	
@@ -81,9 +79,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
     public void testContentGetSetLocale() throws RepositoryException{
     	String french = CONTENT_TEXT + "french stuff";
-    	Content content = new Content();
-    	content.setContentId(CONTENT_ID);
-    	content.setPageName(CONTENT_PARENT);
+    	Content content = new Content(CONTENT_PARENT, CONTENT_ID);
     	content.setText(french);
     	contentService.setContent(content, Locale.FRENCH);
     	

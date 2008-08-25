@@ -5,18 +5,21 @@ import java.io.Serializable;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 public class Content implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private String pageName;
-    private String contentId;
+	private static final long serialVersionUID = 1228074714351585867L;
+	private final String pageName;
+    private final String contentId;
     private String text;
-    public void setPageName(String className) {
-        this.pageName = className;
+    
+    /**
+     * @param pageName
+     * @param contentId
+     */
+    public Content(final String pageName, final String contentId){
+    	this.pageName = pageName;
+    	this.contentId = contentId;
     }
     public String getPageName() {
         return pageName;
-    }
-    public void setContentId(String contentId) {
-        this.contentId = contentId;
     }
     public String getContentId() {
         return contentId;

@@ -21,7 +21,7 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 	private Component nodePath;
 	private Component contentDisplay;
 	private Content copiedContent;
-	private Content content = new Content();
+	private String contentText = "" ;
 	private String path = "";
 	
 	public ContentDisplayPanel(String name) {
@@ -45,8 +45,7 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 
 			@Override
 			public Object getObject() {
-				// TODO Auto-generated method stub
-				return content.getText();
+				return contentText;
 			}
 			
 		};
@@ -137,7 +136,7 @@ public class ContentDisplayPanel extends Panel implements IContentData{
 		
 		if (getContentService().isContentNode(path)){
 			contentDisplay.modelChanging();
-			content = getContentService().getContent(path);
+			contentText = getContentService().getContent(path).getText();
 			contentDisplay.modelChanged();
 		}
 	}

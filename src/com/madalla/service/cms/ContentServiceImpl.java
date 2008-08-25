@@ -141,8 +141,8 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
         return (Content) template.execute(new JcrCallback(){
             public Content doInJcr(Session session) throws IOException, RepositoryException {
                 Node node = (Node) session.getItem(path);
-                Content content = new Content();
-                content.setContentId(node.getName());
+                String pageName = node.getParent().getName().replaceFirst(NS,"");
+                Content content = new Content(pageName, node.getName());
                 content.setText(node.getProperty(EC_PROP_CONTENT).getString());
                 return content;
             }

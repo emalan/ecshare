@@ -4,6 +4,7 @@ import javax.jcr.RepositoryException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.form.Button;
@@ -30,37 +31,39 @@ public class ContentEntryPanel extends Panel implements IContentAware {
     private static final CompressedResourceReference JAVASCRIPT = new CompressedResourceReference(
             ContentEntryPanel.class, "ContentEntryPanel.js");
     Log log = LogFactory.getLog(this.getClass());
-    private final Content content = new Content();
-    private Class contentPage;
 
-    public ContentEntryPanel(String name, final PageParameters parameters) {
+    private Class<? extends Page> contentPage;
+    private final String nodeName;
+    private final String contentId;
+    private String text;
+
+	public ContentEntryPanel(String name, final PageParameters parameters) {
         super(name);
-        String nodeName = parameters.getString(CONTENT_NODE);
-        String id = parameters.getString(CONTENT_ID);
+        nodeName = parameters.getString(CONTENT_NODE);
+        contentId = parameters.getString(CONTENT_ID);
         String returnPage = parameters.getString(CONTENT_PAGE);
         try {
-            this.contentPage = Class.forName(returnPage);
+            this.contentPage = (Class<? extends Page>) Class.forName(returnPage);
         } catch (ClassNotFoundException e) {
             log.error("constructor - Exception while getting return Class.", e);
+        } catch (ClassCastException e) {
+        	log.error("constructor - Exception while casting return Class.", e);
         }
         add(HeaderContributor.forJavaScript(TinyMce.class, "tiny_mce.js"));
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
 
-        content.setPageName(nodeName);
-        content.setContentId(id);
-
         IContentService service = ((IContentServiceProvider) getApplication()).getContentService();
-        String text = service.getContentData(content.getPageName(), content.getContentId(), getSession().getLocale());
-        add(new ContentForm("contentForm", text));
+        text = service.getContentData(nodeName, contentId, getSession().getLocale());
+        add(new ContentForm("contentForm"));
     }
 
     final class ContentForm extends Form {
         private static final long serialVersionUID = -3526743712542402160L;
 
-        public ContentForm(final String name, String text) {
+        public ContentForm(final String name) {
             super(name);
-            content.setText(text);
-            add(new TextArea("text", new PropertyModel(content, "text")));
+            //content.setText(text);
+            add(new TextArea("text", new PropertyModel(this, "text")));
             add(new FeedbackPanel("feedback"));
 
             Button cancelButton = new Button("cancelButton") {
@@ -73,22 +76,22 @@ public class ContentEntryPanel extends Panel implements IContentAware {
             cancelButton.setDefaultFormProcessing(false);
             add(cancelButton);
             
-            Button explore = new Button("exploreButton"){
-                private static final long serialVersionUID = 1L;
-
-                public void onSubmit() {
-                    setResponsePage(contentPage);
-                }
-            };
         }
-
+        public String getText() {
+    		return text;
+    	}
+        public void setText(String val){
+        	text = val;
+        }
         public void onSubmit() {
-            log.debug("Submiting populated Content object to Content service. content=" + content);
+            log.debug("Submiting populated Content object to Content service.");
             try {
                 IContentService service = ((IContentServiceProvider) getPage().getApplication()).getContentService();
+                Content content = new Content(nodeName, contentId);
+                content.setText(text);
                 service.setContent(content, getSession().getLocale());
                 info("Content saved to repository");
-                log.info("Content successfully saved to repository. content=" + content);
+                log.debug("Content successfully saved to repository. content=" + content);
                 setResponsePage(contentPage);
             } catch (RepositoryException e) {
                 info("There was a problem saving content. " + e.getMessage());
