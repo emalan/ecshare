@@ -9,6 +9,7 @@ import junit.framework.TestCase;
 import org.easymock.MockControl;
 
 import com.madalla.dao.blog.BlogDao;
+import com.madalla.service.cms.BlogEntry;
 import com.madalla.service.cms.IContentService;
 
 public class BlogServiceTest extends TestCase{

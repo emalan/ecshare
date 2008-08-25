@@ -1,4 +1,4 @@
-package com.madalla.service.blog;
+package com.madalla.service.cms;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -11,7 +11,6 @@ import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.version.VersionException;
 
-import com.madalla.service.cms.IContentData;
 
 /**
  * Converts Node to BlogEntry and visa versa
@@ -19,7 +18,7 @@ import com.madalla.service.cms.IContentData;
  * @author emalan
  *
  */
-public class BlogEntryConvertor implements IContentData {
+class BlogEntryConvertor implements IContentData {
     
     public static BlogEntry createBlogEntry(Node node) throws ValueFormatException, PathNotFoundException, RepositoryException{
     	String blog = node.getParent().getName().replaceFirst(NS,"");

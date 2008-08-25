@@ -5,7 +5,6 @@ import java.util.Locale;
 
 import javax.jcr.RepositoryException;
 
-import com.madalla.service.blog.BlogEntry;
 
 
 public interface IContentService {

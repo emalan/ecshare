@@ -14,7 +14,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import com.madalla.service.blog.BlogCategory;
-import com.madalla.service.blog.BlogEntry;
+import com.madalla.service.cms.BlogEntry;
 
 public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao, Serializable{
 	private static final long serialVersionUID = 5574089597621630838L;

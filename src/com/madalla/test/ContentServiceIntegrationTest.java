@@ -13,7 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.tree.LinkTree;
 
-import com.madalla.service.blog.BlogEntry;
+import com.madalla.service.cms.BlogEntry;
 import com.madalla.service.cms.Content;
 import com.madalla.service.cms.IContentAdminService;
 import com.madalla.service.cms.IContentService;

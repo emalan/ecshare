@@ -1,4 +1,4 @@
-package com.madalla.service.blog;
+package com.madalla.service.cms;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -127,8 +127,8 @@ public class BlogEntry implements Serializable, Comparable<BlogEntry>, ITreeInpu
     public void setText(String text) {
         this.text = text;
     }
-
-    public String getSummary(String moreLink){
+    
+    public String getSummary(){
         if (StringUtils.isEmpty(text)){
             return text;
         }
@@ -145,7 +145,11 @@ public class BlogEntry implements Serializable, Comparable<BlogEntry>, ITreeInpu
         	//TODO split on " " and add </p>
         	String[] words = StringUtils.split(firstParagraph,' ');
         }
-        return firstParagraph+moreLink;
+        return firstParagraph;
+    }
+
+    public String getSummary(String moreLink){
+        return getSummary()+moreLink;
     }
     
     public String toString() {

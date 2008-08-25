@@ -13,6 +13,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 
 public class CalendarUtils {
+	//TODO Refactor to use Joda time - class not thread safe
     private static DateFormat df = new SimpleDateFormat("MMMMM yyyy");
 
 	public static TreeModel createMonthlyTree(String rootTitle, List list){

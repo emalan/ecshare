@@ -8,7 +8,7 @@ import javax.jcr.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class AbstractContentService implements IContentData {
+class AbstractContentService implements IContentData {
 
 	private final Log log = LogFactory.getLog(this.getClass());
 	

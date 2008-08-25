@@ -3,7 +3,7 @@ package com.madalla.dao.blog;
 import java.util.List;
 
 import com.madalla.service.blog.BlogCategory;
-import com.madalla.service.blog.BlogEntry;
+import com.madalla.service.cms.BlogEntry;
 
 public interface BlogDao {
 

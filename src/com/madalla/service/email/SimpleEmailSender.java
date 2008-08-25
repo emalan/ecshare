@@ -56,41 +56,20 @@ public class SimpleEmailSender implements IEmailSender, Serializable {
         return true;
     }
     
-
-    public String getEmailFromEmail() {
-        return emailFromEmail;
-    }
-
     public void setEmailFromEmail(String emailFromEmail) {
         this.emailFromEmail = emailFromEmail;
-    }
-
-    public String getEmailFromName() {
-        return emailFromName;
     }
 
     public void setEmailFromName(String emailFromName) {
         this.emailFromName = emailFromName;
     }
 
-    public String getEmailHost() {
-        return emailHost;
-    }
-
     public void setEmailHost(String emailHost) {
         this.emailHost = emailHost;
     }
 
-    public String getEmailToEmail() {
-        return emailToEmail;
-    }
-
     public void setEmailToEmail(String emailToEmail) {
         this.emailToEmail = emailToEmail;
-    }
-
-    public String getEmailToName() {
-        return emailToName;
     }
 
     public void setEmailToName(String emailToName) {
@@ -109,16 +88,8 @@ public class SimpleEmailSender implements IEmailSender, Serializable {
         return sb.toString();
     }
 
-    public String getMailAuthName() {
-        return mailAuthName;
-    }
-
     public void setMailAuthName(String mailAuthName) {
         this.mailAuthName = mailAuthName;
-    }
-
-    public String getMailAuthPassword() {
-        return mailAuthPassword;
     }
 
     public void setMailAuthPassword(String mailAuthPassword) {

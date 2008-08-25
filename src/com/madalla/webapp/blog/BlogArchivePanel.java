@@ -21,9 +21,9 @@ import org.apache.wicket.markup.html.tree.LinkTree;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import com.madalla.service.blog.BlogEntry;
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
+import com.madalla.service.cms.BlogEntry;
 import com.madalla.util.ui.ITreeInput;
 
 public class BlogArchivePanel extends Panel {

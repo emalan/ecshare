@@ -13,26 +13,25 @@ import org.apache.wicket.datetime.StyleDateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-import com.madalla.service.blog.BlogEntry;
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
+import com.madalla.service.cms.BlogEntry;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.BlogEntryPage;
 
 public class BlogDisplayPanel extends Panel implements IBlogAware{
 	private static final long serialVersionUID = 1L;
-	private Log log = LogFactory.getLog(this.getClass());
-	private int displayCount = 5;
-	private BlogEntryView blogEntry = new BlogEntryView();
+	private final Log log = LogFactory.getLog(this.getClass());
+	private static final int displayCount = 5;
+	private final BlogEntryView blogEntry = new BlogEntryView();
 	
-	public BlogDisplayPanel(String id, final String blog, final Class<? extends Page> returnPage) {
+	public BlogDisplayPanel(final String id, final String blog, final Class<? extends Page> returnPage) {
 		super(id);
 		
 		final boolean adminMode = ((CmsSession)getSession()).isCmsAdminMode();
@@ -54,10 +53,9 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
         });
 		
         log.debug("construtor - retrieving blog entries from service.");
-        IBlogService service = getBlogService();
-        List<BlogEntry> blogList = service.getBlogEntries(blog);
+        List<BlogEntry> blogList = getBlogService().getBlogEntries(blog);
         log.debug("construtor - retrieved blog entries. count="+blogList.size());
-        ListView listView = new ListView("comments", blogList) {
+        final ListView listView = new ListView("comments", blogList) {
 			private static final long serialVersionUID = 1L;
 
 			public void populateItem(final ListItem listItem) {
@@ -78,27 +76,35 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
 //                CharSequence url = urlFor(behavior,Link.INTERFACE);
 //                log.debug("populateItem - url="+url);
                 
-                Component textSummary = new Label("textSummary").setEscapeModelStrings(false).setOutputMarkupId(true);
+                final Component textSummary = new Label("textSummary", current.getSummary()).
+                	setEscapeModelStrings(false).setOutputMarkupId(true);
+                listItem.add(textSummary);
+
+                final Component textFull = new Label("textFull", current.getText())
+                	.setEscapeModelStrings(false).setOutputMarkupId(true);
+                //textFull.setVisible(false);
+                listItem.add(textFull);
                 
-                AjaxFallbackLink link = new AjaxFallbackLink("temp"){
+                AjaxFallbackLink link = new AjaxFallbackLink("showFullText"){
+
+					private static final long serialVersionUID = 8535809673244662238L;
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-						// TODO Auto-generated method stub
-						
+						target.addComponent(textSummary);
+						target.addComponent(textFull);
+						textSummary.setVisible(false);
+						textFull.setVisible(true);
+						this.setVisible(false);
 					}
                 	
                 };
-                //CharSequence url = urlFor(link.);
+                listItem.add(link);
 
-                String script = "javascript:ecHide("+textSummary.getMarkupId()+");";
-                String htmlLink = "... <a href=\"" + script + "\">"+getString("label.more")+"</a>";
-                textSummary.setModel(new Model(current.getSummary(htmlLink)));
+                //String script = "#";
+                //String htmlLink = "... <a href=\"" + script + "\">"+getString("label.more")+"</a>";
+                //textSummary.setModel(new Model(current.getSummary(htmlLink)));
                 
-                //target.appendJavascript("ECPopupWindow.showPopupWindow('signInPanel','Logon to enter Admin Mode')");
-                
-                listItem.add(textSummary);
-                listItem.add(new Label("textFull", current.getText()).setEscapeModelStrings(false));
                 
                 PageParameters params = new PageParameters(RETURN_PAGE+"="+returnPage.getName()+","+BLOG_ENTRY_ID+"="+current.getId()+","+BLOG_NAME+"="+blog);
                 listItem.add(new BookmarkablePageLink("editBlog",BlogEntryPage.class, params){

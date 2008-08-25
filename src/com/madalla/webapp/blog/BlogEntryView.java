@@ -3,7 +3,7 @@ package com.madalla.webapp.blog;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.madalla.service.blog.BlogEntry;
+import com.madalla.service.cms.BlogEntry;
 
 public class BlogEntryView implements Serializable{
 
