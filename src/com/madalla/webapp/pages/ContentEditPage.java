@@ -10,6 +10,7 @@ public class ContentEditPage extends AdminPage {
 	private static final long serialVersionUID = -264932041802936603L;
 
 	public ContentEditPage(final PageParameters parameters){
+		super();
 		add(new ContentEntryPanel("contentEntryPanel",parameters ));
 	}
 }

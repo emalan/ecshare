@@ -5,16 +5,51 @@
         <meta name="AUTHOR" content="Eugene Malan"  />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"  />
         <style type="text/css">
+            body {
+            	text-align: center;
+            	min-width:740px;
+            }
+        	#topbar {
+				background:#0022CC none repeat-x scroll left bottom;
+				color:#FFFFFF;
+				font-family:"Trebuchet MS",arial,helvetica,sans-serif;
+				left:0pt;
+				position:absolute;
+				top:0pt;
+				width:100%;
+				text-align: left;
+			}
+			#topbar p{ 
+			    padding-left: 30px;
+				font-weight: bold;
+				font-size: larger;
+				font-stretch: wider;
+			}
+			#wrapper {
+			    margin-left: auto;
+			    margin-right: auto;
+			    margin-top : 80px;
+			    position: relative;
+			    text-align: left;
+			    width: 80%;
+			}
             #footer {clear:both; width:100%;}
+        
+        
         </style>
+        
     </wicket:head>
 </head>
 <body>
     <wicket:border>
     
-    <h1>Content Administration</h1>
+    <div id="topbar">
+        <h2>Content Administration</h2>
+    </div>div>
     
-    <wicket:body/>
+    <div id="wrapper">
+    	<wicket:body/>
+    </div>
     
     <div id="footer">
         Unless otherwise indicated, all contents of this site are copyright Eugene Malan.  All Rights Reserved.
