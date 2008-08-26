@@ -20,10 +20,12 @@ public abstract class CmsBlogApplication extends WebApplication implements ICont
 
     
     protected void init() {
-        
         getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
         //getMarkupSettings().setStripWicketTags(true);
-        
+        setupSecurity();
+    }
+    
+    protected void setupSecurity(){
         SimplePageAuthorizationStrategy authorizationStrategy = new SimplePageAuthorizationStrategy(
                 ISecureWebPage.class, getHomePage()) {
             protected boolean isAuthorized() {
