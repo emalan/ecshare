@@ -9,9 +9,9 @@ import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.datetime.StyleDateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
-import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -29,7 +29,7 @@ import com.madalla.webapp.pages.BlogEntryPage;
 public class BlogDisplayPanel extends Panel implements IBlogAware{
 	private static final long serialVersionUID = 1L;
 	private final Log log = LogFactory.getLog(this.getClass());
-	private static final int displayCount = 5;
+	private static final int displayCount = 7;
 	private final BlogEntryView blogEntry = new BlogEntryView();
 	
 	public BlogDisplayPanel(final String id, final String blog, final Class<? extends Page> returnPage) {
@@ -56,6 +56,8 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
         log.debug("construtor - retrieving blog entries from service.");
         List<BlogEntry> blogList = getBlogService().getBlogEntries(blog);
         log.debug("construtor - retrieved blog entries. count="+blogList.size());
+        
+        //ListView repeater
         final ListView listView = new ListView("comments", blogList) {
 			private static final long serialVersionUID = 1L;
 
@@ -70,8 +72,7 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
                 listItem.add(textSummary);
 
                 final Component textFull = new Label("textFull", current.getText())
-                	.setEscapeModelStrings(false).setOutputMarkupPlaceholderTag(true);	
-                textFull.setVisible(false);
+                	.setEscapeModelStrings(false).setOutputMarkupId(true);	
                 listItem.add(textFull);
                 
                 AjaxFallbackLink link = new AjaxFallbackLink("showFullText"){
@@ -80,10 +81,12 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-						textFull.setVisible(true);
-						textSummary.setVisible(false);
 						target.addComponent(textFull);
-						this.setEnabled(false);
+						target.addComponent(textSummary);
+						textSummary.add(new SimpleAttributeModifier("class","blogTextHide"));
+						textFull.add(new SimpleAttributeModifier("class","blogText"));
+						
+						//this.setEnabled(false);
 					}
                 	
                 };

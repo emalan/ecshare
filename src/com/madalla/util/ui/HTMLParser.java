@@ -9,8 +9,12 @@ import javax.swing.text.html.parser.ParserDelegator;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.mutable.MutableInt;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class HTMLParser {
+	
+	private final static Log log = LogFactory.getLog(HTMLParser.class);
 
 	private HTMLParser() {}; // prevent instantiation
 
@@ -23,10 +27,10 @@ public class HTMLParser {
 
 			public void handleText(char[] data, int pos) {
 				if (!found) {
+					log.debug("---------handleText---------");
+					log.debug("handleText - text="+String.valueOf(data));
 					total += data.length;
-					System.out.println(data);
-					System.out.println("pos=" + pos);
-					System.out.println("total=" + total);
+					log.debug("handleText - pos="+pos+" total="+total);
 					if (total >= length) {
 						endPos.setValue(pos);
 						found = true;
@@ -41,13 +45,23 @@ public class HTMLParser {
 			new ParserDelegator().parse(reader, callback, false);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("parseHTMLText - Exception. "+e.getMessage());
+			return html;
 		}
-		
-		String result = StringUtils.substring(html, 0, endPos.intValue());
-		int lastp = StringUtils.lastIndexOf(result, "</p>");
-		int lastP = StringUtils.lastIndexOf(result, "</P>");
 
-		return StringUtils.substring(result,0, lastp >= lastP? lastp : lastP);
+		log.debug("parseHTMLText - Using pos="+endPos);
+		String result;
+		if (endPos.intValue() > 0){
+			result = StringUtils.substring(html, 0, endPos.intValue());
+		} else {
+			result = html;
+		}
+		log.debug("parseHTMLText - result="+result);
+		int lastp = StringUtils.lastIndexOf(result, "</p>")+4;
+		int lastP = StringUtils.lastIndexOf(result, "</P>")+4;
+
+		String ret = StringUtils.substring(result,0, lastp >= lastP? lastp : lastP);
+		log.debug("parseHTMLText - result trimmed to last <P>="+ret);
+		return ret;
 	}
 }
