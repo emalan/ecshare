@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 public class StartUtils {
 
-    public static void setLogLevel(){
+    public static void setLogLevelToDebug(){
     	Logger root = Logger.getRootLogger();
     	ConsoleAppender appender = (ConsoleAppender)root.getAppender("STDOUT");
     	appender.setThreshold(Level.DEBUG);

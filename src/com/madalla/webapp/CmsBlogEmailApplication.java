@@ -1,5 +1,9 @@
 package com.madalla.webapp;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.WicketRuntimeException;
+
 import com.madalla.service.email.IEmailSender;
 import com.madalla.service.email.IEmailServiceProvider;
 
@@ -11,7 +15,16 @@ import com.madalla.service.email.IEmailServiceProvider;
  */
 public abstract class CmsBlogEmailApplication extends CmsBlogApplication implements IEmailServiceProvider {
 
+	private final static Log log = LogFactory.getLog(CmsBlogEmailApplication.class);
 	private IEmailSender emailSender;
+	
+	protected void init() {
+		super.init();
+    	if (emailSender == null){
+    		log.fatal("Email Sender is not configured Correctly.");
+    		throw new WicketRuntimeException("Service is not configured Correctly.");
+    	}
+	}
 	
     public IEmailSender getEmailSender() {
         return emailSender;

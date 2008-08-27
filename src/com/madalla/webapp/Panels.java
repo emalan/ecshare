@@ -1,6 +1,8 @@
 package com.madalla.webapp;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Page;
+import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import com.madalla.webapp.blog.BlogHomePanel;
@@ -38,8 +40,12 @@ public class Panels {
 	 * @param blog - Name of this Blog
 	 * @param returnPage - used to return from blog admin Page
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.blog.BlogHomePanel}
+	 * @throws InstantiationException 
 	 */
-	public static Panel blogPanel(String id, String blog, Class<? extends Page> returnPage){
+	public static Panel blogPanel(String id, String blog, Class<? extends Page> returnPage) {
+		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(blog)|| returnPage == null){
+			throw new WicketRuntimeException("BlogHomePanel - All paramaters need to be supplied.");
+		}
 		return new BlogHomePanel(id, blog, returnPage);
 	}
 	

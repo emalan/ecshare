@@ -1,7 +1,10 @@
 package com.madalla.webapp;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Session;
+import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.authorization.strategies.page.SimplePageAuthorizationStrategy;
 import org.apache.wicket.protocol.http.WebApplication;
 
@@ -24,12 +27,29 @@ public abstract class CmsBlogApplication extends WebApplication implements ICont
     private IContentService contentService;
     private IBlogService blogService;
     private IContentAdminService contentAdminService;
-
+    private final static Log log = LogFactory.getLog(CmsBlogEmailApplication.class);
     
     protected void init() {
-        getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
+    	//initialization checks
+    	if (contentService == null){
+    		log.fatal("Content Service is not configured Correctly.");
+    		throw new WicketRuntimeException("Service is not configured Correctly.");
+    	}
+    	if (blogService == null){
+    		log.fatal("Blog Service is not configured Correctly.");
+    		throw new WicketRuntimeException("Service is not configured Correctly.");
+    	}
+    	if (contentAdminService == null){
+    		log.fatal("Content Admin Service is not configured Correctly.");
+    		throw new WicketRuntimeException("Service is not configured Correctly.");
+    	}
+        setupApplicationSpecificConfiguration();
+    }
+    
+    protected void setupApplicationSpecificConfiguration(){
+    	getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
+    	setupSecurity();
         //getMarkupSettings().setStripWicketTags(true);
-        setupSecurity();
     }
     
     protected void setupSecurity(){
