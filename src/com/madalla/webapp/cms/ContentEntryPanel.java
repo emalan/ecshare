@@ -23,7 +23,7 @@ import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 /**
  * The Wicket application must implement the IContentServiceProvider interface
  * 
- * @author exmalan
+ * @author Eugene Malan
  * 
  */
 public class ContentEntryPanel extends Panel implements IContentAware {

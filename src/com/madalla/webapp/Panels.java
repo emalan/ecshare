@@ -15,7 +15,7 @@ import com.madalla.webapp.email.EmailFormPanel;
  * NOTE: Your Wicket Application needs to extend the {@link CmsBlogApplication} or 
  * the {@link CmsBlogEmailAppplication} before you can use these Panels
  * 
- * @author exmalan
+ * @author Eugene Malan
  *
  */
 public class Panels {

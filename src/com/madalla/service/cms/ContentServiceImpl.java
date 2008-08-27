@@ -20,30 +20,32 @@ import org.springmodules.jcr.JcrTemplate;
 
 
 /**
- * Content Service Implementation for JCR Content Reository
- * 
+ * Content Service Implementation for JCR Content Repository
+ * <p>
  * This class is aware of the structure of the data in the repository 
  * and will create the structure if it does not exist. The schema is
  * open and not enforced by the repository. This class is reponsible
  * for creating the structure and fetching the data. 
- * 
+ * <p>
+ * <pre>
  *            ec:apps 
  *         -----|---------------------------------------                 
  *        |             |                               |
- *     <ec:site1>   <ec:site2>                       <ec:site3>
+ *     [ec:site1]   [ec:site2]                       [ec:site3]
  *                      |-------------------------
  *                      |                         |
  *                    ec:pages                 ec:blogs
  *              --------|----------               |----------------  
  *             |        |          |              |                |
- *        <ec:page1> <ec:page2> <ec:page3>    <ec:mainBlog>    <ec:otherBlog>
+ *        [ec:page1] [ec:page2] [ec:page3]    [ec:mainBlog]    [ec:otherBlog]
  *                      |                            ---------------
  *                   ec:content                     |               |
- *       ---------------|-----------           <ec:blogEntry1>  <ec:blogEntry2>
+ *       ---------------|-----------           [ec:blogEntry1]  [ec:blogEntry2]
  *      |               |           |
- * <ec:para1>   <ec:para2>    <ec:block1>
+ * [ec:para1]   [ec:para2]    [ec:block1]
+ * </pre>
  * 
- * @author exmalan
+ * @author Eugene Malan
  *
  */
 public class ContentServiceImpl extends AbstractContentService implements IContentService, Serializable {
