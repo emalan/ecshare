@@ -27,7 +27,7 @@ public abstract class CmsBlogApplication extends WebApplication implements ICont
     private IContentService contentService;
     private IBlogService blogService;
     private IContentAdminService contentAdminService;
-    private final static Log log = LogFactory.getLog(CmsBlogEmailApplication.class);
+    private final static Log log = LogFactory.getLog(CmsBlogApplication.class);
     
     protected void init() {
     	//initialization checks
