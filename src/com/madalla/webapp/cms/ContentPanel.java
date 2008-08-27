@@ -29,9 +29,8 @@ public class ContentPanel extends Panel implements IContentAware {
     /**
      * 
      * @param id
-     * @param contentEditPage
-     * @param contentService
-     * @param contentAdmin
+     * @param node
+     * @param returnPage
      */
     public ContentPanel(String id, String node, Class<? extends Page> returnPage) {
         super(id);

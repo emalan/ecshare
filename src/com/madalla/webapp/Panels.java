@@ -13,7 +13,7 @@ import com.madalla.webapp.email.EmailFormPanel;
  * place for getting Panels.
  * 
  * NOTE: Your Wicket Application needs to extend the {@link CmsBlogApplication} or 
- * the {@link CmsBlogEmailAppplication} before you can use these Panels
+ * the {@link CmsBlogEmailApplication} before you can use these Panels
  * 
  * @author Eugene Malan
  *
@@ -26,9 +26,7 @@ public class Panels {
 	 * @param id - wicket id
 	 * @param node - Content Parent Node, normally Page Name
 	 * @param returnPage - used to return back from editing Content
-	 * @param contentEditPage - used to link to the Content Edit Page
-	 * @param contentAdmin - used to link to the Content Admin Page
-	 * @return
+	 * @return Instantiated Panel of Type {@link com.madalla.webapp.cms.ContentPanel}
 	 */
 	public static Panel contentPanel(String id, String node, Class<? extends Page> returnPage){
 		return new ContentPanel(id, node, returnPage);
@@ -39,7 +37,7 @@ public class Panels {
 	 * @param id - wicket id
 	 * @param blog - Name of this Blog
 	 * @param returnPage - used to return from blog admin Page
-	 * @return
+	 * @return Instantiated Panel of Type {@link com.madalla.webapp.blog.BlogHomePanel}
 	 */
 	public static Panel blogPanel(String id, String blog, Class<? extends Page> returnPage){
 		return new BlogHomePanel(id, blog, returnPage);
@@ -48,8 +46,7 @@ public class Panels {
 	/**
 	 * @param id - wicket id
 	 * @param subject
-	 * @param emailSender
-	 * @return
+	 * @return Instantiated Panel of Type {@link com.madalla.webapp.email.EmailFormPanel}
 	 */
 	public static Panel emailPanel(String id, String subject){
 		return new EmailFormPanel(id, subject);

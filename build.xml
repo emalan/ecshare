@@ -12,7 +12,7 @@
 		<pathelement location="resources"/>
 	</path>
 	
-	<path id="javadoc.classpath">
+	<path id="build.main.classes">
 		<fileset dir="wicket">
 			<include name="**/*.jar"></include>
 		</fileset>
@@ -65,7 +65,7 @@
 			overview="src/overview.html"
 			version="true"
 			sourcepathref="javadoc.srcpath"
-			classpathref="javadoc.classpath"
+			classpathref="build.main.classes"
 		/>
 	</target>
 	
@@ -77,7 +77,7 @@
 			<formatter type="xml" />
 			<formatter type="plain" usefile="false" />
 			<classpath>
-				<path refid="build.classpath"></path>
+				<path refid="javadoc.classpath"></path>
 				<pathelement path="${build.main.classes}" />
 				<pathelement path="${build.test.classes}" />
 			</classpath>
