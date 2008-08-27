@@ -16,9 +16,6 @@
 
 	<property name="build.dir" value="target" />
 	<property name="build.main.classes" value="${build.dir}/classes" />
-	<property name="build.test.classes" value="${build.dir}/test-classes" />
-	<property name="build.test.reports" value="${build.dir}/test-reports" />
-	<property name="build.javadoc.dir" value="${build.dir}/docs/api" />
 
 	<property name="src.share.dir" value="${share.dir}/src" />
 	<property name="src.share.resources" value="${share.dir}/resources" />
@@ -31,7 +28,6 @@
 	<target name="init" description="o Creates all directories for building">
 		<mkdir dir="${build.dir}" />
 	</target>
-	
 	
 	<target name="compile" depends="init,clean" description="o Compiles the Java sources">
 		<mkdir dir="${build.main.classes}" />

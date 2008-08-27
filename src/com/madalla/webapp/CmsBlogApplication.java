@@ -12,6 +12,13 @@ import com.madalla.service.cms.IContentAdminServiceProvider;
 import com.madalla.service.cms.IContentService;
 import com.madalla.service.cms.IContentServiceProvider;
 
+/**
+ * Abstract Wicket Application class that needs to extended to enable usage 
+ * of the Wicket {@link Panels} provided by the Panels class.
+ *  
+ * @author exmalan
+ *
+ */
 public abstract class CmsBlogApplication extends WebApplication implements IContentServiceProvider, IBlogServiceProvider, IContentAdminServiceProvider {
 
     private IContentService contentService;

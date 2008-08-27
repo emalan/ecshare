@@ -1,6 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="ec-share-lib" basedir=".">
+
+	<property name="build.dir" value="target" />
+	<property name="build.javadoc.dir" value="${build.dir}/docs/api" />
+	<property name="build.main.classes" value="${build.dir}/classes" />
+	<property name="build.test.classes" value="${build.dir}/test-classes" />
+	<property name="build.test.reports" value="${build.dir}/test-reports" />
 	
+	<path id="javadoc.srcpath">
+	    <pathelement location="src"/>
+		<pathelement location="resources"/>
+	</path>
+	
+	<path id="javadoc.classpath">
+		<fileset dir="wicket">
+			<include name="**/*.jar"></include>
+		</fileset>
+		<fileset dir="jackrabbit">
+			<include name="**/*.jar"></include>
+		</fileset>
+		<fileset dir="spring">
+			<include name="**/*.jar"></include>
+		</fileset>
+		<fileset dir="common">
+			<include name="**/*.jar"></include>
+		</fileset>
+		<fileset dir="testing">
+			<include name="**/*.jar"></include>
+		</fileset>
+		<fileset dir="container">
+			<include name="**/*.jar"></include>
+		</fileset>
+		<fileset dir="ddlutils">
+			<include name="**/*.jar"></include>
+		</fileset>
+	</path>
+
 	<path id="database-local-classpath">
 	    <fileset dir="ddlutils">
     	    <include name="**/*.jar"/>
@@ -10,6 +45,50 @@
 	  </fileset>
 	</path>
 	
+	<target name="init" description="o Creates all directories for building">
+		<mkdir dir="${build.dir}" />
+	</target>
+	
+	<target name="javadoc" depends="init" description="o Creates the javadoc documentation">
+		<mkdir dir="${build.javadoc.dir}" />
+		<tstamp>
+			<format pattern="2004-yyyy" property="year"></format>
+		</tstamp>
+		<property name="copyright" value="Copyright &amp;copy; Eugene Malan. All Rights Reserved." />
+		<property name="title" value="Web application framework API" />
+		<javadoc 
+			use="true" 
+			source="1.5"
+			public="true"
+			destdir="${build.javadoc.dir}" 
+			author="true" 
+			version="true"
+			sourcepathref="javadoc.srcpath"
+			classpathref="javadoc.classpath"
+		/>
+	</target>
+	
+	<target name="test" description="o Runs the unit tests">
+		<mkdir dir="${build.test.reports}" />
+
+		<junit dir="./" failureproperty="test.failure" printSummary="yes" fork="true" haltonerror="true">
+			<sysproperty key="basedir" value="."></sysproperty>
+			<formatter type="xml" />
+			<formatter type="plain" usefile="false" />
+			<classpath>
+				<path refid="build.classpath"></path>
+				<pathelement path="${build.main.classes}" />
+				<pathelement path="${build.test.classes}" />
+			</classpath>
+			<batchtest todir="${build.test.reports}">
+				<fileset dir="${src.test.dir}">
+					<include name="**/AllTests.java"></include>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	
+
 	<target name="database-setup-local"
 	        description="Creates the derby database and schema">
 	  <taskdef name="ddlToDatabase"

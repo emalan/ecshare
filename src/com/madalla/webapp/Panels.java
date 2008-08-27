@@ -7,12 +7,22 @@ import com.madalla.webapp.blog.BlogHomePanel;
 import com.madalla.webapp.cms.ContentPanel;
 import com.madalla.webapp.email.EmailFormPanel;
 
+/**
+ * Utlility static instantiation methods to create Wicket Panels
+ * for your Pages. Provided to simplify the API by providing one
+ * place for getting Panels.
+ * 
+ * NOTE: Your Wicket Application needs to extend the {@link CmsBlogApplication} or 
+ * the {@link CmsBlogEmailAppplication} before you can use these Panels
+ * 
+ * @author exmalan
+ *
+ */
 public class Panels {
 	
 	private Panels(){}
 	
 	/**
-	 * Note: your application needs to extend the CmsBlogApplication
 	 * @param id - wicket id
 	 * @param node - Content Parent Node, normally Page Name
 	 * @param returnPage - used to return back from editing Content
@@ -26,7 +36,6 @@ public class Panels {
 	
 	
 	/**
-	 * Note: your application needs to extend the CmsBlogApplication
 	 * @param id - wicket id
 	 * @param blog - Name of this Blog
 	 * @param returnPage - used to return from blog admin Page
@@ -37,7 +46,6 @@ public class Panels {
 	}
 	
 	/**
-	 * Note: your application needs to extend the CmsBlogEmailApplication
 	 * @param id - wicket id
 	 * @param subject
 	 * @param emailSender
