@@ -1,7 +1,5 @@
 package com.madalla.webapp.blog;
 
-import java.text.DateFormat;
-
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
@@ -20,6 +18,9 @@ import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.markup.html.tree.LinkTree;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
@@ -29,6 +30,7 @@ import com.madalla.util.ui.ITreeInput;
 public class BlogArchivePanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private Log log = LogFactory.getLog(this.getClass());
+	private static DateTimeFormatter df = DateTimeFormat.forPattern("MMM d");
 
 	public BlogArchivePanel(final String id, final String blogName, final BlogDisplayPanel display ) {
 		super(id);
@@ -48,7 +50,9 @@ public class BlogArchivePanel extends Panel {
 				if (treeNode.getUserObject() instanceof ITreeInput ){
 					ITreeInput treeInput = (ITreeInput) treeNode.getUserObject();
 					String title = treeInput.getTitle();
-					return new Model(DateFormat.getDateInstance().format(treeInput.getDate()) + (null == title?"":" - " + title));
+					//convert to Joda time
+					LocalDate date = new LocalDate(treeInput.getDate());
+					return new Model(df.print(date) + (null == title?"":" - " + title));
 				} else {
 					return model;
 				}
