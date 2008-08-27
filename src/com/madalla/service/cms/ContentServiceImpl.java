@@ -291,7 +291,7 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
         return new JcrTemplate();
     }
 
-	public void setLocales(List locales) {
+	public void setLocales(List<Locale> locales) {
 		this.locales = locales;
 	}
 
