@@ -29,7 +29,7 @@ import com.madalla.webapp.pages.BlogEntryPage;
 public class BlogDisplayPanel extends Panel implements IBlogAware{
 	private static final long serialVersionUID = 1L;
 	private final Log log = LogFactory.getLog(this.getClass());
-	private static final int displayCount = 7;
+	private int displayCount = 5;
 	private final BlogEntryView blogEntry = new BlogEntryView();
 	
 	public BlogDisplayPanel(final String id, final String blog, final Class<? extends Page> returnPage) {
@@ -76,7 +76,6 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
                 listItem.add(textFull);
                 
                 AjaxFallbackLink link = new AjaxFallbackLink("showFullText"){
-
 					private static final long serialVersionUID = 8535809673244662238L;
 
 					@Override
@@ -85,8 +84,7 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
 						target.addComponent(textSummary);
 						textSummary.add(new SimpleAttributeModifier("class","blogTextHide"));
 						textFull.add(new SimpleAttributeModifier("class","blogText"));
-						
-						//this.setEnabled(false);
+						this.setEnabled(false);
 					}
                 	
                 };

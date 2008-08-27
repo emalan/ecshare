@@ -38,7 +38,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
     private static final long serialVersionUID = 1L;
     private static final CompressedResourceReference JAVASCRIPT = new CompressedResourceReference(BlogEntryPanel.class, "BlogEntryPanel.js");
     private Log log = LogFactory.getLog(this.getClass());
-    private BlogEntryView blogEntry = new BlogEntryView();
+    private final BlogEntryView blogEntry = new BlogEntryView();
     private Class<?> returnPage;
     
     public BlogEntryPanel(String id, final PageParameters parameters) {
@@ -83,7 +83,8 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             dateTextField.setRequired(true);
             dateTextField.add(new ValidationStyleBehaviour());
             dateTextField.add(new AjaxFormComponentUpdatingBehavior("onblur"){
-            	protected void onUpdate(AjaxRequestTarget target) {
+				private static final long serialVersionUID = -2582441663259074484L;
+				protected void onUpdate(AjaxRequestTarget target) {
 					target.addComponent(getFormComponent());
 				}
             });
@@ -92,12 +93,14 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             dateTextField.add(new DatePicker());
 
             //category drop down
-            List categories = getBlogService().getBlogCategories();
+            List<String> categories = getBlogService().getBlogCategories();
             FormComponent categoryDropDown = new DropDownChoice("category", new PropertyModel(blogEntry,"category"), categories);
             categoryDropDown.setRequired(true);
             categoryDropDown.add(new ValidationStyleBehaviour());
             categoryDropDown.add(new AjaxFormComponentUpdatingBehavior("onblur"){
-            	protected void onUpdate(AjaxRequestTarget target){
+				private static final long serialVersionUID = 6968995998493101488L;
+
+				protected void onUpdate(AjaxRequestTarget target){
             		target.addComponent(getFormComponent());
             	}
             });
@@ -109,6 +112,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             title.setRequired(true);
             title.setLabel(new Model(panel.getString("label.title")));
             title.add(new AjaxFormComponentUpdatingBehavior("onblur"){
+				private static final long serialVersionUID = -4657834833919216508L;
 				protected void onUpdate(AjaxRequestTarget target) {
 					target.addComponent(getFormComponent());
 					target.addComponent(feedbackPanel);
@@ -136,8 +140,6 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             };
             cancelButton.setDefaultFormProcessing(false);
             add(cancelButton);
-            
-            
             
         }
         
