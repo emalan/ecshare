@@ -46,13 +46,13 @@ public abstract class CmsBlogApplication extends WebApplication implements ICont
         setupApplicationSpecificConfiguration();
     }
     
-    protected void setupApplicationSpecificConfiguration(){
-    	getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
+    private void setupApplicationSpecificConfiguration(){
+    	//getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
     	setupSecurity();
         //getMarkupSettings().setStripWicketTags(true);
     }
     
-    protected void setupSecurity(){
+    private void setupSecurity(){
         SimplePageAuthorizationStrategy authorizationStrategy = new SimplePageAuthorizationStrategy(
                 ISecureWebPage.class, getHomePage()) {
             protected boolean isAuthorized() {

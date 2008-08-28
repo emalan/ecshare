@@ -29,20 +29,22 @@ import org.springmodules.jcr.JcrTemplate;
  * <p>
  * <pre>
  *            ec:apps 
- *         -----|---------------------------------------                 
- *        |             |                               |
- *     [ec:site1]   [ec:site2]                       [ec:site3]
- *                      |-------------------------
- *                      |                         |
- *                    ec:pages                 ec:blogs
- *              --------|----------               |----------------  
- *             |        |          |              |                |
- *        [ec:page1] [ec:page2] [ec:page3]    [ec:mainBlog]    [ec:otherBlog]
- *                      |                            ---------------
+ *         -----|------------------------------                 
+ *        |                                    |
+ *     [ec:site1]                          [ec:site2]                               
+ *        |                                    |
+ *                       ------------------------------------------------------------
+ *                      |                         |                                  |
+ *                    ec:pages                 ec:blogs                           ec:images
+ *              --------|----------               |----------------                  |---------
+ *             |        |          |              |                |                 |         |
+ *        [ec:page1] [ec:page2] [ec:page3]    [ec:mainBlog]    [ec:otherBlog]    [ec:album1] [ec:group2]
+ *             |        |          |                |---------------
  *                   ec:content                     |               |
  *       ---------------|-----------           [ec:blogEntry1]  [ec:blogEntry2]
  *      |               |           |
  * [ec:para1]   [ec:para2]    [ec:block1]
+ * 
  * </pre>
  * 
  * @author Eugene Malan
