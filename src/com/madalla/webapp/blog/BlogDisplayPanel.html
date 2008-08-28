@@ -25,6 +25,7 @@
         .blogDate, .keywords {
             color: #6699CC;
         }
+
         .showHome .blogEntries {display: inline; }
         .showHome #blogEntryDiv {display: none;}
         .showBlog .blogEntries {display: none;}
@@ -63,7 +64,7 @@
             
             <span class="blogText" wicket:id="textSummary"/>
             <span class="blogTextHide" wicket:id="textFull"/>
-            <a href="#" wicket:id="showFullText"><wicket:message key="label.more">Label Contents</wicket:message></a>
+            <a class="blogTextLink" href="#" wicket:id="showFullText"><wicket:message key="label.more">Label Contents</wicket:message></a>
             
             <div class="blogEntryFooter">
                 <div>

@@ -84,10 +84,12 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
 						target.addComponent(textSummary);
 						textSummary.add(new SimpleAttributeModifier("class","blogTextHide"));
 						textFull.add(new SimpleAttributeModifier("class","blogText"));
-						this.setEnabled(false);
+						add(new SimpleAttributeModifier("class","blogTextHide"));
+						target.addComponent(this);
 					}
                 	
                 };
+                link.setOutputMarkupId(true);
                 listItem.add(link);
 
                 //String script = "#";
