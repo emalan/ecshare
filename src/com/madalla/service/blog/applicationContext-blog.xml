@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+		"http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
 
 <beans>
     <bean id="blogService" class="com.madalla.service.blog.BlogService" lazy-init="true">
@@ -10,4 +11,5 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="site" value="${site.code}"/>
     </bean>
+    
 </beans>
