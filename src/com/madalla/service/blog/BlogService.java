@@ -36,7 +36,7 @@ public class BlogService implements IBlogService, Serializable{
     }
 
     public TreeModel getBlogEntriesAsTree(String blog){
-    	List list = getBlogEntries(blog);
+    	List<BlogEntry> list = getBlogEntries(blog);
     	return CalendarUtils.createMonthlyTree("Blog Archive", list);
     }
     
