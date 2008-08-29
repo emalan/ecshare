@@ -42,7 +42,9 @@ public class ContentPanel extends Panel implements IContentAware {
         String contentBody = contentService.getContentData(node, id , getSession().getLocale());
         Component contentBlock = new ContentContainer("contentBlock", id, node, contentBody);
         contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel() {
-            public Object getObject() {
+			private static final long serialVersionUID = -3131361470864509715L;
+
+			public Object getObject() {
                 String cssClass;
                 if (((CmsSession)getSession()).isCmsAdminMode()) {
                     cssClass = "contentEdit";
@@ -61,12 +63,13 @@ public class ContentPanel extends Panel implements IContentAware {
         public ContentContainer(String id, String contentId, String contentNode, String contentBody) {
             super(id);
 
-            final Boolean adminMode = ((CmsSession)getSession()).isCmsAdminMode();
             final Model contentModel = new Model(contentBody);
             
             // add content
             Component label = new Label("contentBody", contentModel){
-                protected void onBeforeRender(){
+				private static final long serialVersionUID = 6930776696843471636L;
+
+				protected void onBeforeRender(){
                     IContentService contentService = ((IContentServiceProvider) getApplication()).getContentService();
                     String contentBody = contentService.getContentData(nodeName, nodeId, getSession().getLocale());
                     log.debug("onBeforeRender - setting new Content.");

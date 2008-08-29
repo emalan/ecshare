@@ -1,9 +1,6 @@
 package com.madalla.util.ui;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -15,6 +12,7 @@ import junit.framework.TestCase;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.DateTime;
 
 public class CalendarUtilsTest extends TestCase{
 	private Log log = LogFactory.getLog(this.getClass());
@@ -24,8 +22,7 @@ public class CalendarUtilsTest extends TestCase{
 	}
 
 	public void testCreateMonthlyTree(){
-		List list = createList();
-		TreeModel treeModel = CalendarUtils.createMonthlyTree("Root node", list);
+		TreeModel treeModel = CalendarUtils.createMonthlyTree("Root node", createList());
 		
 		MutableTreeNode node = (MutableTreeNode) treeModel.getRoot();
 		log.debug("root = "+node);
@@ -35,7 +32,7 @@ public class CalendarUtilsTest extends TestCase{
 			log.debug("Month = "+month);
 			for (Enumeration e1 = month.children(); e1.hasMoreElements();){
 				DefaultMutableTreeNode entry = (DefaultMutableTreeNode) e1.nextElement();
-				ITreeInput treeInput = (ITreeInput) entry.getUserObject();
+				ICalendarTreeInput treeInput = (ICalendarTreeInput) entry.getUserObject();
 				log.debug(" entry = " + entry);
 			}
 		}
@@ -56,63 +53,44 @@ public class CalendarUtilsTest extends TestCase{
 		}
 	}
 	
-	private List createList(){
-        List list = new ArrayList();
-        Calendar calendar = Calendar.getInstance();
+	private List<TreeEntry> createList(){
+        List<TreeEntry> list = new ArrayList<TreeEntry>();
+        DateTime dateTime = new DateTime();
         String description = "Description Test";
         
-        list.add(new TreeEntry(calendar.getTime(),"Current","Description test"));
+        list.add(new TreeEntry(dateTime,"Current","Description test"));
         
-        calendar.add(Calendar.DAY_OF_MONTH, 1);
-        list.add(new TreeEntry(calendar.getTime(),"future",description));
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        list.add(new TreeEntry(calendar.getTime(),"first of this month", description));
-        
-        calendar.add(Calendar.MONTH, -2);
-        calendar.set(Calendar.DAY_OF_MONTH, 5);
-        list.add(new TreeEntry(calendar.getTime(),"2 month old", description));
-        list.add(new TreeEntry(calendar.getTime(),"another 2 month old", description));
-        
-        calendar.add(Calendar.MONTH, -1);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        list.add(new TreeEntry(calendar.getTime(),"3 month old - 1st day of month", description));
-        calendar.set(Calendar.DAY_OF_MONTH, 31);
-        list.add(new TreeEntry(calendar.getTime(),"3 month old - last day of month", description));
-        
-        calendar.add(Calendar.YEAR, -1);
-        list.add(new TreeEntry(calendar.getTime(),"1 year old", description));
-        calendar.add(Calendar.YEAR, -3);
-        list.add(new TreeEntry(calendar.getTime(),"3 years old", description));
+        list.add(new TreeEntry(dateTime.plusMonths(1),"future",description));
+        list.add(new TreeEntry(dateTime.plusMonths(1).withDayOfMonth(1),"first of this month", description));
+        list.add(new TreeEntry(dateTime.minusMonths(2),"2 month old", description));
+        list.add(new TreeEntry(dateTime.minusMonths(2).withDayOfMonth(5),"another 2 month old", description));
+        list.add(new TreeEntry(dateTime.minusMonths(3).withDayOfMonth(1),"3 month old - 1st day of month", description));
+        list.add(new TreeEntry(dateTime.minusMonths(3).withDayOfMonth(31),"3 month old - last day of month", description));
+        list.add(new TreeEntry(dateTime.minusYears(1),"1 year old", description));
+        list.add(new TreeEntry(dateTime.minusYears(3),"3 years old", description));
         
         return list;
 	}
 	
-	public class TreeEntry implements ITreeInput{
-		private DateFormat df = DateFormat.getDateInstance();
-		private Date date;
-		private String description;
-		private String title;
+	public class TreeEntry implements ICalendarTreeInput{
+		DateTime date;
+		String description;
+		String title;
 		
-		public TreeEntry(Date date, String title, String description){
+		public TreeEntry(DateTime date, String title, String description){
 			this.date = date;
-			this.description = description;
 			this.title = title;
+			this.description = description;
 		}
 		
-		public Date getDate() {
-			return date;
-		}
-
 		public String getDescription() {
 			return description;
 		}
-
 		public String getTitle() {
 			return title;
 		}
-		
-		public String getURL(){
-			return "http://www.ecmalan.com";
+		public DateTime getDateTime() {
+			return date;
 		}
 		
 	}

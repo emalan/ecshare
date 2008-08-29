@@ -18,14 +18,13 @@ import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.markup.html.tree.LinkTree;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
 import com.madalla.service.cms.BlogEntry;
-import com.madalla.util.ui.ITreeInput;
+import com.madalla.util.ui.ICalendarTreeInput;
 
 public class BlogArchivePanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -47,12 +46,10 @@ public class BlogArchivePanel extends Panel {
 			
 			protected IModel getNodeTextModel(IModel model) {
 				DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) model.getObject();
-				if (treeNode.getUserObject() instanceof ITreeInput ){
-					ITreeInput treeInput = (ITreeInput) treeNode.getUserObject();
+				if (treeNode.getUserObject() instanceof ICalendarTreeInput ){
+					ICalendarTreeInput treeInput = (ICalendarTreeInput) treeNode.getUserObject();
 					String title = treeInput.getTitle();
-					//convert to Joda time
-					LocalDate date = new LocalDate(treeInput.getDate());
-					return new Model(df.print(date) + (null == title?"":" - " + title));
+					return new Model(df.print(treeInput.getDateTime()) + (null == title?"":" - " + title));
 				} else {
 					return model;
 				}

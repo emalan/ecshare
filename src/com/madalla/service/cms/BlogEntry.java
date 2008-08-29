@@ -5,11 +5,12 @@ import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.joda.time.DateTime;
 
 import com.madalla.util.ui.HTMLParser;
-import com.madalla.util.ui.ITreeInput;
+import com.madalla.util.ui.ICalendarTreeInput;
 
-public class BlogEntry implements Serializable, Comparable<BlogEntry>, ITreeInput{
+public class BlogEntry implements Serializable, Comparable<BlogEntry>, ICalendarTreeInput{
 
 	private static final long serialVersionUID = -7829797397130212868L;
 
@@ -167,11 +168,7 @@ public class BlogEntry implements Serializable, Comparable<BlogEntry>, ITreeInpu
 
 	public int compareTo(BlogEntry o) {
 		BlogEntry compare = (BlogEntry) o;
-		if (date.after(compare.getDate())){
-			return -1;
-		} else {
-			return 1;
-		}
+		return compare.getDateTime().compareTo(getDateTime());
 	}
 	public String getBlog() {
 		return blog;
@@ -185,6 +182,10 @@ public class BlogEntry implements Serializable, Comparable<BlogEntry>, ITreeInpu
     public String getId() {
         return id;
     }
+
+	public DateTime getDateTime() {
+		return new DateTime(getDate());
+	}
 
 
 }

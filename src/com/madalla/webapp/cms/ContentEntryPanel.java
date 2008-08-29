@@ -37,6 +37,12 @@ public class ContentEntryPanel extends Panel implements IContentAware {
     private final String contentId;
     private String text;
 
+	/**
+	 * @param name
+	 * @param parameters
+	 * 
+	 * TODO Get return Page from application
+	 */
 	public ContentEntryPanel(String name, final PageParameters parameters) {
         super(name);
         nodeName = parameters.getString(CONTENT_NODE);

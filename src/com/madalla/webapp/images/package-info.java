@@ -2,7 +2,8 @@
  * Provides UI functionality for Photos 
  * <p>
  * TODO Wicket Panel for uploading Photos - use example at Wicket site.
- * TODO Create Service and Utility packages 
+ * TODO Create Service and Utility packages
+ * TODO Switch JNDI Respository to use MySQL so we can see what is going on with binary data 
  * <p>
  * Here is the plan...
  * This package saves the photos to File and informs a listener. 
