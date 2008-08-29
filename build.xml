@@ -6,8 +6,9 @@
 	<property name="build.main.classes" value="${build.dir}/classes" />
 	<property name="build.test.classes" value="${build.dir}/test-classes" />
 	<property name="build.test.reports" value="${build.dir}/test-reports" />
+	<property name="test.failure" value="false" />
 	
-	<path id="javadoc.srcpath">
+	<path id="main.srcpath">
 	    <pathelement location="src"/>
 		<pathelement location="resources"/>
 	</path>
@@ -25,15 +26,18 @@
 		<fileset dir="common">
 			<include name="**/*.jar"></include>
 		</fileset>
-		<fileset dir="testing">
-			<include name="**/*.jar"></include>
-		</fileset>
 		<fileset dir="container">
 			<include name="**/*.jar"></include>
 		</fileset>
 		<fileset dir="ddlutils">
 			<include name="**/*.jar"></include>
 		</fileset>
+		<fileset dir="testing">
+			<include name="**/*.jar"></include>
+		</fileset>
+	</path>
+
+	<path id="build.test.classes">
 	</path>
 
 	<path id="database-local-classpath">
@@ -64,7 +68,7 @@
 			author="true"
 			overview="src/overview.html"
 			version="true"
-			sourcepathref="javadoc.srcpath"
+			sourcepathref="main.srcpath"
 			classpathref="build.main.classes"
 		/>
 	</target>
@@ -72,20 +76,13 @@
 	<target name="test" description="o Runs the unit tests">
 		<mkdir dir="${build.test.reports}" />
 
-		<junit dir="./" failureproperty="test.failure" printSummary="yes" fork="true" haltonerror="true">
-			<sysproperty key="basedir" value="."></sysproperty>
+		<junit printSummary="yes" fork="true" haltonfailure="true" >
 			<formatter type="xml" />
 			<formatter type="plain" usefile="false" />
-			<classpath>
-				<path refid="javadoc.classpath"></path>
-				<pathelement path="${build.main.classes}" />
-				<pathelement path="${build.test.classes}" />
+			<classpath >
+				<pathelement id="main.srcpath" />
+				<pathelement id="build.main.classes" />
 			</classpath>
-			<batchtest todir="${build.test.reports}">
-				<fileset dir="${src.test.dir}">
-					<include name="**/AllTests.java"></include>
-				</fileset>
-			</batchtest>
 		</junit>
 	</target>
 	

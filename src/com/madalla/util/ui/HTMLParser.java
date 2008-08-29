@@ -44,7 +44,6 @@ public class HTMLParser {
 		try {
 			new ParserDelegator().parse(reader, callback, false);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			log.error("parseHTMLText - Exception. "+e.getMessage());
 			return html;
 		}
