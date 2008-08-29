@@ -20,7 +20,7 @@ public class CalendarUtils {
 	 * @param list - List of ICalendarTreeInput Items
 	 * @return Populated TreeModel that displays items in Yearly, Monthly tree
 	 */
-	public static TreeModel createMonthlyTree(String rootTitle, List<? extends ICalendarTreeInput> list){
+	public static TreeModel createMonthlyTree(final String rootTitle, final List<? extends ICalendarTreeInput> list){
 		return createMonthlyTree(rootTitle, list, dateFormatter);
 	}
 
@@ -30,8 +30,8 @@ public class CalendarUtils {
 	 * @param dateFormatPattern - joda DateTimeFormatter
 	 * @return Populated TreeModel that displays items in Yearly, Monthly tree
 	 */
-	public static TreeModel createMonthlyTree(String rootTitle, List<? extends ICalendarTreeInput> list,
-			String dateFormatPattern){
+	public static TreeModel createMonthlyTree(final String rootTitle, final List<? extends ICalendarTreeInput> list,
+			final String dateFormatPattern){
 		DateTimeFormatter newdf = DateTimeFormat.forPattern(dateFormatPattern);
 		return createMonthlyTree(rootTitle, list, newdf);
 	}
@@ -43,8 +43,8 @@ public class CalendarUtils {
 	 * @return Populated TreeModel that displays items in Yearly, Monthly tree
 	 * 
 	 */
-	public static TreeModel createMonthlyTree(String rootTitle, List<? extends ICalendarTreeInput> list,
-			DateTimeFormatter df){
+	public static TreeModel createMonthlyTree(final String rootTitle, final List<? extends ICalendarTreeInput> list,
+			final DateTimeFormatter df){
 		
 		//sort with most recent first
 		Collections.sort(list, new Comparator<ICalendarTreeInput>(){

@@ -10,11 +10,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 import com.madalla.service.cms.Content;
-import com.madalla.service.cms.IContentData;
 import com.madalla.service.cms.IContentService;
 import com.madalla.service.cms.IContentServiceProvider;
 
-public class ContentDisplayPanel extends Panel implements IContentData{
+public class ContentDisplayPanel extends Panel {
 
 	private static final long serialVersionUID = -3450362599578103637L;
 	private Log log = LogFactory.getLog(this.getClass());

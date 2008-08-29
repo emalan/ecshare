@@ -108,6 +108,37 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
     	return false;
     }
     
+    public void setImageData(final ImageData data){
+    	processEntry(data, TYPE_IMAGE);
+    }
+    
+    //TODO make all 3 types use this method
+    private String processEntry(final IContentData entry, final String type){
+    	if (entry == null ){
+            log.error("processEntry - Entry cannot be null.");
+            return null;
+        }
+        return (String) template.execute(new JcrCallback(){
+            public Object doInJcr(Session session) throws IOException, RepositoryException {
+                log.debug("processEntry - " + entry);
+                Node node ;
+                if (StringUtils.isEmpty(entry.getId())){
+                	Node parent = getParentNode(type, session);
+                	Node groupNode = getCreateNode(NS+entry.getGroup(), parent);
+                    node = getCreateNode(NS+entry.getName(), groupNode);
+                } else {
+                    log.debug("processEntry - retrieving node by path. path="+entry.getId());
+                    node = (Node) session.getItem(entry.getId());
+                }
+                //TODO convertors for different types
+                //BlogEntryConvertor.populateNode(node, blogEntry);
+                
+                session.save();
+                return node.getPath();
+            }
+        });
+    }
+    
     public String getContentData(final String nodeName, final String id, Locale locale) {
         String localeId = getLocaleId(id, locale);
         return getContentData(nodeName, localeId);

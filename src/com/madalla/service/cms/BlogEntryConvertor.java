@@ -16,7 +16,7 @@ import javax.jcr.version.VersionException;
  * Converts Node to BlogEntry and visa versa
  * 
  * @author emalan
- *
+ * TODO turn this into generic convertor class for all types
  */
 class BlogEntryConvertor implements IContentAware {
     

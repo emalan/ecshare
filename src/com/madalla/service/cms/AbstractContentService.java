@@ -8,7 +8,7 @@ import javax.jcr.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-class AbstractContentService implements IContentData {
+class AbstractContentService implements IContentAware {
 
 	private final Log log = LogFactory.getLog(this.getClass());
 	
@@ -18,12 +18,28 @@ class AbstractContentService implements IContentData {
     	return getCreateNode(EC_NODE_APP, session.getRootNode());
     }
     
+    protected Node getParentNode(String type, Session session) throws RepositoryException{
+    	if (type.equals(TYPE_TEXT)){
+    		return getPagesParent(session);
+    	} else if(type.equals(TYPE_BLOG)){
+    		return getBlogsParent(session);
+    	} else if (type.equals(TYPE_IMAGE)){
+    		return getImageParent(session);
+    	} else {
+    		return null;
+    	}
+    }
+    
     protected Node getPagesParent(Session session) throws RepositoryException{
     	return getCreateNode(EC_NODE_PAGES, getCreateSiteNode(session));
     }
     
     protected Node getBlogsParent(Session session) throws RepositoryException{
     	return getCreateNode(EC_NODE_BLOGS, getCreateSiteNode(session));
+    }
+    
+    protected Node getImageParent(Session session) throws RepositoryException{
+    	return getCreateNode(EC_NODE_IMAGES, getCreateSiteNode(session));
     }
     
     protected Node getCreateSiteNode(Session session) throws RepositoryException{

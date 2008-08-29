@@ -17,14 +17,13 @@ import org.apache.wicket.model.Model;
 
 import com.madalla.service.cms.IContentAdminService;
 import com.madalla.service.cms.IContentAdminServiceProvider;
-import com.madalla.service.cms.IContentData;
 import com.madalla.service.cms.IContentService;
 import com.madalla.service.cms.IContentServiceProvider;
 import com.madalla.util.jcr.model.ContentNode;
 import com.madalla.util.jcr.model.IContentNode;
 import com.madalla.util.jcr.model.tree.JcrTreeNode;
 
-public class ContentExplorerPanel extends Panel implements IContentData{
+public class ContentExplorerPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
 	private Log log = LogFactory.getLog(this.getClass());

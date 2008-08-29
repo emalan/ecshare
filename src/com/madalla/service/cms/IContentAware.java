@@ -14,9 +14,7 @@ public interface IContentAware {
     static final String EC_NODE_IMAGES = NS + "images";
     static final String EC_NODE_CONTENT = NS + "content";
     
-    //static final String EC_NODE_CONTENTENTRY = NS + "contentEntry";
-    //static final String EC_NODE_BLOGENTRY = NS + "blogEntry";
-    
+    //TODO move these to Convertor class
     static final String EC_PROP_TITLE = NS + "title";
 	static final String EC_PROP_CONTENT = NS + "content";
     static final String EC_PROP_KEYWORDS = NS + "keywords";
