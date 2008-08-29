@@ -18,7 +18,7 @@ import javax.jcr.version.VersionException;
  * @author emalan
  *
  */
-class BlogEntryConvertor implements IContentData {
+class BlogEntryConvertor implements IContentAware {
     
     public static BlogEntry createBlogEntry(Node node) throws ValueFormatException, PathNotFoundException, RepositoryException{
     	String blog = node.getParent().getName().replaceFirst(NS,"");
