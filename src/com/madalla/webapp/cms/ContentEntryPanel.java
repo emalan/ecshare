@@ -93,9 +93,9 @@ public class ContentEntryPanel extends Panel implements IContentAware {
             log.debug("Submiting populated Content object to Content service.");
             try {
                 IContentService service = ((IContentServiceProvider) getPage().getApplication()).getContentService();
-                Content content = new Content(nodeName, contentId);
+                Content content = new Content(nodeName, service.getLocaleId(contentId, getSession().getLocale()));
                 content.setText(text);
-                service.setContent(content, getSession().getLocale());
+                service.setContent(content);
                 info("Content saved to repository");
                 log.debug("Content successfully saved to repository. content=" + content);
                 setResponsePage(contentPage);

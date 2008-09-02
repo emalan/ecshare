@@ -16,14 +16,14 @@ public interface IContentService {
     boolean isBlogNode(final String path);
     boolean isContentPasteNode(final String path);
     String getContentData(String nodeName, String id);
-    String getContentData(String nodeName, String id, Locale locale);
+    String getContentData(final String nodeName, final String id, Locale locale);
     void pasteContent(final String path, final Content content);
     void setContent(Content content) throws RepositoryException;
-    void setContent(Content content, Locale locale) throws RepositoryException;
     String insertBlogEntry(BlogEntry blogEntry);
     void updateBlogEntry(BlogEntry blogEntry);
     BlogEntry getBlogEntry(final String uuid);
     void deleteNode(final String path);
     Content getContent(final String path);
-    public List<BlogEntry> getBlogEntries(final String blog);
+    List<BlogEntry> getBlogEntries(final String blog);
+    String getLocaleId(String id, Locale locale);
 }

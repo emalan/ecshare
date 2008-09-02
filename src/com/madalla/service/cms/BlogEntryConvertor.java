@@ -12,9 +12,8 @@ import org.joda.time.DateTime;
  * Converts Node to BlogEntry and visa versa
  * 
  * @author emalan
- * TODO turn this into generic convertor class for all types
  */
-class BlogEntryConvertor implements IContentAware, IEntryConvertor {
+class BlogEntryConvertor implements IContentAware, IEntryProcessor {
     
     public static BlogEntry createBlogEntry(Node node) throws RepositoryException{
     	String blog = node.getParent().getName().replaceFirst(NS,"");
@@ -39,10 +38,8 @@ class BlogEntryConvertor implements IContentAware, IEntryConvertor {
         
     }
 
-	public void populateNode(Node node, IContentData content)
-			throws RepositoryException {
+	public void processNode(Node node, IContentData content) throws RepositoryException {
 		populateNode(node, (BlogEntry) content);
-		
 	}
 
 }

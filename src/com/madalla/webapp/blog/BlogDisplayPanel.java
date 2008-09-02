@@ -64,7 +64,7 @@ public class BlogDisplayPanel extends Panel implements IBlogAware{
 			public void populateItem(final ListItem listItem) {
 				final BlogEntry current = (BlogEntry) listItem.getModelObject();
                 listItem.add(new Label("title", new Model(current.getTitle())));
-                listItem.add(new DateLabel("date", new Model(current.getDate()), new StyleDateConverter("MS",true)));
+                listItem.add(new DateLabel("date", new Model(current.getDate().toDate()), new StyleDateConverter("MS",true)));
                 listItem.add(new Label("keywords", new Model(current.getKeywords())));
 
                 final Component textSummary = new Label("textSummary", current.getSummary()).

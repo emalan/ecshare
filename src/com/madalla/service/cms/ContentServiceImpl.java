@@ -113,9 +113,6 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
     	return false;
     }
 
-    /**
-     * TODO combine all path methods
-     */
     public BlogEntry getBlogEntry(final String path) {
         if (StringUtils.isEmpty(path)){
             log.error("getBlogEntry - path is required.");
@@ -128,7 +125,6 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
             }
         });
     }
-
     
     public String insertBlogEntry(BlogEntry blogEntry) {
 		return processEntry(blogEntry, TYPE_BLOG, new BlogEntryConvertor());
@@ -139,16 +135,39 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
     }
     
     public void setImageData(final ImageData data){
-    	processEntry(data, TYPE_IMAGE, new IEntryConvertor(){
-			public void populateNode(Node node, IContentData content) throws RepositoryException {
+    	processEntry(data, TYPE_IMAGE, new IEntryProcessor(){
+			public void processNode(Node node, IContentData content) throws RepositoryException {
 				ImageData imageData = (ImageData) content;
+				//TODO
 				//node.setProperty("",imageData.get );
 			}
     	});
     }
+
+    public String getContentData(final String nodeName, final String id, Locale locale) {
+        String localeId = getLocaleId(id, locale);
+        return getContentData(nodeName, localeId);
+    }
     
-    //TODO make all 3 types use this method
-    private String processEntry(final IContentData entry, final String type, final IEntryConvertor convertor){
+    public String getContentData(final String page, final String contentId) {
+    	Content content = new Content(page, contentId);
+        processEntry(content, TYPE_TEXT, new IEntryProcessor(){
+			public void processNode(Node node, IContentData content) throws RepositoryException {
+				((Content)content).setText(node.getProperty(EC_PROP_CONTENT).getString()); 
+			}
+        });
+        return content.getText();
+    }
+    
+    public void setContent(final Content content)  {
+        processEntry(content , TYPE_TEXT, new IEntryProcessor(){
+			public void processNode(Node node, IContentData content) throws RepositoryException {
+				node.setProperty(EC_PROP_CONTENT, ((Content)content).getText());
+			}
+        });
+    }
+    
+    private String processEntry(final IContentData entry, final String type, final IEntryProcessor convertor){
     	if (entry == null ){
             log.error("processEntry - Entry cannot be null.");
             return null;
@@ -160,32 +179,32 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
                 if (StringUtils.isEmpty(entry.getId())){
                 	Node parent = getParentNode(type, session);
                 	Node groupNode = getCreateNode(NS+entry.getGroup(), parent);
+                	if (type.equals(TYPE_TEXT)){ //TODO change data structure to get rid of this
+                		groupNode = getCreateNode(EC_NODE_CONTENT, groupNode);
+        			}
                     node = getCreateNode(NS+entry.getName(), groupNode);
                 } else {
                     log.debug("processEntry - retrieving node by path. path="+entry.getId());
                     node = (Node) session.getItem(entry.getId());
                 }
-                convertor.populateNode(node, entry);
-                
+                convertor.processNode(node, entry);
                 session.save();
                 return node.getPath();
             }
         });
     }
     
-    public String getContentData(final String nodeName, final String id, Locale locale) {
-        String localeId = getLocaleId(id, locale);
-        return getContentData(nodeName, localeId);
-    }
-    
-    public String getContentData(final String page, final String contentId) {
-        return processContentEntry(page, contentId, CONTENT_DEFAULT, false);
-    }
-    
-    public void setContent(final Content content, Locale locale) throws RepositoryException {
-        String localeId = getLocaleId(content.getContentId(), locale);
-        processContentEntry(content.getPageName(), localeId, content.getText(), true);
-    }
+	public Content getContent(final String path) {
+        return (Content) template.execute(new JcrCallback(){
+            public Content doInJcr(Session session) throws IOException, RepositoryException {
+                Node node = (Node) session.getItem(path);
+                String pageName = node.getParent().getName().replaceFirst(NS,"");
+                Content content = new Content(node.getPath(), pageName, node.getName());
+                content.setText(node.getProperty(EC_PROP_CONTENT).getString());
+                return content;
+            }
+        });
+	}
     
     public void pasteContent(final String path, final Content content){
         log.debug("pasteContent - path="+path+content);
@@ -193,7 +212,7 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
 				Node parent = (Node) session.getItem(path);
-                Node newNode = getCreateNode(content.getContentId(), parent);
+                Node newNode = getCreateNode(content.getId(), parent);
                 newNode.setProperty(EC_PROP_CONTENT, content.getText());
                 session.save();
                 log.debug("pasteContent - Done pasting. path="+path);
@@ -202,23 +221,6 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
     	});
     }
 
-    public void setContent(final Content content)  {
-        processContentEntry(content.getPageName(), content.getContentId(), content.getText(), true);
-    }
-
-	public Content getContent(final String path) {
-        return (Content) template.execute(new JcrCallback(){
-            public Content doInJcr(Session session) throws IOException, RepositoryException {
-                Node node = (Node) session.getItem(path);
-                String pageName = node.getParent().getName().replaceFirst(NS,"");
-                Content content = new Content(pageName, node.getName());
-                content.setText(node.getProperty(EC_PROP_CONTENT).getString());
-                return content;
-            }
-        });
-	}
-	
-   
     public void deleteNode(final String path) {
         if (StringUtils.isEmpty(path)) {
             log.error("deleteNode - path is required.");
@@ -250,30 +252,8 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
         });
     }
     
-   
-    /**
-     * @param page
-     * @param contentId
-     * @param text
-     * @param overwrite - if true then replace value in repository even if it exists
-     * @return
-     */
-    private String processContentEntry(final String page, final String contentId, final String defaultValue, final boolean overwrite){
-        return (String) template.execute(new JcrCallback(){
-            public Object doInJcr(Session session) throws IOException, RepositoryException {
-                Node pageParent = getPagesParent(session);
-                Node pageNode = getCreateNode(NS+page, pageParent);
-                Node contentNode = getCreateNode(EC_NODE_CONTENT, pageNode);
-                
-                Node node = getCreateContentEntry(contentNode, contentId, defaultValue, overwrite);
-                log.debug("setContent - Saving Content. page="+page+" contentId="+contentId);
-                session.save();
-                return node.getProperty(EC_PROP_CONTENT).getString();
-            }
-        });
-    }
 
-    private String getLocaleId(String id, Locale locale) {
+    public String getLocaleId(String id, Locale locale) {
         Locale found = null;
         for (Iterator<Locale> iter = locales.iterator(); iter.hasNext();) {
             Locale current = iter.next();
@@ -288,15 +268,6 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
             return id + "_"+ found.getLanguage();
         }
     }
-    
-    private Node getCreateContentEntry(Node parent, String contentID, String text, boolean overwrite) throws RepositoryException{
-        Node node = getCreateNode(NS+contentID, parent);
-        if (node.isNew() || overwrite){
-            node.setProperty(EC_PROP_CONTENT, text);
-        }
-        log.debug("getCreateContentEntry - Saving Content. title="+contentID);
-        return node;
-    }    
     
     public void setTemplate(JcrTemplate template) {
         this.template = template;

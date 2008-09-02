@@ -1,6 +1,7 @@
 package com.madalla.webapp.blog;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.joda.time.DateTime;
 
@@ -13,7 +14,7 @@ public class BlogEntryView implements Serializable{
 	private String id; 
     private String blog; 
 	private String text;
-    private DateTime date;
+    private Date date;
     private String category;
     private String title;
     private String description;
@@ -22,7 +23,7 @@ public class BlogEntryView implements Serializable{
     public void init(BlogEntry newData){
     	setId(newData.getId());
 		setTitle(newData.getTitle());
-		setDate(newData.getDate());
+		setDate(newData.getDate().toDate());
 		setKeywords(newData.getKeywords());
 		setText(newData.getText());
 		setDescription(newData.getDescription());
@@ -30,7 +31,7 @@ public class BlogEntryView implements Serializable{
     }
     public void populate(BlogEntry old){
     	old.setTitle(title);
-    	old.setDate(date);
+    	old.setDate(new DateTime(date));
     	old.setKeywords(keywords);
     	old.setText(text);
     	old.setDescription(description);
@@ -54,10 +55,10 @@ public class BlogEntryView implements Serializable{
 	public void setText(String text) {
 		this.text = text;
 	}
-	public DateTime getDate() {
+	public Date getDate() {
 		return date;
 	}
-	public void setDate(DateTime date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 	public String getCategory() {

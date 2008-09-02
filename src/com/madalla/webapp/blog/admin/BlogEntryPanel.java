@@ -78,7 +78,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             add(feedbackPanel);
             
             //Date
-            blogEntry.setDate(new DateTime());
+            blogEntry.setDate(new DateTime().toDate());
             DateTextField dateTextField = new DateTextField("dateTextField", new PropertyModel(blogEntry,"date"), new StyleDateConverter("S-",true));
             dateTextField.setRequired(true);
             dateTextField.add(new ValidationStyleBehaviour());
@@ -166,7 +166,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
     private void saveBlogEntry(BlogEntryView view){
     	BlogEntry blogEntry;
     	if (StringUtils.isEmpty(view.getId())){
-    		blogEntry = new BlogEntry.Builder(view.getBlog(), view.getTitle(), view.getDate() ).build();
+    		blogEntry = new BlogEntry.Builder(view.getBlog(), view.getTitle(), new DateTime(view.getDate()) ).build();
     		view.populate(blogEntry);
     	} else {
     		blogEntry = getBlogService().getBlogEntry(view.getId());
