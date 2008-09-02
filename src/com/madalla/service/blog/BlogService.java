@@ -2,6 +2,7 @@ package com.madalla.service.blog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.tree.TreeModel;
@@ -32,7 +33,9 @@ public class BlogService implements IBlogService, Serializable{
     }
     
     public List<BlogEntry> getBlogEntries(String blog) {
-        return contentService.getBlogEntries(blog);
+    	List<BlogEntry> list = contentService.getBlogEntries(blog);
+    	Collections.sort(list);
+        return list;
     }
 
     public TreeModel getBlogEntriesAsTree(String blog){
