@@ -1,7 +1,8 @@
 package com.madalla.webapp.blog;
 
 import java.io.Serializable;
-import java.util.Date;
+
+import org.joda.time.DateTime;
 
 import com.madalla.service.cms.BlogEntry;
 
@@ -12,7 +13,7 @@ public class BlogEntryView implements Serializable{
 	private String id; 
     private String blog; 
 	private String text;
-    private Date date;
+    private DateTime date;
     private String category;
     private String title;
     private String description;
@@ -53,10 +54,10 @@ public class BlogEntryView implements Serializable{
 	public void setText(String text) {
 		this.text = text;
 	}
-	public Date getDate() {
+	public DateTime getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(DateTime date) {
 		this.date = date;
 	}
 	public String getCategory() {

@@ -36,8 +36,7 @@ import com.madalla.wicket.ValidationStyleBehaviour;
 public class EmailFormPanel extends Panel {
     private static final long serialVersionUID = -1643728343421366820L;
     private Log log = LogFactory.getLog(this.getClass());
-    
-    private String imagePass = CaptchaUtils.randomString(4, 6);
+    //private String imagePass = CaptchaUtils.randomString(4, 6);
     private Integer first = CaptchaUtils.randomInteger(1, 20);
     private Integer second = CaptchaUtils.randomInteger(1, 12);
     
@@ -70,7 +69,8 @@ public class EmailFormPanel extends Panel {
             name.add(new ValidationStyleBehaviour());
             name.setLabel(new Model(panel.getString("label.name")));
             name.add(new AjaxFormComponentUpdatingBehavior("onblur"){
-            	protected void onUpdate(AjaxRequestTarget target) {
+				private static final long serialVersionUID = -1336792123145056842L;
+				protected void onUpdate(AjaxRequestTarget target) {
 					target.addComponent(getFormComponent());
 				}
             });
@@ -80,7 +80,8 @@ public class EmailFormPanel extends Panel {
             email.add(EmailAddressValidator.getInstance());
             email.add(new ValidationStyleBehaviour());
             email.add(new AjaxFormComponentUpdatingBehavior("onblur"){
-            	protected void onUpdate(AjaxRequestTarget target) {
+				private static final long serialVersionUID = -6327997848765302354L;
+				protected void onUpdate(AjaxRequestTarget target) {
 					target.addComponent(getFormComponent());
 				}
             });
@@ -91,14 +92,16 @@ public class EmailFormPanel extends Panel {
             
             add(new Label("captchaString", first+" + "+second+" = "));
             RequiredTextField password = new RequiredTextField("password", new PropertyModel(properties, "password")){
-                protected final void onComponentTag(final ComponentTag tag) {
+				private static final long serialVersionUID = -108228073455105029L;
+				protected final void onComponentTag(final ComponentTag tag) {
                         super.onComponentTag(tag);
                         // clear the field after each render
                         //tag.put("value", "");
                 }
             };
             password.add(new AbstractValidator(){
-                protected void onValidate(IValidatable validatable) {
+				private static final long serialVersionUID = 2572094991300700912L;
+				protected void onValidate(IValidatable validatable) {
                     String password = (String)validatable.getValue();
                     try {
                         int answer = Integer.parseInt(password);
@@ -121,7 +124,9 @@ public class EmailFormPanel extends Panel {
             });
             password.add(new ValidationStyleBehaviour());
             password.add(new AjaxFormComponentUpdatingBehavior("onblur"){
-            	protected void onUpdate(AjaxRequestTarget target) {
+				private static final long serialVersionUID = 1072604570134494000L;
+
+				protected void onUpdate(AjaxRequestTarget target) {
 					target.addComponent(getFormComponent());
 				}
             });

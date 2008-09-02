@@ -57,6 +57,11 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
     private final Log log = LogFactory.getLog(this.getClass());
     private List<Locale> locales;
     
+    /*
+     * (non-Javadoc)
+     *  Boolean checks - TODO examine these methods for performance
+     */
+    
     public boolean isDeletableNode(final String path){
     	Node result = (Node) template.execute(new JcrCallback(){
 
@@ -107,13 +112,43 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
     	}
     	return false;
     }
+
+    /**
+     * TODO combine all path methods
+     */
+    public BlogEntry getBlogEntry(final String path) {
+        if (StringUtils.isEmpty(path)){
+            log.error("getBlogEntry - path is required.");
+            return null;
+        }
+        return (BlogEntry) template.execute(new JcrCallback(){
+            public Object doInJcr(Session session) throws IOException, RepositoryException {
+                Node node = (Node) session.getItem(path);
+                return BlogEntryConvertor.createBlogEntry(node);
+            }
+        });
+    }
+
+    
+    public String insertBlogEntry(BlogEntry blogEntry) {
+		return processEntry(blogEntry, TYPE_BLOG, new BlogEntryConvertor());
+	}
+    
+    public void updateBlogEntry(BlogEntry blogEntry){
+        processEntry(blogEntry, TYPE_BLOG, new BlogEntryConvertor());
+    }
     
     public void setImageData(final ImageData data){
-    	processEntry(data, TYPE_IMAGE);
+    	processEntry(data, TYPE_IMAGE, new IEntryConvertor(){
+			public void populateNode(Node node, IContentData content) throws RepositoryException {
+				ImageData imageData = (ImageData) content;
+				//node.setProperty("",imageData.get );
+			}
+    	});
     }
     
     //TODO make all 3 types use this method
-    private String processEntry(final IContentData entry, final String type){
+    private String processEntry(final IContentData entry, final String type, final IEntryConvertor convertor){
     	if (entry == null ){
             log.error("processEntry - Entry cannot be null.");
             return null;
@@ -130,8 +165,7 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
                     log.debug("processEntry - retrieving node by path. path="+entry.getId());
                     node = (Node) session.getItem(entry.getId());
                 }
-                //TODO convertors for different types
-                //BlogEntryConvertor.populateNode(node, blogEntry);
+                convertor.populateNode(node, entry);
                 
                 session.save();
                 return node.getPath();
@@ -184,27 +218,7 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
         });
 	}
 	
-	public String insertBlogEntry(BlogEntry blogEntry) {
-		return processBlogEntry(blogEntry);
-	}
-    
-    public void updateBlogEntry(BlogEntry blogEntry){
-        processBlogEntry(blogEntry);
-    }
-    
-    public BlogEntry getBlogEntry(final String path) {
-        if (StringUtils.isEmpty(path)){
-            log.error("getBlogEntry - path is required.");
-            return null;
-        }
-        return (BlogEntry) template.execute(new JcrCallback(){
-            public Object doInJcr(Session session) throws IOException, RepositoryException {
-                Node node = (Node) session.getItem(path);
-                return BlogEntryConvertor.createBlogEntry(node);
-            }
-        });
-    }
-    
+   
     public void deleteNode(final String path) {
         if (StringUtils.isEmpty(path)) {
             log.error("deleteNode - path is required.");
@@ -236,39 +250,7 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
         });
     }
     
-    /**
-     * @param page
-     * @param contentId
-     * @param text
-     * @param overwrite - if true then replace value in repository even if it exists
-     * @return
-     */
-    private String processBlogEntry(final BlogEntry blogEntry){
-    	if (blogEntry == null || StringUtils.isEmpty(blogEntry.getBlog())){
-            log.error("processBlogEntry - Blog Entry not valid." + blogEntry);
-            return null;
-        }
-        return (String) template.execute(new JcrCallback(){
-            public Object doInJcr(Session session) throws IOException, RepositoryException {
-                log.debug("processBlogEntry - Processing Blog. " + blogEntry);
-                Node node ;
-                if (StringUtils.isEmpty(blogEntry.getId())){
-                	Node blogParent = getBlogsParent(session);
-                	Node blogNode = getCreateNode(NS+blogEntry.getBlog(), blogParent);
-                    node = getCreateNode(NS+blogEntry.getName(), blogNode);
-                } else {
-                    log.debug("processBlogEntry - retrieving node by path. path="+blogEntry.getId());
-                    node = (Node) session.getItem(blogEntry.getId());
-                }
-               
-                BlogEntryConvertor.populateNode(node, blogEntry);
-                
-                session.save();
-                return node.getPath();
-            }
-        });
-    }
-    
+   
     /**
      * @param page
      * @param contentId

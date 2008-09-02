@@ -1,6 +1,5 @@
 package com.madalla.webapp.blog.admin;
 
-import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -25,6 +24,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.joda.time.DateTime;
 
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
@@ -78,7 +78,7 @@ public class BlogEntryPanel extends Panel implements IBlogAware{
             add(feedbackPanel);
             
             //Date
-            blogEntry.setDate(Calendar.getInstance().getTime());
+            blogEntry.setDate(new DateTime());
             DateTextField dateTextField = new DateTextField("dateTextField", new PropertyModel(blogEntry,"date"), new StyleDateConverter("S-",true));
             dateTextField.setRequired(true);
             dateTextField.add(new ValidationStyleBehaviour());

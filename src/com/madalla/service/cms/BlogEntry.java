@@ -1,7 +1,6 @@
 package com.madalla.service.cms;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
@@ -10,7 +9,7 @@ import org.joda.time.DateTime;
 import com.madalla.util.ui.HTMLParser;
 import com.madalla.util.ui.ICalendarTreeInput;
 
-public class BlogEntry implements Serializable, Comparable<BlogEntry>, ICalendarTreeInput{
+public class BlogEntry implements IContentData, Serializable, Comparable<BlogEntry>, ICalendarTreeInput{
 
 	private static final long serialVersionUID = -7829797397130212868L;
 
@@ -19,7 +18,7 @@ public class BlogEntry implements Serializable, Comparable<BlogEntry>, ICalendar
     private String id; //immutable
     private String blog; //immutable
     private String text;
-    private Date date;
+    private DateTime date;
     private String category;
     private String title;
     private String description;
@@ -30,7 +29,7 @@ public class BlogEntry implements Serializable, Comparable<BlogEntry>, ICalendar
     	private final String id;
     	private final String blog;
     	private final String title;
-    	private final Date date;
+    	private final DateTime date;
     	
     	//Optional parameters
     	private String text ="";
@@ -46,14 +45,14 @@ public class BlogEntry implements Serializable, Comparable<BlogEntry>, ICalendar
     	 * @param title
     	 * @param date
     	 */
-    	Builder(String id, String blog, String title, Date date){
+    	Builder(String id, String blog, String title, DateTime date){
     		this.id = id;
     		this.blog = blog;
     		this.title = title;
     		this.date = date;
     	}
     	//creates a new entry that does not yet exist in repository
-    	public Builder(String blog, String title, Date date){
+    	public Builder(String blog, String title, DateTime date){
     		this.id = "";  //
     		this.blog = blog;
     		this.title = title;
@@ -117,10 +116,10 @@ public class BlogEntry implements Serializable, Comparable<BlogEntry>, ICalendar
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public Date getDate() {
+	public DateTime getDate() {
         return date;
     }
-    public void setDate(Date date) {
+    public void setDate(DateTime date) {
         this.date = date;
     }
     public String getText() {
@@ -153,14 +152,20 @@ public class BlogEntry implements Serializable, Comparable<BlogEntry>, ICalendar
     
     @Override
 	public boolean equals(Object obj) {
-		if (date.equals(obj)) return true;
+		if (this == obj) return true;
 		if (!(obj instanceof BlogEntry)) return false;
 		BlogEntry compare = (BlogEntry)obj; 
-		if (id.equals(compare.getId())){
-			return true;
-		}
-		return false;
+		if (!id.equals(compare.getId())) return false;
+		if (!title.equals(compare.getTitle()))return false;
+		if (!blog.equals(compare.getBlog()))return false;
+		if (!category.equals(compare.getCategory()))return false;
+		if (!description.equals(compare.getDescription()))return false;
+		if (!keywords.equals(compare.getKeywords()))return false;
+		if (!date.equals(compare.getDate()))return false;
+		if (!text.equals(compare.getText()))return false;
+		return true;
 	}
+
 	@Override
 	public int hashCode() {
 		return id.hashCode();
@@ -182,9 +187,12 @@ public class BlogEntry implements Serializable, Comparable<BlogEntry>, ICalendar
     public String getId() {
         return id;
     }
+	public String getGroup(){
+		return blog;
+	}
 
 	public DateTime getDateTime() {
-		return new DateTime(getDate());
+		return date;
 	}
 
 

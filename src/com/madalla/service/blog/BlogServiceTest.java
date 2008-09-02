@@ -1,14 +1,13 @@
 package com.madalla.service.blog;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 
 import junit.framework.TestCase;
 
 import org.easymock.MockControl;
+import org.joda.time.DateTime;
 
-import com.madalla.dao.blog.BlogDao;
 import com.madalla.service.cms.BlogEntry;
 import com.madalla.service.cms.IContentService;
 
@@ -49,17 +48,17 @@ public class BlogServiceTest extends TestCase{
         BlogEntry entry = createBlogEntry();
         test.add(entry);
         
-        Collection entries = service.getBlogEntries(BLOG);
+        Collection<BlogEntry> entries = service.getBlogEntries(BLOG);
     }
     
     public void testGetAllBlogEntriesForCategory(){
-        Collection test = new ArrayList();
+        Collection<BlogEntry> test = new ArrayList<BlogEntry>();
         test.add(createBlogEntry());
     }
     
     public static BlogEntry createBlogEntry(){
     	BlogEntry blogEntry = new BlogEntry.Builder(BLOG, "test title", 
-    			Calendar.getInstance().getTime()).category("travel").text("Test entry")
+    			new DateTime()).category("travel").text("Test entry")
     			.desription("test Description").keywords("test keywords").build();
         return blogEntry;
     }

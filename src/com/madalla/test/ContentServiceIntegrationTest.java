@@ -2,7 +2,6 @@ package com.madalla.test;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -12,6 +11,7 @@ import javax.swing.tree.TreeModel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.tree.LinkTree;
+import org.joda.time.DateTime;
 
 import com.madalla.service.cms.BlogEntry;
 import com.madalla.service.cms.Content;
@@ -91,8 +91,10 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	BlogEntry blogEntry = createBlogEntry();
         String path = contentService.insertBlogEntry(blogEntry);
         BlogEntry testBlogEntry = contentService.getBlogEntry(path);
-    	assertEquals(blogEntry, testBlogEntry);
+    	assertEquals(blogEntry.getBlog(), testBlogEntry.getBlog());
         assertEquals(blogEntry.getTitle(), testBlogEntry.getTitle());
+        assertEquals(blogEntry.getText(), testBlogEntry.getText());
+        assertEquals(blogEntry.getDate(), testBlogEntry.getDate());
         
         contentService.deleteNode(path);
     }
@@ -104,7 +106,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     private final static String BLOGKEYWORDS = "test, keyword";
     private final static String BLOGTEXT = "test text";
     private final static String BLOGTITLE = "test title";
-    private final static Date BLOGDATE = new Date();
+    private final static DateTime BLOGDATE = new DateTime();
     
     private BlogEntry createBlogEntry(){
     	BlogEntry entry = new BlogEntry.Builder(BLOG, BLOGTITLE, BLOGDATE).category(BLOGCATEGORY).build();

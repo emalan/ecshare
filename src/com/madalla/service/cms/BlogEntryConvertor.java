@@ -1,15 +1,11 @@
 package com.madalla.service.cms;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.jcr.Node;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
-import javax.jcr.ValueFormatException;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
-import javax.jcr.version.VersionException;
+
+import org.joda.time.DateTime;
 
 
 /**
@@ -18,30 +14,35 @@ import javax.jcr.version.VersionException;
  * @author emalan
  * TODO turn this into generic convertor class for all types
  */
-class BlogEntryConvertor implements IContentAware {
+class BlogEntryConvertor implements IContentAware, IEntryConvertor {
     
-    public static BlogEntry createBlogEntry(Node node) throws ValueFormatException, PathNotFoundException, RepositoryException{
+    public static BlogEntry createBlogEntry(Node node) throws RepositoryException{
     	String blog = node.getParent().getName().replaceFirst(NS,"");
     	String title = node.getProperty(EC_PROP_TITLE).getString();
-    	Date date = node.getProperty(EC_PROP_ENTRYDATE).getDate().getTime();
-    	String category = node.getProperty(EC_PROP_CATEGORY).getString();
     	String description = node.getProperty(EC_PROP_DESCRIPTION).getString();
+    	String category = node.getProperty(EC_PROP_CATEGORY).getString();
     	String keywords = node.getProperty(EC_PROP_KEYWORDS).getString();
+    	Calendar calendar = node.getProperty(EC_PROP_ENTRYDATE).getDate();
     	String text = node.getProperty(EC_PROP_CONTENT).getString();
     	
-    	return new BlogEntry.Builder(node.getPath(), blog, title, date).
+    	return new BlogEntry.Builder(node.getPath(), blog, title, new DateTime(calendar)).
     	category(category).desription(description).keywords(keywords).text(text).build();
     }
     
-    public static void populateNode(Node node, BlogEntry blogEntry) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException{
-        node.setProperty(EC_PROP_CONTENT, blogEntry.getText());
-        node.setProperty(EC_PROP_CATEGORY, blogEntry.getCategory());
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(blogEntry.getDate());
-        node.setProperty(EC_PROP_ENTRYDATE, calendar );
+    public void populateNode(Node node, BlogEntry blogEntry) throws RepositoryException{
+    	node.setProperty(EC_PROP_TITLE,blogEntry.getTitle() );
         node.setProperty(EC_PROP_DESCRIPTION,blogEntry.getDescription() );
+        node.setProperty(EC_PROP_CATEGORY, blogEntry.getCategory());
         node.setProperty(EC_PROP_KEYWORDS,blogEntry.getKeywords() );
-        node.setProperty(EC_PROP_TITLE,blogEntry.getTitle() );
+        node.setProperty(EC_PROP_ENTRYDATE, blogEntry.getDate().toGregorianCalendar());
+        node.setProperty(EC_PROP_CONTENT, blogEntry.getText());
+        
     }
+
+	public void populateNode(Node node, IContentData content)
+			throws RepositoryException {
+		populateNode(node, (BlogEntry) content);
+		
+	}
 
 }
