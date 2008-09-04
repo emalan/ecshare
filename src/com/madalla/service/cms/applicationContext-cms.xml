@@ -6,7 +6,6 @@
     http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
-	<!-- Content service setup -->
 	<bean id="repositoryService" class="com.madalla.service.cms.RepositoryService">
     	<property name="template" ref="jcrTemplate"/>
     	<property name="site" value="${site.code}"/>
@@ -18,6 +17,21 @@
     	<property name="site" value="${site.code}"/>
     	<property name="repositoryHome" value="${repository.home}"/>
 	</bean>
+
+    <bean id="content" class="com.madalla.service.cms.ContentHelper"  >
+        <constructor-arg ref="jcrTemplate" />
+        <constructor-arg value="${site.code}"/>
+    </bean>
+
+    <bean id="imageData" class="com.madalla.service.cms.ImageDataHelper"  >
+        <constructor-arg ref="jcrTemplate" />
+        <constructor-arg value="${site.code}"/>
+    </bean>
+    
+    <bean id="blogEntry" class="com.madalla.service.cms.BlogEntryHelper"  >
+        <constructor-arg ref="jcrTemplate" />
+        <constructor-arg value="${site.code}"/>
+    </bean>
 
 </beans>
 

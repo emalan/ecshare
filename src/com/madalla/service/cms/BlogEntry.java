@@ -1,11 +1,6 @@
 package com.madalla.service.cms;
 
 import java.io.Serializable;
-import java.util.Calendar;
-
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
@@ -16,21 +11,13 @@ import org.joda.time.DateTime;
 import com.madalla.util.ui.HTMLParser;
 import com.madalla.util.ui.ICalendarTreeInput;
 
-public class BlogEntry extends AbstractRepositoryData implements  Serializable, Comparable<BlogEntry>, ICalendarTreeInput{
+public class BlogEntry  implements IRepositoryData, Serializable, Comparable<BlogEntry>, ICalendarTreeInput{
 
 	private static final long serialVersionUID = -7829797397130212868L;
 	private static final Log log = LogFactory.getLog(BlogEntry.class);
 
 	private final static int summaryLength = 500;
 
-	//Repository data names
-	static final String EC_NODE_BLOGS = NS + "blogs";
-    static final String EC_PROP_TITLE = NS + "title";
-    static final String EC_PROP_KEYWORDS = NS + "keywords";
-    static final String EC_PROP_DESCRIPTION = NS + "description";
-    static final String EC_PROP_ENTRYDATE = NS + "entryDate";
-    static final String EC_PROP_CATEGORY = NS + "category";
-    
     private String id; //immutable
     private String blog; //immutable
     private String text;
@@ -110,50 +97,10 @@ public class BlogEntry extends AbstractRepositoryData implements  Serializable, 
 		this.keywords = builder.keywords;
 	}
     
-    public static boolean isBlogNode(final String path){
-    	String[] pathArray = path.split("/");
-    	if (EC_NODE_BLOGS.equals(pathArray[pathArray.length-2])){
-    		return true;
-    	}
-    	return false;
+    public String save(){
+    	return BlogEntryHelper.getInstance().save(this);
     }
     
-    public String processEntry(Session session, IRepositoryService service) throws RepositoryException{
-    	log.debug("processEntry - " + this);
-        Node node ;
-        if (StringUtils.isEmpty(id)){
-        	Node siteNode = service.getSiteNode(session);
-        	Node parent = service.getCreateNode(EC_NODE_BLOGS, siteNode);
-        	Node groupNode = service.getCreateNode(NS+getGroup(), parent);
-            node = service.getCreateNode(NS+getName(), groupNode);
-        } else {
-            log.debug("processEntry - retrieving node by path. path="+getId());
-            node = (Node) session.getItem(getId());
-        }
-        node.setProperty(EC_PROP_TITLE,getTitle() );
-        node.setProperty(EC_PROP_DESCRIPTION,getDescription() );
-        node.setProperty(EC_PROP_CATEGORY, getCategory());
-        node.setProperty(EC_PROP_KEYWORDS,getKeywords() );
-        node.setProperty(EC_PROP_ENTRYDATE, getDate().toGregorianCalendar());
-        node.setProperty(EC_PROP_CONTENT, getText());
-        session.save();
-        return node.getPath();
-    }
-    
-    //TODO this doesn't look right - move to Builder
-    public static BlogEntry createBlogEntry(Node node) throws RepositoryException{
-    	String blog = node.getParent().getName().replaceFirst(NS,"");
-    	String title = node.getProperty(EC_PROP_TITLE).getString();
-    	String description = node.getProperty(EC_PROP_DESCRIPTION).getString();
-    	String category = node.getProperty(EC_PROP_CATEGORY).getString();
-    	String keywords = node.getProperty(EC_PROP_KEYWORDS).getString();
-    	Calendar calendar = node.getProperty(EC_PROP_ENTRYDATE).getDate();
-    	String text = node.getProperty(EC_PROP_CONTENT).getString();
-    	
-    	return new BlogEntry.Builder(node.getPath(), blog, title, new DateTime(calendar)).
-    	category(category).desription(description).keywords(keywords).text(text).build();
-    }
-
 	public String getName(){
     	return StringUtils.deleteWhitespace(title);
     }

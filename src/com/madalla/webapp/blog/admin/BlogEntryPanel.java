@@ -175,7 +175,7 @@ public class BlogEntryPanel extends Panel {
     		blogEntry = getBlogService().getBlogEntry(view.getId());
     		view.populate(blogEntry);
     	}
-    	getBlogService().saveBlogEntry(blogEntry);
+    	blogEntry.save();
     }
 
 }

@@ -23,10 +23,6 @@ public class BlogService implements IBlogService, Serializable{
         return list;
     }
 
-    public void saveBlogEntry(BlogEntry blogEntry) {
-    	repositoryService.updateBlogEntry(blogEntry);
-    }
-    
     public BlogEntry getBlogEntry(String id) {
     	BlogEntry blogEntry = repositoryService.getBlogEntry(id);
         return blogEntry;

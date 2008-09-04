@@ -29,14 +29,14 @@ public class BlogServiceTest extends TestCase{
     public void testInsert(){
         BlogEntry blogEntry = createBlogEntry();
 
-        service.saveBlogEntry(blogEntry);
+        blogEntry.save();
         
     }
     
     public void testSave(){
         BlogEntry blogEntry = createBlogEntry();
 
-        service.saveBlogEntry(blogEntry);
+        blogEntry.save();
     }
     
     public void testGetBlogEntry(){

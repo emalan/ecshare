@@ -4,8 +4,6 @@ import static com.madalla.webapp.cms.ContentParameters.CONTENT_ID;
 import static com.madalla.webapp.cms.ContentParameters.CONTENT_NODE;
 import static com.madalla.webapp.cms.ContentParameters.CONTENT_PAGE;
 
-import javax.jcr.RepositoryException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
@@ -95,18 +93,13 @@ public class ContentEntryPanel extends Panel {
         }
         public void onSubmit() {
             log.debug("Submiting populated Content object to Content service.");
-            try {
-                IRepositoryService service = ((IRepositoryServiceProvider) getPage().getApplication()).getRepositoryService();
-                Content content = new Content(nodeName, service.getLocaleId(contentId, getSession().getLocale()));
-                content.setText(text);
-                service.setContent(content);
-                info("Content saved to repository");
-                log.debug("Content successfully saved to repository. content=" + content);
-                setResponsePage(contentPage);
-            } catch (RepositoryException e) {
-                info("There was a problem saving content. " + e.getMessage());
-                log.error("Exception while saving content to repository.", e);
-            }
+            IRepositoryService service = ((IRepositoryServiceProvider) getPage().getApplication()).getRepositoryService();
+            Content content = new Content(nodeName, service.getLocaleId(contentId, getSession().getLocale()));
+            content.setText(text);
+            content.save();
+            info("Content saved to repository");
+            log.debug("Content successfully saved to repository. content=" + content);
+            setResponsePage(contentPage);
         }
 
     }

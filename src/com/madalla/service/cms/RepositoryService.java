@@ -75,15 +75,15 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     public boolean isContentNode(final String path){
-    	return Content.isContentNode(path);
+    	return ContentHelper.isContentNode(path);
     }
     
     public boolean isBlogNode(final String path){
-    	return BlogEntry.isBlogNode(path);
+    	return BlogEntryHelper.isBlogNode(path);
     }
     
     public boolean isContentPasteNode(final String path){
-    	return Content.isContentPasteNode(path);
+    	return ContentHelper.isContentPasteNode(path);
     }
 
     public BlogEntry getBlogEntry(final String path) {
@@ -94,40 +94,20 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         return (BlogEntry) template.execute(new JcrCallback(){
             public Object doInJcr(Session session) throws IOException, RepositoryException {
                 Node node = (Node) session.getItem(path);
-                return BlogEntry.createBlogEntry(node);
+                return BlogEntryHelper.createBlogEntry(node);
             }
         });
     }
     
-    public String insertBlogEntry(BlogEntry blogEntry) {
-		return processEntry(blogEntry);
-	}
-    
-    public void updateBlogEntry(BlogEntry blogEntry){
-        processEntry(blogEntry);
-    }
-    
-    public void setImageData(final ImageData data){
-    	processEntry(data);
-    }
-
     public String getContentData(final String nodeName, final String id, Locale locale) {
         String localeId = getLocaleId(id, locale);
         return getContentData(nodeName, localeId);
     }
     
     public String getContentData(final String page, final String contentId) {
-    	Content content = new Content(page, contentId);
-        processEntry(content);
-        return content.getText();
+    	return ContentHelper.getInstance().getData(page, contentId);
     }
     
-    public void setContent(final Content content)  {
-        processEntry(content);
-    }
-
-
-
     public String getLocaleId(String id, Locale locale) {
         Locale found = null;
         for (Iterator<Locale> iter = locales.iterator(); iter.hasNext();) {
@@ -170,7 +150,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
                 
                 for (NodeIterator iterator = blogNode.getNodes(); iterator.hasNext();){
                     Node nextNode = iterator.nextNode();
-                    list.add(BlogEntry.createBlogEntry(nextNode));
+                    list.add(BlogEntryHelper.createBlogEntry(nextNode));
                 }
                 return list;
             }
@@ -202,19 +182,6 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
                 return null;
 			}
     	});
-    }
-    
-    private String processEntry(final IRepositoryData entry){
-    	if (entry == null ){
-            log.error("processEntry - Entry cannot be null.");
-            return null;
-        }
-    	
-        return (String) template.execute(new JcrCallback(){
-            public Object doInJcr(Session session) throws IOException, RepositoryException {
-            	return entry.processEntry(session, getService());
-            }
-        });
     }
     
     private IRepositoryService getService(){

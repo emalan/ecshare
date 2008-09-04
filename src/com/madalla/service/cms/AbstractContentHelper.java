@@ -1,25 +1,23 @@
 package com.madalla.service.cms;
 
-import java.util.List;
-import java.util.Locale;
+import java.io.IOException;
 
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
-abstract class AbstractRepositoryData implements IRepositoryData {
+abstract class AbstractContentHelper {
 
-	private static final Log log = LogFactory.getLog(AbstractRepositoryData.class);
+	private static final Log log = LogFactory.getLog(AbstractContentHelper.class);
 	static final String NS = "ec:";
     static final String EC_NODE_APP = NS + "apps";
-
-    //TODO remove this Node to make data structure more consistent
-    static final String EC_NODE_CONTENT = NS + "content";
     
     //shared repository properties
 	static final String EC_PROP_CONTENT = NS + "content";
@@ -27,18 +25,16 @@ abstract class AbstractRepositoryData implements IRepositoryData {
 	//Spring configured
     protected String site ;
 	protected JcrTemplate template;
-    protected List<Locale> locales;
 
 	public void setSite(String site) {
 		this.site = site;
-	}
-	public void setLocales(List<Locale> locales) {
-		this.locales = locales;
 	}
 	public void setTemplate(JcrTemplate template) {
 		this.template = template;
 	}
 	
+
+	//Utility methods
 
     public Node getApplicationNode(Session session) throws RepositoryException{
     	return getCreateNode(EC_NODE_APP, session.getRootNode());
@@ -48,7 +44,6 @@ abstract class AbstractRepositoryData implements IRepositoryData {
     	Node appNode = getApplicationNode(session);
     	return getCreateNode(NS+site, appNode);
 	}
-	
     
     /**
      *  returns the class name node -- creates it if its not there
@@ -68,11 +63,32 @@ abstract class AbstractRepositoryData implements IRepositoryData {
         return node;
         
     }
-
-
-
     
+    //TODO Generic method that will move to super
+    protected String genericSave(final IRepositoryData data) {
+    	return (String) template.execute(new JcrCallback(){
+			public Object doInJcr(Session session) throws IOException,
+					RepositoryException {
+		    	log.debug("processEntry - " + this);
+		        Node node ;
+		        if (StringUtils.isEmpty(data.getId())){
+		        	Node siteNode = getSiteNode(session);
+		        	Node parent = getParentNode(siteNode);
+		        	Node groupNode = getCreateNode(NS+data.getGroup(), parent);
+		            node = getCreateNode(NS+ data.getName(), groupNode);
+		        } else {
+		            log.debug("processEntry - retrieving node by path. path="+ data.getId());
+		            node = (Node) session.getItem(data.getId());
+		        }
+		        setPropertyValues(node, data);
+		        session.save();
+		        return node.getPath();
 
+			}
+    	});
+    }
 
-	
+    abstract Node getParentNode(Node node)throws RepositoryException;
+
+    abstract void setPropertyValues(Node node, IRepositoryData data)throws  RepositoryException;
 }

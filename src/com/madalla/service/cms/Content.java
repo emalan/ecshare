@@ -2,11 +2,9 @@ package com.madalla.service.cms;
 
 import java.io.Serializable;
 
-import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,30 +40,9 @@ import org.apache.commons.logging.LogFactory;
  * @author Eugene Malan
  *
  */
-public class Content extends AbstractRepositoryData implements Serializable {
+public class Content  implements IRepositoryData, Serializable {
 	private static final long serialVersionUID = 1228074714351585867L;
 	private static final Log log = LogFactory.getLog(Content.class);
-
-    public static boolean isContentNode(final String path){
-    	String[] pathArray = path.split("/");
-    	if (EC_NODE_CONTENT.equals(pathArray[pathArray.length-2])){
-    		return true;
-    	}
-    	return false;
-    }
-    
-    public static boolean isContentPasteNode(final String path){
-    	String[] pathArray = path.split("/");
-    	if (EC_NODE_CONTENT.equals(pathArray[pathArray.length-1])){
-    		return true;
-    	}
-    	return false;
-    }
-
-	// Repository Values
-    static final String EC_NODE_PAGES = NS + "pages";
-    static final String EC_NODE_CONTENT = NS + "content";
-
 
 	private final String pageName;
 	private String name;
@@ -87,27 +64,13 @@ public class Content extends AbstractRepositoryData implements Serializable {
     	this.name = contentName;
     }
     
-    //TODO create save method with this
-    //node.setProperty(EC_PROP_CONTENT, ((Content)content).getText());
+    public String save(){
+    	return ContentHelper.getInstance().save(this);
+    }
 
     //this is the get method
     public String processEntry(Session session, IRepositoryService service) throws RepositoryException{
-    	log.debug("processEntry - " + this);
-        Node node ;
-        if (StringUtils.isEmpty(id)){
-        	Node siteNode = service.getSiteNode(session);
-        	Node parent = service.getCreateNode(EC_NODE_PAGES, siteNode);
-        	Node groupNode = service.getCreateNode(NS+getGroup(), parent);
-       		Node contentNode = service.getCreateNode(EC_NODE_CONTENT, groupNode);
-
-       		node = service.getCreateNode(NS+getName(), contentNode);
-        } else {
-            log.debug("processEntry - retrieving node by path. path="+getId());
-            node = (Node) session.getItem(getId());
-        }
-        setText(node.getProperty(EC_PROP_CONTENT).getString());
-        session.save();
-        return node.getPath();
+    	return null;
     }
     
 
@@ -133,7 +96,5 @@ public class Content extends AbstractRepositoryData implements Serializable {
 	public String getName() {
 		return name;
 	}
-    
-    
     
 }

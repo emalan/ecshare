@@ -15,5 +15,4 @@ interface IRepositoryData {
 	String getGroup();
 	String getName();
 	String getId();
-	String processEntry(Session session, IRepositoryService service) throws RepositoryException;
 }

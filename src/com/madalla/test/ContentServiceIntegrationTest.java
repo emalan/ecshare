@@ -8,6 +8,7 @@ import java.util.Locale;
 import javax.jcr.RepositoryException;
 import javax.swing.tree.TreeModel;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.tree.LinkTree;
@@ -69,19 +70,31 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     }
     
     public void testContentGetSet() throws RepositoryException{
-    	Content content = new Content(CONTENT_PARENT,CONTENT_ID );
-    	content.setText(CONTENT_TEXT);
-    	contentService.setContent(content);
+    	String contentId = RandomStringUtils.randomAlphabetic(5);
     	
-    	String text = contentService.getContentData(CONTENT_PARENT, CONTENT_ID);
-    	assertEquals(CONTENT_TEXT, text);
+    	//test new
+    	Content content = new Content(CONTENT_PARENT,contentId );
+    	String text = RandomStringUtils.randomAlphanumeric(20);
+    	content.setText(text);
+    	String path = content.save();
+    	String testText = contentService.getContentData(CONTENT_PARENT, contentId);
+    	assertEquals(text, testText);
+    	
+    	//TODO test update
+    	Content existing = new Content(path, CONTENT_PARENT, contentId);
+    	String updateText = RandomStringUtils.randomAlphanumeric(100);
+    	existing.setText(updateText);
+    	existing.save();
+    	String testExisting = contentService.getContentData(CONTENT_PARENT, contentId);
+    	assertEquals(updateText, testExisting);
+    
     }
 
     public void testContentGetSetLocale() throws RepositoryException{
-    	String french = CONTENT_TEXT + "french stuff";
+    	String french = RandomStringUtils.randomAlphanumeric(20) + "french stuff";
     	Content content = new Content(CONTENT_PARENT, contentService.getLocaleId(CONTENT_ID, Locale.FRENCH));
     	content.setText(french);
-    	contentService.setContent(content);
+    	content.save();
     	
     	String text = contentService.getContentData(CONTENT_PARENT, CONTENT_ID, Locale.FRENCH);
     	assertEquals(text, french);
@@ -89,7 +102,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     
     public void testBlogGetSet(){
     	BlogEntry blogEntry = createBlogEntry();
-        String path = contentService.insertBlogEntry(blogEntry);
+        String path = blogEntry.save();
         BlogEntry testBlogEntry = contentService.getBlogEntry(path);
     	assertEquals(blogEntry.getBlog(), testBlogEntry.getBlog());
         assertEquals(blogEntry.getTitle(), testBlogEntry.getTitle());
