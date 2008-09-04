@@ -1,6 +1,8 @@
 package com.madalla.webapp.cms;
 
-import static com.madalla.webapp.cms.ContentParameters.*;
+import static com.madalla.webapp.cms.ContentParameters.CONTENT_ID;
+import static com.madalla.webapp.cms.ContentParameters.CONTENT_NODE;
+import static com.madalla.webapp.cms.ContentParameters.CONTENT_PAGE;
 
 import javax.jcr.RepositoryException;
 
@@ -18,8 +20,8 @@ import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.service.cms.Content;
-import com.madalla.service.cms.IContentService;
-import com.madalla.service.cms.IContentServiceProvider;
+import com.madalla.service.cms.IRepositoryService;
+import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 
 /**
@@ -60,7 +62,7 @@ public class ContentEntryPanel extends Panel {
         add(HeaderContributor.forJavaScript(TinyMce.class, "tiny_mce.js"));
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
 
-        IContentService service = ((IContentServiceProvider) getApplication()).getContentService();
+        IRepositoryService service = ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
         text = service.getContentData(nodeName, contentId, getSession().getLocale());
         add(new ContentForm("contentForm"));
     }
@@ -94,7 +96,7 @@ public class ContentEntryPanel extends Panel {
         public void onSubmit() {
             log.debug("Submiting populated Content object to Content service.");
             try {
-                IContentService service = ((IContentServiceProvider) getPage().getApplication()).getContentService();
+                IRepositoryService service = ((IRepositoryServiceProvider) getPage().getApplication()).getRepositoryService();
                 Content content = new Content(nodeName, service.getLocaleId(contentId, getSession().getLocale()));
                 content.setText(text);
                 service.setContent(content);

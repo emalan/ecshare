@@ -4,7 +4,7 @@
 
 <beans>
     <bean id="blogService" class="com.madalla.service.blog.BlogService" lazy-init="true">
-        <property name="contentService" ref="contentService"/>
+        <property name="repositoryService" ref="repositoryService"/>
     </bean>
 
     <bean id="blogDao" class="com.madalla.dao.blog.JdbcBlogDao" init-method="init" lazy-init="true">

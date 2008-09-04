@@ -10,8 +10,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 import com.madalla.service.cms.Content;
-import com.madalla.service.cms.IContentService;
-import com.madalla.service.cms.IContentServiceProvider;
+import com.madalla.service.cms.IRepositoryService;
+import com.madalla.service.cms.IRepositoryServiceProvider;
 
 public class ContentDisplayPanel extends Panel {
 
@@ -140,8 +140,8 @@ public class ContentDisplayPanel extends Panel {
 		}
 	}
 	
-	protected IContentService getContentService() {
-		return ((IContentServiceProvider) getApplication()).getContentService();
+	protected IRepositoryService getContentService() {
+		return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
 	}
 
 }

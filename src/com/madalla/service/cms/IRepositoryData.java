@@ -10,7 +10,7 @@ import javax.jcr.Session;
  * @author exmalan
  *
  */
-interface IContentData {
+interface IRepositoryData {
 
 	String getGroup();
 	String getName();

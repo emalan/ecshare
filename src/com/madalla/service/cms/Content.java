@@ -42,9 +42,25 @@ import org.apache.commons.logging.LogFactory;
  * @author Eugene Malan
  *
  */
-public class Content extends AbstractContentData implements Serializable {
+public class Content extends AbstractRepositoryData implements Serializable {
 	private static final long serialVersionUID = 1228074714351585867L;
 	private static final Log log = LogFactory.getLog(Content.class);
+
+    public static boolean isContentNode(final String path){
+    	String[] pathArray = path.split("/");
+    	if (EC_NODE_CONTENT.equals(pathArray[pathArray.length-2])){
+    		return true;
+    	}
+    	return false;
+    }
+    
+    public static boolean isContentPasteNode(final String path){
+    	String[] pathArray = path.split("/");
+    	if (EC_NODE_CONTENT.equals(pathArray[pathArray.length-1])){
+    		return true;
+    	}
+    	return false;
+    }
 
 	// Repository Values
     static final String EC_NODE_PAGES = NS + "pages";
@@ -71,6 +87,10 @@ public class Content extends AbstractContentData implements Serializable {
     	this.name = contentName;
     }
     
+    //TODO create save method with this
+    //node.setProperty(EC_PROP_CONTENT, ((Content)content).getText());
+
+    //this is the get method
     public String processEntry(Session session, IRepositoryService service) throws RepositoryException{
     	log.debug("processEntry - " + this);
         Node node ;
@@ -89,6 +109,8 @@ public class Content extends AbstractContentData implements Serializable {
         session.save();
         return node.getPath();
     }
+    
+
     
     public String getPageName() {
         return pageName;

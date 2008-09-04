@@ -11,7 +11,7 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class ImageData extends AbstractContentData implements Serializable {
+public class ImageData extends AbstractRepositoryData implements Serializable {
 	private static final long serialVersionUID = -3173685117852794066L;
     static final String EC_NODE_IMAGES = NS + "images";
     private static final Log log = LogFactory.getLog(ImageData.class);

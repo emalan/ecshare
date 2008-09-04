@@ -14,8 +14,8 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
-import com.madalla.service.cms.IContentAdminService;
-import com.madalla.service.cms.IContentAdminServiceProvider;
+import com.madalla.service.cms.IRepositoryAdminService;
+import com.madalla.service.cms.IRepositoryAdminServiceProvider;
 
 public class ContentAdminPanel extends Panel {
 
@@ -70,7 +70,7 @@ public class ContentAdminPanel extends Panel {
             	target.addComponent(listChoice);
             	String fileName;
             	try {
-            		IContentAdminService service = getContentAdminService();
+            		IRepositoryAdminService service = getContentAdminService();
             		
             		if (adminApp){
             			fileName = service.backupContentRoot();
@@ -93,7 +93,7 @@ public class ContentAdminPanel extends Panel {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				IContentAdminService service = getContentAdminService();
+				IRepositoryAdminService service = getContentAdminService();
 				if (adminApp){
 					service.rollbackApplicationRestore();
 				} else {
@@ -103,7 +103,7 @@ public class ContentAdminPanel extends Panel {
 			
 			@Override
 			protected final void onBeforeRender(){
-				IContentAdminService service = getContentAdminService();
+				IRepositoryAdminService service = getContentAdminService();
 				if (adminApp && service.isRollbackApplicationAvailable()){
 					setEnabled(true);
 				} else if (!adminApp && service.isRollbackSiteAvailable()){
@@ -159,9 +159,9 @@ public class ContentAdminPanel extends Panel {
 
 	}
 	
-	public IContentAdminService getContentAdminService(){
-		IContentAdminServiceProvider provider = (IContentAdminServiceProvider)getApplication();
-		return provider.getContentAdminService();
+	public IRepositoryAdminService getContentAdminService(){
+		IRepositoryAdminServiceProvider provider = (IRepositoryAdminServiceProvider)getApplication();
+		return provider.getRepositoryAdminService();
 	}
 	
 	public Boolean setBackupFileList(){

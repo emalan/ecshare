@@ -16,7 +16,7 @@ import org.joda.time.DateTime;
 import com.madalla.util.ui.HTMLParser;
 import com.madalla.util.ui.ICalendarTreeInput;
 
-public class BlogEntry extends AbstractContentData implements  Serializable, Comparable<BlogEntry>, ICalendarTreeInput{
+public class BlogEntry extends AbstractRepositoryData implements  Serializable, Comparable<BlogEntry>, ICalendarTreeInput{
 
 	private static final long serialVersionUID = -7829797397130212868L;
 	private static final Log log = LogFactory.getLog(BlogEntry.class);
@@ -110,6 +110,14 @@ public class BlogEntry extends AbstractContentData implements  Serializable, Com
 		this.keywords = builder.keywords;
 	}
     
+    public static boolean isBlogNode(final String path){
+    	String[] pathArray = path.split("/");
+    	if (EC_NODE_BLOGS.equals(pathArray[pathArray.length-2])){
+    		return true;
+    	}
+    	return false;
+    }
+    
     public String processEntry(Session session, IRepositoryService service) throws RepositoryException{
     	log.debug("processEntry - " + this);
         Node node ;
@@ -132,6 +140,7 @@ public class BlogEntry extends AbstractContentData implements  Serializable, Com
         return node.getPath();
     }
     
+    //TODO this doesn't look right - move to Builder
     public static BlogEntry createBlogEntry(Node node) throws RepositoryException{
     	String blog = node.getParent().getName().replaceFirst(NS,"");
     	String title = node.getProperty(EC_PROP_TITLE).getString();

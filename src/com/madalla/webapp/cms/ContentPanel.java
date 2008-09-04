@@ -1,6 +1,9 @@
 package com.madalla.webapp.cms;
 
-import static com.madalla.webapp.cms.ContentParameters.*;
+import static com.madalla.webapp.cms.ContentParameters.CONTENT_ID;
+import static com.madalla.webapp.cms.ContentParameters.CONTENT_NODE;
+import static com.madalla.webapp.cms.ContentParameters.CONTENT_PAGE;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
@@ -15,8 +18,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 
-import com.madalla.service.cms.IContentService;
-import com.madalla.service.cms.IContentServiceProvider;
+import com.madalla.service.cms.IRepositoryService;
+import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.ContentEditPage;
 
@@ -39,7 +42,7 @@ public class ContentPanel extends Panel {
         this.nodeId = id;
         this.returnPage = returnPage;
         log.debug("Content Panel being created for node=" + node + " id=" + id);
-        IContentService contentService = ((IContentServiceProvider) getApplication()).getContentService();
+        IRepositoryService contentService = ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
         String contentBody = contentService.getContentData(node, id , getSession().getLocale());
         Component contentBlock = new ContentContainer("contentBlock", id, node, contentBody);
         contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel() {
@@ -71,7 +74,7 @@ public class ContentPanel extends Panel {
 				private static final long serialVersionUID = 6930776696843471636L;
 
 				protected void onBeforeRender(){
-                    IContentService contentService = ((IContentServiceProvider) getApplication()).getContentService();
+                    IRepositoryService contentService = ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
                     String contentBody = contentService.getContentData(nodeName, nodeId, getSession().getLocale());
                     log.debug("onBeforeRender - setting new Content.");
                     contentModel.setObject(contentBody);

@@ -10,10 +10,10 @@ import org.apache.wicket.protocol.http.WebApplication;
 
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
-import com.madalla.service.cms.IContentAdminService;
-import com.madalla.service.cms.IContentAdminServiceProvider;
-import com.madalla.service.cms.IContentService;
-import com.madalla.service.cms.IContentServiceProvider;
+import com.madalla.service.cms.IRepositoryAdminService;
+import com.madalla.service.cms.IRepositoryAdminServiceProvider;
+import com.madalla.service.cms.IRepositoryService;
+import com.madalla.service.cms.IRepositoryServiceProvider;
 
 /**
  * Abstract Wicket Application class that needs to extended to enable usage 
@@ -22,16 +22,17 @@ import com.madalla.service.cms.IContentServiceProvider;
  * @author Eugene Malan
  *
  */
-public abstract class CmsBlogApplication extends WebApplication implements IContentServiceProvider, IBlogServiceProvider, IContentAdminServiceProvider {
+public abstract class CmsBlogApplication extends WebApplication implements IRepositoryServiceProvider, IBlogServiceProvider, IRepositoryAdminServiceProvider {
 
-    private IContentService contentService;
+    private IRepositoryService repositoryService;
     private IBlogService blogService;
-    private IContentAdminService contentAdminService;
-    private final static Log log = LogFactory.getLog(CmsBlogApplication.class);
+    private IRepositoryAdminService repositoryAdminService;
+
+	private final static Log log = LogFactory.getLog(CmsBlogApplication.class);
     
     protected void init() {
     	//initialization checks
-    	if (contentService == null){
+    	if (repositoryService == null){
     		log.fatal("Content Service is not configured Correctly.");
     		throw new WicketRuntimeException("Service is not configured Correctly.");
     	}
@@ -39,7 +40,7 @@ public abstract class CmsBlogApplication extends WebApplication implements ICont
     		log.fatal("Blog Service is not configured Correctly.");
     		throw new WicketRuntimeException("Service is not configured Correctly.");
     	}
-    	if (contentAdminService == null){
+    	if (repositoryAdminService == null){
     		log.fatal("Content Admin Service is not configured Correctly.");
     		throw new WicketRuntimeException("Service is not configured Correctly.");
     	}
@@ -63,12 +64,12 @@ public abstract class CmsBlogApplication extends WebApplication implements ICont
         getSecuritySettings().setAuthorizationStrategy(authorizationStrategy);
     }
     
-    public IContentService getContentService(){
-        return contentService;
+    public IRepositoryService getRepositoryService(){
+        return repositoryService;
     }
     
-    public void setContentService(IContentService contentService){
-        this.contentService = contentService;
+    public void setRepositoryService(IRepositoryService repositoryService){
+        this.repositoryService = repositoryService;
     }
 
     public void setBlogService(IBlogService blogService) {
@@ -78,13 +79,16 @@ public abstract class CmsBlogApplication extends WebApplication implements ICont
     public IBlogService getBlogService() {
         return blogService;
     }
+    
+    public IRepositoryAdminService getRepositoryAdminService() {
+		return repositoryAdminService;
+	}
 
-    public IContentAdminService getContentAdminService() {
-        return contentAdminService;
-    }
+	public void setRepositoryAdminService(
+			IRepositoryAdminService repositoryAdminService) {
+		this.repositoryAdminService = repositoryAdminService;
+	}
 
-    public void setContentAdminService(IContentAdminService contentAdminService) {
-        this.contentAdminService = contentAdminService;
-    }
+
 
 }

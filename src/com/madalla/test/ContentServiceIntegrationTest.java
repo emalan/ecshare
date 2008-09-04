@@ -15,14 +15,14 @@ import org.joda.time.DateTime;
 
 import com.madalla.service.cms.BlogEntry;
 import com.madalla.service.cms.Content;
-import com.madalla.service.cms.IContentAdminService;
-import com.madalla.service.cms.IContentService;
+import com.madalla.service.cms.IRepositoryAdminService;
+import com.madalla.service.cms.IRepositoryService;
 
 public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
 	Log log = LogFactory.getLog(this.getClass());
-	private IContentService contentService;
-    private IContentAdminService contentAdminService;
+	private IRepositoryService contentService;
+    private IRepositoryAdminService repositoryAdminService;
 	private final static String CONTENT_ID = "testContent";
 	private final static String CONTENT_PARENT = "testParentNode";
 	private final static String CONTENT_TEXT = "Content text";
@@ -36,26 +36,26 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 	}
 	
     public void testContentBackup(){
-        contentAdminService.backupContentRoot();
-        contentAdminService.backupContentSite();
-		List <File> files = contentAdminService.getBackupFileList();
+        repositoryAdminService.backupContentRoot();
+        repositoryAdminService.backupContentSite();
+		List <File> files = repositoryAdminService.getBackupFileList();
 		for (int i = 0; i < files.size(); i++) {
 			if ("test-backup.xml".equals(files.get(i).getName())){
-				contentAdminService.restoreContentSite(files.get(i));
+				repositoryAdminService.restoreContentSite(files.get(i));
 			}
 		}
 
-		if (contentAdminService.isRollbackApplicationAvailable()){
-			contentAdminService.rollbackApplicationRestore();
+		if (repositoryAdminService.isRollbackApplicationAvailable()){
+			repositoryAdminService.rollbackApplicationRestore();
 		}
-		if (contentAdminService.isRollbackSiteAvailable()){
-			contentAdminService.rollbackSiteRestore();
+		if (repositoryAdminService.isRollbackSiteAvailable()){
+			repositoryAdminService.rollbackSiteRestore();
 		}
 
     }
 
     public void testContentExplorer(){
-    	TreeModel treeModel = contentAdminService.getSiteContent();
+    	TreeModel treeModel = repositoryAdminService.getSiteContent();
     	assertNotNull(treeModel);
     	
     	LinkTree tree = new LinkTree("test", treeModel);
@@ -116,12 +116,12 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	return entry;    	
     }
 
-    public void setContentService(IContentService contentService) {
+    public void setRepositoryService(IRepositoryService contentService) {
 		this.contentService = contentService;
 	}
 
-    public void setContentAdminService(IContentAdminService contentAdminService) {
-        this.contentAdminService = contentAdminService;
+    public void setRepositoryAdminService(IRepositoryAdminService contentAdminService) {
+        this.repositoryAdminService = contentAdminService;
     }
 
 

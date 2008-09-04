@@ -8,13 +8,13 @@ import java.util.List;
 import javax.swing.tree.TreeModel;
 
 import com.madalla.service.cms.BlogEntry;
-import com.madalla.service.cms.IContentService;
+import com.madalla.service.cms.IRepositoryService;
 import com.madalla.util.ui.CalendarUtils;
 
 public class BlogService implements IBlogService, Serializable{
     
 	private static final long serialVersionUID = 1L;
-	private IContentService contentService;
+	private IRepositoryService repositoryService;
 	
     public List<String> getBlogCategories(){
     	List<String> list = new ArrayList<String>();
@@ -24,17 +24,19 @@ public class BlogService implements IBlogService, Serializable{
     }
 
     public void saveBlogEntry(BlogEntry blogEntry) {
-    	contentService.updateBlogEntry(blogEntry);
+    	repositoryService.updateBlogEntry(blogEntry);
     }
     
     public BlogEntry getBlogEntry(String id) {
-    	BlogEntry blogEntry = contentService.getBlogEntry(id);
+    	BlogEntry blogEntry = repositoryService.getBlogEntry(id);
         return blogEntry;
     }
     
     public List<BlogEntry> getBlogEntries(String blog) {
-    	List<BlogEntry> list = contentService.getBlogEntries(blog);
-    	Collections.sort(list);
+    	List<BlogEntry> list = repositoryService.getBlogEntries(blog);
+    	if (list != null){
+    		Collections.sort(list);
+    	}
         return list;
     }
 
@@ -44,11 +46,11 @@ public class BlogService implements IBlogService, Serializable{
     }
     
     public void deleteBlogEntry(String path){
-        contentService.deleteNode(path);
+        repositoryService.deleteNode(path);
     }
     
-	public void setContentService(IContentService contentService) {
-		this.contentService = contentService;
+	public void setRepositoryService(IRepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
 	}
 
         

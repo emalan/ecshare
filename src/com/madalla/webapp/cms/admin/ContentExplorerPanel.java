@@ -15,10 +15,10 @@ import org.apache.wicket.markup.html.tree.LinkTree;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import com.madalla.service.cms.IContentAdminService;
-import com.madalla.service.cms.IContentAdminServiceProvider;
-import com.madalla.service.cms.IContentService;
-import com.madalla.service.cms.IContentServiceProvider;
+import com.madalla.service.cms.IRepositoryAdminService;
+import com.madalla.service.cms.IRepositoryAdminServiceProvider;
+import com.madalla.service.cms.IRepositoryService;
+import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.util.jcr.model.ContentNode;
 import com.madalla.util.jcr.model.IContentNode;
 import com.madalla.util.jcr.model.tree.JcrTreeNode;
@@ -36,7 +36,7 @@ public class ContentExplorerPanel extends Panel {
 		super(name);
 		
 		// Get Content tree
-		IContentAdminService service = getContentAdminService();
+		IRepositoryAdminService service = getContentAdminService();
 		TreeModel treeModel;
 		if (adminMode){
 			treeModel = service.getRepositoryContent();
@@ -85,12 +85,12 @@ public class ContentExplorerPanel extends Panel {
 	}
 
 
-	protected IContentService getContentService() {
-		return ((IContentServiceProvider) getApplication()).getContentService();
+	protected IRepositoryService getContentService() {
+		return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
 	}
     
-    protected IContentAdminService getContentAdminService() {
-        return ((IContentAdminServiceProvider) getApplication()).getContentAdminService();
+    protected IRepositoryAdminService getContentAdminService() {
+        return ((IRepositoryAdminServiceProvider) getApplication()).getRepositoryAdminService();
     }
 
 }

@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.swing.tree.TreeModel;
 
-public interface IContentAdminService {
+public interface IRepositoryAdminService {
 
 	TreeModel getSiteContent();
 	TreeModel getRepositoryContent();

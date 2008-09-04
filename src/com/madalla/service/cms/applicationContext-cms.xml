@@ -7,13 +7,13 @@
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
 	<!-- Content service setup -->
-	<bean id="contentService" class="com.madalla.service.cms.ContentServiceImpl">
+	<bean id="repositoryService" class="com.madalla.service.cms.RepositoryService">
     	<property name="template" ref="jcrTemplate"/>
     	<property name="site" value="${site.code}"/>
     	<property name="locales" ref="siteLocales"/>
 	</bean>
 	
-	<bean id="contentAdminService" class="com.madalla.service.cms.ContentAdminService">
+	<bean id="repositoryAdminService" class="com.madalla.service.cms.RepositoryAdminService">
     	<property name="template" ref="jcrTemplate"/>
     	<property name="site" value="${site.code}"/>
     	<property name="repositoryHome" value="${repository.home}"/>

@@ -9,21 +9,21 @@ import org.easymock.MockControl;
 import org.joda.time.DateTime;
 
 import com.madalla.service.cms.BlogEntry;
-import com.madalla.service.cms.IContentService;
+import com.madalla.service.cms.IRepositoryService;
 
 public class BlogServiceTest extends TestCase{
 
     BlogService service ;
-    IContentService mockContentService;
+    IRepositoryService mockContentService;
     private MockControl contentControl;
     private static String BLOG = "testBlog";
     
     protected void setUp() {
-        contentControl = MockControl.createControl(IContentService.class);
-        mockContentService = (IContentService) contentControl.getMock();
+        contentControl = MockControl.createControl(IRepositoryService.class);
+        mockContentService = (IRepositoryService) contentControl.getMock();
         
         service = new BlogService();
-        service.setContentService(mockContentService);
+        service.setRepositoryService(mockContentService);
     }
     
     public void testInsert(){

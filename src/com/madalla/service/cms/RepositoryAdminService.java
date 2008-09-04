@@ -28,7 +28,7 @@ import com.madalla.util.jcr.model.JcrNodeModel;
 import com.madalla.util.jcr.model.tree.JcrTreeModel;
 import com.madalla.util.jcr.model.tree.JcrTreeNode;
 
-public class ContentAdminService extends RepositoryService implements IContentAdminService {
+public class RepositoryAdminService extends AbstractRepositoryService implements IRepositoryAdminService {
 	
     private static final long serialVersionUID = 1L;
     private static final String FILE_SUFFIX = ".xml";
