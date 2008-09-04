@@ -2,11 +2,6 @@ package com.madalla.service.cms;
 
 import java.io.Serializable;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,23 +27,10 @@ public class ImageData extends AbstractRepositoryData implements Serializable {
 		this.name = name;
 	}
 	
-    public String processEntry(Session session, IRepositoryService service) throws RepositoryException{
-    	log.debug("processEntry - " + this);
-        Node node ;
-        if (StringUtils.isEmpty(id)){
-        	Node siteNode = service.getSiteNode(session);
-        	Node parent = service.getCreateNode(EC_NODE_IMAGES, siteNode);
-        	Node groupNode = service.getCreateNode(NS+getGroup(), parent);
-            node = service.getCreateNode(NS+ getName(), groupNode);
-        } else {
-            log.debug("processEntry - retrieving node by path. path="+ getId());
-            node = (Node) session.getItem(getId());
-        }
-		//node.setProperty("",imageData.get );
-        return node.getPath();
-    }
-
-
+	public String save(){
+		return ImageDataHelper.getInstance().save(this);
+	}
+	
 	public String getAlbum() {
 		return album;
 	}
