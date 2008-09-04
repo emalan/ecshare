@@ -1,5 +1,6 @@
 package com.madalla.webapp.cms;
 
+import static com.madalla.webapp.cms.ContentParameters.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
@@ -19,7 +20,7 @@ import com.madalla.service.cms.IContentServiceProvider;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.ContentEditPage;
 
-public class ContentPanel extends Panel implements IContentAware {
+public class ContentPanel extends Panel {
     private static final long serialVersionUID = 1L;
     private Log log = LogFactory.getLog(this.getClass());
     private Class<? extends Page> returnPage;

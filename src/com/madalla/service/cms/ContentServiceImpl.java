@@ -24,7 +24,7 @@ import org.springmodules.jcr.JcrTemplate;
  * <p>
  * This class is aware of the structure of the data in the repository 
  * and will create the structure if it does not exist. The schema is
- * open and not enforced by the repository. This class is reponsible
+ * open and not enforced by the repository. This class is responsible
  * for creating the structure and fetching the data. 
  * <p>
  * <pre>
@@ -50,7 +50,7 @@ import org.springmodules.jcr.JcrTemplate;
  * @author Eugene Malan
  *
  */
-public class ContentServiceImpl extends AbstractContentService implements IContentService, Serializable {
+public class ContentServiceImpl extends AbstractContentService implements IRepositoryService, IContentService, Serializable {
     
     private static final long serialVersionUID = 1L;
     private JcrTemplate template;
@@ -135,13 +135,7 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
     }
     
     public void setImageData(final ImageData data){
-    	processEntry(data, TYPE_IMAGE, new IEntryProcessor(){
-			public void processNode(Node node, IContentData content) throws RepositoryException {
-				ImageData imageData = (ImageData) content;
-				//TODO
-				//node.setProperty("",imageData.get );
-			}
-    	});
+    	processEntry(data);
     }
 
     public String getContentData(final String nodeName, final String id, Locale locale) {
@@ -151,11 +145,7 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
     
     public String getContentData(final String page, final String contentId) {
     	Content content = new Content(page, contentId);
-        processEntry(content, TYPE_TEXT, new IEntryProcessor(){
-			public void processNode(Node node, IContentData content) throws RepositoryException {
-				((Content)content).setText(node.getProperty(EC_PROP_CONTENT).getString()); 
-			}
-        });
+        processEntry(content);
         return content.getText();
     }
     
@@ -167,29 +157,31 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
         });
     }
     
-    private String processEntry(final IContentData entry, final String type, final IEntryProcessor convertor){
+    private String processEntry(final IContentData entry){
     	if (entry == null ){
             log.error("processEntry - Entry cannot be null.");
             return null;
         }
+    	
         return (String) template.execute(new JcrCallback(){
             public Object doInJcr(Session session) throws IOException, RepositoryException {
-                log.debug("processEntry - " + entry);
-                Node node ;
-                if (StringUtils.isEmpty(entry.getId())){
-                	Node parent = getParentNode(type, session);
-                	Node groupNode = getCreateNode(NS+entry.getGroup(), parent);
-                	if (type.equals(TYPE_TEXT)){ //TODO change data structure to get rid of this
-                		groupNode = getCreateNode(EC_NODE_CONTENT, groupNode);
-        			}
-                    node = getCreateNode(NS+entry.getName(), groupNode);
-                } else {
-                    log.debug("processEntry - retrieving node by path. path="+entry.getId());
-                    node = (Node) session.getItem(entry.getId());
-                }
-                convertor.processNode(node, entry);
-                session.save();
-                return node.getPath();
+            	return entry.processEntry(session, this);
+//                log.debug("processEntry - " + entry);
+//                Node node ;
+//                if (StringUtils.isEmpty(entry.getId())){
+//                	Node parent = entry.getParentNode(session);
+//                	Node groupNode = getCreateNode(NS+entry.getGroup(), parent);
+//                	if (type.equals(TYPE_TEXT)){ //TODO change data structure to get rid of this
+//                		groupNode = getCreateNode(EC_NODE_CONTENT, groupNode);
+//        			}
+//                    node = getCreateNode(NS+entry.getName(), groupNode);
+//                } else {
+//                    log.debug("processEntry - retrieving node by path. path="+entry.getId());
+//                    node = (Node) session.getItem(entry.getId());
+//                }
+//                convertor.processNode(node, entry);
+//                session.save();
+//                return node.getPath();
             }
         });
     }
@@ -276,5 +268,6 @@ public class ContentServiceImpl extends AbstractContentService implements IConte
 	public void setLocales(List<Locale> locales) {
 		this.locales = locales;
 	}
+	
 
 }

@@ -8,44 +8,23 @@ import javax.jcr.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-class AbstractContentService implements IContentAware {
+class AbstractContentService  {
+
+//	final static String TYPE_IMAGE = "image";
+//	final static String TYPE_BLOG = "blog";
+//	final static String TYPE_TEXT = "text";
+	
+	static final String NS = "ec:";
+	
+    static final String EC_NODE_BACKUP = NS + "backup";
+
+    
+    //TODO move these to Convertor class
 
 	private final Log log = LogFactory.getLog(this.getClass());
 	
     protected String site ;
     
-    protected Node getApplicationNode(Session session) throws RepositoryException{
-    	return getCreateNode(EC_NODE_APP, session.getRootNode());
-    }
-    
-    protected Node getParentNode(String type, Session session) throws RepositoryException{
-    	if (type.equals(TYPE_TEXT)){
-    		return getPagesParent(session);
-    	} else if(type.equals(TYPE_BLOG)){
-    		return getBlogsParent(session);
-    	} else if (type.equals(TYPE_IMAGE)){
-    		return getImageParent(session);
-    	} else {
-    		return null;
-    	}
-    }
-    
-    protected Node getPagesParent(Session session) throws RepositoryException{
-    	return getCreateNode(EC_NODE_PAGES, getCreateSiteNode(session));
-    }
-    
-    protected Node getBlogsParent(Session session) throws RepositoryException{
-    	return getCreateNode(EC_NODE_BLOGS, getCreateSiteNode(session));
-    }
-    
-    protected Node getImageParent(Session session) throws RepositoryException{
-    	return getCreateNode(EC_NODE_IMAGES, getCreateSiteNode(session));
-    }
-    
-    protected Node getCreateSiteNode(Session session) throws RepositoryException{
-    	Node appNode = getCreateNode(EC_NODE_APP, session.getRootNode());
-    	return getCreateNode(NS+site, appNode);
-    }
     
     protected Node getCreateBackupNode(Session session) throws RepositoryException{
     	Node appNode = getCreateNode(EC_NODE_APP, session.getRootNode());
@@ -67,27 +46,13 @@ class AbstractContentService implements IContentAware {
         }
         return node;
     }
-    /**
-     *  returns the class name node -- creates it if its not there
-     */
-    protected Node getCreateNode(String nodeName, Node parent) throws RepositoryException{
-    	if (null == nodeName || null == parent){
-    		log.error("getCreateNode - all parameters must be supplied");
-    		return null;
-    	}
-        Node node = null;
-        try {
-            node = parent.getNode(nodeName);
-        } catch (PathNotFoundException e){
-            log.debug("Node not found in repository, now adding. new node="+nodeName);
-            node = parent.addNode(nodeName);
-        }
-        return node;
-        
-    }
     
 	public void setSite(String site) {
 		this.site = site;
+	}
+	
+	public String getSite(){
+		return site;
 	}
 
 

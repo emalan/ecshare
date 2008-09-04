@@ -1,5 +1,7 @@
 package com.madalla.webapp.cms;
 
+import static com.madalla.webapp.cms.ContentParameters.*;
+
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.logging.Log;
@@ -26,7 +28,7 @@ import com.madalla.webapp.scripts.tiny_mce.TinyMce;
  * @author Eugene Malan
  * 
  */
-public class ContentEntryPanel extends Panel implements IContentAware {
+public class ContentEntryPanel extends Panel {
     private static final long serialVersionUID = 1L;
     private static final CompressedResourceReference JAVASCRIPT = new CompressedResourceReference(
             ContentEntryPanel.class, "ContentEntryPanel.js");

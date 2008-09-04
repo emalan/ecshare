@@ -1,5 +1,9 @@
 package com.madalla.webapp.blog.admin;
 
+import static com.madalla.webapp.blog.BlogParameters.BLOG_ENTRY_ID;
+import static com.madalla.webapp.blog.BlogParameters.BLOG_NAME;
+import static com.madalla.webapp.blog.BlogParameters.RETURN_PAGE;
+
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -30,11 +34,10 @@ import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
 import com.madalla.service.cms.BlogEntry;
 import com.madalla.webapp.blog.BlogEntryView;
-import com.madalla.webapp.blog.IBlogAware;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 import com.madalla.wicket.ValidationStyleBehaviour;
 
-public class BlogEntryPanel extends Panel implements IBlogAware{
+public class BlogEntryPanel extends Panel {
     private static final long serialVersionUID = 1L;
     private static final CompressedResourceReference JAVASCRIPT = new CompressedResourceReference(BlogEntryPanel.class, "BlogEntryPanel.js");
     private Log log = LogFactory.getLog(this.getClass());

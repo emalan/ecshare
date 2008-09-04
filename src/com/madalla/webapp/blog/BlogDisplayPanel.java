@@ -1,5 +1,7 @@
 package com.madalla.webapp.blog;
 
+import static com.madalla.webapp.blog.BlogParameters.*;
+
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -26,8 +28,9 @@ import com.madalla.service.cms.BlogEntry;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.BlogEntryPage;
 
-public class BlogDisplayPanel extends Panel implements IBlogAware{
+public class BlogDisplayPanel extends Panel {
 	private static final long serialVersionUID = 1L;
+
 	private final Log log = LogFactory.getLog(this.getClass());
 	private int displayCount = 5;
 	private final BlogEntryView blogEntry = new BlogEntryView();

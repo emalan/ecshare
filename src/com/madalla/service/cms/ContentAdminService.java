@@ -28,7 +28,7 @@ import com.madalla.util.jcr.model.JcrNodeModel;
 import com.madalla.util.jcr.model.tree.JcrTreeModel;
 import com.madalla.util.jcr.model.tree.JcrTreeNode;
 
-public class ContentAdminService extends AbstractContentService implements IContentAdminService {
+public class ContentAdminService extends RepositoryService implements IContentAdminService {
 	
     private static final long serialVersionUID = 1L;
     private static final String FILE_SUFFIX = ".xml";
@@ -37,6 +37,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
     private String repositoryHome;
     private final Log log = LogFactory.getLog(this.getClass());
     
+    static final String EC_NODE_BACKUP = NS + "backup";
     
 
     public TreeModel getRepositoryContent(){
@@ -58,7 +59,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
         return (TreeModel) template.execute(new JcrCallback(){
             
             public Object doInJcr(Session session) throws IOException, RepositoryException {
-                Node siteNode = getCreateSiteNode(session);
+                Node siteNode = getSiteNode(session);
                 session.save();
                 JcrNodeModel nodeModel = new JcrNodeModel(siteNode);
                 JcrTreeNode treeNode = new JcrTreeNode(nodeModel);
@@ -87,13 +88,13 @@ public class ContentAdminService extends AbstractContentService implements ICont
     }
     
     public String backupContentSite(){
-    	log.info("backupContentSite - Backing up Content Repository for Site. Site="+site);
+    	log.info("backupContentSite - Backing up Content Repository for Site. site=" + getSite());
     	String file = (String) template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
-				Node node = getCreateSiteNode(session);
+				Node node = getSiteNode(session);
                 session.save();
-				File backupFile = getBackupFile(site);
+				File backupFile = getBackupFile(getSite());
 				FileOutputStream out = new FileOutputStream(backupFile);
                 session.exportDocumentView(node.getPath(), out, true, false);
                 out.close();
@@ -108,7 +109,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
     }
     
     public List<File> getBackupFileList() {
-    	return getFileList(site);
+    	return getFileList(getSite());
     }
     
     private List<File> getFileList(final String fileStart){
@@ -176,14 +177,14 @@ public class ContentAdminService extends AbstractContentService implements ICont
 				
 				InputStream in = new FileInputStream(backupFile);
 				
-				Node siteNode = getCreateSiteNode(session);
+				Node siteNode = getSiteNode(session);
 				String importPath = siteNode.getParent().getPath();
 				Node backupParent = getCreateBackupNode(session);
 				session.save();
 				
 				//remove old backup if exists
-				if (backupParent.hasNode(NS+site)){
-					Node oldBackup = backupParent.getNode(NS+site);
+				if (backupParent.hasNode(NS+getSite())){
+					Node oldBackup = backupParent.getNode(NS+getSite());
 					log.info("restoreContentSite - removing an old backup.");
 					oldBackup.remove();
 					session.save();
@@ -227,7 +228,7 @@ public class ContentAdminService extends AbstractContentService implements ICont
 				} else {
 					Node backupParent = getCreateBackupNode(session);
 					session.save();
-					if (backupParent.hasNode(NS+site)){
+					if (backupParent.hasNode(NS+getSite())){
 						return true;
 					} else {
 						return false;
@@ -248,8 +249,14 @@ public class ContentAdminService extends AbstractContentService implements ICont
     	rollback(false);
     }
     
+    private Node getCreateBackupNode(Session session) throws RepositoryException{
+    	Node appNode = getCreateNode(EC_NODE_APP, session.getRootNode());
+    	return getCreateNode(EC_NODE_BACKUP, appNode);
+    }
+
+    
     private void rollback(final Boolean application){
-    	log.info("rollback - Attempting to rollback restore. Site ="+site);
+    	log.info("rollback - Attempting to rollback restore. Site ="+getSite());
     	template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
@@ -262,9 +269,9 @@ public class ContentAdminService extends AbstractContentService implements ICont
 					backupParent = getCreateNode(EC_NODE_BACKUP, session.getRootNode());
 					destinationNode = getApplicationNode(session);
 				} else {
-					backupName = NS+site;
+					backupName = NS+getSite();
 					backupParent = getCreateBackupNode(session);
-					destinationNode = getCreateSiteNode(session);
+					destinationNode = getSiteNode(session);
 				}
 				session.save();
 
