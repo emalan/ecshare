@@ -57,6 +57,7 @@ public class BlogArchivePanel extends Panel {
 
 			protected Component newNodeComponent(String id, IModel model) {
 				return new LinkIconPanel(id, model, this) {
+
 					private static final long serialVersionUID = 1L;
 
 					protected void onNodeLinkClicked(TreeNode node,	BaseTree tree, AjaxRequestTarget target) {

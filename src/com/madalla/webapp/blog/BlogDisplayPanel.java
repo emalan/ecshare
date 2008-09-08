@@ -35,6 +35,11 @@ public class BlogDisplayPanel extends Panel {
 	private int displayCount = 5;
 	private final BlogEntryView blogEntry = new BlogEntryView();
 	
+	public BlogDisplayPanel(final String id, final String blog, final String blogEntryId, final Class<? extends Page> returnPage){
+		this(id, blog, returnPage );
+		changeModel(blogEntryId);
+	}
+	
 	public BlogDisplayPanel(final String id, final String blog, final Class<? extends Page> returnPage) {
 		super(id);
 		

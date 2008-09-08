@@ -13,8 +13,8 @@ public class BlogHomePanel extends Panel{
 
 	private static final long serialVersionUID = 1548972105193261539L;
 	private static Log log = LogFactory.getLog(BlogHomePanel.class);
-
-	public BlogHomePanel(String id, String blog, Class<? extends Page> returnPage) {
+	
+	public BlogHomePanel(String id, String blog, String blogEntryId, Class<? extends Page> returnPage){
 		super(id);
 		
 		//Instanciation checks
@@ -25,13 +25,17 @@ public class BlogHomePanel extends Panel{
 					"the abstract class CmsBlogApplication.");
 		}
 
-		BlogDisplayPanel displayPanel = new BlogDisplayPanel("blogDisplayPanel", blog, returnPage);
+		BlogDisplayPanel displayPanel;
+		if (blogEntryId != null){
+			displayPanel = new BlogDisplayPanel("blogDisplayPanel", blog, blogEntryId, returnPage);
+		} else {
+			displayPanel = new BlogDisplayPanel("blogDisplayPanel", blog, returnPage);
+		}
 		displayPanel.setOutputMarkupId(true);
 		add(displayPanel);
 		add(new BlogArchivePanel("blogExplorerPanel", blog, displayPanel));
-		
-		
 	}
+
 	
 
 }

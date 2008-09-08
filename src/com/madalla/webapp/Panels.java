@@ -46,7 +46,22 @@ public class Panels {
 		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(blog)|| returnPage == null){
 			throw new WicketRuntimeException("BlogHomePanel - All paramaters need to be supplied.");
 		}
-		return new BlogHomePanel(id, blog, returnPage);
+		return new BlogHomePanel(id, blog, null, returnPage);
+	}
+	
+	/**
+	 * @param id - wicket id
+	 * @param blog - Name of this Blog
+	 * @param blogEntryId - Page can be opened with default Blog selected
+	 * @param returnPage - used to return from blog admin Page
+	 * @return Instantiated Panel of Type {@link com.madalla.webapp.blog.BlogHomePanel}
+	 * @throws InstantiationException 
+	 */
+	public static Panel blogPanel(String id, String blog, String blogEntryId, Class<? extends Page> returnPage) {
+		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(blog)|| returnPage == null){
+			throw new WicketRuntimeException("BlogHomePanel - All paramaters need to be supplied.");
+		}
+		return new BlogHomePanel(id, blog, blogEntryId, returnPage);
 	}
 	
 	/**
