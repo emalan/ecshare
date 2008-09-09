@@ -41,20 +41,6 @@ public class Panels {
 	 * @param id - wicket id
 	 * @param blog - Name of this Blog
 	 * @param returnPage - used to return from blog admin Page
-	 * @return Instantiated Panel of Type {@link com.madalla.webapp.blog.BlogHomePanel}
-	 * @throws InstantiationException 
-	 */
-	public static Panel blogPanel(String id, String blog, Class<? extends Page> returnPage) {
-		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(blog)|| returnPage == null){
-			throw new WicketRuntimeException("BlogHomePanel - All paramaters need to be supplied.");
-		}
-   		return new BlogHomePanel(id, blog, null, returnPage);
-	}
-	
-	/**
-	 * @param id - wicket id
-	 * @param blog - Name of this Blog
-	 * @param returnPage - used to return from blog admin Page
 	 * @param pageParameters - passed on to Panel
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.blog.BlogHomePanel}
 	 * @throws InstantiationException 
