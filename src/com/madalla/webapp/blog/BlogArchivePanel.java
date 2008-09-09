@@ -99,13 +99,16 @@ public class BlogArchivePanel extends Panel {
 		add(tree);
 		
 		Link home = new AjaxFallbackLink("home"){
-
-			private static final long serialVersionUID = -3613367972403232618L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				target.addComponent(display);
-				display.add(new SimpleAttributeModifier("class","showHome"));
+				if (target == null){
+					setResponsePage(getPage().getClass());
+				} else {
+					target.addComponent(display);
+					display.add(new SimpleAttributeModifier("class","showHome"));
+				}
 				
 			}
 			

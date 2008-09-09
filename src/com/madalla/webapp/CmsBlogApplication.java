@@ -50,7 +50,6 @@ public abstract class CmsBlogApplication extends WebApplication implements IRepo
     private void setupApplicationSpecificConfiguration(){
     	//getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
     	setupSecurity();
-        //getMarkupSettings().setStripWicketTags(true);
     }
     
     private void setupSecurity(){
