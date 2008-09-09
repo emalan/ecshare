@@ -81,7 +81,9 @@ public class BlogEntryPanel extends Panel {
             add(feedbackPanel);
             
             //Date
-            blogEntry.setDate(new DateTime().toDate());
+            if (blogEntry.getDate() == null){
+            	blogEntry.setDate(new DateTime().toDate());
+            }
             DateTextField dateTextField = new DateTextField("dateTextField", new PropertyModel(blogEntry,"date"), new StyleDateConverter("S-",true));
             dateTextField.setRequired(true);
             dateTextField.add(new ValidationStyleBehaviour());

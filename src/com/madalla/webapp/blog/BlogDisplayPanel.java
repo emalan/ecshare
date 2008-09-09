@@ -133,6 +133,21 @@ public class BlogDisplayPanel extends Panel {
 		add(new DateLabel("date", new PropertyModel(blogEntry, "date" ), new StyleDateConverter("MS",true)).setOutputMarkupId(true));
 		add(new Label("keywords", new PropertyModel(blogEntry, "keywords")).setOutputMarkupId(true));
 		add(new Label("text", new PropertyModel(blogEntry, "text")).setOutputMarkupId(true).setEscapeModelStrings(false));
+		PageParameters params = new PageParameters(RETURN_PAGE+"="+returnPage.getName()+","+BLOG_ENTRY_ID+"="+blogEntry.getId()+","+BLOG_NAME+"="+blog);
+        add(new BookmarkablePageLink("editBlogLink",BlogEntryPage.class, params){
+            
+			private static final long serialVersionUID = 1L;
+
+			protected final void onBeforeRender(){
+                if (adminMode){
+                    setVisible(true);
+                } else {
+                    setVisible(false);
+                }
+                super.onBeforeRender();
+            }
+        });
+
 	}
 	
 	public void changeModel(String blogEntryId){

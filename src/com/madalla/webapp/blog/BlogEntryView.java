@@ -3,6 +3,7 @@ package com.madalla.webapp.blog;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.joda.time.DateTime;
 
 import com.madalla.service.cms.BlogEntry;
@@ -85,5 +86,10 @@ public class BlogEntryView implements Serializable{
 	public void setKeywords(String keywords) {
 		this.keywords = keywords;
 	}
+	@Override
+	public String toString() {
+		return ReflectionToStringBuilder.toString(this);
+	}
+
 
 }
