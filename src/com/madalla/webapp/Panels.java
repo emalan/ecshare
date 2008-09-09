@@ -1,7 +1,10 @@
 package com.madalla.webapp;
 
+import static com.madalla.webapp.blog.BlogParameters.BLOG_ENTRY_ID;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Page;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.panel.Panel;
 
@@ -33,8 +36,7 @@ public class Panels {
 	public static Panel contentPanel(String id, String node, Class<? extends Page> returnPage){
 		return new ContentPanel(id, node, returnPage);
 	}
-	
-	
+
 	/**
 	 * @param id - wicket id
 	 * @param blog - Name of this Blog
@@ -46,22 +48,24 @@ public class Panels {
 		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(blog)|| returnPage == null){
 			throw new WicketRuntimeException("BlogHomePanel - All paramaters need to be supplied.");
 		}
-		return new BlogHomePanel(id, blog, null, returnPage);
+   		return new BlogHomePanel(id, blog, null, returnPage);
 	}
 	
 	/**
 	 * @param id - wicket id
 	 * @param blog - Name of this Blog
-	 * @param blogEntryId - Page can be opened with default Blog selected
 	 * @param returnPage - used to return from blog admin Page
+	 * @param pageParameters - passed on to Panel
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.blog.BlogHomePanel}
 	 * @throws InstantiationException 
 	 */
-	public static Panel blogPanel(String id, String blog, String blogEntryId, Class<? extends Page> returnPage) {
+	public static Panel blogPanel(String id, String blog, Class<? extends Page> returnPage, PageParameters params) {
 		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(blog)|| returnPage == null){
 			throw new WicketRuntimeException("BlogHomePanel - All paramaters need to be supplied.");
 		}
-		return new BlogHomePanel(id, blog, blogEntryId, returnPage);
+		String blogEntryId = params.getString(BLOG_ENTRY_ID);
+   		return new BlogHomePanel(id, blog, blogEntryId, returnPage);
+		
 	}
 	
 	/**
