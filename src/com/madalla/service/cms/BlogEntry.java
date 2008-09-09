@@ -137,16 +137,13 @@ public class BlogEntry  implements IRepositoryData, Serializable, Comparable<Blo
     }
     
     public String getSummary(){
-        if (StringUtils.isEmpty(text)){
+    	if (StringUtils.isNotEmpty(description)){
+    		return description;
+    	}
+        if (StringUtils.isEmpty(text) || text.length() <= summaryLength){
             return text;
         }
-        int textLength = text.length();
-        if (textLength <= summaryLength){
-            return text;
-        }
-        
         return HTMLParser.parseHTMLText(text, summaryLength);
-        
     }
 
     public String getSummary(String moreLink){

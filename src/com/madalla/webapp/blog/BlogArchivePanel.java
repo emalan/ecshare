@@ -1,5 +1,7 @@
 package com.madalla.webapp.blog;
 
+import static com.madalla.webapp.blog.BlogParameters.BLOG_ENTRY_ID;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
@@ -7,6 +9,7 @@ import javax.swing.tree.TreeNode;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
@@ -16,6 +19,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.markup.html.tree.LinkTree;
+import org.apache.wicket.markup.html.tree.BaseTree.LinkType;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.joda.time.format.DateTimeFormat;
@@ -57,7 +61,6 @@ public class BlogArchivePanel extends Panel {
 
 			protected Component newNodeComponent(String id, IModel model) {
 				return new LinkIconPanel(id, model, this) {
-
 					private static final long serialVersionUID = 1L;
 
 					protected void onNodeLinkClicked(TreeNode node,	BaseTree tree, AjaxRequestTarget target) {
@@ -71,9 +74,15 @@ public class BlogArchivePanel extends Panel {
 								BlogEntry blogEntry = (BlogEntry) treeNode.getUserObject();
 								String blogEntryId = blogEntry.getId();
 								log.debug("onNodeLinkClicked - blogId="+blogEntryId);
-								display.changeModel(blogEntryId);
-								display.add(new SimpleAttributeModifier("class","showBlog"));
-								target.addComponent(display);
+								if (target == null){ //non-ajax
+									log.info("onNodeLinkClicked - no target found.");
+									PageParameters params = new PageParameters(BLOG_ENTRY_ID+"="+blogEntryId);
+									setResponsePage(getPage().getClass(), params);
+								} else {
+									display.changeModel(blogEntryId);
+									display.add(new SimpleAttributeModifier("class","showBlog"));
+									target.addComponent(display);
+								}
 							}
 						}
 					}
@@ -86,6 +95,7 @@ public class BlogArchivePanel extends Panel {
 
 		};
 		tree.getTreeState().expandAll();
+		tree.setLinkType(LinkType.AJAX_FALLBACK);
 		add(tree);
 		
 		Link home = new AjaxFallbackLink("home"){

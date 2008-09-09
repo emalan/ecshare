@@ -38,6 +38,7 @@ public class BlogDisplayPanel extends Panel {
 	public BlogDisplayPanel(final String id, final String blog, final String blogEntryId, final Class<? extends Page> returnPage){
 		this(id, blog, returnPage );
 		changeModel(blogEntryId);
+		add(new SimpleAttributeModifier("class","showBlog"));
 	}
 	
 	public BlogDisplayPanel(final String id, final String blog, final Class<? extends Page> returnPage) {
