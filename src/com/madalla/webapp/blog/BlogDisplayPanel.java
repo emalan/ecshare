@@ -1,6 +1,8 @@
 package com.madalla.webapp.blog;
 
-import static com.madalla.webapp.blog.BlogParameters.*;
+import static com.madalla.webapp.blog.BlogParameters.BLOG_ENTRY_ID;
+import static com.madalla.webapp.blog.BlogParameters.BLOG_NAME;
+import static com.madalla.webapp.blog.BlogParameters.RETURN_PAGE;
 
 import java.util.List;
 
@@ -27,6 +29,7 @@ import com.madalla.service.blog.IBlogServiceProvider;
 import com.madalla.service.cms.BlogEntry;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.BlogEntryPage;
+import com.madalla.wicket.KeywordHeaderContributor;
 
 public class BlogDisplayPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -154,6 +157,7 @@ public class BlogDisplayPanel extends Panel {
 		BlogEntry newData = getBlogService().getBlogEntry(blogEntryId);
 		blogEntry.init(newData);
 		log.debug("changeModel - "+ blogEntry);
+		add(new KeywordHeaderContributor(newData.getKeywords()));
 	}
 	
     private IBlogService getBlogService(){
