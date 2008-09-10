@@ -39,14 +39,21 @@ public class BlogDisplayPanel extends Panel {
 	private final BlogEntryView blogEntry = new BlogEntryView();
 	
 	public BlogDisplayPanel(final String id, final String blog, final String blogEntryId, final Class<? extends Page> returnPage){
-		this(id, blog, returnPage );
+		super(id);
+		init(id, blog, returnPage );
 		changeModel(blogEntryId);
 		add(new SimpleAttributeModifier("class","showBlog"));
+		add(new KeywordHeaderContributor(blogEntry.getKeywords()));
 	}
-	
 	public BlogDisplayPanel(final String id, final String blog, final Class<? extends Page> returnPage) {
 		super(id);
-		
+		init(id, blog, returnPage);
+		//TODO get the Blog keywords from CMS
+		blogEntry.setKeywords("Eugene Malan, Eugene, Malan, Blog, CMS, Wicket, Java,"+blogEntry.getBlog());
+		add(new KeywordHeaderContributor(blogEntry.getKeywords()));
+	}
+	
+	private void init(final String id, final String blog, final Class<? extends Page> returnPage) {
 		final boolean adminMode = ((CmsSession)getSession()).isCmsAdminMode();
 		
 		//new Blog link
@@ -157,7 +164,6 @@ public class BlogDisplayPanel extends Panel {
 		BlogEntry newData = getBlogService().getBlogEntry(blogEntryId);
 		blogEntry.init(newData);
 		log.debug("changeModel - "+ blogEntry);
-		add(new KeywordHeaderContributor(newData.getKeywords()));
 	}
 	
     private IBlogService getBlogService(){
