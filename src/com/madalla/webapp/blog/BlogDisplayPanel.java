@@ -48,7 +48,8 @@ public class BlogDisplayPanel extends Panel {
 	public BlogDisplayPanel(final String id, final String blog, final Class<? extends Page> returnPage) {
 		super(id);
 		init(id, blog, returnPage);
-		//TODO get the Blog keywords from CMS
+		//TODO Store the Blog Home Meatadata keywords in CMS
+		//TODO Change the Content Entry to a Blog intro and keywords
 		blogEntry.setKeywords("Eugene Malan, Eugene, Malan, Blog, CMS, Wicket, Java,"+blogEntry.getBlog());
 		add(new KeywordHeaderContributor(blogEntry.getKeywords()));
 	}
