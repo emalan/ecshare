@@ -5,13 +5,10 @@ import java.util.Calendar;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrTemplate;
 
 public class BlogEntryHelper extends AbstractContentHelper{
-	private static final Log log = LogFactory.getLog(BlogEntryHelper.class);
 	
 	//Repository data names
 	static final String EC_NODE_BLOGS = NS + "blogs";

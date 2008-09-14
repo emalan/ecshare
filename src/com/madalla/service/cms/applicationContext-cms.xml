@@ -17,6 +17,10 @@
     	<property name="site" value="${site.code}"/>
     	<property name="repositoryHome" value="${repository.home}"/>
 	</bean>
+	
+	<bean id="backupCreator" class="com.madalla.service.cms.RepositoryBackupCreator">
+		<constructor-arg ref="repositoryAdminService"/>
+	</bean>
 
     <bean id="content" class="com.madalla.service.cms.ContentHelper"  >
         <constructor-arg ref="jcrTemplate" />
