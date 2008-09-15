@@ -1,0 +1,54 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+    
+       div.album{
+            position:relative;
+            width: 640px;
+            height: 426px;
+        }
+        ul.crossfade {
+                padding: 0;
+                margin: 0;
+                list-style: none;
+                position: relative;
+        }
+        .crossfade li{
+            list-style: none;
+            list-style-type: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 640px;
+                height: 426px;
+                background-color: #FFF;
+                visibility: hidden;
+        }
+
+        div#controls{
+            position: absolute;
+            left: 8%;
+            bottom: 4%;
+
+        }
+        .banner-image {
+                width: 640px;
+                height: 426px;
+        }
+    
+    </style>
+</wicket:head>
+<body>
+    <wicket:panel>
+        
+        <div class="album" >
+            <ul wicket:id="image-list" class="crossfade">
+                <li style="visibility: visible; list-style: none; list-style-type: none;">
+                    <img wicket:id="id" class="banner-image" border="0" />
+                </li>
+            </ul>
+        </div>      
+    
+    </wicket:panel>
+</body>
+</html>
