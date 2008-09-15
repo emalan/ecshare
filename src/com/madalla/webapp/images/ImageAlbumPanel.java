@@ -2,12 +2,14 @@ package com.madalla.webapp.images;
 
 import java.util.List;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
+import org.apache.wicket.model.IModel;
 
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 
@@ -39,7 +41,23 @@ public class ImageAlbumPanel extends Panel {
 			@Override
 			protected void populateItem(ListItem item) {
 				final String src = (String) item.getModelObject();
-				item.add(new Image("id",src));
+				Image image = new Image("id");
+				image.add(new AttributeModifier("src",true,new IModel(){
+
+					public Object getObject() {
+						return src;
+					}
+
+					public void setObject(Object object) {
+						
+					}
+
+					public void detach() {
+						
+					}
+					
+				}));
+				item.add(image);
 				
 			}
         	
