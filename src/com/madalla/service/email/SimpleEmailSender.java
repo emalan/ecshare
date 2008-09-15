@@ -2,6 +2,7 @@ package com.madalla.service.email;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.mail.EmailException;
@@ -75,17 +76,9 @@ public class SimpleEmailSender implements IEmailSender, Serializable {
     public void setEmailToName(String emailToName) {
         this.emailToName = emailToName;
     }
-
+    
     public String toString() {
-        StringBuffer sb = new StringBuffer("SimpleEmailSender").append(System.getProperty("line.separator"));
-        sb.append("emailhost: "+emailHost).append(System.getProperty("line.separator"));
-        sb.append("emailToEmail: "+emailToEmail).append(System.getProperty("line.separator"));
-        sb.append("emailToName: "+emailToName).append(System.getProperty("line.separator"));
-        sb.append("emailFromEmail: "+emailFromEmail).append(System.getProperty("line.separator"));
-        sb.append("emailFromName: "+emailFromName).append(System.getProperty("line.separator"));
-        sb.append("subject: "+email.getSubject());
-        
-        return sb.toString();
+    	return ReflectionToStringBuilder.toString(this);
     }
 
     public void setMailAuthName(String mailAuthName) {

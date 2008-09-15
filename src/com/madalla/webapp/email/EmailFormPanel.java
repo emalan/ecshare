@@ -65,7 +65,7 @@ public class EmailFormPanel extends Panel {
             feedbackPanel.setOutputMarkupId(true);
             add(feedbackPanel);
             
-            TextField name = new RequiredTextField("name",new PropertyModel(properties,"Name"));
+            TextField name = new RequiredTextField("name",new PropertyModel(properties,"name"));
             name.add(new ValidationStyleBehaviour());
             name.setLabel(new Model(panel.getString("label.name")));
             name.add(new AjaxFormComponentUpdatingBehavior("onblur"){
