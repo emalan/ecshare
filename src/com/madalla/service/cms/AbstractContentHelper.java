@@ -64,7 +64,6 @@ abstract class AbstractContentHelper {
         
     }
     
-    //TODO Generic method that will move to super
     protected String genericSave(final IRepositoryData data) {
     	return (String) template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,

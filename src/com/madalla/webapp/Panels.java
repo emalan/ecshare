@@ -45,11 +45,11 @@ public class Panels {
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.blog.BlogHomePanel}
 	 * @throws InstantiationException 
 	 */
-	public static Panel blogPanel(String id, String blog, Class<? extends Page> returnPage, PageParameters params) {
+	public static Panel blogPanel(String id, String blog, Class<? extends Page> returnPage, PageParameters pageParameters) {
 		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(blog)|| returnPage == null){
 			throw new WicketRuntimeException("BlogHomePanel - All paramaters need to be supplied.");
 		}
-		String blogEntryId = params.getString(BLOG_ENTRY_ID);
+		String blogEntryId = pageParameters.getString(BLOG_ENTRY_ID);
    		return new BlogHomePanel(id, blog, blogEntryId, returnPage);
 		
 	}

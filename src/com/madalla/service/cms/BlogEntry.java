@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 
 import com.madalla.util.ui.HTMLParser;
@@ -14,7 +12,6 @@ import com.madalla.util.ui.ICalendarTreeInput;
 public class BlogEntry  implements IRepositoryData, Serializable, Comparable<BlogEntry>, ICalendarTreeInput{
 
 	private static final long serialVersionUID = -7829797397130212868L;
-	private static final Log log = LogFactory.getLog(BlogEntry.class);
 
 	private final static int summaryLength = 500;
 
@@ -48,14 +45,14 @@ public class BlogEntry  implements IRepositoryData, Serializable, Comparable<Blo
     	 * @param title
     	 * @param date
     	 */
-    	Builder(String id, String blog, String title, DateTime date){
+    	Builder(final String id, final String blog, final String title, final DateTime date){
     		this.id = id;
     		this.blog = blog;
     		this.title = title;
     		this.date = date;
     	}
     	//creates a new entry that does not yet exist in repository
-    	public Builder(String blog, String title, DateTime date){
+    	public Builder(final String blog, final String title, final DateTime date){
     		this.id = "";  //
     		this.blog = blog;
     		this.title = title;
@@ -159,13 +156,12 @@ public class BlogEntry  implements IRepositoryData, Serializable, Comparable<Blo
 		if (this == obj) return true;
 		if (!(obj instanceof BlogEntry)) return false;
 		BlogEntry compare = (BlogEntry)obj; 
-		if (!id.equals(compare.getId())) return false;
 		if (!title.equals(compare.getTitle()))return false;
 		if (!blog.equals(compare.getBlog()))return false;
 		if (!category.equals(compare.getCategory()))return false;
 		if (!description.equals(compare.getDescription()))return false;
 		if (!keywords.equals(compare.getKeywords()))return false;
-		if (!date.equals(compare.getDate()))return false;
+		if (!date.toString().equals(compare.getDate().toString()))return false; //dont ask...
 		if (!text.equals(compare.getText()))return false;
 		return true;
 	}

@@ -25,17 +25,17 @@ var Banner = Class.create(Crossfade, {
 		}
 		Element.addMethods(ControlMethods);	
 		var element = new Element('div', {id :'controls'});
-		var prev = new Element('span', {id :'rotating-album-previous'})
+		var prev = new Element('span', {id : $(elm).className + '-previous'})
 			.addClassName('control').update('<').setControlStyle()
 			.observe('click', this.previous.bind(this));
 		element.appendChild(prev);
 		for ( var index = 0; index < this.slides.length; ++index) {
-			var nav = new Element('span', {id :'rotating-album-' + index})
+			var nav = new Element('span', {id : $(elm).className + '-' + index})
 				.addClassName('control').update(index + 1).setControlStyle()
 			    .observe('click', this.gotoSlide.bindAsEventListener(	this, index));
 			element.appendChild(nav);
 		}
-		var next = new Element('span', {id :'rotating-album-next'})
+		var next = new Element('span', {id : $(elm).className + '-next'})
 			.addClassName('control').update('>').setControlStyle()
 		    .observe('click', this.next.bind(this));
 		element.appendChild(next);
@@ -52,23 +52,21 @@ var Banner = Class.create(Crossfade, {
  		this.stop();
 		this.ready = false;
   		var data = $A(arguments);
-		var me = this;
 		var clicked = data[1]; 
 		if (this.counter == clicked) { this.ready = true; return; }
 		this.setNav(clicked)
 		var prevSlide = this.slides[this.counter];
 		var me = this; 
-		nav = $(me.elm.id + '-' + this.counter );
 		var nextSlide = this.slides[clicked];
 		this.counter = clicked;
         	this.loadSlide(nextSlide, me.options.transition.cycle(prevSlide, nextSlide, me));	
         },
     setNav : function(counter){
 		for (var index = 0; index < this.slides.length; ++index){
-			var nav = $(this.elm.id + '-' + index);
+			var nav = $(this.elm.className + '-' + index);
 			if (nav) { nav.setStyle({fontWeight:'normal', color:'#FFFFFF'});}
 		}
-		var nav = $(this.elm.id + '-' + counter);
+		var nav = $(this.elm.className + '-' + counter);
 		if (nav) { new Effect.Pulsate(nav,{pulses:1, duration:0.5}); nav.setStyle({fontWeight:'bold', color:'#D3D3D3'});} 
 	}
 });

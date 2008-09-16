@@ -1,6 +1,8 @@
 package com.madalla.test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -18,6 +20,7 @@ import com.madalla.service.cms.BlogEntry;
 import com.madalla.service.cms.Content;
 import com.madalla.service.cms.IRepositoryAdminService;
 import com.madalla.service.cms.IRepositoryService;
+import com.madalla.service.cms.ImageData;
 
 public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
@@ -103,13 +106,31 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     public void testBlogGetSet(){
     	BlogEntry blogEntry = createBlogEntry();
         String path = blogEntry.save();
+        
         BlogEntry testBlogEntry = contentService.getBlogEntry(path);
-    	assertEquals(blogEntry.getBlog(), testBlogEntry.getBlog());
+        assertEquals(blogEntry, testBlogEntry);
+        assertEquals(blogEntry.getBlog(), testBlogEntry.getBlog());
         assertEquals(blogEntry.getTitle(), testBlogEntry.getTitle());
         assertEquals(blogEntry.getText(), testBlogEntry.getText());
         //assertEquals(blogEntry.getDate(), testBlogEntry.getDate());
         
         contentService.deleteNode(path);
+    }
+    
+    public void testImageGetSet() throws FileNotFoundException{
+    	InputStream stream = this.getClass().getResourceAsStream("test1.jpg");
+    	assertNotNull(stream);
+    	final String album = "testAlbum";
+    	final String name = "image1";
+    	ImageData image = new ImageData(album, name, stream);
+    	
+    	String path = image.save();
+    	log.info("testImageGetSet - path="+path);
+    	
+    	ImageData test = contentService.getImageData(path);
+    	
+    	assertEquals(image, test);
+    	
     }
     
     

@@ -1,14 +1,20 @@
 package com.madalla.service.cms;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
 import org.joda.time.DateTime;
+import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
-public class BlogEntryHelper extends AbstractContentHelper{
+class BlogEntryHelper extends AbstractContentHelper{
 	
 	//Repository data names
 	static final String EC_NODE_BLOGS = NS + "blogs";
@@ -20,7 +26,7 @@ public class BlogEntryHelper extends AbstractContentHelper{
 
 
 	private static BlogEntryHelper instance;
-	public static BlogEntryHelper getInstance(){
+	static BlogEntryHelper getInstance(){
 		return instance;
 	}
 
@@ -30,10 +36,6 @@ public class BlogEntryHelper extends AbstractContentHelper{
 		instance = this;
 	}
 	
-	public String save(final BlogEntry blogEntry) {
-		return genericSave(blogEntry);
-    }
-	
     public static boolean isBlogNode(final String path){
     	String[] pathArray = path.split("/");
     	if (EC_NODE_BLOGS.equals(pathArray[pathArray.length-2])){
@@ -42,7 +44,7 @@ public class BlogEntryHelper extends AbstractContentHelper{
     	return false;
     }
     
-    public static BlogEntry createBlogEntry(Node node) throws RepositoryException{
+    private static BlogEntry create(Node node) throws RepositoryException{
     	String blog = node.getParent().getName().replaceFirst(NS,"");
     	String title = node.getProperty(EC_PROP_TITLE).getString();
     	String description = node.getProperty(EC_PROP_DESCRIPTION).getString();
@@ -54,6 +56,38 @@ public class BlogEntryHelper extends AbstractContentHelper{
     	return new BlogEntry.Builder(node.getPath(), blog, title, new DateTime(calendar)).
     	category(category).desription(description).keywords(keywords).text(text).build();
     }
+
+	String save(final BlogEntry blogEntry) {
+		return genericSave(blogEntry);
+    }
+	
+	BlogEntry get(final String path){
+		return (BlogEntry) template.execute(new JcrCallback(){
+			public Object doInJcr(Session session) throws IOException,	RepositoryException {
+				Node node = (Node) session.getItem(path);
+				return create(node);
+			}
+			
+		});
+	}
+	
+	List<BlogEntry> getBlogEntries(final String blog){
+		return (List<BlogEntry>) template.execute(new JcrCallback(){
+            List<BlogEntry> list = new ArrayList<BlogEntry>();
+            public List<BlogEntry> doInJcr(Session session) throws IOException, RepositoryException {
+            	Node siteNode = getSiteNode(session);
+            	Node blogParent = getCreateNode(EC_NODE_BLOGS, siteNode);
+            	Node blogNode = getCreateNode(NS+blog, blogParent);
+                
+                for (NodeIterator iterator = blogNode.getNodes(); iterator.hasNext();){
+                    Node nextNode = iterator.nextNode();
+                    list.add(BlogEntryHelper.create(nextNode));
+                }
+                return list;
+            }
+        });
+	}
+	
 
     @Override
 	Node getParentNode(Node node) throws RepositoryException {

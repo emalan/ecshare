@@ -51,7 +51,7 @@ public class Content  implements IRepositoryData, Serializable {
     
     /**
      * @param pageName
-     * @param contentId
+     * @param contentName
      */
     public Content(final String pageName, final String contentName){
     	this.id = "";

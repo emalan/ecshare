@@ -20,5 +20,6 @@ public interface IRepositoryService {
     void deleteNode(final String path);
     Content getContent(final String path);
     List<BlogEntry> getBlogEntries(final String blog);
+    ImageData getImageData(final String path) ;
 
 }

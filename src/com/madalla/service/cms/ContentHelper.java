@@ -96,15 +96,12 @@ public class ContentHelper extends AbstractContentHelper {
     
 	@Override
 	Node getParentNode(Node node) throws RepositoryException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	void setPropertyValues(Node node, IRepositoryData data)
 			throws RepositoryException {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

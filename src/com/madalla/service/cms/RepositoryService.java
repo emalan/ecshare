@@ -2,13 +2,11 @@ package com.madalla.service.cms;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
@@ -44,7 +42,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     
 
     //Delete this and move out to Data classes
-    static final String EC_NODE_BLOGS = NS + "blogs";
+    //static final String EC_NODE_BLOGS = NS + "blogs";
     static final String EC_PROP_CONTENT = NS + "content";
 
     public boolean isDeletableNode(final String path){
@@ -85,18 +83,21 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     public boolean isContentPasteNode(final String path){
     	return ContentHelper.isContentPasteNode(path);
     }
+    
+    public ImageData getImageData(final String path) {
+        if (StringUtils.isEmpty(path)){
+            log.error("getBlogEntry - path is required.");
+            return null;
+        }
+        return ImageDataHelper.getInstance().get(path);
+    }
 
     public BlogEntry getBlogEntry(final String path) {
         if (StringUtils.isEmpty(path)){
             log.error("getBlogEntry - path is required.");
             return null;
         }
-        return (BlogEntry) template.execute(new JcrCallback(){
-            public Object doInJcr(Session session) throws IOException, RepositoryException {
-                Node node = (Node) session.getItem(path);
-                return BlogEntryHelper.createBlogEntry(node);
-            }
-        });
+        return BlogEntryHelper.getInstance().get(path);
     }
     
     public String getContentData(final String nodeName, final String id, Locale locale) {
@@ -124,7 +125,6 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         }
     }
 
-
     public void deleteNode(final String path) {
         if (StringUtils.isEmpty(path)) {
             log.error("deleteNode - path is required.");
@@ -141,20 +141,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     public List<BlogEntry> getBlogEntries(final String blog){
-        return (List<BlogEntry>) template.execute(new JcrCallback(){
-            List<BlogEntry> list = new ArrayList<BlogEntry>();
-            public List<BlogEntry> doInJcr(Session session) throws IOException, RepositoryException {
-            	Node siteNode = getSiteNode(session);
-            	Node blogParent = getCreateNode(EC_NODE_BLOGS, siteNode);
-            	Node blogNode = getCreateNode(NS+blog, blogParent);
-                
-                for (NodeIterator iterator = blogNode.getNodes(); iterator.hasNext();){
-                    Node nextNode = iterator.nextNode();
-                    list.add(BlogEntryHelper.createBlogEntry(nextNode));
-                }
-                return list;
-            }
-        });
+    	return BlogEntryHelper.getInstance().getBlogEntries(blog);
     }
 
 	public Content getContent(final String path) {
