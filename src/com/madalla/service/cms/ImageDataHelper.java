@@ -2,8 +2,11 @@ package com.madalla.service.cms;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
@@ -53,6 +56,24 @@ class ImageDataHelper extends AbstractContentHelper {
 			}
 			
 		});
+	}
+	
+	@SuppressWarnings("unchecked")
+	List<ImageData> getEntries(final String group){
+		return (List<ImageData>) template.execute(new JcrCallback(){
+            List<ImageData> list = new ArrayList<ImageData>();
+            public List<ImageData> doInJcr(Session session) throws IOException, RepositoryException {
+            	Node siteNode = getSiteNode(session);
+            	Node parentNode = getParentNode(siteNode);
+            	Node groupNode  = getCreateNode(NS+group, parentNode);
+                
+                for (NodeIterator iterator = groupNode.getNodes(); iterator.hasNext();){
+                    Node nextNode = iterator.nextNode();
+                    list.add(create(nextNode));
+                }
+                return list;
+            }
+        });
 	}
     
 	@Override

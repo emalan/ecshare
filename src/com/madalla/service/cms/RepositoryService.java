@@ -91,6 +91,10 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         }
         return ImageDataHelper.getInstance().get(path);
     }
+    
+    public List<ImageData> getAlbumImages(final String album){
+    	return ImageDataHelper.getInstance().getEntries(album);
+    }
 
     public BlogEntry getBlogEntry(final String path) {
         if (StringUtils.isEmpty(path)){
