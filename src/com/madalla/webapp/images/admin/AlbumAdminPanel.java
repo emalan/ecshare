@@ -1,5 +1,7 @@
 package com.madalla.webapp.images.admin;
 
+import static com.madalla.webapp.images.admin.AlbumParams.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.Iterator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
@@ -89,9 +92,9 @@ public class AlbumAdminPanel extends Panel{
 	private ImageListView imageListView;
 	private final String album;
 	
-	public AlbumAdminPanel(String id, final String album) {
+	public AlbumAdminPanel(String id, final PageParameters params) {
 		super(id);
-		this.album = album;
+		this.album = params.getString(ALBUM);
 		
         final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
         add(uploadFeedback);
