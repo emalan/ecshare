@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import com.madalla.webapp.blog.BlogHomePanel;
 import com.madalla.webapp.cms.ContentPanel;
 import com.madalla.webapp.email.EmailFormPanel;
+import com.madalla.webapp.images.admin.AlbumAdminPanel;
 
 /**
  * Utlility static instantiation methods to create Wicket Panels
@@ -61,6 +62,10 @@ public class Panels {
 	 */
 	public static Panel emailPanel(String id, String subject){
 		return new EmailFormPanel(id, subject);
+	}
+	
+	public static Panel imageAlbumPanel(String id, PageParameters params){
+		return new AlbumAdminPanel(id, params);
 	}
 	
 

@@ -1,17 +1,15 @@
 package com.madalla.webapp.pages;
 
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.markup.html.WebPage;
 
-import com.madalla.webapp.images.admin.AlbumAdminPanel;
+import com.madalla.webapp.AdminPage;
+import com.madalla.webapp.Panels;
 
-//TODO secure by extending AdminPage
-public class AlbumAdminPage extends WebPage {
+public class AlbumAdminPage extends AdminPage {
 	private static final long serialVersionUID = -5965988030475185795L;
 
 	public AlbumAdminPage(final PageParameters params){
-		super(params);
-		add(new AlbumAdminPanel("albumAdminPanel", params ));
+		add(Panels.imageAlbumPanel("albumAdminPanel", params));
 	}
 	
 }

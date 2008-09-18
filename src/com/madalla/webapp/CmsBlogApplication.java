@@ -52,7 +52,7 @@ public abstract class CmsBlogApplication extends WebApplication implements IRepo
     	setupSecurity();
     }
     
-    private void setupSecurity(){
+    protected void setupSecurity(){
         SimplePageAuthorizationStrategy authorizationStrategy = new SimplePageAuthorizationStrategy(
                 ISecureWebPage.class, getHomePage()) {
             protected boolean isAuthorized() {
