@@ -1,6 +1,6 @@
 package com.madalla.webapp.images.admin;
 
-class AlbumParams {
+public class AlbumParams {
 
 	public final static String ALBUM = "albumName";
 	

@@ -52,11 +52,12 @@ public class AlbumAdminPanel extends Panel{
                 final FileUpload upload = (FileUpload)it.next();
                 try {
                 	String imageName = StringUtils.deleteWhitespace(upload.getClientFileName());
+                	imageName = StringUtils.substringBefore(imageName, ".");
 					ImageData imageData = new ImageData(album,imageName, upload.getInputStream());
 					imageData.save();
 				} catch (IOException e) {
 					log.error("onSubmit - failed to upload File."+e.getLocalizedMessage());
-					e.printStackTrace();
+					AlbumAdminPanel.this.error("Failed to upload images.");
 				}
             }
         }
@@ -71,14 +72,14 @@ public class AlbumAdminPanel extends Panel{
 
 		@Override
 		protected void populateItem(ListItem listItem) {
-			final File file = (File)listItem.getModelObject();
-            listItem.add(new Label("file", file.getName()));
+			final ImageData imageData = (ImageData)listItem.getModelObject();
+            listItem.add(new Label("file", imageData.getName()));
             listItem.add(new Link("delete")
             {
                 public void onClick()
                 {
-                    Files.remove(file);
-                    AlbumAdminPanel.this.info("Deleted " + file);
+                    //Files.remove(imageData);
+                    AlbumAdminPanel.this.info("Deleted ");
                 }
             });
 			
