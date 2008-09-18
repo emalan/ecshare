@@ -74,10 +74,10 @@ public class AlbumAdminPanel extends Panel{
 		protected void populateItem(ListItem listItem) {
 			final ImageData imageData = (ImageData)listItem.getModelObject();
             listItem.add(new Label("file", imageData.getName()));
-            listItem.add(new Link("delete")
-            {
-                public void onClick()
-                {
+            listItem.add(new Link("delete") {
+				private static final long serialVersionUID = 1L;
+
+				public void onClick() {
                     //Files.remove(imageData);
                     AlbumAdminPanel.this.info("Deleted ");
                 }
