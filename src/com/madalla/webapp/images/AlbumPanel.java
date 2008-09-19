@@ -37,7 +37,7 @@ public class AlbumPanel extends Panel {
 
     private static final Log log = LogFactory.getLog(AlbumPanel.class);
 
-	public AlbumPanel(String id, String album, List<String> list) {
+	public AlbumPanel(String id, String album) {
 		super(id);
 
 		add(HeaderContributor.forJavaScript(JS_PROTOTYPE));

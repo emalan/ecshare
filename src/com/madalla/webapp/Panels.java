@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import com.madalla.webapp.blog.BlogHomePanel;
 import com.madalla.webapp.cms.ContentPanel;
 import com.madalla.webapp.email.EmailFormPanel;
+import com.madalla.webapp.images.AlbumPanel;
 import com.madalla.webapp.images.admin.AlbumAdminPanel;
 
 /**
@@ -64,9 +65,15 @@ public class Panels {
 		return new EmailFormPanel(id, subject);
 	}
 	
-	public static Panel imageAlbumPanel(String id, PageParameters params){
+	public static Panel albumAdminPanel(String id, PageParameters params){
 		return new AlbumAdminPanel(id, params);
 	}
+	
+	public static Panel albumPanel(String id, String album){
+		return new AlbumPanel(id, album);
+	}
+	
+	
 	
 
 }

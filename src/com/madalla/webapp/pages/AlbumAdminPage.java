@@ -9,7 +9,7 @@ public class AlbumAdminPage extends AdminPage {
 	private static final long serialVersionUID = -5965988030475185795L;
 
 	public AlbumAdminPage(final PageParameters params){
-		add(Panels.imageAlbumPanel("albumAdminPanel", params));
+		add(Panels.albumAdminPanel("albumAdminPanel", params));
 	}
 	
 }
