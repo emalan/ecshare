@@ -1,8 +1,7 @@
 package com.madalla.webapp.images.admin;
 
-import static com.madalla.webapp.images.admin.AlbumParams.*;
+import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +23,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.file.Files;
 import org.apache.wicket.util.lang.Bytes;
 
 import com.madalla.service.cms.IRepositoryService;
@@ -54,7 +52,7 @@ public class AlbumAdminPanel extends Panel{
                 	String imageName = StringUtils.deleteWhitespace(upload.getClientFileName());
                 	imageName = StringUtils.substringBefore(imageName, ".");
 					ImageData imageData = new ImageData(album,imageName, upload.getInputStream());
-					imageData.save();
+					imageData.save(); //TODO send in a listener
 				} catch (IOException e) {
 					log.error("onSubmit - failed to upload File."+e.getLocalizedMessage());
 					AlbumAdminPanel.this.error("Failed to upload images.");

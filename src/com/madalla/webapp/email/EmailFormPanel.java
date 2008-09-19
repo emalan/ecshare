@@ -8,14 +8,19 @@ import org.apache.wicket.Component;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.IFormVisitorParticipant;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.ClientProperties;
@@ -31,10 +36,14 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import com.madalla.service.captcha.CaptchaUtils;
 import com.madalla.service.email.IEmailSender;
 import com.madalla.service.email.IEmailServiceProvider;
+import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.ValidationStyleBehaviour;
 
 public class EmailFormPanel extends Panel {
     private static final long serialVersionUID = -1643728343421366820L;
+    private static final CompressedResourceReference JS_PROTOTYPE = new CompressedResourceReference(Scriptaculous.class, "prototype.js");
+    private static final CompressedResourceReference JS_EFFECTS = new CompressedResourceReference(Scriptaculous.class, "effects.js");
+
     private Log log = LogFactory.getLog(this.getClass());
     //private String imagePass = CaptchaUtils.randomString(4, 6);
     private Integer first = CaptchaUtils.randomInteger(1, 20);
@@ -48,6 +57,8 @@ public class EmailFormPanel extends Panel {
         Form emailForm = new EmailForm("emailForm", this);
         //AjaxFormValidatingBehavior.addToAllFormComponents(emailForm,"onblur");
         add(emailForm);
+        add(HeaderContributor.forJavaScript(JS_PROTOTYPE));
+        add(HeaderContributor.forJavaScript(JS_EFFECTS));
     }
 
     public class EmailForm extends Form {
@@ -132,10 +143,45 @@ public class EmailFormPanel extends Panel {
             });
             add(password);
             
+            add(new AjaxButton("submit", this){
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onSubmit(AjaxRequestTarget target, Form form) {
+					target.addComponent(feedbackPanel);
+				}
+				
+				 @Override
+				 protected void onError(final AjaxRequestTarget target, final Form form) {
+		           	 log.debug("onError called");
+
+		           	form.visitFormComponents(new IVisitor() {
+		                public Object formComponent(IFormVisitorParticipant formVisitor) {
+		                    if (formVisitor instanceof FormComponent) {
+		                        FormComponent formComponent = (FormComponent) formVisitor;
+		                        
+		                        if (!formComponent.isValid()){ 
+		                            // If this component failed validation, do something
+		                            // fancy to display it to the user...
+		                             target.addComponent(formComponent);
+		        					 
+		                             // do a little dance
+		                             target.appendJavascript(
+		                                "new Effect.Shake($('" + formComponent.getMarkupId() + "'));");
+		                         }
+		                    }
+		                    return formVisitor;
+		                }
+		        	});
+
+				 }
+            	
+            });
+            
             
         }
 
-        protected void onSubmit() {
+		protected void onSubmit() {
             IEmailSender email = getEmailSender();
             String body = getEmailBody(properties.getString("name"),properties.getString("email"),properties.getString("comment"));
             boolean result = email.sendEmail(subject, body);
