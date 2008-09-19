@@ -1,6 +1,5 @@
 package com.madalla.service.cms;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ import javax.jcr.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
 import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
@@ -45,19 +45,10 @@ class ImageDataHelper extends AbstractContentHelper {
     }
     
 	static DynamicImageResource createImageResource(InputStream inputStream){
-		DynamicImageResource webResource = null;
+		BufferedDynamicImageResource webResource = null;
 		try {
-			final BufferedImage bufferedImage = ImageIO.read(inputStream);
-			webResource = new DynamicImageResource(){
-
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected byte[] getImageData() {
-					return toImageData(bufferedImage);
-				}
-				
-			};
+			webResource = new BufferedDynamicImageResource();
+			webResource.setImage(ImageIO.read(inputStream));
 		} catch (IOException e) {
 			log.error("Exception while reading image from Content.",e);
 			throw new WicketRuntimeException("Error while reading image from Content Management System.");
