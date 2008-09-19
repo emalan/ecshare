@@ -153,8 +153,8 @@ public class EmailFormPanel extends Panel {
 				
 				 @Override
 				 protected void onError(final AjaxRequestTarget target, final Form form) {
-		           	 log.debug("onError called");
-
+		           	log.debug("onError called");
+		           	target.addComponent(feedbackPanel);
 		           	form.visitFormComponents(new IVisitor() {
 		                public Object formComponent(IFormVisitorParticipant formVisitor) {
 		                    if (formVisitor instanceof FormComponent) {
