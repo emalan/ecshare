@@ -2,17 +2,13 @@ package com.madalla.webapp.images;
 
 import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
 
-import java.awt.image.BufferedImage;
 import java.util.List;
-
-import javax.imageio.ImageIO;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -56,33 +52,14 @@ public class AlbumPanel extends Panel {
 			@Override
 			protected void populateItem(ListItem item) {
 				final ImageData imageData = (ImageData) item.getModelObject();
-				
-				try {
-					final BufferedImage bufferedImage = ImageIO.read(imageData.getFullImage());
-					DynamicImageResource webResource = new DynamicImageResource(){
-
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						protected byte[] getImageData() {
-							return toImageData(bufferedImage);
-						}
-						
-					};
-					
-					final Image image = new Image("id",webResource);
-					item.add(image);
-
-				} catch (Exception e) {
-					log.error("Exception while rendering image.",e);
-					
+				if (imageData.getFullImageAsResource() != null){
+					item.add(new Image("id",imageData.getFullImageAsResource()));
+				} else {
+					log.info("Could not get Image from ImageData."+imageData);
 				}
-				
-				
-			}
-        	
-        });
 
+			}
+        });
 	}
 	
 	public IRepositoryService getRepositoryService(){

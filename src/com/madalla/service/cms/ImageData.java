@@ -4,9 +4,11 @@ import java.io.InputStream;
 import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.wicket.Resource;
+import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
 
 public class ImageData  implements  IRepositoryData, Serializable, Comparable<ImageData> {
-	private static final long serialVersionUID = -3173685117852794066L;
+	private static final long serialVersionUID = 1L;
 
 	private final String name;
 	private final String album;
@@ -14,20 +16,31 @@ public class ImageData  implements  IRepositoryData, Serializable, Comparable<Im
 	private String title;
 	private String description;
 	private final InputStream fullImage;
+	private final DynamicImageResource webResource;
 
 
 	public ImageData(final String album, final String name, final InputStream fullImage){
-		this("", album, name, fullImage);
-	}
-
-	public ImageData(final String id, final String album, final String name, final InputStream fullImage){
-		this.id = id;
+		this.id = "";
 		this.album = album;
 		this.name = name;
 		this.fullImage = fullImage;
+		this.webResource = null;
 		title = "";
 		description = "";
 	}
+
+	ImageData(final String id, final String album, final String name, final InputStream fullImage){
+		this.id = id;
+		this.album = album;
+		this.name = name;
+		this.fullImage = null;
+		this.webResource =  ImageDataHelper.createImageResource(fullImage);
+		title = "";
+		description = "";
+	}
+	
+	
+
 	
 	public String save(){
 		return ImageDataHelper.getInstance().save(this);
@@ -49,8 +62,12 @@ public class ImageData  implements  IRepositoryData, Serializable, Comparable<Im
 		return id;
 	}
 
-	public InputStream getFullImage() {
+	public InputStream getFullImageAsInputStream() {
 		return fullImage;
+	}
+	
+	public Resource getFullImageAsResource() {
+		return webResource;
 	}
 	
 	public String getTitle() {
@@ -95,6 +112,5 @@ public class ImageData  implements  IRepositoryData, Serializable, Comparable<Im
 	public String toString() {
         return ReflectionToStringBuilder.toString(this).toString();
     }
-	
 	
 }
