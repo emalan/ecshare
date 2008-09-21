@@ -7,7 +7,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.ComponentTag;
@@ -51,68 +50,9 @@ public class EmailFormPanel extends Panel {
     private Integer second = CaptchaUtils.randomInteger(1, 12);
     
     private final ValueMap properties = new ValueMap();
+    String subject ;
+
     
-    public EmailFormPanel(final String id, final String subject) {
-        super(id);
-        
-        
-        Form form = new EmailForm("emailForm");
-        form.setOutputMarkupId(true);
-
-        final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
-        feedbackPanel.setOutputMarkupId(true);
-        add(feedbackPanel);
-
-        form.add(new AjaxButton("submit", form){
-        	@Override
-			protected void onSubmit(AjaxRequestTarget target, Form form) {
-				log.debug("onSubmit called - Ajax sending email");
-				target.addComponent(feedbackPanel);
-	            IEmailSender email = getEmailSender();
-	            String body = getEmailBody(properties.getString("name"),properties.getString("email"),properties.getString("comment"));
-	            boolean result = email.sendEmail(subject, body);
-	            if (result){
-	                info("Email sent successfully");
-	            } else {
-	                error("Failed to send email!");
-	            }
-				
-
-			}
-			
-			 @Override
-			 protected void onError(final AjaxRequestTarget target, final Form form) {
-	           	log.debug("onError called");
-	           	target.addComponent(feedbackPanel);
-	           	form.visitFormComponents(new IVisitor() {
-	                public Object formComponent(IFormVisitorParticipant formVisitor) {
-	                    if (formVisitor instanceof FormComponent) {
-	                        FormComponent formComponent = (FormComponent) formVisitor;
-	                        
-	                        if (!formComponent.isValid()){
-	                             target.addComponent(formComponent);
-	                             target.appendJavascript(
-	                                "new Effect.Pulsate($('" + formComponent.getMarkupId() + "'),{pulses:1, duration:0.3});");
-	                             log.debug("Component is invalid. Component MarkupId="+formComponent.getMarkupId()+". Message is " +formComponent.getFeedbackMessage().getMessage());
-	                            
-	                         }
-	                    } else if (formVisitor instanceof ComponentFeedbackPanel){
-	                    	ComponentFeedbackPanel feedback = (ComponentFeedbackPanel) formVisitor;
-	                    	target.addComponent(feedback);
-	                    }
-	                    
-	                    return formVisitor;
-	                }
-	        	});
-
-			 }
-        });
-        add(form);
-        
-        add(HeaderContributor.forJavaScript(JS_PROTOTYPE));
-        add(HeaderContributor.forJavaScript(JS_EFFECTS));
-    }
-
     public class EmailForm extends Form {
         private static final long serialVersionUID = -2684823497770522924L;
         
@@ -195,14 +135,81 @@ public class EmailFormPanel extends Panel {
             });
             add(password);
             
-            
         }
-        
 
+		@Override
+		protected void onSubmit() {
+			log.debug("onSumit called- sending email.");
+			sendEmail();
+		}
         
-
 
     }
+
+    public EmailFormPanel(final String id, final String subject) {
+        super(id);
+        this.subject = subject;
+        
+        Form form = new EmailForm("emailForm");
+        form.setOutputMarkupId(true);
+
+        final FeedbackPanel feedbackPanel = new ComponentFeedbackPanel("feedback",form);
+        feedbackPanel.setOutputMarkupId(true);
+        form.add(feedbackPanel);
+
+        form.add(new AjaxButton("submit", form){
+        	@Override
+			protected void onSubmit(AjaxRequestTarget target, Form form) {
+				log.debug("onSubmit called - Ajax sending email");
+	            if (sendEmail()){
+	                form.info("Email sent successfully");
+	            } else {
+	                form.error("Failed to send email!");
+	            }
+	            target.addComponent(feedbackPanel);
+			}
+			
+			 @Override
+			 protected void onError(final AjaxRequestTarget target, final Form form) {
+	           	log.debug("onError called");
+	           	target.addComponent(feedbackPanel);
+	           	form.visitFormComponents(new IVisitor() {
+	                public Object formComponent(IFormVisitorParticipant formVisitor) {
+	                    if (formVisitor instanceof FormComponent) {
+	                        FormComponent formComponent = (FormComponent) formVisitor;
+	                        
+	                        if (!formComponent.isValid()){
+	                             target.addComponent(formComponent);
+	                             target.appendJavascript(
+	                                "new Effect.Pulsate($('" + formComponent.getMarkupId() + "'),{pulses:1, duration:0.3});");
+	                             log.debug("Component is invalid. Component MarkupId="+formComponent.getMarkupId()+". Message is " +formComponent.getFeedbackMessage().getMessage());
+	                            
+	                         }
+	                    } else if (formVisitor instanceof ComponentFeedbackPanel){
+	                    	ComponentFeedbackPanel feedback = (ComponentFeedbackPanel) formVisitor;
+	                    	target.addComponent(feedback);
+	                    }
+	                    
+	                    return formVisitor;
+	                }
+	        	});
+
+			 }
+        });
+        add(form);
+        
+        add(HeaderContributor.forJavaScript(JS_PROTOTYPE));
+        add(HeaderContributor.forJavaScript(JS_EFFECTS));
+    }
+    
+    private boolean sendEmail(){
+		
+        IEmailSender email = getEmailSender();
+        String body = getEmailBody(properties.getString("name"),properties.getString("email"),properties.getString("comment"));
+        return email.sendEmail(subject, body);
+    }
+    
+
     
     private String getEmailBody(String from, String email, String comment){
         Object[] args = {from,email,comment};
