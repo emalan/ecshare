@@ -36,25 +36,32 @@
 </wicket:head>
 <body>
     <wicket:panel>
+    <span class="feedbackPanel" wicket:id="feedback"/>
         <form id="emailForm" wicket:id="emailForm">
-            <span class="feedbackPanel" wicket:id="feedback"/>
+            
             <div id="nameDiv">
                 <label for="name">
                     <wicket:message key="label.name">Label Contents</wicket:message>
                 </label>
-                <input id="name" class="inputText" wicket:id="name" type="text" />
+                <input id="name" class="inputText" wicket:id="name" type="text" >
+                    <span class="feedbackPanel" wicket:id="nameFeedback"/>
+                </input>
             </div>
             <div id="emailDiv">
                 <label for="email">
                     <wicket:message key="label.email">Label Contents</wicket:message>
                 </label>
-                <input id="email" class="inputText" wicket:id="email" type="text" />
+                <input id="email" class="inputText" wicket:id="email" type="text" >
+                	<span class="feedbackPanel" wicket:id="emailFeedback"/>
+                </input>
             </div>
             <div id="captchaDiv">
                  <label for="password">
                      <wicket:message key="label.captcha">Label contents</wicket:message>
                  </label>
-                 <input id="password" class="inputText" wicket:id="password" type="text" />
+                 <input id="password" class="inputText" wicket:id="password" type="text" >
+                 	<span class="feedbackPanel" wicket:id="passwordFeedback"/>
+                 </input>
                  <label id="captcha" wicket:id="captchaString"  />
   
             </div>
