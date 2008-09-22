@@ -14,7 +14,7 @@ public class ValidationStyleBehaviour extends AbstractBehavior {
 	private String invalidClass ;
 	
 	public ValidationStyleBehaviour(){
-		this("inputText","inputTextError");
+		this("inputTextValid","inputTextError");
 	}
 	public ValidationStyleBehaviour(String validClass, String invalidClass){
 		this.validClass = validClass;
@@ -27,6 +27,7 @@ public class ValidationStyleBehaviour extends AbstractBehavior {
 		if (comp.isValid() && comp.getConvertedInput() != null) {
 			log.debug("onComponentTag - Valid, setting class to "+validClass+". component="+comp.getId());
 			tag.getAttributes().put("class", validClass);
+			component.info("Valid");
 		} else if (!comp.isValid()) {
 			log.debug("onComponentTag - Invalid, setting class to "+invalidClass+". component="+comp.getId());
 			tag.getAttributes().put("class", invalidClass);

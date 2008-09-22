@@ -4,9 +4,11 @@ import java.text.MessageFormat;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Component;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.ComponentTag;
@@ -26,6 +28,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
+import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.value.ValueMap;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidationError;
@@ -65,28 +68,23 @@ public class EmailFormPanel extends Panel {
             //captchaImageResource = new CaptchaImageResource(imagePass);
     
             TextField name = new RequiredTextField("name",new PropertyModel(properties,"name"));
-            name.add(new ValidationStyleBehaviour());
-            name.setLabel(new Model(EmailFormPanel.this.getString("label.name")));
-            name.add(new ComponentFeedbackPanel("nameFeedback",name));
-            name.add(new AjaxFormComponentUpdatingBehavior("onblur"){
-				private static final long serialVersionUID = -1336792123145056842L;
-				protected void onUpdate(AjaxRequestTarget target) {
-					target.addComponent(getFormComponent());
-				}
-            });
             
+            name.setLabel(new Model(EmailFormPanel.this.getString("label.name")));
+            name.add(new ComponentFeedbackPanel("nameFeedback",name).setOutputMarkupId(true));
+            name.add(new ValidationStyleBehaviour());
+            name.add(new CustomAjaxValidationBehavior());
             add(name);
             
             RequiredTextField email = new RequiredTextField("email",new PropertyModel(properties,"email"));
             email.add(EmailAddressValidator.getInstance());
             email.add(new ValidationStyleBehaviour());
-            email.add(new ComponentFeedbackPanel("emailFeedback", email));
-            email.add(new AjaxFormComponentUpdatingBehavior("onblur"){
-				private static final long serialVersionUID = -6327997848765302354L;
-				protected void onUpdate(AjaxRequestTarget target) {
-					target.addComponent(getFormComponent());
-				}
-            });
+            email.add(new ComponentFeedbackPanel("emailFeedback", email).setOutputMarkupId(true));
+//            email.add(new AjaxFormComponentUpdatingBehavior("onblur"){
+//				private static final long serialVersionUID = -6327997848765302354L;
+//				protected void onUpdate(AjaxRequestTarget target) {
+//					target.addComponent(getFormComponent());
+//				}
+//            });
             add(email);
             
             TextArea comment = new TextArea("comment",new PropertyModel(properties,"comment"));
@@ -125,14 +123,14 @@ public class EmailFormPanel extends Panel {
                 }
             });
             password.add(new ValidationStyleBehaviour());
-            password.add(new ComponentFeedbackPanel("passwordFeedback",password));
-            password.add(new AjaxFormComponentUpdatingBehavior("onblur"){
-				private static final long serialVersionUID = 1072604570134494000L;
-
-				protected void onUpdate(AjaxRequestTarget target) {
-					target.addComponent(getFormComponent());
-				}
-            });
+            password.add(new ComponentFeedbackPanel("passwordFeedback",password).setOutputMarkupId(true));
+//            password.add(new AjaxFormComponentUpdatingBehavior("onblur"){
+//				private static final long serialVersionUID = 1072604570134494000L;
+//
+//				protected void onUpdate(AjaxRequestTarget target) {
+//					target.addComponent(getFormComponent());
+//				}
+//            });
             add(password);
             
         }
@@ -140,9 +138,33 @@ public class EmailFormPanel extends Panel {
 		@Override
 		protected void onSubmit() {
 			log.debug("onSumit called- sending email.");
-			sendEmail();
+			//sendEmail();
 		}
         
+
+    }
+    
+    
+    public class CustomAjaxValidationBehavior extends AjaxFormComponentUpdatingBehavior{
+
+		private static final long serialVersionUID = 1L;
+
+		public CustomAjaxValidationBehavior() {
+			super("onblur");
+		}
+
+		@Override
+		protected void onUpdate(AjaxRequestTarget target) {
+			target.addComponent(getFormComponent());
+			
+		}
+
+		@Override
+		protected void onError(AjaxRequestTarget target, RuntimeException e) {
+			target.addComponent(getFormComponent());
+			target.appendJavascript(
+                    "new Effect.Pulsate($('" + getFormComponent().getMarkupId() + "'),{pulses:1, duration:0.3});");
+		}
 
     }
 
@@ -156,46 +178,50 @@ public class EmailFormPanel extends Panel {
         final FeedbackPanel feedbackPanel = new ComponentFeedbackPanel("feedback",form);
         feedbackPanel.setOutputMarkupId(true);
         form.add(feedbackPanel);
+        
+     
+        //CustomAjaxFormValidationBehavior.addToAllFormComponents(form, "onkeyPress", Duration.ONE_SECOND);
+        
 
-        form.add(new AjaxButton("submit", form){
-        	@Override
-			protected void onSubmit(AjaxRequestTarget target, Form form) {
-				log.debug("onSubmit called - Ajax sending email");
-	            if (sendEmail()){
-	                form.info("Email sent successfully");
-	            } else {
-	                form.error("Failed to send email!");
-	            }
-	            target.addComponent(feedbackPanel);
-			}
-			
-			 @Override
-			 protected void onError(final AjaxRequestTarget target, final Form form) {
-	           	log.debug("onError called");
-	           	target.addComponent(feedbackPanel);
-	           	form.visitFormComponents(new IVisitor() {
-	                public Object formComponent(IFormVisitorParticipant formVisitor) {
-	                    if (formVisitor instanceof FormComponent) {
-	                        FormComponent formComponent = (FormComponent) formVisitor;
-	                        
-	                        if (!formComponent.isValid()){
-	                             target.addComponent(formComponent);
-	                             target.appendJavascript(
-	                                "new Effect.Pulsate($('" + formComponent.getMarkupId() + "'),{pulses:1, duration:0.3});");
-	                             log.debug("Component is invalid. Component MarkupId="+formComponent.getMarkupId()+". Message is " +formComponent.getFeedbackMessage().getMessage());
-	                            
-	                         }
-	                    } else if (formVisitor instanceof ComponentFeedbackPanel){
-	                    	ComponentFeedbackPanel feedback = (ComponentFeedbackPanel) formVisitor;
-	                    	target.addComponent(feedback);
-	                    }
-	                    
-	                    return formVisitor;
-	                }
-	        	});
-
-			 }
-        });
+//        form.add(new AjaxButton("submit", form){
+//        	@Override
+//			protected void onSubmit(AjaxRequestTarget target, Form form) {
+//				log.debug("onSubmit called - Ajax sending email");
+//	            if (sendEmail()){
+//	                form.info("Email sent successfully");
+//	            } else {
+//	                form.error("Failed to send email!");
+//	            }
+//	            target.addComponent(feedbackPanel);
+//			}
+//			
+//			 @Override
+//			 protected void onError(final AjaxRequestTarget target, final Form form) {
+//	           	log.debug("onError called");
+//	           	target.addComponent(feedbackPanel);
+//	           	form.visitFormComponents(new IVisitor() {
+//	                public Object formComponent(IFormVisitorParticipant formVisitor) {
+//	                    if (formVisitor instanceof FormComponent) {
+//	                        FormComponent formComponent = (FormComponent) formVisitor;
+//	                        
+//	                        if (!formComponent.isValid()){
+//	                             target.addComponent(formComponent);
+//	                             target.appendJavascript(
+//	                                "new Effect.Pulsate($('" + formComponent.getMarkupId() + "'),{pulses:1, duration:0.3});");
+//	                             log.debug("Component is invalid. Component MarkupId="+formComponent.getMarkupId()+". Message is " +formComponent.getFeedbackMessage().getMessage());
+//	                            
+//	                         }
+//	                    } else if (formVisitor instanceof ComponentFeedbackPanel){
+//	                    	ComponentFeedbackPanel feedback = (ComponentFeedbackPanel) formVisitor;
+//	                    	target.addComponent(feedback);
+//	                    }
+//	                    
+//	                    return formVisitor;
+//	                }
+//	        	});
+//
+//			 }
+//        });
         add(form);
         
         add(HeaderContributor.forJavaScript(JS_PROTOTYPE));

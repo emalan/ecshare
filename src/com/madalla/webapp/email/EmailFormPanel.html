@@ -10,27 +10,13 @@
         form div label {width:12em;}
         form div textarea {width:15em; height:10em;}
         form div#captcha {float:left; width:15em; padding-top:10px;}
-        form .feedbackPanel ul li {
-			float: left;
-			clear: both;
-		}
-		img#captcha {
-		    float:left;
-		    margin-left: 20px;
-		}
-		
-		form .feedbackPanel ul li {
-			color:red;
-			font-style:normal;
-			list-style-image:none;
-			list-style-position: inside;
-			list-style-type: none;
-			padding-left:1em;
-			padding-top:7px;
-			text-indent:0pt;
-			float: left;
-			clear: both;
-		}
+        form #captcha {clear:both; width:17em; text-align:right;}
+        img#captcha {
+            float:left;
+            margin-left: 20px;
+        }
+
+        
         
     </style>
 </wicket:head>
@@ -72,7 +58,7 @@
                 <textarea id="comment" class="inputText" wicket:id="comment" type="textArea" rows="7" cols="40">Content goes here</textarea>
             </div>
             <div style="width:100%;" class="formButtons">
-                <input type="submit" value="Submit" wicket:id="submit" wicket:message="value:label.submit"/> 
+                <input type="submit" value="Submit" wicket:message="value:label.submit"/> 
                 <span class="feedbackPanel" wicket:id="feedback"/>   
             </div>
         </form>

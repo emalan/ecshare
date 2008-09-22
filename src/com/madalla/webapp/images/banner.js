@@ -15,6 +15,9 @@
 var Banner = Class.create(Crossfade, {
 	initialize : function($super, elm, options) {
 		$super(elm, options);
+		Function.prototype.getInfo = function(){
+			alert(this);
+		}
 		var ControlMethods = {
 			setControlStyle : function(element) {
 				element = $(element);
