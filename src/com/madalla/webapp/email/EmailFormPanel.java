@@ -70,9 +70,11 @@ public class EmailFormPanel extends Panel {
             TextField name = new RequiredTextField("name",new PropertyModel(properties,"name"));
             
             name.setLabel(new Model(EmailFormPanel.this.getString("label.name")));
-            name.add(new ComponentFeedbackPanel("nameFeedback",name).setOutputMarkupId(true));
+            FeedbackPanel nameFeedback = new ComponentFeedbackPanel("nameFeedback",name);
+            nameFeedback.setOutputMarkupId(true);
+            name.add(nameFeedback);
             name.add(new ValidationStyleBehaviour());
-            name.add(new CustomAjaxValidationBehavior());
+            name.add(new CustomAjaxValidationBehavior(nameFeedback));
             add(name);
             
             RequiredTextField email = new RequiredTextField("email",new PropertyModel(properties,"email"));
@@ -148,20 +150,30 @@ public class EmailFormPanel extends Panel {
     public class CustomAjaxValidationBehavior extends AjaxFormComponentUpdatingBehavior{
 
 		private static final long serialVersionUID = 1L;
-
+		
+		private final FeedbackPanel feedbackPanel;
+		
 		public CustomAjaxValidationBehavior() {
 			super("onblur");
+			this.feedbackPanel = null;
+		}
+
+		public CustomAjaxValidationBehavior(FeedbackPanel feedbackPanel) {
+			super("onblur");
+			this.feedbackPanel = feedbackPanel;
 		}
 
 		@Override
 		protected void onUpdate(AjaxRequestTarget target) {
 			target.addComponent(getFormComponent());
-			
+			feedbackPanel.setVisible(false);
+			target.addComponent(feedbackPanel);
 		}
 
 		@Override
 		protected void onError(AjaxRequestTarget target, RuntimeException e) {
 			target.addComponent(getFormComponent());
+			feedbackPanel.setVisible(true);
 			target.appendJavascript(
                     "new Effect.Pulsate($('" + getFormComponent().getMarkupId() + "'),{pulses:1, duration:0.3});");
 		}
@@ -179,7 +191,7 @@ public class EmailFormPanel extends Panel {
         feedbackPanel.setOutputMarkupId(true);
         form.add(feedbackPanel);
         
-     
+        //AjaxFormValidatingBehavior.addToAllFormComponents(form,"onblur");
         //CustomAjaxFormValidationBehavior.addToAllFormComponents(form, "onkeyPress", Duration.ONE_SECOND);
         
 
