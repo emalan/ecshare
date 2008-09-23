@@ -6,11 +6,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.RequestCycle;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.HeaderContributor;
+import org.apache.wicket.feedback.FeedbackMessage;
+import org.apache.wicket.feedback.FeedbackMessages;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -71,28 +74,28 @@ public class EmailFormPanel extends Panel {
             
             name.setLabel(new Model(EmailFormPanel.this.getString("label.name")));
             FeedbackPanel nameFeedback = new ComponentFeedbackPanel("nameFeedback",name);
+            nameFeedback.setMaxMessages(1);
             nameFeedback.setOutputMarkupId(true);
-            name.add(nameFeedback);
+            add(nameFeedback);
             name.add(new ValidationStyleBehaviour());
             name.add(new CustomAjaxValidationBehavior(nameFeedback));
             add(name);
             
             RequiredTextField email = new RequiredTextField("email",new PropertyModel(properties,"email"));
             email.add(EmailAddressValidator.getInstance());
+            FeedbackPanel emailFeedback = new ComponentFeedbackPanel("emailFeedback", email);
+            emailFeedback.setOutputMarkupId(true);
+            emailFeedback.setMaxMessages(1);
+            add(emailFeedback);
             email.add(new ValidationStyleBehaviour());
-            email.add(new ComponentFeedbackPanel("emailFeedback", email).setOutputMarkupId(true));
-//            email.add(new AjaxFormComponentUpdatingBehavior("onblur"){
-//				private static final long serialVersionUID = -6327997848765302354L;
-//				protected void onUpdate(AjaxRequestTarget target) {
-//					target.addComponent(getFormComponent());
-//				}
-//            });
+            email.add(new CustomAjaxValidationBehavior(emailFeedback));
             add(email);
             
             TextArea comment = new TextArea("comment",new PropertyModel(properties,"comment"));
             add(comment);
             
             add(new Label("captchaString", first+" + "+second+" = "));
+            
             RequiredTextField password = new RequiredTextField("password", new PropertyModel(properties, "password")){
 				private static final long serialVersionUID = -108228073455105029L;
 				protected final void onComponentTag(final ComponentTag tag) {
@@ -113,7 +116,7 @@ public class EmailFormPanel extends Panel {
                             validatable.error(error);
                         }
                     } catch (Exception e){
-                    	
+                    	log.info("password validate Exception.",e);
                     }
 //                    if (!imagePass.equals(password)) {
 //                    	log.debug("onValidate - entered:"+password+" should be:"+imagePass);
@@ -124,15 +127,12 @@ public class EmailFormPanel extends Panel {
 //                    captchaImageResource.invalidate();
                 }
             });
+            FeedbackPanel passwordFeedback = new ComponentFeedbackPanel("passwordFeedback",password);
+            passwordFeedback.setOutputMarkupId(true);
+            passwordFeedback.setMaxMessages(1);
+            password.add(passwordFeedback);
             password.add(new ValidationStyleBehaviour());
-            password.add(new ComponentFeedbackPanel("passwordFeedback",password).setOutputMarkupId(true));
-//            password.add(new AjaxFormComponentUpdatingBehavior("onblur"){
-//				private static final long serialVersionUID = 1072604570134494000L;
-//
-//				protected void onUpdate(AjaxRequestTarget target) {
-//					target.addComponent(getFormComponent());
-//				}
-//            });
+            password.add(new CustomAjaxValidationBehavior(passwordFeedback));
             add(password);
             
         }
@@ -166,14 +166,18 @@ public class EmailFormPanel extends Panel {
 		@Override
 		protected void onUpdate(AjaxRequestTarget target) {
 			target.addComponent(getFormComponent());
-			feedbackPanel.setVisible(false);
+			feedbackPanel.getFeedbackMessagesModel().getObject();
+			//feedbackPanel.setVisible(false);
 			target.addComponent(feedbackPanel);
 		}
 
 		@Override
 		protected void onError(AjaxRequestTarget target, RuntimeException e) {
 			target.addComponent(getFormComponent());
-			feedbackPanel.setVisible(true);
+			FeedbackMessages messages = Session.get().getFeedbackMessages();
+			FeedbackMessage message = messages.messageForComponent(getFormComponent());
+			log.debug("onError - message="+message);
+			//feedbackPanel.setVisible(true);
 			target.appendJavascript(
                     "new Effect.Pulsate($('" + getFormComponent().getMarkupId() + "'),{pulses:1, duration:0.3});");
 		}
