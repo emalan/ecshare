@@ -1,24 +1,19 @@
 package com.madalla.webapp.email;
 
+import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
+
 import java.text.MessageFormat;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.Component;
 import org.apache.wicket.RequestCycle;
-import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.HeaderContributor;
-import org.apache.wicket.feedback.FeedbackMessage;
-import org.apache.wicket.feedback.FeedbackMessages;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.IFormVisitorParticipant;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
@@ -31,7 +26,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
-import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.value.ValueMap;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidationError;
@@ -71,7 +65,6 @@ public class EmailFormPanel extends Panel {
             //captchaImageResource = new CaptchaImageResource(imagePass);
     
             TextField name = new RequiredTextField("name",new PropertyModel(properties,"name"));
-            
             name.setLabel(new Model(EmailFormPanel.this.getString("label.name")));
             FeedbackPanel nameFeedback = new ComponentFeedbackPanel("nameFeedback",name);
             nameFeedback.setMaxMessages(1);
@@ -116,7 +109,9 @@ public class EmailFormPanel extends Panel {
                             validatable.error(error);
                         }
                     } catch (Exception e){
-                    	log.info("password validate Exception.",e);
+                    	IValidationError error = new ValidationError().addMessageKey("message.captcha.error");
+                    	validatable.error(error);
+                    	log.debug("password validate Exception.",e);
                     }
 //                    if (!imagePass.equals(password)) {
 //                    	log.debug("onValidate - entered:"+password+" should be:"+imagePass);
@@ -130,7 +125,7 @@ public class EmailFormPanel extends Panel {
             FeedbackPanel passwordFeedback = new ComponentFeedbackPanel("passwordFeedback",password);
             passwordFeedback.setOutputMarkupId(true);
             passwordFeedback.setMaxMessages(1);
-            password.add(passwordFeedback);
+            add(passwordFeedback);
             password.add(new ValidationStyleBehaviour());
             password.add(new CustomAjaxValidationBehavior(passwordFeedback));
             add(password);
@@ -153,9 +148,18 @@ public class EmailFormPanel extends Panel {
 		
 		private final FeedbackPanel feedbackPanel;
 		
+		private String validClass ;
+		private String invalidClass ;
+		
 		public CustomAjaxValidationBehavior() {
+			this("inputTextValid","inputTextError");
+		}
+		
+		public CustomAjaxValidationBehavior(String validClass, String invalidClass){
 			super("onblur");
 			this.feedbackPanel = null;
+			this.validClass = validClass;
+			this.invalidClass = invalidClass;
 		}
 
 		public CustomAjaxValidationBehavior(FeedbackPanel feedbackPanel) {
@@ -166,20 +170,24 @@ public class EmailFormPanel extends Panel {
 		@Override
 		protected void onUpdate(AjaxRequestTarget target) {
 			target.addComponent(getFormComponent());
-			feedbackPanel.getFeedbackMessagesModel().getObject();
-			//feedbackPanel.setVisible(false);
 			target.addComponent(feedbackPanel);
+			target.appendJavascript(
+					"$('"+feedbackPanel.getMarkupId()+"').parentNode.className = '"+validClass+"';");
 		}
 
 		@Override
 		protected void onError(AjaxRequestTarget target, RuntimeException e) {
 			target.addComponent(getFormComponent());
-			FeedbackMessages messages = Session.get().getFeedbackMessages();
-			FeedbackMessage message = messages.messageForComponent(getFormComponent());
-			log.debug("onError - message="+message);
-			//feedbackPanel.setVisible(true);
+			target.addComponent(feedbackPanel);
 			target.appendJavascript(
-                    "new Effect.Pulsate($('" + getFormComponent().getMarkupId() + "'),{pulses:1, duration:0.3});");
+                    "new Effect.Pulsate($('" + getFormComponent().getMarkupId() + "'),{pulses:1, duration:0.3});" +
+                    		"$('"+feedbackPanel.getMarkupId()+"').parentNode.className = '"+invalidClass+"';");
+		}
+
+		@Override
+		public void renderHead(IHeaderResponse response) {
+			super.renderHead(response);
+			response.renderCSSReference(PROTOTYPE);
 		}
 
     }

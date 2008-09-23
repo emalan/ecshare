@@ -21,8 +21,8 @@ var Banner = Class.create(Crossfade, {
 		var ControlMethods = {
 			setControlStyle : function(element) {
 				element = $(element);
-			    return element.setStyle({zIndex: '100',paddingRight: '15px', 
-					cursor:'pointer', fontSize:'20px',
+			    return element.setStyle({zIndex: '100', 
+					cursor:'pointer', fontSize:'14px', marginRight:'10px',
 				    fontWeight: 'normal', color : '#FFFFFF'});
 			}
 		}

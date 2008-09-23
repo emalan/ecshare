@@ -8,6 +8,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.FormComponent;
 
 public class ValidationStyleBehaviour extends AbstractBehavior {
+
 	private static final long serialVersionUID = 1L;
 	private Log log = LogFactory.getLog(this.getClass());
 	private String validClass ;
@@ -27,10 +28,10 @@ public class ValidationStyleBehaviour extends AbstractBehavior {
 		if (comp.isValid() && comp.getConvertedInput() != null) {
 			log.debug("onComponentTag - Valid, setting class to "+validClass+". component="+comp.getId());
 			tag.getAttributes().put("class", validClass);
-			component.info("Valid");
 		} else if (!comp.isValid()) {
 			log.debug("onComponentTag - Invalid, setting class to "+invalidClass+". component="+comp.getId());
 			tag.getAttributes().put("class", invalidClass);
 		}
 	}
+	
 }

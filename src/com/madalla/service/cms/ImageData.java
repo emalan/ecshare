@@ -17,6 +17,8 @@ public class ImageData  implements  IRepositoryData, Serializable, Comparable<Im
 	private String description;
 	private final InputStream fullImage;
 	private final DynamicImageResource webResource;
+	private String url;
+	private String urlTitle;
 
 
 	public ImageData(final String album, final String name, final InputStream fullImage){
@@ -84,6 +86,21 @@ public class ImageData  implements  IRepositoryData, Serializable, Comparable<Im
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	public String getUrlTitle() {
+		return urlTitle;
+	}
+
+	public void setUrlTitle(String urlTitle) {
+		this.urlTitle = urlTitle;
 	}
 	
 	//TODO implement this, cause we need to support sorting images in album

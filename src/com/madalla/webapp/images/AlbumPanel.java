@@ -1,12 +1,17 @@
 package com.madalla.webapp.images;
 
 import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
+import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.EFFECTS;
+import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -14,19 +19,16 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
+import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.service.cms.ImageData;
 import com.madalla.webapp.pages.AlbumAdminPage;
-import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 
 public class AlbumPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	
-    private static final CompressedResourceReference JS_PROTOTYPE = new CompressedResourceReference(Scriptaculous.class, "prototype.js");
-    private static final CompressedResourceReference JS_EFFECTS = new CompressedResourceReference(Scriptaculous.class, "effects.js");
-    
     private static final CompressedResourceReference JS_FASTINIT = new CompressedResourceReference(AlbumPanel.class, "fastinit.js");
     private static final CompressedResourceReference JS_CROSSFADE = new CompressedResourceReference(AlbumPanel.class, "crossfade.js");
     private static final CompressedResourceReference JS_BANNER = new CompressedResourceReference(AlbumPanel.class, "banner.js");
@@ -36,8 +38,8 @@ public class AlbumPanel extends Panel {
 	public AlbumPanel(String id, String album) {
 		super(id);
 
-		add(HeaderContributor.forJavaScript(JS_PROTOTYPE));
-        add(HeaderContributor.forJavaScript(JS_EFFECTS));
+		add(HeaderContributor.forJavaScript(PROTOTYPE));
+        add(HeaderContributor.forJavaScript(EFFECTS));
         add(HeaderContributor.forJavaScript(JS_FASTINIT));
         add(HeaderContributor.forJavaScript(JS_CROSSFADE));
         add(HeaderContributor.forJavaScript(JS_BANNER));
@@ -53,7 +55,17 @@ public class AlbumPanel extends Panel {
 			protected void populateItem(ListItem item) {
 				final ImageData imageData = (ImageData) item.getModelObject();
 				if (imageData.getFullImageAsResource() != null){
-					item.add(new Image("id",imageData.getFullImageAsResource()));
+					Image image = new Image("id",imageData.getFullImageAsResource());
+					if(StringUtils.isEmpty(imageData.getUrl())){
+						//TODO create a link to URL
+						image.add(new AjaxEventBehavior("onclick"){
+							@Override
+							protected void onEvent(AjaxRequestTarget target) {
+								getRequestCycle().setRequestTarget(new RedirectRequestTarget(imageData.getUrl()));
+							}
+						});
+					}
+					item.add(image);
 				} else {
 					log.info("Could not get Image from ImageData."+imageData);
 				}
