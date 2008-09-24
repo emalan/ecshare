@@ -63,7 +63,6 @@ public class EmailFormPanel extends Panel {
             TextField name = new RequiredTextField("name",new PropertyModel(properties,"name"));
             name.setLabel(new Model(EmailFormPanel.this.getString("label.name")));
             FeedbackPanel nameFeedback = new ComponentFeedbackPanel("nameFeedback",name);
-            nameFeedback.setMaxMessages(1);
             nameFeedback.setOutputMarkupId(true);
             add(nameFeedback);
             name.add(new ValidationStyleBehaviour());
@@ -74,7 +73,6 @@ public class EmailFormPanel extends Panel {
             email.add(EmailAddressValidator.getInstance());
             FeedbackPanel emailFeedback = new ComponentFeedbackPanel("emailFeedback", email);
             emailFeedback.setOutputMarkupId(true);
-            emailFeedback.setMaxMessages(1);
             add(emailFeedback);
             email.add(new ValidationStyleBehaviour());
             email.add(new AjaxValidationBehaviour(emailFeedback));
@@ -120,7 +118,6 @@ public class EmailFormPanel extends Panel {
             });
             FeedbackPanel passwordFeedback = new ComponentFeedbackPanel("passwordFeedback",password);
             passwordFeedback.setOutputMarkupId(true);
-            passwordFeedback.setMaxMessages(1);
             add(passwordFeedback);
             password.add(new ValidationStyleBehaviour());
             password.add(new AjaxValidationBehaviour(passwordFeedback));
@@ -131,9 +128,12 @@ public class EmailFormPanel extends Panel {
 		@Override
 		protected void onSubmit() {
 			log.debug("onSumit called- sending email.");
-			//sendEmail();
+            if (sendEmail()){
+            	info("Email sent successfully");
+            } else {
+            	error("Failed to send email!");
+            }
 		}
-        
 
     }
     
@@ -149,49 +149,6 @@ public class EmailFormPanel extends Panel {
         feedbackPanel.setOutputMarkupId(true);
         form.add(feedbackPanel);
         
-        //AjaxFormValidatingBehavior.addToAllFormComponents(form,"onblur");
-        //CustomAjaxFormValidationBehavior.addToAllFormComponents(form, "onkeyPress", Duration.ONE_SECOND);
-        
-
-//        form.add(new AjaxButton("submit", form){
-//        	@Override
-//			protected void onSubmit(AjaxRequestTarget target, Form form) {
-//				log.debug("onSubmit called - Ajax sending email");
-//	            if (sendEmail()){
-//	                form.info("Email sent successfully");
-//	            } else {
-//	                form.error("Failed to send email!");
-//	            }
-//	            target.addComponent(feedbackPanel);
-//			}
-//			
-//			 @Override
-//			 protected void onError(final AjaxRequestTarget target, final Form form) {
-//	           	log.debug("onError called");
-//	           	target.addComponent(feedbackPanel);
-//	           	form.visitFormComponents(new IVisitor() {
-//	                public Object formComponent(IFormVisitorParticipant formVisitor) {
-//	                    if (formVisitor instanceof FormComponent) {
-//	                        FormComponent formComponent = (FormComponent) formVisitor;
-//	                        
-//	                        if (!formComponent.isValid()){
-//	                             target.addComponent(formComponent);
-//	                             target.appendJavascript(
-//	                                "new Effect.Pulsate($('" + formComponent.getMarkupId() + "'),{pulses:1, duration:0.3});");
-//	                             log.debug("Component is invalid. Component MarkupId="+formComponent.getMarkupId()+". Message is " +formComponent.getFeedbackMessage().getMessage());
-//	                            
-//	                         }
-//	                    } else if (formVisitor instanceof ComponentFeedbackPanel){
-//	                    	ComponentFeedbackPanel feedback = (ComponentFeedbackPanel) formVisitor;
-//	                    	target.addComponent(feedback);
-//	                    }
-//	                    
-//	                    return formVisitor;
-//	                }
-//	        	});
-//
-//			 }
-//        });
         add(form);
         
         add(HeaderContributor.forJavaScript(JS_PROTOTYPE));
