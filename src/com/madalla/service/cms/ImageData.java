@@ -16,16 +16,17 @@ public class ImageData  implements  IRepositoryData, Serializable, Comparable<Im
 	private String title;
 	private String description;
 	private final InputStream fullImage;
+	private final InputStream smallImage;
 	private final DynamicImageResource webResource;
 	private String url;
 	private String urlTitle;
-
 
 	public ImageData(final String album, final String name, final InputStream fullImage){
 		this.id = "";
 		this.album = album;
 		this.name = name;
 		this.fullImage = fullImage;
+		this.smallImage = ImageDataHelper.createThumbnail(fullImage,"image/jpeg");
 		this.webResource = null;
 		title = "";
 		description = "";
@@ -36,6 +37,7 @@ public class ImageData  implements  IRepositoryData, Serializable, Comparable<Im
 		this.album = album;
 		this.name = name;
 		this.fullImage = null;
+		this.smallImage = null;
 		this.webResource =  ImageDataHelper.createImageResource(fullImage);
 		title = "";
 		description = "";

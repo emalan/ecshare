@@ -30,7 +30,7 @@ import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.service.cms.ImageData;
 
 public class AlbumAdminPanel extends Panel{
-
+	
 	private class FileUploadForm extends Form{
 		private static final long serialVersionUID = 1L;
 		private final Collection uploads = new ArrayList();
@@ -49,10 +49,12 @@ public class AlbumAdminPanel extends Panel{
             while (it.hasNext()) {
                 final FileUpload upload = (FileUpload)it.next();
                 try {
+                	log.info("uploading file "+ upload.getClientFileName());
                 	String imageName = StringUtils.deleteWhitespace(upload.getClientFileName());
                 	imageName = StringUtils.substringBefore(imageName, ".");
 					ImageData imageData = new ImageData(album,imageName, upload.getInputStream());
-					imageData.save(); //TODO send in a listener
+					imageData.save();
+					log.info("finished processing upload "+ imageName);
 				} catch (IOException e) {
 					log.error("onSubmit - failed to upload File."+e.getLocalizedMessage());
 					AlbumAdminPanel.this.error("Failed to upload images.");

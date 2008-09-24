@@ -1,11 +1,19 @@
 package com.madalla.service.cms;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageInputStream;
+import javax.imageio.stream.ImageOutputStream;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
@@ -49,12 +57,40 @@ class ImageDataHelper extends AbstractContentHelper {
 		try {
 			webResource = new BufferedDynamicImageResource();
 			webResource.setImage(ImageIO.read(inputStream));
+
 		} catch (IOException e) {
 			log.error("Exception while reading image from Content.",e);
 			throw new WicketRuntimeException("Error while reading image from Content Management System.");
 		}
 		return webResource;
-		
+	}
+	
+	static InputStream createThumbnail(InputStream inputStream, String mimeType) {
+		BufferedImage bufferedImage;
+		try {
+			bufferedImage = ImageIO.read(inputStream);
+
+			Image scaledImage = bufferedImage.getScaledInstance(20, 20,
+					Image.SCALE_FAST);
+
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			ImageOutputStream ios = ImageIO.createImageOutputStream(out);
+
+			Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType(mimeType);
+			if (writers == null || !writers.hasNext()) {
+				log.warn("Unsupported mimetype, cannot write: " + mimeType);
+				return new ByteArrayInputStream(new byte[] {});
+			}
+			ImageWriter writer = writers.next();
+			writer.setOutput(ios);
+			writer.write((BufferedImage) scaledImage);
+			ios.flush();
+			ios.close();
+			return new ByteArrayInputStream(out.toByteArray());
+		} catch (IOException e) {
+			log.warn("Not able to create thumbnail.");
+			return new ByteArrayInputStream(new byte[] {});
+		}
 	}
 
 	public ImageDataHelper(String site, JcrTemplate template ){
