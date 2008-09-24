@@ -15,7 +15,7 @@ public class ValidationStyleBehaviour extends AbstractBehavior {
 	private String invalidClass ;
 	
 	public ValidationStyleBehaviour(){
-		this("inputTextValid","inputTextError");
+		this("inputValid","inputError");
 	}
 	public ValidationStyleBehaviour(String validClass, String invalidClass){
 		this.validClass = validClass;

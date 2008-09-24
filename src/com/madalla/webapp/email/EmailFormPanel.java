@@ -1,17 +1,12 @@
 package com.madalla.webapp.email;
 
-import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
-
 import java.text.MessageFormat;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.RequestCycle;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -37,6 +32,7 @@ import com.madalla.service.captcha.CaptchaUtils;
 import com.madalla.service.email.IEmailSender;
 import com.madalla.service.email.IEmailServiceProvider;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
+import com.madalla.wicket.AjaxValidationBehaviour;
 import com.madalla.wicket.ValidationStyleBehaviour;
 
 public class EmailFormPanel extends Panel {
@@ -71,7 +67,7 @@ public class EmailFormPanel extends Panel {
             nameFeedback.setOutputMarkupId(true);
             add(nameFeedback);
             name.add(new ValidationStyleBehaviour());
-            name.add(new CustomAjaxValidationBehavior(nameFeedback));
+            name.add(new AjaxValidationBehaviour(nameFeedback));
             add(name);
             
             RequiredTextField email = new RequiredTextField("email",new PropertyModel(properties,"email"));
@@ -81,7 +77,7 @@ public class EmailFormPanel extends Panel {
             emailFeedback.setMaxMessages(1);
             add(emailFeedback);
             email.add(new ValidationStyleBehaviour());
-            email.add(new CustomAjaxValidationBehavior(emailFeedback));
+            email.add(new AjaxValidationBehaviour(emailFeedback));
             add(email);
             
             TextArea comment = new TextArea("comment",new PropertyModel(properties,"comment"));
@@ -127,7 +123,7 @@ public class EmailFormPanel extends Panel {
             passwordFeedback.setMaxMessages(1);
             add(passwordFeedback);
             password.add(new ValidationStyleBehaviour());
-            password.add(new CustomAjaxValidationBehavior(passwordFeedback));
+            password.add(new AjaxValidationBehaviour(passwordFeedback));
             add(password);
             
         }
@@ -142,56 +138,6 @@ public class EmailFormPanel extends Panel {
     }
     
     
-    public class CustomAjaxValidationBehavior extends AjaxFormComponentUpdatingBehavior{
-
-		private static final long serialVersionUID = 1L;
-		
-		private final FeedbackPanel feedbackPanel;
-		
-		private String validClass ;
-		private String invalidClass ;
-		
-		public CustomAjaxValidationBehavior() {
-			this("inputTextValid","inputTextError");
-		}
-		
-		public CustomAjaxValidationBehavior(String validClass, String invalidClass){
-			super("onblur");
-			this.feedbackPanel = null;
-			this.validClass = validClass;
-			this.invalidClass = invalidClass;
-		}
-
-		public CustomAjaxValidationBehavior(FeedbackPanel feedbackPanel) {
-			super("onblur");
-			this.feedbackPanel = feedbackPanel;
-		}
-
-		@Override
-		protected void onUpdate(AjaxRequestTarget target) {
-			target.addComponent(getFormComponent());
-			target.addComponent(feedbackPanel);
-			target.appendJavascript(
-					"$('"+feedbackPanel.getMarkupId()+"').parentNode.className = '"+validClass+"';");
-		}
-
-		@Override
-		protected void onError(AjaxRequestTarget target, RuntimeException e) {
-			target.addComponent(getFormComponent());
-			target.addComponent(feedbackPanel);
-			target.appendJavascript(
-                    "new Effect.Pulsate($('" + getFormComponent().getMarkupId() + "'),{pulses:1, duration:0.3});" +
-                    		"$('"+feedbackPanel.getMarkupId()+"').parentNode.className = '"+invalidClass+"';");
-		}
-
-		@Override
-		public void renderHead(IHeaderResponse response) {
-			super.renderHead(response);
-			response.renderCSSReference(PROTOTYPE);
-		}
-
-    }
-
     public EmailFormPanel(final String id, final String subject) {
         super(id);
         this.subject = subject;
