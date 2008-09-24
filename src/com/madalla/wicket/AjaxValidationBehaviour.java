@@ -34,12 +34,13 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 	@Override
 	protected void onUpdate(AjaxRequestTarget target) {
 		target.addComponent(getFormComponent());
+		getFormComponent().info("Valid");
 		if (feedbackPanel != null){
 			target.addComponent(feedbackPanel);
 			target.appendJavascript(
 				"$('"+feedbackPanel.getMarkupId()+"').parentNode.addClassName('"+validClass+"');"+
-				"$('"+feedbackPanel.getMarkupId()+"').parentNode.removeClassName('"+invalidClass+"');"+
-				"$('"+feedbackPanel.getMarkupId()+"').update('Valid')");
+				"$('"+feedbackPanel.getMarkupId()+"').parentNode.removeClassName('"+invalidClass+"');");
+				//"$('"+feedbackPanel.getMarkupId()+"').update('Valid')");
 		}
 	}
 
