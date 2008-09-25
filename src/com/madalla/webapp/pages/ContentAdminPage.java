@@ -9,7 +9,7 @@ public class ContentAdminPage extends AdminPage  {
 	private static final long serialVersionUID = -2835770167598542155L;
     
     public ContentAdminPage(final PageParameters parameters){
-        add(ContentAdminPanel.newInstance("contentAdminPanel"));
+        add(ContentAdminPanel.newInstance("contentAdminPanel", parameters));
     }
 
 }
