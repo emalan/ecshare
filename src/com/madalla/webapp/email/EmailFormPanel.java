@@ -9,6 +9,7 @@ import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.HeaderContributor;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -153,11 +154,12 @@ public class EmailFormPanel extends Panel {
         feedbackPanel.setOutputMarkupId(true);
         form.add(feedbackPanel);
         
-        form.add(new AjaxButton("submit", form){
+        AjaxButton submitButton = new IndicatingAjaxButton("submit", form){
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
-				log.debug("****Ajax onsubmit called***** never gets called??");
+				log.debug("Ajax onsubmit called.");
 				target.addComponent(feedbackPanel);
 				if (sendEmail()){
 					form.info("Email sent successfully");
@@ -192,7 +194,10 @@ public class EmailFormPanel extends Panel {
 			}
 			
         	
-        }.setOutputMarkupId(true));
+        };
+        submitButton.setOutputMarkupId(true);
+        form.setDefaultButton(submitButton);
+        form.add(submitButton);
         
         add(form);
         
@@ -210,7 +215,7 @@ public class EmailFormPanel extends Panel {
 
     
     private String getEmailBody(String from, String email, String comment){
-        Object[] args = {from,email,comment};
+        Object[] args = {from,email,(comment == null)?"":comment};
         String body = MessageFormat.format(getEmailtemplate(),args);
         RequestCycle requestCycle = getRequestCycle();
         if (requestCycle instanceof WebRequestCycle){

@@ -69,8 +69,8 @@ public class Panels {
 		return new AlbumAdminPanel(id, params);
 	}
 	
-	public static Panel albumPanel(String id, String album){
-		return new AlbumPanel(id, album);
+	public static Panel albumPanel(String id, String album, Class<? extends Page> returnPage){
+		return new AlbumPanel(id, album, returnPage);
 	}
 	
 	

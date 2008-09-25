@@ -1,6 +1,7 @@
 package com.madalla.webapp.images;
 
 import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
+import static com.madalla.webapp.images.admin.AlbumParams.RETURN_PAGE;
 import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.EFFECTS;
 import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
 
@@ -9,6 +10,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -37,7 +39,7 @@ public class AlbumPanel extends Panel {
 
     private static final Log log = LogFactory.getLog(AlbumPanel.class);
 
-	public AlbumPanel(String id, String album) {
+	public AlbumPanel(String id, String album, Class<? extends Page> returnPage) {
 		super(id);
 
 		add(HeaderContributor.forJavaScript(PROTOTYPE));
@@ -46,7 +48,7 @@ public class AlbumPanel extends Panel {
         add(HeaderContributor.forJavaScript(JS_CROSSFADE));
         add(HeaderContributor.forJavaScript(JS_BANNER));
         
-        Link link = new BookmarkablePageLink("adminLink", AlbumAdminPage.class, new PageParameters(ALBUM +"="+album)) {
+        Link link = new BookmarkablePageLink("adminLink", AlbumAdminPage.class, new PageParameters(ALBUM +"="+album+","+RETURN_PAGE+"="+returnPage.getName())) {
             private static final long serialVersionUID = 1801145612969874170L;
 
             protected final void onBeforeRender() {
@@ -76,6 +78,7 @@ public class AlbumPanel extends Panel {
 					if(StringUtils.isEmpty(imageData.getUrl())){
 						//TODO create a link to URL
 						image.add(new AjaxEventBehavior("onclick"){
+							private static final long serialVersionUID = 1L;
 							@Override
 							protected void onEvent(AjaxRequestTarget target) {
 								getRequestCycle().setRequestTarget(new RedirectRequestTarget(imageData.getUrl()));

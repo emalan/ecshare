@@ -1,6 +1,7 @@
 package com.madalla.webapp.images.admin;
 
 import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
+import static com.madalla.webapp.images.admin.AlbumParams.RETURN_PAGE;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,12 +11,15 @@ import java.util.Iterator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -93,9 +97,21 @@ public class AlbumAdminPanel extends Panel{
 	private ImageListView imageListView;
 	private final String album;
 	
+	
 	public AlbumAdminPanel(String id, final PageParameters params) {
 		super(id);
 		this.album = params.getString(ALBUM);
+		Class<? extends Page> returnPage = null;
+		try {
+			String pageString = params.getString(RETURN_PAGE);
+            returnPage = (Class<? extends Page>) Class.forName(pageString);
+        } catch (ClassNotFoundException e) {
+            log.error("constructor - Exception while getting return Class.", e);
+        } catch (ClassCastException e) {
+        	log.error("constructor - Exception while casting return Class.", e);
+        }
+		add(new PageLink("returnLink", returnPage));
+		
 		
         final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
         add(uploadFeedback);
