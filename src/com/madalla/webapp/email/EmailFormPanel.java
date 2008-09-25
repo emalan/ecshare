@@ -158,7 +158,7 @@ public class EmailFormPanel extends Panel {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
-				log.debug("****Ajax onsubmit called***** never gets called !!!@#$%");
+				log.debug("****Ajax onsubmit called***** never gets called??");
 				target.addComponent(feedbackPanel);
 				if (sendEmail()){
 					form.info("Email sent successfully");
