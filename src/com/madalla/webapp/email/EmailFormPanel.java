@@ -4,11 +4,16 @@ import java.text.MessageFormat;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Component;
 import org.apache.wicket.RequestCycle;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.IFormVisitorParticipant;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
@@ -148,6 +153,47 @@ public class EmailFormPanel extends Panel {
         final FeedbackPanel feedbackPanel = new ComponentFeedbackPanel("feedback",form);
         feedbackPanel.setOutputMarkupId(true);
         form.add(feedbackPanel);
+        
+        form.add(new AjaxButton("submit", form){
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form form) {
+				log.debug("****Ajax onsubmit called***** never gets called !!!@#$%");
+				target.addComponent(feedbackPanel);
+				if (sendEmail()){
+					form.info("Email sent successfully");
+	            } else {
+	            	form.info("Failed to send email!");
+	            }
+				setResponsePage(this.findPage());
+			}
+			
+			@Override
+			protected void onError(final AjaxRequestTarget target, Form form) {
+				log.debug("Ajax onerror called");
+				target.addComponent(feedbackPanel);
+	           	form.visitChildren(new Component.IVisitor() {
+					public Object component(Component component) {
+	           			log.debug("formVisitor="+component);
+	           			if (component instanceof FormComponent) {
+	           				FormComponent formComponent = (FormComponent) component;
+	           				if (!formComponent.isValid()){
+	           					target.addComponent(formComponent);
+	           					log.debug("Component is invalid. Component MarkupId="+formComponent.getMarkupId()+". Message is " +formComponent.getFeedbackMessage().getMessage());
+	           				}
+	           			} else if (component instanceof ComponentFeedbackPanel){
+	           				log.debug("Ajax onerror - adding feedback to target.");
+	           				ComponentFeedbackPanel feedback = (ComponentFeedbackPanel) component;
+	           				target.addComponent(feedback);
+	           			}
+	           			return null;
+					}
+	           	});
+
+			}
+			
+        	
+        }.setOutputMarkupId(true));
         
         add(form);
         
