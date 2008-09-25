@@ -15,6 +15,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -24,6 +25,7 @@ import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.service.cms.ImageData;
+import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.AlbumAdminPage;
 
 public class AlbumPanel extends Panel {
@@ -44,7 +46,22 @@ public class AlbumPanel extends Panel {
         add(HeaderContributor.forJavaScript(JS_CROSSFADE));
         add(HeaderContributor.forJavaScript(JS_BANNER));
         
-        add(new BookmarkablePageLink("adminLink", AlbumAdminPage.class, new PageParameters(ALBUM +"="+album)));
+        Link link = new BookmarkablePageLink("adminLink", AlbumAdminPage.class, new PageParameters(ALBUM +"="+album)) {
+            private static final long serialVersionUID = 1801145612969874170L;
+
+            protected final void onBeforeRender() {
+                if (((CmsSession)getSession()).isCmsAdminMode()) {
+                    setEnabled(true);
+                } else {
+                    setEnabled(false);
+                }
+                super.onBeforeRender();
+            }
+
+        };
+        link.setAfterDisabledLink("");
+        link.setBeforeDisabledLink("");
+        add(link);
         
         List<ImageData> images = getRepositoryService().getAlbumImages(album);
         
