@@ -1,18 +1,14 @@
 package com.madalla.service.cms;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageInputStream;
 import javax.imageio.stream.ImageOutputStream;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -26,6 +22,8 @@ import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource
 import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
+
+import com.madalla.image.ImageUtilities;
 
 class ImageDataHelper extends AbstractContentHelper {
 	
@@ -58,34 +56,26 @@ class ImageDataHelper extends AbstractContentHelper {
 			webResource = new BufferedDynamicImageResource();
 			webResource.setImage(ImageIO.read(inputStream));
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			log.error("Exception while reading image from Content.",e);
 			throw new WicketRuntimeException("Error while reading image from Content Management System.");
 		}
 		return webResource;
 	}
 	
-	static InputStream createThumbnail(InputStream inputStream, String mimeType) {
+	static InputStream createThumbnail(InputStream inputStream) {
 		BufferedImage bufferedImage;
 		try {
 			bufferedImage = ImageIO.read(inputStream);
-
-			Image scaledImage = bufferedImage.getScaledInstance(20, 20,
-					Image.SCALE_FAST);
+			BufferedImage scaledImage = ImageUtilities.getScaledProportinalInstance(bufferedImage, 300, 200);
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			ImageOutputStream ios = ImageIO.createImageOutputStream(out);
-
-			Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType(mimeType);
-			if (writers == null || !writers.hasNext()) {
-				log.warn("Unsupported mimetype, cannot write: " + mimeType);
-				return new ByteArrayInputStream(new byte[] {});
-			}
-			ImageWriter writer = writers.next();
-			writer.setOutput(ios);
-			writer.write((BufferedImage) scaledImage);
-			ios.flush();
-			ios.close();
+			ImageOutputStream imageOut = ImageIO.createImageOutputStream(out);
+			
+			ImageIO.write(scaledImage, "JPG", imageOut);
+			out.flush();
+			out.close();
+			
 			return new ByteArrayInputStream(out.toByteArray());
 		} catch (IOException e) {
 			log.warn("Not able to create thumbnail.");
@@ -126,7 +116,11 @@ class ImageDataHelper extends AbstractContentHelper {
                 
                 for (NodeIterator iterator = groupNode.getNodes(); iterator.hasNext();){
                     Node nextNode = iterator.nextNode();
-                    list.add(create(nextNode));
+                    try {
+                    	list.add(create(nextNode));
+                    } catch (RuntimeException e){
+                    	log.error("Unable to create entry.",e);
+                    }
                 }
                 return list;
             }

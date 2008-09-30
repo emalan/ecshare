@@ -25,8 +25,8 @@ public class ImageData  implements  IRepositoryData, Serializable, Comparable<Im
 		this.id = "";
 		this.album = album;
 		this.name = name;
-		this.fullImage = fullImage;
-		this.smallImage = null; //ImageDataHelper.createThumbnail(fullImage,"image/jpeg");
+		this.fullImage = ImageDataHelper.createThumbnail(fullImage);
+		this.smallImage = null; //
 		this.webResource = null;
 		title = "";
 		description = "";
