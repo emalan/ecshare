@@ -11,24 +11,25 @@
 *  
 */
 
-var Fadepopup = Class.create(
-    popupId : '',
+var Fadepopup = Class.create({
     initialize : function(elm){
-        this.popupId = $(elm).id;
-        $(elm).observe('mouseout', this.show.bind(this));
-        $(elm).observe('mouseover', this.hide.bind(this));
+	    this.options = Object.extend(Object.clone(Fadepopup.defaults));
+        this.options.popupId = $(elm).id;
+        $(elm).observe('mouseover', this.show.bind(this));
+        $(elm).observe('mouseout', this.hide.bind(this));
     },
     show : function(){
-        $(this.popupId + Fadepopup.defaults.popupIdentifier).appear({duration: Fadepopup.defaults.duration});
+        $(this.options.popupId + this.options.popupIdentifier).appear({duration: Fadepopup.defaults.duration});
     },
     hide : function(elm){
-        $(this.popupId + Fadepopup.defaults.popupIdentifier).fade({duration: Fadepopup.defaults.duration});
+        $(this.options.popupId + this.options.popupIdentifier).fade({duration: Fadepopup.defaults.duration});
     }
-);
+});
 Fadepopup.defaults = {
     selector : '.fadepopup',
     duration : 0.5,
-    popupIdentifier : '-area'
+    popupIdentifier : '-area',
+    popupId : 'fadepopup'
 };
 Fadepopup.load = function() {
     $$(Fadepopup.defaults.selector).each(function(c) {
