@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 
 /**
  * Graphics Utilities class that provide default application methods.
@@ -21,7 +22,7 @@ public class ImageUtilities {
 	 */
 	public static BufferedImage getScaledInstance(BufferedImage bufferedImage, int targetWidth, int targetHeight){
 		return getScaledInstance(bufferedImage, targetWidth, targetHeight, 
-				RenderingHints.VALUE_INTERPOLATION_BICUBIC, true);
+				RenderingHints.VALUE_INTERPOLATION_BICUBIC, true, null);
 	}
 
 	/**
@@ -30,21 +31,22 @@ public class ImageUtilities {
 	 * @param targetHeight
 	 * @return BufferedImage that has been scaled down proportionately to within the specified height and width.
 	 */
-	public static BufferedImage getScaledDownProportionalInstance(BufferedImage bufferedImage, int targetWidth, int targetHeight){
+	public static BufferedImage getScaledDownProportionalInstance(BufferedImage bufferedImage, 
+			int targetWidth, int targetHeight, ImageObserver imageObserver){
 		double actualWidth = bufferedImage.getWidth();
 		double actualHeight = bufferedImage.getHeight();
 		double scaleFactor = (double)targetWidth / actualWidth;
 		if (actualHeight * scaleFactor > targetHeight){
 			scaleFactor = targetHeight / actualHeight;
 		}
-		if (scaleFactor <= 1){
+		if (scaleFactor >= 1){
 			return bufferedImage;
 		} 
 		int adjWidth = (int) (scaleFactor * actualWidth);
 		int adjHeight = (int) (scaleFactor * actualHeight);
 
 		return getScaledInstance(bufferedImage, adjWidth, adjHeight, 
-				RenderingHints.VALUE_INTERPOLATION_BICUBIC, true);
+				RenderingHints.VALUE_INTERPOLATION_BICUBIC, true, imageObserver);
 	}
 	
 	/**
@@ -53,7 +55,8 @@ public class ImageUtilities {
 	 * @param targetHeight
 	 * @return BufferedImage that has been scaled down proportionatly to within the specified height and width.
 	 */
-	public static BufferedImage getScaledProportinalInstance(BufferedImage bufferedImage, int targetWidth, int targetHeight){
+	public static BufferedImage getScaledProportinalInstance(BufferedImage bufferedImage, 
+			int targetWidth, int targetHeight, ImageObserver imageObserver){
 		double actualWidth = bufferedImage.getWidth();
 		double actualHeight = bufferedImage.getHeight();
 		double scaleFactor = (double)targetWidth / actualWidth;
@@ -63,7 +66,8 @@ public class ImageUtilities {
 		int adjWidth = (int) (scaleFactor * actualWidth);
 		int adjHeight = (int) (scaleFactor * actualHeight);
 		
-		return getScaledInstance(bufferedImage, adjWidth, adjHeight, RenderingHints.VALUE_INTERPOLATION_BICUBIC, true);
+		return getScaledInstance(bufferedImage, adjWidth, adjHeight, 
+				RenderingHints.VALUE_INTERPOLATION_BICUBIC, true, imageObserver);
 	}
 	
 	/**
@@ -92,11 +96,12 @@ public class ImageUtilities {
                                            int targetWidth,
                                            int targetHeight,
                                            Object hint,
-                                           boolean higherQuality)
+                                           boolean higherQuality,
+                                           ImageObserver observer)
     {
         int type = (img.getTransparency() == Transparency.OPAQUE) ?
             BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
-        BufferedImage ret = (BufferedImage)img;
+        BufferedImage ret = img;
         int w, h;
         if (higherQuality) {
             // Use multi-step technique: start with original size, then
@@ -104,6 +109,10 @@ public class ImageUtilities {
             // until the target size is reached
             w = img.getWidth();
             h = img.getHeight();
+            if (targetWidth >= w || targetHeight >= h){
+                w = targetWidth;
+                h = targetHeight;
+            }
         } else {
             // Use one-step technique: scale directly from original
             // size to target size with a single drawImage() call
@@ -129,7 +138,7 @@ public class ImageUtilities {
             BufferedImage tmp = new BufferedImage(w, h, type);
             Graphics2D g2 = tmp.createGraphics();
             g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, hint);
-            g2.drawImage(ret, 0, 0, w, h, null);
+            g2.drawImage(ret, 0, 0, w, h, observer);
             g2.dispose();
 
             ret = tmp;

@@ -1,5 +1,6 @@
 package com.madalla.webapp.images.admin;
 
+import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
 import static com.madalla.webapp.images.admin.AlbumParams.RETURN_PAGE;
 
 import java.io.IOException;
@@ -32,24 +33,26 @@ import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.service.cms.ImageData;
 
 public class AlbumAdminPanel extends Panel{
+	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(2000);
 	
 	private class FileUploadForm extends Form{
 		private static final long serialVersionUID = 1L;
-		private final Collection uploads = new ArrayList();
+		
+		private final Collection<FileUpload> uploads = new ArrayList<FileUpload>();
 		
 		public FileUploadForm(String name) {
             super(name);
 
             setMultiPart(true);
             add(new MultiFileUploadField("fileInput", new PropertyModel(this, "uploads"), 5));
-            setMaxSize(Bytes.kilobytes(800));
+            setMaxSize(MAX_FILE_SIZE);
         }
 		
 		@Override
 		protected void onSubmit() {
-            Iterator it = uploads.iterator();
+            Iterator<FileUpload> it = uploads.iterator();
             while (it.hasNext()) {
-                final FileUpload upload = (FileUpload)it.next();
+                final FileUpload upload = it.next();
                 try {
                 	log.info("uploading file "+ upload.getClientFileName());
                 	String imageName = StringUtils.deleteWhitespace(upload.getClientFileName());
@@ -62,6 +65,19 @@ public class AlbumAdminPanel extends Panel{
 				}
             }
         }
+	}
+	//TODO
+	private class AlbumForm extends Form{
+		private static final long serialVersionUID = 1L;
+
+		public AlbumForm(final String name, final String album){
+			super(name);
+		}
+		
+		@Override
+		protected void onSubmit() {
+		
+		}
 	}
 
 	private class ImageListView extends ListView{
@@ -95,7 +111,7 @@ public class AlbumAdminPanel extends Panel{
 	
 	public AlbumAdminPanel(String id, final PageParameters params) {
 		super(id);
-		
+		String album = params.getString(ALBUM); //use this to default the dropdown
 		Class<? extends Page> returnPage = null;
 		try {
 			String pageString = params.getString(RETURN_PAGE);
@@ -112,7 +128,9 @@ public class AlbumAdminPanel extends Panel{
         add(uploadFeedback);
         final FileUploadForm simpleUploadForm = new FileUploadForm("simpleUpload");
         add(simpleUploadForm);
-
+        final AlbumForm albumForm = new AlbumForm("albumForm",album);
+        add(albumForm);
+        
         // Add folder view
         imageListView = new ImageListView("imageListView", new LoadableDetachableModel() {
 			private static final long serialVersionUID = 1L;

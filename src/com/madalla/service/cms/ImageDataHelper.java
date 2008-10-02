@@ -1,6 +1,7 @@
 package com.madalla.service.cms;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -24,6 +25,7 @@ import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.image.ImageUtilities;
+import com.madalla.image.LoggingImageObserver;
 
 /**
  * Handles Image Data persistance to a JCR Content Repository
@@ -89,13 +91,17 @@ class ImageDataHelper extends AbstractContentHelper {
 		return webResource;
 	}
 	
+	
+	
 	//scale down if bigger than max defaults
 	private static InputStream scaleOriginal(InputStream inputStream) {
 		BufferedImage bufferedImage;
 		try {
 			bufferedImage = ImageIO.read(inputStream);
-			BufferedImage scaledImage = ImageUtilities.getScaledProportinalInstance(bufferedImage, MAX_WIDTH, MAX_HEIGHT);
-
+			log.debug("scaleOriginal - starting to scale");
+			ImageObserver observer = new LoggingImageObserver(log);
+			BufferedImage scaledImage = ImageUtilities.getScaledDownProportionalInstance(bufferedImage, MAX_WIDTH, MAX_HEIGHT,observer);
+			
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			ImageOutputStream imageOut = ImageIO.createImageOutputStream(out);
 			
@@ -103,9 +109,10 @@ class ImageDataHelper extends AbstractContentHelper {
 			out.flush();
 			out.close();
 			
+			log.debug("scaleOriginal - scaled.");
 			return new ByteArrayInputStream(out.toByteArray());
 		} catch (IOException e) {
-			log.warn("Not able to create thumbnail.");
+			log.error("scaleOriginal - Not able to create scaledImage.", e);
 			return new ByteArrayInputStream(new byte[] {});
 		}
 	}
@@ -178,11 +185,12 @@ class ImageDataHelper extends AbstractContentHelper {
 	@Override
 	void setPropertyValues(Node node, IRepositoryData data)
 			throws RepositoryException {
+		log.debug("setPropertyValue starting - "+data);
 		ImageData imageData = (ImageData) data;
 		node.setProperty(EC_PROP_TITLE, imageData.getTitle());
 		node.setProperty(EC_PROP_DESCRIPTION, imageData.getDescription());
-		node.setProperty(EC_IMAGE_FULL, imageData.getFullImageAsInputStream());
-		
+		node.setProperty(EC_IMAGE_FULL, scaleOriginal(imageData.getFullImageAsInputStream()));
+		log.debug("setPropertyValue done - "+imageData);
 	}
 	
 
