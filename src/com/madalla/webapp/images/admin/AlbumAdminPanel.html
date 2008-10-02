@@ -1,30 +1,36 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
-    
+        #availableImages {
+            float: left;
+            clear: both;
+            width: 50%;
+        }
+        #albumImages {
+            float: left;
+            width: 50%;
+        }
     
     </style>
 </wicket:head>
 <body>
     <wicket:panel>
     <a href="#" wicket:id="returnLink">Return</a>    
-    <form wicket:id="simpleUpload">
-        <fieldset>
-        <legend>Upload form</legend>
-        <p>
+
+    <div id="fileUpload">
+        <form wicket:id="simpleUpload">
+            <fieldset>
+            <legend>Upload form</legend>
+            <p>
             <div wicket:id="fileInput" class="mfuex"/>
-        </p>
-        <input type="submit" value="Upload!"/>
-        
-        </fieldset>
-    </form>
-
-
-    <div>
-        <span wicket:id="uploadFeedback"/>
+            </p>
+            <input type="submit" value="Upload!"/>
+            <span wicket:id="uploadFeedback"/>
+            </fieldset>
+        </form>
     </div>
      
-    <div>
+    <div id="availableImages">
         <h4>Current Images in Album</h4>
         <table>
             <tr wicket:id="imageListView">
@@ -34,7 +40,7 @@
         </table>
     </div>
     
-    <div>
+    <div id="albumImages">
         <form wicket:id="albumForm">
             
             <input type="submit" value="Save"/>

@@ -124,9 +124,9 @@ public class AlbumAdminPanel extends Panel{
 		add(new PageLink("returnLink", returnPage));
 		
 		
-        final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
-        add(uploadFeedback);
         final FileUploadForm simpleUploadForm = new FileUploadForm("simpleUpload");
+        final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
+        simpleUploadForm.add(uploadFeedback);
         add(simpleUploadForm);
         final AlbumForm albumForm = new AlbumForm("albumForm",album);
         add(albumForm);
