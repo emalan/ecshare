@@ -25,14 +25,40 @@ import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.image.ImageUtilities;
 
+/**
+ * Handles Image Data persistance to a JCR Content Repository
+ * <p>
+ * Responsible for getting data into and from a JCR Repository. This class controls the data
+ * structure/schema in the Repository.
+ * </p>
+ * <p>
+ * There is a generic structure for all types of data and for that schema albums map to groups.
+ * ec:albums ---> group
+ * ec:original ---> group (special group for originals)
+ * </p>
+ * <pre>
+ *     [ec:site]  ----- ec:images 
+ *                  -------|----------------                 
+ *                 |                        |
+ *             ec:originals            [ec:albums]  
+ * </pre>
+ * 
+ * 
+ * @author Eugene Malan
+ *
+ */
 class ImageDataHelper extends AbstractContentHelper {
 	
 	// Repository Values
     static final String EC_NODE_IMAGES = NS + "images";
+    private static final String EC_ORIGINALS = "originals";
     static final String EC_PROP_TITLE = NS + "title";
     private static final String EC_IMAGE_FULL = "imageFull";
-    private static final String EC_IMAGE_THUMB = "imageThumb";
+    //private static final String EC_IMAGE_THUMB = "imageThumb";
     static final String EC_PROP_DESCRIPTION = NS + "description";
+    
+    private static final int MAX_WIDTH = 900;
+    private static final int MAX_HEIGHT = 600;
     
     private static final Log log = LogFactory.getLog(ImageDataHelper.class);
 	private static ImageDataHelper instance;
@@ -63,11 +89,12 @@ class ImageDataHelper extends AbstractContentHelper {
 		return webResource;
 	}
 	
-	static InputStream createThumbnail(InputStream inputStream) {
+	//scale down if bigger than max defaults
+	private static InputStream scaleOriginal(InputStream inputStream) {
 		BufferedImage bufferedImage;
 		try {
 			bufferedImage = ImageIO.read(inputStream);
-			BufferedImage scaledImage = ImageUtilities.getScaledProportinalInstance(bufferedImage, 300, 200);
+			BufferedImage scaledImage = ImageUtilities.getScaledProportinalInstance(bufferedImage, MAX_WIDTH, MAX_HEIGHT);
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			ImageOutputStream imageOut = ImageIO.createImageOutputStream(out);
@@ -88,6 +115,16 @@ class ImageDataHelper extends AbstractContentHelper {
 		this.template = template;
 		instance = this;
 	}
+
+	String saveOriginalImage(final String name, final InputStream fullImage ){
+        ImageData imageData = new ImageData(EC_ORIGINALS, name, fullImage);
+        return save(imageData);
+    }
+    
+    String saveAlbumImage(final String album, final String name, final InputStream fullImage){
+    	ImageData imageData = new ImageData(album, name, fullImage);
+    	return save(imageData);
+    }
 	
 	String save(final ImageData imageData) {
 		return genericSave(imageData);
@@ -103,16 +140,22 @@ class ImageDataHelper extends AbstractContentHelper {
 		});
 	}
 	
+	List<ImageData> getOriginalEntries(){
+		return getEntries(NS + EC_ORIGINALS);
+	}
 	
+	List<ImageData> getAlbumEntries(final String group){
+		return getEntries(NS+group);
+	}
 	
 	@SuppressWarnings("unchecked")
-	List<ImageData> getEntries(final String group){
+	private List<ImageData> getEntries(final String group){
 		return (List<ImageData>) template.execute(new JcrCallback(){
             List<ImageData> list = new ArrayList<ImageData>();
             public List<ImageData> doInJcr(Session session) throws IOException, RepositoryException {
             	Node siteNode = getSiteNode(session);
             	Node parentNode = getParentNode(siteNode);
-            	Node groupNode  = getCreateNode(NS+group, parentNode);
+            	Node groupNode  = getCreateNode(group, parentNode);
                 
                 for (NodeIterator iterator = groupNode.getNodes(); iterator.hasNext();){
                     Node nextNode = iterator.nextNode();

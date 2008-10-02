@@ -22,5 +22,6 @@ public interface IRepositoryService {
     List<BlogEntry> getBlogEntries(final String blog);
     ImageData getImageData(final String path) ;
     List<ImageData> getAlbumImages(final String album);
+    List<ImageData> getAlbumOriginalImages();
 
 }

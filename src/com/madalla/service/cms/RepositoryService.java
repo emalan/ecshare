@@ -93,8 +93,12 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     public List<ImageData> getAlbumImages(final String album){
-    	return ImageDataHelper.getInstance().getEntries(album);
+    	return ImageDataHelper.getInstance().getAlbumEntries(album);
     }
+    
+	public List<ImageData> getAlbumOriginalImages() {
+		return ImageDataHelper.getInstance().getOriginalEntries();
+	}
 
     public BlogEntry getBlogEntry(final String path) {
         if (StringUtils.isEmpty(path)){
@@ -174,10 +178,4 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 			}
     	});
     }
-    
-    private IRepositoryService getService(){
-    	return this;
-    }
-
-
 }

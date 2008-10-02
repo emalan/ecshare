@@ -1,6 +1,5 @@
 package com.madalla.webapp.images.admin;
 
-import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
 import static com.madalla.webapp.images.admin.AlbumParams.RETURN_PAGE;
 
 import java.io.IOException;
@@ -14,7 +13,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
@@ -56,8 +54,7 @@ public class AlbumAdminPanel extends Panel{
                 	log.info("uploading file "+ upload.getClientFileName());
                 	String imageName = StringUtils.deleteWhitespace(upload.getClientFileName());
                 	imageName = StringUtils.substringBefore(imageName, ".");
-					ImageData imageData = new ImageData(album,imageName, upload.getInputStream());
-					imageData.save();
+                	ImageData.createOriginalImage(imageName, upload.getInputStream());
 					log.info("finished processing upload "+ imageName);
 				} catch (IOException e) {
 					log.error("onSubmit - failed to upload File."+e.getLocalizedMessage());
@@ -93,14 +90,12 @@ public class AlbumAdminPanel extends Panel{
 
 	private static final long serialVersionUID = 1L;
 	private static final Log log = LogFactory.getLog(AlbumAdminPanel.class);
-	
 	private ImageListView imageListView;
-	private final String album;
 	
 	
 	public AlbumAdminPanel(String id, final PageParameters params) {
 		super(id);
-		this.album = params.getString(ALBUM);
+		
 		Class<? extends Page> returnPage = null;
 		try {
 			String pageString = params.getString(RETURN_PAGE);
@@ -123,7 +118,7 @@ public class AlbumAdminPanel extends Panel{
 			private static final long serialVersionUID = 1L;
 
 			protected Object load() {
-                return getRepositoryService().getAlbumImages(album);
+                return getRepositoryService().getAlbumOriginalImages();
             }
         });
         add(imageListView);

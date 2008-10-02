@@ -5,11 +5,54 @@ import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
+/**
+ * Graphics Utilities class that provide default application methods.
+ * 
+ * @author Eugene Malan
+ *
+ */
 public class ImageUtilities {
 
+	/**
+	 * @param bufferedImage
+	 * @param targetWidth
+	 * @param targetHeight
+	 * @return BufferedImage that has been scaled to the specified height and width.
+	 */
 	public static BufferedImage getScaledInstance(BufferedImage bufferedImage, int targetWidth, int targetHeight){
-		return getScaledInstance(bufferedImage, targetWidth, targetHeight, RenderingHints.VALUE_INTERPOLATION_BICUBIC, true);
+		return getScaledInstance(bufferedImage, targetWidth, targetHeight, 
+				RenderingHints.VALUE_INTERPOLATION_BICUBIC, true);
 	}
+
+	/**
+	 * @param bufferedImage
+	 * @param targetWidth
+	 * @param targetHeight
+	 * @return BufferedImage that has been scaled down proportionately to within the specified height and width.
+	 */
+	public static BufferedImage getScaledDownProportionalInstance(BufferedImage bufferedImage, int targetWidth, int targetHeight){
+		double actualWidth = bufferedImage.getWidth();
+		double actualHeight = bufferedImage.getHeight();
+		double scaleFactor = (double)targetWidth / actualWidth;
+		if (actualHeight * scaleFactor > targetHeight){
+			scaleFactor = targetHeight / actualHeight;
+		}
+		if (scaleFactor <= 1){
+			return bufferedImage;
+		} 
+		int adjWidth = (int) (scaleFactor * actualWidth);
+		int adjHeight = (int) (scaleFactor * actualHeight);
+
+		return getScaledInstance(bufferedImage, adjWidth, adjHeight, 
+				RenderingHints.VALUE_INTERPOLATION_BICUBIC, true);
+	}
+	
+	/**
+	 * @param bufferedImage
+	 * @param targetWidth
+	 * @param targetHeight
+	 * @return BufferedImage that has been scaled down proportionatly to within the specified height and width.
+	 */
 	public static BufferedImage getScaledProportinalInstance(BufferedImage bufferedImage, int targetWidth, int targetHeight){
 		double actualWidth = bufferedImage.getWidth();
 		double actualHeight = bufferedImage.getHeight();
@@ -22,7 +65,7 @@ public class ImageUtilities {
 		
 		return getScaledInstance(bufferedImage, adjWidth, adjHeight, RenderingHints.VALUE_INTERPOLATION_BICUBIC, true);
 	}
-	 
+	
 	/**
      * Convenience method that returns a scaled instance of the
      * provided {@code BufferedImage}.
