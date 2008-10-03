@@ -13,12 +13,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -89,20 +90,22 @@ public class AlbumAdminPanel extends Panel{
 		}
 
 		@Override
-		protected void populateItem(ListItem listItem) {
+		protected void populateItem(final ListItem listItem) {
 			final ImageData imageData = (ImageData)listItem.getModelObject();
             listItem.add(new Label("file", imageData.getName()));
             Image image = new Image("thumb",imageData.getThumbnail());
             listItem.add(image);
-            listItem.add(new Link("delete") {
+            listItem.add(new IndicatingAjaxFallbackLink("delete") {
 				private static final long serialVersionUID = 1L;
 
-				public void onClick() {
+				@Override
+				public void onClick(AjaxRequestTarget target) {
                     AlbumAdminPanel.this.info("Deleting original image. "+imageData);
                     getRepositoryService().deleteNode(imageData.getId());
-                }
+                    target.addComponent(listItem);
+				}
             });
-			
+			listItem.setOutputMarkupId(true);
 		}
 		
 	}
