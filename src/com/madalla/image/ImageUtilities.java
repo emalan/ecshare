@@ -5,6 +5,7 @@ import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.io.InputStream;
 
 /**
  * Graphics Utilities class that provide default application methods.
@@ -13,6 +14,22 @@ import java.awt.image.ImageObserver;
  *
  */
 public class ImageUtilities {
+	
+
+	public static InputStream scaleImageDownProportionately(InputStream inputStream, LoggingImageObserver observer,
+			int maxWidth, int maxHeight){
+		
+		ImageScaleProcessor processor = new ImageScaleProcessor(){
+			@Override
+			BufferedImage processScaling(BufferedImage bufferedImage, int targetWidth, int targetHeight,
+					ImageObserver imageObserver) {
+				return getScaledDownProportionalInstance(bufferedImage, targetWidth, targetHeight, imageObserver);
+			}
+			
+		};
+		return processor.process(inputStream, observer, maxWidth, maxHeight);
+	}
+	
 
 	/**
 	 * @param bufferedImage
@@ -20,9 +37,10 @@ public class ImageUtilities {
 	 * @param targetHeight
 	 * @return BufferedImage that has been scaled to the specified height and width.
 	 */
-	public static BufferedImage getScaledInstance(BufferedImage bufferedImage, int targetWidth, int targetHeight){
+	private static BufferedImage getScaledInstance(BufferedImage bufferedImage, 
+			int targetWidth, int targetHeight,ImageObserver imageObserver){
 		return getScaledInstance(bufferedImage, targetWidth, targetHeight, 
-				RenderingHints.VALUE_INTERPOLATION_BICUBIC, true, null);
+				RenderingHints.VALUE_INTERPOLATION_BICUBIC, true, imageObserver);
 	}
 
 	/**
@@ -31,7 +49,7 @@ public class ImageUtilities {
 	 * @param targetHeight
 	 * @return BufferedImage that has been scaled down proportionately to within the specified height and width.
 	 */
-	public static BufferedImage getScaledDownProportionalInstance(BufferedImage bufferedImage, 
+	private static BufferedImage getScaledDownProportionalInstance(BufferedImage bufferedImage, 
 			int targetWidth, int targetHeight, ImageObserver imageObserver){
 		double actualWidth = bufferedImage.getWidth();
 		double actualHeight = bufferedImage.getHeight();
@@ -55,7 +73,7 @@ public class ImageUtilities {
 	 * @param targetHeight
 	 * @return BufferedImage that has been scaled down proportionatly to within the specified height and width.
 	 */
-	public static BufferedImage getScaledProportinalInstance(BufferedImage bufferedImage, 
+	private static BufferedImage getScaledProportinalInstance(BufferedImage bufferedImage, 
 			int targetWidth, int targetHeight, ImageObserver imageObserver){
 		double actualWidth = bufferedImage.getWidth();
 		double actualHeight = bufferedImage.getHeight();

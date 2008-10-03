@@ -17,6 +17,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -91,12 +92,14 @@ public class AlbumAdminPanel extends Panel{
 		protected void populateItem(ListItem listItem) {
 			final ImageData imageData = (ImageData)listItem.getModelObject();
             listItem.add(new Label("file", imageData.getName()));
+            Image image = new Image("thumb",imageData.getThumbnail());
+            listItem.add(image);
             listItem.add(new Link("delete") {
 				private static final long serialVersionUID = 1L;
 
 				public void onClick() {
-                    //Files.remove(imageData);
-                    AlbumAdminPanel.this.info("Deleted ");
+                    AlbumAdminPanel.this.info("Deleting original image. "+imageData);
+                    getRepositoryService().deleteNode(imageData.getId());
                 }
             });
 			

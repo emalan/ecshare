@@ -1,16 +1,11 @@
 package com.madalla.service.cms;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageOutputStream;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
@@ -56,11 +51,13 @@ class ImageDataHelper extends AbstractContentHelper {
     private static final String EC_ORIGINALS = "originals";
     static final String EC_PROP_TITLE = NS + "title";
     private static final String EC_IMAGE_FULL = "imageFull";
-    //private static final String EC_IMAGE_THUMB = "imageThumb";
+    private static final String EC_IMAGE_THUMB = "imageThumb";
     static final String EC_PROP_DESCRIPTION = NS + "description";
     
     private static final int MAX_WIDTH = 900;
     private static final int MAX_HEIGHT = 600;
+    private static final int THUMB_WIDTH = 90;
+    private static final int THUMB_HEIGHT = 60;
     
     private static final Log log = LogFactory.getLog(ImageDataHelper.class);
 	private static ImageDataHelper instance;
@@ -72,9 +69,14 @@ class ImageDataHelper extends AbstractContentHelper {
     	String parent = node.getParent().getName().replaceFirst(NS,"");
     	String name = node.getName().replaceFirst(NS, "");
     	InputStream image = node.getProperty(EC_IMAGE_FULL).getStream();
-    	ImageData data = new ImageData(node.getPath(), parent, name, image);
+    	ImageData data = new ImageData(node.getPath(), parent, name, createImageResource(image));
     	data.setDescription(node.getProperty(EC_PROP_DESCRIPTION).getString());
     	data.setTitle(node.getProperty(EC_PROP_TITLE).getString());
+    	if (node.hasProperty(EC_IMAGE_THUMB)){
+    		InputStream thumb = node.getProperty(EC_IMAGE_THUMB).getStream();
+    		data.setThumbnail(createImageResource(thumb));
+    	}
+    	data.setUrl("http://www.emalan.org");
     	return data;
     }
     
@@ -91,31 +93,8 @@ class ImageDataHelper extends AbstractContentHelper {
 		return webResource;
 	}
 	
-	
-	
-	//scale down if bigger than max defaults
-	private static InputStream scaleOriginal(InputStream inputStream) {
-		BufferedImage bufferedImage;
-		try {
-			bufferedImage = ImageIO.read(inputStream);
-			log.debug("scaleOriginal - starting to scale");
-			ImageObserver observer = new LoggingImageObserver(log);
-			BufferedImage scaledImage = ImageUtilities.getScaledDownProportionalInstance(bufferedImage, MAX_WIDTH, MAX_HEIGHT,observer);
-			
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			ImageOutputStream imageOut = ImageIO.createImageOutputStream(out);
-			
-			ImageIO.write(scaledImage, "JPG", imageOut);
-			out.flush();
-			out.close();
-			
-			log.debug("scaleOriginal - scaled.");
-			return new ByteArrayInputStream(out.toByteArray());
-		} catch (IOException e) {
-			log.error("scaleOriginal - Not able to create scaledImage.", e);
-			return new ByteArrayInputStream(new byte[] {});
-		}
-	}
+
+
 
 	public ImageDataHelper(String site, JcrTemplate template ){
 		this.site = site;
@@ -125,9 +104,11 @@ class ImageDataHelper extends AbstractContentHelper {
 
 	String saveOriginalImage(final String name, final InputStream fullImage ){
         ImageData imageData = new ImageData(EC_ORIGINALS, name, fullImage);
-        return save(imageData);
+        String path = save(imageData);
+        createThumbnail(path);
+        return path;
     }
-    
+	
     String saveAlbumImage(final String album, final String name, final InputStream fullImage){
     	ImageData imageData = new ImageData(album, name, fullImage);
     	return save(imageData);
@@ -176,6 +157,30 @@ class ImageDataHelper extends AbstractContentHelper {
             }
         });
 	}
+	
+	private void createThumbnail(final String path){
+		template.execute(new JcrCallback(){
+			public Object doInJcr(Session session) throws IOException,
+					RepositoryException {
+				Node node = (Node) session.getItem(path);
+				InputStream fullImage = node.getProperty(EC_IMAGE_FULL).getStream();
+				InputStream thumb = scaleThumbnailImage(fullImage);
+				node.setProperty(EC_IMAGE_THUMB, thumb);
+				session.save();
+				return null;
+			}
+		});
+	}
+	
+	private InputStream scaleOriginalImage(InputStream inputStream){
+		LoggingImageObserver observer = new LoggingImageObserver(log);
+		return ImageUtilities.scaleImageDownProportionately(inputStream, observer, MAX_WIDTH, MAX_HEIGHT);
+	}
+	
+	private InputStream scaleThumbnailImage(InputStream inputStream){
+		LoggingImageObserver observer = new LoggingImageObserver(log);
+		return ImageUtilities.scaleImageDownProportionately(inputStream, observer, THUMB_WIDTH, THUMB_HEIGHT);
+	}
     
 	@Override
     Node getParentNode(Node node) throws RepositoryException{
@@ -189,7 +194,7 @@ class ImageDataHelper extends AbstractContentHelper {
 		ImageData imageData = (ImageData) data;
 		node.setProperty(EC_PROP_TITLE, imageData.getTitle());
 		node.setProperty(EC_PROP_DESCRIPTION, imageData.getDescription());
-		node.setProperty(EC_IMAGE_FULL, scaleOriginal(imageData.getFullImageAsInputStream()));
+		node.setProperty(EC_IMAGE_FULL, scaleOriginalImage(imageData.getFullImageAsInputStream()));
 		log.debug("setPropertyValue done - "+imageData);
 	}
 	

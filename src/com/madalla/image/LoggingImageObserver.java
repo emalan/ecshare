@@ -20,5 +20,11 @@ public class LoggingImageObserver implements ImageObserver {
 		log.debug("imageUpdate - y=" + y);
 		return false;
 	}
+	public void logError(String message, Exception e){
+		log.error(message, e);
+	}
+	public void logInfo(String message){
+		log.info(message);
+	}
 
 }
