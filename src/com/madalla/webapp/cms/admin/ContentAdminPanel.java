@@ -47,7 +47,13 @@ public class ContentAdminPanel extends Panel {
         } catch (Exception e) {
         	returnPage = getApplication().getHomePage();
         }
-		add(new PageLink("returnLink", returnPage));
+		
+        
+        Link link = new PageLink("returnLink", returnPage);
+        if (adminApp){
+        	link.setVisible(false);
+        }
+        add(link);
 		
 		final FeedbackPanel backupMessages = new FeedbackPanel("backupMessages");
 		backupMessages.setOutputMarkupId(true);
