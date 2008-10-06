@@ -15,6 +15,7 @@ import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
@@ -102,7 +103,7 @@ public class AlbumAdminPanel extends Panel{
 				public void onClick(AjaxRequestTarget target) {
                     AlbumAdminPanel.this.info("Deleting original image. "+imageData);
                     getRepositoryService().deleteNode(imageData.getId());
-                    target.addComponent(listItem);
+                    target.addComponent(listItem.getParent().getParent());
 				}
             });
 			listItem.setOutputMarkupId(true);
@@ -144,8 +145,13 @@ public class AlbumAdminPanel extends Panel{
 			protected Object load() {
                 return getRepositoryService().getAlbumOriginalImages();
             }
+			
+			
         });
-        add(imageListView);
+        WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
+        listContainer.setOutputMarkupId(true);
+        listContainer.add(imageListView);
+        add(listContainer);
 		
 	}
 	
