@@ -4,10 +4,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
+import org.apache.wicket.behavior.HeaderContributor;
+import org.apache.wicket.behavior.IBehavior;
 import org.apache.wicket.extensions.markup.html.tree.table.AbstractTreeColumn;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation;
 import org.apache.wicket.extensions.markup.html.tree.table.IColumn;
-import org.apache.wicket.extensions.markup.html.tree.table.PropertyTreeColumn;
 import org.apache.wicket.extensions.markup.html.tree.table.TreeTable;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Alignment;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Unit;
@@ -17,6 +18,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.service.cms.ImageData;
+import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 
 public class AlbumDisplayPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -46,9 +48,10 @@ public class AlbumDisplayPanel extends Panel {
 		IColumn columns[] = new IColumn[]{
 				column
 		};
+		
+
 		Form form = new Form("albumForm");
         add(form);
-        
 		TreeModel treeModel = getRepositoryService().getAlbumImagesAsTree(album);
 		tree = new TreeTable("albumTreeTable", treeModel, columns);
 		form.add(tree);

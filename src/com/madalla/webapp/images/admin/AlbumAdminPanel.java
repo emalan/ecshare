@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -34,6 +35,8 @@ import org.apache.wicket.util.lang.Bytes;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.service.cms.ImageData;
+import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
+import com.madalla.webapp.scripts.utility.ScriptUtils;
 
 public class AlbumAdminPanel extends Panel{
 	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(2000);
@@ -105,6 +108,12 @@ public class AlbumAdminPanel extends Panel{
 	
 	public AlbumAdminPanel(String id, final PageParameters params) {
 		super(id);
+		
+		add(HeaderContributor.forJavaScript(Scriptaculous.PROTOTYPE));
+		add(HeaderContributor.forJavaScript(Scriptaculous.EFFECTS));
+		add(HeaderContributor.forJavaScript(Scriptaculous.DRAGDROP));
+		add(HeaderContributor.forJavaScript(ScriptUtils.DRAG_DROP));
+		
 		String album = params.getString(ALBUM); //use this to default the dropdown
 		Class<? extends Page> returnPage = null;
 		try {
