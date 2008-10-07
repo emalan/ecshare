@@ -3,6 +3,8 @@ package com.madalla.service.cms;
 import java.util.List;
 import java.util.Locale;
 
+import javax.swing.tree.TreeModel;
+
 public interface IRepositoryService {
 
 	//package methods
@@ -23,5 +25,6 @@ public interface IRepositoryService {
     ImageData getImageData(final String path) ;
     List<ImageData> getAlbumImages(final String album);
     List<ImageData> getAlbumOriginalImages();
+    TreeModel getAlbumImagesAsTree(final String album);
 
 }

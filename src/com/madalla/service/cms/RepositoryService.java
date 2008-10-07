@@ -9,6 +9,7 @@ import java.util.Locale;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.swing.tree.TreeModel;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -94,6 +95,10 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     
     public List<ImageData> getAlbumImages(final String album){
     	return ImageDataHelper.getInstance().getAlbumEntries(album);
+    }
+    
+    public TreeModel getAlbumImagesAsTree(final String album) {
+    	return ImageDataHelper.getInstance().getAlbumEntriesAsTree(album);
     }
     
 	public List<ImageData> getAlbumOriginalImages() {

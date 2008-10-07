@@ -10,6 +10,9 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -126,6 +129,16 @@ class ImageDataHelper extends AbstractContentHelper {
 			}
 			
 		});
+	}
+	
+	TreeModel getAlbumEntriesAsTree(final String group){
+		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(group);
+        TreeModel model = new DefaultTreeModel(rootNode);
+        for(ImageData imageData: getAlbumEntries(group)){
+        	DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(imageData);
+        	rootNode.add(treeNode);
+        }
+        return model;
 	}
 	
 	List<ImageData> getOriginalEntries(){
