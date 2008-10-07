@@ -23,5 +23,8 @@ Dragdrop.load = function() {
         new Draggable(c,{ghosting: true, revert: true});
         c.setStyle({ cursor: 'move'});
     });
+    $$(Dragdrop.defaults.droppable).each(function(c) {
+    	Droppables.add(c, { onDrop: imagedropped});
+    });
 };
 Event.observe(window, 'load', Dragdrop.load);
