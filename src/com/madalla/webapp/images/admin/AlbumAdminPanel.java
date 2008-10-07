@@ -70,7 +70,6 @@ public class AlbumAdminPanel extends Panel{
         }
 	}
 	
-
 	private class ImageListView extends ListView{
 		private static final long serialVersionUID = 1L;
 
@@ -97,7 +96,6 @@ public class AlbumAdminPanel extends Panel{
             });
 			listItem.setOutputMarkupId(true);
 		}
-		
 	}
 
 	private static final long serialVersionUID = 1L;

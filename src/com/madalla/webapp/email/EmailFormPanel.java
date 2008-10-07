@@ -57,7 +57,6 @@ public class EmailFormPanel extends Panel {
     public class EmailForm extends Form {
         private static final long serialVersionUID = -2684823497770522924L;
         
-        
         //private final CaptchaImageResource captchaImageResource;
         
         public EmailForm(String id) {
@@ -132,16 +131,16 @@ public class EmailFormPanel extends Panel {
 
 		@Override
 		protected void onSubmit() {
-			log.debug("onSumit called- sending email.");
-            if (sendEmail()){
-            	info("Email sent successfully");
-            } else {
-            	error("Failed to send email!");
-            }
+			if (!isSubmitted()) {
+				log.debug("onSumit called- sending email.");
+				if (sendEmail()) {
+					info("Email sent successfully");
+				} else {
+					error("Failed to send email!");
+				}
+			}
 		}
-
     }
-    
     
     public EmailFormPanel(final String id, final String subject) {
         super(id);
