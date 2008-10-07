@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import javax.swing.tree.TreeModel;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -17,13 +15,6 @@ import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
-import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
-import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation;
-import org.apache.wicket.extensions.markup.html.tree.table.IColumn;
-import org.apache.wicket.extensions.markup.html.tree.table.PropertyTreeColumn;
-import org.apache.wicket.extensions.markup.html.tree.table.TreeTable;
-import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Alignment;
-import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Unit;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -78,35 +69,7 @@ public class AlbumAdminPanel extends Panel{
             }
         }
 	}
-	//TODO
-	private class AlbumForm extends Form{
-		private static final long serialVersionUID = 1L;
-
-		public AlbumForm(final String name, final String album){
-			super(name);
-		}
-		
-		@Override
-		protected void onSubmit() {
-		
-		}
-	}
 	
-	private class AlbumDisplayPanel extends Panel{
-		private static final long serialVersionUID = 1L;
-
-		public AlbumDisplayPanel(String id, String album) {
-			super(id);
-			IColumn columns[] = new IColumn[]{
-					new PropertyTreeColumn(new ColumnLocation(Alignment.LEFT, 18, Unit.EM),
-	                        "Tree Column", "userObject.property1"),
-	                new PropertyEditableColumn(new ColumnLocation(Alignment.LEFT, 12, Unit.EM), "L2",
-	                        "userObject.property2")	
-			};
-			TreeModel treeModel = getRepositoryService().getAlbumImagesAsTree(album);
-			new TreeTable("albumTreeTable", treeModel, columns);
-		}
-	}
 
 	private class ImageListView extends ListView{
 		private static final long serialVersionUID = 1L;
@@ -161,8 +124,7 @@ public class AlbumAdminPanel extends Panel{
         final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
         simpleUploadForm.add(uploadFeedback);
         add(simpleUploadForm);
-        final AlbumForm albumForm = new AlbumForm("albumForm",album);
-        add(albumForm);
+        add(new AlbumDisplayPanel("albumDisplay", album));
         
         // Add folder view
         imageListView = new ImageListView("imageListView", new LoadableDetachableModel() {
@@ -181,7 +143,7 @@ public class AlbumAdminPanel extends Panel{
 		
 	}
 	
-	public IRepositoryService getRepositoryService(){
+	private IRepositoryService getRepositoryService(){
 		IRepositoryServiceProvider provider = (IRepositoryServiceProvider)getApplication();
 		return provider.getRepositoryService();
 	}

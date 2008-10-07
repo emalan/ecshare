@@ -127,10 +127,13 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	log.info("testImageGetSet - path="+path);
     	
     	ImageData test = contentService.getImageData(path);
-    	
     	assertNotNull(test);
     	
+    	TreeModel treeModel = contentService.getAlbumImagesAsTree(album);
+    	assertNotNull(treeModel);
+    	assertEquals(treeModel.getChildCount(treeModel.getRoot()), 1);
     }
+    
     
     
     private final static String BLOG = "testBlog";
