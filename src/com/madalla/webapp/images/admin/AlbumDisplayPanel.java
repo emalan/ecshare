@@ -6,7 +6,7 @@ import javax.swing.tree.TreeNode;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.tree.table.AbstractTreeColumn;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation;
@@ -14,6 +14,7 @@ import org.apache.wicket.extensions.markup.html.tree.table.IColumn;
 import org.apache.wicket.extensions.markup.html.tree.table.TreeTable;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Alignment;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Unit;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 
@@ -22,6 +23,16 @@ import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.service.cms.ImageData;
 
 public class AlbumDisplayPanel extends Panel {
+	
+	private AbstractDefaultAjaxBehavior formDrop;
+	
+	@Override
+	protected void onAfterRender() {
+		// TODO Auto-generated method stub
+		log.error(formDrop.getCallbackUrl());
+		super.onAfterRender();
+	}
+
 	private static final long serialVersionUID = 1L;
 	private final static Log log = LogFactory.getLog(AlbumDisplayPanel.class);
 	
@@ -54,20 +65,30 @@ public class AlbumDisplayPanel extends Panel {
 
 		Form form = new Form("albumForm");
 		form.setOutputMarkupId(true);
-		form.add(new AjaxEventBehavior("imagedropped"){
+		
+
+		
+		
+		formDrop = new AbstractDefaultAjaxBehavior(){
 
 			@Override
-			protected void onEvent(AjaxRequestTarget target) {
+			protected void respond(AjaxRequestTarget target) {
 				log.info("albumForm - something dropped!");
-				
+				target.addComponent(new Label("foo", "Yeah I was just called from Javascript!"));
 			}
 			
-		});
+		};
+		
+		form.add(formDrop);
+		
+		
+		
         add(form);
 		TreeModel treeModel = getRepositoryService().getAlbumImagesAsTree(album);
 		tree = new TreeTable("albumTreeTable", treeModel, columns);
 		form.add(tree);
 		tree.getTreeState().expandAll();
+		
 	}
 	
 	private IRepositoryService getRepositoryService(){
