@@ -7,19 +7,18 @@ import javax.swing.tree.TreeNode;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.calldecorator.AjaxCallDecorator;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.tree.table.AbstractTreeColumn;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation;
 import org.apache.wicket.extensions.markup.html.tree.table.IColumn;
 import org.apache.wicket.extensions.markup.html.tree.table.TreeTable;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Alignment;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Unit;
+import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.util.string.JavascriptUtils;
 
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
@@ -63,19 +62,28 @@ public class AlbumDisplayPanel extends Panel {
 				column
 		};
 		
-		final Form form = new Form("albumForm");
-		form.setOutputMarkupId(true);
-		
-		form.add(new AjaxEventBehavior("onDrop"){
+		final AbstractDefaultAjaxBehavior onDrop = new AbstractDefaultAjaxBehavior() {
+		    protected void respond(final AjaxRequestTarget target) {
+		    	target.appendJavascript("console.log('some stuff dropped');");
+		    }
+		};
+		final Form form = new Form("albumForm"){
+			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onEvent(AjaxRequestTarget target) {
-				target.addComponent(form);
-				log.debug("called Yaah!");
-				
+			protected void onRender(MarkupStream markupStream) {
+				super.onRender(markupStream);
+				String s = "var e = $('"+getMarkupId()+"'); Droppables.add(e, {accept: 'draggable',hoverclass: 'hover',"+
+				"onDrop: function(dragged, dropped, event){"+
+				"console.log(dragged);console.log(dropped);console.log(event);"+
+				"var wcall = wicketAjaxGet('"+onDrop.getCallbackUrl()+"');"+
+    	        "}});"+
+				"e.addClassName('droppable')";
+				JavascriptUtils.writeJavascript(getResponse(), s);
 			}
-			
-		});
+		};
+		form.add(onDrop);
+		form.setOutputMarkupId(true);
 		
 		TreeModel treeModel = getRepositoryService().getAlbumImagesAsTree(album);
 		tree = new TreeTable("albumTreeTable", treeModel, columns);

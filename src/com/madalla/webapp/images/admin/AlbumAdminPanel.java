@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -34,8 +33,6 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.string.JavascriptUtils;
-import org.apache.wicket.util.template.JavaScriptTemplate;
-import org.apache.wicket.util.template.TextTemplate;
 
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
@@ -93,7 +90,8 @@ public class AlbumAdminPanel extends Panel{
 				@Override
 				protected void onRender(MarkupStream markupStream) {
 					super.onRender(markupStream);
-					String s = "var element = $('"+getMarkupId()+"'); new Draggable(element,{ghosting: true, revert: true});";
+					String s = "var e = $('"+getMarkupId()+"'); new Draggable(e,{ghosting: true, revert: true});"+
+					"e.setStyle({ cursor: 'move'}); e.addClassName('draggable')";
 					JavascriptUtils.writeJavascript(getResponse(), s);
 				}
             	
