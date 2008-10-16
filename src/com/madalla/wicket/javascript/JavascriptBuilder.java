@@ -1,25 +1,24 @@
-package com.madalla.wicket;
+package com.madalla.wicket.javascript;
 
-import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.wicket.ajax.AjaxEventBehavior;
-import org.apache.wicket.behavior.AbstractAjaxBehavior;
 
 
 /**
  * Helper class for programatically constructing javascript.
  * 
  * @author <a href="mailto:wireframe6464@users.sourceforge.net">Ryan Sonnek</a>
+ * @author Thanks Ryan!  made some usability changes
  */
 public class JavascriptBuilder
 {
 	private StringBuffer buffer = new StringBuffer();
 
-	public void addLine(String line)
+	public JavascriptBuilder addLine(String line)
 	{
-		buffer.append(line).append("\n");
+		buffer.append(line);
+		return this;
 	}
 
 	public String buildScriptTagString()
@@ -45,7 +44,7 @@ public class JavascriptBuilder
 			String key = (String)iter.next();
 			Object value = options.get(key);
 
-			buffer.append("\n");
+			//buffer.append("\n");
 			buffer.append("  ").append(key).append(": ");
 			buffer.append(formatJavascriptValue(value));
 
@@ -54,7 +53,7 @@ public class JavascriptBuilder
 				buffer.append(", ");
 			}
 		}
-		buffer.append("\n");
+		//buffer.append("\n");
 		buffer.append("}");
 		return buffer.toString();
 	}
@@ -83,31 +82,5 @@ public class JavascriptBuilder
 	public void addOptions(Map options)
 	{
 		addLine(formatAsJavascriptHash(options));
-	}
-
-	public static class JavascriptFunction implements Serializable
-	{
-		private static final long serialVersionUID = 1L;
-		private String function;
-
-		public JavascriptFunction(String function)
-		{
-			this.function = function;
-		}
-
-		public String getFunction()
-		{
-			return function;
-		}
-	}
-	
-	/**
-	 * Convenience {@link JavascriptFunction} for performing a wicket ajax call to an {@link AjaxEventBehavior}
-	 */
-	public static class AjaxCallbackJavascriptFunction extends JavascriptFunction {
-		private static final long serialVersionUID = 1L;
-		public AjaxCallbackJavascriptFunction(AbstractAjaxBehavior behavior) {
-			super("function() { wicketAjaxGet('" + behavior.getCallbackUrl() + "'); }");
-		}
 	}
 }
