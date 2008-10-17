@@ -60,13 +60,13 @@ public class AlbumDisplayPanel extends Panel {
 				column
 		};
 		
+		final Form form = new Form("albumForm");
 		final AbstractDefaultAjaxBehavior onDrop = new AbstractDefaultAjaxBehavior() {
 		    protected void respond(final AjaxRequestTarget target) {
 		    	target.appendJavascript("console.log('some stuff dropped');");
+		    	log.debug("something dropped");
 		    }
 		};
-
-		final Form form = new Form("albumForm");
 		form.add(new DroppableAjaxBehaviour(onDrop));
 		form.add(onDrop);
 		form.setOutputMarkupId(true);
