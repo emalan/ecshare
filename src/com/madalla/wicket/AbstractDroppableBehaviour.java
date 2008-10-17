@@ -23,10 +23,10 @@ public class AbstractDroppableBehaviour extends AbstractTransformerBehavior {
 	@Override
 	public CharSequence transform(Component component, CharSequence output)
 			throws Exception {
-		return output + getJavascriptTemplate(component.getMarkupId());
+		return output + getJavascriptTemplate(component.getMarkupId(), callBack);
 	}
 
-	private String getJavascriptTemplate(String id){
+	private String getJavascriptTemplate(String id, AbstractDefaultAjaxBehavior callback){
 		JavascriptBuilder builder = new JavascriptBuilder();
 		builder.addLine("var e = $('"+id+"'); ");
 		builder.addLine("e.addClassName('droppable');");
@@ -37,7 +37,7 @@ public class AbstractDroppableBehaviour extends AbstractTransformerBehavior {
 		
 		JavascriptFunction onDropFunction = new JavascriptFunction("dragged, dropped, event");
 		onDropFunction.addLine("console.log(dragged);").addLine("console.log(dropped);").
-		addLine("console.log(event);"); //.addAjaxCallback(getAjaxBehavior());
+		addLine("console.log(event);").addAjaxCallback(callback);
 		
 		map.put("onDrop", onDropFunction);
 		
