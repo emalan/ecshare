@@ -20,7 +20,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.service.cms.ImageData;
-import com.madalla.wicket.AbstractDroppableBehaviour;
+import com.madalla.wicket.DroppableAjaxBehaviour;
 
 public class AlbumDisplayPanel extends Panel {
 	
@@ -67,7 +67,7 @@ public class AlbumDisplayPanel extends Panel {
 		};
 
 		final Form form = new Form("albumForm");
-		form.add(new AbstractDroppableBehaviour(onDrop));
+		form.add(new DroppableAjaxBehaviour(onDrop));
 		form.add(onDrop);
 		form.setOutputMarkupId(true);
 		

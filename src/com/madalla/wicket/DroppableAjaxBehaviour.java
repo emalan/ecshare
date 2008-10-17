@@ -10,13 +10,13 @@ import org.apache.wicket.markup.transformer.AbstractTransformerBehavior;
 import com.madalla.wicket.javascript.JavascriptBuilder;
 import com.madalla.wicket.javascript.JavascriptFunction;
 
-public class AbstractDroppableBehaviour extends AbstractTransformerBehavior {
+public class DroppableAjaxBehaviour extends AbstractTransformerBehavior {
 
 	private static final long serialVersionUID = 1L;
 
 	private AbstractDefaultAjaxBehavior callBack;
 	
-	public AbstractDroppableBehaviour(AbstractDefaultAjaxBehavior callBack) {
+	public DroppableAjaxBehaviour(AbstractDefaultAjaxBehavior callBack) {
 		this.callBack = callBack;
 	}
 
