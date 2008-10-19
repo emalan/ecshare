@@ -17,6 +17,7 @@ import javax.swing.tree.TreeModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.jackrabbit.api.JackrabbitWorkspace;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -39,6 +40,28 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
     
     static final String EC_NODE_BACKUP = NS + "backup";
     
+    //TODO allow switching between different workspaces
+    public String[] getAvailableWorkspaces(){
+    	return (String[]) template.execute(new JcrCallback(){
+    		
+    		public Object doInJcr(Session session) throws IOException, RepositoryException{
+ 				JackrabbitWorkspace workpace = (JackrabbitWorkspace)session.getWorkspace();
+				return workpace.getAccessibleWorkspaceNames();
+    		}
+    	});
+    }
+    
+    //TODO create new workspaces from admin console
+    public void createNewWorkspace(final String workspaceName){
+    	template.execute(new JcrCallback(){
+    		
+    		public Object doInJcr(Session session) throws IOException, RepositoryException{
+				JackrabbitWorkspace workpace = (JackrabbitWorkspace)session.getWorkspace();
+				workpace.createWorkspace(workspaceName);
+    			return null;
+    		}
+    	});
+    }
 
     public TreeModel getRepositoryContent(){
         return (TreeModel) template.execute(new JcrCallback(){

@@ -13,6 +13,7 @@
 
 	<bean id="jcrSessionFactory" class="org.springmodules.jcr.JcrSessionFactory">
     	<property name="repository" ref="repository"/>
+		<property name="workspaceName" value="${repository.workspace}"/>    	
     	<property name="credentials">
         	<bean class="javax.jcr.SimpleCredentials">
             	<constructor-arg index="0" value="${repository.user}"/>
