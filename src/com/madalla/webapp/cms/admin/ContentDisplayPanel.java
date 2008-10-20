@@ -9,7 +9,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import com.madalla.service.cms.Content;
+import com.madalla.service.cms.jcr.Content;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 

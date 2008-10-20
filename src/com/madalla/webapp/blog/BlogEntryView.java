@@ -6,7 +6,7 @@ import java.util.Date;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.joda.time.DateTime;
 
-import com.madalla.service.cms.BlogEntry;
+import com.madalla.service.cms.jcr.BlogEntry;
 
 public class BlogEntryView implements Serializable{
 

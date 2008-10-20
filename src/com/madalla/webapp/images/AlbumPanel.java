@@ -26,7 +26,7 @@ import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
-import com.madalla.service.cms.ImageData;
+import com.madalla.service.cms.jcr.ImageData;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.AlbumAdminPage;
 

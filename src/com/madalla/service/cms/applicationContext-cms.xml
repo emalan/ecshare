@@ -6,33 +6,33 @@
     http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
-	<bean id="repositoryService" class="com.madalla.service.cms.RepositoryService">
+	<bean id="repositoryService" class="com.madalla.service.cms.jcr.RepositoryService">
     	<property name="template" ref="jcrTemplate"/>
     	<property name="site" value="${site.code}"/>
     	<property name="locales" ref="siteLocales"/>
 	</bean>
 	
-	<bean id="repositoryAdminService" class="com.madalla.service.cms.RepositoryAdminService">
+	<bean id="repositoryAdminService" class="com.madalla.service.cms.jcr.RepositoryAdminService">
     	<property name="template" ref="jcrTemplate"/>
     	<property name="site" value="${site.code}"/>
     	<property name="repositoryHome" value="${repository.home}"/>
 	</bean>
 	
-	<bean id="backupCreator" class="com.madalla.service.cms.RepositoryBackupCreator">
+	<bean id="backupCreator" class="com.madalla.service.cms.jcr.RepositoryBackupCreator">
 		<constructor-arg ref="repositoryAdminService"/>
 	</bean>
 
-    <bean id="content" class="com.madalla.service.cms.ContentHelper"  >
+    <bean id="content" class="com.madalla.service.cms.jcr.ContentHelper"  >
         <constructor-arg ref="jcrTemplate" />
         <constructor-arg value="${site.code}"/>
     </bean>
 
-    <bean id="imageData" class="com.madalla.service.cms.ImageDataHelper"  >
+    <bean id="imageData" class="com.madalla.service.cms.jcr.ImageDataHelper"  >
         <constructor-arg ref="jcrTemplate" />
         <constructor-arg value="${site.code}"/>
     </bean>
     
-    <bean id="blogEntry" class="com.madalla.service.cms.BlogEntryHelper"  >
+    <bean id="blogEntry" class="com.madalla.service.cms.jcr.BlogEntryHelper"  >
         <constructor-arg ref="jcrTemplate" />
         <constructor-arg value="${site.code}"/>
     </bean>

@@ -17,7 +17,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.PropertyModel;
 
-import com.madalla.service.cms.Content;
+import com.madalla.service.cms.jcr.Content;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;

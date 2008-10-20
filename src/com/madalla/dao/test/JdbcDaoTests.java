@@ -11,7 +11,7 @@ import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 import com.madalla.dao.blog.JdbcBlogDao;
 import com.madalla.service.blog.BlogCategory;
 import com.madalla.service.blog.BlogServiceTest;
-import com.madalla.service.cms.BlogEntry;
+import com.madalla.service.cms.jcr.BlogEntry;
 
 public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests{
 	

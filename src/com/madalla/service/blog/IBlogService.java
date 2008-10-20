@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.swing.tree.TreeModel;
 
-import com.madalla.service.cms.BlogEntry;
+import com.madalla.service.cms.jcr.BlogEntry;
 
 public interface IBlogService {
 	public abstract List<String> getBlogCategories();

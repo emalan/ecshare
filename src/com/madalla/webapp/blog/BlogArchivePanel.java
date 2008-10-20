@@ -27,7 +27,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
-import com.madalla.service.cms.BlogEntry;
+import com.madalla.service.cms.jcr.BlogEntry;
 import com.madalla.util.ui.ICalendarTreeInput;
 
 public class BlogArchivePanel extends Panel {

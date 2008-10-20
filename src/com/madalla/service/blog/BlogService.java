@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.swing.tree.TreeModel;
 
-import com.madalla.service.cms.BlogEntry;
+import com.madalla.service.cms.jcr.BlogEntry;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.util.ui.CalendarUtils;
 

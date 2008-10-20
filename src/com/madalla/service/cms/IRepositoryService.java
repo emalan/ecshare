@@ -1,9 +1,12 @@
 package com.madalla.service.cms;
 
-import java.util.List;
-import java.util.Locale;
+import com.madalla.service.cms.jcr.BlogEntry;
+import com.madalla.service.cms.jcr.Content;
+import com.madalla.service.cms.jcr.ImageData;
 
 import javax.swing.tree.TreeModel;
+import java.util.List;
+import java.util.Locale;
 
 public interface IRepositoryService {
 

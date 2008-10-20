@@ -32,7 +32,7 @@ import org.joda.time.DateTime;
 
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
-import com.madalla.service.cms.BlogEntry;
+import com.madalla.service.cms.jcr.BlogEntry;
 import com.madalla.webapp.blog.BlogEntryView;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 import com.madalla.wicket.ValidationStyleBehaviour;

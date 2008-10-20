@@ -16,11 +16,11 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.tree.LinkTree;
 import org.joda.time.DateTime;
 
-import com.madalla.service.cms.BlogEntry;
-import com.madalla.service.cms.Content;
+import com.madalla.service.cms.jcr.BlogEntry;
+import com.madalla.service.cms.jcr.ImageData;
+import com.madalla.service.cms.jcr.Content;
 import com.madalla.service.cms.IRepositoryAdminService;
 import com.madalla.service.cms.IRepositoryService;
-import com.madalla.service.cms.ImageData;
 
 public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 

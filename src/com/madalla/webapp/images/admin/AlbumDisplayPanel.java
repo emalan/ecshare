@@ -19,7 +19,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
-import com.madalla.service.cms.ImageData;
+import com.madalla.service.cms.jcr.ImageData;
 import com.madalla.wicket.DroppableAjaxBehaviour;
 
 public class AlbumDisplayPanel extends Panel {

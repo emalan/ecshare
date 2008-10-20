@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 import org.easymock.MockControl;
 import org.joda.time.DateTime;
 
-import com.madalla.service.cms.BlogEntry;
+import com.madalla.service.cms.jcr.BlogEntry;
 import com.madalla.service.cms.IRepositoryService;
 
 public class BlogServiceTest extends TestCase{
