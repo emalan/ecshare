@@ -6,5 +6,5 @@ public class BlogParameters {
     public final static String RETURN_PAGE = "returnPage";
     public final static String BLOG_NAME = "blogName";
     
-    private BlogParameters(){};
+    private BlogParameters(){}
 }

@@ -237,20 +237,11 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
 				if (application){
 					Node backupParent = getCreateNode(EC_NODE_BACKUP, session.getRootNode());
 					session.save();
-					if (backupParent.hasNode(EC_NODE_APP)){
-						return true;
-					} else {
-						return false;
-					}
+                    return backupParent.hasNode(EC_NODE_APP);
 				} else {
 					Node backupParent = getCreateBackupNode(session);
 					session.save();
-					if (backupParent.hasNode(NS+getSite())){
-						return true;
-					} else {
-						return false;
-					}
-
+                    return backupParent.hasNode(NS + getSite());
 				}
 			}
     		

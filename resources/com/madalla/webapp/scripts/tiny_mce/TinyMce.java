@@ -8,6 +8,6 @@ package com.madalla.webapp.scripts.tiny_mce;
  */
 public class TinyMce {
 
-	private TinyMce() {	};
+	private TinyMce() {	}
 
 }

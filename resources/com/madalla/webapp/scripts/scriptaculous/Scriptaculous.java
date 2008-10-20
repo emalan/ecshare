@@ -13,5 +13,5 @@ public class Scriptaculous {
     public static final CompressedResourceReference EFFECTS = new CompressedResourceReference(Scriptaculous.class,"effects.js");
     public static final CompressedResourceReference DRAGDROP = new CompressedResourceReference(Scriptaculous.class,"dragdrop.js");
 
-	private Scriptaculous(){};
+	private Scriptaculous(){}
 }

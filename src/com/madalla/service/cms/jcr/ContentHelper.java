@@ -1,19 +1,16 @@
 package com.madalla.service.cms.jcr;
 
-import java.io.IOException;
-
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-
+import com.madalla.service.cms.IRepositoryData;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
-import com.madalla.service.cms.jcr.AbstractContentHelper;
-import com.madalla.service.cms.jcr.Content;
-import com.madalla.service.cms.IRepositoryData;
+
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import java.io.IOException;
 
 public class ContentHelper extends AbstractContentHelper {
 	
@@ -37,18 +34,12 @@ public class ContentHelper extends AbstractContentHelper {
 	
     public static boolean isContentNode(final String path){
     	String[] pathArray = path.split("/");
-    	if (EC_NODE_CONTENT.equals(pathArray[pathArray.length-2])){
-    		return true;
+        return EC_NODE_CONTENT.equals(pathArray[pathArray.length - 2]);
     	}
-    	return false;
-    }
     
     public static boolean isContentPasteNode(final String path){
     	String[] pathArray = path.split("/");
-    	if (EC_NODE_CONTENT.equals(pathArray[pathArray.length-1])){
-    		return true;
-    	}
-    	return false;
+        return EC_NODE_CONTENT.equals(pathArray[pathArray.length - 1]);
     }
 
     //TODO use generic Save method

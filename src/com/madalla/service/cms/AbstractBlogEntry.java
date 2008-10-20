@@ -47,7 +47,7 @@ public abstract class AbstractBlogEntry implements Comparable<AbstractBlogEntry>
 	public abstract String save();
 
 	public int compareTo(AbstractBlogEntry o) {
-		AbstractBlogEntry compare = (AbstractBlogEntry) o;
+		AbstractBlogEntry compare = o;
 		return compare.getDateTime().compareTo(getDateTime());
 	}
 

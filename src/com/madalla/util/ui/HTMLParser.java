@@ -16,7 +16,7 @@ public class HTMLParser {
 	
 	private final static Log log = LogFactory.getLog(HTMLParser.class);
 
-	private HTMLParser() {}; // prevent instantiation
+	private HTMLParser() {} // prevent instantiation
 
 	public static String parseHTMLText(final String html, final int length) {
 		final MutableInt endPos = new MutableInt();

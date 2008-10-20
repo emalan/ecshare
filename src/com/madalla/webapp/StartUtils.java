@@ -10,9 +10,9 @@ public class StartUtils {
 	
 	private static final String LOCAL_LAYOUT = "%-5p - %-26.26c{1} - %m\n";
 	
-	private StartUtils(){};
-	
-	public static void setLogForLocal(){
+	private StartUtils(){}
+
+    public static void setLogForLocal(){
 		Logger root = Logger.getRootLogger();
     	ConsoleAppender appender = (ConsoleAppender)root.getAppender("STDOUT");
     	if (appender != null){

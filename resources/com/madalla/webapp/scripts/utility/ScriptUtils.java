@@ -7,5 +7,5 @@ public class ScriptUtils {
 	public static final CompressedResourceReference FADE_POPUP = new CompressedResourceReference(ScriptUtils.class,"fadePopup.js");
 	public static final CompressedResourceReference DRAG_DROP = new CompressedResourceReference(ScriptUtils.class,"dragdropobserver.js");
 	
-	private ScriptUtils(){};
+	private ScriptUtils(){}
 }

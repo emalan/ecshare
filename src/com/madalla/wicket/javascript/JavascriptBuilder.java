@@ -62,7 +62,7 @@ public class JavascriptBuilder
 	{
 		if (value instanceof CharSequence)
 		{
-			return "'" + (CharSequence)value + "'";
+			return "'" + value + "'";
 		}
 		if (value instanceof Map)
 		{
@@ -70,7 +70,7 @@ public class JavascriptBuilder
 		}
 		if (value instanceof Boolean)
 		{
-			return ((Boolean)value).toString();
+			return value.toString();
 		}
 		if (value instanceof JavascriptFunction)
 		{

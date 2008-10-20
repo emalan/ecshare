@@ -6,6 +6,6 @@ class ContentParameters {
 	static final String CONTENT_ID = "cmsID";
 	static final String CONTENT_PAGE = "cmsPage";
 
-	private ContentParameters(){};
+	private ContentParameters(){}
 
 }
