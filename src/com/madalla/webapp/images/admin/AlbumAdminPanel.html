@@ -15,12 +15,12 @@
 </wicket:head>
 <body>
     <wicket:panel>
-    <a href="#" wicket:id="returnLink">Return</a>    
+    <a href="#" wicket:id="returnLink"><wicket:message key="label.return">Label Contents</wicket:message></a>    
 
     <div id="fileUpload">
         <form wicket:id="simpleUpload">
             <fieldset>
-            <legend>Upload form</legend>
+            <legend><wicket:message key="label.upload">Label Contents</wicket:message></legend>
             <p>
             <div wicket:id="fileInput" class="mfuex"/>
             </p>
@@ -31,12 +31,12 @@
     </div>
      
     <div id="availableImages">
-        <h4>Current Images in Album</h4>
+        <h4><wicket:message key="label.available">Label Contents</wicket:message></h4>
         <table wicket:id="listContainer">
             <tr wicket:id="imageListView">
                 <td><img wicket:id="thumb" border="0" /></td>
                 <td><span wicket:id="file">(file)</span></td>
-                <td><a href="#" wicket:id="delete">delete</a></td>
+                <td><a href="#" wicket:id="delete"><wicket:message key="label.delete">Label Contents</wicket:message></a></td>
             </tr>
         </table>
     </div>
