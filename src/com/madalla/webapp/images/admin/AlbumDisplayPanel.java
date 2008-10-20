@@ -24,13 +24,6 @@ import com.madalla.wicket.DroppableAjaxBehaviour;
 
 public class AlbumDisplayPanel extends Panel {
 	
-//	@Override
-//	protected void onAfterRender() {
-//		// TODO Auto-generated method stub
-//		log.error(formDrop.getCallbackUrl());
-//		super.onAfterRender();
-//	}
-
 	private static final long serialVersionUID = 1L;
 	private final static Log log = LogFactory.getLog(AlbumDisplayPanel.class);
 	
@@ -39,6 +32,8 @@ public class AlbumDisplayPanel extends Panel {
 	public AlbumDisplayPanel(String id, String album) {
 		super(id);
 		IColumn column = new AbstractTreeColumn(new ColumnLocation(Alignment.LEFT,20, Unit.EM),"Images"){
+
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public String renderNode(TreeNode node) {
@@ -62,9 +57,11 @@ public class AlbumDisplayPanel extends Panel {
 		
 		final Form form = new Form("albumForm");
 		final AbstractDefaultAjaxBehavior onDrop = new AbstractDefaultAjaxBehavior() {
-		    protected void respond(final AjaxRequestTarget target) {
-		    	target.appendJavascript("console.log('some stuff dropped');");
+			private static final long serialVersionUID = 1L;
+
+			protected void respond(final AjaxRequestTarget target) {
 		    	log.debug("something dropped");
+		    	
 		    }
 		};
 		form.add(new DroppableAjaxBehaviour(onDrop));

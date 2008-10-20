@@ -1,10 +1,8 @@
 /**
- * Provides Content Respository functionality using the JCR API 
+ * Defines the Content Respository functionality 
  * <p>
- * Content and Blog API provided to get and save these objects to 
- * a JCR Repository. The Repository is Spring Configured. This
- * package controls the data schema of the content in the 
- * repository
+ * Content and Blog API provided to get and persist these objects to 
+ * a persistant store.
  * 
  * @author Eugene Malan
  */
