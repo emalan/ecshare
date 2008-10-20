@@ -27,7 +27,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
-import com.madalla.service.cms.jcr.BlogEntry;
+import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.util.ui.ICalendarTreeInput;
 
 public class BlogArchivePanel extends Panel {
@@ -70,8 +70,8 @@ public class BlogArchivePanel extends Panel {
 						if (node.isLeaf()) {
 							log.debug("onNodeLinkClicked - "+node);
 							DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) node;
-							if (treeNode.getUserObject() instanceof BlogEntry){
-								BlogEntry blogEntry = (BlogEntry) treeNode.getUserObject();
+							if (treeNode.getUserObject() instanceof AbstractBlogEntry){
+								AbstractBlogEntry blogEntry = (AbstractBlogEntry) treeNode.getUserObject();
 								String blogEntryId = blogEntry.getId();
 								log.debug("onNodeLinkClicked - blogId="+blogEntryId);
 								if (target == null){ //non-ajax

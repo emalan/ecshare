@@ -7,7 +7,9 @@ import java.util.List;
 
 import javax.swing.tree.TreeModel;
 
-import com.madalla.service.cms.jcr.BlogEntry;
+import org.joda.time.DateTime;
+
+import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.util.ui.CalendarUtils;
 
@@ -23,13 +25,13 @@ public class BlogService implements IBlogService, Serializable{
         return list;
     }
 
-    public BlogEntry getBlogEntry(String id) {
-    	BlogEntry blogEntry = repositoryService.getBlogEntry(id);
+    public AbstractBlogEntry getBlogEntry(String id) {
+    	AbstractBlogEntry blogEntry = repositoryService.getBlogEntry(id);
         return blogEntry;
     }
     
-    public List<BlogEntry> getBlogEntries(String blog) {
-    	List<BlogEntry> list = repositoryService.getBlogEntries(blog);
+    public List<AbstractBlogEntry> getBlogEntries(String blog) {
+    	List<AbstractBlogEntry> list = repositoryService.getBlogEntries(blog);
     	if (list != null){
     		Collections.sort(list);
     	}
@@ -37,7 +39,7 @@ public class BlogService implements IBlogService, Serializable{
     }
 
     public TreeModel getBlogEntriesAsTree(String blog){
-    	List<BlogEntry> list = getBlogEntries(blog);
+    	List<AbstractBlogEntry> list = getBlogEntries(blog);
     	return CalendarUtils.createMonthlyTree("Blog Archive", list);
     }
     
@@ -47,6 +49,11 @@ public class BlogService implements IBlogService, Serializable{
     
 	public void setRepositoryService(IRepositoryService repositoryService) {
 		this.repositoryService = repositoryService;
+	}
+
+	public AbstractBlogEntry getNewBlogEntry(String blog, String title,
+			DateTime date) {
+		return this.repositoryService.getNewBlogEntry(blog, title, date);
 	}
 
         

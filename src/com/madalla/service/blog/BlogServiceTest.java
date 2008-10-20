@@ -8,8 +8,9 @@ import junit.framework.TestCase;
 import org.easymock.MockControl;
 import org.joda.time.DateTime;
 
-import com.madalla.service.cms.jcr.BlogEntry;
+import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.IRepositoryService;
+import com.madalla.service.cms.jcr.BlogEntry;
 
 public class BlogServiceTest extends TestCase{
 
@@ -40,15 +41,15 @@ public class BlogServiceTest extends TestCase{
     }
     
     public void testGetBlogEntry(){
-        BlogEntry blogEntry = service.getBlogEntry("1");
+        AbstractBlogEntry blogEntry = service.getBlogEntry("1");
     }
     
     public void testGetAllBlogEntries(){
         Collection test = new ArrayList();
-        BlogEntry entry = createBlogEntry();
+        AbstractBlogEntry entry = createBlogEntry();
         test.add(entry);
         
-        Collection<BlogEntry> entries = service.getBlogEntries(BLOG);
+        Collection<AbstractBlogEntry> entries = service.getBlogEntries(BLOG);
     }
     
     public void testGetAllBlogEntriesForCategory(){

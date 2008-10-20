@@ -1,15 +1,16 @@
 package com.madalla.service.cms.jcr;
 
-import com.madalla.service.cms.IRepositoryData;
-import com.madalla.util.ui.HTMLParser;
-import com.madalla.util.ui.ICalendarTreeInput;
+import java.io.Serializable;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.joda.time.DateTime;
 
-import java.io.Serializable;
+import com.madalla.service.cms.AbstractBlogEntry;
+import com.madalla.service.cms.IRepositoryData;
+import com.madalla.util.ui.HTMLParser;
 
-public class BlogEntry  implements IRepositoryData, Serializable, Comparable<BlogEntry>, ICalendarTreeInput{
+public class BlogEntry  extends AbstractBlogEntry implements IRepositoryData, Serializable{
 
 	private static final long serialVersionUID = -7829797397130212868L;
 
@@ -95,34 +96,52 @@ public class BlogEntry  implements IRepositoryData, Serializable, Comparable<Blo
     	return BlogEntryHelper.getInstance().save(this);
     }
     
+	/* (non-Javadoc)
+	 * @see com.madalla.service.cms.jcr.IBlogEntry#getName()
+	 */
 	public String getName(){
     	return StringUtils.deleteWhitespace(title);
     }
     
+    /* (non-Javadoc)
+	 * @see com.madalla.service.cms.jcr.IBlogEntry#getDescription()
+	 */
     public String getDescription() {
 		return description;
 	}
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	/* (non-Javadoc)
+	 * @see com.madalla.service.cms.jcr.IBlogEntry#getKeywords()
+	 */
 	public String getKeywords() {
 		return keywords;
 	}
 	public void setKeywords(String keywords) {
 		this.keywords = keywords;
 	}
+	/* (non-Javadoc)
+	 * @see com.madalla.service.cms.jcr.IBlogEntry#getTitle()
+	 */
 	public String getTitle() {
 		return title;
 	}
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	/* (non-Javadoc)
+	 * @see com.madalla.service.cms.jcr.IBlogEntry#getDate()
+	 */
 	public DateTime getDate() {
         return date;
     }
     public void setDate(DateTime date) {
         this.date = date;
     }
+    /* (non-Javadoc)
+	 * @see com.madalla.service.cms.jcr.IBlogEntry#getText()
+	 */
     public String getText() {
         return text;
     }
@@ -130,6 +149,9 @@ public class BlogEntry  implements IRepositoryData, Serializable, Comparable<Blo
         this.text = text;
     }
     
+    /* (non-Javadoc)
+	 * @see com.madalla.service.cms.jcr.IBlogEntry#getSummary()
+	 */
     public String getSummary(){
     	if (StringUtils.isNotEmpty(description)){
     		return description;
@@ -140,6 +162,9 @@ public class BlogEntry  implements IRepositoryData, Serializable, Comparable<Blo
         return HTMLParser.parseHTMLText(text, summaryLength);
     }
 
+    /* (non-Javadoc)
+	 * @see com.madalla.service.cms.jcr.IBlogEntry#getSummary(java.lang.String)
+	 */
     public String getSummary(String moreLink){
         return getSummary()+moreLink;
     }
@@ -168,26 +193,38 @@ public class BlogEntry  implements IRepositoryData, Serializable, Comparable<Blo
 		return id.hashCode();
 	}
 
-	public int compareTo(BlogEntry o) {
-		BlogEntry compare = (BlogEntry) o;
-		return compare.getDateTime().compareTo(getDateTime());
-	}
+
+	/* (non-Javadoc)
+	 * @see com.madalla.service.cms.jcr.IBlogEntry#getBlog()
+	 */
 	public String getBlog() {
 		return blog;
 	}
+	/* (non-Javadoc)
+	 * @see com.madalla.service.cms.jcr.IBlogEntry#getCategory()
+	 */
 	public String getCategory() {
 		return category;
 	}
 	public void setCategory(String category) {
 		this.category = category;
 	}
+    /* (non-Javadoc)
+	 * @see com.madalla.service.cms.jcr.IBlogEntry#getId()
+	 */
     public String getId() {
         return id;
     }
+	/* (non-Javadoc)
+	 * @see com.madalla.service.cms.jcr.IBlogEntry#getGroup()
+	 */
 	public String getGroup(){
 		return blog;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.madalla.service.cms.jcr.IBlogEntry#getDateTime()
+	 */
 	public DateTime getDateTime() {
 		return date;
 	}

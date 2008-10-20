@@ -6,7 +6,7 @@ import java.util.Date;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.joda.time.DateTime;
 
-import com.madalla.service.cms.jcr.BlogEntry;
+import com.madalla.service.cms.AbstractBlogEntry;
 
 public class BlogEntryView implements Serializable{
 
@@ -21,7 +21,7 @@ public class BlogEntryView implements Serializable{
     private String description;
     private String keywords;
     
-    public void init(BlogEntry newData){
+    public void init(AbstractBlogEntry newData){
     	setId(newData.getId());
 		setTitle(newData.getTitle());
 		setDate(newData.getDate().toDate());
@@ -30,7 +30,7 @@ public class BlogEntryView implements Serializable{
 		setDescription(newData.getDescription());
 		setCategory(newData.getCategory());
     }
-    public void populate(BlogEntry old){
+    public void populate(AbstractBlogEntry old){
     	old.setTitle(title);
     	old.setDate(new DateTime(date));
     	old.setKeywords(keywords);

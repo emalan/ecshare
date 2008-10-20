@@ -6,9 +6,11 @@ import java.io.Serializable;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.wicket.Resource;
 import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
+
+import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.IRepositoryData;
 
-public class ImageData  implements IRepositoryData, Serializable, Comparable<ImageData> {
+public class ImageData extends AbstractImageData implements IRepositoryData, Serializable, Comparable<ImageData> {
 	private static final long serialVersionUID = 1L;
 
 	private final String name;

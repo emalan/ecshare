@@ -3,7 +3,9 @@ package com.madalla.service.cms.jcr;
 import junit.framework.TestCase;
 
 import org.joda.time.DateTime;
-import com.madalla.service.cms.jcr.BlogEntry;
+
+import com.madalla.service.cms.AbstractBlogEntry;
+
 
 public class BlogEntryTest extends TestCase{
 
@@ -16,17 +18,17 @@ public class BlogEntryTest extends TestCase{
 		String keywords = "keywords";
 		String text = "testText more";
 		DateTime date = new DateTime();
-		BlogEntry blogEntry = new BlogEntry.Builder(id, blog, title, date)
+		AbstractBlogEntry blogEntry = new BlogEntry.Builder(id, blog, title, date)
 			.category(category).desription(description).
 			keywords(keywords).text(text).build();
 
-		BlogEntry sameBlogEntry = new BlogEntry.Builder(id, blog, title, date)
+		AbstractBlogEntry sameBlogEntry = new BlogEntry.Builder(id, blog, title, date)
 		.category(category).desription(description).
 		keywords(keywords).text(text).build();
 		
 		assertEquals(blogEntry, sameBlogEntry);
 
-		BlogEntry diffBlogEntry = new BlogEntry.Builder(id, blog, title, date)
+		AbstractBlogEntry diffBlogEntry = new BlogEntry.Builder(id, blog, title, date)
 		.category(category).desription("different").
 		keywords(keywords).text(text).build();
 		

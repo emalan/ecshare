@@ -24,9 +24,9 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 
+import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
-import com.madalla.service.cms.jcr.ImageData;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.AlbumAdminPage;
 
@@ -65,14 +65,14 @@ public class AlbumPanel extends Panel {
         link.setBeforeDisabledLink("");
         add(link);
         
-        List<ImageData> images = getRepositoryService().getAlbumImages(album);
+        List<AbstractImageData> images = getRepositoryService().getAlbumImages(album);
         
         add(new ListView("image-list", images){
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem item) {
-				final ImageData imageData = (ImageData) item.getModelObject();
+				final AbstractImageData imageData = (AbstractImageData) item.getModelObject();
 				if (imageData.getFullImageAsResource() != null){
 					Image image = new Image("id",imageData.getFullImageAsResource());
 					if(StringUtils.isEmpty(imageData.getUrl())){

@@ -1,18 +1,21 @@
 package com.madalla.service.cms.jcr;
 
-import com.madalla.service.cms.IRepositoryData;
-import org.joda.time.DateTime;
-import org.springmodules.jcr.JcrCallback;
-import org.springmodules.jcr.JcrTemplate;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+
+import org.joda.time.DateTime;
+import org.springmodules.jcr.JcrCallback;
+import org.springmodules.jcr.JcrTemplate;
+
+import com.madalla.service.cms.AbstractBlogEntry;
+import com.madalla.service.cms.IRepositoryData;
 
 class BlogEntryHelper extends AbstractContentHelper {
 	
@@ -71,10 +74,10 @@ class BlogEntryHelper extends AbstractContentHelper {
 		});
 	}
 	
-	List<BlogEntry> getBlogEntries(final String blog){
-		return (List<BlogEntry>) template.execute(new JcrCallback(){
-            List<BlogEntry> list = new ArrayList<BlogEntry>();
-            public List<BlogEntry> doInJcr(Session session) throws IOException, RepositoryException {
+	List<AbstractBlogEntry> getBlogEntries(final String blog){
+		return (List<AbstractBlogEntry>) template.execute(new JcrCallback(){
+            List<AbstractBlogEntry> list = new ArrayList<AbstractBlogEntry>();
+            public List<AbstractBlogEntry> doInJcr(Session session) throws IOException, RepositoryException {
             	Node siteNode = getSiteNode(session);
             	Node blogParent = getCreateNode(EC_NODE_BLOGS, siteNode);
             	Node blogNode = getCreateNode(NS+blog, blogParent);

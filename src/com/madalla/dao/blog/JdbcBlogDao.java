@@ -14,6 +14,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import com.madalla.service.blog.BlogCategory;
+import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.jcr.BlogEntry;
 
 public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao, Serializable{
@@ -70,7 +71,7 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
         return (BlogEntry)getJdbcTemplate().queryForObject(SQL_EVENT,new Object[]{new Integer(blogEntryId)}, new BlogRowMapper());
     }
 
-    public int insertBlogEntry(BlogEntry blogEntry) {
+    public int insertBlogEntry(AbstractBlogEntry blogEntry) {
     	//blogEntry.setSiteId(getSiteId().intValue());
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(blogEntry);
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -78,7 +79,7 @@ public class JdbcBlogDao extends NamedParameterJdbcDaoSupport implements BlogDao
         return keyHolder.getKey().intValue();
     }
 
-    public int saveBlogEntry(BlogEntry blogEntry) {
+    public int saveBlogEntry(AbstractBlogEntry blogEntry) {
         //blogEntry.setSiteId(getSiteId().intValue());
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(blogEntry);
         return getNamedParameterJdbcTemplate().update(SQL_UPDATE,parameterSource);

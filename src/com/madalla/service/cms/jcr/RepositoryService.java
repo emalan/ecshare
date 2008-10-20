@@ -14,6 +14,7 @@ import javax.swing.tree.TreeModel;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrCallback;
 import com.madalla.service.cms.*;
 
@@ -86,7 +87,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	return ContentHelper.isContentPasteNode(path);
     }
     
-    public ImageData getImageData(final String path) {
+    public AbstractImageData getImageData(final String path) {
         if (StringUtils.isEmpty(path)){
             log.error("getBlogEntry - path is required.");
             return null;
@@ -94,7 +95,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         return ImageDataHelper.getInstance().get(path);
     }
     
-    public List<ImageData> getAlbumImages(final String album){
+    public List<AbstractImageData> getAlbumImages(final String album){
     	return ImageDataHelper.getInstance().getAlbumEntries(album);
     }
     
@@ -102,16 +103,20 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	return ImageDataHelper.getInstance().getAlbumEntriesAsTree(album);
     }
     
-	public List<ImageData> getAlbumOriginalImages() {
+	public List<AbstractImageData> getAlbumOriginalImages() {
 		return ImageDataHelper.getInstance().getOriginalEntries();
 	}
 
-    public BlogEntry getBlogEntry(final String path) {
+    public AbstractBlogEntry getBlogEntry(final String path) {
         if (StringUtils.isEmpty(path)){
             log.error("getBlogEntry - path is required.");
             return null;
         }
         return BlogEntryHelper.getInstance().get(path);
+    }
+    
+    public AbstractBlogEntry getNewBlogEntry(String blog, String title, DateTime date){
+    	return new BlogEntry.Builder(blog, title, date ).build();
     }
     
     public String getContentData(final String nodeName, final String id, Locale locale) {
@@ -154,7 +159,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         }
     }
     
-    public List<BlogEntry> getBlogEntries(final String blog){
+    public List<AbstractBlogEntry> getBlogEntries(final String blog){
     	return BlogEntryHelper.getInstance().getBlogEntries(blog);
     }
 

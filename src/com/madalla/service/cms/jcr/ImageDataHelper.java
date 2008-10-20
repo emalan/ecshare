@@ -1,15 +1,9 @@
 package com.madalla.service.cms.jcr;
 
-import com.madalla.image.ImageUtilities;
-import com.madalla.image.LoggingImageObserver;
-import com.madalla.service.cms.IRepositoryData;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
-import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
-import org.springmodules.jcr.JcrCallback;
-import org.springmodules.jcr.JcrTemplate;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.jcr.Node;
@@ -19,10 +13,19 @@ import javax.jcr.Session;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
+import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
+import org.springmodules.jcr.JcrCallback;
+import org.springmodules.jcr.JcrTemplate;
+
+import com.madalla.image.ImageUtilities;
+import com.madalla.image.LoggingImageObserver;
+import com.madalla.service.cms.AbstractImageData;
+import com.madalla.service.cms.IRepositoryData;
 
 /**
  * Handles Image Data persistance to a JCR Content Repository
@@ -67,7 +70,7 @@ class ImageDataHelper extends AbstractContentHelper {
 		return instance;
 	}
 
-    private static ImageData create(Node node) throws RepositoryException{
+    private static AbstractImageData create(Node node) throws RepositoryException{
     	String parent = node.getParent().getName().replaceFirst(NS,"");
     	String name = node.getName().replaceFirst(NS, "");
     	InputStream image = node.getProperty(EC_IMAGE_FULL).getStream();
@@ -133,26 +136,26 @@ class ImageDataHelper extends AbstractContentHelper {
 	TreeModel getAlbumEntriesAsTree(final String group){
 		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(group);
         TreeModel model = new DefaultTreeModel(rootNode);
-        for(ImageData imageData: getAlbumEntries(group)){
+        for(AbstractImageData imageData: getAlbumEntries(group)){
         	DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(imageData);
         	rootNode.add(treeNode);
         }
         return model;
 	}
 	
-	List<ImageData> getOriginalEntries(){
+	List<AbstractImageData> getOriginalEntries(){
 		return getEntries(NS + EC_ORIGINALS);
 	}
 	
-	List<ImageData> getAlbumEntries(final String group){
+	List<AbstractImageData> getAlbumEntries(final String group){
 		return getEntries(NS+group);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private List<ImageData> getEntries(final String group){
-		return (List<ImageData>) template.execute(new JcrCallback(){
-            List<ImageData> list = new ArrayList<ImageData>();
-            public List<ImageData> doInJcr(Session session) throws IOException, RepositoryException {
+	private List<AbstractImageData> getEntries(final String group){
+		return (List<AbstractImageData>) template.execute(new JcrCallback(){
+            List<AbstractImageData> list = new ArrayList<AbstractImageData>();
+            public List<AbstractImageData> doInJcr(Session session) throws IOException, RepositoryException {
             	Node siteNode = getSiteNode(session);
             	Node parentNode = getParentNode(siteNode);
             	Node groupNode  = getCreateNode(group, parentNode);

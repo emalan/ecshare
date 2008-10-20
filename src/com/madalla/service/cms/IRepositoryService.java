@@ -1,12 +1,13 @@
 package com.madalla.service.cms;
 
-import com.madalla.service.cms.jcr.BlogEntry;
-import com.madalla.service.cms.jcr.Content;
-import com.madalla.service.cms.jcr.ImageData;
-
-import javax.swing.tree.TreeModel;
 import java.util.List;
 import java.util.Locale;
+
+import javax.swing.tree.TreeModel;
+
+import org.joda.time.DateTime;
+
+import com.madalla.service.cms.jcr.Content;
 
 public interface IRepositoryService {
 
@@ -21,13 +22,14 @@ public interface IRepositoryService {
     String getContentData(String nodeName, String id);
     String getContentData(final String nodeName, final String id, Locale locale);
     void pasteContent(final String path, final Content content);
-    BlogEntry getBlogEntry(final String uuid);
+    AbstractBlogEntry getBlogEntry(final String uuid);
+    AbstractBlogEntry getNewBlogEntry(String blog, String title, DateTime date);
     void deleteNode(final String path);
     Content getContent(final String path);
-    List<BlogEntry> getBlogEntries(final String blog);
-    ImageData getImageData(final String path) ;
-    List<ImageData> getAlbumImages(final String album);
-    List<ImageData> getAlbumOriginalImages();
+    List<AbstractBlogEntry> getBlogEntries(final String blog);
+    AbstractImageData getImageData(final String path) ;
+    List<AbstractImageData> getAlbumImages(final String album);
+    List<AbstractImageData> getAlbumOriginalImages();
     TreeModel getAlbumImagesAsTree(final String album);
 
 }

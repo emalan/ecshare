@@ -1,7 +1,7 @@
 /**
- * Defines the Content Respository functionality 
+ * Defines the Content Repository functionality 
  * <p>
- * Content and Blog API provided to get and persist these objects to 
+ * Content, Blog & Image API provided to get and persist these objects to 
  * a persistant store.
  * 
  * @author Eugene Malan

@@ -26,7 +26,7 @@ import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
-import com.madalla.service.cms.jcr.BlogEntry;
+import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.BlogEntryPage;
 import com.madalla.wicket.KeywordHeaderContributor;
@@ -74,7 +74,7 @@ public class BlogDisplayPanel extends Panel {
         });
 		
         log.debug("construtor - retrieving blog entries from service.");
-        List<BlogEntry> blogList = getBlogService().getBlogEntries(blog);
+        List<AbstractBlogEntry> blogList = getBlogService().getBlogEntries(blog);
         log.debug("construtor - retrieved blog entries. count="+blogList.size());
         
         //ListView repeater
@@ -82,7 +82,7 @@ public class BlogDisplayPanel extends Panel {
 			private static final long serialVersionUID = 1L;
 
 			public void populateItem(final ListItem listItem) {
-				final BlogEntry current = (BlogEntry) listItem.getModelObject();
+				final AbstractBlogEntry current = (AbstractBlogEntry) listItem.getModelObject();
                 listItem.add(new Label("title", new Model(current.getTitle())));
                 listItem.add(new DateLabel("date", new Model(current.getDate().toDate()), new StyleDateConverter("MS",true)));
                 listItem.add(new Label("keywords", new Model(current.getKeywords())));
@@ -162,7 +162,7 @@ public class BlogDisplayPanel extends Panel {
 	}
 	
 	public void changeModel(String blogEntryId){
-		BlogEntry newData = getBlogService().getBlogEntry(blogEntryId);
+		AbstractBlogEntry newData = getBlogService().getBlogEntry(blogEntryId);
 		blogEntry.init(newData);
 		log.debug("changeModel - "+ blogEntry);
 	}

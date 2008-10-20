@@ -32,7 +32,7 @@ import org.joda.time.DateTime;
 
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
-import com.madalla.service.cms.jcr.BlogEntry;
+import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.webapp.blog.BlogEntryView;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 import com.madalla.wicket.ValidationStyleBehaviour;
@@ -169,9 +169,9 @@ public class BlogEntryPanel extends Panel {
     }
     
     private void saveBlogEntry(BlogEntryView view){
-    	BlogEntry blogEntry;
+    	AbstractBlogEntry blogEntry;
     	if (StringUtils.isEmpty(view.getId())){
-    		blogEntry = new BlogEntry.Builder(view.getBlog(), view.getTitle(), new DateTime(view.getDate()) ).build();
+    		blogEntry = getBlogService().getNewBlogEntry(view.getBlog(), view.getTitle(), new DateTime(view.getDate())); 
     		view.populate(blogEntry);
     	} else {
     		blogEntry = getBlogService().getBlogEntry(view.getId());

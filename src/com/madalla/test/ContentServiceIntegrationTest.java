@@ -19,6 +19,8 @@ import org.joda.time.DateTime;
 import com.madalla.service.cms.jcr.BlogEntry;
 import com.madalla.service.cms.jcr.ImageData;
 import com.madalla.service.cms.jcr.Content;
+import com.madalla.service.cms.AbstractBlogEntry;
+import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.IRepositoryAdminService;
 import com.madalla.service.cms.IRepositoryService;
 
@@ -33,7 +35,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 	
 	protected List<String> getTestConfigLocations() {
 		List<String> configLocations = new ArrayList<String>();
-		configLocations.add("classpath:com/madalla/service/cms/applicationContext-cms.xml");
+		configLocations.add("classpath:com/madalla/service/cms/jcr/applicationContext-cms.xml");
         configLocations.add("classpath:com/madalla/util/jcr/applicationContext-jcr-local.xml");
         
 		return configLocations;
@@ -107,7 +109,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	BlogEntry blogEntry = createBlogEntry();
         String path = blogEntry.save();
         
-        BlogEntry testBlogEntry = contentService.getBlogEntry(path);
+        AbstractBlogEntry testBlogEntry = contentService.getBlogEntry(path);
         assertEquals(blogEntry, testBlogEntry);
         assertEquals(blogEntry.getBlog(), testBlogEntry.getBlog());
         assertEquals(blogEntry.getTitle(), testBlogEntry.getTitle());
@@ -126,7 +128,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	
     	log.info("testImageGetSet - path="+path);
     	
-    	ImageData test = contentService.getImageData(path);
+    	AbstractImageData test = contentService.getImageData(path);
     	assertNotNull(test);
     	
     	TreeModel treeModel = contentService.getAlbumImagesAsTree(album);

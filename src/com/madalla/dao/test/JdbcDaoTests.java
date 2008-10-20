@@ -11,6 +11,7 @@ import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 import com.madalla.dao.blog.JdbcBlogDao;
 import com.madalla.service.blog.BlogCategory;
 import com.madalla.service.blog.BlogServiceTest;
+import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.jcr.BlogEntry;
 
 public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests{
@@ -73,7 +74,7 @@ public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests
         	Collection entries = dao.getBlogEntriesForSite();
             log.debug("Deleting Blog Entry. count="+ entries.size());
         	for (Iterator iter = entries.iterator(); iter.hasNext();) {
-        		BlogEntry entry = (BlogEntry) iter.next();
+        		AbstractBlogEntry entry = (AbstractBlogEntry) iter.next();
         		//dao.deleteBlogEntry(entry.getId());
         	}
         }

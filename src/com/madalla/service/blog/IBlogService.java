@@ -4,12 +4,15 @@ import java.util.List;
 
 import javax.swing.tree.TreeModel;
 
-import com.madalla.service.cms.jcr.BlogEntry;
+import org.joda.time.DateTime;
+
+import com.madalla.service.cms.AbstractBlogEntry;
 
 public interface IBlogService {
 	public abstract List<String> getBlogCategories();
-	public abstract List<BlogEntry> getBlogEntries(String blog);
-    public abstract BlogEntry getBlogEntry(String id);
+	public abstract List<AbstractBlogEntry> getBlogEntries(String blog);
+    public abstract AbstractBlogEntry getBlogEntry(String id);
+    public abstract AbstractBlogEntry getNewBlogEntry(String blog, String title, DateTime date);
     public void deleteBlogEntry(String id);
     public TreeModel getBlogEntriesAsTree(String blog);
 }
