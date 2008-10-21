@@ -34,9 +34,11 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.string.JavascriptUtils;
 
+import com.madalla.service.cms.AbstractImageData;
+import com.madalla.service.cms.IRepositoryAdminService;
+import com.madalla.service.cms.IRepositoryAdminServiceProvider;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
-import com.madalla.service.cms.jcr.ImageData;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 
 public class AlbumAdminPanel extends Panel{
@@ -64,7 +66,7 @@ public class AlbumAdminPanel extends Panel{
                 	log.info("uploading file "+ upload.getClientFileName());
                 	String imageName = StringUtils.deleteWhitespace(upload.getClientFileName());
                 	imageName = StringUtils.substringBefore(imageName, ".");
-                	ImageData.createOriginalImage(imageName, upload.getInputStream());
+                	getRepositoryAdminService().createOriginalImage(imageName, upload.getInputStream());
 					log.info("finished processing upload "+ imageName);
 				} catch (IOException e) {
 					log.error("onSubmit - failed to upload File."+e.getLocalizedMessage());
@@ -83,7 +85,7 @@ public class AlbumAdminPanel extends Panel{
 
 		@Override
 		protected void populateItem(final ListItem listItem) {
-			final ImageData imageData = (ImageData)listItem.getModelObject();
+			final AbstractImageData imageData = (AbstractImageData)listItem.getModelObject();
             listItem.add(new Label("file", imageData.getName()));
             Image image = new Image("thumb",imageData.getThumbnail()){
 
@@ -168,6 +170,9 @@ public class AlbumAdminPanel extends Panel{
 		return provider.getRepositoryService();
 	}
 	
-	
+	private IRepositoryAdminService getRepositoryAdminService(){
+		IRepositoryAdminServiceProvider provider = (IRepositoryAdminServiceProvider)getApplication();
+		return provider.getRepositoryAdminService();
+	}
 	
 }

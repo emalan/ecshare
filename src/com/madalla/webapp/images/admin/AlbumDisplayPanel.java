@@ -17,9 +17,9 @@ import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Unit;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 
+import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
-import com.madalla.service.cms.jcr.ImageData;
 import com.madalla.wicket.DroppableAjaxBehaviour;
 
 public class AlbumDisplayPanel extends Panel {
@@ -41,8 +41,8 @@ public class AlbumDisplayPanel extends Panel {
 				Object userObject = treeNode.getUserObject();
 				if (userObject instanceof String){
 					return (String)userObject;
-				} else if (userObject instanceof ImageData){
-					return ((ImageData)userObject).getName();
+				} else if (userObject instanceof AbstractImageData){
+					return ((AbstractImageData)userObject).getName();
 				} else {
 					return null;
 				}
@@ -80,4 +80,6 @@ public class AlbumDisplayPanel extends Panel {
 		IRepositoryServiceProvider provider = (IRepositoryServiceProvider)getApplication();
 		return provider.getRepositoryService();
 	}
+
+
 }

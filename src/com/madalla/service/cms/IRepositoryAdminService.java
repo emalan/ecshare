@@ -1,6 +1,7 @@
 package com.madalla.service.cms;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.swing.tree.TreeModel;
@@ -19,5 +20,7 @@ public interface IRepositoryAdminService {
 	void rollbackSiteRestore();
 	Boolean isRollbackApplicationAvailable();
 	void rollbackApplicationRestore();
+	
+	String createOriginalImage(final String imageName, final InputStream fullImage);
 	
 }

@@ -328,6 +328,11 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
         Resource resource = loader.getResource(repositoryHome);
         return resource.getFile();
 	}
+	
+	public String createOriginalImage(String imageName, InputStream fullImage) {
+		return ImageDataHelper.getInstance().saveOriginalImage(imageName, fullImage);
+	}
+
 
 	public void setTemplate(JcrTemplate template) {
 		this.template = template;

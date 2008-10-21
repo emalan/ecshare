@@ -16,13 +16,12 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.tree.LinkTree;
 import org.joda.time.DateTime;
 
-import com.madalla.service.cms.jcr.BlogEntry;
-import com.madalla.service.cms.jcr.ImageData;
-import com.madalla.service.cms.jcr.Content;
 import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.IRepositoryAdminService;
 import com.madalla.service.cms.IRepositoryService;
+import com.madalla.service.cms.jcr.BlogEntry;
+import com.madalla.service.cms.jcr.Content;
 
 public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
@@ -124,7 +123,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	assertNotNull(stream);
     	final String album = "testAlbum";
     	final String name = "image1";
-    	String path = ImageData.createOriginalImage(name, stream);
+    	String path = repositoryAdminService.createOriginalImage(name, stream);
     	
     	log.info("testImageGetSet - path="+path);
     	
