@@ -18,6 +18,8 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import com.madalla.service.cms.AbstractImageData;
+import com.madalla.service.cms.IRepositoryAdminService;
+import com.madalla.service.cms.IRepositoryAdminServiceProvider;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.wicket.DroppableAjaxBehaviour;
@@ -29,7 +31,7 @@ public class AlbumDisplayPanel extends Panel {
 	
 	private TreeTable tree;
 
-	public AlbumDisplayPanel(String id, String album) {
+	public AlbumDisplayPanel(String id, final String album) {
 		super(id);
 		IColumn column = new AbstractTreeColumn(new ColumnLocation(Alignment.LEFT,20, Unit.EM),"Images"){
 
@@ -61,7 +63,7 @@ public class AlbumDisplayPanel extends Panel {
 
 			protected void respond(final AjaxRequestTarget target) {
 		    	log.debug("something dropped");
-		    	
+		    	getRepositoryAdminService().addImageToAlbum(album, "");
 		    }
 		};
 		form.add(new DroppableAjaxBehaviour(onDrop));
@@ -80,6 +82,12 @@ public class AlbumDisplayPanel extends Panel {
 		IRepositoryServiceProvider provider = (IRepositoryServiceProvider)getApplication();
 		return provider.getRepositoryService();
 	}
+	
+	private IRepositoryAdminService getRepositoryAdminService(){
+		IRepositoryAdminServiceProvider provider = (IRepositoryAdminServiceProvider)getApplication();
+		return provider.getRepositoryAdminService();
+	}
+
 
 
 }

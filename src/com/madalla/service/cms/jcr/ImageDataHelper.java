@@ -114,14 +114,31 @@ class ImageDataHelper extends AbstractContentHelper {
         return path;
     }
 	
-    String saveAlbumImage(final String album, final String name, final InputStream fullImage){
-    	ImageData imageData = new ImageData(album, name, fullImage);
+    String saveAlbumImage(final String album, final String name){
+    	
+    	ImageData originalImage = get(EC_ORIGINALS, name);
+    	//TODO resize image to album defaults
+    	ImageData imageData = new ImageData(album, name, originalImage.getFullImageAsInputStream());
     	return save(imageData);
     }
+    
 	
 	String save(final ImageData imageData) {
 		return genericSave(imageData);
     }
+	
+	ImageData get(final String album, final String name){
+		return (ImageData) template.execute(new JcrCallback(){
+			public Object doInJcr(Session session) throws IOException,	RepositoryException {
+				Node siteNode = getSiteNode(session);
+	        	Node parent = getParentNode(siteNode);
+	        	Node groupNode = getCreateNode(NS+album, parent);
+				Node node = (Node) groupNode.getNode(name);
+				return create(node);
+			}
+			
+		});
+	}
 	
 	ImageData get(final String path){
 		return (ImageData) template.execute(new JcrCallback(){

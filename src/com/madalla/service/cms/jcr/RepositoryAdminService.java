@@ -332,7 +332,11 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
 	public String createOriginalImage(String imageName, InputStream fullImage) {
 		return ImageDataHelper.getInstance().saveOriginalImage(imageName, fullImage);
 	}
-
+	
+	public void addImageToAlbum(String album, String imageName) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	public void setTemplate(JcrTemplate template) {
 		this.template = template;
