@@ -14,6 +14,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.WicketRuntimeException;
@@ -61,6 +62,8 @@ class ImageDataHelper extends AbstractContentHelper {
     
     private static final int MAX_WIDTH = 900;
     private static final int MAX_HEIGHT = 600;
+    private static final int DEFAULT_WIDTH = 400;
+    private static final int DEFAULT_HEIGHT = 266;
     private static final int THUMB_WIDTH = 90;
     private static final int THUMB_HEIGHT = 60;
     
@@ -115,11 +118,21 @@ class ImageDataHelper extends AbstractContentHelper {
     }
 	
     String saveAlbumImage(final String album, final String name){
-    	
-    	ImageData originalImage = get(EC_ORIGINALS, name);
-    	//TODO resize image to album defaults
-    	ImageData imageData = new ImageData(album, name, originalImage.getFullImageAsInputStream());
-    	return save(imageData);
+    	if (StringUtils.isEmpty(name)){
+    		throw new WicketRuntimeException("Album Image Name needs to be supplied.");
+    	}
+    	return (String)template.execute(new JcrCallback(){
+			public Object doInJcr(Session session) throws IOException, RepositoryException {
+				Node siteNode = getSiteNode(session);
+	        	Node parent = getParentNode(siteNode);
+	        	Node groupNode = getCreateNode(NS+EC_ORIGINALS, parent);
+				Node node = (Node) groupNode.getNode(NS+name);
+				InputStream fullImage = node.getProperty(EC_IMAGE_FULL).getStream();
+				InputStream albumImage = scaleAlbumImage(fullImage);
+				ImageData imageData = new ImageData(album, name, albumImage);
+				return save(imageData);
+			}
+		});
     }
     
 	
@@ -133,7 +146,7 @@ class ImageDataHelper extends AbstractContentHelper {
 				Node siteNode = getSiteNode(session);
 	        	Node parent = getParentNode(siteNode);
 	        	Node groupNode = getCreateNode(NS+album, parent);
-				Node node = (Node) groupNode.getNode(name);
+				Node node = (Node) groupNode.getNode(NS+name);
 				return create(node);
 			}
 			
@@ -212,6 +225,11 @@ class ImageDataHelper extends AbstractContentHelper {
 	private InputStream scaleThumbnailImage(InputStream inputStream){
 		LoggingImageObserver observer = new LoggingImageObserver(log);
 		return ImageUtilities.scaleImageDownProportionately(inputStream, observer, THUMB_WIDTH, THUMB_HEIGHT);
+	}
+	
+	private InputStream scaleAlbumImage(InputStream inputStream){
+		LoggingImageObserver observer = new LoggingImageObserver(log);
+		return ImageUtilities.scaleImageDownProportionately(inputStream, observer, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	}
     
 	@Override

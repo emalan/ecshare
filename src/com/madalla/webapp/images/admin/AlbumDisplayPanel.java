@@ -1,11 +1,14 @@
 package com.madalla.webapp.images.admin;
 
+import java.util.Map;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.tree.table.AbstractTreeColumn;
@@ -16,6 +19,7 @@ import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Alignm
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Unit;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.protocol.http.WebRequestCycle;
 
 import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.IRepositoryAdminService;
@@ -62,8 +66,10 @@ public class AlbumDisplayPanel extends Panel {
 			private static final long serialVersionUID = 1L;
 
 			protected void respond(final AjaxRequestTarget target) {
-		    	log.debug("something dropped");
-		    	getRepositoryAdminService().addImageToAlbum(album, "");
+				String dragId = getRequest().getParameter("amp;dragId");
+				log.debug("something dropped. arg="+dragId);
+		    	getRepositoryAdminService().addImageToAlbum(album, dragId);
+		    	
 		    }
 		};
 		form.add(new DroppableAjaxBehaviour(onDrop));

@@ -1,5 +1,7 @@
 package com.madalla.wicket.javascript;
 
+import java.util.Map;
+
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 
 public class JavascriptFunction {
@@ -23,9 +25,9 @@ public class JavascriptFunction {
 		return this;
 	}
 	
-	public void addAjaxCallback(AbstractAjaxBehavior behavior)
+	public void addAjaxCallback(AbstractAjaxBehavior behavior, String args)
 	{
-		addLine("wicketAjaxGet('" + behavior.getCallbackUrl() + "');\n");
+		addLine("wicketAjaxGet('" + behavior.getCallbackUrl()+"' + " + args +");\n");
 	}
 
 }

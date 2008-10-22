@@ -22,6 +22,6 @@ public interface IRepositoryAdminService {
 	void rollbackApplicationRestore();
 	
 	String createOriginalImage(final String imageName, final InputStream fullImage);
-	void addImageToAlbum(String album, String imageName);
+	String addImageToAlbum(String album, String imageName);
 	
 }

@@ -40,6 +40,7 @@ import com.madalla.service.cms.IRepositoryAdminServiceProvider;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
+import com.madalla.wicket.DraggableAjaxBehaviour;
 
 public class AlbumAdminPanel extends Panel{
 	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(2000);
@@ -87,18 +88,9 @@ public class AlbumAdminPanel extends Panel{
 		protected void populateItem(final ListItem listItem) {
 			final AbstractImageData imageData = (AbstractImageData)listItem.getModelObject();
             listItem.add(new Label("file", imageData.getName()));
-            Image image = new Image("thumb",imageData.getThumbnail()){
-
-				@Override
-				protected void onRender(MarkupStream markupStream) {
-					super.onRender(markupStream);
-					String s = "var e = $('"+getMarkupId()+"'); new Draggable(e,{ghosting: true, revert: true});"+
-					"e.setStyle({ cursor: 'move'}); e.addClassName('draggable')";
-					JavascriptUtils.writeJavascript(getResponse(), s);
-				}
-            	
-            };
+            Image image = new Image("thumb",imageData.getThumbnail());
             image.setOutputMarkupId(true);
+            image.add(new DraggableAjaxBehaviour(imageData.getName()));
             
             listItem.add(image);
             listItem.add(new IndicatingAjaxFallbackLink("delete") {

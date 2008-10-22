@@ -36,8 +36,12 @@ public class DroppableAjaxBehaviour extends AbstractTransformerBehavior {
 		map.put("hoverclass", "hover");
 		
 		JavascriptFunction onDropFunction = new JavascriptFunction("dragged, dropped, event");
-		onDropFunction.addLine("console.log(dragged);").addLine("console.log(dropped);").
-		addLine("console.log(event);").addAjaxCallback(callback);
+		onDropFunction.addLine("console.log(dragged);").
+		addLine("console.log(dragged.readAttribute('dragId'));").
+		addLine("console.log(dropped);").
+		addLine("console.log(event);").
+		addLine("var dragId = dragged.readAttribute('dragId');").
+		addAjaxCallback(callback,"'&amp;dragId=' + dragId");
 		
 		map.put("onDrop", onDropFunction);
 		
