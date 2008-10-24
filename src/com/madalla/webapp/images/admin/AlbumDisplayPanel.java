@@ -14,6 +14,7 @@ import org.apache.wicket.extensions.markup.html.tree.table.TreeTable;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Alignment;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Unit;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -33,8 +34,13 @@ public class AlbumDisplayPanel extends Panel {
 	
 	public AlbumDisplayPanel(String id, final String album) {
 		super(id);
+		
+		final Form form = new Form("albumForm");
+		
+		form.add(new FeedbackPanel("albumFeedback"));
+		
+		//Setting up Tree Table
 		IColumn column = new AbstractTreeColumn(new ColumnLocation(Alignment.LEFT,20, Unit.EM),"Images"){
-
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -48,16 +54,13 @@ public class AlbumDisplayPanel extends Panel {
 				} else {
 					return null;
 				}
-				
 			}
-			
 		};
-
 		IColumn columns[] = new IColumn[]{
 				column
 		};
 		
-		final Form form = new Form("albumForm");
+		
 
 		IModel treeModel = new LoadableDetachableModel(){
 			private static final long serialVersionUID = 1L;
@@ -78,7 +81,9 @@ public class AlbumDisplayPanel extends Panel {
 				String dragId = DraggableAjaxBehaviour.getDraggablesId(getRequest());
 				log.debug("something dropped. arg="+dragId);
 		    	getRepositoryAdminService().addImageToAlbum(album, dragId);
+		    	form.info("Success! Image saved to album.");
 		    	target.addComponent(tree);
+		    	target.addComponent(form);
 		    }
 		};
 		form.add(new DroppableAjaxBehaviour(onDrop));

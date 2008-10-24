@@ -1,6 +1,5 @@
 package com.madalla.webapp.cms.admin;
 
-import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
 import org.apache.commons.logging.Log;
@@ -13,6 +12,7 @@ import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.markup.html.tree.LinkTree;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 
 import com.madalla.service.cms.IRepositoryAdminService;
@@ -32,21 +32,24 @@ public class ContentExplorerPanel extends Panel {
 		this(name, displayPanel, false);
 	}
 
-	public ContentExplorerPanel(String name, final ContentDisplayPanel displayPanel, boolean adminMode) {
+	public ContentExplorerPanel(String name, final ContentDisplayPanel displayPanel, final boolean adminMode) {
 		super(name);
 		
-		// Get Content tree
-		IRepositoryAdminService service = getContentAdminService();
-		TreeModel treeModel;
-		if (adminMode){
-			treeModel = service.getRepositoryContent();
-		} else {
-			treeModel = service.getSiteContent();
-		}
-		
-		log.debug("construtor - retrieved content entries. root="
-				+ treeModel.getRoot());
+		// Create Content Tree Model
+		IModel treeModel = new LoadableDetachableModel(){
+			private static final long serialVersionUID = 1L;
 
+			@Override
+			protected Object load() {
+				if (adminMode){
+					return getContentAdminService().getRepositoryContent();
+				} else {
+					return getContentAdminService().getSiteContent();
+				}
+			}
+			
+		};
+		
 		BaseTree tree = new LinkTree("ContentTree", treeModel) {
 			private static final long serialVersionUID = 1L;
 
