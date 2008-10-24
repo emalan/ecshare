@@ -2,6 +2,7 @@ package com.madalla.wicket;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
+import org.apache.wicket.Request;
 import org.apache.wicket.markup.transformer.AbstractTransformerBehavior;
 
 import com.madalla.wicket.javascript.JavascriptBuilder;
@@ -9,6 +10,10 @@ import com.madalla.wicket.javascript.JavascriptBuilder;
 public class DraggableAjaxBehaviour extends AbstractTransformerBehavior {
 
 	private static final long serialVersionUID = 1L;
+
+	public static String getDraggablesId(Request request){
+		return request.getParameter("amp;dragId");
+	}
 
 	private String dragId;
 	
