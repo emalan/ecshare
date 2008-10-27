@@ -15,18 +15,19 @@
 var Banner = Class.create(Crossfade, {
 	initialize : function($super, elm, options) {
 		$super(elm, options);
-		Function.prototype.getInfo = function(){
-			alert(this);
-		}
-		var ControlMethods = {
-			setControlStyle : function(element) {
+		if(this.elm.id) {
+
+			var ControlMethods = {
+			    setControlStyle : function(element) {
 				element = $(element);
 			    return element.setStyle({zIndex: '100', 
 					cursor:'pointer', fontSize:'14px', marginRight:'10px',
 				    fontWeight: 'normal', color : '#FFFFFF'});
+			    }
 			}
+        Element.addMethods(ControlMethods);
 		}
-		Element.addMethods(ControlMethods);	
+			
 		var element = new Element('div', {id :'controls'});
 		var prev = new Element('span', {id : $(elm).className + '-previous'})
 			.addClassName('control').update('<').setControlStyle()
