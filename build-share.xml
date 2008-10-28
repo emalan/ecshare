@@ -6,7 +6,6 @@
   You will need to setup a build.properties in your project folder.
 -->
 <project name="Share" basedir=".">
-
     <property file="build.properties"/>
     
     <property name="javac.target" value="1.5" />
@@ -29,7 +28,7 @@
 		<mkdir dir="${build.dir}" />
 	</target>
 	
-	<target name="compile" depends="init,clean" description="o Compiles the Java sources">
+	<target name="compile" depends="clean, init" description="o Compiles the Java sources">
 		<mkdir dir="${build.main.classes}" />
 		<javac destdir="${build.main.classes}"
 			target="${javac.target}"
