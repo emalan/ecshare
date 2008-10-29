@@ -86,7 +86,7 @@ public class Panels {
 		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(blog)|| returnPage == null || params == null){
 			error("BlogHomePanel - All parameters need to be supplied.");
 		}
-		String blogEntryId = getPageParameter(BLOG_ENTRY_ID, params, "BlogHomePanel");
+		String blogEntryId = params.getString(BLOG_ENTRY_ID);
    		return new BlogHomePanel(id, blog, blogEntryId, returnPage);
 		
 	}
