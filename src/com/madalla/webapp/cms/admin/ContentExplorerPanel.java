@@ -1,5 +1,6 @@
 package com.madalla.webapp.cms.admin;
 
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
 import org.apache.commons.logging.Log;
@@ -27,6 +28,7 @@ class ContentExplorerPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
 	private Log log = LogFactory.getLog(this.getClass());
+	private TreeModel treeModel;
 
 	public ContentExplorerPanel(String name, final ContentDisplayPanel displayPanel) {
 		this(name, displayPanel, false);
@@ -35,22 +37,24 @@ class ContentExplorerPanel extends Panel {
 	public ContentExplorerPanel(String name, final ContentDisplayPanel displayPanel, final boolean adminMode) {
 		super(name);
 		
+		if (adminMode){
+			treeModel = getContentAdminService().getRepositoryContent();
+		} else {
+			treeModel = getContentAdminService().getSiteContent();
+		}
+		
+		
 		// Create Content Tree Model
-		IModel treeModel = new LoadableDetachableModel(){
+		IModel treeModelModel = new Model(){
 			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected Object load() {
-				if (adminMode){
-					return getContentAdminService().getRepositoryContent();
-				} else {
-					return getContentAdminService().getSiteContent();
-				}
-			}
 			
+			@Override
+			public Object getObject() {
+				return treeModel;
+			}
 		};
 		
-		BaseTree tree = new LinkTree("ContentTree", treeModel) {
+		BaseTree tree = new LinkTree("ContentTree", treeModelModel) {
 			private static final long serialVersionUID = 1L;
 
 			protected IModel getNodeTextModel(IModel model) {

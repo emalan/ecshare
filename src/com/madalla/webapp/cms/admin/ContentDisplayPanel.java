@@ -4,6 +4,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -26,21 +28,20 @@ class ContentDisplayPanel extends Panel {
 	public ContentDisplayPanel(String name) {
 		super(name);
 		
-		//Node path
 		Model pathModel = new Model(){
-			
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Object getObject(){
 				return path;
 			}
-			
 		};
 		nodePath = new Label("nodeName", pathModel);
 		nodePath.setOutputMarkupId(true);
 		add(nodePath);
 		
-		//Content text
 		Model textModel = new Model(){
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public Object getObject() {
@@ -53,7 +54,7 @@ class ContentDisplayPanel extends Panel {
 		add(contentDisplay);
 		
         //Delete Link
-        Component delete = new Link("deleteNode"){
+        Component delete = new AjaxLink("deleteNode"){
             private static final long serialVersionUID = 1L;
             
             protected final void onBeforeRender(){
@@ -65,11 +66,11 @@ class ContentDisplayPanel extends Panel {
                 super.onBeforeRender();
             }
             
-            public void onClick() {
+			@Override
+			public void onClick(AjaxRequestTarget target) {
             	getContentService().deleteNode(path);
             	path = "";
-                setResponsePage(getPage().getClass());
-            }
+			}
         };
         delete.setOutputMarkupId(true);
         add(delete);
