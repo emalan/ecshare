@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
@@ -25,6 +26,9 @@ public class ContentAdminPanel extends Panel {
 	private Boolean adminApp;
 	public File file ;
 	public List<File> backupFiles ;
+	
+	private ContentDisplayPanel contentDisplayPanel;
+	private ContentExplorerPanel contentExplorerPanel;
 	
 	public static ContentAdminPanel newInstance(String name, Class<? extends Page> returnPage){
 	    return new ContentAdminPanel(name, false, returnPage);	
@@ -51,6 +55,7 @@ public class ContentAdminPanel extends Panel {
         
         final ListChoice listChoice = new ListChoice("backupFiles", new PropertyModel(this,"file"), 
         		new PropertyModel(this,"backupFiles"), new ChoiceRenderer("name"), 8){
+					private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onBeforeRender() {
@@ -67,8 +72,9 @@ public class ContentAdminPanel extends Panel {
         add(new RestoreForm("restoreForm", listChoice));
 		
 		add(new AjaxFallbackLink("backupLink"){
-            
-            public void onClick(AjaxRequestTarget target) {
+			private static final long serialVersionUID = 1L;
+
+			public void onClick(AjaxRequestTarget target) {
             	target.addComponent(listChoice);
             	String fileName;
             	try {
@@ -120,10 +126,13 @@ public class ContentAdminPanel extends Panel {
         rollback.setOutputMarkupId(true);
         add(rollback);
         
-        ContentDisplayPanel contentDisplayPanel = new ContentDisplayPanel("contentDisplayPanel");
+        contentDisplayPanel = new ContentDisplayPanel("contentDisplayPanel", this);
         contentDisplayPanel.setOutputMarkupId(true);
         add(contentDisplayPanel);
-        add(new ContentExplorerPanel("contentExplorerPanel", contentDisplayPanel, adminApp));
+        
+        contentExplorerPanel = new ContentExplorerPanel("contentExplorerPanel", this, adminApp);
+        contentExplorerPanel.setOutputMarkupId(true);
+        add(contentExplorerPanel);
 
 	}
 	
@@ -181,6 +190,22 @@ public class ContentAdminPanel extends Panel {
         	return true;
         }
         return false;
+	}
+	
+	public Component getDisplayPanel(){
+		return get("contentDisplayPanel");
+	}
+	
+	public Component getExplorerPanel(){
+		return get("contentExplorerPanel");
+	}
+	
+	public void refreshExplorerPanel(){
+		contentExplorerPanel.refresh();
+	}
+	
+	public void refreshDisplayPanel(String path){
+		contentDisplayPanel.refresh(path);
 	}
 	
 }

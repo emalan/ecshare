@@ -13,7 +13,6 @@ import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.markup.html.tree.LinkTree;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 
 import com.madalla.service.cms.IRepositoryAdminService;
@@ -29,20 +28,16 @@ class ContentExplorerPanel extends Panel {
 
 	private Log log = LogFactory.getLog(this.getClass());
 	private TreeModel treeModel;
+	private boolean adminMode;
 
-	public ContentExplorerPanel(String name, final ContentDisplayPanel displayPanel) {
-		this(name, displayPanel, false);
+	public ContentExplorerPanel(String name, final ContentAdminPanel parentPanel) {
+		this(name, parentPanel, false);
 	}
 
-	public ContentExplorerPanel(String name, final ContentDisplayPanel displayPanel, final boolean adminMode) {
+	public ContentExplorerPanel(String name, final ContentAdminPanel parentPanel, final boolean adminMode) {
 		super(name);
-		
-		if (adminMode){
-			treeModel = getContentAdminService().getRepositoryContent();
-		} else {
-			treeModel = getContentAdminService().getSiteContent();
-		}
-		
+		this.adminMode = adminMode;
+		refresh();
 		
 		// Create Content Tree Model
 		IModel treeModelModel = new Model(){
@@ -75,8 +70,8 @@ class ContentExplorerPanel extends Panel {
 							IContentNode contentNode = (IContentNode) jcrTreeNode.getObject();
 							String path = contentNode.getPath();
 							log.debug("onNodeLinkClicked - path=" + path);
-							displayPanel.refresh(path);
-							target.addComponent(displayPanel);
+							parentPanel.refreshDisplayPanel(path);
+							target.addComponent(parentPanel.getDisplayPanel());
 						}
 					}
 
@@ -99,5 +94,14 @@ class ContentExplorerPanel extends Panel {
     protected IRepositoryAdminService getContentAdminService() {
         return ((IRepositoryAdminServiceProvider) getApplication()).getRepositoryAdminService();
     }
+
+	public void refresh() {
+		if (adminMode){
+			treeModel = getContentAdminService().getRepositoryContent();
+		} else {
+			treeModel = getContentAdminService().getSiteContent();
+		}
+		
+	}
 
 }

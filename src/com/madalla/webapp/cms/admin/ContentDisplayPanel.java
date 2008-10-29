@@ -25,7 +25,7 @@ class ContentDisplayPanel extends Panel {
 	private String contentText = "" ;
 	private String path = "";
 	
-	public ContentDisplayPanel(String name) {
+	public ContentDisplayPanel(String name, final ContentAdminPanel parentPanel) {
 		super(name);
 		
 		Model pathModel = new Model(){
@@ -69,7 +69,10 @@ class ContentDisplayPanel extends Panel {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
             	getContentService().deleteNode(path);
-            	path = "";
+            	refresh("");
+            	target.addComponent(getParent());
+            	parentPanel.refreshExplorerPanel();
+            	target.addComponent(parentPanel.getExplorerPanel());
 			}
         };
         delete.setOutputMarkupId(true);
@@ -133,8 +136,11 @@ class ContentDisplayPanel extends Panel {
 		nodePath.modelChanging();
 		this.path = path;
 		nodePath.modelChanged();
-		
-		if (getContentService().isContentNode(path)){
+		if (StringUtils.isEmpty(path)){
+			contentDisplay.modelChanging();
+			contentText = "";
+			contentDisplay.modelChanged();
+		} else if (getContentService().isContentNode(path)){
 			contentDisplay.modelChanging();
 			contentText = getContentService().getContent(path).getText();
 			contentDisplay.modelChanged();
