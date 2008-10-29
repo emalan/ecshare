@@ -3,7 +3,7 @@ package com.madalla.webapp.pages;
 import org.apache.wicket.PageParameters;
 
 import com.madalla.webapp.AdminPage;
-import com.madalla.webapp.cms.ContentEntryPanel;
+import com.madalla.webapp.Panels;
 
 public class ContentEditPage extends AdminPage {
 
@@ -11,6 +11,6 @@ public class ContentEditPage extends AdminPage {
 
 	public ContentEditPage(final PageParameters parameters){
 		super();
-		add(new ContentEntryPanel("contentEntryPanel",parameters ));
+		add(Panels.contentEntryPanel("contentEntryPanel",parameters ));
 	}
 }

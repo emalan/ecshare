@@ -1,13 +1,8 @@
 package com.madalla.webapp.cms;
 
-import static com.madalla.webapp.cms.ContentParameters.CONTENT_ID;
-import static com.madalla.webapp.cms.ContentParameters.CONTENT_NODE;
-import static com.madalla.webapp.cms.ContentParameters.CONTENT_PAGE;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -17,9 +12,9 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.PropertyModel;
 
-import com.madalla.service.cms.jcr.Content;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
+import com.madalla.service.cms.jcr.Content;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 
 /**
@@ -40,23 +35,17 @@ public class ContentEntryPanel extends Panel {
     private String text;
 
 	/**
-	 * @param name
-	 * @param parameters
+	 * @param name - wicket id
+	 * @param nodeName
+	 * @param contentId
+	 * @param returnPage - used to create return Link
 	 * 
-	 * TODO Get return Page from application
 	 */
-	public ContentEntryPanel(String name, final PageParameters parameters) {
+	public ContentEntryPanel(String name, final String nodeName, final String contentId, Class<? extends Page> returnPage) {
         super(name);
-        nodeName = parameters.getString(CONTENT_NODE);
-        contentId = parameters.getString(CONTENT_ID);
-        String returnPage = parameters.getString(CONTENT_PAGE);
-        try {
-            this.contentPage = (Class<? extends Page>) Class.forName(returnPage);
-        } catch (ClassNotFoundException e) {
-            log.error("constructor - Exception while getting return Class.", e);
-        } catch (ClassCastException e) {
-        	log.error("constructor - Exception while casting return Class.", e);
-        }
+        this.nodeName = nodeName;
+        this.contentId = contentId;
+        this.contentPage = returnPage;
         add(HeaderContributor.forJavaScript(TinyMce.class, "tiny_mce.js"));
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
 

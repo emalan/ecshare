@@ -1,8 +1,5 @@
 package com.madalla.webapp.images.admin;
 
-import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
-import static com.madalla.webapp.images.admin.AlbumParams.RETURN_PAGE;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,11 +9,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
-import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -32,7 +27,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
-import org.apache.wicket.util.string.JavascriptUtils;
 
 import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.IRepositoryAdminService;
@@ -113,26 +107,14 @@ public class AlbumAdminPanel extends Panel{
 	private ImageListView imageListView;
 	
 	
-	public AlbumAdminPanel(String id, final PageParameters params) {
+	public AlbumAdminPanel(String id, String album, Class<? extends Page> returnPage) {
 		super(id);
 		
 		add(HeaderContributor.forJavaScript(Scriptaculous.PROTOTYPE));
 		add(HeaderContributor.forJavaScript(Scriptaculous.EFFECTS));
 		add(HeaderContributor.forJavaScript(Scriptaculous.DRAGDROP));
-		//add(HeaderContributor.forJavaScript(ScriptUtils.DRAG_DROP));
 		
-		String album = params.getString(ALBUM); //use this to default the dropdown
-		Class<? extends Page> returnPage = null;
-		try {
-			String pageString = params.getString(RETURN_PAGE);
-            returnPage = (Class<? extends Page>) Class.forName(pageString);
-        } catch (ClassNotFoundException e) {
-            log.error("constructor - Exception while getting return Class.", e);
-        } catch (ClassCastException e) {
-        	log.error("constructor - Exception while casting return Class.", e);
-        }
 		add(new PageLink("returnLink", returnPage));
-		
 		
         final FileUploadForm simpleUploadForm = new FileUploadForm("simpleUpload");
         final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");

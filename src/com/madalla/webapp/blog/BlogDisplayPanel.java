@@ -38,14 +38,14 @@ public class BlogDisplayPanel extends Panel {
 	private int displayCount = 5;
 	private final BlogEntryView blogEntry = new BlogEntryView();
 	
-	public BlogDisplayPanel(final String id, final String blog, final String blogEntryId, final Class<? extends Page> returnPage){
+	BlogDisplayPanel(final String id, final String blog, final String blogEntryId, final Class<? extends Page> returnPage){
 		super(id);
 		init(id, blog, returnPage );
 		changeModel(blogEntryId);
 		add(new SimpleAttributeModifier("class","showBlog"));
 		add(new KeywordHeaderContributor(blogEntry.getKeywords()));
 	}
-	public BlogDisplayPanel(final String id, final String blog, final Class<? extends Page> returnPage) {
+	BlogDisplayPanel(final String id, final String blog, final Class<? extends Page> returnPage) {
 		super(id);
 		init(id, blog, returnPage);
 		//TODO Store the Blog Home Meatadata keywords in CMS

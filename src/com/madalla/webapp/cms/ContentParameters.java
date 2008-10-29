@@ -1,9 +1,9 @@
 package com.madalla.webapp.cms;
 
-class ContentParameters {
+public class ContentParameters {
 
-	static final String CONTENT_NODE = "cmsNode";
-	static final String CONTENT_ID = "cmsID";
+	public static final String CONTENT_NODE = "cmsNode";
+	public static final String CONTENT_ID = "cmsID";
 	static final String CONTENT_PAGE = "cmsPage";
 
 	private ContentParameters(){}

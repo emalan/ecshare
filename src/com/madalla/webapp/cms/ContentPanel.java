@@ -2,7 +2,7 @@ package com.madalla.webapp.cms;
 
 import static com.madalla.webapp.cms.ContentParameters.CONTENT_ID;
 import static com.madalla.webapp.cms.ContentParameters.CONTENT_NODE;
-import static com.madalla.webapp.cms.ContentParameters.CONTENT_PAGE;
+import static com.madalla.webapp.images.admin.AlbumParams.RETURN_PAGE;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -86,7 +86,7 @@ public class ContentPanel extends Panel {
 
             // add link to edit it
             Link link = new BookmarkablePageLink("contentLink", ContentEditPage.class, new PageParameters(CONTENT_NODE + "="
-                    + contentNode + "," + CONTENT_ID + "=" + contentId + "," + CONTENT_PAGE + "="
+                    + contentNode + "," + CONTENT_ID + "=" + contentId + "," + RETURN_PAGE + "="
                     + returnPage.getName())) {
                 private static final long serialVersionUID = 1801145612969874170L;
 

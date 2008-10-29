@@ -13,7 +13,7 @@ import com.madalla.service.cms.jcr.Content;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 
-public class ContentDisplayPanel extends Panel {
+class ContentDisplayPanel extends Panel {
 
 	private static final long serialVersionUID = -3450362599578103637L;
 	private Log log = LogFactory.getLog(this.getClass());

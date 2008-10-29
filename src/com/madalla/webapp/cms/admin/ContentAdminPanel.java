@@ -1,13 +1,10 @@
 package com.madalla.webapp.cms.admin;
 
-import static com.madalla.webapp.PageParams.RETURN_PAGE;
-
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -29,26 +26,17 @@ public class ContentAdminPanel extends Panel {
 	public File file ;
 	public List<File> backupFiles ;
 	
-	public static ContentAdminPanel newInstance(String name, final PageParameters params){
-	    return new ContentAdminPanel(name, false, params);	
+	public static ContentAdminPanel newInstance(String name, Class<? extends Page> returnPage){
+	    return new ContentAdminPanel(name, false, returnPage);	
 	}
-	public static ContentAdminPanel newAdminInstance(String name, final PageParameters params){
-		return new ContentAdminPanel(name, true, params);
+	public static ContentAdminPanel newAdminInstance(String name, Class<? extends Page> returnPage){
+		return new ContentAdminPanel(name, true, returnPage);
 	}
 
-	private ContentAdminPanel(String name, final Boolean adminApp, final PageParameters params) {
+	private ContentAdminPanel(String name, final Boolean adminApp, Class<? extends Page> returnPage) {
 		super(name);
 		this.adminApp = adminApp;
 		
-		Class<? extends Page> returnPage ;
-		try {
-			String pageString = params.getString(RETURN_PAGE);
-			returnPage = (Class<? extends Page>) Class.forName(pageString);
-        } catch (Exception e) {
-        	returnPage = getApplication().getHomePage();
-        }
-		
-        
         Link link = new PageLink("returnLink", returnPage);
         if (adminApp){
         	link.setVisible(false);

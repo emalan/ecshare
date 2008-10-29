@@ -35,7 +35,7 @@ public class BlogArchivePanel extends Panel {
 	private Log log = LogFactory.getLog(this.getClass());
 	private static DateTimeFormatter df = DateTimeFormat.forPattern("MMM d");
 
-	public BlogArchivePanel(final String id, final String blogName, final BlogDisplayPanel display ) {
+	BlogArchivePanel(final String id, final String blogName, final BlogDisplayPanel display ) {
 		super(id);
 
 		//List existing Blogs

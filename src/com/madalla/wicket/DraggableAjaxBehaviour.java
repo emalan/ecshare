@@ -22,7 +22,7 @@ public class DraggableAjaxBehaviour extends AbstractTransformerBehavior {
 	}
 	
 	/**
-	 * @param imageName - ID to be passed to droppable
+	 * @param dragId - ID to be passed to droppable
 	 */
 	public DraggableAjaxBehaviour(String dragId) {
 		this.dragId = dragId;

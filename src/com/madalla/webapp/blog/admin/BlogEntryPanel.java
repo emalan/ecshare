@@ -1,16 +1,12 @@
 package com.madalla.webapp.blog.admin;
 
-import static com.madalla.webapp.blog.BlogParameters.BLOG_ENTRY_ID;
-import static com.madalla.webapp.blog.BlogParameters.BLOG_NAME;
-import static com.madalla.webapp.blog.BlogParameters.RETURN_PAGE;
-
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
-import org.apache.wicket.PageParameters;
+import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.HeaderContributor;
@@ -44,30 +40,39 @@ public class BlogEntryPanel extends Panel {
     private final BlogEntryView blogEntry = new BlogEntryView();
     private Class<?> returnPage;
     
-    public BlogEntryPanel(String id, final PageParameters parameters) {
-        super(id);
-        String returnPageName = parameters.getString(RETURN_PAGE);
-        try {
-            this.returnPage = Class.forName(returnPageName);
-        } catch (ClassNotFoundException e) {
-            log.error("constructor - Exception while getting return Class.", e);
-        }
-        add(HeaderContributor.forJavaScript(TinyMce.class,"tiny_mce.js"));
-        add(HeaderContributor.forJavaScript(JAVASCRIPT));
-
-        //construct blog Entry
-        String blogEntryId = parameters.getString(BLOG_ENTRY_ID);
-        String blogName = parameters.getString(BLOG_NAME);
-        log.debug("Constructing Blog Entry. id="+blogEntryId);
-        if (StringUtils.isEmpty(blogEntryId)){
-            blogEntry.setBlog(blogName);
-            log.debug("Created new Blog Entry");
-        } else {
-            blogEntry.init(getBlogService().getBlogEntry(blogEntryId));
-            log.debug("Retrieved Blog Entry from Service."+blogEntry);
-        }
-        
+    /**
+     * Constructor for creating a new Blog Entry
+     * @param id
+     * @param blogName
+     * @param returnPage
+     */
+    public BlogEntryPanel(String id, String blogName, Class<? extends Page> returnPage){
+    	this(id, returnPage);
+        blogEntry.setBlog(blogName);
+        log.debug("Created new Blog Entry");
         add(new BlogEntryForm("blogForm",this));
+    }
+    
+    /**
+     * Constructor for editing an existing blog entry
+     * @param id
+     * @param blogName
+     * @param blogEntryId
+     * @param returnPage
+     */
+    public BlogEntryPanel(String id, String blogName, String blogEntryId, Class<? extends Page> returnPage) {
+    	this(id, returnPage);
+        log.debug("Constructing Blog Entry. id="+blogEntryId);
+        blogEntry.init(getBlogService().getBlogEntry(blogEntryId));
+        log.debug("Retrieved Blog Entry from Service."+blogEntry);
+        add(new BlogEntryForm("blogForm",this));
+    }
+    
+    private BlogEntryPanel(String id, Class<? extends Page> returnPage){
+    	super(id);
+    	this.returnPage = returnPage;
+    	add(HeaderContributor.forJavaScript(TinyMce.class,"tiny_mce.js"));
+        add(HeaderContributor.forJavaScript(JAVASCRIPT));
     }
     
     final class BlogEntryForm extends Form{

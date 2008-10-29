@@ -23,7 +23,7 @@ import com.madalla.util.jcr.model.ContentNode;
 import com.madalla.util.jcr.model.IContentNode;
 import com.madalla.util.jcr.model.tree.JcrTreeNode;
 
-public class ContentExplorerPanel extends Panel {
+class ContentExplorerPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
 	private Log log = LogFactory.getLog(this.getClass());

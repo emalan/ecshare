@@ -27,7 +27,7 @@ import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.wicket.DraggableAjaxBehaviour;
 import com.madalla.wicket.DroppableAjaxBehaviour;
 
-public class AlbumDisplayPanel extends Panel {
+class AlbumDisplayPanel extends Panel {
 	
 	private static final long serialVersionUID = 1L;
 	private final static Log log = LogFactory.getLog(AlbumDisplayPanel.class);

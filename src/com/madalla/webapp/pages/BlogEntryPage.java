@@ -3,12 +3,12 @@ package com.madalla.webapp.pages;
 import org.apache.wicket.PageParameters;
 
 import com.madalla.webapp.AdminPage;
-import com.madalla.webapp.blog.admin.BlogEntryPanel;
+import com.madalla.webapp.Panels;
 
 public class BlogEntryPage extends AdminPage  {
     private static final long serialVersionUID = 1L;
     
     public BlogEntryPage(final PageParameters parameters){
-        add(new BlogEntryPanel("blogEntryPanel", parameters));
+        add(Panels.blogEntryPanel("blogEntryPanel", parameters));
     }
 }
