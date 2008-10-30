@@ -1,4 +1,56 @@
+/* =General
+-----------------------------------------------------------------------------*/
+
+/* Zero down margin and padding on all elements */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+    background-color:#FFFFFF;
+}
+
 input {
     background-color:#F7AE30;
     margin:10px 0 0 5px;
+}
+
+body {
+    font-size: 62.5%;
+    font-family:"Trebuchet MS",Verdana,Arial,Sans-serif;
+}
+a:link { }
+a:visited { color:#551a8b;}
+a:hover{color:#000099;}
+a:active { color:#ff0000; }
+
+/* =Form
+-----------------------------------------------------------------------------*/
+
+input {
+  margin: 10px 0 0 0;
+  font-family: verdana,arial,helvetica,sans; font-size: 11px;
+  border: 1px solid #8E8E8E;
+}
+
+.button {
+    border-style:solid; 
+    border-width: 1px 4px 4px 1px; 
+    text-decoration: none; 
+    padding: 4px;
+    background-color: #F7AE30; 
+    border-color : #F7AE30 #DF9C29 #DF9C29 #F7AE30;
+}
+
+select {
+  margin: 10px 0 0 0;
+  border: 1px solid #8E8E8E; color:#2B5E2C; background-color:#FFFFFF; 
+  font-family: verdana,arial,helvetica,sans; font-size: 11px;
+}
+
+textarea {
+  margin: 10px 0 0 0;
+  border: 1px solid #8E8E8E; color:#2B5E2C; background-color:#FFFFFF; 
+  font-family: verdana,arial,helvetica,sans; font-size: 11px;
 }

@@ -8,6 +8,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.ListChoice;
@@ -71,7 +73,7 @@ public class ContentAdminPanel extends Panel {
         listChoice.setOutputMarkupId(true);
         add(new RestoreForm("restoreForm", listChoice));
 		
-		add(new AjaxFallbackLink("backupLink"){
+		add(new IndicatingAjaxLink("backupLink"){
 			private static final long serialVersionUID = 1L;
 
 			public void onClick(AjaxRequestTarget target) {
