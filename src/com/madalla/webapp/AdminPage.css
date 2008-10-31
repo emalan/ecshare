@@ -37,10 +37,13 @@ body {
   text-align: left;
 }
 #border {
+	float: left;
     width: 72em;
     max-width: 100%;
     margin: 0 auto;
     text-align: left;
+    border-left: 1px solid #AFBFD8;
+    border-right:1px solid #AFBFD8;
 }
 
 /* =Elements
