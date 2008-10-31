@@ -7,11 +7,13 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
+import org.apache.wicket.extensions.ajax.markup.html.WicketAjaxIndicatorAppender;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.ListChoice;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -20,6 +22,7 @@ import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.service.cms.IRepositoryAdminService;
 import com.madalla.service.cms.IRepositoryAdminServiceProvider;
+import com.madalla.wicket.IndicatingAjaxSubmitLink;
 
 public class ContentAdminPanel extends Panel {
 
@@ -70,10 +73,67 @@ public class ContentAdminPanel extends Panel {
         	
         };
         listChoice.setOutputMarkupId(true);
-        add(new RestoreForm("restoreForm", listChoice));
+        final Form form = new RestoreForm("restoreForm", listChoice);
+        add(form);
 		
+        //Backup link
+		add(new IndicatingAjaxLink("backupLink"){
+			private static final long serialVersionUID = 1L;
+
+			public void onClick(AjaxRequestTarget target) {
+            	target.addComponent(listChoice);
+            	String fileName;
+            	try {
+            		IRepositoryAdminService service = getContentAdminService();
+            		
+            		if (adminApp){
+            			fileName = service.backupContentRoot();
+            		} else {
+            			fileName = service.backupContentSite();
+            		}
+                    info("Content Repository backed up to file. File name=" + fileName);
+            	} catch (Exception e){
+            	    error("Backup failed. "+ e.getLocalizedMessage());	
+            	}
+            }
+        });
+
+        //Rollback link
+        add(new IndicatingAjaxLink("rollbackLink"){
+			private static final long serialVersionUID = -6873075723947980651L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				IRepositoryAdminService service = getContentAdminService();
+				if (adminApp){
+					service.rollbackApplicationRestore();
+				} else {
+					service.rollbackSiteRestore();
+				}
+			}
+			
+			@Override
+			protected final void onBeforeRender(){
+				IRepositoryAdminService service = getContentAdminService();
+				if (adminApp && service.isRollbackApplicationAvailable()){
+					setEnabled(true);
+				} else if (!adminApp && service.isRollbackSiteAvailable()){
+					setEnabled(true);
+				} else {
+					setEnabled(false);
+				}
+                super.onBeforeRender();
+            }
+        });
         
-        
+        add(new IndicatingAjaxSubmitLink("submitLink", form){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form form) {
+				restoreContent();
+			}
+        });
         
         contentDisplayPanel = new ContentDisplayPanel("contentDisplayPanel", this);
         contentDisplayPanel.setOutputMarkupId(true);
@@ -93,74 +153,15 @@ public class ContentAdminPanel extends Panel {
 		public RestoreForm(String id, final ListChoice listChoice){
 			super(id);
 	        add(listChoice);
-	        
-			add(new IndicatingAjaxLink("backupLink"){
-				private static final long serialVersionUID = 1L;
-
-				public void onClick(AjaxRequestTarget target) {
-	            	target.addComponent(listChoice);
-	            	String fileName;
-	            	try {
-	            		IRepositoryAdminService service = getContentAdminService();
-	            		
-	            		if (adminApp){
-	            			fileName = service.backupContentRoot();
-	            		} else {
-	            			fileName = service.backupContentSite();
-	            		}
-	                    info("Content Repository backed up to file. File name=" + fileName);
-	            	} catch (Exception e){
-	            	    error("Backup failed. "+ e.getLocalizedMessage());	
-	            	}
-	            }
-	            
-	        });
-			
-	        //Rollback link
-	        Link rollback = new AjaxFallbackLink("rollbackLink"){
-
-				private static final long serialVersionUID = -6873075723947980651L;
-
-				@Override
-				public void onClick(AjaxRequestTarget target) {
-					IRepositoryAdminService service = getContentAdminService();
-					if (adminApp){
-						service.rollbackApplicationRestore();
-					} else {
-						service.rollbackSiteRestore();
-					}
-				}
-				
-				@Override
-				protected final void onBeforeRender(){
-					IRepositoryAdminService service = getContentAdminService();
-					if (adminApp && service.isRollbackApplicationAvailable()){
-						setEnabled(true);
-					} else if (!adminApp && service.isRollbackSiteAvailable()){
-						setEnabled(true);
-					} else {
-						setEnabled(false);
-					}
-	                super.onBeforeRender();
-	            }
-	        	
-	        };
-	        rollback.setOutputMarkupId(true);
-	        add(rollback);
 		}
+		
+		
 
 		@Override
 		protected void onSubmit() {
-			if (file != null ){
-				if (adminApp){
-					getContentAdminService().restoreContentApplication(file);
-					info("Content Repository restored from file");
-				} else {
-					getContentAdminService().restoreContentSite(file);
-					info("Site Content Data restored from file");
-				}
+			if (!isSubmitted()) {
+				restoreContent();
 			}
-			super.onSubmit();
 		}
 
 		@Override
@@ -171,6 +172,18 @@ public class ContentAdminPanel extends Panel {
 			super.validate();
 		}
 
+	}
+	
+	private void restoreContent(){
+		if (file != null ){
+			if (adminApp){
+				getContentAdminService().restoreContentApplication(file);
+				info("Content Repository restored from file");
+			} else {
+				getContentAdminService().restoreContentSite(file);
+				info("Site Content Data restored from file");
+			}
+		}
 	}
 	
 	public IRepositoryAdminService getContentAdminService(){

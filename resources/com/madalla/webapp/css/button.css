@@ -1,0 +1,34 @@
+    a.orangebutton{
+        background: transparent url('image/square-orange-left.gif') no-repeat top left;
+        display: block;
+        float: left;
+        font: normal 12px Arial; /* Change 12px as desired */
+        line-height: 15px; /* This value + 4px + 4px (top and bottom padding of SPAN) must equal height of button background (default is 23px) */
+        height: 23px; /* Height of button background height */
+        padding-left: 9px; /* Width of left menu image */
+        text-decoration: none;
+    }
+
+    a:link.orangebutton, a:visited.orangebutton{
+        color: #494949; /*button text color*/
+    }
+
+    a.orangebutton span{
+        background: transparent url('image/square-orange-right.gif') no-repeat top right;
+        display: block;
+        padding: 4px 9px 4px 0; /*Set 9px below to match value of 'padding-left' value above*/
+    }
+
+    a.orangebutton:hover{ /* Hover state CSS */
+        background-position: bottom left;
+    }
+
+    a.orangebutton:hover span{ /* Hover state CSS */
+        background-position: bottom right;
+        color: black;
+    }
+
+    .buttonwrapper{ /* Container you can use to surround a CSS button to clear float */
+        overflow: hidden; /*See: http://www.quirksmode.org/css/clearing.html */
+        width: 100%;
+    }
