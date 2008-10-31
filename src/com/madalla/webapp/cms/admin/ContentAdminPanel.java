@@ -8,7 +8,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
@@ -73,60 +72,8 @@ public class ContentAdminPanel extends Panel {
         listChoice.setOutputMarkupId(true);
         add(new RestoreForm("restoreForm", listChoice));
 		
-		add(new IndicatingAjaxLink("backupLink"){
-			private static final long serialVersionUID = 1L;
-
-			public void onClick(AjaxRequestTarget target) {
-            	target.addComponent(listChoice);
-            	String fileName;
-            	try {
-            		IRepositoryAdminService service = getContentAdminService();
-            		
-            		if (adminApp){
-            			fileName = service.backupContentRoot();
-            		} else {
-            			fileName = service.backupContentSite();
-            		}
-                    info("Content Repository backed up to file. File name=" + fileName);
-            	} catch (Exception e){
-            	    error("Backup failed. "+ e.getLocalizedMessage());	
-            	}
-            }
-            
-        });
         
         
-        //Rollback link
-        Link rollback = new AjaxFallbackLink("rollbackLink"){
-
-			private static final long serialVersionUID = -6873075723947980651L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				IRepositoryAdminService service = getContentAdminService();
-				if (adminApp){
-					service.rollbackApplicationRestore();
-				} else {
-					service.rollbackSiteRestore();
-				}
-			}
-			
-			@Override
-			protected final void onBeforeRender(){
-				IRepositoryAdminService service = getContentAdminService();
-				if (adminApp && service.isRollbackApplicationAvailable()){
-					setEnabled(true);
-				} else if (!adminApp && service.isRollbackSiteAvailable()){
-					setEnabled(true);
-				} else {
-					setEnabled(false);
-				}
-                super.onBeforeRender();
-            }
-        	
-        };
-        rollback.setOutputMarkupId(true);
-        add(rollback);
         
         contentDisplayPanel = new ContentDisplayPanel("contentDisplayPanel", this);
         contentDisplayPanel.setOutputMarkupId(true);
@@ -143,9 +90,63 @@ public class ContentAdminPanel extends Panel {
 		private static final long serialVersionUID = 4729370802782788350L;
 		
 		
-		public RestoreForm(String id, ListChoice listChoice){
+		public RestoreForm(String id, final ListChoice listChoice){
 			super(id);
 	        add(listChoice);
+	        
+			add(new IndicatingAjaxLink("backupLink"){
+				private static final long serialVersionUID = 1L;
+
+				public void onClick(AjaxRequestTarget target) {
+	            	target.addComponent(listChoice);
+	            	String fileName;
+	            	try {
+	            		IRepositoryAdminService service = getContentAdminService();
+	            		
+	            		if (adminApp){
+	            			fileName = service.backupContentRoot();
+	            		} else {
+	            			fileName = service.backupContentSite();
+	            		}
+	                    info("Content Repository backed up to file. File name=" + fileName);
+	            	} catch (Exception e){
+	            	    error("Backup failed. "+ e.getLocalizedMessage());	
+	            	}
+	            }
+	            
+	        });
+			
+	        //Rollback link
+	        Link rollback = new AjaxFallbackLink("rollbackLink"){
+
+				private static final long serialVersionUID = -6873075723947980651L;
+
+				@Override
+				public void onClick(AjaxRequestTarget target) {
+					IRepositoryAdminService service = getContentAdminService();
+					if (adminApp){
+						service.rollbackApplicationRestore();
+					} else {
+						service.rollbackSiteRestore();
+					}
+				}
+				
+				@Override
+				protected final void onBeforeRender(){
+					IRepositoryAdminService service = getContentAdminService();
+					if (adminApp && service.isRollbackApplicationAvailable()){
+						setEnabled(true);
+					} else if (!adminApp && service.isRollbackSiteAvailable()){
+						setEnabled(true);
+					} else {
+						setEnabled(false);
+					}
+	                super.onBeforeRender();
+	            }
+	        	
+	        };
+	        rollback.setOutputMarkupId(true);
+	        add(rollback);
 		}
 
 		@Override

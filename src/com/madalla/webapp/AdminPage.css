@@ -9,6 +9,8 @@
 
 body {
     background-color:#FFFFFF;
+    text-align: center; 
+    min-width: 760px;
 }
 
 input {
@@ -20,6 +22,29 @@ body {
     font-size: 62.5%;
     font-family:"Trebuchet MS",Verdana,Arial,Sans-serif;
 }
+
+/* =Layout
+----------------------------------------------------------------------------*/
+/*****************
+* Fixed width : px
+* Liquid width : %
+* Elastic width : em
+****************/
+#wrapper {
+  width: 72em;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: left;
+}
+#border {
+    width: 72em;
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: left;
+}
+
+/* =Elements
+----------------------------------------------------------------------------*/
 a:link { }
 a:visited { color:#551a8b;}
 a:hover{color:#000099;}
