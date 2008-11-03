@@ -30,6 +30,7 @@
         #contentDisplay { float: left; width:100%; border-style: solid; border-color: black; border-width: 1px; margin: 10px 0 0 0 }
         #explorerPanel {float:left; width:25%; overflow:auto; border-right-style: solid; border-right-color: black; border-right-width: 1px;}
         #displayPanel {float:right; width:73%; border-style: solid; border-color: black; border-width: 1px;}
+        
     </style>
 </wicket:head>
 <body>
@@ -39,9 +40,9 @@
         <div id="backupBackup">
             <p><wicket:message key="label.backup.info">Label Contents</wicket:message></p>
             <div class="buttonwrapper">
-                    <a href="#" class="orangebutton" wicket:id="backupLink"><span><wicket:message key="label.backup">Label Contents</wicket:message></span></a>
+                <a href="#" class="orangebutton" wicket:id="backupLink"><span><wicket:message key="label.backup">Label Contents</wicket:message></span></a>
             </div>
-            <span wicket:id="backupMessages"></span>
+            <span wicket:id="backupMessages" class="feedbackPanel"></span>
         </div>
    	    <form wicket:id="restoreForm">
    	        <label><wicket:message key="label.backup.list">Label Contents</wicket:message></label>
@@ -59,11 +60,9 @@
                 <a href="#" class="orangebutton" wicket:id="rollbackLink"><span><wicket:message key="label.rollback">Label Contents</wicket:message></span></a>
             </div>
                 
-            <span wicket:id="restoreMessages"></span>
+            <span wicket:id="restoreMessages" class="feedbackPanel"></span>
 
          </div>
-            
-   	    
     </div>
 	
 	<div id="contentDisplay">

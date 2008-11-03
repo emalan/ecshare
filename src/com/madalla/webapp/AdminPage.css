@@ -93,3 +93,11 @@ textarea {
     float: left;
     clear: both;
 }
+
+.feedbackPanelERROR {
+    color:red;
+}
+.feedbackPanelINFO {
+    color:blue;
+}
+
