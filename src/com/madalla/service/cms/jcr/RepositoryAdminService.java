@@ -1,27 +1,33 @@
 package com.madalla.service.cms.jcr;
 
-import com.madalla.service.cms.IRepositoryAdminService;
-import com.madalla.util.jcr.model.JcrNodeModel;
-import com.madalla.util.jcr.model.tree.JcrTreeModel;
-import com.madalla.util.jcr.model.tree.JcrTreeNode;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.jackrabbit.api.JackrabbitWorkspace;
-import org.joda.time.LocalDateTime;
-import org.joda.time.format.ISODateTimeFormat;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
-import org.springmodules.jcr.JcrCallback;
-import org.springmodules.jcr.JcrTemplate;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.swing.tree.TreeModel;
-import java.io.*;
-import java.util.Arrays;
-import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.jackrabbit.api.JackrabbitWorkspace;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springmodules.jcr.JcrCallback;
+import org.springmodules.jcr.JcrTemplate;
+
+import com.madalla.service.cms.BackupFile;
+import com.madalla.service.cms.IRepositoryAdminService;
+import com.madalla.util.jcr.model.JcrNodeModel;
+import com.madalla.util.jcr.model.tree.JcrTreeModel;
+import com.madalla.util.jcr.model.tree.JcrTreeNode;
 
 public class RepositoryAdminService extends AbstractRepositoryService implements IRepositoryAdminService {
 	
@@ -94,7 +100,7 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
 					RepositoryException {
 				Node node = getApplicationNode(session);
                 session.save();
-				File backupFile = getBackupFile(APP);
+				File backupFile = BackupFile.getBackupFile(APP, getRepositoryHomeDir(),FILE_SUFFIX);
 				FileOutputStream out = new FileOutputStream(backupFile);
                 session.exportDocumentView(node.getPath(), out, true, false);
                 out.close();
@@ -111,7 +117,7 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
 					RepositoryException {
 				Node node = getSiteNode(session);
                 session.save();
-				File backupFile = getBackupFile(getSite());
+				File backupFile = BackupFile.getBackupFile(getSite(), getRepositoryHomeDir(), FILE_SUFFIX);
 				FileOutputStream out = new FileOutputStream(backupFile);
                 session.exportDocumentView(node.getPath(), out, true, false);
                 out.close();
@@ -121,15 +127,15 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
     	return file;
     }
     
-    public List<File> getApplicationBackupFileList(){
+    public List<BackupFile> getApplicationBackupFileList(){
     	return getFileList(APP);
     }
     
-    public List<File> getBackupFileList() {
+    public List<BackupFile> getBackupFileList() {
     	return getFileList(getSite());
     }
     
-    private List<File> getFileList(final String fileStart){
+    private List<BackupFile> getFileList(final String fileStart){
     	File repositoryHomeDir;
 		try {
 			repositoryHomeDir = getRepositoryHomeDir();
@@ -148,7 +154,11 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
 			}
     	});
         log.debug("getBackupFileList - Number of backup files found="+files.length);
-    	return Arrays.asList(files);
+        List<BackupFile> ret = new ArrayList<BackupFile>();
+        for(int i = 0; i < files.length; i++){
+        	ret.add(new BackupFile(files[i]));
+        }
+    	return ret;
     }
     
     //TODO refactore the 2 restore methods
@@ -308,20 +318,6 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
 
     }
 
-	private File getBackupFile(String fileName) throws IOException {
-		
-        //Get repository home directory and create File
-		File repositoryHomeDir = getRepositoryHomeDir();
-        String dateTimeString = ISODateTimeFormat.basicDateTime().print(new LocalDateTime());
-
-		File backupFile = new File(repositoryHomeDir,fileName+"-backup-"+dateTimeString+FILE_SUFFIX);
-        if (backupFile.exists()){
-        	log.error("Backup file exists. Should not happen.");
-		}
-        log.debug("Backup file name. fileName="+backupFile);
-        
-		return backupFile;
-	}
 	
 	private File getRepositoryHomeDir() throws IOException{
         DefaultResourceLoader loader = new DefaultResourceLoader();

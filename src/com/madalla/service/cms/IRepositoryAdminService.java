@@ -12,8 +12,8 @@ public interface IRepositoryAdminService {
 	TreeModel getRepositoryContent();
 	String backupContentRoot();
 	String backupContentSite();
-	List<File> getBackupFileList();
-	List<File> getApplicationBackupFileList();
+	List<BackupFile> getBackupFileList();
+	List<BackupFile> getApplicationBackupFileList();
 	void restoreContentSite(File backupFile);
 	void restoreContentApplication(final File backupFile);
 	Boolean isRollbackSiteAvailable();

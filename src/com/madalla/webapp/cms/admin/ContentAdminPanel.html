@@ -3,10 +3,12 @@
     <style type="text/css">
         #backup {float:left; width:100%;}
         
-        #backupInfo {float:left}
+        #backupBackup {float:left}
         #backup form {float:left}
-        div#controls {float:left; margin: 10px 0 0 5px}
-        div#controls div {padding-bottom: 10px;}
+        #backup form label{float:left}
+        #backup form select{float:left; clear:both;} 
+        div#backupRestore {float:left; margin: 10px 0 0 5px}
+        div#backupRestore div {padding-bottom: 10px;}
         
         #contentDisplay { float: left; width:100%; border-style: solid; border-color: black; border-width: 1px; margin: 10px 0 0 0 }
         #explorerPanel {float:left; width:25%; overflow:auto; border-right-style: solid; border-right-color: black; border-right-width: 1px;}
@@ -17,23 +19,17 @@
     <wicket:panel>
     <a href="#" wicket:id="returnLink">Return</a>
     <div id="backup">
-        <div id="backupInfo">
+        <div id="backupBackup">
             <h4>Content Repository Backup</h4>
-            <ul>
-                <li>Backup Repository Content to an XML File</li>
-                <li>Restore Content from a previous Content Backup</li>
-                <li>Rollback a restore</li>
-            </ul>
+            <div class="buttonwrapper">
+                    <a href="#" class="orangebutton" wicket:id="backupLink"><span><wicket:message key="label.backup">Label Contents</wicket:message></span></a>
+            </div>
         </div>
    	    <form wicket:id="restoreForm">
    	        <label><wicket:message key="label.backup.list">Label Contents</wicket:message></label>
    	        <select wicket:id="backupFiles"></select>
    	    </form>
-        <div id="controls">
-                
-                <div class="buttonwrapper">
-                    <a href="#" class="orangebutton" wicket:id="backupLink"><span><wicket:message key="label.backup">Label Contents</wicket:message></span></a>
-                </div>
+        <div id="backupRestore">
                 
                 <div class="buttonwrapper">
                     <a href="#" class="orangebutton" wicket:id="rollbackLink"><span><wicket:message key="label.rollback">Label Contents</wicket:message></span></a>

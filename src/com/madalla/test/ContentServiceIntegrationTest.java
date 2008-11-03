@@ -1,6 +1,5 @@
 package com.madalla.test;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ import org.joda.time.DateTime;
 
 import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.AbstractImageData;
+import com.madalla.service.cms.BackupFile;
 import com.madalla.service.cms.IRepositoryAdminService;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.jcr.BlogEntry;
@@ -43,10 +43,10 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     public void testContentBackup(){
         repositoryAdminService.backupContentRoot();
         repositoryAdminService.backupContentSite();
-		List <File> files = repositoryAdminService.getBackupFileList();
+		List <BackupFile> files = repositoryAdminService.getBackupFileList();
 		for (int i = 0; i < files.size(); i++) {
 			if ("test-backup.xml".equals(files.get(i).getName())){
-				repositoryAdminService.restoreContentSite(files.get(i));
+				repositoryAdminService.restoreContentSite(files.get(i).getFile());
 			}
 		}
 

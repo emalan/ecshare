@@ -1,25 +1,22 @@
 package com.madalla.webapp.cms.admin;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
-import org.apache.wicket.extensions.ajax.markup.html.WicketAjaxIndicatorAppender;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.ListChoice;
-import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
+import com.madalla.service.cms.BackupFile;
 import com.madalla.service.cms.IRepositoryAdminService;
 import com.madalla.service.cms.IRepositoryAdminServiceProvider;
 import com.madalla.wicket.IndicatingAjaxSubmitLink;
@@ -28,8 +25,8 @@ public class ContentAdminPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
 	private Boolean adminApp;
-	public File file ;
-	public List<File> backupFiles ;
+	public BackupFile file ;
+	public List<BackupFile> backupFiles ;
 	
 	private ContentDisplayPanel contentDisplayPanel;
 	private ContentExplorerPanel contentExplorerPanel;
@@ -56,20 +53,19 @@ public class ContentAdminPanel extends Panel {
 		add(backupMessages);
 	
         setBackupFileList();
-        
         final ListChoice listChoice = new ListChoice("backupFiles", new PropertyModel(this,"file"), 
-        		new PropertyModel(this,"backupFiles"), new ChoiceRenderer("name"), 8){
+        		new PropertyModel(this,"backupFiles"),new ChoiceRenderer("displayName"), 8){ 
 					private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void onBeforeRender() {
-				if (setBackupFileList()){
-					setEnabled(true);
-				} else {
-					setEnabled(false);
-				}
-		        super.onBeforeRender();
-			}
+					@Override
+					protected void onBeforeRender() {
+						if (setBackupFileList()){
+							setEnabled(true);
+						} else {
+							setEnabled(false);
+						}
+						super.onBeforeRender();
+					}
         	
         };
         listChoice.setOutputMarkupId(true);
@@ -177,10 +173,10 @@ public class ContentAdminPanel extends Panel {
 	private void restoreContent(){
 		if (file != null ){
 			if (adminApp){
-				getContentAdminService().restoreContentApplication(file);
+				getContentAdminService().restoreContentApplication(file.getFile());
 				info("Content Repository restored from file");
 			} else {
-				getContentAdminService().restoreContentSite(file);
+				getContentAdminService().restoreContentSite(file.getFile());
 				info("Site Content Data restored from file");
 			}
 		}
@@ -199,7 +195,7 @@ public class ContentAdminPanel extends Panel {
 		}
         if (backupFiles.size() > 0){
         	Collections.sort(backupFiles);
-        	Collections.reverse(backupFiles);
+        	//Collections.reverse(backupFiles);
         	if (file == null){
         		file = backupFiles.get(0);
         	}
