@@ -3,11 +3,28 @@
     <style type="text/css">
         #backup {float:left; width:100%;}
         
-        #backupBackup {float:left; margin: 10px 0 0 15px}
+        #backupBackup {
+            float:left; 
+            margin: 10px 0 0 15px;
+            max-width: 30%;
+        }
+        #backupBackup p {
+            color: #233FBF;
+            padding: 0 5px;
+        }
         #backup form {float:left; margin: 10px 0 0 15px}
         #backup form label{float:left; font-size: 1.2em; font-weight: bold;}
         #backup form select{float:left; clear:both;} 
-        div#backupRestore {float:left; margin: 10px 0 0 15px}
+        
+        div#backupRestore {
+            float:left; 
+            margin: 10px 0 0 15px;
+            max-width: 30%;
+        }
+        div#backupRestore p {
+            color: #233FBF;
+            padding: 0 5px;
+        }
         div#backupRestore div {padding-bottom: 10px;}
         
         #contentDisplay { float: left; width:100%; border-style: solid; border-color: black; border-width: 1px; margin: 10px 0 0 0 }
@@ -20,28 +37,33 @@
     <a href="#" wicket:id="returnLink">Return</a>
     <div id="backup">
         <div id="backupBackup">
-            <h4>Content Repository Backup</h4>
+            <p><wicket:message key="label.backup.info">Label Contents</wicket:message></p>
             <div class="buttonwrapper">
                     <a href="#" class="orangebutton" wicket:id="backupLink"><span><wicket:message key="label.backup">Label Contents</wicket:message></span></a>
             </div>
+            <span wicket:id="backupMessages"></span>
         </div>
    	    <form wicket:id="restoreForm">
    	        <label><wicket:message key="label.backup.list">Label Contents</wicket:message></label>
    	        <select wicket:id="backupFiles"></select>
    	    </form>
         <div id="backupRestore">
+        
+            <p><wicket:message key="label.restore.info">Label Contents</wicket:message></p>
                 
-                <div class="buttonwrapper">
-                    <a href="#" class="orangebutton" wicket:id="rollbackLink"><span><wicket:message key="label.rollback">Label Contents</wicket:message></span></a>
-                </div>
+            <div class="buttonwrapper">
+                <a href="#" class="orangebutton" wicket:id="submitLink"><span><wicket:message key="label.submit.restore">Label Contents</wicket:message></span></a>
+            </div>
+
+            <div class="buttonwrapper">
+                <a href="#" class="orangebutton" wicket:id="rollbackLink"><span><wicket:message key="label.rollback">Label Contents</wicket:message></span></a>
+            </div>
                 
-                <div class="buttonwrapper">
-                    <a href="#" class="orangebutton" wicket:id="submitLink"><span><wicket:message key="label.submit.restore">Label Contents</wicket:message></span></a>
-                </div>
+            <span wicket:id="restoreMessages"></span>
 
          </div>
             
-   	    <span wicket:id="backupMessages"></span>
+   	    
     </div>
 	
 	<div id="contentDisplay">

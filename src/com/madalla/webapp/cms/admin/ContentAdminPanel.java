@@ -3,10 +3,14 @@ package com.madalla.webapp.cms.admin;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.ddlutils.alteration.AddColumnChange;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
+import org.apache.wicket.feedback.FeedbackMessage;
+import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.ListChoice;
@@ -48,10 +52,6 @@ public class ContentAdminPanel extends Panel {
         }
         add(link);
 		
-		final FeedbackPanel backupMessages = new FeedbackPanel("backupMessages");
-		backupMessages.setOutputMarkupId(true);
-		add(backupMessages);
-	
         setBackupFileList();
         final ListChoice listChoice = new ListChoice("backupFiles", new PropertyModel(this,"file"), 
         		new PropertyModel(this,"backupFiles"),new ChoiceRenderer("displayName"), 8){ 
@@ -66,14 +66,27 @@ public class ContentAdminPanel extends Panel {
 						}
 						super.onBeforeRender();
 					}
-        	
         };
         listChoice.setOutputMarkupId(true);
         final Form form = new RestoreForm("restoreForm", listChoice);
         add(form);
 		
-        //Backup link
-		add(new IndicatingAjaxLink("backupLink"){
+        final FeedbackPanel backupMessages = new FeedbackPanel("backupMessages",new IFeedbackMessageFilter(){
+			private static final long serialVersionUID = 1L;
+
+			public boolean accept(FeedbackMessage message) {
+				if (message.getReporter().getId().equals("backupLink")){
+					return true;
+				} else {
+				    return false;
+				}
+			}
+        });
+		backupMessages.setOutputMarkupId(true);
+		add(backupMessages);
+
+		//Backup link
+        AjaxLink backupLink = new IndicatingAjaxLink("backupLink"){
 			private static final long serialVersionUID = 1L;
 
 			public void onClick(AjaxRequestTarget target) {
@@ -87,12 +100,30 @@ public class ContentAdminPanel extends Panel {
             		} else {
             			fileName = service.backupContentSite();
             		}
-                    info("Content Repository backed up to file. File name=" + fileName);
+                    info("Content Repository backed up successfully");
+                    target.addComponent(backupMessages);
             	} catch (Exception e){
             	    error("Backup failed. "+ e.getLocalizedMessage());	
             	}
             }
-        });
+        };
+        add(backupLink);
+		
+
+		final FeedbackPanel restoreMessages = new FeedbackPanel("restoreMessages", new IFeedbackMessageFilter(){
+			private static final long serialVersionUID = 1L;
+
+			public boolean accept(FeedbackMessage message) {
+				if (message.getReporter().getId().equals("rollbackLink")||
+						message.getReporter().getId().equals("submitLink")){
+					return true;
+				} else {
+					return false;
+				}
+			}
+		});
+		restoreMessages.setOutputMarkupId(true);
+		add(restoreMessages);
 
         //Rollback link
         add(new IndicatingAjaxLink("rollbackLink"){
@@ -106,6 +137,8 @@ public class ContentAdminPanel extends Panel {
 				} else {
 					service.rollbackSiteRestore();
 				}
+				info("Rolled back to before Restore.");
+				target.addComponent(restoreMessages);
 			}
 			
 			@Override
@@ -128,6 +161,8 @@ public class ContentAdminPanel extends Panel {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
 				restoreContent();
+				info("Restore successful.");
+				target.addComponent(restoreMessages);
 			}
         });
         
