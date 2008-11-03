@@ -10,7 +10,7 @@ public class TestBackupFile extends TestCase{
 	public void testBackupFile() throws IOException{
 		
 		
-		File file = BackupFile.getBackupFile("test", new File("test"), ".xml");
-		String fileName = file.getName();
+		//File file = BackupFile.getBackupFile("test", new File("test"), ".xml");
+		//String fileName = file.getName();
 	}
 }

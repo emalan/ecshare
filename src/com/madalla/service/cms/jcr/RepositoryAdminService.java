@@ -3,10 +3,8 @@ package com.madalla.service.cms.jcr;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.ImportUUIDBehavior;
@@ -18,8 +16,6 @@ import javax.swing.tree.TreeModel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.api.JackrabbitWorkspace;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
@@ -32,7 +28,6 @@ import com.madalla.util.jcr.model.tree.JcrTreeNode;
 public class RepositoryAdminService extends AbstractRepositoryService implements IRepositoryAdminService {
 	
     private static final long serialVersionUID = 1L;
-    private static final String FILE_SUFFIX = ".xml";
     private static final String APP = "applications";
     private JcrTemplate template;
     private String repositoryHome;
@@ -100,7 +95,7 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
 					RepositoryException {
 				Node node = getApplicationNode(session);
                 session.save();
-				File backupFile = BackupFile.getBackupFile(APP, getRepositoryHomeDir(),FILE_SUFFIX);
+				File backupFile = BackupFile.getBackupFile(APP, repositoryHome);
 				FileOutputStream out = new FileOutputStream(backupFile);
                 session.exportDocumentView(node.getPath(), out, true, false);
                 out.close();
@@ -117,7 +112,7 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
 					RepositoryException {
 				Node node = getSiteNode(session);
                 session.save();
-				File backupFile = BackupFile.getBackupFile(getSite(), getRepositoryHomeDir(), FILE_SUFFIX);
+				File backupFile = BackupFile.getBackupFile(getSite(), repositoryHome);
 				FileOutputStream out = new FileOutputStream(backupFile);
                 session.exportDocumentView(node.getPath(), out, true, false);
                 out.close();
@@ -128,37 +123,11 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
     }
     
     public List<BackupFile> getApplicationBackupFileList(){
-    	return getFileList(APP);
+    	return BackupFile.getFileList(APP, repositoryHome);
     }
     
     public List<BackupFile> getBackupFileList() {
-    	return getFileList(getSite());
-    }
-    
-    private List<BackupFile> getFileList(final String fileStart){
-    	File repositoryHomeDir;
-		try {
-			repositoryHomeDir = getRepositoryHomeDir();
-		} catch (IOException e) {
-			log.error("Unable to get Repository Home Directory.", e);
-			return null;
-		}
-    	File[] files = repositoryHomeDir.listFiles(new FilenameFilter(){
-			public boolean accept(File dir, String name) {
-				if(name.endsWith(FILE_SUFFIX)){
-                    if (name.startsWith(fileStart)){
-                        return true;
-                    }
-				}
-				return false;
-			}
-    	});
-        log.debug("getBackupFileList - Number of backup files found="+files.length);
-        List<BackupFile> ret = new ArrayList<BackupFile>();
-        for(int i = 0; i < files.length; i++){
-        	ret.add(new BackupFile(files[i]));
-        }
-    	return ret;
+    	return BackupFile.getFileList(getSite(),repositoryHome);
     }
     
     //TODO refactore the 2 restore methods
@@ -319,11 +288,7 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
     }
 
 	
-	private File getRepositoryHomeDir() throws IOException{
-        DefaultResourceLoader loader = new DefaultResourceLoader();
-        Resource resource = loader.getResource(repositoryHome);
-        return resource.getFile();
-	}
+
 	
 	public String createOriginalImage(String imageName, InputStream fullImage) {
 		return ImageDataHelper.getInstance().saveOriginalImage(imageName, fullImage);
