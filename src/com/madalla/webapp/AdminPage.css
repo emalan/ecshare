@@ -81,3 +81,15 @@ textarea {
   border: 1px solid #8E8E8E; color:#2B5E2C; background-color:#FFFFFF; 
   font-family: verdana,arial,helvetica,sans; font-size: 11px;
 }
+
+.feedbackPanel ul li {
+    font-style:normal;
+    list-style-image:none;
+    list-style-position: inside;
+    list-style-type: none;
+    padding-left:1em;
+    padding-top:7px;
+    text-indent:0pt;
+    float: left;
+    clear: both;
+}
