@@ -126,7 +126,7 @@ public class ContentAdminPanel extends Panel {
 		add(restoreMessages);
 
         //Rollback link
-        add(new IndicatingAjaxLink("rollbackLink"){
+        final AjaxLink rollBackLink = new IndicatingAjaxLink("rollbackLink"){
 			private static final long serialVersionUID = -6873075723947980651L;
 
 			@Override
@@ -153,7 +153,9 @@ public class ContentAdminPanel extends Panel {
 				}
                 super.onBeforeRender();
             }
-        });
+        };
+        rollBackLink.setOutputMarkupId(true);
+        add(rollBackLink);
         
         add(new IndicatingAjaxSubmitLink("submitLink", form){
 			private static final long serialVersionUID = 1L;
@@ -163,6 +165,7 @@ public class ContentAdminPanel extends Panel {
 				restoreContent();
 				info("Restore successful.");
 				target.addComponent(restoreMessages);
+				target.addComponent(rollBackLink);
 			}
         });
         
