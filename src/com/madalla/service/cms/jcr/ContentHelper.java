@@ -32,10 +32,12 @@ public class ContentHelper extends AbstractContentHelper {
 		instance = this;
 	}
 	
-    public static boolean isContentNode(final String path){
+    public static boolean isNodeType(final String path){
+    	//TODO use generic method once we change data model
+    	//return isNodeType(path, EC_NODE_CONTENT);
     	String[] pathArray = path.split("/");
-        return EC_NODE_CONTENT.equals(pathArray[pathArray.length - 2]);
-    	}
+    	return EC_NODE_CONTENT.equals(pathArray[pathArray.length - 2]);
+   	}
     
     public static boolean isContentPasteNode(final String path){
     	String[] pathArray = path.split("/");

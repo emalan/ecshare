@@ -20,12 +20,12 @@ import com.madalla.service.cms.IRepositoryData;
 class BlogEntryHelper extends AbstractContentHelper {
 	
 	//Repository data names
-	static final String EC_NODE_BLOGS = NS + "blogs";
-    static final String EC_PROP_TITLE = NS + "title";
-    static final String EC_PROP_KEYWORDS = NS + "keywords";
-    static final String EC_PROP_DESCRIPTION = NS + "description";
-    static final String EC_PROP_ENTRYDATE = NS + "entryDate";
-    static final String EC_PROP_CATEGORY = NS + "category";
+	private static final String EC_NODE_BLOGS = NS + "blogs";
+    private static final String EC_PROP_TITLE = NS + "title";
+    private static final String EC_PROP_KEYWORDS = NS + "keywords";
+    private static final String EC_PROP_DESCRIPTION = NS + "description";
+    private static final String EC_PROP_ENTRYDATE = NS + "entryDate";
+    private static final String EC_PROP_CATEGORY = NS + "category";
 
 
 	private static BlogEntryHelper instance;
@@ -39,12 +39,8 @@ class BlogEntryHelper extends AbstractContentHelper {
 		instance = this;
 	}
 	
-    public static boolean isBlogNode(final String path){
-    	String[] pathArray = path.split("/");
-    	if (EC_NODE_BLOGS.equals(pathArray[pathArray.length-2])){
-    		return true;
-    	}
-    	return false;
+    public static boolean isNodeType(final String path){
+    	return isNodeType(path, EC_NODE_BLOGS);
     }
     
     private static BlogEntry create(Node node) throws RepositoryException{

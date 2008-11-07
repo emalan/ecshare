@@ -27,6 +27,11 @@ abstract class AbstractContentHelper {
     protected String site ;
 	protected JcrTemplate template;
 
+    public static boolean isNodeType(final String path, String type){
+    	String[] pathArray = path.split("/");
+    	return type.equals(pathArray[pathArray.length - 3]);
+    }
+    
 	public void setSite(String site) {
 		this.site = site;
 	}
@@ -89,6 +94,5 @@ abstract class AbstractContentHelper {
     }
 
     abstract Node getParentNode(Node node)throws RepositoryException;
-
     abstract void setPropertyValues(Node node, IRepositoryData data)throws  RepositoryException;
 }

@@ -18,6 +18,7 @@ public interface IRepositoryService {
 	boolean isDeletableNode(final String path);
 	boolean isContentNode(final String path);
     boolean isBlogNode(final String path);
+    boolean isImageNode(final String path);
     boolean isContentPasteNode(final String path);
     String getContentData(String nodeName, String id);
     String getContentData(final String nodeName, final String id, Locale locale);

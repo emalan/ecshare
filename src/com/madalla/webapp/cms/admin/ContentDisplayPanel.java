@@ -137,15 +137,20 @@ class ContentDisplayPanel extends Panel {
 		nodePath.modelChanging();
 		this.path = path;
 		nodePath.modelChanged();
+
+		contentDisplay.modelChanging();
 		if (StringUtils.isEmpty(path)){
-			contentDisplay.modelChanging();
 			contentText = "";
-			contentDisplay.modelChanged();
 		} else if (getContentService().isContentNode(path)){
-			contentDisplay.modelChanging();
 			contentText = getContentService().getContent(path).getText();
-			contentDisplay.modelChanged();
+		} else if (getContentService().isBlogNode(path)){
+			contentText = "Blog Node";
+		}else if (getContentService().isImageNode(path)){
+			contentText = "Image Node";
+		} else {
+			contentText = "";
 		}
+		contentDisplay.modelChanged();
 	}
 	
 	protected IRepositoryService getContentService() {

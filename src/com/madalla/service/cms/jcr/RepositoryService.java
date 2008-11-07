@@ -45,7 +45,6 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     
 
     //Delete this and move out to Data classes
-    //static final String EC_NODE_BLOGS = NS + "blogs";
     static final String EC_PROP_CONTENT = NS + "content";
 
     public boolean isDeletableNode(final String path){
@@ -76,11 +75,15 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     public boolean isContentNode(final String path){
-    	return ContentHelper.isContentNode(path);
+    	return ContentHelper.isNodeType(path);
     }
     
     public boolean isBlogNode(final String path){
-    	return BlogEntryHelper.isBlogNode(path);
+    	return BlogEntryHelper.isNodeType(path);
+    }
+    
+    public boolean isImageNode(final String path){
+    	return ImageDataHelper.isNodeType(path);
     }
     
     public boolean isContentPasteNode(final String path){

@@ -53,12 +53,12 @@ import com.madalla.service.cms.IRepositoryData;
 class ImageDataHelper extends AbstractContentHelper {
 	
 	// Repository Values
-    static final String EC_NODE_IMAGES = NS + "images";
+    private static final String EC_NODE_IMAGES = NS + "images";
     private static final String EC_ORIGINALS = "originals";
-    static final String EC_PROP_TITLE = NS + "title";
+    private static final String EC_PROP_TITLE = NS + "title";
     private static final String EC_IMAGE_FULL = "imageFull";
     private static final String EC_IMAGE_THUMB = "imageThumb";
-    static final String EC_PROP_DESCRIPTION = NS + "description";
+    private static final String EC_PROP_DESCRIPTION = NS + "description";
     
     private static final int MAX_WIDTH = 900;
     private static final int MAX_HEIGHT = 600;
@@ -101,7 +101,9 @@ class ImageDataHelper extends AbstractContentHelper {
 		return webResource;
 	}
 	
-
+    public static boolean isNodeType(final String path){
+    	return isNodeType(path, EC_NODE_IMAGES);
+    }
 
 
 	public ImageDataHelper(String site, JcrTemplate template ){
@@ -247,6 +249,5 @@ class ImageDataHelper extends AbstractContentHelper {
 		node.setProperty(EC_IMAGE_FULL, scaleOriginalImage(imageData.getFullImageAsInputStream()));
 		log.debug("setPropertyValue done - "+imageData);
 	}
-	
 
 }
