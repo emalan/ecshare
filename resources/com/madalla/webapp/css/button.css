@@ -1,6 +1,9 @@
-.buttonwrapper{ /* Container you can use to surround a CSS button to clear float */
+div.buttonwrapper{ /* Container you can use to surround a CSS button to clear float */
     overflow: hidden; /*See: http://www.quirksmode.org/css/clearing.html */
     width: 100%;
+}
+span.buttonwrapper{ /* Container you can use to surround a CSS button to clear float */
+    overflow: hidden; /*See: http://www.quirksmode.org/css/clearing.html */
 }
 
 /* disabled buttons */
