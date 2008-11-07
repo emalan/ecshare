@@ -27,15 +27,32 @@
         }
         div#backupRestore div {padding-bottom: 10px;}
         
-        #contentDisplay { float: left; width:100%; border-style: solid; border-color: black; border-width: 1px; margin: 10px 0 0 0 }
-        #explorerPanel {float:left; width:25%; overflow:auto; border-right-style: solid; border-right-color: black; border-right-width: 1px;}
-        #displayPanel {float:right; width:73%; border-style: solid; border-color: black; border-width: 1px;}
+        #contentDisplay { 
+            float: left; 
+            width:100%; 
+            margin: 10px 0 0 0 }
+        #explorerPanel {
+            float:left; 
+            width:25%; 
+            overflow:auto; 
+            border-right: 1px solid #AFBFD8;
+        }
+        #displayPanel {
+            float:right; 
+            width:73%; 
+        }
+        .borderTopBottom {
+            border-top: 1px solid #AFBFD8;
+            border-bottom: 1px solid #AFBFD8;
+        }
         
     </style>
 </wicket:head>
 <body>
     <wicket:panel>
-    <a href="#" wicket:id="returnLink">Return</a>
+    <div class="buttonwrapper">
+        <a href="#" class="bluebutton" wicket:id="returnLink"><span><wicket:message key="label.return">Label Contents</wicket:message></span></a>
+    </div>
     <div id="backup">
         <div id="backupBackup">
             <p><wicket:message key="label.backup.info">Label Contents</wicket:message></p>
@@ -65,7 +82,7 @@
          </div>
     </div>
 	
-	<div id="contentDisplay">
+	<div id="contentDisplay" class="borderTopBottom">
 		<div id="explorerPanel">
         	<span wicket:id="contentExplorerPanel" />
         </div>
