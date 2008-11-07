@@ -51,6 +51,7 @@ class ContentDisplayPanel extends Panel {
 		};
 		contentDisplay = new Label("contentText", textModel);
 		contentDisplay.setOutputMarkupId(true);
+		contentDisplay.setEscapeModelStrings(false);
 		add(contentDisplay);
 		
         //Delete Link
