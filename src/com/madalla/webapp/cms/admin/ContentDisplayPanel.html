@@ -1,16 +1,27 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
-        #contentName {float: left;}
+        #contentName {
+            float: left; 
+            background-color: #0022CC
+        }
+        #contentName span {
+            padding: 10px 0 5px 5px;
+            color:white; 
+            font-size:1.4em; 
+            font-weight: bold;
+        }
         #contentText {float: left; clear: both;}
         #contentActions {float: left; clear: both;}
+        
     </style>
 </wicket:head>
 <body>
     <wicket:panel>
         
         <div id="contentName">
-        	<span wicket:id="nodeName"/>
+            <span>Content Path :</span>
+        	<span style="font-size: smaller" wicket:id="nodeName"/>
         </div>
         
         <div id="contentText">
@@ -18,9 +29,15 @@
         </div>
         
         <div id="contentActions">
-        	<a href="#" wicket:id="deleteNode">Delete Node</a>
-        	<a href="#" wicket:id="copyNode">Copy Node</a>
-        	<a href="#" wicket:id="pasteNode">Paste Node</a>
+            <span class="buttonwrapper">
+        	   <a href="#" class="orangebutton" wicket:id="deleteNode"><span><wicket:message key="label.delete">Label Contents</wicket:message></span></a>
+        	</span>
+        	<span class="buttonwrapper">
+        	   <a href="#" class="orangebutton" wicket:id="copyNode"><span><wicket:message key="label.copy">Label Contents</wicket:message></span></a>
+        	</span>
+        	<span class="buttonwrapper">
+        	   <a href="#" class="orangebutton" wicket:id="pasteNode"><span><wicket:message key="label.paste">Label Contents</wicket:message></span></a>
+        	</span>
         </div>
         
     </wicket:panel>
