@@ -5,15 +5,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import com.madalla.service.cms.jcr.Content;
+import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
+import com.madalla.service.cms.jcr.Content;
 
 class ContentDisplayPanel extends Panel {
 
@@ -24,6 +24,7 @@ class ContentDisplayPanel extends Panel {
 	private Content copiedContent;
 	private String contentText = "" ;
 	private String path = "";
+	Component paste;
 	
 	public ContentDisplayPanel(String name, final ContentAdminPanel parentPanel) {
 		super(name);
@@ -55,7 +56,7 @@ class ContentDisplayPanel extends Panel {
 		add(contentDisplay);
 		
         //Delete Link
-        Component delete = new AjaxLink("deleteNode"){
+        Component delete = new IndicatingAjaxLink("deleteNode"){
             private static final long serialVersionUID = 1L;
             
             protected final void onBeforeRender(){
@@ -79,8 +80,32 @@ class ContentDisplayPanel extends Panel {
         delete.setOutputMarkupId(true);
         add(delete);
 
+        //Paste Link
+        paste = new IndicatingAjaxLink("pasteNode"){
+			private static final long serialVersionUID = -4315390241296210531L;
+
+			@Override
+			protected final void onBeforeRender(){
+				if (!StringUtils.isEmpty(path) && getContentService().isContentPasteNode(path) && copiedContent != null){
+					setEnabled(true);
+				} else {
+					setEnabled(false);
+				}
+                super.onBeforeRender();
+            }
+            
+			@Override
+            public void onClick(AjaxRequestTarget target) {
+				getContentService().pasteContent(path, copiedContent);
+                path = "";
+                setResponsePage(getPage().getClass());
+            }
+        };
+        paste.setOutputMarkupId(true);
+        add(paste);
+
         //Copy Link
-        final Component copy = new Link("copyNode"){
+        final Component copy = new IndicatingAjaxLink("copyNode"){
             
 			private static final long serialVersionUID = -1062211579369743790L;
 			
@@ -95,36 +120,13 @@ class ContentDisplayPanel extends Panel {
             }
             
 			@Override
-            public void onClick() {
+            public void onClick(AjaxRequestTarget target) {
 				copiedContent = getContentService().getContent(path);
+				target.addComponent(paste);
 			}
         };
         copy.setOutputMarkupId(true);
         add(copy);
-        
-        //Paste Link
-        final Component paste = new Link("pasteNode"){
-			private static final long serialVersionUID = -4315390241296210531L;
-
-			@Override
-			protected final void onBeforeRender(){
-				if (!StringUtils.isEmpty(path) && getContentService().isContentPasteNode(path) && copiedContent != null){
-					setEnabled(true);
-				} else {
-					setEnabled(false);
-				}
-                super.onBeforeRender();
-            }
-            
-			@Override
-            public void onClick() {
-				getContentService().pasteContent(path, copiedContent);
-                path = "";
-                setResponsePage(getPage().getClass());
-            }
-        };
-        paste.setOutputMarkupId(true);
-        add(paste);
 
 	}
 	
@@ -144,13 +146,19 @@ class ContentDisplayPanel extends Panel {
 		} else if (getContentService().isContentNode(path)){
 			contentText = getContentService().getContent(path).getText();
 		} else if (getContentService().isBlogNode(path)){
-			contentText = "Blog Node";
+			AbstractBlogEntry blogEntry = getContentService().getBlogEntry(path);
+			StringBuffer sb = new StringBuffer("Title : ").append(blogEntry.getTitle()).append("<br/>")
+				.append("Date : ").append(blogEntry.getDateTime()).append("<br/>").append("<br/>")
+				.append(blogEntry.getText());
+			contentText = sb.toString();
 		}else if (getContentService().isImageNode(path)){
 			contentText = "Image Node";
 		} else {
 			contentText = "";
 		}
 		contentDisplay.modelChanged();
+		//paste.
+		
 	}
 	
 	protected IRepositoryService getContentService() {

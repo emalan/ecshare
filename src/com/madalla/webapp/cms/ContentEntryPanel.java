@@ -4,9 +4,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.behavior.HeaderContributor;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
@@ -63,15 +63,24 @@ public class ContentEntryPanel extends Panel {
             add(new TextArea("text", new PropertyModel(this, "text")));
             add(new FeedbackPanel("feedback"));
 
-            Button cancelButton = new Button("cancelButton") {
+            add(new Link("cancelButton") {
                 private static final long serialVersionUID = 1L;
 
-                public void onSubmit() {
-                    setResponsePage(contentPage);
-                }
-            };
-            cancelButton.setDefaultFormProcessing(false);
-            add(cancelButton);
+				@Override
+				public void onClick() {
+					setResponsePage(contentPage);
+					
+				}
+            });
+            
+            add(new Link("submitButton"){
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick() {
+					onSubmit();
+				}
+            });
             
         }
         public String getText() {

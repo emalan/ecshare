@@ -3,21 +3,20 @@
     <style type="text/css">
         #contentName {
             float: left; 
-            background-color: #0022CC;
             margin: 5px 0 0 0 ;
         }
         #contentName span {
-            padding: 10px 0 5px 5px;
-            color:white; 
-            font-size:1.4em; 
+            padding: 10px 0 5px 0;
+            color:#0022CC; 
+            font-size:1.8em; 
             font-weight: bold;
         }
         #contentText {
             float: left; 
             clear: both;
-            margin: 20px 0 ;
+            margin: 10px 0 ;
             border: 1px solid #AFBFD8;
-            overflow: scroll;
+            overflow: auto;
             height: 15em;
             width: 40em;
         }
@@ -35,7 +34,7 @@
         
         <div id="contentName">
             <span>Content Path :</span>
-        	<span style="font-size: smaller" wicket:id="nodeName"/>
+        	<span style="font-size: smaller; font-weight: normal;" wicket:id="nodeName"/>
         </div>
         
         <div id="contentText">

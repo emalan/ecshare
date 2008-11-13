@@ -23,7 +23,7 @@ public interface IRepositoryService {
     String getContentData(String nodeName, String id);
     String getContentData(final String nodeName, final String id, Locale locale);
     void pasteContent(final String path, final Content content);
-    AbstractBlogEntry getBlogEntry(final String uuid);
+    AbstractBlogEntry getBlogEntry(final String path);
     AbstractBlogEntry getNewBlogEntry(String blog, String title, DateTime date);
     void deleteNode(final String path);
     Content getContent(final String path);

@@ -4,7 +4,12 @@
         	form { float:left;}
             form div {float:left; clear:both;}
             form textarea {float:left; clear:both;}
-            form span {float:left; clear:both;}
+            
+            div#formButtons { margin: 10px 0 0 5px;}
+            .buttonwrapper {
+                margin: 0 5px 10px 0 ;
+                float: left; 
+            }
     	</style>
 </wicket:head>
 <body>
@@ -15,9 +20,13 @@
                 <a href="javascript:;" onmousedown="tinyMCE.get('text').hide();">[Hide]</a>
             </div>
             <textarea style="textarea" wicket:id="text" rows="25" cols="60">Input comes here</textarea>
-            <div class="formButtons">
-                <input wicket:id="cancelButton" type="submit" value="Cancel" />
-				<input type="submit" value="Save" />
+            <div id="formButtons">
+                <span class="buttonwrapper">
+                    <a href="#" class="orangebutton" wicket:id="cancelButton"><span><wicket:message key="label.cancel">Label Contents</wicket:message></span></a>
+                </span>
+                <span class="buttonwrapper">
+                    <a href="#" class="orangebutton" wicket:id="submitButton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
+                </span>
             </div>
             <span wicket:id="feedback">feedbackmessages will be put here</span>
         </form>
