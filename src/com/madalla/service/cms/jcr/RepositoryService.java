@@ -179,12 +179,12 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	}
     
     public void pasteContent(final String path, final Content content){
-        log.debug("pasteContent - path="+path+content);
+        log.debug("pasteContent - path="+path);
     	template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
 				Node parent = (Node) session.getItem(path);
-                Node newNode = getCreateNode(content.getId(), parent);
+                Node newNode = getCreateNode(content.getName(), parent);
                 newNode.setProperty(EC_PROP_CONTENT, content.getText());
                 session.save();
                 log.debug("pasteContent - Done pasting. path="+path);

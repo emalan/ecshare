@@ -86,7 +86,7 @@ class ContentDisplayPanel extends Panel {
 
 			@Override
 			protected final void onBeforeRender(){
-				if (!StringUtils.isEmpty(path) && getContentService().isContentPasteNode(path) && copiedContent != null){
+				if (!StringUtils.isEmpty(path) && copiedContent != null && getContentService().isContentPasteNode(path)){
 					setEnabled(true);
 				} else {
 					setEnabled(false);
@@ -97,8 +97,10 @@ class ContentDisplayPanel extends Panel {
 			@Override
             public void onClick(AjaxRequestTarget target) {
 				getContentService().pasteContent(path, copiedContent);
-                path = "";
-                setResponsePage(getPage().getClass());
+            	refresh("");
+            	target.addComponent(getParent());
+            	parentPanel.refreshExplorerPanel();
+            	target.addComponent(parentPanel.getExplorerPanel());
             }
         };
         paste.setOutputMarkupId(true);

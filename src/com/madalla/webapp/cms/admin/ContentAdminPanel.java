@@ -3,7 +3,6 @@ package com.madalla.webapp.cms.admin;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.ddlutils.alteration.AddColumnChange;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -257,5 +256,4 @@ public class ContentAdminPanel extends Panel {
 	public void refreshDisplayPanel(String path){
 		contentDisplayPanel.refresh(path);
 	}
-	
 }
