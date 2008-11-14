@@ -64,9 +64,7 @@ form div label {
   font-size: 12px; 
   padding-top: 10px; padding-right: 10px; padding-left: 5px;
 }
-form div input {
-    float: left;
-}
+
 form input.inputError {
     background-color:#F6BCBC;
     border:1px solid #990000;
@@ -74,6 +72,7 @@ form input.inputError {
 }
 
 form input {
+	float: left;
     margin: 10px 0 0 0;
     font-family: verdana,arial,helvetica,sans; font-size: 11px;
     border: 1px solid #8E8E8E;
@@ -88,7 +87,8 @@ form input {
     border-color : #F7AE30 #DF9C29 #DF9C29 #F7AE30;
 }
 
-select {
+form select {
+	float: left;
 	margin:10px 0 0;
     border: 1px solid #8E8E8E; color:#2B5E2C; background-color:#FFFFFF; 
     font-family: verdana,arial,helvetica,sans; font-size: 11px;

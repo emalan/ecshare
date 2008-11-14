@@ -33,15 +33,13 @@
     <wicket:panel>
         
         <form wicket:id="blogForm">
-            <span class="feedbackPanel" wicket:id="feedback">
-                feedbackmessages will be put here
-            </span>
 
             <div id=dateDiv>
 	            <label for="date">
                     <wicket:message key="label.date">Label Contents</wicket:message>
                 </label>
                 <input id="date" class="inputText" size="14" type="text" wicket:id="dateTextField" /> 
+                <span class="feedbackPanel" wicket:id="dateFeedback"/>
             </div>
 
             <div id="categoryDiv">
@@ -52,6 +50,7 @@
                     <option>category 1</option>
                     <option>category 2</option>
                 </select>
+                <span class="feedbackPanel" wicket:id="categoryFeedback"/>
             </div>
             
             <div id="title">

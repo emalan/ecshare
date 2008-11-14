@@ -20,6 +20,7 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
@@ -32,6 +33,7 @@ import com.madalla.service.blog.IBlogServiceProvider;
 import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.webapp.blog.BlogEntryView;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
+import com.madalla.wicket.form.AjaxValidationBehaviour;
 import com.madalla.wicket.form.ValidationStyleBehaviour;
 import com.madalla.wicket.form.ValidationStyleRequiredTextField;
 
@@ -83,10 +85,6 @@ public class BlogEntryPanel extends Panel {
         public BlogEntryForm(final String name, Component panel) {
             super(name);
 
-            final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
-            feedbackPanel.setOutputMarkupId(true);
-            add(feedbackPanel);
-            
             //Date
             if (blogEntry.getDate() == null){
             	blogEntry.setDate(new DateTime().toDate());
@@ -94,17 +92,16 @@ public class BlogEntryPanel extends Panel {
             DateTextField dateTextField = new DateTextField("dateTextField", new PropertyModel(blogEntry,"date"), new StyleDateConverter("S-",true));
             dateTextField.setRequired(true);
             dateTextField.add(new ValidationStyleBehaviour());
-            dateTextField.add(new AjaxFormComponentUpdatingBehavior("onblur"){
-				private static final long serialVersionUID = -2582441663259074484L;
-				protected void onUpdate(AjaxRequestTarget target) {
-					target.addComponent(getFormComponent());
-				}
-            });
+            FeedbackPanel dateFeedback = new ComponentFeedbackPanel("dateFeedback", dateTextField);
+            dateFeedback.setOutputMarkupId(true);
+            add(dateFeedback);
+            dateTextField.add(new AjaxValidationBehaviour(dateFeedback));
             dateTextField.setLabel(new Model(panel.getString("label.date")));
             add(dateTextField);
             dateTextField.add(new DatePicker());
+            
 
-            //category drop down
+            //Category select
             List<String> categories = getBlogService().getBlogCategories();
             FormComponent categoryDropDown = new DropDownChoice("category", new PropertyModel(blogEntry,"category"), categories);
             categoryDropDown.setRequired(true);
@@ -118,18 +115,13 @@ public class BlogEntryPanel extends Panel {
             });
             categoryDropDown.setLabel(new Model(panel.getString("label.category")));
             add(categoryDropDown);
+            add(new ComponentFeedbackPanel("categoryFeedback", categoryDropDown));
 
+            //Title
             FeedbackPanel titleFeedback = new FeedbackPanel("titleFeedback");
             add(titleFeedback);
             TextField title = new ValidationStyleRequiredTextField("title",new PropertyModel(blogEntry,"title"), titleFeedback);
-            //title.setLabel(new Model(panel.getString("label.title")));
-//            title.add(new AjaxFormComponentUpdatingBehavior("onblur"){
-//				private static final long serialVersionUID = -4657834833919216508L;
-//				protected void onUpdate(AjaxRequestTarget target) {
-//					target.addComponent(getFormComponent());
-//					target.addComponent(feedbackPanel);
-//				}
-//            });
+            title.setLabel(new Model(panel.getString("label.title")));
             add(title);
             
             add(new TextArea("description",new PropertyModel(blogEntry,"description")).setConvertEmptyInputStringToNull(false));
