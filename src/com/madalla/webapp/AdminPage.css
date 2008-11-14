@@ -13,11 +13,6 @@ body {
     min-width: 760px;
 }
 
-input {
-    background-color:#F7AE30;
-    margin:10px 0 0 5px;
-}
-
 body {
     font-size: 62.5%;
     font-family:"Trebuchet MS",Verdana,Arial,Sans-serif;
@@ -58,6 +53,21 @@ a:active { color:#ff0000; }
 /* =Form
 -----------------------------------------------------------------------------*/
 
+form div {
+  float:left;
+  clear:both;
+}
+
+form div label {
+  float: left;
+  left: 0;  
+  font-size: 12px; 
+  padding-top: 10px; padding-right: 10px; padding-left: 5px;
+}
+form div input {
+    float: left;
+}
+
 input {
   margin: 10px 0 0 0;
   font-family: verdana,arial,helvetica,sans; font-size: 11px;
@@ -74,8 +84,9 @@ input {
 }
 
 select {
-  border: 1px solid #8E8E8E; color:#2B5E2C; background-color:#FFFFFF; 
-  font-family: verdana,arial,helvetica,sans; font-size: 11px;
+	margin:10px 0 0;
+    border: 1px solid #8E8E8E; color:#2B5E2C; background-color:#FFFFFF; 
+    font-family: verdana,arial,helvetica,sans; font-size: 11px;
 }
 
 textarea {

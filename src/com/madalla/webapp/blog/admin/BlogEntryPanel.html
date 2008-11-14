@@ -20,6 +20,13 @@
 			clear: both;
 		}
         .yui-skin-sam {margin-top: 8px;}
+        
+        div#formButtons { margin: 10px 0 0 5px;}
+        .buttonwrapper {
+            margin: 0 5px 10px 0 ;
+            float: left; 
+        }
+        
     </style>
 </wicket:head>
 <body>
@@ -80,8 +87,12 @@
 
 
             <div class="formButtons">
-                <input wicket:id="cancelButton" type="submit" value="Cancel" />
-                <input wicket:id="saveButton" type="submit" value="Save" />
+                <span class="buttonwrapper">
+                    <a href="#" class="orangebutton" wicket:id="cancelButton"><span><wicket:message key="label.cancel">Label Contents</wicket:message></span></a>
+                </span>
+                <span class="buttonwrapper">
+                    <a href="#" class="orangebutton" wicket:id="submitButton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
+                </span>
             </div>
 
 

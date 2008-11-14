@@ -13,12 +13,13 @@ import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.datetime.StyleDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
@@ -135,22 +136,16 @@ public class BlogEntryPanel extends Panel {
             
             add(new TextArea("text", new PropertyModel(blogEntry, "text")));
             
-            Button saveButton = new Button("saveButton");
-            setDefaultButton(saveButton);
-            add(saveButton);
+            add(new SubmitLink("submitButton"));
             
-            Button cancelButton = new Button("cancelButton"){
+            add(new Link("cancelButton"){
 				private static final long serialVersionUID = 1L;
 
-				public void onSubmit() {
-					
+				@Override
+				public void onClick() {
 					setResponsePage(returnPage);
-					
 				}
-            };
-            cancelButton.setDefaultFormProcessing(false);
-            add(cancelButton);
-            
+            });
         }
         
         public void onSubmit() {
