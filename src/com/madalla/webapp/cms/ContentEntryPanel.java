@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -73,14 +74,7 @@ public class ContentEntryPanel extends Panel {
 				}
             });
             
-            add(new Link("submitButton"){
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void onClick() {
-					onSubmit();
-				}
-            });
+            add(new SubmitLink("submitButton"));
             
         }
         public String getText() {
