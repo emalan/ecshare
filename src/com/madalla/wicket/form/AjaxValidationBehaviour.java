@@ -1,4 +1,4 @@
-package com.madalla.wicket;
+package com.madalla.wicket.form;
 
 import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
 

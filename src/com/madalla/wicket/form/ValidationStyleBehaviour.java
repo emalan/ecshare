@@ -1,4 +1,4 @@
-package com.madalla.wicket;
+package com.madalla.wicket.form;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

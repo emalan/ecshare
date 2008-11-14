@@ -67,11 +67,16 @@ form div label {
 form div input {
     float: left;
 }
+form input.inputError {
+    background-color:#F6BCBC;
+    border:1px solid #990000;
+    color:#990000;
+}
 
-input {
-  margin: 10px 0 0 0;
-  font-family: verdana,arial,helvetica,sans; font-size: 11px;
-  border: 1px solid #8E8E8E;
+form input {
+    margin: 10px 0 0 0;
+    font-family: verdana,arial,helvetica,sans; font-size: 11px;
+    border: 1px solid #8E8E8E;
 }
 
 .button {

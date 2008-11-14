@@ -32,7 +32,8 @@ import com.madalla.service.blog.IBlogServiceProvider;
 import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.webapp.blog.BlogEntryView;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
-import com.madalla.wicket.ValidationStyleBehaviour;
+import com.madalla.wicket.form.ValidationStyleBehaviour;
+import com.madalla.wicket.form.ValidationStyleRequiredTextField;
 
 public class BlogEntryPanel extends Panel {
     private static final long serialVersionUID = 1L;
@@ -118,17 +119,17 @@ public class BlogEntryPanel extends Panel {
             categoryDropDown.setLabel(new Model(panel.getString("label.category")));
             add(categoryDropDown);
 
-            TextField title = new TextField("title",new PropertyModel(blogEntry,"title"));
-            title.add(new ValidationStyleBehaviour());
-            title.setRequired(true);
-            title.setLabel(new Model(panel.getString("label.title")));
-            title.add(new AjaxFormComponentUpdatingBehavior("onblur"){
-				private static final long serialVersionUID = -4657834833919216508L;
-				protected void onUpdate(AjaxRequestTarget target) {
-					target.addComponent(getFormComponent());
-					target.addComponent(feedbackPanel);
-				}
-            });
+            FeedbackPanel titleFeedback = new FeedbackPanel("titleFeedback");
+            add(titleFeedback);
+            TextField title = new ValidationStyleRequiredTextField("title",new PropertyModel(blogEntry,"title"), titleFeedback);
+            //title.setLabel(new Model(panel.getString("label.title")));
+//            title.add(new AjaxFormComponentUpdatingBehavior("onblur"){
+//				private static final long serialVersionUID = -4657834833919216508L;
+//				protected void onUpdate(AjaxRequestTarget target) {
+//					target.addComponent(getFormComponent());
+//					target.addComponent(feedbackPanel);
+//				}
+//            });
             add(title);
             
             add(new TextArea("description",new PropertyModel(blogEntry,"description")).setConvertEmptyInputStringToNull(false));
