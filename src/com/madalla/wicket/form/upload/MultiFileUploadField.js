@@ -147,7 +147,7 @@ function MultiSelector( eprefix, list_target,max, del_label ){
 		};
 
 		// Set row value
-		new_row.innerHTML = element.value;
+		new_row.innerHTML = element.value + '&nbsp;&nbsp;';
 
 		// Add button
 		new_row.appendChild( new_row_link );
