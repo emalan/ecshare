@@ -117,15 +117,16 @@ function MultiSelector( eprefix, list_target,max, del_label ){
 		var new_row = document.createElement( 'div' );
 
 		// Delete button
-		var new_row_button = document.createElement( 'input' );
-		new_row_button.type = 'button';
-		new_row_button.value = this.delete_label;
-
+		var new_row_link = document.createElement( 'a' );
+		var new_row_text = document.createTextNode(this.delete_label);
+		new_row_link.appendChild(new_row_text);
+		new_row_link.setAttribute('href','#');
+		
 		// References
 		new_row.element = element;
 
 		// Delete function
-		new_row_button.onclick= function(){
+		new_row_link.onclick= function(){
 
 			// Remove element from form
 			this.parentNode.element.parentNode.removeChild( this.parentNode.element );
@@ -149,7 +150,7 @@ function MultiSelector( eprefix, list_target,max, del_label ){
 		new_row.innerHTML = element.value;
 
 		// Add button
-		new_row.appendChild( new_row_button );
+		new_row.appendChild( new_row_link );
 
 		// Add it to the list
 		this.list_target.appendChild( new_row );
