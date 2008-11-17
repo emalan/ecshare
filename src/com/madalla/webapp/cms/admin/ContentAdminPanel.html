@@ -1,20 +1,28 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
-        #backup {float:left; width:100%;}
+        #control {float: left; width: 100%;}
+        
+        #backup {float: left; width: 100%;}
+        
         
         #backupBackup {
-            float:left; 
-            margin: 10px 0 0 15px;
+            float: left; 
             max-width: 30%;
+            width: 30%;
         }
         #backupBackup p {
             color: #233FBF;
-            padding: 0 5px;
         }
-        #backup form {float:left; margin: 10px 0 0 15px}
+        #backupBackup p, #backupBackup div.buttonwrapper, #backupBackup span.feedbackPanel {
+            margin: 10px 0 0 10px;
+        }
+        #backup form {
+            float: left; 
+            margin: 10px 0 0 15px
+        }
         #backup form label{
-            float:left; 
+            float: left; 
             font-size: 1.2em; 
             font-weight: bold;
             color: #4F4F4F
@@ -23,8 +31,11 @@
         
         div#backupRestore {
             float:left; 
-            margin: 10px 0 0 15px;
             max-width: 30%;
+            width: 30%;
+        }
+        div#backupRestore {
+            margin: 10px 0 0 15px;
         }
         div#backupRestore p {
             color: #233FBF;
@@ -43,7 +54,7 @@
         }
         #displayPanel {
             float:right; 
-            width:73%; 
+            width:65%; 
         }
         .borderTopBottom {
             border-top: 1px solid #AFBFD8;
@@ -54,8 +65,10 @@
 </wicket:head>
 <body>
     <wicket:panel>
-    <div class="buttonwrapper">
-        <a href="#" class="bluebutton" wicket:id="returnLink"><span><wicket:message key="label.return">Label Contents</wicket:message></span></a>
+    <div id="control">
+        <span class="buttonwrapper">
+            <a href="#" class="bluebutton" wicket:id="returnLink"><span><wicket:message key="label.return">Label Contents</wicket:message></span></a>
+        </span>
     </div>
     <div id="backup">
         <div id="backupBackup">
