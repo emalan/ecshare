@@ -1,6 +1,8 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
+        #control {float: left; width: 100%;}
+        #fileUpload {float: left; width: 100%;}
         #availableImages {
             float: left;
             clear: both;
@@ -15,7 +17,11 @@
 </wicket:head>
 <body>
     <wicket:panel>
-    <a href="#" wicket:id="returnLink"><wicket:message key="label.return">Label Contents</wicket:message></a>    
+    <div id="control">
+        <span class="buttonwrapper">
+            <a href="#" class="bluebutton" wicket:id="returnLink"><span><wicket:message key="label.return">Label Contents</wicket:message></span></a>
+        </span>
+    </div>
 
     <div id="fileUpload">
         <form wicket:id="simpleUpload">
@@ -24,7 +30,9 @@
             <p>
             <div wicket:id="fileInput" class="mfuex"/>
             </p>
-            <input type="submit" value="Upload!"/>
+            <div class="buttonwrapper">
+                <a href="#" class="orangebutton" wicket:id="submitLink"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
+            </div>
             <span wicket:id="uploadFeedback"/>
             </fieldset>
         </form>

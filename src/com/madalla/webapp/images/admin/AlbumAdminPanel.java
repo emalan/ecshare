@@ -15,6 +15,7 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.markup.html.image.Image;
@@ -119,6 +120,7 @@ public class AlbumAdminPanel extends Panel{
         final FileUploadForm simpleUploadForm = new FileUploadForm("simpleUpload");
         final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
         simpleUploadForm.add(uploadFeedback);
+        simpleUploadForm.add(new SubmitLink("submitLink"));
         add(simpleUploadForm);
         add(new AlbumDisplayPanel("albumDisplay", album));
         
