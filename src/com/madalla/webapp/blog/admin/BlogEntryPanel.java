@@ -1,6 +1,7 @@
 package com.madalla.webapp.blog.admin;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -98,7 +99,16 @@ public class BlogEntryPanel extends Panel {
             dateTextField.add(new AjaxValidationBehaviour(dateFeedback));
             dateTextField.setLabel(new Model(panel.getString("label.date")));
             add(dateTextField);
-            dateTextField.add(new DatePicker());
+            dateTextField.add(new DatePicker(){
+
+				@Override
+				protected void configure(Map widgetProperties) {
+					super.configure(widgetProperties);
+					widgetProperties.put("title", Boolean.FALSE);
+					widgetProperties.put("close", Boolean.FALSE);
+				}
+            	
+            });
             
 
             //Category select
