@@ -35,6 +35,7 @@ var Banner = Class.create(Crossfade, {
             var prev = new Element('span', {id :'rotating-banner-previous'})
                 .addClassName('control').update('<').setControlStyle()
                 .observe('click', this.previous.bind(this));
+            
             element.appendChild(prev);
             
             /* For each slide create an element, bind to gotoSlide method and add to div */

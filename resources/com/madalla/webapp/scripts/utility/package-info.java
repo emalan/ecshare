@@ -1,6 +1,6 @@
 /**
  * Author : Eugene Malan
  * 
- *  Some utlity classes
+ *  Some utlity javascript
 **/
 package com.madalla.webapp.scripts.utility;

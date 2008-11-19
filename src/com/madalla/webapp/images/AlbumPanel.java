@@ -4,6 +4,9 @@ import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
 import static com.madalla.webapp.images.admin.AlbumParams.RETURN_PAGE;
 import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.EFFECTS;
 import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
+import static com.madalla.webapp.scripts.utility.ScriptUtils.BANNER;
+import static com.madalla.webapp.scripts.utility.ScriptUtils.CROSSFADE;
+import static com.madalla.webapp.scripts.utility.ScriptUtils.FAST_INIT;
 
 import java.util.List;
 
@@ -21,7 +24,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 
 import com.madalla.service.cms.AbstractImageData;
@@ -33,10 +35,6 @@ import com.madalla.webapp.pages.AlbumAdminPage;
 public class AlbumPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	
-    private static final CompressedResourceReference JS_FASTINIT = new CompressedResourceReference(AlbumPanel.class, "fastinit.js");
-    private static final CompressedResourceReference JS_CROSSFADE = new CompressedResourceReference(AlbumPanel.class, "crossfade.js");
-    private static final CompressedResourceReference JS_BANNER = new CompressedResourceReference(AlbumPanel.class, "banner.js");
-
     private static final Log log = LogFactory.getLog(AlbumPanel.class);
 
 	public AlbumPanel(String id, String album, Class<? extends Page> returnPage) {
@@ -44,9 +42,9 @@ public class AlbumPanel extends Panel {
 
 		add(HeaderContributor.forJavaScript(PROTOTYPE));
         add(HeaderContributor.forJavaScript(EFFECTS));
-        add(HeaderContributor.forJavaScript(JS_FASTINIT));
-        add(HeaderContributor.forJavaScript(JS_CROSSFADE));
-        add(HeaderContributor.forJavaScript(JS_BANNER));
+        add(HeaderContributor.forJavaScript(FAST_INIT));
+        add(HeaderContributor.forJavaScript(CROSSFADE));
+        add(HeaderContributor.forJavaScript(BANNER));
         
         Link link = new BookmarkablePageLink("adminLink", AlbumAdminPage.class, new PageParameters(ALBUM +"="+album+","+RETURN_PAGE+"="+returnPage.getName())) {
             private static final long serialVersionUID = 1801145612969874170L;

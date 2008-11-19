@@ -10,19 +10,20 @@
 * 
 *  
 */
-
 var Fadepopup = Class.create({
-    initialize : function(elm){
-	    this.options = Object.extend(Object.clone(Fadepopup.defaults));
-        this.options.popupId = $(elm).id;
-        $(elm).observe('mouseover', this.show.bind(this));
-        $(elm).observe('mouseout', this.hide.bind(this));
+    initialize : function(element, options){
+        this.options = Object.extend(Object.clone(Fadepopup.defaults), options || {});
+	    this.triggerElement = $(element);
+        this.options.popupId = $(element).id;
+		this.targetArea = $(this.options.popupId + this.options.popupIdentifier);
+        this.triggerElement.observe('mouseover', this.show.bind(this));
+        this.triggerElement.observe('mouseout', this.hide.bind(this));    
     },
     show : function(){
-        $(this.options.popupId + this.options.popupIdentifier).appear({duration: Fadepopup.defaults.duration});
+        this.targetArea.appear({duration: this.options.duration});
     },
     hide : function(elm){
-        $(this.options.popupId + this.options.popupIdentifier).fade({duration: Fadepopup.defaults.duration});
+        this.targetArea.fade({duration: this.options.duration});
     }
 });
 Fadepopup.defaults = {
@@ -32,8 +33,8 @@ Fadepopup.defaults = {
     popupId : 'fadepopup'
 };
 Fadepopup.load = function() {
-    $$(Fadepopup.defaults.selector).each(function(c) {
-        return new Fadepopup(c);
+    $$(Fadepopup.defaults.selector).each(function(element) {
+        return new Fadepopup(element);
     });
 };
 Event.observe(window, 'load', Fadepopup.load);

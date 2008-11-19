@@ -15,6 +15,7 @@
 var Banner = Class.create(Crossfade, {
 	initialize : function($super, elm, options) {
 		$super(elm, options);
+		/* We are going to create some navigation html and DOM insert them in the page */
 		if(this.elm.id) {
 
 			var ControlMethods = {
