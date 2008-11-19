@@ -33,7 +33,7 @@ var Banner = Class.create(Crossfade, {
             
             /* create previous element, bind to previous method and add to the main div */
             var prev = new Element('span', {id :'rotating-banner-previous'})
-                .addClassName('control').update('<').setControlStyle()
+                .addClassName('control').update('&lt;').setControlStyle()
                 .observe('click', this.previous.bind(this));
             
             element.appendChild(prev);
@@ -48,7 +48,7 @@ var Banner = Class.create(Crossfade, {
             
             /* create the next element, bind to the next method and add to the div */
             var next = new Element('span', {id :'rotating-banner-next'})
-                .addClassName('control').update('>').setControlStyle()
+                .addClassName('control').update('&gt;').setControlStyle()
                 .observe('click', this.next.bind(this));
             element.appendChild(next);
             
@@ -59,7 +59,7 @@ var Banner = Class.create(Crossfade, {
             this.setNav(0);
         }
         /* Start the timer */
-        setTimeout(this.start.bind(this),this.rndm((this.options.interval-1)*1000,(this.options.interval+1)*1000));
+        if (this.slides.length > 1) {setTimeout(this.start.bind(this),this.rndm((this.options.interval-1)*1000,(this.options.interval+1)*1000))};
     },
     cycle : function($super, dir) {
         $super(dir);
