@@ -21,8 +21,7 @@ var Banner = Class.create(Crossfade, {
             /* Define common methods and add them to Element */
             var ControlMethods = {
                 setControlStyle : function(element) {
-                    element = $(element);
-                    return element.setStyle({zIndex: '100',paddingRight: '15px', 
+                    return $(element).setStyle({zIndex: '100',paddingRight: '15px', 
                         cursor:'pointer', fontWeight: 'normal', color : '#FFFFFF'});
                 }
             }
@@ -76,7 +75,7 @@ var Banner = Class.create(Crossfade, {
         this.setNav(clicked)
         var prevSlide = this.slides[this.counter];
         var me = this; 
-        nav = $(me.elm.id + '-' + this.counter );
+        var nav = $(me.elm.id + '-' + this.counter );
         var nextSlide = this.slides[clicked];
         this.counter = clicked;
             this.loadSlide(nextSlide, me.options.transition.cycle(prevSlide, nextSlide, me));   
