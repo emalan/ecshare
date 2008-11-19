@@ -4,8 +4,8 @@
     
        div.album{
             position:relative;
-            width: 400px;
-            height: 266px;
+            width: 362px;
+            height: 286px;
         }
         ul.crossfade {
                 padding: 0;
@@ -19,8 +19,8 @@
                 position: absolute;
                 top: 0;
                 left: 0;
-                width: 300px;
-                height: 200px;
+                width: 362px;
+                height: 266px;
                 background-color: #FFF;
                 visibility: hidden;
         }
@@ -32,10 +32,7 @@
             margin: 10px;
 
         }
-        .banner-image {
-
-        }
-    
+        
     </style>
 </wicket:head>
 <body>
@@ -48,7 +45,11 @@
         <div class="album" >
             <ul id="images" class="crossfade">
                 <li wicket:id="image-list" style="visibility: visible; list-style: none; list-style-type: none;">
-                    <img wicket:id="id" class="banner-image" border="0" />
+                    <div class="imageWrapper">
+                        <div>
+                        <img wicket:id="id" class="banner-image" border="0" />
+                        </div>
+                    </div>
                 </li>
             </ul>
         </div>      

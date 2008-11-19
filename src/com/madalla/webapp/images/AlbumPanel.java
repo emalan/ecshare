@@ -7,6 +7,7 @@ import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.BANNER;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.CROSSFADE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.FAST_INIT;
+import static com.madalla.webapp.css.Css.*;
 
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class AlbumPanel extends Panel {
         add(HeaderContributor.forJavaScript(FAST_INIT));
         add(HeaderContributor.forJavaScript(CROSSFADE));
         add(HeaderContributor.forJavaScript(BANNER));
+        add(CSS_IMAGE);
         
         Link link = new BookmarkablePageLink("adminLink", AlbumAdminPage.class, new PageParameters(ALBUM +"="+album+","+RETURN_PAGE+"="+returnPage.getName())) {
             private static final long serialVersionUID = 1801145612969874170L;
