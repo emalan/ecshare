@@ -86,8 +86,8 @@ class AlbumDisplayPanel extends Panel {
 		    	target.addComponent(form);
 		    }
 		};
-		form.add(new DroppableAjaxBehaviour(onDrop));
-		form.add(onDrop);
+		add(new DroppableAjaxBehaviour(onDrop));
+		add(onDrop);
 		form.setOutputMarkupId(true);
 		
 		tree.getTreeState().expandAll();
