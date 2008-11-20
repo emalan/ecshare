@@ -19,7 +19,7 @@
   You will need to setup a deployer.properties with the folowing value pairs
   webapp, path, url, username, password
 -->
-<project name="Deployer" default="compile" basedir=".">
+<project name="Deployer" basedir=".">
 
   <property file="deployer.properties"/>
   
