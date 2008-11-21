@@ -4,12 +4,14 @@ import java.io.Serializable;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 import org.joda.time.DateTime;
 
 import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.IRepositoryData;
 import com.madalla.util.ui.HTMLParser;
 
+@Node(jcrType="") 
 public class BlogEntry  extends AbstractBlogEntry implements IRepositoryData, Serializable{
 
 	private static final long serialVersionUID = -7829797397130212868L;
