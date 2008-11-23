@@ -1,10 +1,10 @@
-package com.madalla.util.jcr.test;
+package com.madalla.jcr;
 
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 
-import com.madalla.test.AbstractSpringWicketTester;
+import com.madalla.AbstractSpringWicketTester;
 
 public abstract class AbstractJcrTester extends AbstractSpringWicketTester{
 

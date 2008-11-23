@@ -1,4 +1,4 @@
-package com.madalla.test;
+package com.madalla;
 
 import java.util.ArrayList;
 import java.util.List;

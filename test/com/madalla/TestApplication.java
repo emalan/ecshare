@@ -1,4 +1,4 @@
-package com.madalla.test;
+package com.madalla;
 
 import org.apache.wicket.protocol.http.WebApplication;
 

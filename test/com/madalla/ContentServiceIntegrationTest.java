@@ -1,4 +1,4 @@
-package com.madalla.test;
+package com.madalla;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -119,7 +119,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     }
     
     public void testImageGetSet() throws FileNotFoundException{
-    	InputStream stream = this.getClass().getResourceAsStream("ContentServiceIntegrationTest.java");
+    	InputStream stream = this.getClass().getResourceAsStream("test1.jpg");
     	assertNotNull(stream);
     	final String album = "testAlbum";
     	final String name = "image1";

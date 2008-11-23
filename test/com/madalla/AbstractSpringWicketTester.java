@@ -1,4 +1,4 @@
-package com.madalla.test;
+package com.madalla;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public abstract class AbstractSpringWicketTester  extends AbstractDependencyInje
     
     protected String[] getConfigLocations() {
         List configLocations = getTestConfigLocations();
-        configLocations.add("classpath:com/madalla/test/applicationContext-test.xml");
+        configLocations.add("classpath:com/madalla/applicationContext-test.xml");
         return (String[])configLocations.toArray(new String[configLocations.size()]);
     }
 }

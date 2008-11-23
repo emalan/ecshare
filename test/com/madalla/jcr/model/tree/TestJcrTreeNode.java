@@ -1,4 +1,5 @@
-package com.madalla.util.jcr.model.tree;
+package com.madalla.jcr.model.tree;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,8 +16,11 @@ import org.apache.commons.logging.LogFactory;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
+import com.madalla.jcr.AbstractJcrTester;
 import com.madalla.util.jcr.model.JcrNodeModel;
-import com.madalla.util.jcr.test.AbstractJcrTester;
+import com.madalla.util.jcr.model.tree.AbstractTreeNode;
+import com.madalla.util.jcr.model.tree.JcrTreeModel;
+import com.madalla.util.jcr.model.tree.JcrTreeNode;
 
 public class TestJcrTreeNode extends AbstractJcrTester {
 
