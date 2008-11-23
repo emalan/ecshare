@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
@@ -17,7 +16,9 @@ abstract class ImageScaleProcessor {
 		BufferedImage bufferedImage;
 		try {
 			bufferedImage = ImageIO.read(inputStream);
-		
+			if (bufferedImage == null){
+				throw new RuntimeException("scaleImage - ImagIO unable to read inputStream.");
+			}
 			BufferedImage scaledImage = processScaling(bufferedImage, width, height, observer);
 		
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -28,7 +29,7 @@ abstract class ImageScaleProcessor {
 			out.close();
 		
 			return new ByteArrayInputStream(out.toByteArray());
-		} catch (IOException e) {
+		} catch (Exception e) {
 			observer.logError("scaleImage - failed.", e);
 			return new ByteArrayInputStream(new byte[] {});
 		}

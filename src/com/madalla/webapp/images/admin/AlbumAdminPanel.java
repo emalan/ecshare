@@ -1,6 +1,7 @@
 package com.madalla.webapp.images.admin;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -17,7 +18,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import com.madalla.wicket.form.upload.MultiFileUploadField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -26,6 +26,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
 
@@ -36,6 +37,7 @@ import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.DraggableAjaxBehaviour;
+import com.madalla.wicket.form.upload.MultiFileUploadField;
 
 public class AlbumAdminPanel extends Panel{
 	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(2000);
@@ -59,14 +61,30 @@ public class AlbumAdminPanel extends Panel{
             while (it.hasNext()) {
                 final FileUpload upload = it.next();
                 try {
-                	log.info("uploading file "+ upload.getClientFileName());
+                	log.info("file upload - uploading file "+ upload.getClientFileName());
+                	
+                	String contentType = upload.getContentType();
+                	log.info("file upload - Content type="+contentType);
+                	if (!(contentType.equalsIgnoreCase("image/png") || contentType.equalsIgnoreCase("image/jpeg"))){
+                		log.warn("file upload - Input type not supported. Type="+contentType);
+                		warn(getString("error.type", new Model(upload)));
+                		continue;
+                	}
+                	InputStream inputStream = upload.getInputStream();
+                	if (inputStream == null){
+                		log.warn("file upload - Input resource invalid.");
+                		warn(getString("error.resource", new Model(upload)));
+                		continue;
+                	} 
                 	String imageName = StringUtils.deleteWhitespace(upload.getClientFileName());
                 	imageName = StringUtils.substringBefore(imageName, ".");
                 	getRepositoryAdminService().createOriginalImage(imageName, upload.getInputStream());
-					log.info("finished processing upload "+ imageName);
-				} catch (IOException e) {
+                	log.info("finished processing upload "+ imageName);
+                	info(getString("info.success", new Model(upload)));
+                	
+				} catch (Exception e) {
 					log.error("onSubmit - failed to upload File."+e.getLocalizedMessage());
-					AlbumAdminPanel.this.error("Failed to upload images.");
+					error(getString("error.fail"));
 				}
             }
         }

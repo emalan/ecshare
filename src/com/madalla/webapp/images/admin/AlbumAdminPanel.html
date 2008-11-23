@@ -3,6 +3,11 @@
     <style type="text/css">
         #control {float: left; width: 100%;}
         #fileUpload {float: left; width: 100%;}
+        
+        #fileUpload p {
+            color: blue;
+        }
+        
         #availableImages {
             float: left;
             clear: both;
@@ -12,6 +17,11 @@
             float: left;
             width: 48%;
         }
+        .feedback {
+            float:left;
+            margin: 5px 0 5px 20px;
+        }
+        
     
     </style>
 </wicket:head>
@@ -27,13 +37,14 @@
         <form wicket:id="simpleUpload">
             <fieldset>
             <legend><wicket:message key="label.upload">Label Contents</wicket:message></legend>
+            <p><wicket:message key="label.upload.info">Label Contents</wicket:message></p>
             <p>
             <div wicket:id="fileInput" class="mfuex"/>
             </p>
             <div class="buttonwrapper">
                 <a href="#" class="orangebutton" wicket:id="submitLink"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
             </div>
-            <span wicket:id="uploadFeedback"/>
+            <span class="feedback" wicket:id="uploadFeedback"/>
             </fieldset>
         </form>
     </div>

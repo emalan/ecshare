@@ -119,7 +119,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     }
     
     public void testImageGetSet() throws FileNotFoundException{
-    	InputStream stream = this.getClass().getResourceAsStream("test1.jpg");
+    	InputStream stream = this.getClass().getResourceAsStream("ContentServiceIntegrationTest.java");
     	assertNotNull(stream);
     	final String album = "testAlbum";
     	final String name = "image1";

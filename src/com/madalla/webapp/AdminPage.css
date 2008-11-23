@@ -115,7 +115,10 @@ textarea {
 .feedbackPanelERROR {
     color:red;
 }
-.feedbackPanelINFO {
+.feedbackPanelWARNING {
     color:orange;
+}
+.feedbackPanelINFO {
+    color:blue;
 }
 
