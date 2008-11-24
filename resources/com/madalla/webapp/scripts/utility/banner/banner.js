@@ -18,36 +18,26 @@ var Banner = Class.create(Crossfade, {
         /* We are going to create some navigation html and DOM insert them in the page */
         if (this.elm.id) {
             
-            /* Define common methods and add them to Element */
-            var ControlMethods = {
-                setControlStyle : function(element) {
-                    return $(element).setStyle({zIndex: '100',paddingRight: '15px', 
-                        cursor:'pointer', fontWeight: 'normal', color : '#FFFFFF'});
-                }
-            }
-            Element.addMethods(ControlMethods); 
-
             /* Main Div */
             var element = new Element('div', {id :'controls'});
             
             /* create previous element, bind to previous method and add to the main div */
-            var prev = new Element('span', {id :'rotating-banner-previous'})
-                .addClassName('control').update('&lt;').setControlStyle()
+            var prev = new Element('span', {id :$(elm).className + '-previous'})
+                .addClassName('control').update('&lt;').setStyle(Banner.controlStyle)
                 .observe('click', this.previous.bind(this));
-            
             element.appendChild(prev);
             
             /* For each slide create an element, bind to gotoSlide method and add to div */
             for ( var index = 0; index < this.slides.length; ++index) {
-                var nav = new Element('span', {id :'rotating-banner-' + index})
-                    .addClassName('control').update(index + 1).setControlStyle()
+                var nav = new Element('span', {id :$(elm).className + '-' + index})
+                    .addClassName('control').update(index + 1).setStyle(Banner.controlStyle)
                     .observe('click', this.gotoSlide.bindAsEventListener( this, index));
                 element.appendChild(nav);
             }
             
             /* create the next element, bind to the next method and add to the div */
-            var next = new Element('span', {id :'rotating-banner-next'})
-                .addClassName('control').update('&gt;').setControlStyle()
+            var next = new Element('span', {id :$(elm).className + '-next'})
+                .addClassName('control').update('&gt;').setStyle(Banner.controlStyle)
                 .observe('click', this.next.bind(this));
             element.appendChild(next);
             
@@ -85,11 +75,18 @@ var Banner = Class.create(Crossfade, {
             var nav = $(this.elm.id + '-' + index);
             if (nav) { nav.setStyle({fontWeight:'normal', color:'#FFFFFF'});}
         }
-        var nav = $(this.elm.id + '-' + counter);
+        var nav = $(this.elm.className + '-' + counter);
         if (nav) { new Effect.Pulsate(nav,{pulses:1, duration:0.5}); nav.setStyle({fontWeight:'bold', color:'#D3D3D3'});} 
     }
 });
-
+Banner.controlStyle = {
+	zIndex: '100', 
+	cursor:'pointer', 
+	fontSize:'14px', 
+	marginRight:'10px',
+	fontWeight: 'normal', 
+	color : '#FFFFFF'
+};
 Banner.load = function() {
     Crossfade.defaults.selectors.each(function(s){
         $$(s).each(function(c){
