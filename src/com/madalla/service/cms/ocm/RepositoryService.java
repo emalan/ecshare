@@ -1,4 +1,4 @@
-package com.madalla.service.cms.jcr;
+package com.madalla.service.cms.ocm;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -20,6 +20,8 @@ import org.springmodules.jcr.JcrCallback;
 import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.IRepositoryService;
+import com.madalla.service.cms.jcr.Content;
+import com.madalla.service.cms.ocm.blog.BlogEntry;
 
 /**
  * Content Service Implementation for JCR Content Repository
@@ -78,19 +80,23 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     public boolean isContentNode(final String path){
-    	return ContentHelper.isNodeType(path);
+    	//TODO return ContentHelper.isNodeType(path);
+    	return false;
     }
     
     public boolean isBlogNode(final String path){
-    	return BlogEntryHelper.isNodeType(path);
+    	//TODO return BlogEntryHelper.isNodeType(path);
+    	return false;
     }
     
     public boolean isImageNode(final String path){
-    	return ImageDataHelper.isNodeType(path);
+    	//TODO return ImageDataHelper.isNodeType(path);
+    	return false;
     }
     
     public boolean isContentPasteNode(final String path){
-    	return ContentHelper.isContentPasteNode(path);
+    	//TODO return ContentHelper.isContentPasteNode(path);
+    	return false;
     }
     
     public AbstractImageData getImageData(final String path) {
@@ -98,19 +104,23 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
             log.error("getBlogEntry - path is required.");
             return null;
         }
-        return ImageDataHelper.getInstance().get(path);
+        //TODO return ImageDataHelper.getInstance().get(path);
+        return null;
     }
     
     public List<AbstractImageData> getAlbumImages(final String album){
-    	return ImageDataHelper.getInstance().getAlbumEntries(album);
+    	//TODO return ImageDataHelper.getInstance().getAlbumEntries(album);
+    	return null;
     }
     
     public TreeModel getAlbumImagesAsTree(final String album) {
-    	return ImageDataHelper.getInstance().getAlbumEntriesAsTree(album);
+    	//return ImageDataHelper.getInstance().getAlbumEntriesAsTree(album);
+    	return null;
     }
     
 	public List<AbstractImageData> getAlbumOriginalImages() {
-		return ImageDataHelper.getInstance().getOriginalEntries();
+		//TODO return ImageDataHelper.getInstance().getOriginalEntries();
+		return null;
 	}
 
     public AbstractBlogEntry getBlogEntry(final String path) {
@@ -118,11 +128,11 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
             log.error("getBlogEntry - path is required.");
             return null;
         }
-        return BlogEntryHelper.getInstance().get(path);
+        return (AbstractBlogEntry) ocm.getObject(BlogEntry.class, path);
     }
     
     public AbstractBlogEntry getNewBlogEntry(String blog, String title, DateTime date){
-    	return new BlogEntry.Builder(blog, title, date ).build();
+    	return new BlogEntry(blog, title, date );
     }
     
     public String getContentData(final String nodeName, final String id, Locale locale) {
@@ -131,7 +141,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     public String getContentData(final String page, final String contentId) {
-    	return ContentHelper.getInstance().getData(page, contentId);
+    	//return ContentHelper.getInstance().getData(page, contentId);
+    	return null;
     }
     
     public String getLocaleId(String id, Locale locale) {
@@ -166,7 +177,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     public List<AbstractBlogEntry> getBlogEntries(final String blog){
-    	return BlogEntryHelper.getInstance().getBlogEntries(blog);
+    	//return BlogEntryHelper.getInstance().getBlogEntries(blog);
+    	return null;
     }
 
 	public Content getContent(final String path) {
@@ -195,4 +207,5 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 			}
     	});
     }
+
 }

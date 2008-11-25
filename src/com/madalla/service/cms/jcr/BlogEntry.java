@@ -2,21 +2,14 @@ package com.madalla.service.cms.jcr;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 import org.joda.time.DateTime;
 
 import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.IRepositoryData;
-import com.madalla.util.ui.HTMLParser;
 
-@Node(jcrType="") 
 public class BlogEntry  extends AbstractBlogEntry implements IRepositoryData, Serializable{
 
 	private static final long serialVersionUID = -7829797397130212868L;
-
-	private final static int summaryLength = 500;
 
     private String id; //immutable
     private String blog; //immutable
@@ -98,13 +91,6 @@ public class BlogEntry  extends AbstractBlogEntry implements IRepositoryData, Se
     	return BlogEntryHelper.getInstance().save(this);
     }
     
-	/* (non-Javadoc)
-	 * @see com.madalla.service.cms.jcr.IBlogEntry#getName()
-	 */
-	public String getName(){
-    	return StringUtils.deleteWhitespace(title);
-    }
-    
     /* (non-Javadoc)
 	 * @see com.madalla.service.cms.jcr.IBlogEntry#getDescription()
 	 */
@@ -151,51 +137,6 @@ public class BlogEntry  extends AbstractBlogEntry implements IRepositoryData, Se
         this.text = text;
     }
     
-    /* (non-Javadoc)
-	 * @see com.madalla.service.cms.jcr.IBlogEntry#getSummary()
-	 */
-    public String getSummary(){
-    	if (StringUtils.isNotEmpty(description)){
-    		return description;
-    	}
-        if (StringUtils.isEmpty(text) || text.length() <= summaryLength){
-            return text;
-        }
-        return HTMLParser.parseHTMLText(text, summaryLength);
-    }
-
-    /* (non-Javadoc)
-	 * @see com.madalla.service.cms.jcr.IBlogEntry#getSummary(java.lang.String)
-	 */
-    public String getSummary(String moreLink){
-        return getSummary()+moreLink;
-    }
-    
-    public String toString() {
-        return ReflectionToStringBuilder.toString(this).toString();
-    }
-    
-    @Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (!(obj instanceof BlogEntry)) return false;
-		BlogEntry compare = (BlogEntry)obj; 
-		if (!title.equals(compare.getTitle()))return false;
-		if (!blog.equals(compare.getBlog()))return false;
-		if (!category.equals(compare.getCategory()))return false;
-		if (!description.equals(compare.getDescription()))return false;
-		if (!keywords.equals(compare.getKeywords()))return false;
-		if (!date.toString().equals(compare.getDate().toString()))return false; //dont ask...
-		if (!text.equals(compare.getText()))return false;
-		return true;
-	}
-
-	@Override
-	public int hashCode() {
-		return id.hashCode();
-	}
-
-
 	/* (non-Javadoc)
 	 * @see com.madalla.service.cms.jcr.IBlogEntry#getBlog()
 	 */

@@ -1,12 +1,63 @@
 package com.madalla.service.cms;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.joda.time.DateTime;
 
+import com.madalla.service.cms.jcr.BlogEntry;
+import com.madalla.util.ui.HTMLParser;
 import com.madalla.util.ui.ICalendarTreeInput;
 
 public abstract class AbstractBlogEntry implements Comparable<AbstractBlogEntry>, ICalendarTreeInput{
+	private final static int summaryLength = 500;
 
-	public abstract String getName();
+	public abstract String save();
+
+	public String getSummary(String moreLink){
+        return getSummary()+moreLink;
+    }
+	public int compareTo(AbstractBlogEntry o) {
+		AbstractBlogEntry compare = o;
+		return compare.getDateTime().compareTo(getDateTime());
+	}
+	
+    public String getSummary(){
+    	if (StringUtils.isNotEmpty(getDescription())){
+    		return getDescription();
+    	}
+        if (StringUtils.isEmpty(getText()) || getText().length() <= summaryLength){
+            return getText();
+        }
+        return HTMLParser.parseHTMLText(getText(), summaryLength);
+    }
+    
+	public String getName() {
+		return StringUtils.deleteWhitespace(getTitle());
+	}
+	
+    @Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (!(obj instanceof BlogEntry)) return false;
+		BlogEntry compare = (BlogEntry)obj; 
+		if (!getTitle().equals(compare.getTitle()))return false;
+		if (!getBlog().equals(compare.getBlog()))return false;
+		if (!getCategory().equals(compare.getCategory()))return false;
+		if (!getDescription().equals(compare.getDescription()))return false;
+		if (!getKeywords().equals(compare.getKeywords()))return false;
+		if (!getDate().toString().equals(compare.getDate().toString()))return false; //dont ask...
+		if (!getText().equals(compare.getText()))return false;
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		return getId().hashCode();
+	}
+
+	public String toString() {
+        return ReflectionToStringBuilder.toString(this).toString();
+    }
 
 	public abstract String getDescription();
 
@@ -17,10 +68,6 @@ public abstract class AbstractBlogEntry implements Comparable<AbstractBlogEntry>
 	public abstract DateTime getDate();
 
 	public abstract String getText();
-
-	public abstract String getSummary();
-
-	public abstract String getSummary(String moreLink);
 
 	public abstract String getBlog();
 
@@ -44,12 +91,5 @@ public abstract class AbstractBlogEntry implements Comparable<AbstractBlogEntry>
 
 	public abstract void setCategory(String category);
 	
-	public abstract String save();
-
-	public int compareTo(AbstractBlogEntry o) {
-		AbstractBlogEntry compare = o;
-		return compare.getDateTime().compareTo(getDateTime());
-	}
-
 
 }

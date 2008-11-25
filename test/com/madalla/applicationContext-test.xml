@@ -6,7 +6,7 @@
     http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
     
-    <bean id="contentOcmTest" class="com.madalla.ContentOcmTest">
+    <bean id="contentOcmTest" class="com.madalla.service.cms.ocm.blog.ContentOcmBlogTest">
         <property name="template" ref="jcrTemplate"/>
     </bean>
     

@@ -1,4 +1,4 @@
-package com.madalla;
+package com.madalla.service.cms.ocm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,13 +13,16 @@ import org.apache.jackrabbit.ocm.mapper.Mapper;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.AnnotationMapperImpl;
 import org.springmodules.jcr.JcrTemplate;
 
-import com.madalla.service.cms.jcr.BlogEntry;
+import com.madalla.AbstractSpringWicketTester;
 import com.madalla.service.cms.ocm.blog.Blog;
+import com.madalla.service.cms.ocm.blog.BlogEntry;
+import com.madalla.util.jcr.JcrUtils;
 
-public class ContentOcmTest extends AbstractSpringWicketTester {
+public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester {
 
 	Log log = LogFactory.getLog(this.getClass());
 	private JcrTemplate template;
+	protected ObjectContentManager ocm;
 	
 	@Override
 	protected void onSetUp() throws Exception {
@@ -30,7 +33,8 @@ public class ContentOcmTest extends AbstractSpringWicketTester {
 				
 		Mapper mapper = new AnnotationMapperImpl(classes);
 		Session session = template.getSessionFactory().getSession();
-		ObjectContentManager ocm =  new ObjectContentManagerImpl(session, mapper);
+		JcrUtils.setupOcmNodeTypes(session);
+		ocm =  new ObjectContentManagerImpl(session, mapper);
 	}
 
 	@Override
@@ -42,16 +46,6 @@ public class ContentOcmTest extends AbstractSpringWicketTester {
 				.add("classpath:com/madalla/util/jcr/applicationContext-jcr-local.xml");
 
 		return configLocations;
-	}
-	
-	
-	
-	public void testOcmBlogInsert(){
-		//Fetch or create Blogs node
-		
-		
-		Blog blog = new Blog();
-		
 	}
 	
 	public JcrTemplate getTemplate() {

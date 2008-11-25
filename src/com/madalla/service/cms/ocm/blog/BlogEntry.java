@@ -1,131 +1,124 @@
 package com.madalla.service.cms.ocm.blog;
 
+import java.io.Serializable;
+
+import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 import org.joda.time.DateTime;
 
 import com.madalla.service.cms.AbstractBlogEntry;
 
 @Node
-public class BlogEntry extends AbstractBlogEntry {
+public class BlogEntry extends AbstractBlogEntry implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
+	@Field(path=true) private final String id;
+    @Field private final String blog; //immutable
+    private DateTime date;
+    @Field private String title;
+    @Field private String text;
+    @Field private String category;
+    @Field private String description;
+    @Field private String keywords;
+	
+    public BlogEntry(final String id, final String blog, final String title, final DateTime date) {
+		this.id = id;
+		this.blog = blog;
+		this.title = title;
+		this.date = date;
+    }
+    
+    public BlogEntry(final String blog, final String title, final DateTime date){
+		this.id = "";
+		this.blog = blog;
+		this.title = title;
+		this.date = date;
+    }
+    
+    @Override
+    public String getId() {
+		return id;
+	}
+	
 	@Override
 	public String getBlog() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getCategory() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public DateTime getDate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public DateTime getDateTime() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getGroup() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getKeywords() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getSummary() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getSummary(String moreLink) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getText() {
-		// TODO Auto-generated method stub
-		return null;
+		return blog;
 	}
 
 	@Override
 	public String getTitle() {
-		// TODO Auto-generated method stub
+		return title;
+	}
+	@Override
+	public DateTime getDate() {
+		return date;
+	}
+
+	@Override
+	public DateTime getDateTime() {
+		return date;
+	}
+
+	@Override
+	public String getCategory() {
+		return category;
+	}
+
+	@Override
+	public String getDescription() {
+		return description;
+	}
+
+	@Override
+	public String getKeywords() {
+		return keywords;
+	}
+
+	@Override
+	public String getText() {
+		return text;
+	}
+
+	@Override
+	public String getGroup() {
+		// TODO get rid of this
 		return null;
 	}
 
 	@Override
 	public String save() {
-		// TODO Auto-generated method stub
+		// TODO Remove 
 		return null;
 	}
 
 	@Override
 	public void setCategory(String category) {
-		// TODO Auto-generated method stub
-
+		this.category = category;
 	}
 
 	@Override
 	public void setDate(DateTime dateTime) {
-		// TODO Auto-generated method stub
-
+		this.date = dateTime;
 	}
 
 	@Override
 	public void setDescription(String description) {
-		// TODO Auto-generated method stub
-
+		this.description = description;
 	}
 
 	@Override
 	public void setKeywords(String keywords) {
-		// TODO Auto-generated method stub
-
+		this.keywords = keywords;
 	}
 
 	@Override
 	public void setText(String text) {
-		// TODO Auto-generated method stub
-
+		this.text = text;
 	}
 
 	@Override
 	public void setTitle(String title) {
-		// TODO Auto-generated method stub
-
+		this.title = title;
 	}
-
 }
