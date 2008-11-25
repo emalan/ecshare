@@ -13,8 +13,8 @@ public class BlogEntry extends AbstractBlogEntry implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Field(path=true) private final String id;
-    @Field private final String blog; //immutable
+	@Field(path=true) private String id;
+    @Field private String blog; //immutable
     private DateTime date;
     @Field private String title;
     @Field private String text;
@@ -22,13 +22,15 @@ public class BlogEntry extends AbstractBlogEntry implements Serializable {
     @Field private String description;
     @Field private String keywords;
 	
-    public BlogEntry(final String id, final String blog, final String title, final DateTime date) {
-		this.id = id;
-		this.blog = blog;
-		this.title = title;
-		this.date = date;
+    public BlogEntry(){
+    	
     }
     
+    /**
+     * @param blog
+     * @param title
+     * @param date
+     */
     public BlogEntry(final String blog, final String title, final DateTime date){
 		this.id = "";
 		this.blog = blog;
@@ -41,6 +43,10 @@ public class BlogEntry extends AbstractBlogEntry implements Serializable {
 		return id;
 	}
 	
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	@Override
 	public String getBlog() {
 		return blog;

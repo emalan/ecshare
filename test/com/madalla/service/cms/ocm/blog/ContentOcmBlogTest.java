@@ -28,30 +28,48 @@ public class ContentOcmBlogTest extends AbstractContentOcmTest {
 		// /ec:apps/ec:test/ec:blogs/ec:testBlog
 		String testPath = getCreateBlogsNode();
 		
-		//Create Blog
+		String blogPath = testPath+"/ec:MyOcmBlog";
 		{
+			//Create Blog
 			Blog blog = new Blog();
-			blog.setId(testPath+"/ec:MyOcmBlog");
+			blog.setId(blogPath);
 			String title = "testOcmblog";
 			blog.setTitle(title);
-			//blog.setKeywords(keywords);
-			//blog.setDescription(description);
+			blog.setKeywords("test, keyword");
+			blog.setDescription("test description");
 			ocm.insert(blog);
 			ocm.save();
 			Blog testResult = (Blog) ocm.getObject(Blog.class, blog.getId());
 			assertNotNull(testResult);
 			assertEquals(blog.getTitle(), title);
 		}
-		//get Blog, edit and save
+		{
+			//get Blog, edit and save
+			Blog blog = (Blog) ocm.getObject(Blog.class, blogPath);
+			String newDescription = "other description";
+			blog.setDescription(newDescription);
+			ocm.update(blog);
+			ocm.save();
+			Blog testResult = (Blog) ocm.getObject(Blog.class, blogPath);
+			assertEquals(newDescription, testResult.getDescription());
+		}
 		
-		//create Blog Entry
-		
+		String blogEntryPath;
+		{
+			//create Blog Entry
+			Blog blog = (Blog) ocm.getObject(Blog.class, blogPath);
+			blogEntryPath = blog.getId() + "/"; 
+			BlogEntry blogEntry = new BlogEntry();
+			blogEntry.setId("");
+		}
 		//edit Blog Entry
 		
 		//get Blog and Entries
 		
 		//edit Blog - make sure entries are still there
 		
+		ocm.remove(testPath);
+		ocm.save();
 		
 	}
 	

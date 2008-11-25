@@ -7,10 +7,12 @@ import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 public class Blog  {
 
 	@Field(path=true) private String id;
+	@Field private String name;
 	@Field private String title;
 	@Field private String keywords;
 	@Field private String description;
 	//@Collection private Map<String, BlogEntry> blogEntry;
+	
 	
 //	public void setBlogEntry(Map<String, BlogEntry> blogEntry) {
 //		this.blogEntry = blogEntry;
@@ -27,6 +29,14 @@ public class Blog  {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getTitle() {
