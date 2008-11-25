@@ -9,6 +9,7 @@ import javax.jcr.Session;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrCallback;
 
 import com.madalla.service.cms.ocm.AbstractContentOcmTest;
@@ -21,22 +22,24 @@ public class ContentOcmBlogTest extends AbstractContentOcmTest {
 	
 	private Log log = LogFactory.getLog(this.getClass());
 	
-	public void testOcmBlogInsert() throws RepositoryException{
+	public void testOcmBlogEntry() throws RepositoryException{
 
 		
 		//getCreate test Node
 		// /ec:apps/ec:test/ec:blogs/ec:testBlog
-		String testPath = getCreateBlogsNode();
+		String blogsPath = getCreateBlogsNode();
 		
-		String blogPath = testPath+"/ec:MyOcmBlog";
+		String blogName = RandomStringUtils.randomAlphabetic(5)+"Blog";
+		String blogPath ;
 		{
 			//Create Blog
-			Blog blog = new Blog();
-			blog.setId(blogPath);
-			String title = "testOcmblog";
+			Blog blog = new Blog(blogsPath, blogName);
+			blogPath = blog.getId();
+			String title = "Test Ocm Blog";
 			blog.setTitle(title);
 			blog.setKeywords("test, keyword");
 			blog.setDescription("test description");
+			log.debug("inserting blog :"+blog.getId());
 			ocm.insert(blog);
 			ocm.save();
 			Blog testResult = (Blog) ocm.getObject(Blog.class, blog.getId());
@@ -58,9 +61,16 @@ public class ContentOcmBlogTest extends AbstractContentOcmTest {
 		{
 			//create Blog Entry
 			Blog blog = (Blog) ocm.getObject(Blog.class, blogPath);
-			blogEntryPath = blog.getId() + "/"; 
-			BlogEntry blogEntry = new BlogEntry();
-			blogEntry.setId("");
+
+			String title = "First Blog Entry";
+			BlogEntry blogEntry = new BlogEntry(blog, title, new DateTime());
+			
+			ocm.insert(blogEntry);
+			ocm.save();
+			
+			BlogEntry testEntry = (BlogEntry) ocm.getObject(BlogEntry.class, blogEntry.getId());
+			assertNotNull(testEntry);
+			
 		}
 		//edit Blog Entry
 		
@@ -68,7 +78,7 @@ public class ContentOcmBlogTest extends AbstractContentOcmTest {
 		
 		//edit Blog - make sure entries are still there
 		
-		ocm.remove(testPath);
+		ocm.remove(blogPath);
 		ocm.save();
 		
 	}
@@ -80,13 +90,9 @@ public class ContentOcmBlogTest extends AbstractContentOcmTest {
 					RepositoryException {
 				Node test = getTestNode(session);
 				Node blogs = JcrUtils.getCreateNode(NS_BLOG, test);
-				
-				//create random folder
-				String random = RandomStringUtils.randomAlphabetic(5);
-				Node node = JcrUtils.getCreateNode(random, blogs);
 				session.save();
-				log.debug("created Node with path: "+node.getPath());
-				return node.getPath();
+				log.debug("created Node with path: "+blogs.getPath());
+				return blogs.getPath();
 			}
 			
 		});

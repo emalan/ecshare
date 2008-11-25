@@ -6,6 +6,7 @@ import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 import org.joda.time.DateTime;
 
+import com.madalla.service.cms.AbstractBlog;
 import com.madalla.service.cms.AbstractBlogEntry;
 
 @Node
@@ -14,7 +15,7 @@ public class BlogEntry extends AbstractBlogEntry implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Field(path=true) private String id;
-    @Field private String blog; //immutable
+    private String blog;
     private DateTime date;
     @Field private String title;
     @Field private String text;
@@ -31,11 +32,10 @@ public class BlogEntry extends AbstractBlogEntry implements Serializable {
      * @param title
      * @param date
      */
-    public BlogEntry(final String blog, final String title, final DateTime date){
-		this.id = "";
-		this.blog = blog;
-		this.title = title;
-		this.date = date;
+    public BlogEntry(AbstractBlog blog, final String title, final DateTime date){
+    	this.title = title;
+    	this.date = date;
+    	this.id = blog.getId() + "/ec:" + getName();
     }
     
     @Override

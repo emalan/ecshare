@@ -1,5 +1,6 @@
 package com.madalla.service.cms;
 
+
 public abstract class AbstractBlog {
 
 	public abstract String getId();

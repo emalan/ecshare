@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrCallback;
 
+import com.madalla.service.cms.AbstractBlog;
 import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.IRepositoryService;
@@ -132,6 +133,10 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     public AbstractBlogEntry getNewBlogEntry(String blog, String title, DateTime date){
+    	return null; //TODO obsolete
+    }
+    
+    public AbstractBlogEntry getNewBlogEntry(AbstractBlog blog, String title, DateTime date){
     	return new BlogEntry(blog, title, date );
     }
     
