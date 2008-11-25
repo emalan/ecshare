@@ -1,6 +1,7 @@
 package com.madalla.service.cms.ocm.blog;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -9,6 +10,9 @@ import javax.jcr.Session;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.jackrabbit.ocm.query.Filter;
+import org.apache.jackrabbit.ocm.query.Query;
+import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrCallback;
 
@@ -64,18 +68,27 @@ public class ContentOcmBlogTest extends AbstractContentOcmTest {
 
 			String title = "First Blog Entry";
 			BlogEntry blogEntry = new BlogEntry(blog, title, new DateTime());
-			
+			String category = "test Category";
+			blogEntry.setCategory(category);
 			ocm.insert(blogEntry);
 			ocm.save();
 			
 			BlogEntry testEntry = (BlogEntry) ocm.getObject(BlogEntry.class, blogEntry.getId());
 			assertNotNull(testEntry);
+			assertEquals(category, testEntry.getCategory());
 			
 		}
-		//edit Blog Entry
 		
-		//get Blog and Entries
-		
+		{
+			//get Blog and Entries
+			Blog blog = (Blog) ocm.getObject(Blog.class, blogPath);
+			QueryManager queryManager = ocm.getQueryManager();
+			Filter filter = queryManager.createFilter(BlogEntry.class);
+			filter.setScope(blog.getId()+"//");
+			Query query = queryManager.createQuery(filter);
+			Collection blogEntries = ocm.getObjects(query);
+			log.info("retrieved blog entries :"+blogEntries.size());
+		}
 		//edit Blog - make sure entries are still there
 		
 		ocm.remove(blogPath);
