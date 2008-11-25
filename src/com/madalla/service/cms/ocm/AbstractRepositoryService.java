@@ -20,6 +20,7 @@ import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.service.cms.jcr.BlogEntry;
 import com.madalla.service.cms.ocm.blog.Blog;
+import com.madalla.util.jcr.JcrOcmUtils;
 import com.madalla.util.jcr.JcrUtils;
 
 abstract class AbstractRepositoryService {
@@ -44,7 +45,7 @@ abstract class AbstractRepositoryService {
 		Session session;
 		try {
 			session = template.getSessionFactory().getSession();
-			JcrUtils.setupOcmNodeTypes(session);
+			JcrOcmUtils.setupOcmNodeTypes(session);
 		} catch (RepositoryException e) {
 			log.error("Error initializing - getting session from JcrTemplate", e);
 			throw new WicketRuntimeException("Error getting Session from JcrTemplate.",e);
@@ -61,26 +62,10 @@ abstract class AbstractRepositoryService {
     	return getCreateNode(NS+site, appNode);
 	}
 	
-    
-    /**
-     *  returns the class name node -- creates it if its not there
-     */
-    public Node getCreateNode(String nodeName, Node parent) throws RepositoryException{
-    	if (null == nodeName || null == parent){
-    		log.error("getCreateNode - all parameters must be supplied");
-    		return null;
-    	}
-        Node node = null;
-        try {
-            node = parent.getNode(nodeName);
-        } catch (PathNotFoundException e){
-            log.debug("Node not found in repository, now adding. new node="+nodeName);
-            node = parent.addNode(nodeName);
-        }
-        return node;
-        
+    protected Node getCreateNode(String nodeName, Node parent) throws RepositoryException{
+    	return JcrUtils.getCreateNode(nodeName, parent);
     }
-    
+
     public void setTemplate(JcrTemplate template) {
         this.template = template;
     }

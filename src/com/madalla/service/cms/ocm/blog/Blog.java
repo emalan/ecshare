@@ -6,10 +6,10 @@ import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 @Node
 public class Blog  {
 
-	@Field(path=true) private String path;
+	@Field(path=true) private String id;
 	@Field private String title;
-//	private String keywords;
-//	private String description;
+	@Field private String keywords;
+	@Field private String description;
 	//@Collection private Map<String, BlogEntry> blogEntry;
 	
 //	public void setBlogEntry(Map<String, BlogEntry> blogEntry) {
@@ -20,12 +20,13 @@ public class Blog  {
 //		return blogEntry;
 //	}
 
-	public String getPath() {
-		return path;
+
+	public String getId() {
+		return id;
 	}
 
-	public void setPath(String id) {
-		this.path = id;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getTitle() {
@@ -36,20 +37,20 @@ public class Blog  {
 		this.title = title;
 	}
 
-//	public String getKeywords() {
-//		return keywords;
-//	}
-//
-//	public void setKeywords(String keywords) {
-//		this.keywords = keywords;
-//	}
-//
-//	public String getDescription() {
-//		return description;
-//	}
-//
-//	public void setDescription(String description) {
-//		this.description = description;
-//		
-//	}
+	public String getKeywords() {
+		return keywords;
+	}
+
+	public void setKeywords(String keywords) {
+		this.keywords = keywords;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+		
+	}
 }

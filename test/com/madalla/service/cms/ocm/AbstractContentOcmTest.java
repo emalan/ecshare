@@ -1,8 +1,11 @@
 package com.madalla.service.cms.ocm;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
@@ -11,17 +14,24 @@ import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.apache.jackrabbit.ocm.manager.impl.ObjectContentManagerImpl;
 import org.apache.jackrabbit.ocm.mapper.Mapper;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.AnnotationMapperImpl;
+import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.AbstractSpringWicketTester;
 import com.madalla.service.cms.ocm.blog.Blog;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
+import com.madalla.util.jcr.JcrOcmUtils;
 import com.madalla.util.jcr.JcrUtils;
 
 public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester {
 
+	/////ec:apps/ec:test/ec:blogs/ec:testBlog
+	protected static final String NS = "ec:";
+	private static final String NS_APP = NS+"apps";
+	private static final String NS_TEST = NS+"test";
+	
 	Log log = LogFactory.getLog(this.getClass());
-	private JcrTemplate template;
+	protected JcrTemplate template;
 	protected ObjectContentManager ocm;
 	
 	@Override
@@ -33,8 +43,14 @@ public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester 
 				
 		Mapper mapper = new AnnotationMapperImpl(classes);
 		Session session = template.getSessionFactory().getSession();
-		JcrUtils.setupOcmNodeTypes(session);
+		JcrOcmUtils.setupOcmNodeTypes(session);
 		ocm =  new ObjectContentManagerImpl(session, mapper);
+	}
+	
+	protected Node getTestNode(Session session) throws RepositoryException{
+		Node root = session.getRootNode();
+		Node app = JcrUtils.getCreateNode(NS_APP, root);
+		return JcrUtils.getCreateNode(NS_TEST, app);
 	}
 
 	@Override
