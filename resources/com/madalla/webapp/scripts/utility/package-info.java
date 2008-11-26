@@ -1,6 +1,13 @@
 /**
+ * Some utility javascript code
+ * <p>
+ * <ul>
+ *   <li>Drap Drop</li>
+ *   <li>Fade Popup</li>
+ * </ul>
+ * </p>
  * Author : Eugene Malan
  * 
- *  Some utlity javascript
+ *  
 **/
 package com.madalla.webapp.scripts.utility;

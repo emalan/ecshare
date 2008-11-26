@@ -13,6 +13,11 @@ import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.platform.derby.DerbyPlatform;
 import org.xml.sax.InputSource;
 
+/**
+ * Creates derby database and schema.
+ * @author exmalan
+ *
+ */
 public class JdbcDatabaseSetup {
 	private DataSource dataSource;
 	private InputStream schema;

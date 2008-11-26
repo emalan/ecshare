@@ -25,7 +25,7 @@ import com.madalla.service.cms.jcr.Content;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
 
 /**
- * Content Service Implementation for JCR Content Repository
+ * Content Service Implementation for Jackrabbit JCR Content Repository
  * <p>
  * This class is aware of the structure of the data in the repository 
  * and will create the structure if it does not exist. The schema is

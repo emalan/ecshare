@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.jcr.Node;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 

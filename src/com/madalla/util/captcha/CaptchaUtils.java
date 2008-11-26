@@ -1,4 +1,4 @@
-package com.madalla.service.captcha;
+package com.madalla.util.captcha;
 
 public class CaptchaUtils {
 	

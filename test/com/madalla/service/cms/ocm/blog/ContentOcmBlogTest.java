@@ -80,19 +80,24 @@ public class ContentOcmBlogTest extends AbstractContentOcmTest {
 		}
 		
 		{
-			//get Blog and Entries
+			//get Blog , edit, then get Entries
 			Blog blog = (Blog) ocm.getObject(Blog.class, blogPath);
+			blog.setTitle("edited");
+			ocm.update(blog);
+			ocm.save();
+			
 			QueryManager queryManager = ocm.getQueryManager();
 			Filter filter = queryManager.createFilter(BlogEntry.class);
 			filter.setScope(blog.getId()+"//");
 			Query query = queryManager.createQuery(filter);
 			Collection blogEntries = ocm.getObjects(query);
 			log.info("retrieved blog entries :"+blogEntries.size());
+			assertTrue(blogEntries.size()>0);
 		}
 		//edit Blog - make sure entries are still there
 		
-		ocm.remove(blogPath);
-		ocm.save();
+		//ocm.remove(blogPath);
+		//ocm.save();
 		
 	}
 	

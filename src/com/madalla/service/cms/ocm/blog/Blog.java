@@ -1,5 +1,8 @@
 package com.madalla.service.cms.ocm.blog;
 
+import java.util.Map;
+
+import org.apache.jackrabbit.ocm.mapper.impl.annotation.Collection;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 
@@ -12,7 +15,7 @@ public class Blog  extends AbstractBlog{
 	@Field private String title;
 	@Field private String keywords;
 	@Field private String description;
-	//@Collection private Map<String, BlogEntry> blogEntry;
+	@Collection private Map<String, BlogEntry> blogEntry;
 	
 	public Blog(){
 		
@@ -22,14 +25,13 @@ public class Blog  extends AbstractBlog{
 		id = parentPath + "/ec:" + blogName;
 	}
 	
-//	public void setBlogEntry(Map<String, BlogEntry> blogEntry) {
-//		this.blogEntry = blogEntry;
-//	}
-//
-//	public Map<String, BlogEntry> getBlogEntry() {
-//		return blogEntry;
-//	}
+	public void setBlogEntry(Map<String, BlogEntry> blogEntry) {
+		this.blogEntry = blogEntry;
+	}
 
+	public Map<String, BlogEntry> getBlogEntry() {
+		return blogEntry;
+	}
 
 	public String getId() {
 		return id;

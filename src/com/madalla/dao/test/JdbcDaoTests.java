@@ -14,7 +14,7 @@ import com.madalla.service.blog.BlogServiceTest;
 import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.jcr.BlogEntry;
 
-public class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests{
+class JdbcDaoTests extends  AbstractDependencyInjectionSpringContextTests{
 	
 	Log log = LogFactory.getLog(this.getClass());
  

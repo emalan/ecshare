@@ -32,9 +32,9 @@ import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
-import com.madalla.service.captcha.CaptchaUtils;
 import com.madalla.service.email.IEmailSender;
 import com.madalla.service.email.IEmailServiceProvider;
+import com.madalla.util.captcha.CaptchaUtils;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.form.ValidationStyleRequiredTextField;
 

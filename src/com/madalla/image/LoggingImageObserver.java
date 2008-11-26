@@ -5,6 +5,14 @@ import java.awt.image.ImageObserver;
 
 import org.apache.commons.logging.Log;
 
+/**
+ * Reports progress of Image Processing to Log
+ * <p>
+ * TODO Link this up to some GUI progress indicator
+ * </p>
+ * @author exmalan
+ *
+ */
 public class LoggingImageObserver implements ImageObserver {
 
 	private final Log log;
