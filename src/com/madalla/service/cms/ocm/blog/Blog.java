@@ -21,6 +21,10 @@ public class Blog extends AbstractBlog{
 		
 	}
 	
+	public Blog(String path){
+		id = path;
+	}
+	
 	public Blog(String parentPath, String blogName){
 		id = parentPath + "/ec:" + blogName;
 	}

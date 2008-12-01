@@ -1,5 +1,8 @@
 package com.madalla.service.cms;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.joda.time.DateTime;
@@ -12,7 +15,14 @@ public abstract class AbstractBlogEntry implements Comparable<AbstractBlogEntry>
 	private final static int summaryLength = 500;
 
 	public abstract String save();
-
+    
+	public static List<String> getBlogCategories(){
+    	List<String> list = new ArrayList<String>();
+    	list.add("work");
+    	list.add("travel");
+        return list;
+    }
+	
 	public String getSummary(String moreLink){
         return getSummary()+moreLink;
     }

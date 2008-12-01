@@ -2,6 +2,9 @@ package com.madalla.service.cms.ocm;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -14,6 +17,9 @@ import javax.swing.tree.TreeModel;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.jackrabbit.ocm.query.Filter;
+import org.apache.jackrabbit.ocm.query.Query;
+import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrCallback;
 
@@ -22,7 +28,9 @@ import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.jcr.Content;
+import com.madalla.service.cms.ocm.blog.Blog;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
+import com.madalla.service.cms.ocm.blog.BlogInfo;
 
 /**
  * Content Service Implementation for Jackrabbit JCR Content Repository
@@ -48,56 +56,29 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	private static final long serialVersionUID = 795763276139305054L;
 	private static final Log log = LogFactory.getLog(RepositoryService.class);
 
-    
+    private IRepositoryService oldRepositoryService;
 
     //Delete this and move out to Data classes
-    static final String EC_PROP_CONTENT = NS + "content";
+    static final String EC_PROP_CONTENT = "ec:" + "content";
 
     public boolean isDeletableNode(final String path){
-    	Node result = (Node) template.execute(new JcrCallback(){
-
-			public Object doInJcr(Session session) throws IOException,
-					RepositoryException {
-				Node node = (Node) session.getItem(path);
-				Node root = session.getRootNode();
-				Node parent = node.getParent();
-				while (!root.isSame(parent)) {
-					if (parent.getName().equals(EC_NODE_APP)){
-						return parent;
-					}
-					parent = parent.getParent();
-				}
-
-				return null;
-			}
-    		
-    	});
-    	if (result == null){
-    		return false;
-    	} else {
-    		return true;
-    	}
-    	
+    	return RepositoryInfo.isDeletableNode(template, path);
     }
     
     public boolean isContentNode(final String path){
-    	//TODO return ContentHelper.isNodeType(path);
-    	return false;
+    	return oldRepositoryService.isContentNode(path);
     }
     
     public boolean isBlogNode(final String path){
-    	//TODO return BlogEntryHelper.isNodeType(path);
-    	return false;
+    	return oldRepositoryService.isBlogNode(path);
     }
     
     public boolean isImageNode(final String path){
-    	//TODO return ImageDataHelper.isNodeType(path);
-    	return false;
+    	return oldRepositoryService.isImageNode(path);
     }
     
     public boolean isContentPasteNode(final String path){
-    	//TODO return ContentHelper.isContentPasteNode(path);
-    	return false;
+    	return oldRepositoryService.isContentPasteNode(path);
     }
     
     public AbstractImageData getImageData(final String path) {
@@ -105,23 +86,32 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
             log.error("getBlogEntry - path is required.");
             return null;
         }
-        //TODO return ImageDataHelper.getInstance().get(path);
-        return null;
+        return oldRepositoryService.getImageData(path);
     }
     
     public List<AbstractImageData> getAlbumImages(final String album){
     	//TODO return ImageDataHelper.getInstance().getAlbumEntries(album);
-    	return null;
+    	return oldRepositoryService.getAlbumImages(album);
     }
     
     public TreeModel getAlbumImagesAsTree(final String album) {
     	//return ImageDataHelper.getInstance().getAlbumEntriesAsTree(album);
-    	return null;
+    	return oldRepositoryService.getAlbumImagesAsTree(album);
     }
     
 	public List<AbstractImageData> getAlbumOriginalImages() {
 		//TODO return ImageDataHelper.getInstance().getOriginalEntries();
-		return null;
+		return oldRepositoryService.getAlbumOriginalImages();
+	}
+	
+	public AbstractBlog getBlog(final String blogName){
+		String blogPath = BlogInfo.getPath(blogName, template, site);
+		if (!ocm.objectExists(blogPath)){
+			Blog blog = new Blog(blogPath);
+			ocm.insert(blog);
+			ocm.save();
+		}
+		return (AbstractBlog) ocm.getObject(Blog.class, blogPath);
 	}
 
     public AbstractBlogEntry getBlogEntry(final String path) {
@@ -129,15 +119,38 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
             log.error("getBlogEntry - path is required.");
             return null;
         }
-        return (AbstractBlogEntry) ocm.getObject(BlogEntry.class, path);
+        
+        AbstractBlogEntry blogEntry = (AbstractBlogEntry) ocm.getObject(BlogEntry.class, path);
+        
+        //check if converted
+        if (blogEntry.getDate() == null && blogEntry.getCategory() == null){
+        	//convert
+        }
+        //convert if neccessary
+        return blogEntry;
     }
     
+    @Deprecated
     public AbstractBlogEntry getNewBlogEntry(String blog, String title, DateTime date){
-    	return null; //TODO obsolete
+    	return null;
     }
     
     public AbstractBlogEntry getNewBlogEntry(AbstractBlog blog, String title, DateTime date){
     	return new BlogEntry(blog, title, date );
+    }
+    
+    public List<AbstractBlogEntry> getBlogEntries(AbstractBlog blog){
+		QueryManager queryManager = ocm.getQueryManager();
+		Filter filter = queryManager.createFilter(BlogEntry.class);
+		filter.setScope(blog.getId()+"//");
+		Query query = queryManager.createQuery(filter);
+		Collection collection =  ocm.getObjects(query);
+		List<AbstractBlogEntry> list = new ArrayList<AbstractBlogEntry>();
+		for(Iterator iter = collection.iterator(); iter.hasNext();){
+			list.add((AbstractBlogEntry) iter.next());
+		}
+		Collections.sort(list);
+		return list;
     }
     
     public String getContentData(final String nodeName, final String id, Locale locale) {
@@ -147,7 +160,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     
     public String getContentData(final String page, final String contentId) {
     	//return ContentHelper.getInstance().getData(page, contentId);
-    	return null;
+    	return oldRepositoryService.getContentData(page, contentId);
     }
     
     public String getLocaleId(String id, Locale locale) {
@@ -183,14 +196,14 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     
     public List<AbstractBlogEntry> getBlogEntries(final String blog){
     	//return BlogEntryHelper.getInstance().getBlogEntries(blog);
-    	return null;
+    	return oldRepositoryService.getBlogEntries(blog);
     }
 
 	public Content getContent(final String path) {
         return (Content) template.execute(new JcrCallback(){
             public Content doInJcr(Session session) throws IOException, RepositoryException {
                 Node node = (Node) session.getItem(path);
-                String pageName = node.getParent().getName().replaceFirst(AbstractRepositoryService.NS,"");
+                String pageName = node.getParent().getName().replaceFirst("ec:","");
                 Content content = new Content(node.getPath(), pageName, node.getName());
                 content.setText(node.getProperty(EC_PROP_CONTENT).getString());
                 return content;
@@ -212,5 +225,15 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 			}
     	});
     }
+
+	public IRepositoryService getOldRepositoryService() {
+		return oldRepositoryService;
+	}
+
+	public void setOldRepositoryService(IRepositoryService oldRepositoryService) {
+		this.oldRepositoryService = oldRepositoryService;
+	}
+    
+    
 
 }

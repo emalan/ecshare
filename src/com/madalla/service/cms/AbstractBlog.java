@@ -2,7 +2,7 @@ package com.madalla.service.cms;
 
 
 public abstract class AbstractBlog {
-
+	
 	public abstract String getId();
 	public abstract String getTitle();
 	public abstract void setTitle(String title);

@@ -1,5 +1,9 @@
 package com.madalla.service.cms.ocm;
 
+import static com.madalla.service.cms.ocm.RepositoryInfo.EC_NODE_APP;
+import static com.madalla.service.cms.ocm.RepositoryInfo.NS;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -10,43 +14,41 @@ import javax.jcr.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
-import org.apache.wicket.WicketRuntimeException;
+import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.util.jcr.JcrUtils;
 import com.madalla.util.jcr.ocm.JcrOcmUtils;
 
-abstract class AbstractRepositoryService {
+abstract class AbstractRepositoryService{
 	
 	private static final Log log = LogFactory.getLog(AbstractRepositoryService.class);
 	
-    private String site ;
+    protected String site ;
 	protected JcrTemplate template;
     protected List<Locale> locales;
     protected ObjectContentManager ocm;
 
-    //Repository Node Names
-    static final String NS = "ec:";
-    static final String EC_NODE_APP = NS + "apps";
-    
     public void init(){
-		Session session;
-		try {
-			session = template.getSessionFactory().getSession();
-		} catch (RepositoryException e) {
-			log.error("Error initializing - getting session from JcrTemplate", e);
-			throw new WicketRuntimeException("Error getting Session from JcrTemplate.",e);
-		}
-		ocm =  JcrOcmUtils.getObjectContentManager(session);
+    	template.execute(new JcrCallback(){
+
+			public Object doInJcr(Session session) throws IOException,
+					RepositoryException {
+				ocm =  JcrOcmUtils.getObjectContentManager(session);
+				//do conversion if neccessary
+				return null;
+			}
+    		
+    	});
+		
     }
 
     public Node getApplicationNode(Session session) throws RepositoryException{
-    	return getCreateNode(EC_NODE_APP, session.getRootNode());
+    	return RepositoryInfo.getApplicationNode(session);
     }
 
 	public Node getSiteNode(Session session) throws RepositoryException {
-    	Node appNode = getApplicationNode(session);
-    	return getCreateNode(NS+site, appNode);
+		return RepositoryInfo.getSiteNode(session, site);
 	}
 	
     protected Node getCreateNode(String nodeName, Node parent) throws RepositoryException{

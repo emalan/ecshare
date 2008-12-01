@@ -6,14 +6,15 @@
     http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
-    <bean id="repositoryOcmService" class="com.madalla.service.cms.ocm.RepositoryService"
+    <bean id="repositoryService" class="com.madalla.service.cms.ocm.RepositoryService"
         init-method="init">
         <property name="template" ref="jcrTemplate"/>
         <property name="site" value="${site.code}"/>
         <property name="locales" ref="siteLocales"/>
+        <property name="oldRepositoryService" ref="oldRepositoryService"/>
     </bean>
     
-	<bean id="repositoryService" class="com.madalla.service.cms.jcr.RepositoryService">
+	<bean id="oldRepositoryService" class="com.madalla.service.cms.jcr.RepositoryService">
     	<property name="template" ref="jcrTemplate"/>
     	<property name="site" value="${site.code}"/>
     	<property name="locales" ref="siteLocales"/>

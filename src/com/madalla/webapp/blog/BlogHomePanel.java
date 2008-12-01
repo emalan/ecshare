@@ -6,7 +6,10 @@ import org.apache.wicket.Page;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.panel.Panel;
 
+import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
+import com.madalla.service.cms.AbstractBlog;
+import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 
 public class BlogHomePanel extends Panel{
@@ -14,7 +17,7 @@ public class BlogHomePanel extends Panel{
 	private static final long serialVersionUID = 1548972105193261539L;
 	private static Log log = LogFactory.getLog(BlogHomePanel.class);
 	
-	public BlogHomePanel(String id, String blog, String blogEntryId, Class<? extends Page> returnPage){
+	public BlogHomePanel(String id, String blogName, String blogEntryId, Class<? extends Page> returnPage){
 		super(id);
 		
 		//Instanciation checks
@@ -25,6 +28,7 @@ public class BlogHomePanel extends Panel{
 					"the abstract class CmsBlogApplication.");
 		}
 
+		AbstractBlog blog = getRepositoryService().getBlog(blogName);
 		BlogDisplayPanel displayPanel;
 		if (blogEntryId != null){
 			displayPanel = new BlogDisplayPanel("blogDisplayPanel", blog, blogEntryId, returnPage);
@@ -36,6 +40,8 @@ public class BlogHomePanel extends Panel{
 		add(new BlogArchivePanel("blogExplorerPanel", blog, displayPanel));
 	}
 
-	
+    private IRepositoryService getRepositoryService(){
+    	return ((IRepositoryServiceProvider)getApplication()).getRepositoryService();
+    }
 
 }

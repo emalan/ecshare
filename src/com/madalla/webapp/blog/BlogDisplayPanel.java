@@ -26,7 +26,10 @@ import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.service.blog.IBlogService;
 import com.madalla.service.blog.IBlogServiceProvider;
+import com.madalla.service.cms.AbstractBlog;
 import com.madalla.service.cms.AbstractBlogEntry;
+import com.madalla.service.cms.IRepositoryService;
+import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.BlogEntryPage;
 import com.madalla.wicket.KeywordHeaderContributor;
@@ -38,14 +41,14 @@ public class BlogDisplayPanel extends Panel {
 	private int displayCount = 5;
 	private final BlogEntryView blogEntry = new BlogEntryView();
 	
-	BlogDisplayPanel(final String id, final String blog, final String blogEntryId, final Class<? extends Page> returnPage){
+	BlogDisplayPanel(final String id, final AbstractBlog blog, final String blogEntryId, final Class<? extends Page> returnPage){
 		super(id);
 		init(id, blog, returnPage );
 		changeModel(blogEntryId);
 		add(new SimpleAttributeModifier("class","showBlog"));
 		add(new KeywordHeaderContributor(blogEntry.getKeywords()));
 	}
-	BlogDisplayPanel(final String id, final String blog, final Class<? extends Page> returnPage) {
+	BlogDisplayPanel(final String id, final AbstractBlog blog, final Class<? extends Page> returnPage) {
 		super(id);
 		init(id, blog, returnPage);
 		//TODO Store the Blog Home Meatadata keywords in CMS
@@ -54,12 +57,12 @@ public class BlogDisplayPanel extends Panel {
 		add(new KeywordHeaderContributor(blogEntry.getKeywords()));
 	}
 	
-	private void init(final String id, final String blog, final Class<? extends Page> returnPage) {
+	private void init(final String id, final AbstractBlog blog, final Class<? extends Page> returnPage) {
 		final boolean adminMode = ((CmsSession)getSession()).isCmsAdminMode();
 		
 		//new Blog link
         add(new BookmarkablePageLink("createNew",BlogEntryPage.class, 
-        		new PageParameters(RETURN_PAGE+"="+returnPage.getName()+","+BLOG_ENTRY_ID+"=,"+BLOG_NAME+"="+blog)){
+        		new PageParameters(RETURN_PAGE+"="+returnPage.getName()+","+BLOG_ENTRY_ID+"=,"+BLOG_NAME+"="+blog.getId())){
     		private static final long serialVersionUID = -6335468391788102638L;
     		
     		@Override
@@ -74,7 +77,8 @@ public class BlogDisplayPanel extends Panel {
         });
 		
         log.debug("construtor - retrieving blog entries from service.");
-        List<AbstractBlogEntry> blogList = getBlogService().getBlogEntries(blog);
+        List<AbstractBlogEntry> blogList = getRepositoryService().getBlogEntries(blog);
+
         log.debug("construtor - retrieved blog entries. count="+blogList.size());
         
         //ListView repeater
@@ -169,6 +173,10 @@ public class BlogDisplayPanel extends Panel {
 	
     private IBlogService getBlogService(){
     	return ((IBlogServiceProvider)getApplication()).getBlogService();
+    }
+    
+    private IRepositoryService getRepositoryService(){
+    	return ((IRepositoryServiceProvider)getApplication()).getRepositoryService();
     }
 
 	
