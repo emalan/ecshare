@@ -16,7 +16,7 @@ public class BlogEntry extends AbstractBlogEntry implements Serializable {
 	
 	@Field(path=true) private String id;
     private String blog;
-    private DateTime date;
+    @Field private DateTime date;
     @Field private String title;
     @Field private String text;
     @Field private String category;

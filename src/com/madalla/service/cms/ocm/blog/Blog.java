@@ -9,7 +9,7 @@ import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 import com.madalla.service.cms.AbstractBlog;
 
 @Node
-public class Blog  extends AbstractBlog{
+public class Blog extends AbstractBlog{
 
 	@Field(path=true) private String id;
 	@Field private String title;

@@ -9,11 +9,9 @@ import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverterProvider;
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.AtomicTypeConverterProviderImpl;
 import org.apache.jackrabbit.ocm.manager.impl.ObjectContentManagerImpl;
-import org.apache.jackrabbit.ocm.manager.objectconverter.ObjectConverter;
 import org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImpl;
 import org.apache.jackrabbit.ocm.mapper.Mapper;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.AnnotationMapperImpl;
@@ -22,8 +20,8 @@ import org.springmodules.jcr.JcrTemplate;
 import com.madalla.AbstractSpringWicketTester;
 import com.madalla.service.cms.ocm.blog.Blog;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
-import com.madalla.util.jcr.JcrOcmUtils;
 import com.madalla.util.jcr.JcrUtils;
+import com.madalla.util.jcr.ocm.JcrOcmUtils;
 
 public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester {
 

@@ -1,4 +1,4 @@
-package com.madalla.util.jcr;
+package com.madalla.util.jcr.ocm;
 
 import java.io.FileInputStream;
 import java.io.InputStream;

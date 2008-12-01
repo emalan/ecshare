@@ -19,8 +19,8 @@ import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.service.cms.jcr.BlogEntry;
 import com.madalla.service.cms.ocm.blog.Blog;
-import com.madalla.util.jcr.JcrOcmUtils;
 import com.madalla.util.jcr.JcrUtils;
+import com.madalla.util.jcr.ocm.JcrOcmUtils;
 
 abstract class AbstractRepositoryService {
 	
