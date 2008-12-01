@@ -29,8 +29,7 @@ abstract class AbstractRepositoryService {
     static final String NS = "ec:";
     static final String EC_NODE_APP = NS + "apps";
     
-    AbstractRepositoryService() {
-				
+    public void init(){
 		Session session;
 		try {
 			session = template.getSessionFactory().getSession();
