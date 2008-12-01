@@ -2,6 +2,10 @@ package com.madalla.util.jcr.ocm;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -13,6 +17,18 @@ import org.apache.jackrabbit.core.nodetype.NodeTypeDef;
 import org.apache.jackrabbit.core.nodetype.NodeTypeManagerImpl;
 import org.apache.jackrabbit.core.nodetype.NodeTypeRegistry;
 import org.apache.jackrabbit.core.nodetype.xml.NodeTypeReader;
+import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
+import org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverterProvider;
+import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.DefaultAtomicTypeConverterProvider;
+import org.apache.jackrabbit.ocm.manager.impl.ObjectContentManagerImpl;
+import org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImpl;
+import org.apache.jackrabbit.ocm.mapper.Mapper;
+import org.apache.jackrabbit.ocm.mapper.impl.annotation.AnnotationMapperImpl;
+import org.apache.wicket.WicketRuntimeException;
+import org.joda.time.DateTime;
+
+import com.madalla.service.cms.ocm.blog.Blog;
+import com.madalla.service.cms.ocm.blog.BlogEntry;
 
 public class JcrOcmUtils {
 	
@@ -22,8 +38,35 @@ public class JcrOcmUtils {
     /** namespace constant */
     public static final String OCM_NAMESPACE = "http://jackrabbit.apache.org/ocm";
     
+    public static ObjectContentManager getObjectContentManager(Session session){
+
+    	try {
+			JcrOcmUtils.setupOcmNodeTypes(session);
+		} catch (RepositoryException e) {
+			throw new WicketRuntimeException("Error setting up OCM ObjectContentManager.",e);
+		}
+    	
+    	//Setup all OCM annotated classes
+		List<Class> classes = new ArrayList<Class>();	
+		classes.add(Blog.class);
+		classes.add(BlogEntry.class);
+		Mapper mapper = new AnnotationMapperImpl(classes);
+				
+		//Setup Convertors
+		Map convertors = new HashMap();
+		convertors.put(DateTime.class, JodaDateTimeTypeConverter.class);
+		AtomicTypeConverterProvider atomicTypeConverterProvider = new DefaultAtomicTypeConverterProvider(convertors);
+		
+		
+		ObjectContentManagerImpl ocm =  new ObjectContentManagerImpl(session, mapper);
+		ObjectConverterImpl converterImpl = new ObjectConverterImpl(mapper, atomicTypeConverterProvider);
+		ocm.setObjectConverter(converterImpl);
+		
+		return ocm;
+    }
     
-    public static void setupOcmNodeTypes(Session session) throws RepositoryException{
+    
+    private static void setupOcmNodeTypes(Session session) throws RepositoryException{
     	createNamespace(session);
     	registerOcmNodeType(session);
     }

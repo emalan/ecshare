@@ -70,13 +70,15 @@ public class ContentOcmBlogTest extends AbstractContentOcmTest {
 			BlogEntry blogEntry = new BlogEntry(blog, title, new DateTime());
 			String category = "test Category";
 			blogEntry.setCategory(category);
+			DateTime dateTime = new DateTime();
+			blogEntry.setDate(dateTime);
 			ocm.insert(blogEntry);
 			ocm.save();
 			
 			BlogEntry testEntry = (BlogEntry) ocm.getObject(BlogEntry.class, blogEntry.getId());
 			assertNotNull(testEntry);
 			assertEquals(category, testEntry.getCategory());
-			
+			assertEquals(dateTime, testEntry.getDate());
 		}
 		
 		{

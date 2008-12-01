@@ -1,6 +1,5 @@
 package com.madalla.service.cms.ocm;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -11,14 +10,9 @@ import javax.jcr.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
-import org.apache.jackrabbit.ocm.manager.impl.ObjectContentManagerImpl;
-import org.apache.jackrabbit.ocm.mapper.Mapper;
-import org.apache.jackrabbit.ocm.mapper.impl.annotation.AnnotationMapperImpl;
 import org.apache.wicket.WicketRuntimeException;
 import org.springmodules.jcr.JcrTemplate;
 
-import com.madalla.service.cms.jcr.BlogEntry;
-import com.madalla.service.cms.ocm.blog.Blog;
 import com.madalla.util.jcr.JcrUtils;
 import com.madalla.util.jcr.ocm.JcrOcmUtils;
 
@@ -36,20 +30,15 @@ abstract class AbstractRepositoryService {
     static final String EC_NODE_APP = NS + "apps";
     
     AbstractRepositoryService() {
-    	List<Class> classes = new ArrayList<Class>();	
-		classes.add(Blog.class);
-		classes.add(BlogEntry.class);
 				
-		Mapper mapper = new AnnotationMapperImpl(classes);
 		Session session;
 		try {
 			session = template.getSessionFactory().getSession();
-			JcrOcmUtils.setupOcmNodeTypes(session);
 		} catch (RepositoryException e) {
 			log.error("Error initializing - getting session from JcrTemplate", e);
 			throw new WicketRuntimeException("Error getting Session from JcrTemplate.",e);
 		}
-		ocm =  new ObjectContentManagerImpl(session, mapper);
+		ocm =  JcrOcmUtils.getObjectContentManager(session);
     }
 
     public Node getApplicationNode(Session session) throws RepositoryException{

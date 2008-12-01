@@ -9,17 +9,10 @@ import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverterProvider;
-import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.AtomicTypeConverterProviderImpl;
-import org.apache.jackrabbit.ocm.manager.impl.ObjectContentManagerImpl;
-import org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImpl;
-import org.apache.jackrabbit.ocm.mapper.Mapper;
-import org.apache.jackrabbit.ocm.mapper.impl.annotation.AnnotationMapperImpl;
+import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.AbstractSpringWicketTester;
-import com.madalla.service.cms.ocm.blog.Blog;
-import com.madalla.service.cms.ocm.blog.BlogEntry;
 import com.madalla.util.jcr.JcrUtils;
 import com.madalla.util.jcr.ocm.JcrOcmUtils;
 
@@ -32,28 +25,14 @@ public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester 
 	
 	Log log = LogFactory.getLog(this.getClass());
 	protected JcrTemplate template;
-	protected ObjectContentManagerImpl ocm;
+	protected ObjectContentManager ocm;
 	
 	@Override
 	protected void onSetUp() throws Exception {
 		super.onSetUp();
 		
-		//Setup all OCM annotated classes
-		List<Class> classes = new ArrayList<Class>();	
-		classes.add(Blog.class);
-		classes.add(BlogEntry.class);
-		Mapper mapper = new AnnotationMapperImpl(classes);
 		Session session = template.getSessionFactory().getSession();
-		JcrOcmUtils.setupOcmNodeTypes(session);
-
-		ocm =  new ObjectContentManagerImpl(session, mapper);
-		
-		//Add new Convertors
-		AtomicTypeConverterProvider atomicTypeConverterProvider = new AtomicTypeConverterProviderImpl();
-		//atomicTypeConverterProvider.getAtomicTypeConverters().put(key, value);
-		ObjectConverterImpl converterImpl = new ObjectConverterImpl(mapper, atomicTypeConverterProvider);
-
-		ocm.setObjectConverter(converterImpl);
+		ocm =  JcrOcmUtils.getObjectContentManager(session);
 	}
 	
 	protected Node getTestNode(Session session) throws RepositoryException{
