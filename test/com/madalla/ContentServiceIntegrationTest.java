@@ -15,14 +15,15 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.tree.LinkTree;
 import org.joda.time.DateTime;
 
+import com.madalla.service.cms.AbstractBlog;
 import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.BackupFile;
 import com.madalla.service.cms.IRepositoryAdminService;
 import com.madalla.service.cms.IRepositoryService;
-import com.madalla.service.cms.jcr.BlogEntry;
 import com.madalla.service.cms.jcr.Content;
 import com.madalla.service.cms.jcr.RepositoryService;
+import com.madalla.service.cms.ocm.blog.BlogEntry;
 
 public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
@@ -105,25 +106,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	String text = contentService.getContentData(CONTENT_PARENT, CONTENT_ID, Locale.FRENCH);
     	assertEquals(text, french);
     }
-    
-    public void testBlogGetSet(){
-    	BlogEntry blogEntry = createBlogEntry();
-        String path = blogEntry.save();
-        
-        AbstractBlogEntry testBlogEntry = oldRepositoryService.getBlogEntry(path);
-        assertEquals(blogEntry, testBlogEntry);
-        assertEquals(blogEntry.getBlog(), testBlogEntry.getBlog());
-        assertEquals(blogEntry.getTitle(), testBlogEntry.getTitle());
-        assertEquals(blogEntry.getText(), testBlogEntry.getText());
-        //assertEquals(blogEntry.getDate(), testBlogEntry.getDate());
-        
-        contentService.deleteNode(path);
-    }
-    
-    public void testBlogConversion(){
-    	//TODO
-    }
-    
+
     public void testImageGetSet() throws FileNotFoundException{
     	InputStream stream = this.getClass().getResourceAsStream("test1.jpg");
     	assertNotNull(stream);
@@ -144,8 +127,6 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	assertEquals(treeModel.getChildCount(treeModel.getRoot()), 1);
     }
     
-    
-    
     private final static String BLOG = "testBlog";
     private final static String BLOGCATEGORY = "testCategory";
     private final static String BLOGDESCRIPTION = "Blog Description Test";
@@ -154,8 +135,42 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     private final static String BLOGTITLE = "test title";
     private final static DateTime BLOGDATE = new DateTime();
     
-    private BlogEntry createBlogEntry(){
-    	BlogEntry entry = new BlogEntry.Builder(BLOG, BLOGTITLE, BLOGDATE).category(BLOGCATEGORY).build();
+    public void testBlogGetSet(){
+    	AbstractBlog blog = contentService.getBlog(BLOG);
+    	assertNotNull(blog);
+    	BlogEntry blogEntry = contentService.getNewBlogEntry(blog, BLOGTITLE, BLOGDATE);
+    	assertNotNull(blogEntry);
+    	blogEntry.setDescription(BLOGDESCRIPTION);
+    	String path = blogEntry.getId();
+    	contentService.saveBlogEntry(blogEntry);
+    	
+    	BlogEntry testEntry = contentService.getBlogEntry(path);
+    	assertNotNull(testEntry);
+    	
+    	contentService.deleteNode(path);
+    	
+//        String path = blogEntry.save();
+//        
+//        AbstractBlogEntry testBlogEntry = oldRepositoryService.getBlogEntry(path);
+//        assertEquals(blogEntry, testBlogEntry);
+//        assertEquals(blogEntry.getBlog(), testBlogEntry.getBlog());
+//        assertEquals(blogEntry.getTitle(), testBlogEntry.getTitle());
+//        assertEquals(blogEntry.getText(), testBlogEntry.getText());
+//        //assertEquals(blogEntry.getDate(), testBlogEntry.getDate());
+//        
+//        contentService.deleteNode(path);
+    }
+    
+    public void testBlogConversion(){
+    	//Create some old Blog Entries
+    	com.madalla.service.cms.jcr.BlogEntry blogEntry = createBlogEntry();
+        String path = blogEntry.save();
+        
+        AbstractBlogEntry testBlogEntry = oldRepositoryService.getBlogEntry(path);
+    }
+    
+    private com.madalla.service.cms.jcr.BlogEntry createBlogEntry(){
+    	com.madalla.service.cms.jcr.BlogEntry entry = new com.madalla.service.cms.jcr.BlogEntry.Builder(BLOG, BLOGTITLE, BLOGDATE).category(BLOGCATEGORY).build();
     	entry.setDescription(BLOGDESCRIPTION);
     	entry.setKeywords(BLOGKEYWORDS);
     	entry.setText(BLOGTEXT);

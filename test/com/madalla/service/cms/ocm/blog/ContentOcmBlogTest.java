@@ -96,10 +96,9 @@ public class ContentOcmBlogTest extends AbstractContentOcmTest {
 			log.info("retrieved blog entries :"+blogEntries.size());
 			assertTrue(blogEntries.size()>0);
 		}
-		//edit Blog - make sure entries are still there
 		
-		//ocm.remove(blogPath);
-		//ocm.save();
+		ocm.remove(blogPath);
+		ocm.save();
 		
 	}
 	
