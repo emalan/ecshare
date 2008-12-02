@@ -6,8 +6,6 @@ import org.apache.wicket.Page;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import com.madalla.service.blog.IBlogService;
-import com.madalla.service.blog.IBlogServiceProvider;
 import com.madalla.service.cms.AbstractBlog;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
@@ -21,8 +19,7 @@ public class BlogHomePanel extends Panel{
 		super(id);
 		
 		//Instanciation checks
-		if (!(getApplication() instanceof IBlogServiceProvider) ||
-				!(getApplication() instanceof IRepositoryServiceProvider)){
+		if (!(getApplication() instanceof IRepositoryServiceProvider)){
 			log.error("BlogHomePanel instanciation check failed on instanceof check.");
 			throw new WicketRuntimeException("BlogHomePanel needs your wicket Application class to extend " +
 					"the abstract class CmsBlogApplication.");

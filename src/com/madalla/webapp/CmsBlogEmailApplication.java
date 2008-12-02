@@ -13,7 +13,7 @@ import com.madalla.service.email.IEmailServiceProvider;
  * @author Eugene Malan
  *
  */
-public abstract class CmsBlogEmailApplication extends CmsBlogApplication implements IEmailServiceProvider {
+public abstract class CmsBlogEmailApplication extends CmsApplication implements IEmailServiceProvider {
 
 	private final static Log log = LogFactory.getLog(CmsBlogEmailApplication.class);
 	private IEmailSender emailSender;

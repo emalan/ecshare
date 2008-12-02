@@ -29,9 +29,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.joda.time.DateTime;
 
-import com.madalla.service.blog.IBlogService;
-import com.madalla.service.blog.IBlogServiceProvider;
-import com.madalla.service.cms.AbstractBlogEntry;
+import com.madalla.service.cms.AbstractBlog;
+import com.madalla.service.cms.IRepositoryService;
+import com.madalla.service.cms.IRepositoryServiceProvider;
+import com.madalla.service.cms.ocm.blog.BlogEntry;
 import com.madalla.webapp.blog.BlogEntryView;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 import com.madalla.wicket.form.AjaxValidationBehaviour;
@@ -68,7 +69,7 @@ public class BlogEntryPanel extends Panel {
     public BlogEntryPanel(String id, String blogName, String blogEntryId, Class<? extends Page> returnPage) {
     	this(id, returnPage);
         log.debug("Constructing Blog Entry. id="+blogEntryId);
-        blogEntry.init(getBlogService().getBlogEntry(blogEntryId));
+        blogEntry.init(getRepositoryService().getBlogEntry(blogEntryId));
         log.debug("Retrieved Blog Entry from Service."+blogEntry);
         add(new BlogEntryForm("blogForm",this));
     }
@@ -112,7 +113,7 @@ public class BlogEntryPanel extends Panel {
             
 
             //Category select
-            List<String> categories = getBlogService().getBlogCategories();
+            List<String> categories = BlogEntry.getBlogCategories();
             FormComponent categoryDropDown = new DropDownChoice("category", new PropertyModel(blogEntry,"category"), categories);
             categoryDropDown.setRequired(true);
             categoryDropDown.add(new ValidationStyleBehaviour());
@@ -167,20 +168,21 @@ public class BlogEntryPanel extends Panel {
 
     }
     
-    private IBlogService getBlogService(){
-    	return ((IBlogServiceProvider)getApplication()).getBlogService();
+    private IRepositoryService getRepositoryService(){
+    	return ((IRepositoryServiceProvider)getApplication()).getRepositoryService();
     }
     
     private void saveBlogEntry(BlogEntryView view){
-    	AbstractBlogEntry blogEntry;
+    	BlogEntry blogEntry;
     	if (StringUtils.isEmpty(view.getId())){
-    		blogEntry = getBlogService().getNewBlogEntry(view.getBlog(), view.getTitle(), new DateTime(view.getDate())); 
+    		AbstractBlog blog = getRepositoryService().getBlog(view.getBlog());
+    		blogEntry = getRepositoryService().getNewBlogEntry(blog, view.getTitle(), new DateTime(view.getDate())); 
     		view.populate(blogEntry);
     	} else {
-    		blogEntry = getBlogService().getBlogEntry(view.getId());
+    		blogEntry = getRepositoryService().getBlogEntry(view.getId());
     		view.populate(blogEntry);
     	}
-    	blogEntry.save();
+    	getRepositoryService().saveBlogEntry(blogEntry);
     }
 
 }

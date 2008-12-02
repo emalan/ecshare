@@ -8,8 +8,6 @@ import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.authorization.strategies.page.SimplePageAuthorizationStrategy;
 import org.apache.wicket.protocol.http.WebApplication;
 
-import com.madalla.service.blog.IBlogService;
-import com.madalla.service.blog.IBlogServiceProvider;
 import com.madalla.service.cms.IRepositoryAdminService;
 import com.madalla.service.cms.IRepositoryAdminServiceProvider;
 import com.madalla.service.cms.IRepositoryService;
@@ -22,22 +20,17 @@ import com.madalla.service.cms.IRepositoryServiceProvider;
  * @author Eugene Malan
  *
  */
-public abstract class CmsBlogApplication extends WebApplication implements IRepositoryServiceProvider, IBlogServiceProvider, IRepositoryAdminServiceProvider {
+public abstract class CmsApplication extends WebApplication implements IRepositoryServiceProvider, IRepositoryAdminServiceProvider {
 
     private IRepositoryService repositoryService;
-    private IBlogService blogService;
     private IRepositoryAdminService repositoryAdminService;
 
-	private final static Log log = LogFactory.getLog(CmsBlogApplication.class);
+	private final static Log log = LogFactory.getLog(CmsApplication.class);
     
     protected void init() {
     	//initialization checks
     	if (repositoryService == null){
     		log.fatal("Content Service is not configured Correctly.");
-    		throw new WicketRuntimeException("Service is not configured Correctly.");
-    	}
-    	if (blogService == null){
-    		log.fatal("Blog Service is not configured Correctly.");
     		throw new WicketRuntimeException("Service is not configured Correctly.");
     	}
     	if (repositoryAdminService == null){
@@ -71,14 +64,6 @@ public abstract class CmsBlogApplication extends WebApplication implements IRepo
         this.repositoryService = repositoryService;
     }
 
-    public void setBlogService(IBlogService blogService) {
-        this.blogService = blogService;
-    }
-
-    public IBlogService getBlogService() {
-        return blogService;
-    }
-    
     public IRepositoryAdminService getRepositoryAdminService() {
 		return repositoryAdminService;
 	}

@@ -114,29 +114,30 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 		return (AbstractBlog) ocm.getObject(Blog.class, blogPath);
 	}
 
-    public AbstractBlogEntry getBlogEntry(final String path) {
+	public BlogEntry getNewBlogEntry(AbstractBlog blog, String title, DateTime date){
+    	return new BlogEntry(blog, title, date );
+    }
+
+    public BlogEntry getBlogEntry(final String path) {
         if (StringUtils.isEmpty(path)){
             log.error("getBlogEntry - path is required.");
             return null;
         }
-        
-        AbstractBlogEntry blogEntry = (AbstractBlogEntry) ocm.getObject(BlogEntry.class, path);
-        
-        //check if converted
-        if (blogEntry.getDate() == null && blogEntry.getCategory() == null){
-        	//convert
-        }
-        //convert if neccessary
-        return blogEntry;
+        return (BlogEntry) ocm.getObject(BlogEntry.class, path);
+    }
+    
+    public void saveBlogEntry(BlogEntry blogEntry){
+    	if (ocm.objectExists(blogEntry.getId())){
+    		ocm.update(blogEntry);
+    	} else {
+    		ocm.insert(blogEntry);
+    	}
+    	ocm.save();
     }
     
     @Deprecated
     public AbstractBlogEntry getNewBlogEntry(String blog, String title, DateTime date){
     	return null;
-    }
-    
-    public AbstractBlogEntry getNewBlogEntry(AbstractBlog blog, String title, DateTime date){
-    	return new BlogEntry(blog, title, date );
     }
     
     public List<AbstractBlogEntry> getBlogEntries(AbstractBlog blog){

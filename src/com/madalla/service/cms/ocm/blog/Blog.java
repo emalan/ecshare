@@ -10,6 +10,7 @@ import com.madalla.service.cms.AbstractBlog;
 
 @Node
 public class Blog extends AbstractBlog{
+	private static final long serialVersionUID = 1L;
 
 	@Field(path=true) private String id;
 	@Field private String title;

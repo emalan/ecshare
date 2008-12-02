@@ -27,7 +27,7 @@ import com.madalla.webapp.images.admin.AlbumAdminPanel;
  * for your Pages. Provided to simplify the API by providing one
  * place for getting Panels.
  * 
- * NOTE: Your Wicket Application needs to extend the {@link CmsBlogApplication} or 
+ * NOTE: Your Wicket Application needs to extend the {@link CmsApplication} or 
  * the {@link CmsBlogEmailApplication} before you can use these Panels
  * 
  * @author Eugene Malan
