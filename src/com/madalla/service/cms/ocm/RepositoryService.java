@@ -56,7 +56,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	private static final long serialVersionUID = 795763276139305054L;
 	private static final Log log = LogFactory.getLog(RepositoryService.class);
 
-    private IRepositoryService oldRepositoryService;
+    private com.madalla.service.cms.jcr.RepositoryService oldRepositoryService;
 
     //Delete this and move out to Data classes
     static final String EC_PROP_CONTENT = "ec:" + "content";
@@ -226,11 +226,11 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	});
     }
 
-	public IRepositoryService getOldRepositoryService() {
+	public com.madalla.service.cms.jcr.RepositoryService getOldRepositoryService() {
 		return oldRepositoryService;
 	}
 
-	public void setOldRepositoryService(IRepositoryService oldRepositoryService) {
+	public void setOldRepositoryService(com.madalla.service.cms.jcr.RepositoryService oldRepositoryService) {
 		this.oldRepositoryService = oldRepositoryService;
 	}
     

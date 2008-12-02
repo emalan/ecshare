@@ -44,4 +44,5 @@ public class BlogHomePanel extends Panel{
     	return ((IRepositoryServiceProvider)getApplication()).getRepositoryService();
     }
 
+
 }

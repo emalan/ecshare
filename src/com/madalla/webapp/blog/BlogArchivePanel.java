@@ -2,6 +2,8 @@ package com.madalla.webapp.blog;
 
 import static com.madalla.webapp.blog.BlogParameters.BLOG_ENTRY_ID;
 
+import java.util.List;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
@@ -25,9 +27,11 @@ import org.apache.wicket.model.Model;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import com.madalla.service.blog.IBlogService;
-import com.madalla.service.blog.IBlogServiceProvider;
+import com.madalla.service.cms.AbstractBlog;
 import com.madalla.service.cms.AbstractBlogEntry;
+import com.madalla.service.cms.IRepositoryService;
+import com.madalla.service.cms.IRepositoryServiceProvider;
+import com.madalla.util.ui.CalendarUtils;
 import com.madalla.util.ui.ICalendarTreeInput;
 
 public class BlogArchivePanel extends Panel {
@@ -35,13 +39,13 @@ public class BlogArchivePanel extends Panel {
 	private Log log = LogFactory.getLog(this.getClass());
 	private static DateTimeFormatter df = DateTimeFormat.forPattern("MMM d");
 
-	BlogArchivePanel(final String id, final String blogName, final BlogDisplayPanel display ) {
+	BlogArchivePanel(final String id, final AbstractBlog blog, final BlogDisplayPanel display ) {
 		super(id);
 
 		//List existing Blogs
 		log.debug("construtor - retrieving blog entries from service.");
-		IBlogService service = getBlogService();
-		TreeModel blogEntries = service.getBlogEntriesAsTree(blogName);
+		List<AbstractBlogEntry> list = getRepositoryService().getBlogEntries(blog);
+		TreeModel blogEntries = CalendarUtils.createMonthlyTree("Blog Archive", list);
 		log.debug("construtor - retrieved blog entries. root="
 				+ blogEntries.getRoot());
 
@@ -118,8 +122,8 @@ public class BlogArchivePanel extends Panel {
 
 	}
 	
-    private IBlogService getBlogService(){
-    	return ((IBlogServiceProvider)getApplication()).getBlogService();
+    private IRepositoryService getRepositoryService(){
+    	return ((IRepositoryServiceProvider)getApplication()).getRepositoryService();
     }
 
 }

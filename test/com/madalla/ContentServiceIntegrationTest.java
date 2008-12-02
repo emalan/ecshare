@@ -22,12 +22,14 @@ import com.madalla.service.cms.IRepositoryAdminService;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.jcr.BlogEntry;
 import com.madalla.service.cms.jcr.Content;
+import com.madalla.service.cms.jcr.RepositoryService;
 
 public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
 	Log log = LogFactory.getLog(this.getClass());
 	private IRepositoryService contentService;
     private IRepositoryAdminService repositoryAdminService;
+    private RepositoryService oldRepositoryService;
 	private final static String CONTENT_ID = "testContent";
 	private final static String CONTENT_PARENT = "testParentNode";
 	private final static String CONTENT_TEXT = "Content text";
@@ -108,7 +110,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	BlogEntry blogEntry = createBlogEntry();
         String path = blogEntry.save();
         
-        AbstractBlogEntry testBlogEntry = contentService.getBlogEntry(path);
+        AbstractBlogEntry testBlogEntry = oldRepositoryService.getBlogEntry(path);
         assertEquals(blogEntry, testBlogEntry);
         assertEquals(blogEntry.getBlog(), testBlogEntry.getBlog());
         assertEquals(blogEntry.getTitle(), testBlogEntry.getTitle());
@@ -116,6 +118,10 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
         //assertEquals(blogEntry.getDate(), testBlogEntry.getDate());
         
         contentService.deleteNode(path);
+    }
+    
+    public void testBlogConversion(){
+    	//TODO
     }
     
     public void testImageGetSet() throws FileNotFoundException{
@@ -164,6 +170,13 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
         this.repositoryAdminService = contentAdminService;
     }
 
+	public RepositoryService getOldRepositoryService() {
+		return oldRepositoryService;
+	}
+
+	public void setOldRepositoryService(RepositoryService oldRepositoryService) {
+		this.oldRepositoryService = oldRepositoryService;
+	}
 
 
 }

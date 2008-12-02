@@ -43,7 +43,7 @@ import com.madalla.service.cms.ocm.blog.Blog;
  * @author Eugene Malan
  *
  */
-public class RepositoryService extends AbstractRepositoryService implements IRepositoryService, Serializable{
+public class RepositoryService extends AbstractRepositoryService implements Serializable{
 
 	private static final long serialVersionUID = 795763276139305054L;
 	private static final Log log = LogFactory.getLog(RepositoryService.class);

@@ -166,15 +166,11 @@ public class BlogDisplayPanel extends Panel {
 	}
 	
 	public void changeModel(String blogEntryId){
-		AbstractBlogEntry newData = getBlogService().getBlogEntry(blogEntryId);
+		AbstractBlogEntry newData = getRepositoryService().getBlogEntry(blogEntryId);
 		blogEntry.init(newData);
 		log.debug("changeModel - "+ blogEntry);
 	}
 	
-    private IBlogService getBlogService(){
-    	return ((IBlogServiceProvider)getApplication()).getBlogService();
-    }
-    
     private IRepositoryService getRepositoryService(){
     	return ((IRepositoryServiceProvider)getApplication()).getRepositoryService();
     }

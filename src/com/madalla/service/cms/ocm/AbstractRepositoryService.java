@@ -14,6 +14,7 @@ import javax.jcr.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
+import org.apache.wicket.WicketRuntimeException;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
@@ -30,17 +31,14 @@ abstract class AbstractRepositoryService{
     protected ObjectContentManager ocm;
 
     public void init(){
-    	template.execute(new JcrCallback(){
-
-			public Object doInJcr(Session session) throws IOException,
-					RepositoryException {
-				ocm =  JcrOcmUtils.getObjectContentManager(session);
-				//do conversion if neccessary
-				return null;
-			}
-    		
-    	});
-		
+    	Session session;
+		try {
+			session = template.getSessionFactory().getSession();
+		} catch (RepositoryException e) {
+			log.error("Exception while getting Session from JcrTemplate", e);
+			throw new WicketRuntimeException("Exception getting Session from JcrTemplate", e);
+		}
+		ocm =  JcrOcmUtils.getObjectContentManager(session);
     }
 
     public Node getApplicationNode(Session session) throws RepositoryException{
