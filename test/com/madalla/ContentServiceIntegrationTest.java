@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.tree.LinkTree;
 import org.joda.time.DateTime;
+import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.service.cms.AbstractBlog;
 import com.madalla.service.cms.AbstractBlogEntry;
@@ -24,13 +25,16 @@ import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.jcr.Content;
 import com.madalla.service.cms.jcr.RepositoryService;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
+import com.madalla.util.jcr.ocm.JcrOcmConversion;
 
 public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
 	Log log = LogFactory.getLog(this.getClass());
 	private IRepositoryService contentService;
     private IRepositoryAdminService repositoryAdminService;
-    private RepositoryService oldRepositoryService;
+    protected JcrTemplate template;
+	private RepositoryService oldRepositoryService;
+	private final static String SITE = "test";
 	private final static String CONTENT_ID = "testContent";
 	private final static String CONTENT_PARENT = "testParentNode";
 	private final static String CONTENT_TEXT = "Content text";
@@ -148,29 +152,25 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	assertNotNull(testEntry);
     	
     	contentService.deleteNode(path);
-    	
-//        String path = blogEntry.save();
-//        
-//        AbstractBlogEntry testBlogEntry = oldRepositoryService.getBlogEntry(path);
-//        assertEquals(blogEntry, testBlogEntry);
-//        assertEquals(blogEntry.getBlog(), testBlogEntry.getBlog());
-//        assertEquals(blogEntry.getTitle(), testBlogEntry.getTitle());
-//        assertEquals(blogEntry.getText(), testBlogEntry.getText());
-//        //assertEquals(blogEntry.getDate(), testBlogEntry.getDate());
-//        
-//        contentService.deleteNode(path);
     }
     
     public void testBlogConversion(){
     	//Create some old Blog Entries
-    	com.madalla.service.cms.jcr.BlogEntry blogEntry = createBlogEntry();
-        String path = blogEntry.save();
+    	for (int i = 0; i < 5; i++){
+    		com.madalla.service.cms.jcr.BlogEntry blogEntry = createBlogEntry(i);
+    		String path = blogEntry.save();
+    	}
         
-        AbstractBlogEntry testBlogEntry = oldRepositoryService.getBlogEntry(path);
+        //do conversion
+    	JcrOcmConversion conversion = new JcrOcmConversion();
+    	conversion.init(template, oldRepositoryService, contentService,SITE);
+    	conversion.convertNodesToOcm();
+    	
+    	//test conversion
     }
     
-    private com.madalla.service.cms.jcr.BlogEntry createBlogEntry(){
-    	com.madalla.service.cms.jcr.BlogEntry entry = new com.madalla.service.cms.jcr.BlogEntry.Builder(BLOG, BLOGTITLE, BLOGDATE).category(BLOGCATEGORY).build();
+    private com.madalla.service.cms.jcr.BlogEntry createBlogEntry(int i){
+    	com.madalla.service.cms.jcr.BlogEntry entry = new com.madalla.service.cms.jcr.BlogEntry.Builder(BLOG, BLOGTITLE+i, BLOGDATE).category(BLOGCATEGORY).build();
     	entry.setDescription(BLOGDESCRIPTION);
     	entry.setKeywords(BLOGKEYWORDS);
     	entry.setText(BLOGTEXT);
@@ -191,6 +191,14 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
 	public void setOldRepositoryService(RepositoryService oldRepositoryService) {
 		this.oldRepositoryService = oldRepositoryService;
+	}
+    
+	public JcrTemplate getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(JcrTemplate template) {
+		this.template = template;
 	}
 
 

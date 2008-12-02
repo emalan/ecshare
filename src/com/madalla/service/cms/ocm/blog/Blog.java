@@ -27,7 +27,7 @@ public class Blog extends AbstractBlog{
 	}
 	
 	public Blog(String parentPath, String blogName){
-		id = parentPath + "/ec:" + blogName;
+		id = parentPath + "/" + blogName;
 	}
 	
 	public void setBlogEntry(Map<String, BlogEntry> blogEntry) {

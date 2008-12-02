@@ -1,8 +1,5 @@
 package com.madalla.service.cms.ocm;
 
-import static com.madalla.service.cms.ocm.RepositoryInfo.EC_NODE_APP;
-import static com.madalla.service.cms.ocm.RepositoryInfo.NS;
-
 import java.io.IOException;
 
 import javax.jcr.Node;
@@ -19,6 +16,9 @@ public class RepositoryInfo {
     //Repository Node Names
     public static final String NS = "ec:";
     public static final String EC_NODE_APP = NS + "apps";
+    public static final String EC_NODE_BLOGS = NS + "blogs";
+    public static final String EC_NODE_PAGES = NS + "pages";
+    public static final String EC_NODE_IMAGES = NS + "images";
  
     
     public static Node getApplicationNode(Session session) throws RepositoryException{
@@ -28,6 +28,11 @@ public class RepositoryInfo {
 	public static Node getSiteNode(Session session, String site) throws RepositoryException {
     	Node appNode = getApplicationNode(session);
     	return JcrUtils.getCreateNode(NS+site, appNode);
+	}
+	
+	public static Node getBlogsNode(Session session, String site) throws RepositoryException{
+		Node siteNode = getSiteNode(session, site);
+		return JcrUtils.getCreateNode(EC_NODE_BLOGS, siteNode);
 	}
 	
 	public static boolean isDeletableNode(JcrTemplate template, final String path){

@@ -30,7 +30,6 @@ import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.jcr.Content;
 import com.madalla.service.cms.ocm.blog.Blog;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
-import com.madalla.service.cms.ocm.blog.BlogInfo;
 
 /**
  * Content Service Implementation for Jackrabbit JCR Content Repository
@@ -61,6 +60,10 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     //Delete this and move out to Data classes
     static final String EC_PROP_CONTENT = "ec:" + "content";
 
+    public void init(){
+    	super.init();
+    	//do Conversion
+    }
     public boolean isDeletableNode(final String path){
     	return RepositoryInfo.isDeletableNode(template, path);
     }
@@ -105,7 +108,15 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	}
 	
 	public AbstractBlog getBlog(final String blogName){
-		String blogPath = BlogInfo.getPath(blogName, template, site);
+		String blogPath = (String )template.execute(new JcrCallback(){
+			public Object doInJcr(Session session) throws IOException,
+					RepositoryException {
+				Node blogsNode = RepositoryInfo.getBlogsNode(session, site);
+				session.save();
+				return blogsNode.getPath()+"/"+ blogName;
+			}
+		});
+
 		if (!ocm.objectExists(blogPath)){
 			Blog blog = new Blog(blogPath);
 			ocm.insert(blog);

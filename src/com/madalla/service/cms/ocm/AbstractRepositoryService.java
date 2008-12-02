@@ -1,9 +1,5 @@
 package com.madalla.service.cms.ocm;
 
-import static com.madalla.service.cms.ocm.RepositoryInfo.EC_NODE_APP;
-import static com.madalla.service.cms.ocm.RepositoryInfo.NS;
-
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -15,7 +11,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.apache.wicket.WicketRuntimeException;
-import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.util.jcr.JcrUtils;

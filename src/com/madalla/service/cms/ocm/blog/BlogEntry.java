@@ -35,7 +35,7 @@ public class BlogEntry extends AbstractBlogEntry implements Serializable {
     public BlogEntry(AbstractBlog blog, final String title, final DateTime date){
     	this.title = title;
     	this.date = date;
-    	this.id = blog.getId() + "/ec:" + getName();
+    	this.id = blog.getId() + "/" + getName();
     }
     
     @Override
