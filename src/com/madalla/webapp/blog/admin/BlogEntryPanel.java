@@ -56,7 +56,7 @@ public class BlogEntryPanel extends Panel {
     	this(id, returnPage);
         blogEntry.setBlog(blogName);
         log.debug("Created new Blog Entry");
-        add(new BlogEntryForm("blogForm",this));
+        init();
     }
     
     /**
@@ -71,7 +71,15 @@ public class BlogEntryPanel extends Panel {
         log.debug("Constructing Blog Entry. id="+blogEntryId);
         blogEntry.init(getRepositoryService().getBlogEntry(blogEntryId));
         log.debug("Retrieved Blog Entry from Service."+blogEntry);
-        add(new BlogEntryForm("blogForm",this));
+        init();
+    }
+    
+    private void init(){
+    	Form form = new BlogEntryForm("blogForm");
+        final FeedbackPanel feedbackPanel = new ComponentFeedbackPanel("feedback",form);
+        feedbackPanel.setOutputMarkupId(true);
+        form.add(feedbackPanel);
+        add(form);
     }
     
     private BlogEntryPanel(String id, Class<? extends Page> returnPage){
@@ -84,7 +92,7 @@ public class BlogEntryPanel extends Panel {
     final class BlogEntryForm extends Form{
         private static final long serialVersionUID = 1L;
         
-        public BlogEntryForm(final String name, Component panel) {
+        public BlogEntryForm(final String name) {
             super(name);
 
             //Date
@@ -98,7 +106,7 @@ public class BlogEntryPanel extends Panel {
             dateFeedback.setOutputMarkupId(true);
             add(dateFeedback);
             dateTextField.add(new AjaxValidationBehaviour(dateFeedback));
-            dateTextField.setLabel(new Model(panel.getString("label.date")));
+            dateTextField.setLabel(new Model(BlogEntryPanel.this.getString("label.date")));
             add(dateTextField);
             dateTextField.add(new DatePicker(){
 
@@ -124,7 +132,7 @@ public class BlogEntryPanel extends Panel {
             		target.addComponent(getFormComponent());
             	}
             });
-            categoryDropDown.setLabel(new Model(panel.getString("label.category")));
+            categoryDropDown.setLabel(new Model(BlogEntryPanel.this.getString("label.category")));
             add(categoryDropDown);
             add(new ComponentFeedbackPanel("categoryFeedback", categoryDropDown));
 
@@ -132,7 +140,7 @@ public class BlogEntryPanel extends Panel {
             FeedbackPanel titleFeedback = new FeedbackPanel("titleFeedback");
             add(titleFeedback);
             TextField title = new ValidationStyleRequiredTextField("title",new PropertyModel(blogEntry,"title"), titleFeedback);
-            title.setLabel(new Model(panel.getString("label.title")));
+            title.setLabel(new Model(BlogEntryPanel.this.getString("label.title")));
             add(title);
             
             add(new TextArea("description",new PropertyModel(blogEntry,"description")).setConvertEmptyInputStringToNull(false));
@@ -160,8 +168,8 @@ public class BlogEntryPanel extends Panel {
                 log.info("Blog Entry successfully saved. " + blogEntry);
                 setResponsePage(returnPage);
             } catch (Exception e) {
-                info("There was a problem saving Entry.");
-                info(e.getMessage());
+                error("There was a problem saving Entry.");
+                error(e.getMessage());
                 log.error("Exception while saving entry to blog service.", e);
             }
         }
