@@ -35,6 +35,15 @@ public class RepositoryInfo {
 		return JcrUtils.getCreateNode(EC_NODE_BLOGS, siteNode);
 	}
 	
+	public static boolean isNodeType(final String path, String type){
+    	String[] pathArray = path.split("/");
+    	return type.equals(pathArray[pathArray.length - 3]);
+    }
+	
+	public static boolean isBlogNodeType(final String path){
+    	return isNodeType(path, EC_NODE_BLOGS);
+    }
+	
 	public static boolean isDeletableNode(JcrTemplate template, final String path){
     	Node result = (Node) template.execute(new JcrCallback(){
 

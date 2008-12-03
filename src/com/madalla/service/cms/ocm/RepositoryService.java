@@ -78,7 +78,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     public boolean isBlogNode(final String path){
-    	return oldRepositoryService.isBlogNode(path);
+    	return RepositoryInfo.isBlogNodeType(path);
     }
     
     public boolean isImageNode(final String path){
