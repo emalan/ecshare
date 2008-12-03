@@ -30,6 +30,7 @@ import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.jcr.Content;
 import com.madalla.service.cms.ocm.blog.Blog;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
+import com.madalla.util.jcr.ocm.JcrOcmConversion;
 
 /**
  * Content Service Implementation for Jackrabbit JCR Content Repository
@@ -63,6 +64,10 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     public void init(){
     	super.init();
     	//do Conversion
+    	JcrOcmConversion conversion = new JcrOcmConversion();
+    	conversion.init(template, oldRepositoryService, this,site);
+    	conversion.convertNodesToOcm();
+
     }
     public boolean isDeletableNode(final String path){
     	return RepositoryInfo.isDeletableNode(template, path);

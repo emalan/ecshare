@@ -17,7 +17,7 @@ import org.springmodules.jcr.JcrTemplate;
 import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.IRepositoryData;
 
-class BlogEntryHelper extends AbstractContentHelper {
+public class BlogEntryHelper extends AbstractContentHelper {
 	
 	//Repository data names
 	private static final String EC_NODE_BLOGS = NS + "blogs";
@@ -43,7 +43,7 @@ class BlogEntryHelper extends AbstractContentHelper {
     	return isNodeType(path, EC_NODE_BLOGS);
     }
     
-    private static BlogEntry create(Node node) throws RepositoryException{
+    public static BlogEntry create(Node node) throws RepositoryException{
     	String blog = node.getParent().getName().replaceFirst(NS,"");
     	String title = node.getProperty(EC_PROP_TITLE).getString();
     	String description = node.getProperty(EC_PROP_DESCRIPTION).getString();

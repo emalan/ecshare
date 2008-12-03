@@ -6,10 +6,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.apache.wicket.WicketRuntimeException;
 import org.springmodules.jcr.JcrCallback;
@@ -18,11 +21,13 @@ import org.springmodules.jcr.JcrTemplate;
 import com.madalla.service.cms.AbstractBlog;
 import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.IRepositoryService;
+import com.madalla.service.cms.jcr.BlogEntryHelper;
 import com.madalla.service.cms.ocm.RepositoryInfo;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
 
 public class JcrOcmConversion {
 	
+	Log log = LogFactory.getLog(this.getClass());
 	private IRepositoryService repositoryService;
 	private com.madalla.service.cms.jcr.RepositoryService oldRepositoryService;
 	private ObjectContentManager ocm;
@@ -62,9 +67,17 @@ public class JcrOcmConversion {
 					}
 				}
 				for (Node blogNode: list){
-					
+					log.warn("*** Conversion ***");
+					log.warn("Converting Blog..."+ blogNode.getPath());
 					String blogName = StringUtils.substringAfter(blogNode.getName(), "ec:");
-					List<AbstractBlogEntry> blogEntries = oldRepositoryService.getBlogEntries(blogName);
+					
+					List<AbstractBlogEntry> blogEntries = new ArrayList<AbstractBlogEntry>();
+	                for (NodeIterator iterator = blogNode.getNodes(); iterator.hasNext();){
+	                    Node nextNode = iterator.nextNode();
+	                    blogEntries.add(BlogEntryHelper.create(nextNode));
+	                }
+	                
+					
 					AbstractBlog blog = repositoryService.getBlog(blogName);
 					for(AbstractBlogEntry old: blogEntries){
 						BlogEntry newEntry = repositoryService.getNewBlogEntry(blog, old.getTitle(), old.getDate());
