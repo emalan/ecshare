@@ -60,7 +60,7 @@ public class BlogDisplayPanel extends Panel {
 		
 		//new Blog link
         add(new BookmarkablePageLink("createNew",BlogEntryPage.class, 
-        		new PageParameters(RETURN_PAGE+"="+returnPage.getName()+","+BLOG_ENTRY_ID+"=,"+BLOG_NAME+"="+blog.getId())){
+        		new PageParameters(RETURN_PAGE+"="+returnPage.getName()+","+BLOG_ENTRY_ID+"=,"+BLOG_NAME+"="+blog.getName())){
     		private static final long serialVersionUID = -6335468391788102638L;
     		
     		@Override
