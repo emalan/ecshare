@@ -1,6 +1,7 @@
 <html xmlns:wicket>
 <wicket:head>
        <style type="text/css">
+            #control {float: left; width: 100%;}
         	form {float:left;}
 
             form textarea {float:left; clear:both;}
@@ -14,6 +15,11 @@
 </wicket:head>
 <body>
     <wicket:panel>
+        <div id="control">
+            <span class="buttonwrapper">
+                <a href="#" class="bluebutton" wicket:id="returnLink"><span><wicket:message key="label.return">Label Contents</wicket:message></span></a>
+            </span>
+        </div>
         <form wicket:id="contentForm">
             <div>
                 <a href="javascript:;" onmousedown="tinyMCE.get('text').show();">[Show]</a>

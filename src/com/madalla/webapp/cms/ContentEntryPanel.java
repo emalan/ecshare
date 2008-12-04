@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
@@ -49,6 +50,8 @@ public class ContentEntryPanel extends Panel {
         this.contentPage = returnPage;
         add(HeaderContributor.forJavaScript(TinyMce.class, "tiny_mce.js"));
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
+
+        add(new PageLink("returnLink", returnPage));
 
         IRepositoryService service = ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
         text = service.getContentData(nodeName, contentId, getSession().getLocale());
