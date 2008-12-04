@@ -1,12 +1,16 @@
 package com.madalla.webapp.cms;
 
+import static com.madalla.webapp.PageParams.RETURN_PAGE;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -17,6 +21,7 @@ import org.apache.wicket.model.PropertyModel;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.service.cms.jcr.Content;
+import com.madalla.webapp.pages.ContentAdminPage;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 
 /**
@@ -52,6 +57,8 @@ public class ContentEntryPanel extends Panel {
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
 
         add(new PageLink("returnLink", returnPage));
+		add(new BookmarkablePageLink("contentAdminLink", ContentAdminPage.class, 
+				new PageParameters(RETURN_PAGE + "=" + returnPage.getName())) );
 
         IRepositoryService service = ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
         text = service.getContentData(nodeName, contentId, getSession().getLocale());
