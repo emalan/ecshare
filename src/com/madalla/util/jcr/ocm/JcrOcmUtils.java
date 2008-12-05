@@ -29,6 +29,8 @@ import org.joda.time.DateTime;
 
 import com.madalla.service.cms.ocm.blog.Blog;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
+import com.madalla.service.cms.ocm.image.Album;
+import com.madalla.service.cms.ocm.image.Image;
 
 public class JcrOcmUtils {
 	
@@ -50,6 +52,8 @@ public class JcrOcmUtils {
 		List<Class> classes = new ArrayList<Class>();	
 		classes.add(Blog.class);
 		classes.add(BlogEntry.class);
+		classes.add(Album.class);
+		classes.add(Image.class);
 		Mapper mapper = new AnnotationMapperImpl(classes);
 				
 		//Setup Convertors

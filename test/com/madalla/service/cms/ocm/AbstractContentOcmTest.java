@@ -18,10 +18,9 @@ import com.madalla.util.jcr.ocm.JcrOcmUtils;
 
 public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester {
 
-	/////ec:apps/ec:test/ec:blogs/ec:testBlog
-	protected static final String NS = "ec:";
+	private static final String NS = "ec:";
 	private static final String NS_APP = NS+"apps";
-	private static final String NS_TEST = NS+"test";
+	protected static final String NS_TEST = "test";
 	
 	Log log = LogFactory.getLog(this.getClass());
 	protected JcrTemplate template;

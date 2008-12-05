@@ -17,21 +17,16 @@ import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrCallback;
 
 import com.madalla.service.cms.ocm.AbstractContentOcmTest;
-import com.madalla.util.jcr.JcrUtils;
+import com.madalla.service.cms.ocm.RepositoryInfo;
+import com.madalla.service.cms.ocm.RepositoryInfo.RepositoryType;
 
 public class ContentOcmBlogTest extends AbstractContentOcmTest {
 
-	
-	private static final String NS_BLOG = NS+"blogs";
-	
 	private Log log = LogFactory.getLog(this.getClass());
 	
 	public void testOcmBlogEntry() throws RepositoryException{
-
 		
-		//getCreate test Node
-		// /ec:apps/ec:test/ec:blogs/ec:testBlog
-		String blogsPath = getCreateBlogsNode();
+		String blogsPath = getCreateParentNode();
 		
 		String blogName = RandomStringUtils.randomAlphabetic(5)+"Blog";
 		String blogPath ;
@@ -102,15 +97,14 @@ public class ContentOcmBlogTest extends AbstractContentOcmTest {
 		
 	}
 	
-	protected String getCreateBlogsNode(){
+	protected String getCreateParentNode(){
 		return (String) template.execute(new JcrCallback(){
 
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
-				Node test = getTestNode(session);
-				Node blogs = JcrUtils.getCreateNode(NS_BLOG, test);
+				
+				Node blogs = RepositoryInfo.getGroupNode(session, NS_TEST, RepositoryType.BLOG);
 				session.save();
-				log.debug("created Node with path: "+blogs.getPath());
 				return blogs.getPath();
 			}
 			

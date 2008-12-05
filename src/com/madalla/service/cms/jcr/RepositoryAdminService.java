@@ -130,7 +130,7 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
     	return BackupFile.getFileList(getSite(),repositoryHome);
     }
     
-    //TODO refactore the 2 restore methods
+    //TODO refactor the 2 restore methods
     public void restoreContentApplication(final File backupFile) {
         log.info("restoreContentApplication - Importing data to repository from file. file ="+backupFile.getPath());
     	template.execute(new JcrCallback(){

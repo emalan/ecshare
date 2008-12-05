@@ -9,39 +9,56 @@ import javax.jcr.Session;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
+import com.madalla.service.cms.ocm.blog.Blog;
+import com.madalla.service.cms.ocm.blog.BlogEntry;
+import com.madalla.service.cms.ocm.image.Album;
+import com.madalla.service.cms.ocm.image.Image;
 import com.madalla.util.jcr.JcrUtils;
 
 public class RepositoryInfo {
 
     //Repository Node Names
-    public static final String NS = "ec:";
-    public static final String EC_NODE_APP = NS + "apps";
-    public static final String EC_NODE_BLOGS = NS + "blogs";
-    public static final String EC_NODE_PAGES = NS + "pages";
-    public static final String EC_NODE_IMAGES = NS + "images";
+    private static final String NS = "ec:";
+    private static final String EC_NODE_APP = NS + "apps";
+    private static final String EC_NODE_BLOGS = NS + "blogs";
+    private static final String EC_NODE_PAGES = NS + "pages";
+    private static final String EC_NODE_IMAGES = NS + "images";
+
+	public enum RepositoryType {
+		BLOG(Blog.class, true, EC_NODE_BLOGS),
+		BLOGENTRY(BlogEntry.class, false,EC_NODE_BLOGS),
+		ALBUM(Album.class, true, EC_NODE_IMAGES),
+		IMAGE(Image.class, false, EC_NODE_IMAGES);
+		
+		public final Class typeClass;
+		public final boolean parent;
+		public String groupName;
+		RepositoryType(Class typeClass, boolean parent, String groupName){
+			this.typeClass = typeClass;
+			this.parent = parent;
+			this.groupName = groupName;
+		}
+	}
+
  
-    
     public static Node getApplicationNode(Session session) throws RepositoryException{
     	return JcrUtils.getCreateNode(EC_NODE_APP, session.getRootNode());
     }
     
-	public static Node getSiteNode(Session session, String site) throws RepositoryException {
-    	Node appNode = getApplicationNode(session);
-    	return JcrUtils.getCreateNode(NS+site, appNode);
-	}
-	
-	public static Node getBlogsNode(Session session, String site) throws RepositoryException{
-		Node siteNode = getSiteNode(session, site);
-		return JcrUtils.getCreateNode(EC_NODE_BLOGS, siteNode);
-	}
-	
-	public static boolean isNodeType(final String path, String type){
-    	String[] pathArray = path.split("/");
-    	return type.equals(pathArray[pathArray.length - 3]);
+    public static Node getGroupNode(Session session, String site, RepositoryType type) throws RepositoryException{
+    	if (type.parent){
+    		return getCreateParentNode(session, site, type.groupName);
+    	} else {
+    		return null;
+    	}
     }
-	
+    
 	public static boolean isBlogNodeType(final String path){
     	return isNodeType(path, EC_NODE_BLOGS);
+    }
+	
+	public static boolean isImagesNodeType(final String path){
+    	return isNodeType(path, EC_NODE_IMAGES);
     }
 	
 	public static boolean isDeletableNode(JcrTemplate template, final String path){
@@ -70,4 +87,18 @@ public class RepositoryInfo {
     	}
     	
     }
+
+	private static boolean isNodeType(final String path, String type){
+    	String[] pathArray = path.split("/");
+    	return type.equals(pathArray[pathArray.length - 3]);
+    }
+	
+	private static Node getCreateParentNode(Session session, String site, String type) throws RepositoryException {
+    	Node appNode = getApplicationNode(session);
+    	Node siteNode =  JcrUtils.getCreateNode(NS+site, appNode);
+    	return JcrUtils.getCreateNode(type, siteNode);
+	}
+	
+
+
 }

@@ -15,6 +15,13 @@ public class Album implements Serializable{
 	@Field private String title;
 	@Field private String type;
 	
+	public Album(){
+		
+	}
+	
+	public Album(String parentPath, String name){
+		id = parentPath + "/" + name;
+	}
 	public String getName(){
 		return StringUtils.substringAfterLast(getId(), "/");
 	}

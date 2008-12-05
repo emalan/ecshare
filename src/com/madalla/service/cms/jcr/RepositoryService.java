@@ -2,7 +2,6 @@ package com.madalla.service.cms.jcr;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -21,8 +20,6 @@ import org.springmodules.jcr.JcrCallback;
 import com.madalla.service.cms.AbstractBlog;
 import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.AbstractImageData;
-import com.madalla.service.cms.IRepositoryService;
-import com.madalla.service.cms.ocm.blog.Blog;
 
 /**
  * Content Service Implementation for JCR Content Repository

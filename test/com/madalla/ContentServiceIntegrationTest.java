@@ -17,7 +17,6 @@ import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.service.cms.AbstractBlog;
-import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.BackupFile;
 import com.madalla.service.cms.IRepositoryAdminService;

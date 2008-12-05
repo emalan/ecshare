@@ -27,6 +27,22 @@ public class Image implements Serializable, Comparable<Image>{
 	private DynamicImageResource webResource;
 	private DynamicImageResource thumbnail;
 	
+	public Image(){
+		
+	}
+	
+	public Image(final Album album, final String name, final InputStream fullImage){
+		this.id = album.getId() + "/" + name;
+		//this.fullImage = fullImage;
+		this.webResource = null;
+	}
+
+	public Image(final String id, final Album album, final String name, final DynamicImageResource fullImage){
+		this.id = album.getId() + "/" + name;
+		//this.fullImage = null;
+		this.webResource =  fullImage;
+	}
+
 	public String getName(){
 		return StringUtils.substringAfterLast(getId(), "/");
 	}

@@ -23,6 +23,7 @@ import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.jcr.BlogEntryHelper;
 import com.madalla.service.cms.ocm.RepositoryInfo;
+import com.madalla.service.cms.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
 
 public class JcrOcmConversion {
@@ -59,7 +60,7 @@ public class JcrOcmConversion {
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
 				final List<Node> list = new ArrayList<Node>();
-				Node blogsNode = RepositoryInfo.getBlogsNode(session, site);
+				Node blogsNode = RepositoryInfo.getGroupNode(session, site, RepositoryType.BLOG);
 				for (Iterator iter = blogsNode.getNodes(); iter.hasNext();){
 					Node node = (Node) iter.next();
 					if (node.getName().startsWith("ec:")){
