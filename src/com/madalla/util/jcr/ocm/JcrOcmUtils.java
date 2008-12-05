@@ -27,10 +27,7 @@ import org.apache.jackrabbit.ocm.mapper.impl.annotation.AnnotationMapperImpl;
 import org.apache.wicket.WicketRuntimeException;
 import org.joda.time.DateTime;
 
-import com.madalla.service.cms.ocm.blog.Blog;
-import com.madalla.service.cms.ocm.blog.BlogEntry;
-import com.madalla.service.cms.ocm.image.Album;
-import com.madalla.service.cms.ocm.image.Image;
+import com.madalla.service.cms.ocm.RepositoryInfo.RepositoryType;
 
 public class JcrOcmUtils {
 	
@@ -48,12 +45,11 @@ public class JcrOcmUtils {
 			throw new WicketRuntimeException("Error setting up OCM ObjectContentManager.",e);
 		}
     	
-    	//Setup all OCM annotated classes
-		List<Class> classes = new ArrayList<Class>();	
-		classes.add(Blog.class);
-		classes.add(BlogEntry.class);
-		classes.add(Album.class);
-		classes.add(Image.class);
+    	//Setup OCM annotated classes
+		List<Class> classes = new ArrayList<Class>();
+		for(RepositoryType type: RepositoryType.values()){
+			classes.add(type.typeClass);
+		}
 		Mapper mapper = new AnnotationMapperImpl(classes);
 				
 		//Setup Convertors

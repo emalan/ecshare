@@ -1,7 +1,6 @@
 package com.madalla.service.cms.ocm;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,7 +32,7 @@ import com.madalla.service.cms.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.service.cms.ocm.blog.Blog;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
 import com.madalla.service.cms.ocm.image.Album;
-import com.madalla.service.cms.ocm.image.ImageHelper;
+import com.madalla.service.cms.ocm.image.OriginalAlbum;
 import com.madalla.util.jcr.ParentNodeCallback;
 import com.madalla.util.jcr.ParentNodeTemplate;
 import com.madalla.util.jcr.ocm.JcrOcmConversion;
@@ -109,9 +108,17 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	});
     }
 
-//	public Album getOriginalsAlbum(){
-//		return getAlbum(name);
-//	}
+	public Album getOriginalsAlbum(){
+		return (Album) parentNodeTemplate.execute(RepositoryType.ORIGINALALBUM, new ParentNodeCallback(){
+
+			@Override
+			public Object createNew(String parentPath, String name) {
+				return new OriginalAlbum(parentPath);
+			}
+			
+		});
+	}
+
 //	public String createOriginalImage(String imageName, InputStream fullImage) {
 //		return ImageHelper.getInstance().saveOriginalImage(imageName, fullImage);
 //	}
