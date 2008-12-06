@@ -1,6 +1,7 @@
 package com.madalla.service.cms.ocm;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,9 +33,10 @@ import com.madalla.service.cms.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.service.cms.ocm.blog.Blog;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
 import com.madalla.service.cms.ocm.image.Album;
-import com.madalla.service.cms.ocm.image.OriginalAlbum;
+import com.madalla.service.cms.ocm.image.Image;
+import com.madalla.service.cms.ocm.image.ImageHelper;
 import com.madalla.util.jcr.ParentNodeCallback;
-import com.madalla.util.jcr.ParentNodeTemplate;
+import com.madalla.util.jcr.RepositoryTemplate;
 import com.madalla.util.jcr.ocm.JcrOcmConversion;
 
 /**
@@ -62,14 +64,14 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	private static final Log log = LogFactory.getLog(RepositoryService.class);
 
     private com.madalla.service.cms.jcr.RepositoryService oldRepositoryService;
-    private ParentNodeTemplate parentNodeTemplate;
+    private RepositoryTemplate repositoryTemplate;
 
     //Delete this and move out to Data classes
     static final String EC_PROP_CONTENT = "ec:" + "content";
 
     public void init(){
     	super.init();
-    	parentNodeTemplate = new ParentNodeTemplate(template, ocm, site);
+    	repositoryTemplate = new RepositoryTemplate(template, ocm, site);
     	
     	//do Conversion
     	JcrOcmConversion conversion = new JcrOcmConversion();
@@ -97,32 +99,62 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	return oldRepositoryService.isContentPasteNode(path);
     }
     
+    /**
+     * Creates the album if it does not exist.
+     * @param name - album name
+     * @return - album
+     */
     public Album getAlbum(final String name){
-    	return (Album) parentNodeTemplate.execute(RepositoryType.ALBUM, name, new ParentNodeCallback(){
+    	return (Album) repositoryTemplate.executeParent(RepositoryType.ALBUM, name, new ParentNodeCallback(){
 
 			@Override
-			public Object createNew(String parentPath, String name) {
+			public AbstractOcm createNew(String parentPath, String name) {
 				return new Album();
 			}
 
     	});
     }
-
-	public Album getOriginalsAlbum(){
-		return (Album) parentNodeTemplate.execute(RepositoryType.ORIGINALALBUM, new ParentNodeCallback(){
+    
+    private static final String ORIGINAL_ALBUM_NAME = "Originals";
+	
+    /**
+     * The originals album is a storage space for all uploaded images. The uploaded images can be copied out
+     * to albums for display on the site. the album is created if it does not exist.
+     * 
+     * @return - the album where we store all uploaded images
+     */
+    public Album getOriginalsAlbum(){
+		return (Album) repositoryTemplate.executeParent(RepositoryType.ALBUM,ORIGINAL_ALBUM_NAME , new ParentNodeCallback(){
 
 			@Override
 			public Object createNew(String parentPath, String name) {
-				return new OriginalAlbum(parentPath);
+				return new Album(parentPath, name);
 			}
 			
 		});
 	}
 
-//	public String createOriginalImage(String imageName, InputStream fullImage) {
-//		return ImageHelper.getInstance().saveOriginalImage(imageName, fullImage);
-//	}
-//	
+	public void createImage(Album album, String name, InputStream inputStream) {
+        //TODO use repository Template
+	    
+	    //scale image down to defaults if necessary
+	    inputStream = ImageHelper.scaleOriginalImage(inputStream);
+		
+		Image image = new Image(album, name, inputStream);
+        if (ocm.objectExists(image.getId())){
+            ocm.update(image);
+	    } else {
+	        ocm.insert(image);
+	    }
+	    ocm.save();
+	    
+	    //post save Thumbnail creation
+	    Image postProcessing = (Image) ocm.getObject(Image.class, image.getId());
+	    postProcessing.setImageThumb(ImageHelper.scaleThumbnailImage(postProcessing.getImageFull()));
+	    ocm.update(postProcessing);
+	    ocm.save();
+	}
+	
 //	public String addImageToAlbum(String album, String imageName) {
 //		return ImageHelper.getInstance().saveAlbumImage(album, imageName);
 //	}
@@ -151,7 +183,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	}
 	
 	public Blog getBlog(final String blogName){
-		return (Blog) parentNodeTemplate.execute(RepositoryType.BLOG, blogName, new ParentNodeCallback(){
+		return (Blog) repositoryTemplate.executeParent(RepositoryType.BLOG, blogName, new ParentNodeCallback(){
 
 			@Override
 			public Object createNew(String parentPath, String name) {
@@ -166,6 +198,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
 
     public BlogEntry getBlogEntry(final String path) {
+        //TODO use repository Template
         if (StringUtils.isEmpty(path)){
             log.error("getBlogEntry - path is required.");
             return null;

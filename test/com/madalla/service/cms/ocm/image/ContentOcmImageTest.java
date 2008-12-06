@@ -1,6 +1,7 @@
 package com.madalla.service.cms.ocm.image;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -41,8 +42,30 @@ public class ContentOcmImageTest extends AbstractContentOcmTest{
 		
 		{
 			//test Image
-			Image image = new Image();
+			InputStream jpg = this.getClass().getResourceAsStream("test1.jpg");
+			InputStream png = this.getClass().getResourceAsStream("test1.png");
+			Album album = (Album) ocm.getObject(Album.class, nodePath);
+
+			jpg = ImageHelper.scaleOriginalImage(jpg);
+			Image image = new Image(album,"testjpg",jpg);
+			ocm.insert(image);
+			ocm.save();
+			
+			Image testImage = (Image) ocm.getObject(Image.class, image.getId());
+			assertNotNull(testImage);
+			
+			testImage.setImageThumb(ImageHelper.scaleThumbnailImage(testImage.getImageFull()));
+			ocm.update(testImage);
+			ocm.save();
+			
+			Image postTest = (Image) ocm.getObject(Image.class, image.getId());
+			assertNotNull(postTest);
+			assertNotNull(postTest.getImageThumb());
+			
 		}
+		
+		ocm.remove(nodePath);
+		ocm.save();
 		
 	}
 	

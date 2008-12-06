@@ -13,7 +13,6 @@ import com.madalla.service.cms.ocm.blog.Blog;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
 import com.madalla.service.cms.ocm.image.Album;
 import com.madalla.service.cms.ocm.image.Image;
-import com.madalla.service.cms.ocm.image.OriginalAlbum;
 import com.madalla.util.jcr.JcrUtils;
 
 public class RepositoryInfo {
@@ -29,21 +28,15 @@ public class RepositoryInfo {
 		BLOG(Blog.class, true, EC_NODE_BLOGS),
 		BLOGENTRY(BlogEntry.class, false,EC_NODE_BLOGS),
 		ALBUM(Album.class, true, EC_NODE_IMAGES),
-		IMAGE(Image.class, false, EC_NODE_IMAGES),
-		ORIGINALALBUM(OriginalAlbum.class, true, EC_NODE_IMAGES, OriginalAlbum.ORIGINAL_ALBUM_NAME);
+		IMAGE(Image.class, false, EC_NODE_IMAGES);
 		
 		public final Class typeClass;
 		public final boolean parent;
 		public String groupName;
-		public String typeName;
 		RepositoryType(Class typeClass, boolean parent, String groupName){
-			this(typeClass, parent, groupName, "");
-		}
-		RepositoryType(Class typeClass, boolean parent, String groupName, String typeName){
 			this.typeClass = typeClass;
 			this.parent = parent;
 			this.groupName = groupName;
-			this.typeName = typeName;
 		}
 	}
 

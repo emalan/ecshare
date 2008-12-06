@@ -1,5 +1,6 @@
 package com.madalla.service.cms.ocm.blog;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 
@@ -20,6 +21,10 @@ public class Blog extends AbstractBlog{
 	
 	public Blog(String parentPath, String blogName){
 		id = parentPath + "/" + blogName;
+	}
+	
+	public String getName(){
+	    return StringUtils.substringAfterLast(getId(), "/");
 	}
 	
 	public String getId() {

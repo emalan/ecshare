@@ -10,16 +10,17 @@ import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
 
 import com.madalla.service.cms.jcr.ImageData;
+import com.madalla.service.cms.ocm.AbstractOcm;
 
 @Node
-public class Image implements Serializable, Comparable<Image>{
+public class Image extends AbstractOcm implements Serializable, Comparable<Image>{
 
 	private static final long serialVersionUID = 1L;
 
 	@Field(path=true) private String id;
 	@Field private String title;
-	private InputStream imageFull;
-	private InputStream imageThumb;
+	@Field private InputStream imageFull;
+	@Field private InputStream imageThumb;
 	@Field private String url;
 	@Field private String urlTitle;
 	@Field private String description;
@@ -33,15 +34,15 @@ public class Image implements Serializable, Comparable<Image>{
 	
 	public Image(final Album album, final String name, final InputStream fullImage){
 		this.id = album.getId() + "/" + name;
-		//this.fullImage = fullImage;
-		this.webResource = null;
+		this.imageFull = fullImage;
+		//this.webResource = null;
 	}
 
-	public Image(final String id, final Album album, final String name, final DynamicImageResource fullImage){
-		this.id = album.getId() + "/" + name;
-		//this.fullImage = null;
-		this.webResource =  fullImage;
-	}
+//	public Image(final String id, final Album album, final String name, final DynamicImageResource fullImage){
+//		this.id = album.getId() + "/" + name;
+//		//this.fullImage = null;
+//		this.webResource =  fullImage;
+//	}
 
 	public String getName(){
 		return StringUtils.substringAfterLast(getId(), "/");

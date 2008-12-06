@@ -1,24 +1,17 @@
 package com.madalla.service.cms.ocm.image;
 
-import java.io.IOException;
 import java.io.InputStream;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.WicketRuntimeException;
-import org.springmodules.jcr.JcrCallback;
 
-import com.madalla.service.cms.jcr.ImageData;
+import com.madalla.image.ImageUtilities;
+import com.madalla.image.LoggingImageObserver;
 
 /**
- * Responsible for storing Originals 
+ * Utility class for processing Images 
  * 
- * @author exmalan
+ * @author Eugene Malan
  *
  */
 public class ImageHelper {
@@ -29,23 +22,23 @@ public class ImageHelper {
     private static final int THUMB_WIDTH = 90;
     private static final int THUMB_HEIGHT = 60;
     
-    private static final String EC_NODE_ORIGINALS = "originals";
-    
     private static final Log log = LogFactory.getLog(ImageHelper.class);
 	
-    private static ImageHelper instance;
-	
-    public static ImageHelper getInstance(){
-		return instance;
+	public static InputStream scaleOriginalImage(InputStream inputStream){
+		LoggingImageObserver observer = new LoggingImageObserver(log);
+		return ImageUtilities.scaleImageDownProportionately(inputStream, observer, MAX_WIDTH, MAX_HEIGHT);
 	}
-    
-//	public String saveOriginalImage(final String name, final InputStream fullImage ){
-//        ImageData imageData = new ImageData(EC_ORIGINALS, name, fullImage);
-//        String path = save(imageData);
-//        createThumbnail(path);
-//        return path;
-//    }
-//	
+	
+	public static InputStream scaleThumbnailImage(InputStream inputStream){
+		LoggingImageObserver observer = new LoggingImageObserver(log);
+		return ImageUtilities.scaleImageDownProportionately(inputStream, observer, THUMB_WIDTH, THUMB_HEIGHT);
+	}
+	
+	public static InputStream scaleAlbumImage(InputStream inputStream){
+		LoggingImageObserver observer = new LoggingImageObserver(log);
+		return ImageUtilities.scaleImageDownProportionately(inputStream, observer, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+	}
+	
 //    public String saveAlbumImage(final String album, final String name){
 //    	if (StringUtils.isEmpty(name)){
 //    		throw new WicketRuntimeException("Album Image Name needs to be supplied.");

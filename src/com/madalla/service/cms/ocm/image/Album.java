@@ -6,8 +6,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 
+import com.madalla.service.cms.ocm.AbstractOcm;
+
 @Node
-public class Album implements Serializable{
+public class Album extends AbstractOcm implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
