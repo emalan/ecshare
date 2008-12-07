@@ -1,5 +1,6 @@
 package com.madalla.webapp.images;
 
+import static com.madalla.webapp.css.Css.CSS_IMAGE;
 import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
 import static com.madalla.webapp.images.admin.AlbumParams.RETURN_PAGE;
 import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.EFFECTS;
@@ -7,7 +8,6 @@ import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.BANNER;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.CROSSFADE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.FAST_INIT;
-import static com.madalla.webapp.css.Css.*;
 
 import java.util.List;
 
@@ -30,6 +30,7 @@ import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
+import com.madalla.service.cms.ocm.image.Album;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.AlbumAdminPage;
 
@@ -38,7 +39,7 @@ public class AlbumPanel extends Panel {
 	
     private static final Log log = LogFactory.getLog(AlbumPanel.class);
 
-	public AlbumPanel(String id, String album, Class<? extends Page> returnPage) {
+	public AlbumPanel(String id, String albumName, Class<? extends Page> returnPage) {
 		super(id);
 
 		add(HeaderContributor.forJavaScript(PROTOTYPE));
@@ -47,6 +48,8 @@ public class AlbumPanel extends Panel {
         add(HeaderContributor.forJavaScript(CROSSFADE));
         add(HeaderContributor.forJavaScript(BANNER));
         add(CSS_IMAGE);
+        
+        Album album = getRepositoryService().getAlbum(albumName);
         
         Link link = new BookmarkablePageLink("adminLink", AlbumAdminPage.class, new PageParameters(ALBUM +"="+album+","+RETURN_PAGE+"="+returnPage.getName())) {
             private static final long serialVersionUID = 1801145612969874170L;
@@ -65,7 +68,7 @@ public class AlbumPanel extends Panel {
         link.setBeforeDisabledLink("");
         add(link);
         
-        List<AbstractImageData> images = getRepositoryService().getAlbumImages(album);
+        List<com.madalla.service.cms.ocm.image.Image> images = getRepositoryService().getAlbumImages(album);
         
         add(new ListView("image-list", images){
 			private static final long serialVersionUID = 1L;

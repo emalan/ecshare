@@ -126,7 +126,7 @@ public class AlbumAdminPanel extends Panel{
 	private ImageListView imageListView;
 	
 	
-	public AlbumAdminPanel(String id, String album, Class<? extends Page> returnPage) {
+	public AlbumAdminPanel(String id, String albumId, Class<? extends Page> returnPage) {
 		super(id);
 		
 		add(HeaderContributor.forJavaScript(Scriptaculous.PROTOTYPE));
@@ -140,7 +140,7 @@ public class AlbumAdminPanel extends Panel{
         simpleUploadForm.add(uploadFeedback);
         simpleUploadForm.add(new SubmitLink("submitLink"));
         add(simpleUploadForm);
-        add(new AlbumDisplayPanel("albumDisplay", album));
+        add(new AlbumDisplayPanel("albumDisplay", albumId));
         
         // Add folder view
         imageListView = new ImageListView("imageListView", new LoadableDetachableModel() {

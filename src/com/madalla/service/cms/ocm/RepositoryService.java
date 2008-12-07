@@ -13,6 +13,8 @@ import java.util.Locale;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 
 import org.apache.commons.lang.StringUtils;
@@ -26,7 +28,6 @@ import org.springmodules.jcr.JcrCallback;
 
 import com.madalla.service.cms.AbstractBlog;
 import com.madalla.service.cms.AbstractBlogEntry;
-import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.jcr.Content;
 import com.madalla.service.cms.ocm.RepositoryInfo.RepositoryType;
@@ -134,7 +135,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 		});
 	}
 
-	public void createImage(Album album, String name, InputStream inputStream) {
+	public String createImage(Album album, String name, InputStream inputStream) {
         //TODO use repository Template
 	    
 	    //scale image down to defaults if necessary
@@ -153,33 +154,56 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	    postProcessing.setImageThumb(ImageHelper.scaleThumbnailImage(postProcessing.getImageFull()));
 	    ocm.update(postProcessing);
 	    ocm.save();
+	    return postProcessing.getId();
 	}
 	
-//	public String addImageToAlbum(String album, String imageName) {
-//		return ImageHelper.getInstance().saveAlbumImage(album, imageName);
-//	}
+	public String addImageToAlbum(Album album, String imageId) {
+	    Image original = (Image) ocm.getObject(Image.class,imageId);
+
+	    InputStream inputStream = ImageHelper.scaleAlbumImage(original.getImageFull());
+	    Image albumImage = new Image(album, original.getName(), inputStream);
+	    albumImage.setImageThumb(original.getImageThumb());
+	    ocm.insert(albumImage);
+	    ocm.save();
+		return albumImage.getId();
+	}
 	
-    public AbstractImageData getImageData(final String path) {
+    public Image getImage(final String path) {
         if (StringUtils.isEmpty(path)){
-            log.error("getBlogEntry - path is required.");
+            log.error("getImage - path is required.");
             return null;
         }
-        return oldRepositoryService.getImageData(path);
+        return (Image) ocm.getObject(Image.class, path);
     }
     
-    public List<AbstractImageData> getAlbumImages(final String album){
-    	//TODO return ImageDataHelper.getInstance().getAlbumEntries(album);
-    	return oldRepositoryService.getAlbumImages(album);
+    public List<Image> getAlbumImages(Album album){
+        //TODO create a query template
+        QueryManager queryManager = ocm.getQueryManager();
+        Filter filter = queryManager.createFilter(Image.class);
+        filter.setScope(album.getId()+"//");
+        Query query = queryManager.createQuery(filter);
+        Collection collection =  ocm.getObjects(query);
+        List<Image> list = new ArrayList<Image>();
+        for(Iterator iter = collection.iterator(); iter.hasNext();){
+            list.add((Image) iter.next());
+        }
+        Collections.sort(list);
+        return list;
     }
     
-    public TreeModel getAlbumImagesAsTree(final String album) {
-    	//return ImageDataHelper.getInstance().getAlbumEntriesAsTree(album);
-    	return oldRepositoryService.getAlbumImagesAsTree(album);
+    public TreeModel getAlbumImagesAsTree(final Album album) {
+        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(album.getName());
+        TreeModel model = new DefaultTreeModel(rootNode);
+        for(Image image: getAlbumImages(album)){
+            DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(image);
+            rootNode.add(treeNode);
+        }
+        return model;
     }
     
-	public List<AbstractImageData> getAlbumOriginalImages() {
-		//TODO return ImageDataHelper.getInstance().getOriginalEntries();
-		return oldRepositoryService.getAlbumOriginalImages();
+	public List<Image> getAlbumOriginalImages() {
+	    Album album = getOriginalsAlbum();
+	    return getAlbumImages(album);
 	}
 	
 	public Blog getBlog(final String blogName){

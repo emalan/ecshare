@@ -1,5 +1,6 @@
 package com.madalla.service.cms;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 
@@ -9,6 +10,8 @@ import org.joda.time.DateTime;
 
 import com.madalla.service.cms.jcr.Content;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
+import com.madalla.service.cms.ocm.image.Album;
+import com.madalla.service.cms.ocm.image.Image;
 
 public interface IRepositoryService {
 
@@ -43,9 +46,13 @@ public interface IRepositoryService {
     List<AbstractBlogEntry> getBlogEntries(final String blog);
     
     //Image
-    AbstractImageData getImageData(final String path) ;
-    List<AbstractImageData> getAlbumImages(final String album);
-    List<AbstractImageData> getAlbumOriginalImages();
-    TreeModel getAlbumImagesAsTree(final String album);
+    Album getOriginalsAlbum();
+    Album getAlbum(final String name);
+    String createImage(Album album, String name, InputStream inputStream);
+    String addImageToAlbum(Album album, String imageId);
+    Image getImage(final String path);
+    List<Image> getAlbumImages(Album album);
+    List<Image> getAlbumOriginalImages();
+    TreeModel getAlbumImagesAsTree(final Album album);
 
 }
