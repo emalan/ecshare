@@ -110,7 +110,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 
 			@Override
 			public AbstractOcm createNew(String parentPath, String name) {
-				return new Album();
+				return new Album(parentPath, name);
 			}
 
     	});
@@ -135,7 +135,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 		});
 	}
 
-	public String createImage(Album album, String name, InputStream inputStream) {
+	public Image createImage(Album album, String name, InputStream inputStream) {
         //TODO use repository Template
 	    
 	    //scale image down to defaults if necessary
@@ -154,10 +154,10 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	    postProcessing.setImageThumb(ImageHelper.scaleThumbnailImage(postProcessing.getImageFull()));
 	    ocm.update(postProcessing);
 	    ocm.save();
-	    return postProcessing.getId();
+	    return postProcessing;
 	}
 	
-	public String addImageToAlbum(Album album, String imageId) {
+	public Image addImageToAlbum(Album album, String imageId) {
 	    Image original = (Image) ocm.getObject(Image.class,imageId);
 
 	    InputStream inputStream = ImageHelper.scaleAlbumImage(original.getImageFull());
@@ -165,7 +165,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	    albumImage.setImageThumb(original.getImageThumb());
 	    ocm.insert(albumImage);
 	    ocm.save();
-		return albumImage.getId();
+		return albumImage;
 	}
 	
     public Image getImage(final String path) {

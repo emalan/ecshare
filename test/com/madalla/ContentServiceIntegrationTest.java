@@ -13,6 +13,7 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.tree.LinkTree;
+import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrTemplate;
 
@@ -24,6 +25,8 @@ import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.jcr.Content;
 import com.madalla.service.cms.jcr.RepositoryService;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
+import com.madalla.service.cms.ocm.image.Album;
+import com.madalla.service.cms.ocm.image.Image;
 import com.madalla.util.jcr.ocm.JcrOcmConversion;
 
 public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
@@ -113,21 +116,62 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     public void testImageGetSet() throws FileNotFoundException{
     	InputStream stream = this.getClass().getResourceAsStream("test1.jpg");
     	assertNotNull(stream);
-    	final String album = "testAlbum";
+    	
     	final String name = "image1";
-    	String path = repositoryAdminService.createOriginalImage(name, stream);
+    	Album originalAlbum = contentService.getOriginalsAlbum();
+    	Image image = contentService.createImage(originalAlbum, name, stream);
+    	log.info("testImageGetSet - path="+image.getId());
+    	assertNotNull(image);
+
+    	{
+    		Album album = contentService.getAlbum("testAlbum");
+    		Image testImage = contentService.addImageToAlbum(album, image.getId());
+    		assertNotNull(testImage);
+    	}
+    	{
+    	    Image testImage = contentService.getImage(image.getId());
+    	    assertNotNull(testImage);
+    	}
+    	//contentService.getAlbumImages(album)
     	
-    	log.info("testImageGetSet - path="+path);
+    	//contentService.getAlbumOriginalImages();
     	
-    	AbstractImageData test = contentService.getImageData(path);
-    	assertNotNull(test);
+    	//contentService.getAlbumImagesAsTree(album);
     	
-    	String albumPath = repositoryAdminService.addImageToAlbum(album, name);
-    	log.info("testAddImageToAlbum - path="+albumPath);
     	
-    	TreeModel treeModel = contentService.getAlbumImagesAsTree(album);
-    	assertNotNull(treeModel);
-    	assertEquals(treeModel.getChildCount(treeModel.getRoot()), 1);
+    	//TreeModel treeModel = contentService.getAlbumImagesAsTree(album);
+    	//assertNotNull(treeModel);
+    	//assertEquals(treeModel.getChildCount(treeModel.getRoot()), 1);
+    }
+    
+    public void testImageConversion() throws ResourceStreamNotFoundException{
+    	
+    	final String album = "testAlbum";
+    	final String name = "image";
+    	for (int i = 1; i <= 3; i++){
+    		InputStream stream = this.getClass().getResourceAsStream("test"+i+".jpg");
+    		assertNotNull(stream);
+    		String path = repositoryAdminService.createOriginalImage(name+i, stream);
+    		log.info("testImageGetSet - path="+path);
+    	}
+    	
+    	List<AbstractImageData> list = oldRepositoryService.getAlbumOriginalImages();
+    	String testImage;
+    	for(AbstractImageData oldImage: list){
+    		Album originalAlbum = contentService.getOriginalsAlbum();
+        	Image image = contentService.createImage(originalAlbum, oldImage.getName(), oldImage.getFullImageAsResource().getResourceStream().getInputStream());
+        	log.info("testImageGetSet - path="+image.getId());
+        	testImage = image.getId();
+    	}
+    	
+//    	
+//    	String albumPath = repositoryAdminService.addImageToAlbum(album, name);
+//    	log.info("testAddImageToAlbum - path="+albumPath);
+//    	
+//    	TreeModel treeModel = contentService.getAlbumImagesAsTree(album);
+//    	assertNotNull(treeModel);
+//    	assertEquals(treeModel.getChildCount(treeModel.getRoot()), 1);
+    	
     }
     
     private final static String BLOG = "testBlog";
