@@ -123,21 +123,15 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	log.info("testImageGetSet - path="+image.getId());
     	assertNotNull(image);
 
-    	{
-    		Album album = contentService.getAlbum("testAlbum");
-    		Image testImage = contentService.addImageToAlbum(album, image.getId());
-    		assertNotNull(testImage);
-    	}
-    	{
-    	    Image testImage = contentService.getImage(image.getId());
-    	    assertNotNull(testImage);
-    	}
-    	//contentService.getAlbumImages(album)
+    	Album album = contentService.getAlbum("testAlbum");
+    	Image testImage = contentService.addImageToAlbum(album, image.getId());
+    	assertNotNull(testImage);
     	
-    	//contentService.getAlbumOriginalImages();
+    	//AbstractImageData test = contentService.getImageData(path);
+    	//assertNotNull(test);
     	
-    	//contentService.getAlbumImagesAsTree(album);
-    	
+    	//String albumPath = repositoryAdminService.addImageToAlbum(album, name);
+    	//log.info("testAddImageToAlbum - path="+albumPath);
     	
     	//TreeModel treeModel = contentService.getAlbumImagesAsTree(album);
     	//assertNotNull(treeModel);
