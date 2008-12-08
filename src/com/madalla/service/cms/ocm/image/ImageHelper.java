@@ -39,21 +39,4 @@ public class ImageHelper {
 		return ImageUtilities.scaleImageDownProportionately(inputStream, observer, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	}
 	
-//    public String saveAlbumImage(final String album, final String name){
-//    	if (StringUtils.isEmpty(name)){
-//    		throw new WicketRuntimeException("Album Image Name needs to be supplied.");
-//    	}
-//    	return (String)template.execute(new JcrCallback(){
-//			public Object doInJcr(Session session) throws IOException, RepositoryException {
-//				Node siteNode = getSiteNode(session);
-//	        	Node parent = getParentNode(siteNode);
-//	        	Node groupNode = getCreateNode(NS+EC_ORIGINALS, parent);
-//				Node node = (Node) groupNode.getNode(NS+name);
-//				InputStream fullImage = node.getProperty(EC_IMAGE_FULL).getStream();
-//				InputStream albumImage = scaleAlbumImage(fullImage);
-//				ImageData imageData = new ImageData(album, name, albumImage);
-//				return save(imageData);
-//			}
-//		});
-//    }
 }

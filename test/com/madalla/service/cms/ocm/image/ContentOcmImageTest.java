@@ -20,7 +20,7 @@ public class ContentOcmImageTest extends AbstractContentOcmTest{
 
 	private Log log = LogFactory.getLog(this.getClass());
 	
-	public void testContentOcmImages(){
+	public void testContentOcmImages() throws IOException{
 		String parentPath = getCreateParentNode();
 		
 		String name = RandomStringUtils.randomAlphabetic(5)+"Album";
@@ -53,9 +53,11 @@ public class ContentOcmImageTest extends AbstractContentOcmTest{
 			
 			Image testImage = (Image) ocm.getObject(Image.class, image.getId());
 			assertNotNull(testImage);
+			ImageHelper.scaleAlbumImage(testImage.getImageFull());
 			
-			testImage.setImageThumb(ImageHelper.scaleThumbnailImage(testImage.getImageFull()));
-			ocm.update(testImage);
+			Image testImage1 = (Image) ocm.getObject(Image.class, image.getId());
+			testImage.setImageThumb(ImageHelper.scaleThumbnailImage(testImage1.getImageFull()));
+			ocm.update(testImage1);
 			ocm.save();
 			
 			Image postTest = (Image) ocm.getObject(Image.class, image.getId());

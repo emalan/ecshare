@@ -58,6 +58,7 @@ public class ImageUtilities {
 			scaleFactor = targetHeight / actualHeight;
 		}
 		if (scaleFactor >= 1){
+			imageObserver.imageUpdate(bufferedImage, 0, 0, 0, (int)actualWidth, (int)actualHeight);
 			return bufferedImage;
 		} 
 		int adjWidth = (int) (scaleFactor * actualWidth);
@@ -154,6 +155,7 @@ public class ImageUtilities {
             }
 
             BufferedImage tmp = new BufferedImage(w, h, type);
+            observer.imageUpdate(tmp, 0, 0, 0, w, h);
             Graphics2D g2 = tmp.createGraphics();
             g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, hint);
             g2.drawImage(ret, 0, 0, w, h, observer);

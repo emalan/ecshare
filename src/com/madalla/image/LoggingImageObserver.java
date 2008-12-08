@@ -21,11 +21,10 @@ public class LoggingImageObserver implements ImageObserver {
 	}
 	public boolean imageUpdate(Image img, int infoflags, int x, int y,
 			int width, int height) {
-		log.debug("imageUpdate - infoflags=" + infoflags);
-		log.debug("imageUpdate - width=" + width);
-		log.debug("imageUpdate - height=" + height);
-		log.debug("imageUpdate - x=" + x);
-		log.debug("imageUpdate - y=" + y);
+		//log.debug("imageUpdate - infoflags=" + infoflags);
+		log.debug("imageUpdate - width=" + width + ", height=" + height);
+		//log.debug("imageUpdate - x=" + x);
+		//log.debug("imageUpdate - y=" + y);
 		return false;
 	}
 	public void logError(String message, Exception e){

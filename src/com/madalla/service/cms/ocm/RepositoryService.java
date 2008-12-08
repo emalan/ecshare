@@ -23,6 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.ocm.query.Filter;
 import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
+import org.apache.jackrabbit.util.LazyFileInputStream;
 import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrCallback;
 
@@ -140,8 +141,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	    
 	    //scale image down to defaults if necessary
 	    inputStream = ImageHelper.scaleOriginalImage(inputStream);
-		
 		Image image = new Image(album, name, inputStream);
+		image.setImageThumb(ImageHelper.scaleThumbnailImage(inputStream));
         if (ocm.objectExists(image.getId())){
             ocm.update(image);
 	    } else {
@@ -150,22 +151,27 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	    ocm.save();
 	    
 	    //post save Thumbnail creation
-	    Image postProcessing = (Image) ocm.getObject(Image.class, image.getId());
-	    postProcessing.setImageThumb(ImageHelper.scaleThumbnailImage(postProcessing.getImageFull()));
-	    ocm.update(postProcessing);
-	    ocm.save();
-	    return postProcessing;
+	    //Image postProcessing = (Image) ocm.getObject(Image.class, image.getId());
+	    //postProcessing.setImageThumb(ImageHelper.scaleThumbnailImage(postProcessing.getImageFull()));
+	    //ocm.update(postProcessing);
+	    //ocm.save();
+	    return image;
 	}
 	
-	public Image addImageToAlbum(Album album, String imageId) {
+	public void addImageToAlbum(Album album, String imageId) {
 	    Image original = (Image) ocm.getObject(Image.class,imageId);
 
-	    InputStream inputStream = ImageHelper.scaleAlbumImage(original.getImageFull());
-	    Image albumImage = new Image(album, original.getName(), inputStream);
-	    albumImage.setImageThumb(original.getImageThumb());
-	    ocm.insert(albumImage);
+	    ocm.copy(original.getId(), album.getId() + "/" + original.getName());
+//	    InputStream inputStream = ImageHelper.scaleAlbumImage(original.getImageFull());
+//	    Image albumImage = new Image(album, original.getName(), inputStream);
+//	    albumImage.setImageThumb(original.getImageThumb());
+//	    if (ocm.objectExists(albumImage.getId())){
+//	    	ocm.update(albumImage);
+//	    } else {
+//	    	ocm.insert(albumImage);
+//	    }
 	    ocm.save();
-		return albumImage;
+//		return albumImage;
 	}
 	
     public Image getImage(final String path) {

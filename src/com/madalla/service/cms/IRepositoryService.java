@@ -49,7 +49,7 @@ public interface IRepositoryService {
     Album getOriginalsAlbum();
     Album getAlbum(final String name);
     Image createImage(Album album, String name, InputStream inputStream);
-    Image addImageToAlbum(Album album, String imageId);
+    void addImageToAlbum(Album album, String imageId);
     Image getImage(final String path);
     List<Image> getAlbumImages(Album album);
     List<Image> getAlbumOriginalImages();
