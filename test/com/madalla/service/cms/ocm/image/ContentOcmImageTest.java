@@ -46,18 +46,17 @@ public class ContentOcmImageTest extends AbstractContentOcmTest{
 			InputStream png = this.getClass().getResourceAsStream("test1.png");
 			Album album = (Album) ocm.getObject(Album.class, nodePath);
 
-			jpg = ImageHelper.scaleOriginalImage(jpg);
+			
 			Image image = new Image(album,"testjpg",jpg);
 			ocm.insert(image);
 			ocm.save();
+			ImageHelper.saveImageFull(template, image.getId(), jpg);
+			ImageHelper.saveImageThumb(template, image.getId());
 			
 			Image testImage = (Image) ocm.getObject(Image.class, image.getId());
 			assertNotNull(testImage);
-			ImageHelper.scaleAlbumImage(testImage.getImageFull());
-			
-			Image testImage1 = (Image) ocm.getObject(Image.class, image.getId());
-			testImage.setImageThumb(ImageHelper.scaleThumbnailImage(testImage1.getImageFull()));
-			ocm.update(testImage1);
+			testImage.setTitle("new title");
+			ocm.update(testImage);
 			ocm.save();
 			
 			Image postTest = (Image) ocm.getObject(Image.class, image.getId());

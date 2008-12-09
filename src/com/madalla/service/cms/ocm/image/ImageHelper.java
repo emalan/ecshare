@@ -1,14 +1,20 @@
 package com.madalla.service.cms.ocm.image;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
 import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
+import org.springmodules.jcr.JcrCallback;
+import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.image.ImageUtilities;
 import com.madalla.image.LoggingImageObserver;
@@ -56,5 +62,35 @@ public class ImageHelper {
 		}
 		return webResource;
 	}
+	
+	private static final String IMAGE_FULL = "imageFull";
+	private static final String IMAGE_THUMB = "imageThumb";
+	
+	public static void saveImageFull(JcrTemplate template, final String path, final InputStream inputStream){
+	        template.execute(new JcrCallback(){
+	            public Object doInJcr(Session session) throws IOException,
+	                    RepositoryException {
+	                Node node = (Node) session.getItem(path);
+	                InputStream scaled = scaleOriginalImage(inputStream);
+	                node.setProperty(IMAGE_FULL, scaled);
+	                session.save();
+	                return null;
+	            }
+	        });
+	}
+
+	public static void saveImageThumb(JcrTemplate template, final String path){
+        template.execute(new JcrCallback(){
+            public Object doInJcr(Session session) throws IOException,
+                    RepositoryException {
+                Node node = (Node) session.getItem(path);
+                InputStream fullImage = node.getProperty(IMAGE_FULL).getStream();
+                InputStream thumb = scaleThumbnailImage(fullImage);
+                node.setProperty(IMAGE_THUMB, thumb);
+                session.save();
+                return null;
+            }
+        });
+}
 	
 }

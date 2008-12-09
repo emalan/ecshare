@@ -19,22 +19,18 @@ public class Image extends AbstractOcm implements Serializable, Comparable<Image
 
 	@Field(path=true) private String id;
 	@Field private String title;
-	@Field private InputStream imageFull;
-	@Field private InputStream imageThumb;
+	@Field private DynamicImageResource imageFull;
+	@Field private DynamicImageResource imageThumb;
 	@Field private String url;
 	@Field private String urlTitle;
 	@Field private String description;
-	
-	private DynamicImageResource resourceFull;
-	private DynamicImageResource resourceThumb;
 	
 	public Image(){
 		
 	}
 	
-	public Image(final Album album, final String name, final InputStream fullImage){
+	public Image(final Album album, final String name, final InputStream inputStream){
 		this.id = album.getId() + "/" + name;
-		this.imageFull = fullImage;
 	}
 
 //	public Image(final String id, final Album album, final String name, final DynamicImageResource fullImage){
@@ -43,22 +39,6 @@ public class Image extends AbstractOcm implements Serializable, Comparable<Image
 //		this.webResource =  fullImage;
 //	}
 	
-	public void createResources(){
-		if (imageFull != null){
-			resourceFull = ImageHelper.createImageResource(imageFull);
-		}
-		if (imageThumb != null){
-			resourceThumb = ImageHelper.createImageResource(imageThumb);
-		}
-	}
-
-	public DynamicImageResource getResourceFull() {
-		return resourceFull;
-	}
-
-	public DynamicImageResource getResourceThumb() {
-		return resourceThumb;
-	}
 
 	public String getName(){
 		return StringUtils.substringAfterLast(getId(), "/");
@@ -72,28 +52,28 @@ public class Image extends AbstractOcm implements Serializable, Comparable<Image
 		this.id = id;
 	}
 
-	public String getTitle() {
+	public DynamicImageResource getImageFull() {
+        return imageFull;
+    }
+
+    public void setImageFull(DynamicImageResource imageFull) {
+        this.imageFull = imageFull;
+    }
+
+    public DynamicImageResource getImageThumb() {
+        return imageThumb;
+    }
+
+    public void setImageThumb(DynamicImageResource imageThumb) {
+        this.imageThumb = imageThumb;
+    }
+
+    public String getTitle() {
 		return title;
 	}
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public InputStream getImageFull() {
-		return imageFull;
-	}
-
-	public void setImageFull(InputStream imageFull) {
-		this.imageFull = imageFull;
-	}
-
-	public InputStream getImageThumb() {
-		return imageThumb;
-	}
-
-	public void setImageThumb(InputStream imageThumb) {
-		this.imageThumb = imageThumb;
 	}
 
 	public String getUrl() {

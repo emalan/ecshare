@@ -27,7 +27,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 
-import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.service.cms.ocm.image.Album;
@@ -75,9 +74,9 @@ public class AlbumPanel extends Panel {
 
 			@Override
 			protected void populateItem(ListItem item) {
-				final AbstractImageData imageData = (AbstractImageData) item.getModelObject();
-				if (imageData.getFullImageAsResource() != null){
-					Image image = new Image("id",imageData.getFullImageAsResource());
+				final com.madalla.service.cms.ocm.image.Image imageData = (com.madalla.service.cms.ocm.image.Image) item.getModelObject();
+				if (imageData.getImageFull() != null){
+					Image image = new Image("id",imageData.getImageFull());
 					if(StringUtils.isEmpty(imageData.getUrl())){
 						//TODO create a link to URL
 						image.add(new AjaxEventBehavior("onclick"){

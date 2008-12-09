@@ -23,7 +23,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.ocm.query.Filter;
 import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
-import org.apache.jackrabbit.util.LazyFileInputStream;
 import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrCallback;
 
@@ -136,30 +135,26 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 		});
 	}
 
-	public Image createImage(Album album, String name, InputStream inputStream) {
+	public String createImage(Album album, String name, InputStream inputStream) {
         //TODO use repository Template
 	    
 	    //scale image down to defaults if necessary
-	    inputStream = ImageHelper.scaleOriginalImage(inputStream);
 		Image image = new Image(album, name, inputStream);
-		image.setImageThumb(ImageHelper.scaleThumbnailImage(inputStream));
         if (ocm.objectExists(image.getId())){
             ocm.update(image);
 	    } else {
 	        ocm.insert(image);
 	    }
 	    ocm.save();
-	    
-	    //post save Thumbnail creation
-	    //Image postProcessing = (Image) ocm.getObject(Image.class, image.getId());
-	    //postProcessing.setImageThumb(ImageHelper.scaleThumbnailImage(postProcessing.getImageFull()));
-	    //ocm.update(postProcessing);
-	    //ocm.save();
-	    return image;
+
+	    ImageHelper.saveImageFull(template, image.getId(), inputStream);
+	    ImageHelper.saveImageThumb(template, image.getId());
+	    return image.getId();
 	}
 	
-	public void addImageToAlbum(Album album, String imageId) {
-	    Image original = (Image) ocm.getObject(Image.class,imageId);
+	public void addImageToAlbum(Album album, String imageName) {
+	    Album orginalAlbum = getOriginalsAlbum();
+	    Image original = (Image) ocm.getObject(Image.class, orginalAlbum.getId() + "/" + imageName);
 
 	    ocm.copy(original.getId(), album.getId() + "/" + original.getName());
 //	    InputStream inputStream = ImageHelper.scaleAlbumImage(original.getImageFull());
@@ -191,9 +186,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         Collection collection =  ocm.getObjects(query);
         List<Image> list = new ArrayList<Image>();
         for(Iterator iter = collection.iterator(); iter.hasNext();){
-        	Image image = (Image) iter.next();
-        	image.createResources();
-            list.add(image);
+            list.add((Image) iter.next());
         }
         Collections.sort(list);
         return list;

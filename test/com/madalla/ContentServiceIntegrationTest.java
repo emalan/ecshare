@@ -119,23 +119,25 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	
     	final String name = "image1";
     	Album originalAlbum = contentService.getOriginalsAlbum();
-    	Image image = contentService.createImage(originalAlbum, name, stream);
-    	log.info("testImageGetSet - path="+image.getId());
-    	assertNotNull(image);
+    	String imagePath = contentService.createImage(originalAlbum, name, stream);
 
     	Album album;
     	{
     		album = contentService.getAlbum("testAlbum");
-    		contentService.addImageToAlbum(album, image.getId());
+    		contentService.addImageToAlbum(album, imagePath);
     	}
     	{
-    	    Image testImage = contentService.getImage(image.getId());
+    	    Image testImage = contentService.getImage(imagePath);
     	    assertNotNull(testImage);
     	}
     	{
     	    List<Image> list = contentService.getAlbumImages(album);
     	    assertNotNull(list);
     	    assertTrue(list.size() > 0);
+    	    Image image = (Image)list.get(0);
+    	    assertNotNull(image);
+    	    assertNotNull(image.getImageFull());
+    	    assertNotNull(image.getImageThumb());
     	}
     	{
     		List<Image> list = contentService.getAlbumOriginalImages();
@@ -162,9 +164,9 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	String testImage;
     	for(AbstractImageData oldImage: list){
     		Album originalAlbum = contentService.getOriginalsAlbum();
-        	Image image = contentService.createImage(originalAlbum, oldImage.getName(), oldImage.getFullImageAsResource().getResourceStream().getInputStream());
-        	log.info("testImageGetSet - path="+image.getId());
-        	testImage = image.getId();
+        	testImage = contentService.createImage(originalAlbum, oldImage.getName(), oldImage.getFullImageAsResource().getResourceStream().getInputStream());
+        	log.info("testImageGetSet - path="+testImage);
+        	
     	}
     	
 //    	

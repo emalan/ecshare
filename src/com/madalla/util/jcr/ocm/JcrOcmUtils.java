@@ -25,6 +25,7 @@ import org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImp
 import org.apache.jackrabbit.ocm.mapper.Mapper;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.AnnotationMapperImpl;
 import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
 import org.joda.time.DateTime;
 
 import com.madalla.service.cms.ocm.RepositoryInfo.RepositoryType;
@@ -55,6 +56,7 @@ public class JcrOcmUtils {
 		//Setup Convertors
 		Map convertors = new HashMap();
 		convertors.put(DateTime.class, JodaDateTimeTypeConverter.class);
+		convertors.put(DynamicImageResource.class, DynamicImageResourceConvertor.class);
 		AtomicTypeConverterProvider atomicTypeConverterProvider = new DefaultAtomicTypeConverterProvider(convertors);
 		
 		

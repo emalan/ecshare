@@ -99,7 +99,7 @@ public class AlbumAdminPanel extends Panel{
 		protected void populateItem(final ListItem listItem) {
 			final com.madalla.service.cms.ocm.image.Image imageData = (com.madalla.service.cms.ocm.image.Image)listItem.getModelObject();
             listItem.add(new Label("file", imageData.getName()));
-            Image image = new Image("thumb",imageData.getResourceThumb());
+            Image image = new Image("thumb",imageData.getImageThumb());
             image.setOutputMarkupId(true);
             image.add(new DraggableAjaxBehaviour(imageData.getName()));
             
