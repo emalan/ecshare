@@ -191,7 +191,9 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         Collection collection =  ocm.getObjects(query);
         List<Image> list = new ArrayList<Image>();
         for(Iterator iter = collection.iterator(); iter.hasNext();){
-            list.add((Image) iter.next());
+        	Image image = (Image) iter.next();
+        	image.createResources();
+            list.add(image);
         }
         Collections.sort(list);
         return list;

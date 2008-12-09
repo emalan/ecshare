@@ -2,8 +2,13 @@ package com.madalla.service.cms.ocm.image;
 
 import java.io.InputStream;
 
+import javax.imageio.ImageIO;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
+import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
 
 import com.madalla.image.ImageUtilities;
 import com.madalla.image.LoggingImageObserver;
@@ -37,6 +42,19 @@ public class ImageHelper {
 	public static InputStream scaleAlbumImage(InputStream inputStream){
 		LoggingImageObserver observer = new LoggingImageObserver(log);
 		return ImageUtilities.scaleImageDownProportionately(inputStream, observer, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+	}
+	
+	static DynamicImageResource createImageResource(InputStream inputStream){
+		BufferedDynamicImageResource webResource = null;
+		try {
+			webResource = new BufferedDynamicImageResource();
+			webResource.setImage(ImageIO.read(inputStream));
+
+		} catch (Exception e) {
+			log.error("Exception while reading image from Content.",e);
+			//throw new WicketRuntimeException("Error while reading image from Content Management System.");
+		}
+		return webResource;
 	}
 	
 }

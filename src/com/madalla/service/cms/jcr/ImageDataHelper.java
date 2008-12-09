@@ -50,7 +50,7 @@ import com.madalla.service.cms.IRepositoryData;
  * @author Eugene Malan
  *
  */
-class ImageDataHelper extends AbstractContentHelper {
+public class ImageDataHelper extends AbstractContentHelper {
 	
 	// Repository Values
     private static final String EC_NODE_IMAGES = NS + "images";
@@ -73,7 +73,7 @@ class ImageDataHelper extends AbstractContentHelper {
 		return instance;
 	}
 
-    private static AbstractImageData create(Node node) throws RepositoryException{
+    public static AbstractImageData create(Node node) throws RepositoryException{
     	String parent = node.getParent().getName().replaceFirst(NS,"");
     	String name = node.getName().replaceFirst(NS, "");
     	InputStream image = node.getProperty(EC_IMAGE_FULL).getStream();

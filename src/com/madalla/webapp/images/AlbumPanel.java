@@ -51,7 +51,7 @@ public class AlbumPanel extends Panel {
         
         Album album = getRepositoryService().getAlbum(albumName);
         
-        Link link = new BookmarkablePageLink("adminLink", AlbumAdminPage.class, new PageParameters(ALBUM +"="+album+","+RETURN_PAGE+"="+returnPage.getName())) {
+        Link link = new BookmarkablePageLink("adminLink", AlbumAdminPage.class, new PageParameters(ALBUM +"="+albumName+","+RETURN_PAGE+"="+returnPage.getName())) {
             private static final long serialVersionUID = 1801145612969874170L;
 
             protected final void onBeforeRender() {

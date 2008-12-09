@@ -15,16 +15,22 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.service.cms.AbstractBlog;
 import com.madalla.service.cms.AbstractBlogEntry;
+import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.jcr.BlogEntryHelper;
+import com.madalla.service.cms.jcr.ImageData;
+import com.madalla.service.cms.jcr.ImageDataHelper;
 import com.madalla.service.cms.ocm.RepositoryInfo;
 import com.madalla.service.cms.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
+import com.madalla.service.cms.ocm.image.Album;
+import com.madalla.service.cms.ocm.image.Image;
 
 public class JcrOcmConversion {
 	
@@ -59,6 +65,7 @@ public class JcrOcmConversion {
 
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
+				
 				final List<Node> list = new ArrayList<Node>();
 				Node blogsNode = RepositoryInfo.getGroupNode(session, site, RepositoryType.BLOG);
 				for (Iterator iter = blogsNode.getNodes(); iter.hasNext();){
@@ -68,7 +75,7 @@ public class JcrOcmConversion {
 					}
 				}
 				for (Node blogNode: list){
-					log.warn("*** Conversion ***");
+					log.warn("*** Blog Conversion ***");
 					log.warn("Converting Blog..."+ blogNode.getPath());
 					String blogName = StringUtils.substringAfter(blogNode.getName(), "ec:");
 					
@@ -91,6 +98,33 @@ public class JcrOcmConversion {
 					blogNode.remove();
 					session.save();
 				}
+				
+				Node imagesNode = RepositoryInfo.getGroupNode(session, site, RepositoryType.ALBUM);
+				log.warn("*** Images Conversion ***");
+				Node originals = null;
+				for (Iterator iter = imagesNode.getNodes(); iter.hasNext();){
+					Node node = (Node) iter.next();
+					if (node.getName().equals("ec:originals")){
+						originals = node;
+					} 
+				}
+				if (originals != null){
+					Album album = repositoryService.getOriginalsAlbum();
+					for (NodeIterator iterator = originals.getNodes(); iterator.hasNext();){
+						Node nextNode = iterator.nextNode();
+						AbstractImageData imageData = ImageDataHelper.create(nextNode);
+						Image image;
+						try {
+							repositoryService.createImage(album,imageData.getName(), imageData.getFullImageAsResource().getResourceStream().getInputStream());
+						} catch (ResourceStreamNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					//originals.remove();
+				}
+				
+				session.save();
 				
 				return null;
 			}

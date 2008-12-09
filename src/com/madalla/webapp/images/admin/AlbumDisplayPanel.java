@@ -20,8 +20,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 import com.madalla.service.cms.AbstractImageData;
-import com.madalla.service.cms.IRepositoryAdminService;
-import com.madalla.service.cms.IRepositoryAdminServiceProvider;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.service.cms.ocm.image.Album;
@@ -33,7 +31,7 @@ class AlbumDisplayPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final static Log log = LogFactory.getLog(AlbumDisplayPanel.class);
 	
-	public AlbumDisplayPanel(String id, final String albumId) {
+	public AlbumDisplayPanel(String id, final String albumName) {
 		super(id);
 		
 		final Form form = new Form("albumForm");
@@ -68,7 +66,7 @@ class AlbumDisplayPanel extends Panel {
 
 			@Override
 			protected Object load() {
-			    Album album = getRepositoryService().getAlbum(albumId);
+			    Album album = getRepositoryService().getAlbum(albumName);
 				return getRepositoryService().getAlbumImagesAsTree(album);
 			}
 		};
@@ -82,7 +80,8 @@ class AlbumDisplayPanel extends Panel {
 			protected void respond(final AjaxRequestTarget target) {
 				String dragId = DraggableAjaxBehaviour.getDraggablesId(getRequest());
 				log.debug("something dropped. arg="+dragId);
-		    	getRepositoryAdminService().addImageToAlbum(albumId, dragId);
+				Album album = getRepositoryService().getAlbum(albumName);
+		    	getRepositoryService().addImageToAlbum(album, dragId);
 		    	form.info("Success! Image saved to album.");
 		    	target.addComponent(tree);
 		    	target.addComponent(form);
@@ -101,12 +100,5 @@ class AlbumDisplayPanel extends Panel {
 		IRepositoryServiceProvider provider = (IRepositoryServiceProvider)getApplication();
 		return provider.getRepositoryService();
 	}
-	
-	private IRepositoryAdminService getRepositoryAdminService(){
-		IRepositoryAdminServiceProvider provider = (IRepositoryAdminServiceProvider)getApplication();
-		return provider.getRepositoryAdminService();
-	}
-
-
 
 }

@@ -25,8 +25,8 @@ public class Image extends AbstractOcm implements Serializable, Comparable<Image
 	@Field private String urlTitle;
 	@Field private String description;
 	
-	private DynamicImageResource webResource;
-	private DynamicImageResource thumbnail;
+	private DynamicImageResource resourceFull;
+	private DynamicImageResource resourceThumb;
 	
 	public Image(){
 		
@@ -35,7 +35,6 @@ public class Image extends AbstractOcm implements Serializable, Comparable<Image
 	public Image(final Album album, final String name, final InputStream fullImage){
 		this.id = album.getId() + "/" + name;
 		this.imageFull = fullImage;
-		//this.webResource = null;
 	}
 
 //	public Image(final String id, final Album album, final String name, final DynamicImageResource fullImage){
@@ -43,6 +42,23 @@ public class Image extends AbstractOcm implements Serializable, Comparable<Image
 //		//this.fullImage = null;
 //		this.webResource =  fullImage;
 //	}
+	
+	public void createResources(){
+		if (imageFull != null){
+			resourceFull = ImageHelper.createImageResource(imageFull);
+		}
+		if (imageThumb != null){
+			resourceThumb = ImageHelper.createImageResource(imageThumb);
+		}
+	}
+
+	public DynamicImageResource getResourceFull() {
+		return resourceFull;
+	}
+
+	public DynamicImageResource getResourceThumb() {
+		return resourceThumb;
+	}
 
 	public String getName(){
 		return StringUtils.substringAfterLast(getId(), "/");

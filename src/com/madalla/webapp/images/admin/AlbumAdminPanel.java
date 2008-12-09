@@ -1,6 +1,5 @@
 package com.madalla.webapp.images.admin;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,11 +29,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
 
-import com.madalla.service.cms.AbstractImageData;
-import com.madalla.service.cms.IRepositoryAdminService;
-import com.madalla.service.cms.IRepositoryAdminServiceProvider;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
+import com.madalla.service.cms.ocm.image.Album;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.DraggableAjaxBehaviour;
 import com.madalla.wicket.form.upload.MultiFileUploadField;
@@ -78,7 +75,8 @@ public class AlbumAdminPanel extends Panel{
                 	} 
                 	String imageName = StringUtils.deleteWhitespace(upload.getClientFileName());
                 	imageName = StringUtils.substringBefore(imageName, ".");
-                	getRepositoryAdminService().createOriginalImage(imageName, upload.getInputStream());
+                	Album album = getRepositoryService().getOriginalsAlbum();
+                	getRepositoryService().createImage(album, imageName, inputStream);
                 	log.info("finished processing upload "+ imageName);
                 	info(getString("info.success", new Model(upload)));
                 	
@@ -99,9 +97,9 @@ public class AlbumAdminPanel extends Panel{
 
 		@Override
 		protected void populateItem(final ListItem listItem) {
-			final AbstractImageData imageData = (AbstractImageData)listItem.getModelObject();
+			final com.madalla.service.cms.ocm.image.Image imageData = (com.madalla.service.cms.ocm.image.Image)listItem.getModelObject();
             listItem.add(new Label("file", imageData.getName()));
-            Image image = new Image("thumb",imageData.getThumbnail());
+            Image image = new Image("thumb",imageData.getResourceThumb());
             image.setOutputMarkupId(true);
             image.add(new DraggableAjaxBehaviour(imageData.getName()));
             
@@ -126,7 +124,7 @@ public class AlbumAdminPanel extends Panel{
 	private ImageListView imageListView;
 	
 	
-	public AlbumAdminPanel(String id, String albumId, Class<? extends Page> returnPage) {
+	public AlbumAdminPanel(String id, String albumName, Class<? extends Page> returnPage) {
 		super(id);
 		
 		add(HeaderContributor.forJavaScript(Scriptaculous.PROTOTYPE));
@@ -140,7 +138,7 @@ public class AlbumAdminPanel extends Panel{
         simpleUploadForm.add(uploadFeedback);
         simpleUploadForm.add(new SubmitLink("submitLink"));
         add(simpleUploadForm);
-        add(new AlbumDisplayPanel("albumDisplay", albumId));
+        add(new AlbumDisplayPanel("albumDisplay", albumName));
         
         // Add folder view
         imageListView = new ImageListView("imageListView", new LoadableDetachableModel() {
@@ -162,11 +160,6 @@ public class AlbumAdminPanel extends Panel{
 	private IRepositoryService getRepositoryService(){
 		IRepositoryServiceProvider provider = (IRepositoryServiceProvider)getApplication();
 		return provider.getRepositoryService();
-	}
-	
-	private IRepositoryAdminService getRepositoryAdminService(){
-		IRepositoryAdminServiceProvider provider = (IRepositoryAdminServiceProvider)getApplication();
-		return provider.getRepositoryAdminService();
 	}
 	
 }

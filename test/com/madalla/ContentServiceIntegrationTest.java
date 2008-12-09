@@ -142,12 +142,9 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	    assertNotNull(list);
     	    assertTrue(list.size() > 0);
     	}
-    	//contentService.getAlbumImagesAsTree(album);
-    	
-    	
-    	//TreeModel treeModel = contentService.getAlbumImagesAsTree(album);
-    	//assertNotNull(treeModel);
-    	//assertEquals(treeModel.getChildCount(treeModel.getRoot()), 1);
+    	TreeModel treeModel =  contentService.getAlbumImagesAsTree(album);
+    	assertNotNull(treeModel);
+    	assertTrue(treeModel.getChildCount(treeModel.getRoot()) >= 1);
     }
     
     public void testImageConversion() throws ResourceStreamNotFoundException{

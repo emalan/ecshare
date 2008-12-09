@@ -46,11 +46,7 @@ public class RepositoryInfo {
     }
     
     public static Node getGroupNode(Session session, String site, RepositoryType type) throws RepositoryException{
-    	if (type.parent){
-    		return getCreateParentNode(session, site, type.groupName);
-    	} else {
-    		return null;
-    	}
+  		return getCreateParentNode(session, site, type.groupName);
     }
     
 	public static boolean isBlogNodeType(final String path){
@@ -96,7 +92,9 @@ public class RepositoryInfo {
 	private static Node getCreateParentNode(Session session, String site, String type) throws RepositoryException {
     	Node appNode = getApplicationNode(session);
     	Node siteNode =  JcrUtils.getCreateNode(NS+site, appNode);
-    	return JcrUtils.getCreateNode(type, siteNode);
+    	Node ret =  JcrUtils.getCreateNode(type, siteNode);
+    	session.save();
+    	return ret;
 	}
 	
 
