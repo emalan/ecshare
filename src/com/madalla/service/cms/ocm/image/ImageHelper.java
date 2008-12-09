@@ -66,6 +66,23 @@ public class ImageHelper {
 	private static final String IMAGE_FULL = "imageFull";
 	private static final String IMAGE_THUMB = "imageThumb";
 	
+	public static void resizeAlbumImage(JcrTemplate template, final String path){
+	    //TODO use default sizes setup in album
+	    //TODO resize all images in album
+	    template.execute(new JcrCallback(){
+
+            public Object doInJcr(Session session) throws IOException,
+                    RepositoryException {
+                Node node = (Node) session.getItem(path);
+                InputStream inputStream = node.getProperty(IMAGE_FULL).getStream();
+                node.setProperty(IMAGE_FULL, scaleAlbumImage(inputStream));
+                session.save();
+                return null;
+            }
+	        
+	    });
+	}
+	
 	public static void saveImageFull(JcrTemplate template, final String path, final InputStream inputStream){
 	        template.execute(new JcrCallback(){
 	            public Object doInJcr(Session session) throws IOException,

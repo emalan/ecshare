@@ -155,18 +155,12 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	public void addImageToAlbum(Album album, String imageName) {
 	    Album orginalAlbum = getOriginalsAlbum();
 	    Image original = (Image) ocm.getObject(Image.class, orginalAlbum.getId() + "/" + imageName);
-
-	    ocm.copy(original.getId(), album.getId() + "/" + original.getName());
-//	    InputStream inputStream = ImageHelper.scaleAlbumImage(original.getImageFull());
-//	    Image albumImage = new Image(album, original.getName(), inputStream);
-//	    albumImage.setImageThumb(original.getImageThumb());
-//	    if (ocm.objectExists(albumImage.getId())){
-//	    	ocm.update(albumImage);
-//	    } else {
-//	    	ocm.insert(albumImage);
-//	    }
+	    
+	    String path = album.getId() + "/" + original.getName();
+	    ocm.copy(original.getId(), path);
 	    ocm.save();
-//		return albumImage;
+	    ImageHelper.resizeAlbumImage(template, path);
+	    
 	}
 	
     public Image getImage(final String path) {
