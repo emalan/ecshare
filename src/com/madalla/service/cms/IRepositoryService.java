@@ -8,10 +8,11 @@ import javax.swing.tree.TreeModel;
 
 import org.joda.time.DateTime;
 
-import com.madalla.service.cms.jcr.Content;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
 import com.madalla.service.cms.ocm.image.Album;
 import com.madalla.service.cms.ocm.image.Image;
+import com.madalla.service.cms.ocm.page.Content;
+import com.madalla.service.cms.ocm.page.Page;
 
 public interface IRepositoryService {
 
@@ -29,10 +30,12 @@ public interface IRepositoryService {
     void deleteNode(final String path);
     
     //Content
-    String getContentData(String nodeName, String id);
-    String getContentData(final String nodeName, final String id, Locale locale);
-    void pasteContent(final String path, final Content content);
-    Content getContent(final String path);
+    Page getPage(final String name);
+    String getContentData(Page page, String id);
+    String getContentData(Page page, String id, Locale locale);
+    void saveContent(Content content);
+    //void pasteContent(final String path, final Content content);
+    //Content getContent(final String path);
     
     //Blog
     AbstractBlog getBlog(final String blogName);
@@ -40,10 +43,6 @@ public interface IRepositoryService {
     BlogEntry getBlogEntry(final String path);
     void saveBlogEntry(BlogEntry blogEntry);
     List<AbstractBlogEntry> getBlogEntries(AbstractBlog blog);
-    @Deprecated
-    AbstractBlogEntry getNewBlogEntry(String blog, String title, DateTime date);
-    @Deprecated
-    List<AbstractBlogEntry> getBlogEntries(final String blog);
     
     //Image
     Album getOriginalsAlbum();

@@ -61,7 +61,8 @@ public class ContentEntryPanel extends Panel {
 				new PageParameters(RETURN_PAGE + "=" + returnPage.getName())) );
 
         IRepositoryService service = ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
-        text = service.getContentData(nodeName, contentId, getSession().getLocale());
+        com.madalla.service.cms.ocm.page.Page page = service.getPage(nodeName);
+        text = service.getContentData(page, contentId, getSession().getLocale());
         add(new ContentForm("contentForm"));
     }
 

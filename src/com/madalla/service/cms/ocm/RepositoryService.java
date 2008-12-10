@@ -29,13 +29,14 @@ import org.springmodules.jcr.JcrCallback;
 import com.madalla.service.cms.AbstractBlog;
 import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.IRepositoryService;
-import com.madalla.service.cms.jcr.Content;
 import com.madalla.service.cms.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.service.cms.ocm.blog.Blog;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
 import com.madalla.service.cms.ocm.image.Album;
 import com.madalla.service.cms.ocm.image.Image;
 import com.madalla.service.cms.ocm.image.ImageHelper;
+import com.madalla.service.cms.ocm.page.Content;
+import com.madalla.service.cms.ocm.page.Page;
 import com.madalla.util.jcr.ParentNodeCallback;
 import com.madalla.util.jcr.RepositoryTemplate;
 import com.madalla.util.jcr.ocm.JcrOcmConversion;
@@ -85,7 +86,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     public boolean isContentNode(final String path){
-    	return oldRepositoryService.isContentNode(path);
+    	return RepositoryInfo.isContentNodeType(path);
     }
     
     public boolean isBlogNode(final String path){
@@ -97,7 +98,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     public boolean isContentPasteNode(final String path){
-    	return oldRepositoryService.isContentPasteNode(path);
+    	return RepositoryInfo.isContentPasteNode(path);
     }
     
     /**
@@ -240,6 +241,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     public List<AbstractBlogEntry> getBlogEntries(AbstractBlog blog){
+        //TODO create query template
 		QueryManager queryManager = ocm.getQueryManager();
 		Filter filter = queryManager.createFilter(BlogEntry.class);
 		filter.setScope(blog.getId()+"//");
@@ -253,14 +255,37 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 		return list;
     }
     
-    public String getContentData(final String nodeName, final String id, Locale locale) {
-        String localeId = getLocaleId(id, locale);
-        return getContentData(nodeName, localeId);
+    //Content
+    
+    public Page getPage(final String name){
+        return (Page) repositoryTemplate.executeParent(RepositoryType.PAGE, name, new ParentNodeCallback(){
+
+            @Override
+            public AbstractOcm createNew(String parentPath, String name) {
+                return new Page(parentPath, name);
+            }
+
+        });
     }
     
-    public String getContentData(final String page, final String contentId) {
-    	//return ContentHelper.getInstance().getData(page, contentId);
-    	return oldRepositoryService.getContentData(page, contentId);
+    public String getContentData(final Page page, final String id, Locale locale) {
+        String localeId = getLocaleId(id, locale);
+        return getContentData(page, localeId);
+    }
+    
+    public String getContentData(final Page page, final String contentName) {
+        String path = page.getId() + "/" + contentName;
+        Content content;
+        if (ocm.objectExists(path)){
+            content = (Content) ocm.getObject(Content.class, page.getId() + "/" + contentName);
+        } else {
+            content = new Content(page, contentName);
+            content.setText("New Content");
+            ocm.insert(content);
+            ocm.save();
+        }
+        
+        return content.getText();
     }
     
     public String getLocaleId(String id, Locale locale) {
@@ -294,37 +319,40 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         }
     }
     
-    public List<AbstractBlogEntry> getBlogEntries(final String blog){
-    	//return BlogEntryHelper.getInstance().getBlogEntries(blog);
-    	return oldRepositoryService.getBlogEntries(blog);
+    public void saveContent(Content content){
+        if (ocm.objectExists(content.getId())){
+            ocm.update(content);
+        } else {
+            ocm.insert(content);
+        }
+        ocm.save();
     }
-
-	public Content getContent(final String path) {
-        return (Content) template.execute(new JcrCallback(){
-            public Content doInJcr(Session session) throws IOException, RepositoryException {
-                Node node = (Node) session.getItem(path);
-                String pageName = node.getParent().getName().replaceFirst("ec:","");
-                Content content = new Content(node.getPath(), pageName, node.getName());
-                content.setText(node.getProperty(EC_PROP_CONTENT).getString());
-                return content;
-            }
-        });
-	}
-    
-    public void pasteContent(final String path, final Content content){
-        log.debug("pasteContent - path="+path);
-    	template.execute(new JcrCallback(){
-			public Object doInJcr(Session session) throws IOException,
-					RepositoryException {
-				Node parent = (Node) session.getItem(path);
-                Node newNode = getCreateNode(content.getName(), parent);
-                newNode.setProperty(EC_PROP_CONTENT, content.getText());
-                session.save();
-                log.debug("pasteContent - Done pasting. path="+path);
-                return null;
-			}
-    	});
-    }
+//	public Content getContent(final String path) {
+//        return (Content) template.execute(new JcrCallback(){
+//            public Content doInJcr(Session session) throws IOException, RepositoryException {
+//                Node node = (Node) session.getItem(path);
+//                String pageName = node.getParent().getName().replaceFirst("ec:","");
+//                Content content = new Content(node.getPath(), pageName, node.getName());
+//                content.setText(node.getProperty(EC_PROP_CONTENT).getString());
+//                return content;
+//            }
+//        });
+//	}
+//    
+//    public void pasteContent(final String path, final Content content){
+//        log.debug("pasteContent - path="+path);
+//    	template.execute(new JcrCallback(){
+//			public Object doInJcr(Session session) throws IOException,
+//					RepositoryException {
+//				Node parent = (Node) session.getItem(path);
+//                Node newNode = getCreateNode(content.getName(), parent);
+//                newNode.setProperty(EC_PROP_CONTENT, content.getText());
+//                session.save();
+//                log.debug("pasteContent - Done pasting. path="+path);
+//                return null;
+//			}
+//    	});
+//    }
 
 	public com.madalla.service.cms.jcr.RepositoryService getOldRepositoryService() {
 		return oldRepositoryService;

@@ -13,6 +13,8 @@ import com.madalla.service.cms.ocm.blog.Blog;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
 import com.madalla.service.cms.ocm.image.Album;
 import com.madalla.service.cms.ocm.image.Image;
+import com.madalla.service.cms.ocm.page.Content;
+import com.madalla.service.cms.ocm.page.Page;
 import com.madalla.util.jcr.JcrUtils;
 
 public class RepositoryInfo {
@@ -28,7 +30,9 @@ public class RepositoryInfo {
 		BLOG(Blog.class, true, EC_NODE_BLOGS),
 		BLOGENTRY(BlogEntry.class, false,EC_NODE_BLOGS),
 		ALBUM(Album.class, true, EC_NODE_IMAGES),
-		IMAGE(Image.class, false, EC_NODE_IMAGES);
+		IMAGE(Image.class, false, EC_NODE_IMAGES),
+		PAGE(Page.class, true, EC_NODE_PAGES),
+		CONTENT(Content.class, false, EC_NODE_PAGES);
 		
 		public final Class typeClass;
 		public final boolean parent;
@@ -56,6 +60,15 @@ public class RepositoryInfo {
 	public static boolean isImagesNodeType(final String path){
     	return isNodeType(path, EC_NODE_IMAGES);
     }
+	
+	public static boolean isContentNodeType(final String path){
+        return isNodeType(path, EC_NODE_PAGES);
+    }
+	
+	public static boolean isContentPasteNode(final String path){
+	    //TODO
+	    return false;
+	}
 	
 	public static boolean isDeletableNode(JcrTemplate template, final String path){
     	Node result = (Node) template.execute(new JcrCallback(){

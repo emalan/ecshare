@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
@@ -24,6 +25,7 @@ import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.jcr.BlogEntryHelper;
+import com.madalla.service.cms.jcr.ContentHelper;
 import com.madalla.service.cms.jcr.ImageData;
 import com.madalla.service.cms.jcr.ImageDataHelper;
 import com.madalla.service.cms.ocm.RepositoryInfo;
@@ -31,6 +33,7 @@ import com.madalla.service.cms.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
 import com.madalla.service.cms.ocm.image.Album;
 import com.madalla.service.cms.ocm.image.Image;
+import com.madalla.service.cms.ocm.page.Page;
 
 public class JcrOcmConversion {
 	
@@ -125,6 +128,38 @@ public class JcrOcmConversion {
 				}
 				
 				session.save();
+				
+				
+			    final String EC_NODE_PAGES = "ec:pages";
+			    final String EC_NODE_CONTENT = "ec:content";
+			    final String EC_PROP_CONTENT = "ec:content";
+				log.warn("*** Content Conversion ***");
+				  template.execute(new JcrCallback(){
+
+			            public Object doInJcr(Session session) throws IOException,
+			                    RepositoryException {
+			                List<com.madalla.service.cms.ocm.page.Content> list = new ArrayList();
+			                Node parent = RepositoryInfo.getGroupNode(session, site, RepositoryType.PAGE);
+			                for (NodeIterator iter = parent.getNodes(); iter.hasNext();){
+			                    Node node = iter.nextNode();
+			                    Page page = repositoryService.getPage( StringUtils.substringAfterLast(node.getName(),"ec:"));
+			                    try {
+			                    Node contentNode = node.getNode(EC_NODE_CONTENT);
+			                    for (NodeIterator iter1 = contentNode.getNodes(); iter1.hasNext();){
+			                        Node oldNode = iter1.nextNode();
+			                        com.madalla.service.cms.ocm.page.Content content = new com.madalla.service.cms.ocm.page.Content(page, StringUtils.substringAfterLast(oldNode.getName(),"ec:"));
+			                        content.setText(oldNode.getProperty(EC_PROP_CONTENT).getString());
+			                        repositoryService.saveContent(content);
+			                        
+			                    }
+			                    } catch (PathNotFoundException e){
+			                        
+			                    }
+			                }
+			                return null;
+			            }
+			            
+			        });
 				
 				return null;
 			}

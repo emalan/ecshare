@@ -22,11 +22,13 @@ import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.BackupFile;
 import com.madalla.service.cms.IRepositoryAdminService;
 import com.madalla.service.cms.IRepositoryService;
-import com.madalla.service.cms.jcr.Content;
+import com.madalla.service.cms.jcr.ContentHelper;
 import com.madalla.service.cms.jcr.RepositoryService;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
 import com.madalla.service.cms.ocm.image.Album;
 import com.madalla.service.cms.ocm.image.Image;
+import com.madalla.service.cms.ocm.page.Content;
+import com.madalla.service.cms.ocm.page.Page;
 import com.madalla.util.jcr.ocm.JcrOcmConversion;
 
 public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
@@ -37,9 +39,6 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     protected JcrTemplate template;
 	private RepositoryService oldRepositoryService;
 	private final static String SITE = "test";
-	private final static String CONTENT_ID = "testContent";
-	private final static String CONTENT_PARENT = "testParentNode";
-	private final static String CONTENT_TEXT = "Content text";
 	
 	protected List<String> getTestConfigLocations() {
 		List<String> configLocations = new ArrayList<String>();
@@ -82,37 +81,35 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	
     }
     
+    private final static String CONTENT_ID = "testContent";
+    private final static String CONTENT_PARENT = "testParentNode";
+    private final static String CONTENT_TEXT = "Content text";
+
     public void testContentGetSet() throws RepositoryException{
     	String contentId = RandomStringUtils.randomAlphabetic(5);
     	
     	//test new
-    	Content content = new Content(CONTENT_PARENT,contentId );
+    	Page page = contentService.getPage(CONTENT_PARENT);
+    	Content content = new Content(page,contentId );
     	String text = RandomStringUtils.randomAlphanumeric(20);
     	content.setText(text);
-    	String path = content.save();
-    	String testText = contentService.getContentData(CONTENT_PARENT, contentId);
+    	contentService.saveContent(content);
+    	String testText = contentService.getContentData(page, contentId);
     	assertEquals(text, testText);
-    	
-    	//TODO test update
-    	Content existing = new Content(path, CONTENT_PARENT, contentId);
-    	String updateText = RandomStringUtils.randomAlphanumeric(100);
-    	existing.setText(updateText);
-    	existing.save();
-    	String testExisting = contentService.getContentData(CONTENT_PARENT, contentId);
-    	assertEquals(updateText, testExisting);
     
     }
 
     public void testContentGetSetLocale() throws RepositoryException{
     	String french = RandomStringUtils.randomAlphanumeric(20) + "french stuff";
-    	Content content = new Content(CONTENT_PARENT, contentService.getLocaleId(CONTENT_ID, Locale.FRENCH));
+    	Page page = contentService.getPage(CONTENT_PARENT);
+    	Content content = new Content(page, contentService.getLocaleId(CONTENT_ID, Locale.FRENCH));
     	content.setText(french);
-    	content.save();
+    	contentService.saveContent(content);
     	
-    	String text = contentService.getContentData(CONTENT_PARENT, CONTENT_ID, Locale.FRENCH);
+    	String text = contentService.getContentData(page, CONTENT_ID, Locale.FRENCH);
     	assertEquals(text, french);
     }
-
+    
     public void testImageGetSet() throws FileNotFoundException{
     	InputStream stream = this.getClass().getResourceAsStream("test1.jpg");
     	assertNotNull(stream);

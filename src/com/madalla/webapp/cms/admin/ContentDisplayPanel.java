@@ -96,7 +96,8 @@ class ContentDisplayPanel extends Panel {
             
 			@Override
             public void onClick(AjaxRequestTarget target) {
-				getContentService().pasteContent(path, copiedContent);
+			    //TODO
+				//getContentService().pasteContent(path, copiedContent);
             	refresh("");
             	target.addComponent(getParent());
             	parentPanel.refreshExplorerPanel();
@@ -123,7 +124,8 @@ class ContentDisplayPanel extends Panel {
             
 			@Override
             public void onClick(AjaxRequestTarget target) {
-				copiedContent = getContentService().getContent(path);
+				//TODO
+			    //copiedContent = getContentService().getContent(path);
 				target.addComponent(paste);
 			}
         };
@@ -146,7 +148,8 @@ class ContentDisplayPanel extends Panel {
 		if (StringUtils.isEmpty(path)){
 			contentText = "";
 		} else if (getContentService().isContentNode(path)){
-			contentText = getContentService().getContent(path).getText();
+		    //TODO
+			//contentText = getContentService().getContent(path).getText();
 		} else if (getContentService().isBlogNode(path)){
 			AbstractBlogEntry blogEntry = getContentService().getBlogEntry(path);
 			StringBuffer sb = new StringBuffer("Title : ").append(blogEntry.getTitle()).append("<br/>")
