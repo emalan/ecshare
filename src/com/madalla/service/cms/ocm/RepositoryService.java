@@ -320,15 +320,16 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         }
         ocm.save();
     }
+    
 	public Content getContent(final String path) {
 		return (Content) ocm.getObject(Content.class, path);
 	}
     
     public void pasteContent(final String path, final Content content){
-    	Content toContent = (Content) ocm.getObject(Content.class, path);
-    	toContent.setText(content.getText());
-    	ocm.update(toContent);
-    	ocm.save();
+    	Page newParent = (Page) ocm.getObject(Page.class, path);
+    	Content newContent = new Content(newParent, content.getName());
+    	newContent.setText(content.getText());
+    	saveContent(newContent);
     }
 
 	public com.madalla.service.cms.jcr.RepositoryService getOldRepositoryService() {

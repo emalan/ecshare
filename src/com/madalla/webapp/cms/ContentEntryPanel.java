@@ -20,7 +20,7 @@ import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
-import com.madalla.service.cms.jcr.Content;
+import com.madalla.service.cms.ocm.page.Content;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.ContentAdminPage;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
@@ -109,9 +109,11 @@ public class ContentEntryPanel extends Panel {
         public void onSubmit() {
             log.debug("Submiting populated Content object to Content service.");
             IRepositoryService service = ((IRepositoryServiceProvider) getPage().getApplication()).getRepositoryService();
-            Content content = new Content(nodeName, service.getLocaleId(contentId, getSession().getLocale()));
+            String localeId  = service.getLocaleId(contentId, getSession().getLocale());
+            com.madalla.service.cms.ocm.page.Page page = service.getPage(nodeName);
+            Content content = new Content(page, localeId);
             content.setText(text);
-            content.save();
+            service.saveContent(content);
             info("Content saved to repository");
             log.debug("Content successfully saved to repository. content=" + content);
             setResponsePage(contentPage);

@@ -3,6 +3,7 @@ package com.madalla.service.cms.ocm.page;
 import java.io.Serializable;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 
@@ -28,6 +29,10 @@ public class Page extends AbstractOcm implements Serializable{
     }
     public void setId(String id) {
         this.id = id;
+    }
+    
+	public String toString() {
+        return ReflectionToStringBuilder.toString(this).toString();
     }
     
 }

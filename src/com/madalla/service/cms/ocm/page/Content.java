@@ -3,6 +3,7 @@ package com.madalla.service.cms.ocm.page;
 import java.io.Serializable;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 
@@ -35,6 +36,10 @@ public class Content extends AbstractOcm implements Serializable{
     }
     public void setText(String text) {
         this.text = text;
+    }
+    
+	public String toString() {
+        return ReflectionToStringBuilder.toString(this).toString();
     }
     
 }
