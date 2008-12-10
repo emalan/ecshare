@@ -25,6 +25,7 @@ public class RepositoryInfo {
     private static final String EC_NODE_BLOGS = NS + "blogs";
     private static final String EC_NODE_PAGES = NS + "pages";
     private static final String EC_NODE_IMAGES = NS + "images";
+    private static final String OCM_CLASS = "ocm:classname";
 
 	public enum RepositoryType {
 		BLOG(Blog.class, true, EC_NODE_BLOGS),
@@ -65,9 +66,26 @@ public class RepositoryInfo {
         return isNodeType(path, EC_NODE_PAGES);
     }
 	
-	public static boolean isContentPasteNode(final String path){
-	    //TODO
-	    return false;
+	public static boolean isContentPasteNode(JcrTemplate template, final String path){
+	    Boolean rt = (Boolean) template.execute(new JcrCallback(){
+
+			public Object doInJcr(Session session) throws IOException,
+					RepositoryException {
+				Node node = (Node) session.getItem(path);
+				if (node.hasProperty(OCM_CLASS)){
+					String className = node.getProperty(OCM_CLASS).getString();
+					if ("com.madalla.service.cms.ocm.page.Page".equals(className)){
+						return Boolean.TRUE;
+					} else {
+						return Boolean.FALSE;
+					}
+				}else {
+					return Boolean.FALSE;
+				}
+			}
+	    	
+	    });
+	    return rt;
 	}
 	
 	public static boolean isDeletableNode(JcrTemplate template, final String path){

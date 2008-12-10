@@ -34,8 +34,8 @@ public interface IRepositoryService {
     String getContentData(Page page, String id);
     String getContentData(Page page, String id, Locale locale);
     void saveContent(Content content);
-    //void pasteContent(final String path, final Content content);
-    //Content getContent(final String path);
+    Content getContent(final String path);
+    void pasteContent(String path, Content content);
     
     //Blog
     AbstractBlog getBlog(final String blogName);

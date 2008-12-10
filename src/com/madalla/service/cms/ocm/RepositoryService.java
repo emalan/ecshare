@@ -98,7 +98,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     public boolean isContentPasteNode(final String path){
-    	return RepositoryInfo.isContentPasteNode(path);
+    	return RepositoryInfo.isContentPasteNode(template, path);
     }
     
     /**
@@ -235,11 +235,6 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	ocm.save();
     }
     
-    @Deprecated
-    public AbstractBlogEntry getNewBlogEntry(String blog, String title, DateTime date){
-    	return null;
-    }
-    
     public List<AbstractBlogEntry> getBlogEntries(AbstractBlog blog){
         //TODO create query template
 		QueryManager queryManager = ocm.getQueryManager();
@@ -254,8 +249,6 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 		Collections.sort(list);
 		return list;
     }
-    
-    //Content
     
     public Page getPage(final String name){
         return (Page) repositoryTemplate.executeParent(RepositoryType.PAGE, name, new ParentNodeCallback(){
@@ -327,32 +320,16 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         }
         ocm.save();
     }
-//	public Content getContent(final String path) {
-//        return (Content) template.execute(new JcrCallback(){
-//            public Content doInJcr(Session session) throws IOException, RepositoryException {
-//                Node node = (Node) session.getItem(path);
-//                String pageName = node.getParent().getName().replaceFirst("ec:","");
-//                Content content = new Content(node.getPath(), pageName, node.getName());
-//                content.setText(node.getProperty(EC_PROP_CONTENT).getString());
-//                return content;
-//            }
-//        });
-//	}
-//    
-//    public void pasteContent(final String path, final Content content){
-//        log.debug("pasteContent - path="+path);
-//    	template.execute(new JcrCallback(){
-//			public Object doInJcr(Session session) throws IOException,
-//					RepositoryException {
-//				Node parent = (Node) session.getItem(path);
-//                Node newNode = getCreateNode(content.getName(), parent);
-//                newNode.setProperty(EC_PROP_CONTENT, content.getText());
-//                session.save();
-//                log.debug("pasteContent - Done pasting. path="+path);
-//                return null;
-//			}
-//    	});
-//    }
+	public Content getContent(final String path) {
+		return (Content) ocm.getObject(Content.class, path);
+	}
+    
+    public void pasteContent(final String path, final Content content){
+    	Content toContent = (Content) ocm.getObject(Content.class, path);
+    	toContent.setText(content.getText());
+    	ocm.update(toContent);
+    	ocm.save();
+    }
 
 	public com.madalla.service.cms.jcr.RepositoryService getOldRepositoryService() {
 		return oldRepositoryService;

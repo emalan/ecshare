@@ -21,6 +21,7 @@ import org.apache.wicket.model.PropertyModel;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.service.cms.jcr.Content;
+import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.ContentAdminPage;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 
@@ -58,7 +59,18 @@ public class ContentEntryPanel extends Panel {
 
         add(new PageLink("returnLink", returnPage));
 		add(new BookmarkablePageLink("contentAdminLink", ContentAdminPage.class, 
-				new PageParameters(RETURN_PAGE + "=" + returnPage.getName())) );
+				new PageParameters(RETURN_PAGE + "=" + returnPage.getName())){
+			private static final long serialVersionUID = 1801145612969874170L;
+
+            protected final void onBeforeRender() {
+                if (((CmsSession)getSession()).isCmsAdminMode()) {
+                    setEnabled(true);
+                } else {
+                    setEnabled(false);
+                }
+                super.onBeforeRender();
+            }
+		});
 
         IRepositoryService service = ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
         com.madalla.service.cms.ocm.page.Page page = service.getPage(nodeName);

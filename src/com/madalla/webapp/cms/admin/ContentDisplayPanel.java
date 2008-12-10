@@ -13,7 +13,7 @@ import org.apache.wicket.model.Model;
 import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
-import com.madalla.service.cms.jcr.Content;
+import com.madalla.service.cms.ocm.page.Content;
 
 class ContentDisplayPanel extends Panel {
 
@@ -96,8 +96,7 @@ class ContentDisplayPanel extends Panel {
             
 			@Override
             public void onClick(AjaxRequestTarget target) {
-			    //TODO
-				//getContentService().pasteContent(path, copiedContent);
+				getContentService().pasteContent(path, copiedContent);
             	refresh("");
             	target.addComponent(getParent());
             	parentPanel.refreshExplorerPanel();
@@ -124,8 +123,7 @@ class ContentDisplayPanel extends Panel {
             
 			@Override
             public void onClick(AjaxRequestTarget target) {
-				//TODO
-			    //copiedContent = getContentService().getContent(path);
+			    copiedContent = getContentService().getContent(path);
 				target.addComponent(paste);
 			}
         };
@@ -148,8 +146,7 @@ class ContentDisplayPanel extends Panel {
 		if (StringUtils.isEmpty(path)){
 			contentText = "";
 		} else if (getContentService().isContentNode(path)){
-		    //TODO
-			//contentText = getContentService().getContent(path).getText();
+			contentText = getContentService().getContent(path).getText();
 		} else if (getContentService().isBlogNode(path)){
 			AbstractBlogEntry blogEntry = getContentService().getBlogEntry(path);
 			StringBuffer sb = new StringBuffer("Title : ").append(blogEntry.getTitle()).append("<br/>")
