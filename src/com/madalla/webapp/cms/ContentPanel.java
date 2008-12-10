@@ -42,9 +42,8 @@ public class ContentPanel extends Panel {
         this.nodeId = id;
         this.returnPage = returnPage;
         log.debug("Content Panel being created for node=" + node + " id=" + id);
-        IRepositoryService contentService = ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
-        com.madalla.service.cms.ocm.page.Page page = contentService.getPage(node);
-        String contentBody = contentService.getContentData(page, id , getSession().getLocale());
+        com.madalla.service.cms.ocm.page.Page page = getRepositoryservice().getPage(node);
+        String contentBody = getRepositoryservice().getContentData(page, id , getSession().getLocale());
         Component contentBlock = new ContentContainer("contentBlock", id, node, contentBody);
         contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel() {
 			private static final long serialVersionUID = -3131361470864509715L;
@@ -75,9 +74,8 @@ public class ContentPanel extends Panel {
 				private static final long serialVersionUID = 6930776696843471636L;
 
 				protected void onBeforeRender(){
-                    IRepositoryService contentService = ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
-                    com.madalla.service.cms.ocm.page.Page page = contentService.getPage(nodeName);
-                    String contentBody = contentService.getContentData(page, nodeId, getSession().getLocale());
+                    com.madalla.service.cms.ocm.page.Page page = getRepositoryservice().getPage(nodeName);
+                    String contentBody = getRepositoryservice().getContentData(page, nodeId, getSession().getLocale());
                     log.debug("onBeforeRender - setting new Content.");
                     contentModel.setObject(contentBody);
                     super.onBeforeRender();
@@ -107,7 +105,10 @@ public class ContentPanel extends Panel {
             add(link);
 
         }
- 
+    }
+    
+    private IRepositoryService getRepositoryservice(){
+    	return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
     }
 
 }

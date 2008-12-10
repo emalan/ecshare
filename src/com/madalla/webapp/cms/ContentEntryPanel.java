@@ -72,9 +72,8 @@ public class ContentEntryPanel extends Panel {
             }
 		});
 
-        IRepositoryService service = ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
-        com.madalla.service.cms.ocm.page.Page page = service.getPage(nodeName);
-        text = service.getContentData(page, contentId, getSession().getLocale());
+        com.madalla.service.cms.ocm.page.Page page = getRepositoryservice().getPage(nodeName);
+        text = getRepositoryservice().getContentData(page, contentId, getSession().getLocale());
         add(new ContentForm("contentForm"));
     }
 
@@ -108,17 +107,21 @@ public class ContentEntryPanel extends Panel {
         }
         public void onSubmit() {
             log.debug("Submiting populated Content object to Content service.");
-            IRepositoryService service = ((IRepositoryServiceProvider) getPage().getApplication()).getRepositoryService();
-            String localeId  = service.getLocaleId(contentId, getSession().getLocale());
-            com.madalla.service.cms.ocm.page.Page page = service.getPage(nodeName);
+            String localeId  = getRepositoryservice().getLocaleId(contentId, getSession().getLocale());
+            com.madalla.service.cms.ocm.page.Page page = getRepositoryservice().getPage(nodeName);
             Content content = new Content(page, localeId);
             content.setText(text);
-            service.saveContent(content);
+            getRepositoryservice().saveContent(content);
             info("Content saved to repository");
             log.debug("Content successfully saved to repository. content=" + content);
             setResponsePage(contentPage);
         }
 
     }
+    
+    private IRepositoryService getRepositoryservice(){
+    	return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
+    }
+
 
 }
