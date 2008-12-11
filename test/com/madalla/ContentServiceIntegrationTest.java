@@ -13,23 +13,18 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.tree.LinkTree;
-import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrTemplate;
 
-import com.madalla.service.cms.AbstractBlog;
-import com.madalla.service.cms.AbstractImageData;
 import com.madalla.service.cms.BackupFile;
+import com.madalla.service.cms.IBlogData;
 import com.madalla.service.cms.IRepositoryAdminService;
 import com.madalla.service.cms.IRepositoryService;
-import com.madalla.service.cms.jcr.ContentHelper;
-import com.madalla.service.cms.jcr.RepositoryService;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
 import com.madalla.service.cms.ocm.image.Album;
 import com.madalla.service.cms.ocm.image.Image;
 import com.madalla.service.cms.ocm.page.Content;
 import com.madalla.service.cms.ocm.page.Page;
-import com.madalla.util.jcr.ocm.JcrOcmConversion;
 
 public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
@@ -37,12 +32,11 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 	private IRepositoryService contentService;
     private IRepositoryAdminService repositoryAdminService;
     protected JcrTemplate template;
-	private RepositoryService oldRepositoryService;
 	private final static String SITE = "test";
 	
 	protected List<String> getTestConfigLocations() {
 		List<String> configLocations = new ArrayList<String>();
-		configLocations.add("classpath:com/madalla/service/cms/jcr/applicationContext-cms.xml");
+		configLocations.add("classpath:com/madalla/service/cms/ocm/applicationContext-cms.xml");
         configLocations.add("classpath:com/madalla/util/jcr/applicationContext-jcr-local.xml");
         
 		return configLocations;
@@ -83,10 +77,10 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     
     private final static String CONTENT_ID = "testContent";
     private final static String CONTENT_PARENT = "testParentNode";
-    private final static String CONTENT_TEXT = "Content text";
 
     public void testContentGetSet() throws RepositoryException{
     	String contentId = RandomStringUtils.randomAlphabetic(5);
+    	String contentText = RandomStringUtils.randomAlphabetic(20);
     	
     	//test new
     	Page page = contentService.getPage(CONTENT_PARENT);
@@ -94,9 +88,18 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	String text = RandomStringUtils.randomAlphanumeric(20);
     	content.setText(text);
     	contentService.saveContent(content);
-    	String testText = contentService.getContentData(page, contentId);
+    	String testText = contentService.getContentText(page, contentId);
     	assertEquals(text, testText);
     
+    	//test Update
+    	{
+    		Content c = contentService.getContent(page, contentId);
+    		String s = "test1";
+    		c.setText(s);
+    		contentService.saveContent(c);
+    		String s1 = contentService.getContentText(page, contentId);
+    		assertEquals(s, s1);
+    	}
     }
 
     public void testContentGetSetLocale() throws RepositoryException{
@@ -106,7 +109,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	content.setText(french);
     	contentService.saveContent(content);
     	
-    	String text = contentService.getContentData(page, CONTENT_ID, Locale.FRENCH);
+    	String text = contentService.getContentText(page, CONTENT_ID, Locale.FRENCH);
     	assertEquals(text, french);
     }
     
@@ -146,36 +149,6 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	assertTrue(treeModel.getChildCount(treeModel.getRoot()) >= 1);
     }
     
-    public void testImageConversion() throws ResourceStreamNotFoundException{
-    	
-    	final String album = "testAlbum";
-    	final String name = "image";
-    	for (int i = 1; i <= 3; i++){
-    		InputStream stream = this.getClass().getResourceAsStream("test"+i+".jpg");
-    		assertNotNull(stream);
-    		String path = repositoryAdminService.createOriginalImage(name+i, stream);
-    		log.info("testImageGetSet - path="+path);
-    	}
-    	
-    	List<AbstractImageData> list = oldRepositoryService.getAlbumOriginalImages();
-    	String testImage;
-    	for(AbstractImageData oldImage: list){
-    		Album originalAlbum = contentService.getOriginalsAlbum();
-        	testImage = contentService.createImage(originalAlbum, oldImage.getName(), oldImage.getFullImageAsResource().getResourceStream().getInputStream());
-        	log.info("testImageGetSet - path="+testImage);
-        	
-    	}
-    	
-//    	
-//    	String albumPath = repositoryAdminService.addImageToAlbum(album, name);
-//    	log.info("testAddImageToAlbum - path="+albumPath);
-//    	
-//    	TreeModel treeModel = contentService.getAlbumImagesAsTree(album);
-//    	assertNotNull(treeModel);
-//    	assertEquals(treeModel.getChildCount(treeModel.getRoot()), 1);
-    	
-    }
-    
     private final static String BLOG = "testBlog";
     private final static String BLOGCATEGORY = "testCategory";
     private final static String BLOGDESCRIPTION = "Blog Description Test";
@@ -185,7 +158,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     private final static DateTime BLOGDATE = new DateTime();
     
     public void testBlogGetSet(){
-    	AbstractBlog blog = contentService.getBlog(BLOG);
+    	IBlogData blog = contentService.getBlog(BLOG);
     	assertNotNull(blog);
     	BlogEntry blogEntry = contentService.getNewBlogEntry(blog, BLOGTITLE, BLOGDATE);
     	assertNotNull(blogEntry);
@@ -197,21 +170,6 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	assertNotNull(testEntry);
     	
     	contentService.deleteNode(path);
-    }
-    
-    public void testBlogConversion(){
-    	//Create some old Blog Entries
-    	for (int i = 0; i < 5; i++){
-    		com.madalla.service.cms.jcr.BlogEntry blogEntry = createBlogEntry(i);
-    		String path = blogEntry.save();
-    	}
-        
-        //do conversion
-    	JcrOcmConversion conversion = new JcrOcmConversion();
-    	conversion.init(template, oldRepositoryService, contentService,SITE);
-    	conversion.convertNodesToOcm();
-    	
-    	//test conversion
     }
     
     private com.madalla.service.cms.jcr.BlogEntry createBlogEntry(int i){
@@ -230,14 +188,6 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
         this.repositoryAdminService = contentAdminService;
     }
 
-	public RepositoryService getOldRepositoryService() {
-		return oldRepositoryService;
-	}
-
-	public void setOldRepositoryService(RepositoryService oldRepositoryService) {
-		this.oldRepositoryService = oldRepositoryService;
-	}
-    
 	public JcrTemplate getTemplate() {
 		return template;
 	}

@@ -1,6 +1,5 @@
 package com.madalla.service.cms.ocm;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,9 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
@@ -24,10 +20,10 @@ import org.apache.jackrabbit.ocm.query.Filter;
 import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.joda.time.DateTime;
-import org.springmodules.jcr.JcrCallback;
 
-import com.madalla.service.cms.AbstractBlog;
 import com.madalla.service.cms.AbstractBlogEntry;
+import com.madalla.service.cms.AbstractData;
+import com.madalla.service.cms.IBlogData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.service.cms.ocm.blog.Blog;
@@ -37,9 +33,9 @@ import com.madalla.service.cms.ocm.image.Image;
 import com.madalla.service.cms.ocm.image.ImageHelper;
 import com.madalla.service.cms.ocm.page.Content;
 import com.madalla.service.cms.ocm.page.Page;
-import com.madalla.util.jcr.ParentNodeCallback;
-import com.madalla.util.jcr.RepositoryTemplate;
-import com.madalla.util.jcr.ocm.JcrOcmConversion;
+import com.madalla.service.cms.ocm.template.ParentNodeCallback;
+import com.madalla.service.cms.ocm.template.RepositoryTemplate;
+import com.madalla.util.jcr.JcrUtils;
 
 /**
  * Content Service Implementation for Jackrabbit JCR Content Repository
@@ -65,22 +61,13 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	private static final long serialVersionUID = 795763276139305054L;
 	private static final Log log = LogFactory.getLog(RepositoryService.class);
 
-    private com.madalla.service.cms.jcr.RepositoryService oldRepositoryService;
     private RepositoryTemplate repositoryTemplate;
-
-    //Delete this and move out to Data classes
-    static final String EC_PROP_CONTENT = "ec:" + "content";
 
     public void init(){
     	super.init();
     	repositoryTemplate = new RepositoryTemplate(template, ocm, site);
-    	
-    	//do Conversion
-    	JcrOcmConversion conversion = new JcrOcmConversion();
-    	conversion.init(template, oldRepositoryService, this,site);
-    	conversion.convertNodesToOcm();
-    	
     }
+
     public boolean isDeletableNode(final String path){
     	return RepositoryInfo.isDeletableNode(template, path);
     }
@@ -101,6 +88,14 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	return RepositoryInfo.isContentPasteNode(template, path);
     }
     
+    public void deleteNode(final String path) {
+    	JcrUtils.deleteNode(template, path);
+    }
+    
+    //*************************
+    // *** Album and Images ***
+    private static final String ORIGINAL_ALBUM_NAME = "Originals";
+    
     /**
      * Creates the album if it does not exist.
      * @param name - album name
@@ -110,14 +105,12 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	return (Album) repositoryTemplate.executeParent(RepositoryType.ALBUM, name, new ParentNodeCallback(){
 
 			@Override
-			public AbstractOcm createNew(String parentPath, String name) {
+			public AbstractData createNew(String parentPath, String name) {
 				return new Album(parentPath, name);
 			}
 
     	});
     }
-    
-    private static final String ORIGINAL_ALBUM_NAME = "Originals";
 	
     /**
      * The originals album is a storage space for all uploaded images. The uploaded images can be copied out
@@ -129,7 +122,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 		return (Album) repositoryTemplate.executeParent(RepositoryType.ALBUM,ORIGINAL_ALBUM_NAME , new ParentNodeCallback(){
 
 			@Override
-			public Object createNew(String parentPath, String name) {
+			public AbstractData createNew(String parentPath, String name) {
 				return new Album(parentPath, name);
 			}
 			
@@ -201,19 +194,22 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	    Album album = getOriginalsAlbum();
 	    return getAlbumImages(album);
 	}
+
+    //*****************************
+    // *** Blog and BlogEntries ***
 	
 	public Blog getBlog(final String blogName){
 		return (Blog) repositoryTemplate.executeParent(RepositoryType.BLOG, blogName, new ParentNodeCallback(){
 
 			@Override
-			public Object createNew(String parentPath, String name) {
+			public AbstractData createNew(String parentPath, String name) {
 				return new Blog(parentPath, name);
 			}
 			
 		});
 	}
 
-	public BlogEntry getNewBlogEntry(AbstractBlog blog, String title, DateTime date){
+	public BlogEntry getNewBlogEntry(IBlogData blog, String title, DateTime date){
     	return new BlogEntry(blog, title, date );
     }
 
@@ -235,7 +231,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	ocm.save();
     }
     
-    public List<AbstractBlogEntry> getBlogEntries(AbstractBlog blog){
+    public List<AbstractBlogEntry> getBlogEntries(IBlogData blog){
         //TODO create query template
 		QueryManager queryManager = ocm.getQueryManager();
 		Filter filter = queryManager.createFilter(BlogEntry.class);
@@ -250,23 +246,30 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 		return list;
     }
     
+    //*************************
+    // *** Page and Content ***
+    
+
+    /* (non-Javadoc)
+     * @see com.madalla.service.cms.IRepositoryService#getPage(java.lang.String)
+     */
     public Page getPage(final String name){
         return (Page) repositoryTemplate.executeParent(RepositoryType.PAGE, name, new ParentNodeCallback(){
 
             @Override
-            public AbstractOcm createNew(String parentPath, String name) {
+            public AbstractData createNew(String parentPath, String name) {
                 return new Page(parentPath, name);
             }
 
         });
     }
     
-    public String getContentData(final Page page, final String id, Locale locale) {
+    public String getContentText(final Page page, final String id, Locale locale) {
         String localeId = getLocaleId(id, locale);
-        return getContentData(page, localeId);
+        return getContentText(page, localeId);
     }
     
-    public String getContentData(final Page page, final String contentName) {
+    public String getContentText(final Page page, final String contentName) {
         String path = page.getId() + "/" + contentName;
         Content content;
         if (ocm.objectExists(path)){
@@ -297,21 +300,6 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         }
     }
 
-    public void deleteNode(final String path) {
-        if (StringUtils.isEmpty(path)) {
-            log.error("deleteNode - path is required.");
-        } else {
-            template.execute(new JcrCallback() {
-                public Object doInJcr(Session session) throws IOException, RepositoryException {
-                    Node node = (Node) session.getItem(path);
-                    node.remove();
-                    session.save();
-                    return null;
-                }
-            });
-        }
-    }
-    
     public void saveContent(Content content){
         if (ocm.objectExists(content.getId())){
             ocm.update(content);
@@ -321,8 +309,16 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         ocm.save();
     }
     
-	public Content getContent(final String path) {
-		return (Content) ocm.getObject(Content.class, path);
+    public Content getContent(final Page parent, final String name, final Locale locale){
+    	return getContent(parent, getLocaleId(name, locale));
+    }
+    
+    public Content getContent(final Page parent, final String name){
+    	return getContent(parent.getId() + "/" + name);
+    }
+
+    public Content getContent(final String id) {
+		return (Content) ocm.getObject(Content.class, id);
 	}
     
     public void pasteContent(final String path, final Content content){
@@ -331,15 +327,5 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	newContent.setText(content.getText());
     	saveContent(newContent);
     }
-
-	public com.madalla.service.cms.jcr.RepositoryService getOldRepositoryService() {
-		return oldRepositoryService;
-	}
-
-	public void setOldRepositoryService(com.madalla.service.cms.jcr.RepositoryService oldRepositoryService) {
-		this.oldRepositoryService = oldRepositoryService;
-	}
-    
-    
 
 }

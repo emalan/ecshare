@@ -7,10 +7,10 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 
-import com.madalla.service.cms.ocm.AbstractOcm;
+import com.madalla.service.cms.AbstractData;
 
 @Node
-public class Content extends AbstractOcm implements Serializable{
+public class Content extends AbstractData implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Field(path=true) private String id;

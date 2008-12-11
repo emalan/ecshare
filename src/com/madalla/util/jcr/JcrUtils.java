@@ -1,11 +1,17 @@
 package com.madalla.util.jcr;
 
+import java.io.IOException;
+
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springmodules.jcr.JcrCallback;
+import org.springmodules.jcr.JcrTemplate;
 
 public class JcrUtils {
 
@@ -28,6 +34,21 @@ public class JcrUtils {
         }
         return node;
         
+    }
+    
+    public static void deleteNode(JcrTemplate template, final String path) {
+        if (StringUtils.isEmpty(path)) {
+            log.error("deleteNode - path is required.");
+        } else {
+            template.execute(new JcrCallback() {
+                public Object doInJcr(Session session) throws IOException, RepositoryException {
+                    Node node = (Node) session.getItem(path);
+                    node.remove();
+                    session.save();
+                    return null;
+                }
+            });
+        }
     }
     
 }

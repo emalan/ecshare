@@ -6,8 +6,8 @@ import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 import org.joda.time.DateTime;
 
-import com.madalla.service.cms.AbstractBlog;
 import com.madalla.service.cms.AbstractBlogEntry;
+import com.madalla.service.cms.IBlogData;
 
 @Node
 public class BlogEntry extends AbstractBlogEntry implements Serializable {
@@ -32,7 +32,7 @@ public class BlogEntry extends AbstractBlogEntry implements Serializable {
      * @param title
      * @param date
      */
-    public BlogEntry(AbstractBlog blog, final String title, final DateTime date){
+    public BlogEntry(IBlogData blog, final String title, final DateTime date){
     	this.title = title;
     	this.date = date;
     	this.id = blog.getId() + "/" + getName();

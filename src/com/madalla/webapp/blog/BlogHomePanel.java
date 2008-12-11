@@ -6,7 +6,7 @@ import org.apache.wicket.Page;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import com.madalla.service.cms.AbstractBlog;
+import com.madalla.service.cms.IBlogData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 
@@ -25,7 +25,7 @@ public class BlogHomePanel extends Panel{
 					"the abstract class CmsBlogApplication.");
 		}
 
-		AbstractBlog blog = getRepositoryService().getBlog(blogName);
+		IBlogData blog = getRepositoryService().getBlog(blogName);
 		BlogDisplayPanel displayPanel;
 		if (blogEntryId != null){
 			displayPanel = new BlogDisplayPanel("blogDisplayPanel", blog, blogEntryId, returnPage);

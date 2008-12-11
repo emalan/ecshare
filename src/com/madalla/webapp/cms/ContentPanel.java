@@ -43,7 +43,7 @@ public class ContentPanel extends Panel {
         this.returnPage = returnPage;
         log.debug("Content Panel being created for node=" + node + " id=" + id);
         com.madalla.service.cms.ocm.page.Page page = getRepositoryservice().getPage(node);
-        String contentBody = getRepositoryservice().getContentData(page, id , getSession().getLocale());
+        String contentBody = getRepositoryservice().getContentText(page, id , getSession().getLocale());
         Component contentBlock = new ContentContainer("contentBlock", id, node, contentBody);
         contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel() {
 			private static final long serialVersionUID = -3131361470864509715L;
@@ -75,7 +75,7 @@ public class ContentPanel extends Panel {
 
 				protected void onBeforeRender(){
                     com.madalla.service.cms.ocm.page.Page page = getRepositoryservice().getPage(nodeName);
-                    String contentBody = getRepositoryservice().getContentData(page, nodeId, getSession().getLocale());
+                    String contentBody = getRepositoryservice().getContentText(page, nodeId, getSession().getLocale());
                     log.debug("onBeforeRender - setting new Content.");
                     contentModel.setObject(contentBody);
                     super.onBeforeRender();

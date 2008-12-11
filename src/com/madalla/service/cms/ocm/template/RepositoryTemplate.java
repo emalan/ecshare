@@ -1,4 +1,4 @@
-package com.madalla.util.jcr;
+package com.madalla.service.cms.ocm.template;
 
 import java.io.IOException;
 

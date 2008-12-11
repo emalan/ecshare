@@ -29,7 +29,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.joda.time.DateTime;
 
-import com.madalla.service.cms.AbstractBlog;
+import com.madalla.service.cms.IBlogData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
@@ -184,7 +184,7 @@ public class BlogEntryPanel extends Panel {
     private void saveBlogEntry(BlogEntryView view){
     	BlogEntry blogEntry;
     	if (StringUtils.isEmpty(view.getId())){
-    		AbstractBlog blog = getRepositoryService().getBlog(view.getBlog());
+    		IBlogData blog = getRepositoryService().getBlog(view.getBlog());
     		blogEntry = getRepositoryService().getNewBlogEntry(blog, view.getTitle(), new DateTime(view.getDate())); 
     		view.populate(blogEntry);
     	} else {

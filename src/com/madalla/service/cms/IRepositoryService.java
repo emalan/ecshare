@@ -31,18 +31,22 @@ public interface IRepositoryService {
     
     //Content
     Page getPage(final String name);
-    String getContentData(Page page, String id);
-    String getContentData(Page page, String id, Locale locale);
-    void saveContent(Content content);
+    String getContentText(Page page, String id);
+    String getContentText(Page page, String id, Locale locale);
+    
+    Content getContent(final Page parent, final String name, final Locale locale);
+    Content getContent(final Page parent, final String name);
     Content getContent(final String path);
+    
+    void saveContent(Content content);
     void pasteContent(String path, Content content);
     
     //Blog
-    AbstractBlog getBlog(final String blogName);
-    BlogEntry getNewBlogEntry(AbstractBlog blog, String title, DateTime date);
+    IBlogData getBlog(final String blogName);
+    BlogEntry getNewBlogEntry(IBlogData blog, String title, DateTime date);
     BlogEntry getBlogEntry(final String path);
     void saveBlogEntry(BlogEntry blogEntry);
-    List<AbstractBlogEntry> getBlogEntries(AbstractBlog blog);
+    List<AbstractBlogEntry> getBlogEntries(IBlogData blog);
     
     //Image
     Album getOriginalsAlbum();

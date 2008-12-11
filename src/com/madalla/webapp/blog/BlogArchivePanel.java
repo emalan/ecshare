@@ -27,8 +27,8 @@ import org.apache.wicket.model.Model;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import com.madalla.service.cms.AbstractBlog;
 import com.madalla.service.cms.AbstractBlogEntry;
+import com.madalla.service.cms.IBlogData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.util.ui.CalendarUtils;
@@ -39,7 +39,7 @@ public class BlogArchivePanel extends Panel {
 	private Log log = LogFactory.getLog(this.getClass());
 	private static DateTimeFormatter df = DateTimeFormat.forPattern("MMM d");
 
-	BlogArchivePanel(final String id, final AbstractBlog blog, final BlogDisplayPanel display ) {
+	BlogArchivePanel(final String id, final IBlogData blog, final BlogDisplayPanel display ) {
 		super(id);
 
 		//List existing Blogs

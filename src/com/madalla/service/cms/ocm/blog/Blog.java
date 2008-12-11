@@ -4,10 +4,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 
-import com.madalla.service.cms.AbstractBlog;
+import com.madalla.service.cms.BlogData;
 
 @Node
-public class Blog extends AbstractBlog{
+public class Blog extends BlogData{
 	private static final long serialVersionUID = 1L;
 
 	@Field(path=true) private String id;

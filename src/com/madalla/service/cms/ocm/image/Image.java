@@ -9,11 +9,11 @@ import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
 
+import com.madalla.service.cms.AbstractData;
 import com.madalla.service.cms.jcr.ImageData;
-import com.madalla.service.cms.ocm.AbstractOcm;
 
 @Node
-public class Image extends AbstractOcm implements Serializable, Comparable<Image>{
+public class Image extends AbstractData implements Serializable, Comparable<Image>{
 
 	private static final long serialVersionUID = 1L;
 

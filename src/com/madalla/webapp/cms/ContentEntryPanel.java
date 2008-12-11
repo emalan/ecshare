@@ -40,7 +40,7 @@ public class ContentEntryPanel extends Panel {
     private Class<? extends Page> contentPage;
     private final String nodeName;
     private final String contentId;
-    private String text;
+    private Content content;
 
 	/**
 	 * @param name - wicket id
@@ -73,7 +73,7 @@ public class ContentEntryPanel extends Panel {
 		});
 
         com.madalla.service.cms.ocm.page.Page page = getRepositoryservice().getPage(nodeName);
-        text = getRepositoryservice().getContentData(page, contentId, getSession().getLocale());
+        content = getRepositoryservice().getContent(page, contentId, getSession().getLocale());
         add(new ContentForm("contentForm"));
     }
 
@@ -100,17 +100,13 @@ public class ContentEntryPanel extends Panel {
             
         }
         public String getText() {
-    		return text;
+    		return content.getText();
     	}
         public void setText(String val){
-        	text = val;
+        	content.setText(val);
         }
         public void onSubmit() {
             log.debug("Submiting populated Content object to Content service.");
-            String localeId  = getRepositoryservice().getLocaleId(contentId, getSession().getLocale());
-            com.madalla.service.cms.ocm.page.Page page = getRepositoryservice().getPage(nodeName);
-            Content content = new Content(page, localeId);
-            content.setText(text);
             getRepositoryservice().saveContent(content);
             info("Content saved to repository");
             log.debug("Content successfully saved to repository. content=" + content);
