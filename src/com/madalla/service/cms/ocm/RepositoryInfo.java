@@ -19,10 +19,9 @@ import com.madalla.util.jcr.JcrUtils;
 /**
  * Information regarding the Schema in the Content respository System
  * <p>
- * This class is aware of the structure of the data in the repository 
- * and will create the structure if it does not exist. The schema is
- * open and not enforced by the repository. This class is responsible
- * for storing itself in the Repository and fetching itself. 
+ * The schema is depicted below. The data regarding the parent nodes and 
+ * the classes that are children is all stored here. The RepositoryType
+ * Enum holds all the required data.
  * <p>
  * <pre>
  *            ec:apps 

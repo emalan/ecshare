@@ -20,7 +20,6 @@ abstract class AbstractRepositoryService {
 	protected JcrTemplate template;
     protected List<Locale> locales;
 
-
     //Repository Node Names
     static final String NS = "ec:";
     static final String EC_NODE_APP = NS + "apps";
