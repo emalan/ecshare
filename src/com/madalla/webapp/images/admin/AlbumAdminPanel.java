@@ -29,6 +29,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
 
+import com.madalla.service.cms.IAlbumData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.service.cms.ocm.image.Album;
@@ -75,7 +76,7 @@ public class AlbumAdminPanel extends Panel{
                 	} 
                 	String imageName = StringUtils.deleteWhitespace(upload.getClientFileName());
                 	imageName = StringUtils.substringBefore(imageName, ".");
-                	Album album = getRepositoryService().getOriginalsAlbum();
+                	IAlbumData album = getRepositoryService().getOriginalsAlbum();
                 	getRepositoryService().createImage(album, imageName, inputStream);
                 	log.info("finished processing upload "+ imageName);
                 	info(getString("info.success", new Model(upload)));

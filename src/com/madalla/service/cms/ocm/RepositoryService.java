@@ -24,11 +24,14 @@ import org.joda.time.DateTime;
 import com.madalla.service.cms.AbstractData;
 import com.madalla.service.cms.BlogEntryData;
 import com.madalla.service.cms.ContentData;
+import com.madalla.service.cms.IAlbumData;
 import com.madalla.service.cms.IBlogData;
 import com.madalla.service.cms.IBlogEntryData;
 import com.madalla.service.cms.IContentData;
+import com.madalla.service.cms.IImageData;
 import com.madalla.service.cms.IPageData;
 import com.madalla.service.cms.IRepositoryService;
+import com.madalla.service.cms.ImageData;
 import com.madalla.service.cms.PageData;
 import com.madalla.service.cms.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.service.cms.ocm.blog.Blog;
@@ -123,7 +126,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
      * 
      * @return - the album where we store all uploaded images
      */
-    public Album getOriginalsAlbum(){
+    public IAlbumData getOriginalsAlbum(){
 		return (Album) repositoryTemplate.executeParent(RepositoryType.ALBUM,ORIGINAL_ALBUM_NAME , new ParentNodeCallback(){
 
 			@Override
@@ -134,7 +137,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 		});
 	}
 
-	public String createImage(Album album, String name, InputStream inputStream) {
+	public String createImage(IAlbumData album, String name, InputStream inputStream) {
         //TODO use repository Template
 	    
 	    //scale image down to defaults if necessary
@@ -151,8 +154,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	    return image.getId();
 	}
 	
-	public void addImageToAlbum(Album album, String imageName) {
-	    Album orginalAlbum = getOriginalsAlbum();
+	public void addImageToAlbum(IAlbumData album, String imageName) {
+	    IAlbumData orginalAlbum = getOriginalsAlbum();
 	    Image original = (Image) ocm.getObject(Image.class, orginalAlbum.getId() + "/" + imageName);
 	    
 	    String path = album.getId() + "/" + original.getName();
@@ -162,22 +165,22 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	    
 	}
 	
-    public Image getImage(final String path) {
+    public IImageData getImage(final String path) {
         if (StringUtils.isEmpty(path)){
             log.error("getImage - path is required.");
             return null;
         }
-        return (Image) ocm.getObject(Image.class, path);
+        return (IImageData) ocm.getObject(Image.class, path);
     }
     
-    public List<Image> getAlbumImages(Album album){
+    public List<ImageData> getAlbumImages(IAlbumData album){
         //TODO create a query template
         QueryManager queryManager = ocm.getQueryManager();
         Filter filter = queryManager.createFilter(Image.class);
         filter.setScope(album.getId()+"//");
         Query query = queryManager.createQuery(filter);
         Collection collection =  ocm.getObjects(query);
-        List<Image> list = new ArrayList<Image>();
+        List<ImageData> list = new ArrayList<ImageData>();
         for(Iterator iter = collection.iterator(); iter.hasNext();){
             list.add((Image) iter.next());
         }
@@ -185,18 +188,18 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         return list;
     }
     
-    public TreeModel getAlbumImagesAsTree(final Album album) {
+    public TreeModel getAlbumImagesAsTree(final IAlbumData album) {
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(album.getName());
         TreeModel model = new DefaultTreeModel(rootNode);
-        for(Image image: getAlbumImages(album)){
+        for(ImageData image: getAlbumImages(album)){
             DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(image);
             rootNode.add(treeNode);
         }
         return model;
     }
     
-	public List<Image> getAlbumOriginalImages() {
-	    Album album = getOriginalsAlbum();
+	public List<ImageData> getAlbumOriginalImages() {
+	    IAlbumData album = getOriginalsAlbum();
 	    return getAlbumImages(album);
 	}
 

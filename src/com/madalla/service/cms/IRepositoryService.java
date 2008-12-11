@@ -8,7 +8,6 @@ import javax.swing.tree.TreeModel;
 
 import org.joda.time.DateTime;
 
-import com.madalla.service.cms.ocm.image.Album;
 import com.madalla.service.cms.ocm.image.Image;
 
 public interface IRepositoryService {
@@ -60,20 +59,20 @@ public interface IRepositoryService {
 	List<BlogEntryData> getBlogEntries(IBlogData blog);
 
 	// Image
-	Album getOriginalsAlbum();
+	IAlbumData getOriginalsAlbum();
 
-	Album getAlbum(final String name);
+	IAlbumData getAlbum(final String name);
 
-	String createImage(Album album, String name, InputStream inputStream);
+	String createImage(IAlbumData album, String name, InputStream inputStream);
 
-	void addImageToAlbum(Album album, String name);
+	void addImageToAlbum(IAlbumData album, String name);
 
-	Image getImage(final String id);
+	IImageData getImage(final String id);
 
-	List<Image> getAlbumImages(Album album);
+	List<ImageData> getAlbumImages(IAlbumData album);
 
-	List<Image> getAlbumOriginalImages();
+	List<ImageData> getAlbumOriginalImages();
 
-	TreeModel getAlbumImagesAsTree(final Album album);
+	TreeModel getAlbumImagesAsTree(final IAlbumData album);
 
 }

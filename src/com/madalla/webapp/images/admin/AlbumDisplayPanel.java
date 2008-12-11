@@ -19,10 +19,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import com.madalla.service.cms.AbstractImageData;
+import com.madalla.service.cms.IAlbumData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
-import com.madalla.service.cms.ocm.image.Album;
+import com.madalla.service.cms.ImageData;
 import com.madalla.wicket.DraggableAjaxBehaviour;
 import com.madalla.wicket.DroppableAjaxBehaviour;
 
@@ -48,8 +48,8 @@ class AlbumDisplayPanel extends Panel {
 				Object userObject = treeNode.getUserObject();
 				if (userObject instanceof String){
 					return (String)userObject;
-				} else if (userObject instanceof AbstractImageData){
-					return ((AbstractImageData)userObject).getName();
+				} else if (userObject instanceof ImageData){
+					return ((ImageData)userObject).getName();
 				} else {
 					return null;
 				}
@@ -66,7 +66,7 @@ class AlbumDisplayPanel extends Panel {
 
 			@Override
 			protected Object load() {
-			    Album album = getRepositoryService().getAlbum(albumName);
+			    IAlbumData album = getRepositoryService().getAlbum(albumName);
 				return getRepositoryService().getAlbumImagesAsTree(album);
 			}
 		};
@@ -80,7 +80,7 @@ class AlbumDisplayPanel extends Panel {
 			protected void respond(final AjaxRequestTarget target) {
 				String dragId = DraggableAjaxBehaviour.getDraggablesId(getRequest());
 				log.debug("something dropped. arg="+dragId);
-				Album album = getRepositoryService().getAlbum(albumName);
+				IAlbumData album = getRepositoryService().getAlbum(albumName);
 		    	getRepositoryService().addImageToAlbum(album, dragId);
 		    	form.info("Success! Image saved to album.");
 		    	target.addComponent(tree);

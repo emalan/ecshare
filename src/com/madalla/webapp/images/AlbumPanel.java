@@ -27,9 +27,10 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 
+import com.madalla.service.cms.IAlbumData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
-import com.madalla.service.cms.ocm.image.Album;
+import com.madalla.service.cms.ImageData;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.AlbumAdminPage;
 
@@ -48,7 +49,7 @@ public class AlbumPanel extends Panel {
         add(HeaderContributor.forJavaScript(BANNER));
         add(CSS_IMAGE);
         
-        Album album = getRepositoryService().getAlbum(albumName);
+        IAlbumData album = getRepositoryService().getAlbum(albumName);
         
         Link link = new BookmarkablePageLink("adminLink", AlbumAdminPage.class, new PageParameters(ALBUM +"="+albumName+","+RETURN_PAGE+"="+returnPage.getName())) {
             private static final long serialVersionUID = 1801145612969874170L;
@@ -67,7 +68,7 @@ public class AlbumPanel extends Panel {
         link.setBeforeDisabledLink("");
         add(link);
         
-        List<com.madalla.service.cms.ocm.image.Image> images = getRepositoryService().getAlbumImages(album);
+        List<ImageData> images = getRepositoryService().getAlbumImages(album);
         
         add(new ListView("image-list", images){
 			private static final long serialVersionUID = 1L;

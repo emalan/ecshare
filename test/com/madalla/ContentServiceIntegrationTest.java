@@ -17,16 +17,17 @@ import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.service.cms.BackupFile;
+import com.madalla.service.cms.IAlbumData;
 import com.madalla.service.cms.IBlogData;
 import com.madalla.service.cms.IBlogEntryData;
 import com.madalla.service.cms.IContentData;
+import com.madalla.service.cms.IImageData;
 import com.madalla.service.cms.IPageData;
 import com.madalla.service.cms.IRepositoryAdminService;
 import com.madalla.service.cms.IRepositoryService;
-import com.madalla.service.cms.ocm.image.Album;
+import com.madalla.service.cms.ImageData;
 import com.madalla.service.cms.ocm.image.Image;
 import com.madalla.service.cms.ocm.page.Content;
-import com.madalla.service.cms.ocm.page.Page;
 
 public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
@@ -120,21 +121,21 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	assertNotNull(stream);
     	
     	final String name = "image1";
-    	Album originalAlbum = contentService.getOriginalsAlbum();
+    	IAlbumData originalAlbum = contentService.getOriginalsAlbum();
     	String imagePath = contentService.createImage(originalAlbum, name, stream);
     	
-    	Album album;
+    	IAlbumData album;
     	{
     		album = contentService.getAlbum("testAlbum");
-    		Image image = contentService.getImage(imagePath);
+    		IImageData image = contentService.getImage(imagePath);
     		contentService.addImageToAlbum(album, image.getName());
     	}
     	{
-    	    Image testImage = contentService.getImage(imagePath);
+    		IImageData testImage = contentService.getImage(imagePath);
     	    assertNotNull(testImage);
     	}
     	{
-    	    List<Image> list = contentService.getAlbumImages(album);
+    	    List<ImageData> list = contentService.getAlbumImages(album);
     	    assertNotNull(list);
     	    assertTrue(list.size() > 0);
     	    Image image = (Image)list.get(0);
@@ -143,7 +144,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	    assertNotNull(image.getImageThumb());
     	}
     	{
-    		List<Image> list = contentService.getAlbumOriginalImages();
+    		List<ImageData> list = contentService.getAlbumOriginalImages();
     	    assertNotNull(list);
     	    assertTrue(list.size() > 0);
     	}

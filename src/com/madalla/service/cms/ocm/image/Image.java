@@ -1,18 +1,17 @@
 package com.madalla.service.cms.ocm.image;
 
 import java.io.InputStream;
-import java.io.Serializable;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
 
-import com.madalla.service.cms.AbstractData;
+import com.madalla.service.cms.IAlbumData;
+import com.madalla.service.cms.ImageData;
 
 @Node
-public class Image extends AbstractData implements Serializable, Comparable<Image>{
+public class Image extends ImageData {
 
 	private static final long serialVersionUID = 1L;
 
@@ -28,16 +27,9 @@ public class Image extends AbstractData implements Serializable, Comparable<Imag
 		
 	}
 	
-	public Image(final Album album, final String name, final InputStream inputStream){
+	public Image(final IAlbumData album, final String name, final InputStream inputStream){
 		this.id = album.getId() + "/" + name;
 	}
-
-//	public Image(final String id, final Album album, final String name, final DynamicImageResource fullImage){
-//		this.id = album.getId() + "/" + name;
-//		//this.fullImage = null;
-//		this.webResource =  fullImage;
-//	}
-	
 
 	public String getName(){
 		return StringUtils.substringAfterLast(getId(), "/");
@@ -98,30 +90,5 @@ public class Image extends AbstractData implements Serializable, Comparable<Imag
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	//TODO implement this, cause we need to support sorting images in album
-	public int compareTo(Image compare) {
-		return compare.getName().compareTo(getName());
-	}
-	
-    @Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (!(obj instanceof Image)) return false;
-		Image compare = (Image)obj; 
-		if (!id.equals(compare.getId())) return false;
-		if (!title.equals(compare.getTitle())) return false;
-		if (!description.equals(compare.getDescription()))return false;
-		return true;
-	}
-
-	@Override
-	public int hashCode() {
-		return id.hashCode();
-	}
-
-	public String toString() {
-        return ReflectionToStringBuilder.toString(this).toString();
-    }
 
 }
