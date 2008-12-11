@@ -5,17 +5,15 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.joda.time.DateTime;
 
-import com.madalla.service.cms.jcr.BlogEntry;
 import com.madalla.util.ui.HTMLParser;
 import com.madalla.util.ui.ICalendarTreeInput;
 
-public abstract class AbstractBlogEntry implements Comparable<AbstractBlogEntry>, ICalendarTreeInput{
-	private final static int summaryLength = 500;
+public abstract class BlogEntryData extends AbstractData implements IBlogEntryData,Comparable<BlogEntryData>, ICalendarTreeInput {
 
-	public abstract String save();
-    
+	private static final long serialVersionUID = -4384559542235332563L;
+	private static final int summaryLength = 500;
+
 	public static List<String> getBlogCategories(){
     	List<String> list = new ArrayList<String>();
     	list.add("work");
@@ -26,10 +24,7 @@ public abstract class AbstractBlogEntry implements Comparable<AbstractBlogEntry>
 	public String getSummary(String moreLink){
         return getSummary()+moreLink;
     }
-	public int compareTo(AbstractBlogEntry o) {
-		AbstractBlogEntry compare = o;
-		return compare.getDateTime().compareTo(getDateTime());
-	}
+
 	
     public String getSummary(){
     	if (StringUtils.isNotEmpty(getDescription())){
@@ -45,11 +40,16 @@ public abstract class AbstractBlogEntry implements Comparable<AbstractBlogEntry>
 		return StringUtils.deleteWhitespace(getTitle());
 	}
 	
-    @Override
+	public int compareTo(BlogEntryData o) {
+		BlogEntryData compare = o;
+		return compare.getDateTime().compareTo(getDateTime());
+	}	
+    
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
-		if (!(obj instanceof BlogEntry)) return false;
-		BlogEntry compare = (BlogEntry)obj; 
+		if (!(obj instanceof BlogEntryData)) return false;
+		BlogEntryData compare = (BlogEntryData)obj; 
 		if (!getTitle().equals(compare.getTitle()))return false;
 		if (!getBlog().equals(compare.getBlog()))return false;
 		if (!getCategory().equals(compare.getCategory()))return false;
@@ -64,42 +64,8 @@ public abstract class AbstractBlogEntry implements Comparable<AbstractBlogEntry>
 	public int hashCode() {
 		return getId().hashCode();
 	}
-
+	
 	public String toString() {
         return ReflectionToStringBuilder.toString(this).toString();
     }
-
-	public abstract String getDescription();
-
-	public abstract String getKeywords();
-
-	public abstract String getTitle();
-
-	public abstract DateTime getDate();
-
-	public abstract String getText();
-
-	public abstract String getBlog();
-
-	public abstract String getCategory();
-
-	public abstract String getId();
-
-	public abstract String getGroup();
-
-	public abstract DateTime getDateTime();
-	
-	public abstract void setTitle(String title);
-	
-	public abstract void setDate(DateTime dateTime);
-
-	public abstract void setKeywords(String keywords);
-
-	public abstract void setText(String text);
-
-	public abstract void setDescription(String description);
-
-	public abstract void setCategory(String category);
-	
-
 }

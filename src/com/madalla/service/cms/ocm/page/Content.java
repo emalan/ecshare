@@ -3,14 +3,14 @@ package com.madalla.service.cms.ocm.page;
 import java.io.Serializable;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 
-import com.madalla.service.cms.AbstractData;
+import com.madalla.service.cms.ContentData;
+import com.madalla.service.cms.IPageData;
 
 @Node
-public class Content extends AbstractData implements Serializable{
+public class Content extends ContentData implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Field(path=true) private String id;
@@ -19,7 +19,7 @@ public class Content extends AbstractData implements Serializable{
     public Content(){
         
     }
-    public Content(Page page, String name){
+    public Content(IPageData page, String name){
         id = page.getId() + "/" + name;
     }
     public String getName(){
@@ -37,9 +37,4 @@ public class Content extends AbstractData implements Serializable{
     public void setText(String text) {
         this.text = text;
     }
-    
-	public String toString() {
-        return ReflectionToStringBuilder.toString(this).toString();
-    }
-    
 }

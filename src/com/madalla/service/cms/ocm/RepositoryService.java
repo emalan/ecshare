@@ -21,10 +21,15 @@ import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.joda.time.DateTime;
 
-import com.madalla.service.cms.AbstractBlogEntry;
 import com.madalla.service.cms.AbstractData;
+import com.madalla.service.cms.BlogEntryData;
+import com.madalla.service.cms.ContentData;
 import com.madalla.service.cms.IBlogData;
+import com.madalla.service.cms.IBlogEntryData;
+import com.madalla.service.cms.IContentData;
+import com.madalla.service.cms.IPageData;
 import com.madalla.service.cms.IRepositoryService;
+import com.madalla.service.cms.PageData;
 import com.madalla.service.cms.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.service.cms.ocm.blog.Blog;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
@@ -222,7 +227,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         return (BlogEntry) ocm.getObject(BlogEntry.class, path);
     }
     
-    public void saveBlogEntry(BlogEntry blogEntry){
+    public void saveBlogEntry(IBlogEntryData blogEntry){
     	if (ocm.objectExists(blogEntry.getId())){
     		ocm.update(blogEntry);
     	} else {
@@ -231,16 +236,16 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	ocm.save();
     }
     
-    public List<AbstractBlogEntry> getBlogEntries(IBlogData blog){
+    public List<BlogEntryData> getBlogEntries(IBlogData blog){
         //TODO create query template
 		QueryManager queryManager = ocm.getQueryManager();
 		Filter filter = queryManager.createFilter(BlogEntry.class);
 		filter.setScope(blog.getId()+"//");
 		Query query = queryManager.createQuery(filter);
 		Collection collection =  ocm.getObjects(query);
-		List<AbstractBlogEntry> list = new ArrayList<AbstractBlogEntry>();
+		List<BlogEntryData> list = new ArrayList<BlogEntryData>();
 		for(Iterator iter = collection.iterator(); iter.hasNext();){
-			list.add((AbstractBlogEntry) iter.next());
+			list.add((BlogEntryData) iter.next());
 		}
 		Collections.sort(list);
 		return list;
@@ -253,8 +258,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     /* (non-Javadoc)
      * @see com.madalla.service.cms.IRepositoryService#getPage(java.lang.String)
      */
-    public Page getPage(final String name){
-        return (Page) repositoryTemplate.executeParent(RepositoryType.PAGE, name, new ParentNodeCallback(){
+    public PageData getPage(final String name){
+        return (PageData) repositoryTemplate.executeParent(RepositoryType.PAGE, name, new ParentNodeCallback(){
 
             @Override
             public AbstractData createNew(String parentPath, String name) {
@@ -264,14 +269,14 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         });
     }
     
-    public String getContentText(final Page page, final String id, Locale locale) {
+    public String getContentText(final IPageData page, final String id, Locale locale) {
         String localeId = getLocaleId(id, locale);
         return getContentText(page, localeId);
     }
     
-    public String getContentText(final Page page, final String contentName) {
+    public String getContentText(final IPageData page, final String contentName) {
         String path = page.getId() + "/" + contentName;
-        Content content;
+        ContentData content;
         if (ocm.objectExists(path)){
             content = (Content) ocm.getObject(Content.class, page.getId() + "/" + contentName);
         } else {
@@ -300,7 +305,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         }
     }
 
-    public void saveContent(Content content){
+    public void saveContent(IContentData content){
         if (ocm.objectExists(content.getId())){
             ocm.update(content);
         } else {
@@ -309,11 +314,11 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         ocm.save();
     }
     
-    public Content getContent(final Page parent, final String name, final Locale locale){
+    public Content getContent(final IPageData parent, final String name, final Locale locale){
     	return getContent(parent, getLocaleId(name, locale));
     }
     
-    public Content getContent(final Page parent, final String name){
+    public Content getContent(final IPageData parent, final String name){
     	return getContent(parent.getId() + "/" + name);
     }
 
@@ -321,7 +326,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 		return (Content) ocm.getObject(Content.class, id);
 	}
     
-    public void pasteContent(final String path, final Content content){
+    public void pasteContent(final String path, final IContentData content){
     	Page newParent = (Page) ocm.getObject(Page.class, path);
     	Content newContent = new Content(newParent, content.getName());
     	newContent.setText(content.getText());

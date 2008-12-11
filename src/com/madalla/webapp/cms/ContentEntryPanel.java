@@ -18,9 +18,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.PropertyModel;
 
+import com.madalla.service.cms.IContentData;
+import com.madalla.service.cms.IPageData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
-import com.madalla.service.cms.ocm.page.Content;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.ContentAdminPage;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
@@ -40,7 +41,7 @@ public class ContentEntryPanel extends Panel {
     private Class<? extends Page> contentPage;
     private final String nodeName;
     private final String contentId;
-    private Content content;
+    private IContentData content;
 
 	/**
 	 * @param name - wicket id
@@ -72,7 +73,7 @@ public class ContentEntryPanel extends Panel {
             }
 		});
 
-        com.madalla.service.cms.ocm.page.Page page = getRepositoryservice().getPage(nodeName);
+        IPageData page = getRepositoryservice().getPage(nodeName);
         content = getRepositoryservice().getContent(page, contentId, getSession().getLocale());
         add(new ContentForm("contentForm"));
     }

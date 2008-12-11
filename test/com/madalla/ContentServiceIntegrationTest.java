@@ -18,9 +18,11 @@ import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.service.cms.BackupFile;
 import com.madalla.service.cms.IBlogData;
+import com.madalla.service.cms.IBlogEntryData;
+import com.madalla.service.cms.IContentData;
+import com.madalla.service.cms.IPageData;
 import com.madalla.service.cms.IRepositoryAdminService;
 import com.madalla.service.cms.IRepositoryService;
-import com.madalla.service.cms.ocm.blog.BlogEntry;
 import com.madalla.service.cms.ocm.image.Album;
 import com.madalla.service.cms.ocm.image.Image;
 import com.madalla.service.cms.ocm.page.Content;
@@ -83,7 +85,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	String contentText = RandomStringUtils.randomAlphabetic(20);
     	
     	//test new
-    	Page page = contentService.getPage(CONTENT_PARENT);
+    	IPageData page = contentService.getPage(CONTENT_PARENT);
     	Content content = new Content(page,contentId );
     	String text = RandomStringUtils.randomAlphanumeric(20);
     	content.setText(text);
@@ -93,7 +95,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     
     	//test Update
     	{
-    		Content c = contentService.getContent(page, contentId);
+    		IContentData c = contentService.getContent(page, contentId);
     		String s = "test1";
     		c.setText(s);
     		contentService.saveContent(c);
@@ -104,7 +106,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
     public void testContentGetSetLocale() throws RepositoryException{
     	String french = RandomStringUtils.randomAlphanumeric(20) + "french stuff";
-    	Page page = contentService.getPage(CONTENT_PARENT);
+    	IPageData page = contentService.getPage(CONTENT_PARENT);
     	Content content = new Content(page, contentService.getLocaleId(CONTENT_ID, Locale.FRENCH));
     	content.setText(french);
     	contentService.saveContent(content);
@@ -120,11 +122,12 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	final String name = "image1";
     	Album originalAlbum = contentService.getOriginalsAlbum();
     	String imagePath = contentService.createImage(originalAlbum, name, stream);
-
+    	
     	Album album;
     	{
     		album = contentService.getAlbum("testAlbum");
-    		contentService.addImageToAlbum(album, imagePath);
+    		Image image = contentService.getImage(imagePath);
+    		contentService.addImageToAlbum(album, image.getName());
     	}
     	{
     	    Image testImage = contentService.getImage(imagePath);
@@ -160,26 +163,18 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     public void testBlogGetSet(){
     	IBlogData blog = contentService.getBlog(BLOG);
     	assertNotNull(blog);
-    	BlogEntry blogEntry = contentService.getNewBlogEntry(blog, BLOGTITLE, BLOGDATE);
+    	IBlogEntryData blogEntry = contentService.getNewBlogEntry(blog, BLOGTITLE, BLOGDATE);
     	assertNotNull(blogEntry);
     	blogEntry.setDescription(BLOGDESCRIPTION);
     	String path = blogEntry.getId();
     	contentService.saveBlogEntry(blogEntry);
     	
-    	BlogEntry testEntry = contentService.getBlogEntry(path);
+    	IBlogEntryData testEntry = contentService.getBlogEntry(path);
     	assertNotNull(testEntry);
     	
     	contentService.deleteNode(path);
     }
     
-    private com.madalla.service.cms.jcr.BlogEntry createBlogEntry(int i){
-    	com.madalla.service.cms.jcr.BlogEntry entry = new com.madalla.service.cms.jcr.BlogEntry.Builder(BLOG, BLOGTITLE+i, BLOGDATE).category(BLOGCATEGORY).build();
-    	entry.setDescription(BLOGDESCRIPTION);
-    	entry.setKeywords(BLOGKEYWORDS);
-    	entry.setText(BLOGTEXT);
-    	return entry;    	
-    }
-
     public void setRepositoryService(IRepositoryService contentService) {
 		this.contentService = contentService;
 	}

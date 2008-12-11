@@ -27,7 +27,7 @@ import org.apache.wicket.model.Model;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import com.madalla.service.cms.AbstractBlogEntry;
+import com.madalla.service.cms.BlogEntryData;
 import com.madalla.service.cms.IBlogData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
@@ -44,7 +44,7 @@ public class BlogArchivePanel extends Panel {
 
 		//List existing Blogs
 		log.debug("construtor - retrieving blog entries from service.");
-		List<AbstractBlogEntry> list = getRepositoryService().getBlogEntries(blog);
+		List<BlogEntryData> list = getRepositoryService().getBlogEntries(blog);
 		TreeModel blogEntries = CalendarUtils.createMonthlyTree("Blog Archive", list);
 		log.debug("construtor - retrieved blog entries. root="
 				+ blogEntries.getRoot());
@@ -74,8 +74,8 @@ public class BlogArchivePanel extends Panel {
 						if (node.isLeaf()) {
 							log.debug("onNodeLinkClicked - "+node);
 							DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) node;
-							if (treeNode.getUserObject() instanceof AbstractBlogEntry){
-								AbstractBlogEntry blogEntry = (AbstractBlogEntry) treeNode.getUserObject();
+							if (treeNode.getUserObject() instanceof BlogEntryData){
+								BlogEntryData blogEntry = (BlogEntryData) treeNode.getUserObject();
 								String blogEntryId = blogEntry.getId();
 								log.debug("onNodeLinkClicked - blogId="+blogEntryId);
 								if (target == null){ //non-ajax

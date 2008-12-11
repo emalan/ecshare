@@ -10,10 +10,10 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import com.madalla.service.cms.AbstractBlogEntry;
+import com.madalla.service.cms.IBlogEntryData;
+import com.madalla.service.cms.IContentData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
-import com.madalla.service.cms.ocm.page.Content;
 
 class ContentDisplayPanel extends Panel {
 
@@ -21,7 +21,7 @@ class ContentDisplayPanel extends Panel {
 	private Log log = LogFactory.getLog(this.getClass());
 	private Component nodePath;
 	private Component contentDisplay;
-	private Content copiedContent;
+	private IContentData copiedContent;
 	private String contentText = "" ;
 	private String path = "";
 	Component paste;
@@ -148,7 +148,7 @@ class ContentDisplayPanel extends Panel {
 		} else if (getContentService().isContentNode(path)){
 			contentText = getContentService().getContent(path).getText();
 		} else if (getContentService().isBlogNode(path)){
-			AbstractBlogEntry blogEntry = getContentService().getBlogEntry(path);
+			IBlogEntryData blogEntry = getContentService().getBlogEntry(path);
 			StringBuffer sb = new StringBuffer("Title : ").append(blogEntry.getTitle()).append("<br/>")
 				.append("Date : ").append(blogEntry.getDateTime()).append("<br/>").append("<br/>")
 				.append(blogEntry.getText());

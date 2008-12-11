@@ -287,17 +287,6 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
 
     }
 
-	
-
-	
-	public String createOriginalImage(String imageName, InputStream fullImage) {
-		return ImageDataHelper.getInstance().saveOriginalImage(imageName, fullImage);
-	}
-	
-	public String addImageToAlbum(String album, String imageName) {
-		return ImageDataHelper.getInstance().saveAlbumImage(album, imageName);
-	}
-
 	public void setTemplate(JcrTemplate template) {
 		this.template = template;
 	}

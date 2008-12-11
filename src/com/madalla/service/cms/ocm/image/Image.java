@@ -10,7 +10,6 @@ import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
 
 import com.madalla.service.cms.AbstractData;
-import com.madalla.service.cms.jcr.ImageData;
 
 @Node
 public class Image extends AbstractData implements Serializable, Comparable<Image>{
@@ -108,8 +107,8 @@ public class Image extends AbstractData implements Serializable, Comparable<Imag
     @Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
-		if (!(obj instanceof ImageData)) return false;
-		ImageData compare = (ImageData)obj; 
+		if (!(obj instanceof Image)) return false;
+		Image compare = (Image)obj; 
 		if (!id.equals(compare.getId())) return false;
 		if (!title.equals(compare.getTitle())) return false;
 		if (!description.equals(compare.getDescription()))return false;

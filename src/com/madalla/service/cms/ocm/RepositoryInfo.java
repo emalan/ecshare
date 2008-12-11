@@ -16,7 +16,30 @@ import com.madalla.service.cms.ocm.image.Image;
 import com.madalla.service.cms.ocm.page.Content;
 import com.madalla.service.cms.ocm.page.Page;
 import com.madalla.util.jcr.JcrUtils;
-
+/**
+ * Information regarding the Schema in the Content respository System
+ * <p>
+ * This class is aware of the structure of the data in the repository 
+ * and will create the structure if it does not exist. The schema is
+ * open and not enforced by the repository. This class is responsible
+ * for storing itself in the Repository and fetching itself. 
+ * <p>
+ * <pre>
+ *            ec:apps 
+ *         -----|------------------------------                 
+ *        |                                    |
+ *     [ec:site1]                          [ec:site2]                               
+ *        |                                    |
+ *                       -------------------------------------------------------
+ *                      |                         |                             |
+ *                    ec:pages                 ec:blogs                      ec:images
+ *                      |                         |                             |
+ *               Pages and Content         Blogs and Blog Entries       Albums and Images   
+ * </pre>
+ * 
+ * @author Eugene Malan
+ *
+ */
 public class RepositoryInfo {
 
     //Repository Node Names

@@ -23,21 +23,6 @@
 		<constructor-arg ref="repositoryAdminService"/>
 	</bean>
 
-    <bean id="content" class="com.madalla.service.cms.jcr.ContentHelper"  >
-        <constructor-arg ref="jcrTemplate" />
-        <constructor-arg value="${site.code}"/>
-    </bean>
-
-    <bean id="imageData" class="com.madalla.service.cms.jcr.ImageDataHelper"  >
-        <constructor-arg ref="jcrTemplate" />
-        <constructor-arg value="${site.code}"/>
-    </bean>
-    
-    <bean id="blogEntry" class="com.madalla.service.cms.jcr.BlogEntryHelper"  >
-        <constructor-arg ref="jcrTemplate" />
-        <constructor-arg value="${site.code}"/>
-    </bean>
-
 </beans>
 
 
