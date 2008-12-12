@@ -24,8 +24,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
+import com.madalla.service.cms.BlogData;
 import com.madalla.service.cms.BlogEntryData;
-import com.madalla.service.cms.IBlogData;
 import com.madalla.service.cms.IBlogEntryData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
@@ -40,14 +40,14 @@ public class BlogDisplayPanel extends Panel {
 	private int displayCount = 5;
 	private final BlogEntryView blogEntry = new BlogEntryView();
 	
-	BlogDisplayPanel(final String id, final IBlogData blog, final String blogEntryId, final Class<? extends Page> returnPage){
+	BlogDisplayPanel(final String id, final BlogData blog, final String blogEntryId, final Class<? extends Page> returnPage){
 		super(id);
 		init(id, blog, returnPage );
 		changeModel(blogEntryId);
 		add(new SimpleAttributeModifier("class","showBlog"));
 		add(new KeywordHeaderContributor(blogEntry.getKeywords()));
 	}
-	BlogDisplayPanel(final String id, final IBlogData blog, final Class<? extends Page> returnPage) {
+	BlogDisplayPanel(final String id, final BlogData blog, final Class<? extends Page> returnPage) {
 		super(id);
 		init(id, blog, returnPage);
 		//TODO Store the Blog Home Meatadata keywords in CMS
@@ -56,7 +56,7 @@ public class BlogDisplayPanel extends Panel {
 		add(new KeywordHeaderContributor(blogEntry.getKeywords()));
 	}
 	
-	private void init(final String id, final IBlogData blog, final Class<? extends Page> returnPage) {
+	private void init(final String id, final BlogData blog, final Class<? extends Page> returnPage) {
 		final boolean adminMode = ((CmsSession)getSession()).isCmsAdminMode();
 		
 		//new Blog link

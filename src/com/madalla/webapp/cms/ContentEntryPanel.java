@@ -18,7 +18,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.PropertyModel;
 
-import com.madalla.service.cms.IContentData;
+import com.madalla.service.cms.ContentData;
 import com.madalla.service.cms.IPageData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
@@ -41,7 +41,7 @@ public class ContentEntryPanel extends Panel {
     private Class<? extends Page> contentPage;
     private final String nodeName;
     private final String contentId;
-    private IContentData content;
+    private ContentData content;
 
 	/**
 	 * @param name - wicket id

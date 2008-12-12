@@ -19,6 +19,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
+import com.madalla.service.cms.AlbumData;
 import com.madalla.service.cms.IAlbumData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
@@ -66,7 +67,7 @@ class AlbumDisplayPanel extends Panel {
 
 			@Override
 			protected Object load() {
-			    IAlbumData album = getRepositoryService().getAlbum(albumName);
+			    AlbumData album = getRepositoryService().getAlbum(albumName);
 				return getRepositoryService().getAlbumImagesAsTree(album);
 			}
 		};

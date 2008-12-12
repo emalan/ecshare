@@ -29,8 +29,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.joda.time.DateTime;
 
+import com.madalla.service.cms.BlogEntryData;
 import com.madalla.service.cms.IBlogData;
-import com.madalla.service.cms.IBlogEntryData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 import com.madalla.service.cms.ocm.blog.BlogEntry;
@@ -112,6 +112,8 @@ public class BlogEntryPanel extends Panel {
             add(dateTextField);
             dateTextField.add(new DatePicker(){
 
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				protected void configure(Map widgetProperties) {
 					super.configure(widgetProperties);
@@ -183,7 +185,7 @@ public class BlogEntryPanel extends Panel {
     }
     
     private void saveBlogEntry(BlogEntryView view){
-    	IBlogEntryData blogEntry;
+    	BlogEntryData blogEntry;
     	if (StringUtils.isEmpty(view.getId())){
     		IBlogData blog = getRepositoryService().getBlog(view.getBlog());
     		blogEntry = getRepositoryService().getNewBlogEntry(blog, view.getTitle(), new DateTime(view.getDate())); 

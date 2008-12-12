@@ -22,12 +22,12 @@ import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.joda.time.DateTime;
 
 import com.madalla.service.cms.AbstractData;
+import com.madalla.service.cms.AlbumData;
+import com.madalla.service.cms.BlogData;
 import com.madalla.service.cms.BlogEntryData;
 import com.madalla.service.cms.ContentData;
 import com.madalla.service.cms.IAlbumData;
 import com.madalla.service.cms.IBlogData;
-import com.madalla.service.cms.IBlogEntryData;
-import com.madalla.service.cms.IContentData;
 import com.madalla.service.cms.IImageData;
 import com.madalla.service.cms.IPageData;
 import com.madalla.service.cms.IRepositoryService;
@@ -126,7 +126,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
      * 
      * @return - the album where we store all uploaded images
      */
-    public IAlbumData getOriginalsAlbum(){
+    public AlbumData getOriginalsAlbum(){
 		return (Album) repositoryTemplate.executeParent(RepositoryType.ALBUM,ORIGINAL_ALBUM_NAME , new ParentNodeCallback(){
 
 			@Override
@@ -138,16 +138,9 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	}
 
 	public String createImage(IAlbumData album, String name, InputStream inputStream) {
-        //TODO use repository Template
-	    
 	    //scale image down to defaults if necessary
 		Image image = new Image(album, name, inputStream);
-        if (ocm.objectExists(image.getId())){
-            ocm.update(image);
-	    } else {
-	        ocm.insert(image);
-	    }
-	    ocm.save();
+		saveDataObject(image);
 
 	    ImageHelper.saveImageFull(template, image.getId(), inputStream);
 	    ImageHelper.saveImageThumb(template, image.getId());
@@ -162,7 +155,6 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 	    ocm.copy(original.getId(), path);
 	    ocm.save();
 	    ImageHelper.resizeAlbumImage(template, path);
-	    
 	}
 	
     public IImageData getImage(final String path) {
@@ -173,13 +165,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         return (IImageData) ocm.getObject(Image.class, path);
     }
     
-    public List<ImageData> getAlbumImages(IAlbumData album){
-        //TODO create a query template
-        QueryManager queryManager = ocm.getQueryManager();
-        Filter filter = queryManager.createFilter(Image.class);
-        filter.setScope(album.getId()+"//");
-        Query query = queryManager.createQuery(filter);
-        Collection collection =  ocm.getObjects(query);
+    public List<ImageData> getAlbumImages(AlbumData album){
+        Collection collection =  getQueryData(Image.class, album);
         List<ImageData> list = new ArrayList<ImageData>();
         for(Iterator iter = collection.iterator(); iter.hasNext();){
             list.add((Image) iter.next());
@@ -187,8 +174,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         Collections.sort(list);
         return list;
     }
-    
-    public TreeModel getAlbumImagesAsTree(final IAlbumData album) {
+
+    public TreeModel getAlbumImagesAsTree(final AlbumData album) {
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(album.getName());
         TreeModel model = new DefaultTreeModel(rootNode);
         for(ImageData image: getAlbumImages(album)){
@@ -199,7 +186,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
 	public List<ImageData> getAlbumOriginalImages() {
-	    IAlbumData album = getOriginalsAlbum();
+	    AlbumData album = getOriginalsAlbum();
 	    return getAlbumImages(album);
 	}
 
@@ -222,7 +209,6 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
 
     public BlogEntry getBlogEntry(final String path) {
-        //TODO use repository Template
         if (StringUtils.isEmpty(path)){
             log.error("getBlogEntry - path is required.");
             return null;
@@ -230,22 +216,12 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         return (BlogEntry) ocm.getObject(BlogEntry.class, path);
     }
     
-    public void saveBlogEntry(IBlogEntryData blogEntry){
-    	if (ocm.objectExists(blogEntry.getId())){
-    		ocm.update(blogEntry);
-    	} else {
-    		ocm.insert(blogEntry);
-    	}
-    	ocm.save();
+    public void saveBlogEntry(BlogEntryData blogEntry){
+    	saveDataObject(blogEntry);
     }
     
-    public List<BlogEntryData> getBlogEntries(IBlogData blog){
-        //TODO create query template
-		QueryManager queryManager = ocm.getQueryManager();
-		Filter filter = queryManager.createFilter(BlogEntry.class);
-		filter.setScope(blog.getId()+"//");
-		Query query = queryManager.createQuery(filter);
-		Collection collection =  ocm.getObjects(query);
+    public List<BlogEntryData> getBlogEntries(BlogData blog){
+		Collection collection =  getQueryData(BlogEntry.class, blog);
 		List<BlogEntryData> list = new ArrayList<BlogEntryData>();
 		for(Iterator iter = collection.iterator(); iter.hasNext();){
 			list.add((BlogEntryData) iter.next());
@@ -308,13 +284,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         }
     }
 
-    public void saveContent(IContentData content){
-        if (ocm.objectExists(content.getId())){
-            ocm.update(content);
-        } else {
-            ocm.insert(content);
-        }
-        ocm.save();
+    public void saveContent(ContentData content){
+    	saveDataObject(content);
     }
     
     public Content getContent(final IPageData parent, final String name, final Locale locale){
@@ -333,7 +304,24 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         copyData(path, content);
     }
 
-    public void copyData(final String path, final AbstractData data){
+    private void saveDataObject(AbstractData data){
+    	if (ocm.objectExists(data.getId())){
+    		ocm.update(data);
+    	} else {
+    		ocm.insert(data);
+    	}
+    	ocm.save();
+    }
+    
+    private Collection getQueryData(Class data, AbstractData parent){
+        QueryManager queryManager = ocm.getQueryManager();
+        Filter filter = queryManager.createFilter(data);
+        filter.setScope(parent.getId()+"//");
+        Query query = queryManager.createQuery(filter);
+        return  ocm.getObjects(query);
+    }
+    
+    private void copyData(final String path, final AbstractData data){
         String destPath = path+ "/" + data.getName();
         if (ocm.objectExists(destPath)){
             ocm.remove(destPath);

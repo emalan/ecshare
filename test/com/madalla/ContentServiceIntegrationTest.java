@@ -16,11 +16,13 @@ import org.apache.wicket.markup.html.tree.LinkTree;
 import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrTemplate;
 
+import com.madalla.service.cms.AlbumData;
 import com.madalla.service.cms.BackupFile;
+import com.madalla.service.cms.BlogEntryData;
+import com.madalla.service.cms.ContentData;
 import com.madalla.service.cms.IAlbumData;
 import com.madalla.service.cms.IBlogData;
 import com.madalla.service.cms.IBlogEntryData;
-import com.madalla.service.cms.IContentData;
 import com.madalla.service.cms.IImageData;
 import com.madalla.service.cms.IPageData;
 import com.madalla.service.cms.IRepositoryAdminService;
@@ -96,7 +98,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     
     	//test Update
     	{
-    		IContentData c = contentService.getContent(page, contentId);
+    		ContentData c = contentService.getContent(page, contentId);
     		String s = "test1";
     		c.setText(s);
     		contentService.saveContent(c);
@@ -124,7 +126,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	IAlbumData originalAlbum = contentService.getOriginalsAlbum();
     	String imagePath = contentService.createImage(originalAlbum, name, stream);
     	
-    	IAlbumData album;
+    	AlbumData album;
     	{
     		album = contentService.getAlbum("testAlbum");
     		IImageData image = contentService.getImage(imagePath);
@@ -164,7 +166,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     public void testBlogGetSet(){
     	IBlogData blog = contentService.getBlog(BLOG);
     	assertNotNull(blog);
-    	IBlogEntryData blogEntry = contentService.getNewBlogEntry(blog, BLOGTITLE, BLOGDATE);
+    	BlogEntryData blogEntry = contentService.getNewBlogEntry(blog, BLOGTITLE, BLOGDATE);
     	assertNotNull(blogEntry);
     	blogEntry.setDescription(BLOGDESCRIPTION);
     	String path = blogEntry.getId();
