@@ -50,7 +50,7 @@ import com.madalla.util.jcr.JcrUtils;
  * using Jackrabbit OCM framework
  * <p>
  * This implentation uses Jackrabbit OCM to persist most of the Bean 
- * data. The schema of the Repository is stored in the @see org.madalla.service.cms.ocm.RepositoryInfo 
+ * data. The schema of the Repository is stored in the RepositoryInfo class  
  * <p>
  * <pre>
  *            ec:apps 
@@ -62,6 +62,7 @@ import com.madalla.util.jcr.JcrUtils;
  * </pre>
  * 
  * @author Eugene Malan
+ * @see org.madalla.service.cms.ocm.RepositoryInfo
  *
  */
 public class RepositoryService extends AbstractRepositoryService implements IRepositoryService, Serializable{
