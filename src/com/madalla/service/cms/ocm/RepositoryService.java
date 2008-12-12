@@ -47,10 +47,10 @@ import com.madalla.util.jcr.JcrUtils;
 
 /**
  * Content Service Implementation for Jackrabbit JCR Content Repository
+ * using Jackrabbit OCM framework
  * <p>
- * This class is aware of the structure of the data in the repository 
- * and will create the structure if it does not exist. The schema is
- * open and not enforced by the repository. 
+ * This implentation uses Jackrabbit OCM to persist most of the Bean 
+ * data. The schema of the Repository is stored in the @see org.madalla.service.cms.ocm.RepositoryInfo 
  * <p>
  * <pre>
  *            ec:apps 
@@ -329,11 +329,19 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 		return (Content) ocm.getObject(Content.class, id);
 	}
     
-    public void pasteContent(final String path, final IContentData content){
-    	Page newParent = (Page) ocm.getObject(Page.class, path);
-    	Content newContent = new Content(newParent, content.getName());
-    	newContent.setText(content.getText());
-    	saveContent(newContent);
+    public void pasteContent(final String path, final ContentData content){
+        copyData(path, content);
     }
+
+    public void copyData(final String path, final AbstractData data){
+        String destPath = path+ "/" + data.getName();
+        if (ocm.objectExists(destPath)){
+            ocm.remove(destPath);
+            ocm.save();
+        }
+        ocm.copy(data.getId(), destPath);
+        ocm.save();
+    }
+
 
 }

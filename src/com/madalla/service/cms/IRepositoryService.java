@@ -45,7 +45,7 @@ public interface IRepositoryService {
 
 	void saveContent(IContentData content);
 
-	void pasteContent(String id, IContentData content);
+	void pasteContent(String id, ContentData content);
 
 	// Blog
 	IBlogData getBlog(final String blogName);

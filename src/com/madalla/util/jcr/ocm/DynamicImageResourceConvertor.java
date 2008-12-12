@@ -30,7 +30,7 @@ public class DynamicImageResourceConvertor implements AtomicTypeConverter {
 
     /**
      * 
-     * @see org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter#getObject(javax.jcr.Value)
+     * 
      */
     public Object getObject(Value value)
     {
@@ -55,7 +55,7 @@ public class DynamicImageResourceConvertor implements AtomicTypeConverter {
 
     /**
      * 
-     * @see org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter#getStringValue(java.lang.Object)
+     * 
      */
     public String getXPathQueryValue(ValueFactory valueFactory,Object object)
     {       

@@ -10,8 +10,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
+import com.madalla.service.cms.ContentData;
 import com.madalla.service.cms.IBlogEntryData;
-import com.madalla.service.cms.IContentData;
 import com.madalla.service.cms.IRepositoryService;
 import com.madalla.service.cms.IRepositoryServiceProvider;
 
@@ -21,7 +21,7 @@ class ContentDisplayPanel extends Panel {
 	private Log log = LogFactory.getLog(this.getClass());
 	private Component nodePath;
 	private Component contentDisplay;
-	private IContentData copiedContent;
+	private ContentData copiedContent;
 	private String contentText = "" ;
 	private String path = "";
 	Component paste;
