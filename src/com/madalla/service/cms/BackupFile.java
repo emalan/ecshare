@@ -19,6 +19,13 @@ import org.joda.time.format.ISODateTimeFormat;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 
+/**
+ * An instance represents a File that holds backup data. There are static utility
+ * methods to handle backup files.
+ * 
+ * @author Eugene Malan
+ *
+ */
 public class BackupFile implements Serializable, Comparable<BackupFile> {
 
 	private static final long serialVersionUID = 1L;
@@ -31,6 +38,12 @@ public class BackupFile implements Serializable, Comparable<BackupFile> {
 		this.file = file;
 	}
 	
+	/**
+	 * @param fileName
+	 * @param repositoryHome
+	 * @return
+	 * @throws IOException
+	 */
 	public static File getBackupFile(String fileName, String repositoryHome) throws IOException {
 		
         String dateTimeString = ISODateTimeFormat.basicDateTime().print(new LocalDateTime());
@@ -40,6 +53,11 @@ public class BackupFile implements Serializable, Comparable<BackupFile> {
 		return backupFile;
 	}
 	
+	/**
+	 * @param fileStart
+	 * @param repositoryHome
+	 * @return
+	 */
 	public static List<BackupFile> getFileList(final String fileStart, String repositoryHome){
     	File repositoryHomeDir;
 		try {
@@ -66,6 +84,11 @@ public class BackupFile implements Serializable, Comparable<BackupFile> {
     	return ret;
     }
 	
+	/**
+	 * @param repositoryHome
+	 * @return
+	 * @throws IOException
+	 */
 	private static File getRepositoryHomeDir(String repositoryHome) throws IOException{
         DefaultResourceLoader loader = new DefaultResourceLoader();
         Resource resource = loader.getResource(repositoryHome);
@@ -75,6 +98,10 @@ public class BackupFile implements Serializable, Comparable<BackupFile> {
 	public File getFile(){
 		return file;
 	}
+	
+	/**
+	 * @return - display String for application i.e.  yesterday - 14:00
+	 */
 	public String getDisplayName(){
 		String s = file.getName();
 		String site = StringUtils.substringBefore(s, BACKUP);
