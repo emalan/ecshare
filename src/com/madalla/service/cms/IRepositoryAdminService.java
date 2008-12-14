@@ -5,6 +5,12 @@ import java.util.List;
 
 import javax.swing.tree.TreeModel;
 
+/**
+ * Administrative functions for the Content Repository including backup.
+ * 
+ * @author Eugene Malan
+ *
+ */
 public interface IRepositoryAdminService {
 
 	

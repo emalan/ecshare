@@ -39,9 +39,9 @@ public class BackupFile implements Serializable, Comparable<BackupFile> {
 	}
 	
 	/**
-	 * @param fileName
-	 * @param repositoryHome
-	 * @return
+	 * @param fileName - String to be appended to file name
+	 * @param repositoryHome 
+	 * @return backupFile
 	 * @throws IOException
 	 */
 	public static File getBackupFile(String fileName, String repositoryHome) throws IOException {
@@ -56,7 +56,7 @@ public class BackupFile implements Serializable, Comparable<BackupFile> {
 	/**
 	 * @param fileStart
 	 * @param repositoryHome
-	 * @return
+	 * @return list of existing backups
 	 */
 	public static List<BackupFile> getFileList(final String fileStart, String repositoryHome){
     	File repositoryHomeDir;

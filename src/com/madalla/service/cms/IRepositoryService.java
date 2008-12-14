@@ -8,9 +8,27 @@ import javax.swing.tree.TreeModel;
 
 import org.joda.time.DateTime;
 
+/**
+ * Main API for accessing Data Objects from the Content Repository.
+ * <p>
+ * Access to Business Objects that are persisted in the CMS. Methods to get
+ * and save the objects and to check what type a Node is.
+ * - Page and Content
+ * - Blog and Blog entries
+ * - Album and Images 
+ * </p>
+ * 
+ * @author Eugene Malan
+ *
+ */
 public interface IRepositoryService {
 
-	// package methods
+	
+	/**
+	 * @param id 
+	 * @param locale
+	 * @return
+	 */
 	String getLocaleId(String id, Locale locale);
 
 	// type checks

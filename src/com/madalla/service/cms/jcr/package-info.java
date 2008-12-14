@@ -1,8 +1,9 @@
 /**
- * Implements the Content Respository functionality using the JCR API 
+ * Implements the Repository Admin service using the JCR API.
  * <p>
- * The Repository is Spring Configured. This package controls the 
- * data schema of the content in the repository
+ * The Admin implementation uses mostly the JCR API, but there are dependencies
+ * on Jackrabbit code for backup. Spring configuration file is supplied.
+ * </p>
  * 
  * @author Eugene Malan
  */
