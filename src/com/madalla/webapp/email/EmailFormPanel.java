@@ -150,9 +150,9 @@ public class EmailFormPanel extends Panel {
 				if (sendEmail()){
 					form.info("Email sent successfully");
 	            } else {
-	            	form.info("Failed to send email!");
+	            	form.error("Failed to send email!");
 	            }
-				setResponsePage(this.findPage());
+				//setResponsePage(this.findPage());
 			}
 			
 			@Override
