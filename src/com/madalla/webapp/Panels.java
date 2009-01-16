@@ -21,6 +21,7 @@ import com.madalla.webapp.cms.admin.ContentAdminPanel;
 import com.madalla.webapp.email.EmailFormPanel;
 import com.madalla.webapp.images.AlbumPanel;
 import com.madalla.webapp.images.admin.AlbumAdminPanel;
+import com.madalla.webapp.user.UserLoginPanel;
 
 /**
  * Utlility static instantiation methods to create Wicket Panels
@@ -147,6 +148,12 @@ public class Panels {
 		return new AlbumPanel(id, album, returnPage);
 	}
 	
+	public static Panel userLoginPanel(String id, PageParameters params) {
+		if (StringUtils.isEmpty(id) || params == null){
+			error("UserLoginPanel - All parameters need to be supplied.");
+		}
+		return new UserLoginPanel(id, getReturnPage(params, "UserLoginPanel"));
+	}
 
 	/*  Utility methods */
 	private static void error(String message){

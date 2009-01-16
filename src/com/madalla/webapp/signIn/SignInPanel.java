@@ -151,7 +151,6 @@ public abstract class SignInPanel extends Panel
 
 		add(new SignInForm("signInForm"));
 		
-		add(new BookmarkablePageLink("loginPageLink", UserLoginPage.class));
 	}
 
 	/**
