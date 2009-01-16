@@ -18,11 +18,11 @@ public class BlogHomePanel extends Panel{
 	public BlogHomePanel(String id, String blogName, String blogEntryId, Class<? extends Page> returnPage){
 		super(id);
 		
-		//Instanciation checks
+		//Instantiation checks
 		if (!(getApplication() instanceof IRepositoryServiceProvider)){
 			log.error("BlogHomePanel instanciation check failed on instanceof check.");
 			throw new WicketRuntimeException("BlogHomePanel needs your wicket Application class to extend " +
-					"the abstract class CmsBlogApplication.");
+					"the abstract class CmsApplication.");
 		}
 
 		BlogData blog = getRepositoryService().getBlog(blogName);

@@ -5,6 +5,7 @@
     	form.signInForm div label {float: left;}
     	form.signInForm div input {float: left;}
     	form.signInForm div label {width:7em;}
+    	#loginLink {clear: both; float: left; padding: 10px 0 0 5px;}
     </style>
 </wicket:head>
 <body>
@@ -27,6 +28,7 @@
                 <input type="reset" value="Reset"/>
             </div>
         </form>
+        <a id="loginLink" wicket:id="loginPageLink" href=""><wicket:message key="label.login.page">Label Contents</wicket:message></a>
     </wicket:panel>
 </body>
 </html>
