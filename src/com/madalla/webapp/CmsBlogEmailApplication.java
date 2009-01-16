@@ -4,8 +4,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.WicketRuntimeException;
 
-import com.madalla.service.email.IEmailSender;
-import com.madalla.service.email.IEmailServiceProvider;
+import com.madalla.email.IEmailSender;
+import com.madalla.email.IEmailServiceProvider;
 
 /**
  * Adds Email functionality so you can use the {@link com.madalla.webapp.email.EmailFormPanel}

@@ -8,10 +8,10 @@ import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.authorization.strategies.page.SimplePageAuthorizationStrategy;
 import org.apache.wicket.protocol.http.WebApplication;
 
-import com.madalla.service.cms.IRepositoryAdminService;
-import com.madalla.service.cms.IRepositoryAdminServiceProvider;
-import com.madalla.service.cms.IRepositoryService;
-import com.madalla.service.cms.IRepositoryServiceProvider;
+import com.madalla.cms.service.IRepositoryAdminService;
+import com.madalla.cms.service.IRepositoryAdminServiceProvider;
+import com.madalla.cms.service.IRepositoryService;
+import com.madalla.cms.service.IRepositoryServiceProvider;
 
 /**
  * Abstract Wicket Application class that needs to extended to enable usage 

@@ -16,20 +16,20 @@ import org.apache.wicket.markup.html.tree.LinkTree;
 import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrTemplate;
 
-import com.madalla.service.cms.AlbumData;
-import com.madalla.service.cms.BackupFile;
-import com.madalla.service.cms.BlogEntryData;
-import com.madalla.service.cms.ContentData;
-import com.madalla.service.cms.IAlbumData;
-import com.madalla.service.cms.IBlogData;
-import com.madalla.service.cms.IBlogEntryData;
-import com.madalla.service.cms.IImageData;
-import com.madalla.service.cms.IPageData;
-import com.madalla.service.cms.IRepositoryAdminService;
-import com.madalla.service.cms.IRepositoryService;
-import com.madalla.service.cms.ImageData;
-import com.madalla.service.cms.ocm.image.Image;
-import com.madalla.service.cms.ocm.page.Content;
+import com.madalla.cms.bo.AlbumData;
+import com.madalla.cms.bo.BlogEntryData;
+import com.madalla.cms.bo.ContentData;
+import com.madalla.cms.bo.IAlbumData;
+import com.madalla.cms.bo.IBlogData;
+import com.madalla.cms.bo.IBlogEntryData;
+import com.madalla.cms.bo.IImageData;
+import com.madalla.cms.bo.IPageData;
+import com.madalla.cms.bo.ImageData;
+import com.madalla.cms.bo.impl.ocm.image.Image;
+import com.madalla.cms.bo.impl.ocm.page.Content;
+import com.madalla.cms.service.BackupFile;
+import com.madalla.cms.service.IRepositoryAdminService;
+import com.madalla.cms.service.IRepositoryService;
 
 public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
@@ -41,8 +41,8 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 	
 	protected List<String> getTestConfigLocations() {
 		List<String> configLocations = new ArrayList<String>();
-		configLocations.add("classpath:com/madalla/service/cms/ocm/applicationContext-cms.xml");
-        configLocations.add("classpath:com/madalla/util/jcr/applicationContext-jcr-local.xml");
+		configLocations.add("classpath:com/madalla/cms/service/ocm/applicationContext-cms.xml");
+        configLocations.add("classpath:com/madalla/cms/jcr/applicationContext-jcr-local.xml");
         
 		return configLocations;
 	}

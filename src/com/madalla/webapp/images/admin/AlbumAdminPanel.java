@@ -29,10 +29,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
 
-import com.madalla.service.cms.IAlbumData;
-import com.madalla.service.cms.IRepositoryService;
-import com.madalla.service.cms.IRepositoryServiceProvider;
-import com.madalla.service.cms.ocm.image.Album;
+import com.madalla.cms.bo.IAlbumData;
+import com.madalla.cms.bo.impl.ocm.image.Album;
+import com.madalla.cms.service.IRepositoryService;
+import com.madalla.cms.service.IRepositoryServiceProvider;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.DraggableAjaxBehaviour;
 import com.madalla.wicket.form.upload.MultiFileUploadField;
@@ -98,7 +98,7 @@ public class AlbumAdminPanel extends Panel{
 
 		@Override
 		protected void populateItem(final ListItem listItem) {
-			final com.madalla.service.cms.ocm.image.Image imageData = (com.madalla.service.cms.ocm.image.Image)listItem.getModelObject();
+			final com.madalla.cms.bo.impl.ocm.image.Image imageData = (com.madalla.cms.bo.impl.ocm.image.Image)listItem.getModelObject();
             listItem.add(new Label("file", imageData.getName()));
             Image image = new Image("thumb",imageData.getImageThumb());
             image.setOutputMarkupId(true);

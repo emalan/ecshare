@@ -11,9 +11,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springmodules.jcr.JcrCallback;
 
+import com.madalla.cms.bo.impl.ocm.page.Content;
+import com.madalla.cms.bo.impl.ocm.page.Page;
+import com.madalla.cms.service.ocm.RepositoryInfo;
+import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.service.cms.ocm.AbstractContentOcmTest;
-import com.madalla.service.cms.ocm.RepositoryInfo;
-import com.madalla.service.cms.ocm.RepositoryInfo.RepositoryType;
 
 public class ContentOcmPageTest extends AbstractContentOcmTest{
 

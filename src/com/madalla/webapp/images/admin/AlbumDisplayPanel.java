@@ -19,11 +19,11 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import com.madalla.service.cms.AlbumData;
-import com.madalla.service.cms.IAlbumData;
-import com.madalla.service.cms.IRepositoryService;
-import com.madalla.service.cms.IRepositoryServiceProvider;
-import com.madalla.service.cms.ImageData;
+import com.madalla.cms.bo.AlbumData;
+import com.madalla.cms.bo.IAlbumData;
+import com.madalla.cms.bo.ImageData;
+import com.madalla.cms.service.IRepositoryService;
+import com.madalla.cms.service.IRepositoryServiceProvider;
 import com.madalla.wicket.DraggableAjaxBehaviour;
 import com.madalla.wicket.DroppableAjaxBehaviour;
 

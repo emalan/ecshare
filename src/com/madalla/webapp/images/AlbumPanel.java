@@ -27,10 +27,10 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 
-import com.madalla.service.cms.AlbumData;
-import com.madalla.service.cms.IRepositoryService;
-import com.madalla.service.cms.IRepositoryServiceProvider;
-import com.madalla.service.cms.ImageData;
+import com.madalla.cms.bo.AlbumData;
+import com.madalla.cms.bo.ImageData;
+import com.madalla.cms.service.IRepositoryService;
+import com.madalla.cms.service.IRepositoryServiceProvider;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.AlbumAdminPage;
 
@@ -75,7 +75,7 @@ public class AlbumPanel extends Panel {
 
 			@Override
 			protected void populateItem(ListItem item) {
-				final com.madalla.service.cms.ocm.image.Image imageData = (com.madalla.service.cms.ocm.image.Image) item.getModelObject();
+				final com.madalla.cms.bo.impl.ocm.image.Image imageData = (com.madalla.cms.bo.impl.ocm.image.Image) item.getModelObject();
 				if (imageData.getImageFull() != null){
 					Image image = new Image("id",imageData.getImageFull());
 					if(StringUtils.isEmpty(imageData.getUrl())){

@@ -15,13 +15,13 @@ import org.apache.wicket.markup.html.tree.LinkTree;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import com.madalla.service.cms.IRepositoryAdminService;
-import com.madalla.service.cms.IRepositoryAdminServiceProvider;
-import com.madalla.service.cms.IRepositoryService;
-import com.madalla.service.cms.IRepositoryServiceProvider;
-import com.madalla.util.jcr.model.ContentNode;
-import com.madalla.util.jcr.model.IContentNode;
-import com.madalla.util.jcr.model.tree.JcrTreeNode;
+import com.madalla.cms.jcr.model.ContentNode;
+import com.madalla.cms.jcr.model.IContentNode;
+import com.madalla.cms.jcr.model.tree.JcrTreeNode;
+import com.madalla.cms.service.IRepositoryAdminService;
+import com.madalla.cms.service.IRepositoryAdminServiceProvider;
+import com.madalla.cms.service.IRepositoryService;
+import com.madalla.cms.service.IRepositoryServiceProvider;
 
 class ContentExplorerPanel extends Panel {
 	private static final long serialVersionUID = 1L;

@@ -29,11 +29,11 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.joda.time.DateTime;
 
-import com.madalla.service.cms.BlogEntryData;
-import com.madalla.service.cms.IBlogData;
-import com.madalla.service.cms.IRepositoryService;
-import com.madalla.service.cms.IRepositoryServiceProvider;
-import com.madalla.service.cms.ocm.blog.BlogEntry;
+import com.madalla.cms.bo.BlogEntryData;
+import com.madalla.cms.bo.IBlogData;
+import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
+import com.madalla.cms.service.IRepositoryService;
+import com.madalla.cms.service.IRepositoryServiceProvider;
 import com.madalla.webapp.blog.BlogEntryView;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 import com.madalla.wicket.form.AjaxValidationBehaviour;

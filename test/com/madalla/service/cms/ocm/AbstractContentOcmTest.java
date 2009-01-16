@@ -13,8 +13,8 @@ import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.AbstractSpringWicketTester;
-import com.madalla.util.jcr.JcrUtils;
-import com.madalla.util.jcr.ocm.JcrOcmUtils;
+import com.madalla.cms.jcr.JcrUtils;
+import com.madalla.cms.service.ocm.util.JcrOcmUtils;
 
 public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester {
 
@@ -44,9 +44,9 @@ public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester 
 	protected List<String> getTestConfigLocations() {
 		List<String> configLocations = new ArrayList<String>();
 		configLocations
-				.add("classpath:com/madalla/service/cms/jcr/applicationContext-cms.xml");
+				.add("classpath:com/madalla/cms/service/ocm/applicationContext-cms.xml");
 		configLocations
-				.add("classpath:com/madalla/util/jcr/applicationContext-jcr-local.xml");
+				.add("classpath:com/madalla/cms/jcr/applicationContext-jcr-local.xml");
 
 		return configLocations;
 	}

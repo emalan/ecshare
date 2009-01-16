@@ -16,11 +16,11 @@ import org.apache.commons.logging.LogFactory;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
+import com.madalla.cms.jcr.model.JcrNodeModel;
+import com.madalla.cms.jcr.model.tree.AbstractTreeNode;
+import com.madalla.cms.jcr.model.tree.JcrTreeModel;
+import com.madalla.cms.jcr.model.tree.JcrTreeNode;
 import com.madalla.jcr.AbstractJcrTester;
-import com.madalla.util.jcr.model.JcrNodeModel;
-import com.madalla.util.jcr.model.tree.AbstractTreeNode;
-import com.madalla.util.jcr.model.tree.JcrTreeModel;
-import com.madalla.util.jcr.model.tree.JcrTreeNode;
 
 public class TestJcrTreeNode extends AbstractJcrTester {
 
@@ -31,7 +31,7 @@ public class TestJcrTreeNode extends AbstractJcrTester {
 
 	protected List getTestConfigLocations() {
 		List configLocations = new ArrayList();
-		configLocations.add("classpath:com/madalla/service/cms/applicationContext-cms.xml");
+		configLocations.add("classpath:com/madalla/cms/service/ocm/applicationContext-cms.xml");
 		return configLocations;
 	}
 	

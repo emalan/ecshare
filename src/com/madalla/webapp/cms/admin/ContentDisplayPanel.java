@@ -10,10 +10,10 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import com.madalla.service.cms.ContentData;
-import com.madalla.service.cms.IBlogEntryData;
-import com.madalla.service.cms.IRepositoryService;
-import com.madalla.service.cms.IRepositoryServiceProvider;
+import com.madalla.cms.bo.ContentData;
+import com.madalla.cms.bo.IBlogEntryData;
+import com.madalla.cms.service.IRepositoryService;
+import com.madalla.cms.service.IRepositoryServiceProvider;
 
 class ContentDisplayPanel extends Panel {
 

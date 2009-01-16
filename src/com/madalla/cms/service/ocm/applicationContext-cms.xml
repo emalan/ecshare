@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+    <bean id="repositoryService" class="com.madalla.cms.service.ocm.RepositoryService"
+        init-method="init">
+        <property name="template" ref="jcrTemplate"/>
+        <property name="site" value="${site.code}"/>
+        <property name="locales" ref="siteLocales"/>
+    </bean>
+    
+	<bean id="repositoryAdminService" class="com.madalla.cms.service.jcr.RepositoryAdminService">
+    	<property name="template" ref="jcrTemplate"/>
+    	<property name="site" value="${site.code}"/>
+    	<property name="repositoryHome" value="${repository.home}"/>
+	</bean>
+	
+	<bean id="backupCreator" class="com.madalla.cms.service.jcr.RepositoryBackupCreator">
+		<constructor-arg ref="repositoryAdminService"/>
+	</bean>
+
+</beans>
+
+
+

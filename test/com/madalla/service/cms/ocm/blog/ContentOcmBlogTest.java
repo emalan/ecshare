@@ -16,9 +16,11 @@ import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrCallback;
 
+import com.madalla.cms.bo.impl.ocm.blog.Blog;
+import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
+import com.madalla.cms.service.ocm.RepositoryInfo;
+import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.service.cms.ocm.AbstractContentOcmTest;
-import com.madalla.service.cms.ocm.RepositoryInfo;
-import com.madalla.service.cms.ocm.RepositoryInfo.RepositoryType;
 
 public class ContentOcmBlogTest extends AbstractContentOcmTest {
 
