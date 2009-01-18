@@ -1,7 +1,6 @@
 package com.madalla.webapp.user;
 
 import org.apache.wicket.Page;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;

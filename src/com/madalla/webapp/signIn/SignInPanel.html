@@ -23,8 +23,9 @@
                 <label for="rememberMe"><wicket:message key="label.remember">Label Contents</wicket:message></label>
             </div>
             <div class="formButtons">
-                <input type="submit" name="submit" value="Sign In"/>
-                <input type="reset" value="Reset"/>
+                <span class="buttonwrapper">
+                    <a href="#" class="orangebutton" wicket:id="submitLink"><span><wicket:message key="label.login">Label Contents</wicket:message></span></a>
+                </span>
             </div>
         </form>
     </wicket:panel>
