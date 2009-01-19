@@ -12,6 +12,7 @@ import com.madalla.cms.service.IRepositoryAdminService;
 import com.madalla.cms.service.IRepositoryAdminServiceProvider;
 import com.madalla.cms.service.IRepositoryService;
 import com.madalla.cms.service.IRepositoryServiceProvider;
+import com.madalla.webapp.security.IAuthenticator;
 
 /**
  * Abstract Wicket Application class that needs to extended to enable usage 
@@ -72,7 +73,5 @@ public abstract class CmsApplication extends WebApplication implements IReposito
 			IRepositoryAdminService repositoryAdminService) {
 		this.repositoryAdminService = repositoryAdminService;
 	}
-
-
 
 }

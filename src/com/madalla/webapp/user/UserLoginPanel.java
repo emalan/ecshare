@@ -5,6 +5,7 @@ import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 
+import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.signIn.SignInPanel;
 
 public class UserLoginPanel extends Panel {
@@ -24,7 +25,13 @@ public class UserLoginPanel extends Panel {
             private static final long serialVersionUID = 1L;
             
             public boolean signIn(String username, String password) {
-                return false;
+            	CmsSession session = (CmsSession) getSession();
+                if (session.login(username, password)) {
+                    return true;
+                } else {
+                    return false;
+                }
+
             }
             
             protected void onSignInFailed() {

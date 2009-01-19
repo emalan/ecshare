@@ -15,7 +15,8 @@
 				top:0pt;
 				width:100%;
 				text-align: left;
-				height:4.5em;
+				padding-bottom: 10px;
+				/* height:4.5em; */
 			}
 			#topbar p{ 
 			    padding-left: 30px;
@@ -43,6 +44,18 @@
                 padding-bottom: 10px;
                 width: 100%;
             }
+            .msg {
+                text-align: center;
+            }
+            .msg .message_box {
+                border: 1px solid #FFCC35;
+                color:#000000;
+                font-weight: bold;
+                display: inline;
+            }
+            #noscript_box {
+                background-color: #FAD163;
+            }
         
         
         </style>
@@ -54,6 +67,11 @@
   <wicket:border>
     <div id="topbar">
         <p>Content Administration</p>
+        <noscript>
+			<div id="noscript_msg" class="msg">
+				<div id="noscript_box" class="message_box">You need to have JavaScript enabled to use this page.</div>
+			</div>
+		</noscript>
     </div>
     
     <div id="main">

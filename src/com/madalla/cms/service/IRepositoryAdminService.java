@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.swing.tree.TreeModel;
 
+import com.madalla.webapp.security.IAuthenticator;
+
 /**
  * Administrative functions for the Content Repository including backup.
  * 
@@ -13,6 +15,8 @@ import javax.swing.tree.TreeModel;
  */
 public interface IRepositoryAdminService {
 
+	
+	IAuthenticator getUserAuthenticator();
 	
 	/**
 	 * All Content Data for a site/application

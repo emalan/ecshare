@@ -18,18 +18,23 @@ package com.madalla.webapp.signIn;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxSubmitButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.PasswordTextField;
-import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.value.ValueMap;
+
+import com.madalla.wicket.IndicatingAjaxSubmitLink;
 
 
 /**
@@ -105,7 +110,7 @@ public abstract class SignInPanel extends Panel
 			// Show remember me checkbox?
 			rememberMeRow.setVisible(includeRememberMe);
 			
-			add(new SubmitLink("submitLink"));
+			//add(new SubmitLink("submitLink"));
 		}
 
 		/**
@@ -153,7 +158,26 @@ public abstract class SignInPanel extends Panel
 		this.includeRememberMe = includeRememberMe;
         this.feedback = feedback;
 
-		add(new SignInForm("signInForm"));
+		Form form = new SignInForm("signInForm");
+		form.setEnabled(true);
+		add(form);
+		
+		AjaxSubmitLink submit = new IndicatingAjaxSubmitLink("submitLink", form){
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form form) {
+				super.onError(target, form);
+			}
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form form) {
+				log.debug("Ajax submit called");
+			}
+			
+		};
+		submit.setEnabled(true);
+		submit.setVisibilityAllowed(true);
+		form.add(submit);
 		
 	}
 

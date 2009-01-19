@@ -24,6 +24,7 @@ import com.madalla.cms.jcr.model.tree.JcrTreeModel;
 import com.madalla.cms.jcr.model.tree.JcrTreeNode;
 import com.madalla.cms.service.BackupFile;
 import com.madalla.cms.service.IRepositoryAdminService;
+import com.madalla.webapp.security.IAuthenticator;
 
 public class RepositoryAdminService extends AbstractRepositoryService implements IRepositoryAdminService {
 	
@@ -35,6 +36,10 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
     
     static final String EC_NODE_BACKUP = NS + "backup";
     
+	public IAuthenticator getUserAuthenticator() {
+		return new UserAuthenticator(getSite());
+	}
+	
     //TODO allow switching between different workspaces
     public String[] getAvailableWorkspaces(){
     	return (String[]) template.execute(new JcrCallback(){
@@ -294,5 +299,6 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
 	public void setRepositoryHome(String repositoryHome) {
 		this.repositoryHome = repositoryHome;
 	}
+
 
 }

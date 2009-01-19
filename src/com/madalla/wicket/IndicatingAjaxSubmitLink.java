@@ -9,9 +9,7 @@ public abstract class IndicatingAjaxSubmitLink extends AjaxSubmitLink implements
 	private static final long serialVersionUID = 1L;
 	private final WicketAjaxIndicatorAppender indicatorAppender = new WicketAjaxIndicatorAppender();
 
-	public IndicatingAjaxSubmitLink(String id) {
-		super(id);
-	}
+
 	public IndicatingAjaxSubmitLink(String id, Form form) {
 		super(id, form);
 		add(indicatorAppender);
