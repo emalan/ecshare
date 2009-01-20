@@ -64,8 +64,6 @@ public abstract class SignInPanel extends Panel
 	/** Field for user name. */
 	private TextField username;
     
-    private FeedbackPanel feedback;
-
 	/**
 	 * Sign in form.
 	 */
@@ -119,14 +117,8 @@ public abstract class SignInPanel extends Panel
 		public void onSubmit()
 		{
 		    log.debug("Login with userName="+getUsername());
-			if (signIn(getUsername(), getPassword()))
-			{
-				onSignInSucceeded();
-			}
-			else
-			{
-				onSignInFailed();
-			}
+		    //continue to Ajax submit
+
 		}
 	}
 
@@ -151,12 +143,12 @@ public abstract class SignInPanel extends Panel
 	 *            True if form should include a remember-me checkbox
 	 * @see org.apache.wicket.Component#Component(String)
 	 */
-	public SignInPanel(final String id, final boolean includeRememberMe, FeedbackPanel feedback)
+	public SignInPanel(final String id, final boolean includeRememberMe, final FeedbackPanel feedback)
 	{
 		super(id);
 
 		this.includeRememberMe = includeRememberMe;
-        this.feedback = feedback;
+        feedback.setOutputMarkupId(true);
 
 		Form form = new SignInForm("signInForm");
 		form.setEnabled(true);
@@ -166,12 +158,22 @@ public abstract class SignInPanel extends Panel
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form form) {
-				super.onError(target, form);
+				log.debug("Ajax onError called");
+				target.addComponent(feedback);
 			}
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
 				log.debug("Ajax submit called");
+				if (signIn(getUsername(), getPassword()))
+				{
+					onSignInSucceeded();
+				}
+				else
+				{
+					feedback.error(getLocalizer().getString("signInFailed", this, "Sign in failed"));
+					target.addComponent(feedback);
+				}
 			}
 			
 		};
@@ -254,8 +256,6 @@ public abstract class SignInPanel extends Panel
 	 */
 	public abstract boolean signIn(String username, String password);
 
-	protected abstract void onSignInFailed();
-
 	protected void onSignInSucceeded()
 	{
 		// If login has been called because the user was not yet
@@ -266,12 +266,6 @@ public abstract class SignInPanel extends Panel
 		}
 	}
 
-    public FeedbackPanel getFeedback() {
-        return feedback;
-    }
 
-    public void setFeedback(FeedbackPanel feedback) {
-        this.feedback = feedback;
-    }
 
 }

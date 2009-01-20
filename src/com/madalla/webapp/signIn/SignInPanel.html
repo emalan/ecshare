@@ -5,6 +5,7 @@
     	form.signInForm div label {float: left;}
     	form.signInForm div input {float: left;}
     	form.signInForm div label {width:7em;}
+    	form.signInForm div .buttonwrapper {margin-left: 19em; float: left;}
     </style>
 </wicket:head>
 <body>
@@ -19,8 +20,8 @@
                 <input class="inputText" wicket:id="password" type="password" value="password" />
             </div>
             <div wicket:id="rememberMeRow">
-                <input class="checkbox" id="rememberMe" wicket:id="rememberMe" type="checkbox"/>
                 <label for="rememberMe"><wicket:message key="label.remember">Label Contents</wicket:message></label>
+                <input class="checkbox" id="rememberMe" wicket:id="rememberMe" type="checkbox"/>
             </div>
             <div class="formButtons">
                 <span class="buttonwrapper">

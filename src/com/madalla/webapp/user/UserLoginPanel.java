@@ -34,10 +34,6 @@ public class UserLoginPanel extends Panel {
 
             }
             
-            protected void onSignInFailed() {
-                feedback.error(getLocalizer().getString("signInFailed", this, "Sign in failed"));
-            }
-            
             protected void onSignInSucceeded() {
                 super.onSignInSucceeded();
             }
