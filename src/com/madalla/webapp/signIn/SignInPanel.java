@@ -125,17 +125,9 @@ public abstract class SignInPanel extends Panel
 
     public SignInPanel(final String id)
     {
-        this(id, true, null);
+        this(id, true);
     }	
     
-    /**
-	 * @see org.apache.wicket.Component#Component(String)
-	 */
-	public SignInPanel(final String id, FeedbackPanel feedback)
-	{
-		this(id, true, feedback);
-	}
-
 	/**
 	 * @param id
 	 *            See Component constructor
@@ -143,17 +135,19 @@ public abstract class SignInPanel extends Panel
 	 *            True if form should include a remember-me checkbox
 	 * @see org.apache.wicket.Component#Component(String)
 	 */
-	public SignInPanel(final String id, final boolean includeRememberMe, final FeedbackPanel feedback)
+	public SignInPanel(final String id, final boolean includeRememberMe)
 	{
 		super(id);
 
 		this.includeRememberMe = includeRememberMe;
-        feedback.setOutputMarkupId(true);
-
+		
 		Form form = new SignInForm("signInForm");
-		form.setEnabled(true);
 		add(form);
 		
+		final FeedbackPanel feedback = new FeedbackPanel("loginFeedback");
+		feedback.setOutputMarkupId(true);
+		form.add(feedback);
+
 		AjaxSubmitLink submit = new IndicatingAjaxSubmitLink("submitLink", form){
 
 			@Override
@@ -167,6 +161,7 @@ public abstract class SignInPanel extends Panel
 				log.debug("Ajax submit called");
 				if (signIn(getUsername(), getPassword()))
 				{
+					feedback.info(getLocalizer().getString("signInFailed", this, "Success"));
 					onSignInSucceeded();
 				}
 				else

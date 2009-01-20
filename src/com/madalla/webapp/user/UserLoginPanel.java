@@ -2,7 +2,6 @@ package com.madalla.webapp.user;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.PageLink;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import com.madalla.webapp.CmsSession;
@@ -17,11 +16,7 @@ public class UserLoginPanel extends Panel {
 		
 		add(new PageLink("returnLink", returnPage));
 		
-        // Create feedback panel and add to page
-        final FeedbackPanel feedback = new FeedbackPanel("loginFeedback");
-        add(feedback);
-        
-		add(new SignInPanel("signInPanel", feedback){
+		add(new SignInPanel("signInPanel"){
             private static final long serialVersionUID = 1L;
             
             public boolean signIn(String username, String password) {
