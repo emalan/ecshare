@@ -5,7 +5,7 @@
 * Simple Class that will identify popups on a page. the popups will fade
 * in an out on mouseover and mouseoff.
 * 
-* Make sure the are that must popup is made initally invisible this way...
+* Make sure the area that must popup is made initally invisible this way...
 * style="display:none;"
 * 
 *  
