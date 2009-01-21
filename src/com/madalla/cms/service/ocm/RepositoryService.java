@@ -39,6 +39,7 @@ import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.image.ImageHelper;
 import com.madalla.cms.bo.impl.ocm.page.Content;
 import com.madalla.cms.bo.impl.ocm.page.Page;
+import com.madalla.cms.bo.impl.ocm.security.User;
 import com.madalla.cms.jcr.JcrUtils;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.cms.service.ocm.template.ParentNodeCallback;
@@ -303,6 +304,32 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     
     public void pasteContent(final String path, final ContentData content){
         copyData(path, content);
+    }
+
+    //*************************
+    // ******   Users    ******
+    
+     
+    public User getNewUser(String username, String password){
+    	if (isUserExists(username)){
+    		return null;
+    	}
+    	return getUser(username, password);
+    }
+    
+    public User getUser(String username, String password){
+    	return (User) repositoryTemplate.executeParent(RepositoryType.USER, username, new ParentNodeCallback(){
+
+			@Override
+			public AbstractData createNew(String parentPath, String name) {
+				return new User(parentPath, name);
+			}
+
+    	});
+    }
+    
+    private boolean isUserExists(String username){
+    	return true;
     }
 
     private void saveDataObject(AbstractData data){

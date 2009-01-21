@@ -15,6 +15,7 @@ import com.madalla.cms.bo.impl.ocm.image.Album;
 import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.page.Content;
 import com.madalla.cms.bo.impl.ocm.page.Page;
+import com.madalla.cms.bo.impl.ocm.security.User;
 import com.madalla.cms.jcr.JcrUtils;
 /**
  * Information regarding the Schema in the Content respository System
@@ -34,6 +35,13 @@ import com.madalla.cms.jcr.JcrUtils;
  *                    ec:pages                 ec:blogs                      ec:images
  *                      |                         |                             |
  *               Pages and Content         Blogs and Blog Entries       Albums and Images   
+ *               
+ *           ec:users
+ *              |
+ *            Users
+ *              |
+ *         UserRole | UserSite | questions | UserBlog | UserPage | UserAlbum
+ *            
  * </pre>
  * 
  * @author Eugene Malan
@@ -47,21 +55,26 @@ public class RepositoryInfo {
     private static final String EC_NODE_BLOGS = NS + "blogs";
     private static final String EC_NODE_PAGES = NS + "pages";
     private static final String EC_NODE_IMAGES = NS + "images";
+    private static final String EC_NODE_USERS = NS + "users";
     private static final String OCM_CLASS = "ocm:classname";
 
 	public enum RepositoryType {
-		BLOG(Blog.class, true, EC_NODE_BLOGS),
-		BLOGENTRY(BlogEntry.class, false,EC_NODE_BLOGS),
-		ALBUM(Album.class, true, EC_NODE_IMAGES),
-		IMAGE(Image.class, false, EC_NODE_IMAGES),
-		PAGE(Page.class, true, EC_NODE_PAGES),
-		CONTENT(Content.class, false, EC_NODE_PAGES);
+		BLOG(Blog.class, true, true, EC_NODE_BLOGS),
+		BLOGENTRY(BlogEntry.class, true, false,EC_NODE_BLOGS),
+		ALBUM(Album.class, true, true, EC_NODE_IMAGES),
+		IMAGE(Image.class, true, false, EC_NODE_IMAGES),
+		PAGE(Page.class, true, true, EC_NODE_PAGES),
+		CONTENT(Content.class, true, false, EC_NODE_PAGES),
+		USER(User.class, false, true, EC_NODE_USERS);
 		
 		public final Class typeClass;
+		public final boolean site;
 		public final boolean parent;
 		public String groupName;
-		RepositoryType(Class typeClass, boolean parent, String groupName){
+		
+		RepositoryType(Class typeClass, boolean site, boolean parent, String groupName){
 			this.typeClass = typeClass;
+			this.site = site;
 			this.parent = parent;
 			this.groupName = groupName;
 		}
@@ -73,7 +86,7 @@ public class RepositoryInfo {
     }
     
     public static Node getGroupNode(Session session, String site, RepositoryType type) throws RepositoryException{
-  		return getCreateParentNode(session, site, type.groupName);
+  		return getCreateParentNode(session, site, type);
     }
     
 	public static boolean isBlogNodeType(final String path){
@@ -142,10 +155,15 @@ public class RepositoryInfo {
     	return type.equals(pathArray[pathArray.length - 3]);
     }
 	
-	private static Node getCreateParentNode(Session session, String site, String type) throws RepositoryException {
+	private static Node getCreateParentNode(Session session, String site, RepositoryType type) throws RepositoryException {
     	Node appNode = getApplicationNode(session);
-    	Node siteNode =  JcrUtils.getCreateNode(NS+site, appNode);
-    	Node ret =  JcrUtils.getCreateNode(type, siteNode);
+    	Node parentNode;
+    	if (type.site){
+    		parentNode =  JcrUtils.getCreateNode(NS+site, appNode);
+    	} else {
+    		parentNode = appNode;
+    	}
+    	Node ret =  JcrUtils.getCreateNode(type.groupName, parentNode);
     	session.save();
     	return ret;
 	}

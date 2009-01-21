@@ -19,9 +19,7 @@ package com.madalla.webapp.signIn;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxSubmitButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
@@ -32,8 +30,8 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.value.ValueMap;
 
+import com.madalla.util.security.ICredentialHolder;
 import com.madalla.wicket.IndicatingAjaxSubmitLink;
 
 
@@ -71,8 +69,7 @@ public abstract class SignInPanel extends Panel
 	{
 		private static final long serialVersionUID = 1L;
 
-		/** El-cheapo model for form. */
-		private final ValueMap properties = new ValueMap();
+		private final ICredentialHolder credentials;
 
 		/**
 		 * Constructor.
@@ -80,15 +77,14 @@ public abstract class SignInPanel extends Panel
 		 * @param id
 		 *            id of the form component
 		 */
-		public SignInForm(final String id)
+		public SignInForm(final String id, ICredentialHolder credentials)
 		{
 			super(id);
-
+			this.credentials = credentials;
 			// Attach textfield components that edit properties map
 			// in lieu of a formal beans model
-			add(username = new TextField("username", new PropertyModel(properties, "username")));
-			add(password = new PasswordTextField("password", new PropertyModel(properties,
-					"password")));
+			add(username = new TextField("username", new PropertyModel(credentials, "username")));
+			add(password = new PasswordTextField("password", new PropertyModel(credentials,"password")));
             username.setLabel(new Model("User Name"));
             password.setLabel(new Model("Password"));
             add(new FormComponentLabel("usernameLabel",username));
@@ -123,9 +119,9 @@ public abstract class SignInPanel extends Panel
 	}
 
 
-    public SignInPanel(final String id)
+    public SignInPanel(final String id, ICredentialHolder credentials)
     {
-        this(id, true);
+        this(id, credentials, true);
     }	
     
 	/**
@@ -135,13 +131,13 @@ public abstract class SignInPanel extends Panel
 	 *            True if form should include a remember-me checkbox
 	 * @see org.apache.wicket.Component#Component(String)
 	 */
-	public SignInPanel(final String id, final boolean includeRememberMe)
+	public SignInPanel(final String id, ICredentialHolder credentials, final boolean includeRememberMe)
 	{
 		super(id);
 
 		this.includeRememberMe = includeRememberMe;
 		
-		Form form = new SignInForm("signInForm");
+		Form form = new SignInForm("signInForm", credentials);
 		add(form);
 		
 		final FeedbackPanel feedback = new FeedbackPanel("loginFeedback");
@@ -195,7 +191,7 @@ public abstract class SignInPanel extends Panel
 	 */
 	public String getPassword()
 	{
-		return password.getInput();
+		return password.getModelObjectAsString();
 	}
 
 	/**
