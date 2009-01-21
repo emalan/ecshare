@@ -14,6 +14,10 @@ public class User extends UserData {
 	@Field(path=true) private String id;
 	@Field private String password;
 	@Field private String username;
+	
+	public User(){
+		
+	}
 
 	public User(String parentPath, String name){
 		id = parentPath + "/" + name;
@@ -26,6 +30,10 @@ public class User extends UserData {
 	public String getId() {
 		return id;
 	}
+	
+	public void setId(String id){
+		this.id = id;
+	}
 
 	public String getPassword() {
 		return password;
@@ -33,6 +41,14 @@ public class User extends UserData {
 
 	public String getUsername() {
 		return username;
+	}
+	
+	public void setPassword(String password){
+		this.password = password;
+	}
+	
+	public void setUsername(String username){
+		this.username = username;
 	}
 
 }

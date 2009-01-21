@@ -317,21 +317,26 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	return getUser(username, password);
     }
     
-    public User getUser(String username, String password){
+    public User getUser(String username, final String password){
     	return (User) repositoryTemplate.executeParent(RepositoryType.USER, username, new ParentNodeCallback(){
 
 			@Override
 			public AbstractData createNew(String parentPath, String name) {
-				return new User(parentPath, name);
+				User user = new User(parentPath, name);
+				user.setPassword(password);
+				return user;
 			}
 
     	});
     }
     
     private boolean isUserExists(String username){
-    	return true;
+    	return repositoryTemplate.checkExists(RepositoryType.USER, username);
     }
 
+    //************************************
+    // *****  Utility methods
+    
     private void saveDataObject(AbstractData data){
     	if (ocm.objectExists(data.getId())){
     		ocm.update(data);

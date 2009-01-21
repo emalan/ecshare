@@ -25,6 +25,20 @@ public class RepositoryTemplate {
 		this.ocm = ocm;
 		this.site = site;
 	}
+	
+	public boolean checkExists(final RepositoryType type, final String name){
+		return (Boolean)template.execute(new JcrCallback(){
+
+			public Object doInJcr(Session session) throws IOException,
+					RepositoryException {
+				Node parent = RepositoryInfo.getGroupNode(session, site, type);
+				String nodePath = parent.getPath() + (StringUtils.isEmpty(name)?"" : "/" + name);
+				return ocm.objectExists(nodePath);
+			}
+			
+		});
+	}
+	
 	public Object executeParent(final RepositoryType type, final String name, final ParentNodeCallback callback){
 		String parentPath = (String)template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
