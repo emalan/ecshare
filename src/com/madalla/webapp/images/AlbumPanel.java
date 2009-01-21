@@ -27,10 +27,10 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 
-import com.madalla.cms.bo.AlbumData;
-import com.madalla.cms.bo.ImageData;
-import com.madalla.cms.service.IRepositoryService;
-import com.madalla.cms.service.IRepositoryServiceProvider;
+import com.madalla.bo.AlbumData;
+import com.madalla.bo.ImageData;
+import com.madalla.service.IRepositoryService;
+import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.AlbumAdminPage;
 

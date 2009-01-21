@@ -3,7 +3,7 @@ package com.madalla.webapp;
 import org.apache.wicket.Request;
 import org.apache.wicket.protocol.http.WebSession;
 
-import com.madalla.cms.service.IRepositoryAdminServiceProvider;
+import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.webapp.cms.IContentAdmin;
 import com.madalla.webapp.security.IAuthenticator;
 

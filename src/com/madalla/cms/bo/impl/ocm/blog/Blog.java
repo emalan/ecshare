@@ -4,7 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 
-import com.madalla.cms.bo.BlogData;
+import com.madalla.bo.BlogData;
 
 @Node
 public class Blog extends BlogData{

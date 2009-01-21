@@ -1,4 +1,4 @@
-package com.madalla.cms.service;
+package com.madalla.service;
 
 /**
  * This should be implemented by the class supplying the implentation

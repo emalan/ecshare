@@ -4,8 +4,8 @@ import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 import org.joda.time.DateTime;
 
-import com.madalla.cms.bo.BlogEntryData;
-import com.madalla.cms.bo.IBlogData;
+import com.madalla.bo.BlogEntryData;
+import com.madalla.bo.IBlogData;
 
 @Node
 public class BlogEntry extends BlogEntryData {

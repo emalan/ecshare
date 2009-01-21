@@ -27,10 +27,10 @@ import org.apache.wicket.model.Model;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import com.madalla.cms.bo.BlogData;
-import com.madalla.cms.bo.BlogEntryData;
-import com.madalla.cms.service.IRepositoryService;
-import com.madalla.cms.service.IRepositoryServiceProvider;
+import com.madalla.bo.BlogData;
+import com.madalla.bo.BlogEntryData;
+import com.madalla.service.IRepositoryService;
+import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.util.ui.CalendarUtils;
 import com.madalla.util.ui.ICalendarTreeInput;
 

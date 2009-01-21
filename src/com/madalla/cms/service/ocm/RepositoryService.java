@@ -21,17 +21,17 @@ import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.joda.time.DateTime;
 
-import com.madalla.cms.bo.AbstractData;
-import com.madalla.cms.bo.AlbumData;
-import com.madalla.cms.bo.BlogData;
-import com.madalla.cms.bo.BlogEntryData;
-import com.madalla.cms.bo.ContentData;
-import com.madalla.cms.bo.IAlbumData;
-import com.madalla.cms.bo.IBlogData;
-import com.madalla.cms.bo.IImageData;
-import com.madalla.cms.bo.IPageData;
-import com.madalla.cms.bo.ImageData;
-import com.madalla.cms.bo.PageData;
+import com.madalla.bo.AbstractData;
+import com.madalla.bo.AlbumData;
+import com.madalla.bo.BlogData;
+import com.madalla.bo.BlogEntryData;
+import com.madalla.bo.ContentData;
+import com.madalla.bo.IAlbumData;
+import com.madalla.bo.IBlogData;
+import com.madalla.bo.IImageData;
+import com.madalla.bo.IPageData;
+import com.madalla.bo.ImageData;
+import com.madalla.bo.PageData;
 import com.madalla.cms.bo.impl.ocm.blog.Blog;
 import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
 import com.madalla.cms.bo.impl.ocm.image.Album;
@@ -40,10 +40,10 @@ import com.madalla.cms.bo.impl.ocm.image.ImageHelper;
 import com.madalla.cms.bo.impl.ocm.page.Content;
 import com.madalla.cms.bo.impl.ocm.page.Page;
 import com.madalla.cms.jcr.JcrUtils;
-import com.madalla.cms.service.IRepositoryService;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.cms.service.ocm.template.ParentNodeCallback;
 import com.madalla.cms.service.ocm.template.RepositoryTemplate;
+import com.madalla.service.IRepositoryService;
 
 /**
  * Content Service Implementation for Jackrabbit JCR Content Repository

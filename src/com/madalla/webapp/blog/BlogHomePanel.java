@@ -6,9 +6,9 @@ import org.apache.wicket.Page;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import com.madalla.cms.bo.BlogData;
-import com.madalla.cms.service.IRepositoryService;
-import com.madalla.cms.service.IRepositoryServiceProvider;
+import com.madalla.bo.BlogData;
+import com.madalla.service.IRepositoryService;
+import com.madalla.service.IRepositoryServiceProvider;
 
 public class BlogHomePanel extends Panel{
 

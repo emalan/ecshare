@@ -19,9 +19,9 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
-import com.madalla.cms.service.BackupFile;
-import com.madalla.cms.service.IRepositoryAdminService;
-import com.madalla.cms.service.IRepositoryAdminServiceProvider;
+import com.madalla.service.BackupFile;
+import com.madalla.service.IRepositoryAdminService;
+import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.wicket.IndicatingAjaxSubmitLink;
 
 public class ContentAdminPanel extends Panel {

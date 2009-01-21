@@ -29,10 +29,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
 
-import com.madalla.cms.bo.IAlbumData;
+import com.madalla.bo.IAlbumData;
 import com.madalla.cms.bo.impl.ocm.image.Album;
-import com.madalla.cms.service.IRepositoryService;
-import com.madalla.cms.service.IRepositoryServiceProvider;
+import com.madalla.service.IRepositoryService;
+import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.DraggableAjaxBehaviour;
 import com.madalla.wicket.form.upload.MultiFileUploadField;

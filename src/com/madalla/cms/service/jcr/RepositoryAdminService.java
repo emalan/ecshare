@@ -22,8 +22,8 @@ import org.springmodules.jcr.JcrTemplate;
 import com.madalla.cms.jcr.model.JcrNodeModel;
 import com.madalla.cms.jcr.model.tree.JcrTreeModel;
 import com.madalla.cms.jcr.model.tree.JcrTreeNode;
-import com.madalla.cms.service.BackupFile;
-import com.madalla.cms.service.IRepositoryAdminService;
+import com.madalla.service.BackupFile;
+import com.madalla.service.IRepositoryAdminService;
 import com.madalla.webapp.security.IAuthenticator;
 
 public class RepositoryAdminService extends AbstractRepositoryService implements IRepositoryAdminService {

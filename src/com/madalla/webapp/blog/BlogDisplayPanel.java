@@ -24,11 +24,11 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-import com.madalla.cms.bo.BlogData;
-import com.madalla.cms.bo.BlogEntryData;
-import com.madalla.cms.bo.IBlogEntryData;
-import com.madalla.cms.service.IRepositoryService;
-import com.madalla.cms.service.IRepositoryServiceProvider;
+import com.madalla.bo.BlogData;
+import com.madalla.bo.BlogEntryData;
+import com.madalla.bo.IBlogEntryData;
+import com.madalla.service.IRepositoryService;
+import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.BlogEntryPage;
 import com.madalla.wicket.KeywordHeaderContributor;

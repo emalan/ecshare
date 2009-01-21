@@ -16,20 +16,20 @@ import org.apache.wicket.markup.html.tree.LinkTree;
 import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrTemplate;
 
-import com.madalla.cms.bo.AlbumData;
-import com.madalla.cms.bo.BlogEntryData;
-import com.madalla.cms.bo.ContentData;
-import com.madalla.cms.bo.IAlbumData;
-import com.madalla.cms.bo.IBlogData;
-import com.madalla.cms.bo.IBlogEntryData;
-import com.madalla.cms.bo.IImageData;
-import com.madalla.cms.bo.IPageData;
-import com.madalla.cms.bo.ImageData;
+import com.madalla.bo.AlbumData;
+import com.madalla.bo.BlogEntryData;
+import com.madalla.bo.ContentData;
+import com.madalla.bo.IAlbumData;
+import com.madalla.bo.IBlogData;
+import com.madalla.bo.IBlogEntryData;
+import com.madalla.bo.IImageData;
+import com.madalla.bo.IPageData;
+import com.madalla.bo.ImageData;
 import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.page.Content;
-import com.madalla.cms.service.BackupFile;
-import com.madalla.cms.service.IRepositoryAdminService;
-import com.madalla.cms.service.IRepositoryService;
+import com.madalla.service.BackupFile;
+import com.madalla.service.IRepositoryAdminService;
+import com.madalla.service.IRepositoryService;
 
 public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 

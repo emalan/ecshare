@@ -1,4 +1,4 @@
-package com.madalla.cms.bo;
+package com.madalla.bo;
 
 public interface IPageData {
 	String getName();

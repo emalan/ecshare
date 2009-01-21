@@ -1,4 +1,4 @@
-package com.madalla.cms.bo;
+package com.madalla.bo;
 
 
 public abstract class PageData extends AbstractData implements IPageData{

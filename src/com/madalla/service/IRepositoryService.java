@@ -1,4 +1,4 @@
-package com.madalla.cms.service;
+package com.madalla.service;
 
 import java.io.InputStream;
 import java.util.List;
@@ -8,16 +8,16 @@ import javax.swing.tree.TreeModel;
 
 import org.joda.time.DateTime;
 
-import com.madalla.cms.bo.AlbumData;
-import com.madalla.cms.bo.BlogData;
-import com.madalla.cms.bo.BlogEntryData;
-import com.madalla.cms.bo.ContentData;
-import com.madalla.cms.bo.IAlbumData;
-import com.madalla.cms.bo.IBlogData;
-import com.madalla.cms.bo.IImageData;
-import com.madalla.cms.bo.IPageData;
-import com.madalla.cms.bo.ImageData;
-import com.madalla.cms.bo.PageData;
+import com.madalla.bo.AlbumData;
+import com.madalla.bo.BlogData;
+import com.madalla.bo.BlogEntryData;
+import com.madalla.bo.ContentData;
+import com.madalla.bo.IAlbumData;
+import com.madalla.bo.IBlogData;
+import com.madalla.bo.IImageData;
+import com.madalla.bo.IPageData;
+import com.madalla.bo.ImageData;
+import com.madalla.bo.PageData;
 
 /**
  * Main API for accessing Data Objects from the Content Repository.

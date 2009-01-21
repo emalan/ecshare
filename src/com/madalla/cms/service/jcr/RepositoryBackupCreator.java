@@ -1,6 +1,6 @@
 package com.madalla.cms.service.jcr;
 
-import com.madalla.cms.service.IRepositoryAdminService;
+import com.madalla.service.IRepositoryAdminService;
 
 public class RepositoryBackupCreator {
 

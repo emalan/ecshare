@@ -8,10 +8,10 @@ import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.authorization.strategies.page.SimplePageAuthorizationStrategy;
 import org.apache.wicket.protocol.http.WebApplication;
 
-import com.madalla.cms.service.IRepositoryAdminService;
-import com.madalla.cms.service.IRepositoryAdminServiceProvider;
-import com.madalla.cms.service.IRepositoryService;
-import com.madalla.cms.service.IRepositoryServiceProvider;
+import com.madalla.service.IRepositoryAdminService;
+import com.madalla.service.IRepositoryAdminServiceProvider;
+import com.madalla.service.IRepositoryService;
+import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.security.IAuthenticator;
 
 /**

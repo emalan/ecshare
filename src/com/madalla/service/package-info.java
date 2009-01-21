@@ -6,4 +6,4 @@
  * 
  * @author Eugene Malan
  */
-package com.madalla.cms.service;
+package com.madalla.service;

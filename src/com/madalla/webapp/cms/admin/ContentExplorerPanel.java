@@ -18,10 +18,10 @@ import org.apache.wicket.model.Model;
 import com.madalla.cms.jcr.model.ContentNode;
 import com.madalla.cms.jcr.model.IContentNode;
 import com.madalla.cms.jcr.model.tree.JcrTreeNode;
-import com.madalla.cms.service.IRepositoryAdminService;
-import com.madalla.cms.service.IRepositoryAdminServiceProvider;
-import com.madalla.cms.service.IRepositoryService;
-import com.madalla.cms.service.IRepositoryServiceProvider;
+import com.madalla.service.IRepositoryAdminService;
+import com.madalla.service.IRepositoryAdminServiceProvider;
+import com.madalla.service.IRepositoryService;
+import com.madalla.service.IRepositoryServiceProvider;
 
 class ContentExplorerPanel extends Panel {
 	private static final long serialVersionUID = 1L;

@@ -1,6 +1,6 @@
 package com.madalla.cms.service.ocm.template;
 
-import com.madalla.cms.bo.AbstractData;
+import com.madalla.bo.AbstractData;
 
 
 

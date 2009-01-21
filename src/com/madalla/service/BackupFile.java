@@ -1,4 +1,4 @@
-package com.madalla.cms.service;
+package com.madalla.service;
 
 import java.io.File;
 import java.io.FilenameFilter;

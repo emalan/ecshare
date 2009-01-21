@@ -6,8 +6,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 
-import com.madalla.cms.bo.ContentData;
-import com.madalla.cms.bo.IPageData;
+import com.madalla.bo.ContentData;
+import com.madalla.bo.IPageData;
 
 @Node
 public class Content extends ContentData implements Serializable{
