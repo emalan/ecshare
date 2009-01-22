@@ -34,6 +34,7 @@ abstract class AbstractRepositoryService{
 			throw new WicketRuntimeException("Exception getting Session from JcrTemplate", e);
 		}
 		ocm =  JcrOcmUtils.getObjectContentManager(session);
+		
     }
 
     public Node getApplicationNode(Session session) throws RepositoryException{

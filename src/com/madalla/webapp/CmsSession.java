@@ -4,6 +4,7 @@ import org.apache.wicket.Request;
 import org.apache.wicket.protocol.http.WebSession;
 
 import com.madalla.service.IRepositoryAdminServiceProvider;
+import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.cms.IContentAdmin;
 import com.madalla.webapp.security.IAuthenticator;
 
@@ -25,8 +26,8 @@ public abstract class CmsSession  extends WebSession implements IContentAdmin{
     }
     
     public boolean login(String userName, String password) {
-    	IRepositoryAdminServiceProvider adminService =((IRepositoryAdminServiceProvider)getApplication());
-        IAuthenticator authenticator = adminService.getRepositoryAdminService().getUserAuthenticator();
+    	IRepositoryServiceProvider adminService =((IRepositoryServiceProvider)getApplication());
+        IAuthenticator authenticator = adminService.getRepositoryService().getUserAuthenticator();
         if (authenticator.authenticate(userName, password)){
             setCmsAdminMode(true);
             return true;

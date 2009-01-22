@@ -46,6 +46,8 @@ import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.cms.service.ocm.template.ParentNodeCallback;
 import com.madalla.cms.service.ocm.template.RepositoryTemplate;
 import com.madalla.service.IRepositoryService;
+import com.madalla.util.security.SecurityUtils;
+import com.madalla.webapp.security.IAuthenticator;
 
 /**
  * Content Service Implementation for Jackrabbit JCR Content Repository
@@ -77,6 +79,11 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     public void init(){
     	super.init();
     	repositoryTemplate = new RepositoryTemplate(template, ocm, site);
+    	
+    	//temp code - remove once the admin create User code is done
+    	getNewUser("guest", SecurityUtils.encrypt("poipoi11"));
+    	getNewUser("admin", SecurityUtils.encrypt("madalla"));
+    	
     }
 
     public boolean isDeletableNode(final String path){
@@ -339,6 +346,29 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     private boolean isUserExists(String username){
     	return repositoryTemplate.checkExists(RepositoryType.USER, username);
     }
+    
+	public IAuthenticator getUserAuthenticator() {
+		return new IAuthenticator(){
+
+			public boolean authenticate(String user, char[] password) {
+				return authenticate(user, new String(password));
+			}
+
+			public boolean authenticate(String username, String password) {
+				log.debug("authenticate - username="+username);
+				if (isUserExists(username)){
+					log.debug("authenticate - user found.");
+					UserData user = getUser(username);
+					log.debug("authenticate - password="+password);
+					log.debug("authenticate - compare="+user.getPassword());
+					return user.getPassword().equals(password);
+				} else {
+					return false;
+				}
+			}
+			
+		};
+	}
 
     //************************************
     // *****  Utility methods

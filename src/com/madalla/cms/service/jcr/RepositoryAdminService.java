@@ -36,9 +36,6 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
     
     static final String EC_NODE_BACKUP = NS + "backup";
     
-	public IAuthenticator getUserAuthenticator() {
-		return new UserAuthenticator(getSite());
-	}
 	
     //TODO allow switching between different workspaces
     public String[] getAvailableWorkspaces(){

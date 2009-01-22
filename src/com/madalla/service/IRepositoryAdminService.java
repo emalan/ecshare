@@ -16,8 +16,6 @@ import com.madalla.webapp.security.IAuthenticator;
 public interface IRepositoryAdminService {
 
 	
-	IAuthenticator getUserAuthenticator();
-	
 	/**
 	 * All Content Data for a site/application
 	 * @return CMS data as a Tree for display

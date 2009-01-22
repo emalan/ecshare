@@ -19,6 +19,7 @@ import com.madalla.bo.IPageData;
 import com.madalla.bo.ImageData;
 import com.madalla.bo.PageData;
 import com.madalla.bo.security.UserData;
+import com.madalla.webapp.security.IAuthenticator;
 
 /**
  * Main API for accessing Data Objects from the Content Repository.
@@ -109,4 +110,6 @@ public interface IRepositoryService {
     UserData getUser(String username);
     
     void saveUser(UserData user);
+    
+    IAuthenticator getUserAuthenticator();
 }

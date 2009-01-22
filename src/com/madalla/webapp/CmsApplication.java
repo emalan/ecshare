@@ -50,26 +50,29 @@ public abstract class CmsApplication extends WebApplication implements IReposito
     }
     
     protected void setupSecurity(){
+    	
+    	//List to hold page authorizations
     	Collection <PageAuthorization> pageAuthorizations = new ArrayList<PageAuthorization>();
+    	
+    	//Admin Page authorization
     	PageAuthorization adminAuthorization = new PageAuthorization(ISecureAdminPage.class){
-
 			@Override
 			protected boolean isAuthorized() {
                 return ((CmsSession)Session.get()).isCmsAdminMode();
             }
-    		
     	};
     	pageAuthorizations.add(adminAuthorization);
-    	PageAuthorization loggedInAuthorization = new PageAuthorization(ISecureWebPage.class){
 
+    	//Logged in page authorization
+    	PageAuthorization loggedInAuthorization = new PageAuthorization(ISecureWebPage.class){
 			@Override
 			protected boolean isAuthorized() {
                 return ((CmsSession)Session.get()).isCmsAdminMode();
             }
-    		
     	};
     	pageAuthorizations.add(loggedInAuthorization);
     	
+    	//create Authorization strategy
     	AppAuthorizationStrategy authorizationStrategy = new AppAuthorizationStrategy(
                 getHomePage(), pageAuthorizations);
  
