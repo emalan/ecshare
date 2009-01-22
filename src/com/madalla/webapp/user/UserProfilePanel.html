@@ -1,0 +1,61 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+        div#profile {
+            clear:both; 
+            float:left;
+            margin: 15px 0 0 10px;
+        
+        }
+        span.divHeadings {clear:both; float: left; color: blue; font-size: large;}
+        
+        form div{clear: both; float: left; width: 100%;}
+        form div label {float: left;}
+        form div question {float: left;}
+        form div input {float: left;}
+        form div label {width:7em;}
+        form div .buttonwrapper {margin-left: 10em; float: left;}
+        form div .feedbackPanel {float: left;}
+        
+        
+    </style>
+</wicket:head>
+<body>
+    <wicket:panel>
+    
+	    <div id="control">
+    	    <span class="buttonwrapper">
+        	    <a href="#" class="bluebutton" wicket:id="returnLink"><span><wicket:message key="label.return">Label Contents</wicket:message></span></a>
+        	</span>
+    	</div>
+    	<div id="profile">
+    		<span class="divHeadings"><wicket:message key="heading.profile">Label Contents</wicket:message></span>
+			<form>
+                <div>
+                    <label><wicket:message key="label.email">Label Contents</wicket:message></label>
+                    <input class="inputText" type="text"/>
+                </div>
+                <div>
+                    <label><wicket:message key="label.password">Label Contents</wicket:message></label>
+                    <input class="inputText" type="text"/>
+                </div>
+                <div>
+                    <label><wicket:message key="label.question">Label Contents</wicket:message></label>
+                    <span class="question">What is it?</span>
+                </div>
+                <div>
+                    <label><wicket:message key="label.answer">Label Contents</wicket:message></label>
+                    <input class="inputText" type="text"/>
+                </div>
+                <div class="formButtons">
+                    <span class="buttonwrapper">
+                        <a class="orangebutton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
+                    </span>
+                    <span class="feedbackPanel"></span>
+                </div>
+            </form>        	
+		</div>
+        
+    </wicket:panel>
+</body>
+</html>
