@@ -32,6 +32,7 @@ import com.madalla.bo.IImageData;
 import com.madalla.bo.IPageData;
 import com.madalla.bo.ImageData;
 import com.madalla.bo.PageData;
+import com.madalla.bo.security.UserData;
 import com.madalla.cms.bo.impl.ocm.blog.Blog;
 import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
 import com.madalla.cms.bo.impl.ocm.image.Album;
@@ -328,6 +329,10 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 			}
 
     	});
+    }
+    
+    public void saveUser(UserData user){
+        saveDataObject(user);
     }
     
     private boolean isUserExists(String username){

@@ -18,6 +18,7 @@ import com.madalla.bo.IImageData;
 import com.madalla.bo.IPageData;
 import com.madalla.bo.ImageData;
 import com.madalla.bo.PageData;
+import com.madalla.bo.security.UserData;
 
 /**
  * Main API for accessing Data Objects from the Content Repository.
@@ -101,5 +102,11 @@ public interface IRepositoryService {
 	List<ImageData> getAlbumOriginalImages();
 
 	TreeModel getAlbumImagesAsTree(final AlbumData album);
-
+	
+	//User
+    UserData getNewUser(String username, String password);
+    
+    UserData getUser(String username, final String password);
+    
+    void saveUser(UserData user);
 }

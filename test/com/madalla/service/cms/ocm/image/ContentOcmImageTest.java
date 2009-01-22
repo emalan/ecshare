@@ -3,19 +3,13 @@ package com.madalla.service.cms.ocm.image;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springmodules.jcr.JcrCallback;
 
 import com.madalla.cms.bo.impl.ocm.image.Album;
 import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.image.ImageHelper;
-import com.madalla.cms.service.ocm.RepositoryInfo;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.service.cms.ocm.AbstractContentOcmTest;
 
@@ -24,9 +18,9 @@ public class ContentOcmImageTest extends AbstractContentOcmTest{
 	private Log log = LogFactory.getLog(this.getClass());
 	
 	public void testContentOcmImages() throws IOException{
-		String parentPath = getCreateParentNode();
+		String parentPath = getCreateParentNode(RepositoryType.ALBUM);
 		
-		String name = RandomStringUtils.randomAlphabetic(5)+"Album";
+		String name = getRandomName("Album");
 		String nodePath ;
 		{
 			//Test Album
@@ -73,17 +67,4 @@ public class ContentOcmImageTest extends AbstractContentOcmTest{
 		
 	}
 	
-	private String getCreateParentNode(){
-		return (String) template.execute(new JcrCallback(){
-
-			public Object doInJcr(Session session) throws IOException,
-					RepositoryException {
-				
-				Node blogs = RepositoryInfo.getGroupNode(session, NS_TEST, RepositoryType.ALBUM);
-				session.save();
-				return blogs.getPath();
-			}
-			
-		});
-	}
 }

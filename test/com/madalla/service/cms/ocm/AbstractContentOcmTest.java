@@ -1,5 +1,6 @@
 package com.madalla.service.cms.ocm;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,13 +8,17 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
+import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.AbstractSpringWicketTester;
 import com.madalla.cms.jcr.JcrUtils;
+import com.madalla.cms.service.ocm.RepositoryInfo;
+import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.cms.service.ocm.util.JcrOcmUtils;
 
 public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester {
@@ -58,6 +63,25 @@ public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester 
 	public void setTemplate(JcrTemplate template) {
 		this.template = template;
 	}
+	
+	protected String getRandomName(String post){
+	    return RandomStringUtils.randomAlphabetic(5)+post;
+	}
+	
+    protected String getCreateParentNode(final RepositoryType type){
+        return (String) template.execute(new JcrCallback(){
+
+            public Object doInJcr(Session session) throws IOException,
+                    RepositoryException {
+                
+                Node parent = RepositoryInfo.getGroupNode(session, NS_TEST, type);
+                session.save();
+                return parent.getPath();
+            }
+            
+        });
+    }
+
 
 
 }

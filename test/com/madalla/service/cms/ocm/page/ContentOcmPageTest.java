@@ -1,19 +1,10 @@
 package com.madalla.service.cms.ocm.page;
 
-import java.io.IOException;
-
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-
-import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springmodules.jcr.JcrCallback;
 
 import com.madalla.cms.bo.impl.ocm.page.Content;
 import com.madalla.cms.bo.impl.ocm.page.Page;
-import com.madalla.cms.service.ocm.RepositoryInfo;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.service.cms.ocm.AbstractContentOcmTest;
 
@@ -22,9 +13,9 @@ public class ContentOcmPageTest extends AbstractContentOcmTest{
     private Log log = LogFactory.getLog(this.getClass());
     
     public void testPageContent(){
-        String parentPath = getCreateParentNode();
+        String parentPath = getCreateParentNode(RepositoryType.PAGE);
         
-        String name = RandomStringUtils.randomAlphabetic(5)+"Page";
+        String name = getRandomName("Page");
         
         Page page = new Page(parentPath, name);
         ocm.insert(page);
@@ -41,18 +32,4 @@ public class ContentOcmPageTest extends AbstractContentOcmTest{
         
     }
 
-    
-    private String getCreateParentNode(){
-        return (String) template.execute(new JcrCallback(){
-
-            public Object doInJcr(Session session) throws IOException,
-                    RepositoryException {
-                
-                Node blogs = RepositoryInfo.getGroupNode(session, NS_TEST, RepositoryType.PAGE);
-                session.save();
-                return blogs.getPath();
-            }
-            
-        });
-    }
 }

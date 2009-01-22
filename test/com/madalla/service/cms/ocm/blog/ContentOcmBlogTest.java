@@ -1,24 +1,18 @@
 package com.madalla.service.cms.ocm.blog;
 
-import java.io.IOException;
 import java.util.Collection;
 
-import javax.jcr.Node;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 
-import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.ocm.query.Filter;
 import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.joda.time.DateTime;
-import org.springmodules.jcr.JcrCallback;
 
 import com.madalla.cms.bo.impl.ocm.blog.Blog;
 import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
-import com.madalla.cms.service.ocm.RepositoryInfo;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.service.cms.ocm.AbstractContentOcmTest;
 
@@ -28,9 +22,9 @@ public class ContentOcmBlogTest extends AbstractContentOcmTest {
 	
 	public void testOcmBlogEntry() throws RepositoryException{
 		
-		String blogsPath = getCreateParentNode();
+		String blogsPath = getCreateParentNode(RepositoryType.BLOG);
 		
-		String blogName = RandomStringUtils.randomAlphabetic(5)+"Blog";
+		String blogName = getRandomName("Blog");
 		String blogPath ;
 		{
 			//Create Blog
@@ -97,20 +91,6 @@ public class ContentOcmBlogTest extends AbstractContentOcmTest {
 		ocm.remove(blogPath);
 		ocm.save();
 		
-	}
-	
-	protected String getCreateParentNode(){
-		return (String) template.execute(new JcrCallback(){
-
-			public Object doInJcr(Session session) throws IOException,
-					RepositoryException {
-				
-				Node blogs = RepositoryInfo.getGroupNode(session, NS_TEST, RepositoryType.BLOG);
-				session.save();
-				return blogs.getPath();
-			}
-			
-		});
 	}
 
 }

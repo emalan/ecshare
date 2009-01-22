@@ -25,6 +25,7 @@ import com.madalla.bo.IBlogEntryData;
 import com.madalla.bo.IImageData;
 import com.madalla.bo.IPageData;
 import com.madalla.bo.ImageData;
+import com.madalla.bo.security.UserData;
 import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.page.Content;
 import com.madalla.service.BackupFile;
@@ -176,6 +177,12 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	assertNotNull(testEntry);
     	
     	contentService.deleteNode(path);
+    }
+    
+    public void testUserCreate(){
+        String username = "test1User";
+        String password = "password";
+        UserData user = contentService.getNewUser(username, password);
     }
     
     public void setRepositoryService(IRepositoryService contentService) {
