@@ -183,6 +183,14 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
         String username = "test1User";
         String password = "password";
         UserData user = contentService.getNewUser(username, password);
+        
+        UserData test = contentService.getUser(username);
+        assertNotNull(test);
+        
+        UserData nouser = contentService.getNewUser("nouser","pwd");
+        assertNull(nouser);
+        
+        contentService.deleteNode(test.getId());
     }
     
     public void setRepositoryService(IRepositoryService contentService) {

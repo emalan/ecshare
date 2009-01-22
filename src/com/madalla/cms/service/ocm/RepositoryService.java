@@ -311,21 +311,22 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     // ******   Users    ******
     
      
-    public User getNewUser(String username, String password){
+    public UserData getNewUser(String username, String password){
     	if (isUserExists(username)){
     		return null;
     	}
-    	return getUser(username, password);
+    	UserData user = getUser(username);
+    	user.setPassword(password);
+    	saveUser(user);
+    	return user;
     }
     
-    public User getUser(String username, final String password){
+    public UserData getUser(String username){
     	return (User) repositoryTemplate.executeParent(RepositoryType.USER, username, new ParentNodeCallback(){
 
 			@Override
 			public AbstractData createNew(String parentPath, String name) {
-				User user = new User(parentPath, name);
-				user.setPassword(password);
-				return user;
+				return new User(parentPath, name);
 			}
 
     	});

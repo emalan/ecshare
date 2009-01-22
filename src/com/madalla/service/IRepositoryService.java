@@ -106,7 +106,7 @@ public interface IRepositoryService {
 	//User
     UserData getNewUser(String username, String password);
     
-    UserData getUser(String username, final String password);
+    UserData getUser(String username);
     
     void saveUser(UserData user);
 }

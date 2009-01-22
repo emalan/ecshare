@@ -13,7 +13,6 @@ public class User extends UserData {
 
 	@Field(path=true) private String id;
 	@Field private String password;
-	@Field private String username;
 	
 	public User(){
 		
@@ -39,16 +38,8 @@ public class User extends UserData {
 		return password;
 	}
 
-	public String getUsername() {
-		return username;
-	}
-	
 	public void setPassword(String password){
 		this.password = password;
-	}
-	
-	public void setUsername(String username){
-		this.username = username;
 	}
 
 }
