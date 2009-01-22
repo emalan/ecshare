@@ -1,18 +1,21 @@
 package com.madalla.webapp;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Session;
 import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.authorization.strategies.page.SimplePageAuthorizationStrategy;
 import org.apache.wicket.protocol.http.WebApplication;
 
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
-import com.madalla.webapp.security.IAuthenticator;
+import com.madalla.webapp.authorization.AppAuthorizationStrategy;
+import com.madalla.webapp.authorization.PageAuthorization;
 
 /**
  * Abstract Wicket Application class that needs to extended to enable usage 
@@ -47,12 +50,28 @@ public abstract class CmsApplication extends WebApplication implements IReposito
     }
     
     protected void setupSecurity(){
-        SimplePageAuthorizationStrategy authorizationStrategy = new SimplePageAuthorizationStrategy(
-                ISecureWebPage.class, getHomePage()) {
-            protected boolean isAuthorized() {
+    	Collection <PageAuthorization> pageAuthorizations = new ArrayList<PageAuthorization>();
+    	PageAuthorization adminAuthorization = new PageAuthorization(ISecureAdminPage.class){
+
+			@Override
+			protected boolean isAuthorized() {
                 return ((CmsSession)Session.get()).isCmsAdminMode();
             }
-        };
+    		
+    	};
+    	pageAuthorizations.add(adminAuthorization);
+    	PageAuthorization loggedInAuthorization = new PageAuthorization(ISecureWebPage.class){
+
+			@Override
+			protected boolean isAuthorized() {
+                return ((CmsSession)Session.get()).isCmsAdminMode();
+            }
+    		
+    	};
+    	pageAuthorizations.add(loggedInAuthorization);
+    	
+    	AppAuthorizationStrategy authorizationStrategy = new AppAuthorizationStrategy(
+                getHomePage(), pageAuthorizations);
  
         getSecuritySettings().setAuthorizationStrategy(authorizationStrategy);
     }
