@@ -148,9 +148,9 @@ public class EmailFormPanel extends Panel {
 				log.debug("Ajax onsubmit called.");
 				target.addComponent(feedbackPanel);
 				if (sendEmail()){
-					form.info("Email sent successfully");
+					form.info(getString("message.success"));
 	            } else {
-	            	form.error("Failed to send email!");
+	            	form.error(getString("message.fail"));
 	            }
 				//setResponsePage(this.findPage());
 			}

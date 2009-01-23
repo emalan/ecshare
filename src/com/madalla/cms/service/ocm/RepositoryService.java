@@ -80,9 +80,9 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	super.init();
     	repositoryTemplate = new RepositoryTemplate(template, ocm, site);
     	
-    	//temp code - remove once the admin create User code is done
-    	getNewUser("guest", SecurityUtils.encrypt("poipoi11"));
-    	getNewUser("admin", SecurityUtils.encrypt("madalla"));
+    	//Create default Users if they don't exist yet
+    	getNewUser("guest", SecurityUtils.encrypt("password"));
+    	getNewUser("admin", SecurityUtils.encrypt("password"));
     	
     }
 
