@@ -12,6 +12,7 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
@@ -19,6 +20,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.value.ValueMap;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import com.madalla.bo.security.UserData;
@@ -26,6 +28,7 @@ import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
+import com.madalla.wicket.form.ValidationStyleBehaviour;
 import com.madalla.wicket.form.ValidationStyleRequiredTextField;
 
 public class UserProfilePanel extends Panel{
@@ -34,6 +37,7 @@ public class UserProfilePanel extends Panel{
 	private static final Log log = LogFactory.getLog(UserProfilePanel.class);
 	
 	private UserData user;
+	private final ValueMap properties = new ValueMap();
 	
     public class ProfileForm extends Form {
         private static final long serialVersionUID = -2684823497770522924L;
@@ -48,6 +52,30 @@ public class UserProfilePanel extends Panel{
             TextField email = new ValidationStyleRequiredTextField("email",new PropertyModel(user,"email"), emailFeedback);
             email.add(EmailAddressValidator.getInstance());
             add(email);
+            
+            FeedbackPanel passwordFeedback = new FeedbackPanel("passwordFeedback");
+            add(passwordFeedback);
+            
+            TextField existingPassword = new PasswordTextField("existingPassword", 
+            		new PropertyModel(properties,"existingPassword"));
+            existingPassword.setOutputMarkupId(true);
+            existingPassword.add(new ValidationStyleBehaviour());
+            existingPassword.setRequired(false);
+            add(existingPassword);
+            
+            TextField newPassword = new PasswordTextField("newPassword",
+            		new PropertyModel(properties,"newPassword"));
+            newPassword.setOutputMarkupId(true);
+            newPassword.add(new ValidationStyleBehaviour());
+            newPassword.setRequired(false);
+            add(newPassword);
+            
+            TextField confirmPassword = new PasswordTextField("confirmPassword",
+            		new PropertyModel(properties,"confirmPassword"));
+            confirmPassword.setOutputMarkupId(true);
+            confirmPassword.add(new ValidationStyleBehaviour());
+            confirmPassword.setRequired(false);
+            add(confirmPassword);
             
         }
     }

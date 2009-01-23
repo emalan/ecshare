@@ -40,15 +40,18 @@
                	    <legend><wicket:message key="label.passwordChange">Label Contents</wicket:message></legend>
                 	<div>    
                     	<label><wicket:message key="label.passwordExisting">Label Contents</wicket:message></label>
-                    	<input class="inputText" type="text"/>
+                    	<input class="inputText" type="password" wicket:id="existingPassword"/>
                     </div>
                     <div>    
                     	<label><wicket:message key="label.passwordNew">Label Contents</wicket:message></label>
-                    	<input class="inputText" type="text"/>
+                    	<input class="inputText" type="password" wicket:id="newPassword"/>
                     </div>
                     <div>    
                     	<label><wicket:message key="label.passwordConfirm">Label Contents</wicket:message></label>
-                    	<input class="inputText" type="text"/>
+                    	<input class="inputText" type="password" wicket:id="confirmPassword"/>
+                    </div>
+                    <div>
+                    	<span class="feedbackPanel" wicket:id="passwordFeedback"></span>
                     </div>
                 </fieldset>
                 <div class="formButtons">

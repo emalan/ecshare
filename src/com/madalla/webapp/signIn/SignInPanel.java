@@ -18,6 +18,7 @@ package com.madalla.webapp.signIn;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -169,8 +170,10 @@ public abstract class SignInPanel extends Panel
 			
 		};
 		submit.setEnabled(true);
+
 		submit.setVisibilityAllowed(true);
 		form.add(submit);
+		form.add(new AttributeModifier("onSubmit", true, new Model("document.getElementById('" + submit.getMarkupId() + "').onclick();return false;")));
 		
 	}
 
