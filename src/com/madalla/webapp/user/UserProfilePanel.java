@@ -81,6 +81,7 @@ public class UserProfilePanel extends Panel{
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
 				log.debug("Ajax onsubmit called.");
 				target.addComponent(feedbackPanel);
+				getRepositoryService().saveUser(user);
 				form.info(getString("message.success"));
 				//setResponsePage(this.findPage());
 			}
