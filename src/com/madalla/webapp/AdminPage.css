@@ -50,6 +50,21 @@ a:visited { color:#551a8b;}
 a:hover{color:#000099;}
 a:active { color:#ff0000; }
 
+/* =Headings
+-----------------------------------------------------------------------------*/
+div.adminSection {
+    clear:both; 
+    float:left;
+    margin: 15px 0 0 10px;
+}
+
+span.adminHeading {
+	clear:both; 
+	float: left; 
+	color: blue; 
+	font-size: large;
+}
+
 /* =Form
 -----------------------------------------------------------------------------*/
 
@@ -78,6 +93,12 @@ form input {
     border: 1px solid #8E8E8E;
 }
 
+form div .buttonwrapper {
+	float: left;
+	margin-bottom:15px;
+    margin-top:15px;
+}
+
 .button {
     border-style:solid; 
     border-width: 1px 4px 4px 1px; 
@@ -100,13 +121,17 @@ textarea {
   font-family: verdana,arial,helvetica,sans; font-size: 11px;
 }
 
+form div .feedbackPanel {
+	float: left;
+}
+
 .feedbackPanel ul li {
     font-style:normal;
     list-style-image:none;
     list-style-position: inside;
     list-style-type: none;
     padding-left:1em;
-    padding-top:7px;
+    padding-top:10px;
     text-indent:0pt;
     float: left;
     clear: both;

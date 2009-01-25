@@ -160,9 +160,9 @@ public class Panels {
 		if (StringUtils.isEmpty(id) || params == null){
 			error("UserProfilePanel - All parameters need to be supplied.");
 		}
-		return new UserProfilePanel(id, getReturnPage(params, "UserLoginPanel"));
+		return new UserProfilePanel(id, getReturnPage(params, "UserProfilePanel"));
 	}
-
+	
 	/*  Utility methods */
 	private static void error(String message){
 		throw new WicketRuntimeException(message);

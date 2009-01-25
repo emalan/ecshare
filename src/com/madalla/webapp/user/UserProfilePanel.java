@@ -29,7 +29,9 @@ import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
+import com.madalla.wicket.form.AjaxValidationBehaviour;
 import com.madalla.wicket.form.ValidationStyleBehaviour;
+import com.madalla.wicket.form.ValidationStylePasswordField;
 import com.madalla.wicket.form.ValidationStyleRequiredTextField;
 
 public class UserProfilePanel extends Panel{
@@ -38,7 +40,39 @@ public class UserProfilePanel extends Panel{
 	private static final Log log = LogFactory.getLog(UserProfilePanel.class);
 	
 	private UserData user;
-	private final ValueMap properties = new ValueMap();
+	
+    public class PasswordForm extends Form {
+        
+        private static final long serialVersionUID = 9033980585192727266L;
+        private final ValueMap properties = new ValueMap();
+        
+        public PasswordForm(String id) {
+            super(id);
+            
+            FeedbackPanel existingFeedback = new FeedbackPanel("existingFeedback");
+            add(existingFeedback);
+            TextField existingPassword = new PasswordTextField("existingPassword", new PropertyModel(properties,"existingPassword"));
+            existingPassword.setOutputMarkupId(true);
+            existingPassword.add(new ValidationStyleBehaviour());
+            add(existingPassword);
+
+            TextField newPassword = new PasswordTextField("newPassword",
+                    new PropertyModel(properties,"newPassword"));
+            newPassword.setOutputMarkupId(true);
+            newPassword.add(new ValidationStyleBehaviour());
+            add(newPassword);
+            
+            TextField confirmPassword = new PasswordTextField("confirmPassword",
+                    new PropertyModel(properties,"confirmPassword"));
+            confirmPassword.setOutputMarkupId(true);
+            confirmPassword.add(new ValidationStyleBehaviour());
+            add(confirmPassword);
+            
+            add(new EqualInputValidator(newPassword, confirmPassword));
+            
+        }
+    }
+
 	
     public class ProfileForm extends Form {
         private static final long serialVersionUID = -2684823497770522924L;
@@ -54,31 +88,8 @@ public class UserProfilePanel extends Panel{
             email.add(EmailAddressValidator.getInstance());
             add(email);
             
-            FeedbackPanel passwordFeedback = new FeedbackPanel("passwordFeedback");
-            add(passwordFeedback);
-            
-            TextField existingPassword = new PasswordTextField("existingPassword", 
-            		new PropertyModel(properties,"existingPassword"));
-            existingPassword.setOutputMarkupId(true);
-            existingPassword.add(new ValidationStyleBehaviour());
-            existingPassword.setRequired(false);
-            add(existingPassword);
-            
-            TextField newPassword = new PasswordTextField("newPassword",
-            		new PropertyModel(properties,"newPassword"));
-            newPassword.setOutputMarkupId(true);
-            newPassword.add(new ValidationStyleBehaviour());
-            newPassword.setRequired(false);
-            add(newPassword);
-            
-            TextField confirmPassword = new PasswordTextField("confirmPassword",
-            		new PropertyModel(properties,"confirmPassword"));
-            confirmPassword.setOutputMarkupId(true);
-            confirmPassword.add(new ValidationStyleBehaviour());
-            confirmPassword.setRequired(false);
-            add(confirmPassword);
-            
-            add(new EqualInputValidator(newPassword, confirmPassword));
+            add(new TextField("firstName", new PropertyModel(user,"firstName")));
+            add(new TextField("lastName", new PropertyModel(user,"lastName")));
             
         }
     }
@@ -90,28 +101,87 @@ public class UserProfilePanel extends Panel{
 		add(HeaderContributor.forJavaScript(Scriptaculous.PROTOTYPE));
 		
 		add(new PageLink("returnLink", returnPage));
-		
-		//Heading
+
+		//get logged in User Data
 		String username = ((CmsSession)getSession()).getUsername();
-		user = getRepositoryService().getUser(username);
-		add(new Label("heading",getString("heading.profile", new Model(user) )));
+		log.debug("Retrieved User name from Session. username="+username);
+        user = getRepositoryService().getUser(username);
+        log.debug(user);
+
+        //****************
+        //Password Section
+        
+        //Form
+        Form passwordForm = new PasswordForm("passwordForm");
+        passwordForm.setOutputMarkupId(true);
+        add(passwordForm);
+        
+        final FeedbackPanel passwordFeedback = new ComponentFeedbackPanel("passwordFeedback",passwordForm);
+        passwordFeedback.setOutputMarkupId(true);
+        passwordForm.add(passwordFeedback);
+        
+        AjaxButton passwordSubmit = new IndicatingAjaxButton("passwordSubmit", passwordForm){
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form form) {
+                log.debug("Ajax onsubmit called.");
+                target.addComponent(passwordFeedback);
+                getRepositoryService().saveUser(user);
+                form.info(getString("message.success"));
+                //setResponsePage(this.findPage());
+            }
+            
+            @Override
+            protected void onError(final AjaxRequestTarget target, Form form) {
+                log.debug("Ajax onerror called");
+                target.addComponent(passwordFeedback);
+                form.visitChildren(new Component.IVisitor() {
+                    public Object component(Component component) {
+                        log.debug("formVisitor="+component);
+                        if (component instanceof FormComponent) {
+                            FormComponent formComponent = (FormComponent) component;
+                            if (!formComponent.isValid()){
+                                target.addComponent(formComponent);
+                                log.debug("Component is invalid. Component MarkupId="+formComponent.getMarkupId()+". Message is " +formComponent.getFeedbackMessage().getMessage());
+                            }
+                        } else if (component instanceof ComponentFeedbackPanel){
+                            log.debug("Ajax onerror - adding feedback to target.");
+                            ComponentFeedbackPanel feedback = (ComponentFeedbackPanel) component;
+                            target.addComponent(feedback);
+                        }
+                        return null;
+                    }
+                });
+
+            }
+        };
+        passwordForm.add(passwordSubmit);
+
+        
+        
+        //****************
+        //Profile Section
+        
+		//Heading
+		add(new Label("profileHeading",getString("heading.profile", new Model(user) )));
 		
 		//Form
-		Form form = new ProfileForm("profileForm");
-		form.setOutputMarkupId(true);
-		add(form);
+		Form profileForm = new ProfileForm("profileForm");
+		profileForm.setOutputMarkupId(true);
+		add(profileForm);
 		
-		final FeedbackPanel feedbackPanel = new ComponentFeedbackPanel("feedback",form);
-		feedbackPanel.setOutputMarkupId(true);
-		form.add(feedbackPanel);
+		final FeedbackPanel profileFeedback = new ComponentFeedbackPanel("profileFeedback",profileForm);
+		profileFeedback.setOutputMarkupId(true);
+		profileForm.add(profileFeedback);
 		
-        AjaxButton submitButton = new IndicatingAjaxButton("submit", form){
+        AjaxButton submitButton = new IndicatingAjaxButton("profileSubmit", profileForm){
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
 				log.debug("Ajax onsubmit called.");
-				target.addComponent(feedbackPanel);
+				target.addComponent(profileFeedback);
 				getRepositoryService().saveUser(user);
 				form.info(getString("message.success"));
 				//setResponsePage(this.findPage());
@@ -120,7 +190,7 @@ public class UserProfilePanel extends Panel{
 			@Override
 			protected void onError(final AjaxRequestTarget target, Form form) {
 				log.debug("Ajax onerror called");
-				target.addComponent(feedbackPanel);
+				target.addComponent(profileFeedback);
 	           	form.visitChildren(new Component.IVisitor() {
 					public Object component(Component component) {
 	           			log.debug("formVisitor="+component);
@@ -141,7 +211,7 @@ public class UserProfilePanel extends Panel{
 
 			}
         };
-        form.add(submitButton);
+        profileForm.add(submitButton);
 		
 		
 	}
