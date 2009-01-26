@@ -27,11 +27,11 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import com.madalla.bo.security.UserData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
-import com.madalla.wicket.form.AjaxValidationBehaviour;
+import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.wicket.form.ValidationStyleBehaviour;
-import com.madalla.wicket.form.ValidationStylePasswordField;
 import com.madalla.wicket.form.ValidationStyleRequiredTextField;
 
 public class UserProfilePanel extends Panel{
@@ -40,16 +40,18 @@ public class UserProfilePanel extends Panel{
 	private static final Log log = LogFactory.getLog(UserProfilePanel.class);
 	
 	private UserData user;
+	//TODO replace ValueMap with Secure Class to hold passwords
+	private final ValueMap properties = new ValueMap();
 	
     public class PasswordForm extends Form {
         
         private static final long serialVersionUID = 9033980585192727266L;
-        private final ValueMap properties = new ValueMap();
         
         public PasswordForm(String id) {
             super(id);
             
             FeedbackPanel existingFeedback = new FeedbackPanel("existingFeedback");
+            existingFeedback.setOutputMarkupId(true);
             add(existingFeedback);
             TextField existingPassword = new PasswordTextField("existingPassword", new PropertyModel(properties,"existingPassword"));
             existingPassword.setOutputMarkupId(true);
@@ -124,11 +126,34 @@ public class UserProfilePanel extends Panel{
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form form) {
+            protected void onSubmit(final AjaxRequestTarget target, Form form) {
                 log.debug("Ajax onsubmit called.");
+                form.visitChildren(new Component.IVisitor() {
+                    public Object component(Component component){
+                        log.debug("formVisitor="+component);
+                        if (component instanceof FormComponent) {
+                            FormComponent formComponent = (FormComponent) component;
+                            if (formComponent.isValid()){
+                                target.addComponent(formComponent);
+                                log.debug("Component is valid. Component MarkupId="+formComponent.getMarkupId()+". Message is " +formComponent.getFeedbackMessage().getMessage());
+                            }
+                        } else if (component instanceof ComponentFeedbackPanel){
+                            log.debug("Ajax submit - adding feedback to target.");
+                            ComponentFeedbackPanel feedback = (ComponentFeedbackPanel) component;
+                            target.addComponent(feedback);
+                        }
+                        return null;
+                    }
+                });
                 target.addComponent(passwordFeedback);
-                getRepositoryService().saveUser(user);
-                form.info(getString("message.success"));
+                IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
+                if(authenticator.authenticate(user.getName(), SecurityUtils.encrypt(properties.getString("existingPassword")))){
+                    user.setPassword(SecurityUtils.encrypt(properties.getString("newPassword")));
+                    getRepositoryService().saveUser(user);
+                    form.info(getString("message.success"));
+                } else {
+                    form.error(getString("message.fail"));
+                }
                 //setResponsePage(this.findPage());
             }
             

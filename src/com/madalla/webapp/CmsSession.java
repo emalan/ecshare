@@ -30,8 +30,8 @@ public abstract class CmsSession  extends WebSession implements IContentAdmin{
     }
     
     public boolean login(String userName, String password) {
-    	IRepositoryServiceProvider adminService =((IRepositoryServiceProvider)getApplication());
-        IAuthenticator authenticator = adminService.getRepositoryService().getUserAuthenticator();
+    	IRepositoryServiceProvider repositoryService =((IRepositoryServiceProvider)getApplication());
+        IAuthenticator authenticator = repositoryService.getRepositoryService().getUserAuthenticator();
         if (authenticator.authenticate(userName, password)){
         	cmsAdminMode = true;
         	username = userName;
