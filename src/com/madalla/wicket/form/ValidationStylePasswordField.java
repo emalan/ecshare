@@ -5,16 +5,14 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 
-public class ValidationStylePasswordField extends PasswordTextField {
+public class ValidationStylePasswordField extends PasswordTextField implements ValidationStyleComponent{
+	private static final long serialVersionUID = 3384438368054434609L;
 
-    private static final long serialVersionUID = -1566218353018783473L;
-
-    public ValidationStylePasswordField(final String id, final IModel model, FeedbackPanel feedback){
+	public ValidationStylePasswordField(final String id, final IModel model, FeedbackPanel feedback){
         super(id, model);
         feedback.setOutputMarkupId(true);
         feedback.setFilter(new ComponentFeedbackMessageFilter(this));
         add(new ValidationStyleBehaviour());
-        add(new AjaxValidationBehaviour(feedback));
-        
+        setOutputMarkupId(true);
     }
 }

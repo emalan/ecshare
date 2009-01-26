@@ -38,7 +38,7 @@ import com.madalla.webapp.blog.BlogEntryView;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 import com.madalla.wicket.form.AjaxValidationBehaviour;
 import com.madalla.wicket.form.ValidationStyleBehaviour;
-import com.madalla.wicket.form.ValidationStyleRequiredTextField;
+import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 
 public class BlogEntryPanel extends Panel {
     private static final long serialVersionUID = 1L;
@@ -143,7 +143,7 @@ public class BlogEntryPanel extends Panel {
             //Title
             FeedbackPanel titleFeedback = new FeedbackPanel("titleFeedback");
             add(titleFeedback);
-            TextField title = new ValidationStyleRequiredTextField("title",new PropertyModel(blogEntry,"title"), titleFeedback);
+            TextField title = new AjaxValidationStyleRequiredTextField("title",new PropertyModel(blogEntry,"title"), titleFeedback);
             title.setLabel(new Model(BlogEntryPanel.this.getString("label.title")));
             add(title);
             

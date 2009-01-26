@@ -36,7 +36,7 @@ import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
 import com.madalla.util.captcha.CaptchaUtils;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
-import com.madalla.wicket.form.ValidationStyleRequiredTextField;
+import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 
 public class EmailFormPanel extends Panel {
     private static final long serialVersionUID = -1643728343421366820L;
@@ -64,11 +64,11 @@ public class EmailFormPanel extends Panel {
     
             FeedbackPanel nameFeedback = new FeedbackPanel("nameFeedback");
             add(nameFeedback);
-            add(new ValidationStyleRequiredTextField("name",new PropertyModel(properties,"name"), nameFeedback));
+            add(new AjaxValidationStyleRequiredTextField("name",new PropertyModel(properties,"name"), nameFeedback));
             
             FeedbackPanel emailFeedback = new FeedbackPanel("emailFeedback");
             add(emailFeedback);
-            TextField email = new ValidationStyleRequiredTextField("email",new PropertyModel(properties,"email"), emailFeedback);
+            TextField email = new AjaxValidationStyleRequiredTextField("email",new PropertyModel(properties,"email"), emailFeedback);
             email.add(EmailAddressValidator.getInstance());
             add(email);
             
@@ -79,7 +79,7 @@ public class EmailFormPanel extends Panel {
             
             FeedbackPanel passwordFeedback = new FeedbackPanel("passwordFeedback");
             add(passwordFeedback);
-            RequiredTextField password = new ValidationStyleRequiredTextField("password", new PropertyModel(properties, "password"), passwordFeedback){
+            RequiredTextField password = new AjaxValidationStyleRequiredTextField("password", new PropertyModel(properties, "password"), passwordFeedback){
 				private static final long serialVersionUID = -108228073455105029L;
 				protected final void onComponentTag(final ComponentTag tag) {
                         super.onComponentTag(tag);

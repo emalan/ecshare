@@ -3,16 +3,12 @@ package com.madalla.webapp.user;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.HeaderContributor;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualInputValidator;
 import org.apache.wicket.markup.html.link.PageLink;
@@ -31,8 +27,9 @@ import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.webapp.security.IAuthenticator;
-import com.madalla.wicket.form.ValidationStyleBehaviour;
-import com.madalla.wicket.form.ValidationStyleRequiredTextField;
+import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
+import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
+import com.madalla.wicket.form.ValidationStylePasswordField;
 
 public class UserProfilePanel extends Panel{
 
@@ -51,25 +48,23 @@ public class UserProfilePanel extends Panel{
             super(id);
             
             FeedbackPanel existingFeedback = new FeedbackPanel("existingFeedback");
-            existingFeedback.setOutputMarkupId(true);
             add(existingFeedback);
-            TextField existingPassword = new PasswordTextField("existingPassword", new PropertyModel(properties,"existingPassword"));
-            existingPassword.setOutputMarkupId(true);
-            existingPassword.add(new ValidationStyleBehaviour());
-            add(existingPassword);
-
-            TextField newPassword = new PasswordTextField("newPassword",
-                    new PropertyModel(properties,"newPassword"));
-            newPassword.setOutputMarkupId(true);
-            newPassword.add(new ValidationStyleBehaviour());
+            add(new ValidationStylePasswordField("existingPassword", 
+            		new PropertyModel(properties,"existingPassword"), existingFeedback));
+            
+            FeedbackPanel newFeedback = new FeedbackPanel("newFeedback");
+            add(newFeedback);
+            TextField newPassword = new ValidationStylePasswordField("newPassword",
+                    new PropertyModel(properties,"newPassword"), newFeedback);
             add(newPassword);
             
-            TextField confirmPassword = new PasswordTextField("confirmPassword",
-                    new PropertyModel(properties,"confirmPassword"));
-            confirmPassword.setOutputMarkupId(true);
-            confirmPassword.add(new ValidationStyleBehaviour());
+            FeedbackPanel confirmFeedback = new FeedbackPanel("confirmFeedback");
+            add(confirmFeedback);
+            TextField confirmPassword = new ValidationStylePasswordField("confirmPassword", 
+            		new PropertyModel(properties,"confirmPassword"), confirmFeedback);
             add(confirmPassword);
             
+            //Validate that new and confirm are equal
             add(new EqualInputValidator(newPassword, confirmPassword));
             
         }
@@ -79,20 +74,17 @@ public class UserProfilePanel extends Panel{
     public class ProfileForm extends Form {
         private static final long serialVersionUID = -2684823497770522924L;
         
-        //private final CaptchaImageResource captchaImageResource;
-        
         public ProfileForm(String id) {
             super(id);
             
             FeedbackPanel emailFeedback = new FeedbackPanel("emailFeedback");
             add(emailFeedback);
-            TextField email = new ValidationStyleRequiredTextField("email",new PropertyModel(user,"email"), emailFeedback);
+            TextField email = new AjaxValidationStyleRequiredTextField("email",new PropertyModel(user,"email"), emailFeedback);
             email.add(EmailAddressValidator.getInstance());
             add(email);
             
             add(new TextField("firstName", new PropertyModel(user,"firstName")));
             add(new TextField("lastName", new PropertyModel(user,"lastName")));
-            
         }
     }
 
@@ -122,29 +114,13 @@ public class UserProfilePanel extends Panel{
         passwordFeedback.setOutputMarkupId(true);
         passwordForm.add(passwordFeedback);
         
-        AjaxButton passwordSubmit = new IndicatingAjaxButton("passwordSubmit", passwordForm){
-            private static final long serialVersionUID = 1L;
-
+        AjaxButton passwordSubmit = new AjaxValidationStyleSubmitButton("passwordSubmit", passwordForm){
+        	private static final long serialVersionUID = 1L;
+        	
             @Override
-            protected void onSubmit(final AjaxRequestTarget target, Form form) {
-                log.debug("Ajax onsubmit called.");
-                form.visitChildren(new Component.IVisitor() {
-                    public Object component(Component component){
-                        log.debug("formVisitor="+component);
-                        if (component instanceof FormComponent) {
-                            FormComponent formComponent = (FormComponent) component;
-                            if (formComponent.isValid()){
-                                target.addComponent(formComponent);
-                            }
-                        } else if (component instanceof ComponentFeedbackPanel){
-                            log.debug("Ajax submit - adding feedback to target.");
-                            ComponentFeedbackPanel feedback = (ComponentFeedbackPanel) component;
-                            target.addComponent(feedback);
-                        }
-                        return null;
-                    }
-                });
-                target.addComponent(passwordFeedback);
+			protected void onSubmit(AjaxRequestTarget target, Form form) {
+				super.onSubmit(target, form);
+				target.addComponent(passwordFeedback);
                 IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
                 if(authenticator.authenticate(user.getName(), SecurityUtils.encrypt(properties.getString("existingPassword")))){
                     user.setPassword(SecurityUtils.encrypt(properties.getString("newPassword")));
@@ -153,31 +129,12 @@ public class UserProfilePanel extends Panel{
                 } else {
                     form.error(getString("message.fail"));
                 }
-                //setResponsePage(this.findPage());
-            }
-            
+			}
+
             @Override
             protected void onError(final AjaxRequestTarget target, Form form) {
-                log.debug("Ajax onerror called");
-                target.addComponent(passwordFeedback);
-                form.visitChildren(new Component.IVisitor() {
-                    public Object component(Component component) {
-                        log.debug("formVisitor="+component);
-                        if (component instanceof FormComponent) {
-                            FormComponent formComponent = (FormComponent) component;
-                            if (!formComponent.isValid()){
-                                target.addComponent(formComponent);
-                                log.debug("Component is invalid. Component MarkupId="+formComponent.getMarkupId()+". Message is " +formComponent.getFeedbackMessage().getMessage());
-                            }
-                        } else if (component instanceof ComponentFeedbackPanel){
-                            log.debug("Ajax onerror - adding feedback to target.");
-                            ComponentFeedbackPanel feedback = (ComponentFeedbackPanel) component;
-                            target.addComponent(feedback);
-                        }
-                        return null;
-                    }
-                });
-
+            	super.onError(target, form);
+            	target.addComponent(passwordFeedback);
             }
         };
         passwordForm.add(passwordSubmit);
@@ -199,13 +156,14 @@ public class UserProfilePanel extends Panel{
 		profileFeedback.setOutputMarkupId(true);
 		profileForm.add(profileFeedback);
 		
-        AjaxButton submitButton = new IndicatingAjaxButton("profileSubmit", profileForm){
+        AjaxButton submitButton = new AjaxValidationStyleSubmitButton("profileSubmit", profileForm){
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
-				log.debug("Ajax onsubmit called.");
+				super.onSubmit(target, form);
 				target.addComponent(profileFeedback);
+
 				getRepositoryService().saveUser(user);
 				form.info(getString("message.success"));
 				//setResponsePage(this.findPage());
@@ -213,25 +171,8 @@ public class UserProfilePanel extends Panel{
 			
 			@Override
 			protected void onError(final AjaxRequestTarget target, Form form) {
-				log.debug("Ajax onerror called");
+				super.onError(target, form);
 				target.addComponent(profileFeedback);
-	           	form.visitChildren(new Component.IVisitor() {
-					public Object component(Component component) {
-	           			log.debug("formVisitor="+component);
-	           			if (component instanceof FormComponent) {
-	           				FormComponent formComponent = (FormComponent) component;
-	           				if (!formComponent.isValid()){
-	           					target.addComponent(formComponent);
-	           					log.debug("Component is invalid. Component MarkupId="+formComponent.getMarkupId()+". Message is " +formComponent.getFeedbackMessage().getMessage());
-	           				}
-	           			} else if (component instanceof ComponentFeedbackPanel){
-	           				log.debug("Ajax onerror - adding feedback to target.");
-	           				ComponentFeedbackPanel feedback = (ComponentFeedbackPanel) component;
-	           				target.addComponent(feedback);
-	           			}
-	           			return null;
-					}
-	           	});
 
 			}
         };
