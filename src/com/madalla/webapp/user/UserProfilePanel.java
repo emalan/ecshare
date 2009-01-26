@@ -135,7 +135,6 @@ public class UserProfilePanel extends Panel{
                             FormComponent formComponent = (FormComponent) component;
                             if (formComponent.isValid()){
                                 target.addComponent(formComponent);
-                                log.debug("Component is valid. Component MarkupId="+formComponent.getMarkupId()+". Message is " +formComponent.getFeedbackMessage().getMessage());
                             }
                         } else if (component instanceof ComponentFeedbackPanel){
                             log.debug("Ajax submit - adding feedback to target.");
