@@ -1,9 +1,9 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
-        form div{width: 100%;}
-        div#user form div label {width: 7em;}
+        form div#createNew {clear:none;}
         div#profile form div label {width: 7em;}
+        form div#createNew .buttonwrapper {margin: 5px 0 0 10px;}
         form div .buttonwrapper {margin-left: 10em;}
         form#passwordLink
     </style>
@@ -16,40 +16,24 @@
         	    <a href="#" class="bluebutton" wicket:id="returnLink"><span><wicket:message key="label.return">Label Contents</wicket:message></span></a>
         	</span>
     	</div>
-    	<div id="user" class="adminSection">
-            <span class="adminHeading"><wicket:message key="heading.user">Label Contents</wicket:message></span>
+               
+    	<div id="profile" class="adminSection">
+    		<span class="adminHeading"><wicket:message key="heading.profile">Label Contents</wicket:message></span>
+
             <form id="user" wicket:id="userForm">
                 <div>    
                     <label><wicket:message key="label.username">Label Contents</wicket:message></label>
                     <input class="inputText" type="text" wicket:id="username"/>
-                    <span class="feedbackPanel" wicket:id="usernameFeedback"></span>
                 </div>
-                <div>    
-                    <label><wicket:message key="label.email">Label Contents</wicket:message></label>
-                    <input class="inputText" type="text" wicket:id="email"/>
-                    <span class="feedbackPanel" wicket:id=emailFeedback></span>
-                </div>
-                <div>    
-                    <label><wicket:message key="label.firstName">Label Contents</wicket:message></label>
-                    <input class="inputText" type="text" wicket:id="firstName"/>
-                </div>
-                <div>    
-                    <label><wicket:message key="label.lastName">Label Contents</wicket:message></label>
-                    <input class="inputText" type="text" wicket:id="lastName"/>
-                </div>
-                <div class="formButtons">
+                <div id="createNew">
                     <input type="submit" style="display: none;">
                     <span class="buttonwrapper">
-                        <a wicket:id="userSubmit" class="orangebutton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
+                        <a wicket:id="userSubmit" class="orangebutton"><span><wicket:message key="label.create">Label Contents</wicket:message></span></a>
                     </span>
                     <span class="feedbackPanel" wicket:id="userFeedback"></span>
                 </div>
             </form>
-               
-        </div>
-    	<div id="profile" class="adminSection">
-            <hr/>                
-    		<span class="adminHeading" wicket:id="profileHeading"></span>
+
 			<form id="profile" wicket:id="profileForm">
                 <div>
                     <label for="email"><wicket:message key="label.email">Label Contents</wicket:message></label>

@@ -8,13 +8,17 @@ import org.apache.wicket.model.IModel;
 public class ValidationStyleRequiredTextField extends RequiredTextField implements ValidationStyleComponent {
 
 	private static final long serialVersionUID = 1L;
+	
+	public ValidationStyleRequiredTextField(final String id, final IModel model){
+		super(id, model);
+		add(new ValidationStyleBehaviour());
+	}
 
 	public ValidationStyleRequiredTextField(final String id, final IModel model, FeedbackPanel feedback) {
 		super(id, model);
 		feedback.setOutputMarkupId(true);
 		feedback.setFilter(new ComponentFeedbackMessageFilter(this));
 		add(new ValidationStyleBehaviour());
-		
 	}
 
 }

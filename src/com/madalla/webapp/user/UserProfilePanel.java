@@ -198,4 +198,5 @@ public class UserProfilePanel extends Panel{
     private IRepositoryService getRepositoryService(){
     	return ((IRepositoryServiceProvider)getApplication()).getRepositoryService();
     }
+
 }
