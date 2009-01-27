@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -27,6 +28,10 @@ public class SecurityUtils {
 			log.error("encrypt - UnsupportedEncodingException.",e);
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public static String getGeneratedPassword(){
+		return RandomStringUtils.randomAlphanumeric(6);
 	}
 
 }
