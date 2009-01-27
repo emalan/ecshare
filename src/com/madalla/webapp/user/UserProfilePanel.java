@@ -27,10 +27,11 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import com.madalla.bo.security.UserData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.util.security.ICredentialHolder;
+import com.madalla.util.security.SecureCredentials;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
-import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
 import com.madalla.wicket.form.ValidationStylePasswordField;
@@ -41,13 +42,12 @@ public class UserProfilePanel extends Panel{
 	private static final Log log = LogFactory.getLog(UserProfilePanel.class);
 	
 	private UserData user;
-	//TODO replace ValueMap with Secure Class to hold passwords
-	private final ValueMap properties = new ValueMap();
+	private ICredentialHolder credentials = new SecureCredentials();
 	
     public class PasswordForm extends Form {
         
         private static final long serialVersionUID = 9033980585192727266L;
-        
+        private final ValueMap properties = new ValueMap();
         public PasswordForm(String id) {
             super(id);
             
@@ -61,7 +61,6 @@ public class UserProfilePanel extends Panel{
 
                 @Override
                 protected void onValidate(IValidatable validatable) {
-                    log.debug("Existing Password Validation. "+validatable.getValue());
                     String value = SecurityUtils.encrypt((String)validatable.getValue());
                     if (!user.getPassword().equals(value)){
                         error(validatable,"error.existing");
@@ -74,7 +73,7 @@ public class UserProfilePanel extends Panel{
             FeedbackPanel newFeedback = new FeedbackPanel("newFeedback");
             add(newFeedback);
             TextField newPassword = new ValidationStylePasswordField("newPassword",
-                    new PropertyModel(properties,"newPassword"), newFeedback);
+                    new PropertyModel(credentials,"password"), newFeedback);
             add(newPassword);
             
             FeedbackPanel confirmFeedback = new FeedbackPanel("confirmFeedback");
@@ -141,14 +140,9 @@ public class UserProfilePanel extends Panel{
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
 				super.onSubmit(target, form);
 				target.addComponent(passwordFeedback);
-                IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
-                if(authenticator.authenticate(user.getName(), SecurityUtils.encrypt(properties.getString("existingPassword")))){
-                    user.setPassword(SecurityUtils.encrypt(properties.getString("newPassword")));
-                    getRepositoryService().saveUser(user);
-                    form.info(getString("message.success"));
-                } else {
-                    form.error(getString("message.fail"));
-                }
+                user.setPassword(credentials.getPassword());
+                getRepositoryService().saveUser(user);
+                form.info(getString("message.success"));
 			}
 
             @Override
