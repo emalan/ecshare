@@ -21,6 +21,7 @@ import com.madalla.webapp.cms.admin.ContentAdminPanel;
 import com.madalla.webapp.email.EmailFormPanel;
 import com.madalla.webapp.images.AlbumPanel;
 import com.madalla.webapp.images.admin.AlbumAdminPanel;
+import com.madalla.webapp.user.UserAdminPanel;
 import com.madalla.webapp.user.UserLoginPanel;
 import com.madalla.webapp.user.UserProfilePanel;
 
@@ -161,6 +162,13 @@ public class Panels {
 			error("UserProfilePanel - All parameters need to be supplied.");
 		}
 		return new UserProfilePanel(id, getReturnPage(params, "UserProfilePanel"));
+	}
+	
+	public static Panel userAdminPanel(String id, PageParameters params) {
+		if (StringUtils.isEmpty(id) || params == null){
+			error("UserAdminPanel - All parameters need to be supplied.");
+		}
+		return new UserAdminPanel(id, getReturnPage(params, "UserAdminPanel"));
 	}
 	
 	/*  Utility methods */

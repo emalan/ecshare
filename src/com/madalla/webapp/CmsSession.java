@@ -21,12 +21,17 @@ public abstract class CmsSession  extends WebSession implements IContentAdmin{
         return cmsAdminMode;
     }
     
-    public String getUsername(){
+    public boolean isLoggedIn() {
+		return username != null;
+	}
+
+	public String getUsername(){
     	return username;
     }
     
     public final void logout(){
     	cmsAdminMode = false;
+    	username = null;
     }
     
     public boolean login(String userName, String password) {

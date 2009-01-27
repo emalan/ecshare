@@ -9,6 +9,6 @@ public class UserLoginPage extends AdminPage{
 
 	public UserLoginPage(final PageParameters params){
 		
-		add(Panels.userLoginPanel("userLoginPanel", params));
+		add(Panels.userLoginPanel("userPanel", params));
 	}
 }
