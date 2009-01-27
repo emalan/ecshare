@@ -123,6 +123,7 @@ textarea {
 
 form div .feedbackPanel {
 	float: left;
+	margin-top: 10px;
 }
 
 .feedbackPanel ul li {

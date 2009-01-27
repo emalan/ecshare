@@ -3,6 +3,7 @@ package com.madalla.webapp.user;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -108,6 +109,7 @@ public class UserProfilePanel extends Panel{
         //Form
         Form passwordForm = new PasswordForm("passwordForm");
         passwordForm.setOutputMarkupId(true);
+        
         add(passwordForm);
         
         final FeedbackPanel passwordFeedback = new ComponentFeedbackPanel("passwordFeedback",passwordForm);
@@ -138,7 +140,7 @@ public class UserProfilePanel extends Panel{
             }
         };
         passwordForm.add(passwordSubmit);
-
+        passwordForm.add(new AttributeModifier("onSubmit", true, new Model("document.getElementById('" + passwordSubmit.getMarkupId() + "').onclick();return false;")));
         
         
         //****************
