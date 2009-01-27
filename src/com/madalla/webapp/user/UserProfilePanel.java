@@ -10,8 +10,9 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.validation.EqualInputValidator;
+import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -19,6 +20,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.value.ValueMap;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import com.madalla.bo.security.UserData;
@@ -50,8 +53,23 @@ public class UserProfilePanel extends Panel{
             
             FeedbackPanel existingFeedback = new FeedbackPanel("existingFeedback");
             add(existingFeedback);
-            add(new ValidationStylePasswordField("existingPassword", 
-            		new PropertyModel(properties,"existingPassword"), existingFeedback));
+            PasswordTextField existingPassword = new ValidationStylePasswordField("existingPassword", 
+            		new PropertyModel(properties,"existingPassword"), existingFeedback);
+            add(existingPassword);
+            existingPassword.add(new AbstractValidator(){
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                protected void onValidate(IValidatable validatable) {
+                    log.debug("Existing Password Validation. "+validatable.getValue());
+                    String value = SecurityUtils.encrypt((String)validatable.getValue());
+                    if (!user.getPassword().equals(value)){
+                        error(validatable,"error.existing");
+                    }
+                }
+                
+            });
+            
             
             FeedbackPanel newFeedback = new FeedbackPanel("newFeedback");
             add(newFeedback);
@@ -66,7 +84,7 @@ public class UserProfilePanel extends Panel{
             add(confirmPassword);
             
             //Validate that new and confirm are equal
-            add(new EqualInputValidator(newPassword, confirmPassword));
+            add(new EqualPasswordInputValidator(newPassword, confirmPassword));
             
         }
     }
