@@ -41,13 +41,14 @@ public class UserAdminPanel extends Panel{
 	
 	private UserData user = new UserDataView();
 	private boolean lockUsername = false;
+	private TextField username;
 	
     public class NewUserForm extends Form {
         private static final long serialVersionUID = 9033980585192727266L;
 
         public NewUserForm(String id) {
             super(id);
-            TextField username = new AjaxValidationStyleRequiredTextField("username", 
+            username = new AjaxValidationStyleRequiredTextField("username", 
             		new PropertyModel(user, "name")){
 
 				private static final long serialVersionUID = 1L;
@@ -63,6 +64,7 @@ public class UserAdminPanel extends Panel{
 				}
             	
             };
+            username.setOutputMarkupId(true);
             add(username);
         }
     }
@@ -191,6 +193,11 @@ public class UserAdminPanel extends Panel{
 				lockUsername = false;
 				target.addComponent(userForm);
 				target.addComponent(profileForm);
+				
+				//Clear and set focus on User Name Text Field
+				target.appendJavascript(
+					"$('"+username.getMarkupId()+"').clear();"+
+					"$('"+username.getMarkupId()+"').focus();");
 			}
 			
 			@Override
