@@ -10,6 +10,7 @@ import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.HeaderContributor;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.PageLink;
@@ -75,7 +76,6 @@ public class UserAdminPanel extends Panel{
 
         Form newUserForm = new NewUserForm("userForm");
         newUserForm.setOutputMarkupId(true);
-        
         add(newUserForm);
         
         final FeedbackPanel userFeedback = new ComponentFeedbackPanel("userFeedback",newUserForm);
@@ -85,6 +85,7 @@ public class UserAdminPanel extends Panel{
         //User edit form
 		final Form profileForm = new ProfileForm("profileForm");
 		profileForm.setOutputMarkupId(true);
+		profileForm.add(new SimpleAttributeModifier("class","formHide"));
 		add(profileForm);
         
         AjaxButton newUserSubmit = new AjaxValidationStyleSubmitButton("userSubmit", newUserForm){
@@ -99,6 +100,7 @@ public class UserAdminPanel extends Panel{
                 user = getRepositoryService().getNewUser(user.getName(),
                 		SecurityUtils.encrypt(password));
                 log.debug("New User created." + user);
+                profileForm.add(new SimpleAttributeModifier("class","formShow"));
                 target.addComponent(profileForm);
 			}
 
