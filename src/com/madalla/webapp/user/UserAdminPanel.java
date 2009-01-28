@@ -48,7 +48,21 @@ public class UserAdminPanel extends Panel{
         public NewUserForm(String id) {
             super(id);
             TextField username = new AjaxValidationStyleRequiredTextField("username", 
-            		new PropertyModel(user, "name"));
+            		new PropertyModel(user, "name")){
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onBeforeRender() {
+					if(lockUsername){
+						setEnabled(false);
+					} else {
+						setEnabled(true);
+					}
+					super.onBeforeRender();
+				}
+            	
+            };
             add(username);
         }
     }
@@ -61,7 +75,8 @@ public class UserAdminPanel extends Panel{
             
             FeedbackPanel emailFeedback = new FeedbackPanel("emailFeedback");
             add(emailFeedback);
-            TextField email = new AjaxValidationStyleRequiredTextField("email",new PropertyModel(user,"email"), emailFeedback);
+            TextField email = new AjaxValidationStyleRequiredTextField("email",
+            		new PropertyModel(user,"email"), emailFeedback);
             email.add(EmailAddressValidator.getInstance());
             add(email);
             
@@ -79,13 +94,13 @@ public class UserAdminPanel extends Panel{
 		
 		add(new PageLink("returnLink", returnPage));
 
-        final Form newUserForm = new NewUserForm("userForm");
-        newUserForm.setOutputMarkupId(true);
-        add(newUserForm);
+        final Form userForm = new NewUserForm("userForm");
+        userForm.setOutputMarkupId(true);
+        add(userForm);
         
-        final FeedbackPanel userFeedback = new ComponentFeedbackPanel("userFeedback",newUserForm);
+        final FeedbackPanel userFeedback = new ComponentFeedbackPanel("userFeedback",userForm);
         userFeedback.setOutputMarkupId(true);
-        newUserForm.add(userFeedback);
+        userForm.add(userFeedback);
         
         //User edit form
 		final Form profileForm = new ProfileForm("profileForm");
@@ -93,7 +108,7 @@ public class UserAdminPanel extends Panel{
 		profileForm.add(new SimpleAttributeModifier("class","formHide"));
 		add(profileForm);
         
-        AjaxSubmitLink newUserSubmit = new AjaxValidationStyleSubmitLink("userSubmit", newUserForm){
+        AjaxSubmitLink newUserSubmit = new AjaxValidationStyleSubmitLink("userSubmit", userForm){
         	private static final long serialVersionUID = 1L;
         	
         	
@@ -111,7 +126,7 @@ public class UserAdminPanel extends Panel{
                 	profileForm.add(new SimpleAttributeModifier("class","formShow"));
                 	target.addComponent(profileForm);
                 	lockUsername = true;
-                	target.addComponent(newUserForm);
+                	target.addComponent(userForm);
                 } else {
                 	log.error("Unable to create new User");
                 	error("Failed to Create New User.");
@@ -134,8 +149,8 @@ public class UserAdminPanel extends Panel{
             }
         };
         newUserSubmit.setOutputMarkupId(true);
-        newUserForm.add(newUserSubmit);
-        newUserForm.add(new AttributeModifier("onSubmit", true, new Model("document.getElementById('" + newUserSubmit.getMarkupId() + "').onclick();return false;")));
+        userForm.add(newUserSubmit);
+        userForm.add(new AttributeModifier("onSubmit", true, new Model("document.getElementById('" + newUserSubmit.getMarkupId() + "').onclick();return false;")));
         
 		final FeedbackPanel profileFeedback = new ComponentFeedbackPanel("profileFeedback",profileForm);
 		profileFeedback.setOutputMarkupId(true);
@@ -174,6 +189,8 @@ public class UserAdminPanel extends Panel{
 				user = new UserDataView();
 				profileForm.add(new SimpleAttributeModifier("class","formHide"));
 				lockUsername = false;
+				target.addComponent(userForm);
+				target.addComponent(profileForm);
 			}
 			
 			@Override

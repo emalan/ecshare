@@ -31,6 +31,7 @@ import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.CmsSession;
+import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
@@ -111,6 +112,7 @@ public class UserProfilePanel extends Panel{
 		super(id);
 		
 		add(HeaderContributor.forJavaScript(Scriptaculous.PROTOTYPE));
+		add(Css.CSS_FORM);
 		
 		add(new PageLink("returnLink", returnPage));
 

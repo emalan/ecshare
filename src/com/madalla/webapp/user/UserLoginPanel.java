@@ -7,6 +7,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.CmsSession;
+import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.webapp.signIn.SignInPanel;
 
@@ -18,6 +19,7 @@ public class UserLoginPanel extends Panel {
 		super(id);
 		
 		add(HeaderContributor.forJavaScript(Scriptaculous.PROTOTYPE));
+		add(Css.CSS_FORM);
 		
 		add(new PageLink("returnLink", returnPage));
 		
