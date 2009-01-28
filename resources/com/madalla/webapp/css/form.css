@@ -1,0 +1,98 @@
+/* =Form
+-----------------------------------------------------------------------------*/
+
+form div {
+  float:left;
+  clear:both;
+}
+
+form div label {
+  float: left;
+  left: 0;  
+  font-size: 12px; 
+  padding-top: 10px; padding-right: 10px; padding-left: 5px;
+}
+
+form input.inputError {
+    background-color:#F6BCBC;
+    border:1px solid #990000;
+    color:#990000;
+}
+
+form input {
+	float: left;
+    margin: 10px 0 0 0;
+    font-family: verdana,arial,helvetica,sans; font-size: 11px;
+    border: 1px solid #8E8E8E;
+}
+
+form div.inputValid .feedbackPanel{
+	background-image: url("image/inputValid.gif");
+    background-position: left bottom;
+    background-repeat: no-repeat;
+}
+
+form div .buttonwrapper {
+	float: left;
+	margin-bottom:15px;
+    margin-top:15px;
+}
+
+.button {
+    border-style:solid; 
+    border-width: 1px 4px 4px 1px; 
+    text-decoration: none; 
+    padding: 4px;
+    background-color: #F7AE30; 
+    border-color : #F7AE30 #DF9C29 #DF9C29 #F7AE30;
+}
+
+form select {
+	float: left;
+	margin:10px 0 0;
+    border: 1px solid #8E8E8E; color:#2B5E2C; background-color:#FFFFFF; 
+    font-family: verdana,arial,helvetica,sans; font-size: 11px;
+}
+
+textarea {
+  margin: 10px 0 0 0;
+  border: 1px solid #8E8E8E; color:#2B5E2C; background-color:#FFFFFF; 
+  font-family: verdana,arial,helvetica,sans; font-size: 11px;
+}
+
+form div .feedbackPanel {
+	float: left;
+	margin-top: 10px;
+}
+
+.feedbackPanel ul li {
+    font-style:normal;
+    list-style-image:none;
+    list-style-position: inside;
+    list-style-type: none;
+    padding-left:1em;
+/*    padding-top:10px; */
+    text-indent:0pt;
+    float: left;
+    clear: both;
+}
+form .feedbackPanelERROR {
+    color:red;
+}
+
+/* space for image */
+form .feedbackPanelINFO {
+    padding-left: 15px;
+    color: blue;
+}
+
+.feedbackPanelERROR {
+    color:red;
+}
+.feedbackPanelWARNING {
+    color:orange;
+}
+.feedbackPanelINFO {
+    color:blue;
+}
+

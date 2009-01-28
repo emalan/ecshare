@@ -4,18 +4,18 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
-//TODO merge code with AjaxValidationStyleSubmitLink
-public abstract class AjaxValidationStyleSubmitButton extends IndicatingAjaxButton{
+import com.madalla.wicket.IndicatingAjaxSubmitLink;
+
+public abstract class AjaxValidationStyleSubmitLink extends IndicatingAjaxSubmitLink{
 
 	private static final long serialVersionUID = 5857888282264283281L;
-	private static final Log log = LogFactory.getLog(AjaxValidationStyleSubmitButton.class);
+	private static final Log log = LogFactory.getLog(AjaxValidationStyleSubmitLink.class);
 	
-	public AjaxValidationStyleSubmitButton(String id, Form form) {
+	public AjaxValidationStyleSubmitLink(String id, Form form) {
 		super(id, form);
 	}
 

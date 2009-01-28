@@ -4,7 +4,8 @@
         form div#createNew {clear:none;}
         div#profile form div label {width: 7em;}
         form div#createNew .buttonwrapper {margin: 5px 0 0 10px;}
-        form div .buttonwrapper {margin-left: 10em;}
+        form div.formButtons {margin-left: 10em;}
+        form div.formButtons .buttonwrapper {margin-right: 5px;}
         form#passwordLink
         form.formShow {display: inline;}
         form.formHide {display: none;}
@@ -54,6 +55,9 @@
                     <input type="submit" style="display: none;">
                     <span class="buttonwrapper">
                         <a wicket:id="profileSubmit" class="orangebutton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
+                    </span>
+                    <span class="buttonwrapper">
+                        <a wicket:id="newSubmit" class="orangebutton"><span><wicket:message key="label.submitNew">Label Contents</wicket:message></span></a>
                     </span>
                     <span class="feedbackPanel" wicket:id="profileFeedback"></span>
                 </div>

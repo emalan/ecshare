@@ -9,6 +9,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.form.Form;
@@ -27,9 +28,11 @@ import com.madalla.email.IEmailServiceProvider;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.util.security.SecurityUtils;
+import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
+import com.madalla.wicket.form.AjaxValidationStyleSubmitLink;
 
 public class UserAdminPanel extends Panel{
 
@@ -37,6 +40,7 @@ public class UserAdminPanel extends Panel{
 	private static final Log log = LogFactory.getLog(UserAdminPanel.class);
 	
 	private UserData user = new UserDataView();
+	private boolean lockUsername = false;
 	
     public class NewUserForm extends Form {
         private static final long serialVersionUID = 9033980585192727266L;
@@ -71,10 +75,11 @@ public class UserAdminPanel extends Panel{
 		super(id);
 		
 		add(HeaderContributor.forJavaScript(Scriptaculous.PROTOTYPE));
+		add(Css.CSS_FORM);
 		
 		add(new PageLink("returnLink", returnPage));
 
-        Form newUserForm = new NewUserForm("userForm");
+        final Form newUserForm = new NewUserForm("userForm");
         newUserForm.setOutputMarkupId(true);
         add(newUserForm);
         
@@ -88,8 +93,9 @@ public class UserAdminPanel extends Panel{
 		profileForm.add(new SimpleAttributeModifier("class","formHide"));
 		add(profileForm);
         
-        AjaxButton newUserSubmit = new AjaxValidationStyleSubmitButton("userSubmit", newUserForm){
+        AjaxSubmitLink newUserSubmit = new AjaxValidationStyleSubmitLink("userSubmit", newUserForm){
         	private static final long serialVersionUID = 1L;
+        	
         	
             @Override
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
@@ -97,11 +103,19 @@ public class UserAdminPanel extends Panel{
 				target.addComponent(userFeedback);
                 
 				String password = SecurityUtils.getGeneratedPassword();
-                user = getRepositoryService().getNewUser(user.getName(),
+				UserData newUser = getRepositoryService().getNewUser(user.getName(),
                 		SecurityUtils.encrypt(password));
-                log.debug("New User created." + user);
-                profileForm.add(new SimpleAttributeModifier("class","formShow"));
-                target.addComponent(profileForm);
+                if (newUser != null){
+                	user = newUser;
+                	log.debug("New User created." + user);
+                	profileForm.add(new SimpleAttributeModifier("class","formShow"));
+                	target.addComponent(profileForm);
+                	lockUsername = true;
+                	target.addComponent(newUserForm);
+                } else {
+                	log.error("Unable to create new User");
+                	error("Failed to Create New User.");
+                }
 			}
 
             @Override
@@ -109,13 +123,20 @@ public class UserAdminPanel extends Panel{
             	super.onError(target, form);
             	target.addComponent(userFeedback);
             }
+            @Override
+			protected final void onBeforeRender(){
+            	if(lockUsername){
+            		setEnabled(false);
+            	} else {
+            		setEnabled(true);
+            	}
+            	super.onBeforeRender();
+            }
         };
+        newUserSubmit.setOutputMarkupId(true);
         newUserForm.add(newUserSubmit);
         newUserForm.add(new AttributeModifier("onSubmit", true, new Model("document.getElementById('" + newUserSubmit.getMarkupId() + "').onclick();return false;")));
         
-        
-        
-		
 		final FeedbackPanel profileFeedback = new ComponentFeedbackPanel("profileFeedback",profileForm);
 		profileFeedback.setOutputMarkupId(true);
 		profileForm.add(profileFeedback);
@@ -127,10 +148,8 @@ public class UserAdminPanel extends Panel{
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
 				super.onSubmit(target, form);
 				target.addComponent(profileFeedback);
-
 				getRepositoryService().saveUser(user);
 				form.info(getString("message.success"));
-				//setResponsePage(this.findPage());
 			}
 			
 			@Override
@@ -141,6 +160,30 @@ public class UserAdminPanel extends Panel{
 			}
         };
         profileForm.add(submitButton);
+        
+        AjaxButton submitNewButton = new AjaxValidationStyleSubmitButton("newSubmit", profileForm){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form form) {
+				super.onSubmit(target, form);
+				target.addComponent(profileFeedback);
+				getRepositoryService().saveUser(user);
+				form.info(getString("message.success"));
+				//clear User, hide Profile and enable Username
+				user = new UserDataView();
+				profileForm.add(new SimpleAttributeModifier("class","formHide"));
+				lockUsername = false;
+			}
+			
+			@Override
+			protected void onError(final AjaxRequestTarget target, Form form) {
+				super.onError(target, form);
+				target.addComponent(profileFeedback);
+
+			}
+        };
+        profileForm.add(submitNewButton);
 		
 		
 	}
@@ -155,8 +198,6 @@ public class UserAdminPanel extends Panel{
         String body = getEmailBody(username,password);
         return email.sendEmail(subject, body);
     }
-    
-
     
     private String getEmailBody(String arg0, String arg1){
         Object[] args = {arg0,arg1};
