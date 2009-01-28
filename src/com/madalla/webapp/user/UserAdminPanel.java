@@ -2,6 +2,11 @@ package com.madalla.webapp.user;
 
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -12,6 +17,8 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior;
+import org.apache.wicket.extensions.ajax.markup.html.autocomplete.StringAutoCompleteRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.PageLink;
@@ -20,6 +27,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import com.madalla.bo.security.UserData;
@@ -65,6 +73,40 @@ public class UserAdminPanel extends Panel{
             	
             };
             username.setOutputMarkupId(true);
+            username.add(new AutoCompleteBehavior(new StringAutoCompleteRenderer()){
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected Iterator getChoices(String input) {
+					 if (Strings.isEmpty(input))
+		                {
+		                    return Collections.EMPTY_LIST.iterator();
+		                }
+
+		                List choices = new ArrayList(10);
+
+		                Locale[] locales = Locale.getAvailableLocales();
+
+		                for (int i = 0; i < locales.length; i++)
+		                {
+		                    final Locale locale = locales[i];
+		                    final String country = locale.getDisplayCountry();
+
+		                    if (country.toUpperCase().startsWith(input.toUpperCase()))
+		                    {
+		                        choices.add(country);
+		                        if (choices.size() == 10)
+		                        {
+		                            break;
+		                        }
+		                    }
+		                }
+
+		                return choices.iterator();
+				}
+            	
+            });
             add(username);
         }
     }
