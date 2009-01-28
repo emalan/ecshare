@@ -1,6 +1,8 @@
 package com.madalla.cms.service.ocm.template;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -8,9 +10,13 @@ import javax.jcr.Session;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
+import org.apache.jackrabbit.ocm.query.Filter;
+import org.apache.jackrabbit.ocm.query.Query;
+import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
+import com.madalla.bo.AbstractData;
 import com.madalla.cms.service.ocm.RepositoryInfo;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 
@@ -75,6 +81,32 @@ public class RepositoryTemplate {
             ocm.save();
         }
         return ocm.getObject(type.typeClass, nodePath);
+    }
+	
+	public Collection getAll(final RepositoryType type){
+		if(!type.parent){
+			return Collections.EMPTY_LIST;
+		}
+		String parentPath = (String)template.execute(new JcrCallback(){
+			public Object doInJcr(Session session) throws IOException,
+					RepositoryException {
+	    		Node parent = RepositoryInfo.getGroupNode(session, site, type);
+	    		return parent.getPath();
+			}
+		});
+		return getQueryData(type.typeClass, parentPath);
+	}
+	
+	public Collection getAll(final RepositoryType type, AbstractData parent) {
+		return getQueryData(type.typeClass, parent.getId());
+	}
+	
+    private Collection getQueryData(Class data, String path){
+        QueryManager queryManager = ocm.getQueryManager();
+        Filter filter = queryManager.createFilter(data);
+		filter.setScope(path+"//");
+        Query query = queryManager.createQuery(filter);
+        return  ocm.getObjects(query);
     }
 	
 	

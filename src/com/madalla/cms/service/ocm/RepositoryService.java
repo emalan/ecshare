@@ -347,6 +347,18 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	return repositoryTemplate.checkExists(RepositoryType.USER, username);
     }
     
+    public List<UserData> getUsers(){
+
+        Collection collection =  repositoryTemplate.getAll(RepositoryType.USER);
+        List<UserData> list = new ArrayList<UserData>();
+        for(Iterator iter = collection.iterator(); iter.hasNext();){
+            list.add((UserData) iter.next());
+        }
+        //TODO Sort
+        //Collections.sort(list);
+        return list;
+    }
+    
 	public IAuthenticator getUserAuthenticator() {
 		return new IAuthenticator(){
 

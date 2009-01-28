@@ -37,10 +37,6 @@ abstract class AbstractRepositoryService{
 		
     }
 
-    public Node getApplicationNode(Session session) throws RepositoryException{
-    	return RepositoryInfo.getApplicationNode(session);
-    }
-
     protected Node getCreateNode(String nodeName, Node parent) throws RepositoryException{
     	return JcrUtils.getCreateNode(nodeName, parent);
     }

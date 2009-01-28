@@ -112,4 +112,6 @@ public interface IRepositoryService {
     void saveUser(UserData user);
     
     IAuthenticator getUserAuthenticator();
+    
+    List<UserData> getUsers();
 }

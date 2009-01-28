@@ -193,6 +193,13 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
         contentService.deleteNode(test.getId());
     }
     
+    public void testUserGetAll(){
+    	List<UserData> list = contentService.getUsers();
+    	for(UserData user : list){
+    		System.out.println(user);
+    	}
+    }
+    
     public void setRepositoryService(IRepositoryService contentService) {
 		this.contentService = contentService;
 	}
