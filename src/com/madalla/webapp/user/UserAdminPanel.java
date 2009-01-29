@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
@@ -19,6 +19,7 @@ import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.StringAutoCompleteRenderer;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
@@ -27,14 +28,16 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.springframework.beans.BeanUtils;
 
 import com.madalla.bo.security.UserData;
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
-import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
@@ -46,17 +49,19 @@ public class UserAdminPanel extends Panel {
 	private static final long serialVersionUID = 9027719184960390850L;
 	private static final Log log = LogFactory.getLog(UserAdminPanel.class);
 
-	private UserData user = new UserDataView();
+	private UserData user = new UserDataView() ;
 	private boolean lockUsername = false;
-	private TextField username;
+	private TextField usernameField;
 
 	public class NewUserForm extends Form {
 		private static final long serialVersionUID = 9033980585192727266L;
 
 		public NewUserForm(String id) {
 			super(id);
-			username = new AjaxValidationStyleRequiredTextField("username",
-					new PropertyModel(user, "name")) {
+			
+			//User Name Field
+			usernameField = new RequiredTextField("username",
+					new PropertyModel(user,"name")) {
 
 				private static final long serialVersionUID = 1L;
 
@@ -71,13 +76,13 @@ public class UserAdminPanel extends Panel {
 				}
 
 			};
-			username.setOutputMarkupId(true);
-			username.add(new AutoCompleteBehavior(StringAutoCompleteRenderer.INSTANCE) {
+			usernameField.setOutputMarkupId(true);
+			usernameField.add(new AutoCompleteBehavior(StringAutoCompleteRenderer.INSTANCE) {
 
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				protected Iterator getChoices(String input) {
+				protected Iterator<?> getChoices(String input) {
 					if (Strings.isEmpty(input)) {
 						return Collections.EMPTY_LIST.iterator();
 					}
@@ -96,10 +101,27 @@ public class UserAdminPanel extends Panel {
 				}
 
 			});
-			// TODO add user name validation
-			// no spaces and other stuff
-			// convert to lowercase
-			add(username);
+			
+			//Validation
+			usernameField.add(new AbstractValidator(){
+				private static final long serialVersionUID = 1L;
+				@Override
+				protected void onValidate(IValidatable validatable) {
+					String value = (String) validatable.getValue();
+					if (StringUtils.isEmpty(value)){
+						error(validatable,"error.required");
+					}else if (!StringUtils.isAlphanumeric(value)){
+						error(validatable,"error.alphanumeric");
+					} else {
+						if (value.length() <= 4){
+							error(validatable, "error.length");
+						}
+					}
+				}
+				
+			});
+			
+			add(usernameField);
 		}
 	}
 
@@ -145,6 +167,7 @@ public class UserAdminPanel extends Panel {
 		profileForm.add(new SimpleAttributeModifier("class", "formHide"));
 		add(profileForm);
 
+		//Select or Create New User
 		AjaxSubmitLink newUserSubmit = new AjaxValidationStyleSubmitLink(
 				"userSubmit", userForm) {
 			private static final long serialVersionUID = 1L;
@@ -154,21 +177,12 @@ public class UserAdminPanel extends Panel {
 				super.onSubmit(target, form);
 				target.addComponent(userFeedback);
 
-				String password = SecurityUtils.getGeneratedPassword();
-				UserData newUser = getRepositoryService().getNewUser(
-						user.getName(), SecurityUtils.encrypt(password));
-				if (newUser != null) {
-					user = newUser;
-					log.debug("New User created." + user);
-					profileForm.add(new SimpleAttributeModifier("class",
-							"formShow"));
-					target.addComponent(profileForm);
-					lockUsername = true;
-					target.addComponent(userForm);
-				} else {
-					log.error("Unable to create new User");
-					error("Failed to Create New User.");
-				}
+				retrieveUserData(user.getName());
+				log.debug("onSubmit - "+user);
+				profileForm.add(new SimpleAttributeModifier("class","formShow"));
+				target.addComponent(profileForm);
+				lockUsername = true;
+				target.addComponent(userForm);
 			}
 
 			@Override
@@ -189,15 +203,21 @@ public class UserAdminPanel extends Panel {
 		};
 		newUserSubmit.setOutputMarkupId(true);
 		userForm.add(newUserSubmit);
-		userForm.add(new AttributeModifier("onSubmit", true, new Model(
-				"document.getElementById('" + newUserSubmit.getMarkupId()
-						+ "').onclick();return false;")));
+		
+		usernameField.add(new AttributeModifier("onchange", true, new Model(
+				"document.getElementById('"+ newUserSubmit.getMarkupId()
+				+ "').onclick();return false;")));
+		
+//		userForm.add(new AttributeModifier("onSubmit", true, new Model(
+//				"document.getElementById('" + newUserSubmit.getMarkupId()
+//						+ "').onclick();return false;")));
 
 		final FeedbackPanel profileFeedback = new ComponentFeedbackPanel(
 				"profileFeedback", profileForm);
 		profileFeedback.setOutputMarkupId(true);
 		profileForm.add(profileFeedback);
 
+		//Submit Button for just Saving
 		AjaxButton submitButton = new AjaxValidationStyleSubmitButton(
 				"profileSubmit", profileForm) {
 			private static final long serialVersionUID = 1L;
@@ -219,6 +239,7 @@ public class UserAdminPanel extends Panel {
 		};
 		profileForm.add(submitButton);
 
+		//Submit for saving and resetting for starting another
 		AjaxButton submitNewButton = new AjaxValidationStyleSubmitButton(
 				"newSubmit", profileForm) {
 			private static final long serialVersionUID = 1L;
@@ -238,8 +259,8 @@ public class UserAdminPanel extends Panel {
 				target.addComponent(profileForm);
 
 				// Clear and set focus on User Name Text Field
-				target.appendJavascript("$('" + username.getMarkupId()
-						+ "').clear();" + "$('" + username.getMarkupId()
+				target.appendJavascript("$('" + usernameField.getMarkupId()
+						+ "').clear();" + "$('" + usernameField.getMarkupId()
 						+ "').focus();");
 			}
 
@@ -253,7 +274,18 @@ public class UserAdminPanel extends Panel {
 		profileForm.add(submitNewButton);
 
 	}
-
+	
+	private void retrieveUserData(String username){
+		UserData src = getRepositoryService().getUser(username);
+		BeanUtils.copyProperties(src, user);
+	}
+	
+	private void saveUserData(UserData userData){
+		UserData dest = getRepositoryService().getUser(userData.getName());
+		BeanUtils.copyProperties(userData, dest);
+		getRepositoryService().saveUser(dest);
+	}
+	
 	private IRepositoryService getRepositoryService() {
 		return ((IRepositoryServiceProvider) getApplication())
 				.getRepositoryService();
