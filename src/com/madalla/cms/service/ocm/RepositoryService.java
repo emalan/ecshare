@@ -307,6 +307,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     // ******   Users    ******
      
     public UserData getNewUser(String username, String password){
+    	username = username.toLowerCase();
     	if (isUserExists(username)){
     		return null;
     	}
@@ -317,6 +318,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     public UserData getUser(String username){
+    	username = username.toLowerCase();
     	return (User) repositoryTemplate.executeParent(RepositoryType.USER, username, new ParentNodeCallback(){
 
 			@Override
