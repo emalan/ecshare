@@ -107,6 +107,9 @@ public class UserAdminPanel extends Panel{
 				}
             	
             });
+            //TODO add user name validation
+            //no spaces and other stuff
+            //convert to lowercase
             add(username);
         }
     }
