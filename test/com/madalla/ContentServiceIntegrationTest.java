@@ -3,6 +3,7 @@ package com.madalla;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -194,7 +195,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     }
     
     public void testUserGetAll(){
-    	List<UserData> list = contentService.getUsers();
+    	Collection<UserData> list = contentService.getUsers();
     	for(UserData user : list){
     		System.out.println(user);
     	}

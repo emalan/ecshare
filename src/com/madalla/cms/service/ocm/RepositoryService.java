@@ -2,8 +2,6 @@ package com.madalla.cms.service.ocm;
 
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -16,9 +14,6 @@ import javax.swing.tree.TreeModel;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.jackrabbit.ocm.query.Filter;
-import org.apache.jackrabbit.ocm.query.Query;
-import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.joda.time.DateTime;
 
 import com.madalla.bo.AbstractData;
@@ -175,14 +170,11 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         return (IImageData) ocm.getObject(Image.class, path);
     }
     
+    //TODO There is a dangerous cast from Collection to List here
     public List<ImageData> getAlbumImages(AlbumData album){
-        Collection collection =  getQueryData(Image.class, album);
-        List<ImageData> list = new ArrayList<ImageData>();
-        for(Iterator iter = collection.iterator(); iter.hasNext();){
-            list.add((Image) iter.next());
-        }
-        Collections.sort(list);
-        return list;
+    	List<ImageData> list = (List<ImageData>) repositoryTemplate.getAll(RepositoryType.IMAGE, album);
+    	Collections.sort(list);
+    	return list;
     }
 
     public TreeModel getAlbumImagesAsTree(final AlbumData album) {
@@ -230,12 +222,9 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	saveDataObject(blogEntry);
     }
     
-    public List<BlogEntryData> getBlogEntries(BlogData blog){
-		Collection collection =  getQueryData(BlogEntry.class, blog);
-		List<BlogEntryData> list = new ArrayList<BlogEntryData>();
-		for(Iterator iter = collection.iterator(); iter.hasNext();){
-			list.add((BlogEntryData) iter.next());
-		}
+  //TODO There is a dangerous cast from Collection to List here
+	public List<BlogEntryData> getBlogEntries(BlogData blog){
+		List<BlogEntryData> list = (List<BlogEntryData>) repositoryTemplate.getAll(RepositoryType.BLOGENTRY, blog);
 		Collections.sort(list);
 		return list;
     }
@@ -316,7 +305,6 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 
     //*************************
     // ******   Users    ******
-    
      
     public UserData getNewUser(String username, String password){
     	if (isUserExists(username)){
@@ -347,17 +335,12 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	return repositoryTemplate.checkExists(RepositoryType.USER, username);
     }
     
-    public List<UserData> getUsers(){
-
-        Collection collection =  repositoryTemplate.getAll(RepositoryType.USER);
-        List<UserData> list = new ArrayList<UserData>();
-        for(Iterator iter = collection.iterator(); iter.hasNext();){
-            list.add((UserData) iter.next());
-        }
-        //TODO Sort
-        //Collections.sort(list);
-        return list;
-    }
+	@SuppressWarnings("unchecked")
+	public List<UserData> getUsers(){
+		List<UserData> list = (List<UserData>) repositoryTemplate.getAll(RepositoryType.USER);
+		Collections.sort(list);
+		return list;
+	}
     
 	public IAuthenticator getUserAuthenticator() {
 		return new IAuthenticator(){
@@ -394,14 +377,6 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	ocm.save();
     }
     
-    private Collection getQueryData(Class data, AbstractData parent){
-        QueryManager queryManager = ocm.getQueryManager();
-        Filter filter = queryManager.createFilter(data);
-        filter.setScope(parent.getId()+"//");
-        Query query = queryManager.createQuery(filter);
-        return  ocm.getObjects(query);
-    }
-    
     private void copyData(final String path, final AbstractData data){
         String destPath = path+ "/" + data.getName();
         if (ocm.objectExists(destPath)){
@@ -411,6 +386,4 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         ocm.copy(data.getId(), destPath);
         ocm.save();
     }
-
-
 }

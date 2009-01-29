@@ -83,9 +83,9 @@ public class RepositoryTemplate {
         return ocm.getObject(type.typeClass, nodePath);
     }
 	
-	public Collection getAll(final RepositoryType type){
+	public Collection<? extends AbstractData> getAll(final RepositoryType type){
 		if(!type.parent){
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		}
 		String parentPath = (String)template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
@@ -94,14 +94,16 @@ public class RepositoryTemplate {
 	    		return parent.getPath();
 			}
 		});
-		return getQueryData(type.typeClass, parentPath);
+		Collection<? extends AbstractData> result = getQueryData(type.typeClass, parentPath);
+        return result;
 	}
 	
-	public Collection getAll(final RepositoryType type, AbstractData parent) {
+	public Collection<? extends AbstractData> getAll(final RepositoryType type, AbstractData parent) {
 		return getQueryData(type.typeClass, parent.getId());
 	}
 	
-    private Collection getQueryData(Class data, String path){
+    @SuppressWarnings("unchecked") //filter will guarantee that only 'extends AbstractData' are returned
+	private Collection<? extends AbstractData> getQueryData(Class<? extends AbstractData> data, String path){
         QueryManager queryManager = ocm.getQueryManager();
         Filter filter = queryManager.createFilter(data);
 		filter.setScope(path+"//");

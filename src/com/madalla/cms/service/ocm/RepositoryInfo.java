@@ -9,6 +9,7 @@ import javax.jcr.Session;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
+import com.madalla.bo.AbstractData;
 import com.madalla.cms.bo.impl.ocm.blog.Blog;
 import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
 import com.madalla.cms.bo.impl.ocm.image.Album;
@@ -67,12 +68,12 @@ public class RepositoryInfo {
 		CONTENT(Content.class, true, false, EC_NODE_PAGES),
 		USER(User.class, false, true, EC_NODE_USERS);
 		
-		public final Class typeClass;
+		public final Class<? extends AbstractData> typeClass;
 		public final boolean site;
 		public final boolean parent;
 		public String groupName;
 		
-		RepositoryType(Class typeClass, boolean site, boolean parent, String groupName){
+		RepositoryType(Class<? extends AbstractData> typeClass, boolean site, boolean parent, String groupName){
 			this.typeClass = typeClass;
 			this.site = site;
 			this.parent = parent;
