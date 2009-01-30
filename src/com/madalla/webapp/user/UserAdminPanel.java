@@ -41,6 +41,7 @@ import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.email.EmailFormatter;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
@@ -280,8 +281,10 @@ public class UserAdminPanel extends Panel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                resetPassword();
-                
+                String password = resetPassword();
+                String message = getEmailWelcomeMessage(password);
+                String emailBody = EmailFormatter.getUserEmailBody(user, message);
+                getEmailSender().sendUserEmail("Welcome Email", emailBody, user.getEmail(), user.getFirstName());
             }
 		});
 		
@@ -290,12 +293,12 @@ public class UserAdminPanel extends Panel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                resetPassword();
-                
+                String password = resetPassword();
+                String message = getEmailResetMessage(password);
+                String emailBody = EmailFormatter.getUserEmailBody(user, message);
+                getEmailSender().sendUserEmail("Reset Password", emailBody, user.getEmail(), user.getFirstName());
             }
         });
-		
-		
 
 	}
 	
@@ -327,33 +330,23 @@ public class UserAdminPanel extends Panel {
 				.getRepositoryService();
 	}
 
-	private boolean sendEmail(String username, String password, String subject) {
-
-		IEmailSender email = getEmailSender();
-		String body = getEmailBody(username, password);
-		return email.sendEmail(subject, body);
+	private String getEmailWelcomeMessage(String password) {
+		StringBuffer sb = new StringBuffer("Your new account has been created.")
+			.append(System.getProperty("line.separator"));
+		sb.append("User Name : " + user.getName()).append(System.getProperty("line.separator"));
+		sb.append("Password : " + password).append(System.getProperty("line.separator"))
+			.append(System.getProperty("line.separator"));
+		sb.append("Please change your password after you have Logged In using the 'User Profile Page'.");
+		return sb.toString();
 	}
-
-	private String getEmailBody(String arg0, String arg1) {
-		Object[] args = { arg0, arg1 };
-		String body = MessageFormat.format(getEmailtemplate(), args);
-
-		return body;
-	}
-
-	private String getEmailtemplate() {
-		StringBuffer sb = new StringBuffer("Welcome...").append(
-				System.getProperty("line.separator")).append(
-				System.getProperty("line.separator"));
-		sb.append("Your new account has been created.").append(
-				System.getProperty("line.separator"));
-		sb.append("User Name : {0}").append(
-				System.getProperty("line.separator"));
-		sb.append("Password : {1}")
-				.append(System.getProperty("line.separator")).append(
-						System.getProperty("line.separator"));
-		sb
-				.append("Please change your password after you have Logged In using the 'User Profile Page'.");
+	
+	private String getEmailResetMessage(String password) {
+		StringBuffer sb = new StringBuffer("Your password has been reset.")
+			.append(System.getProperty("line.separator"));
+		sb.append("User Name : " + user.getName()).append(System.getProperty("line.separator"));
+		sb.append("New Password : " + password).append(System.getProperty("line.separator"))
+			.append(System.getProperty("line.separator"));
+		sb.append("Please change your password after you have Logged In using the 'User Profile Page'.");
 		return sb.toString();
 	}
 

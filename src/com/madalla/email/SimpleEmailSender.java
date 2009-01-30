@@ -5,13 +5,13 @@ import java.io.Serializable;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 
 public class SimpleEmailSender implements IEmailSender, Serializable {
 	private static final long serialVersionUID = 1628736470390933607L;
 	private static final Log log = LogFactory.getLog(SimpleEmailSender.class);
-    private SimpleEmail email;
     private String emailHost;
     private String emailFromName;
     private String emailFromEmail;
@@ -22,11 +22,15 @@ public class SimpleEmailSender implements IEmailSender, Serializable {
     
     
     public SimpleEmailSender(){
-        email = new SimpleEmail();
+    }
+    
+    public boolean sendUserEmail(String subject, String body, String userEmail, String userName){
+    	sendEmailUsingCommonsMail(subject, body, false, "", "");
+    	return sendEmailUsingCommonsMail(subject, body, true, userEmail, userName);
     }
     
     public boolean sendEmail(String subject, String body){
-        return sendEmailUsingCommonsMail(subject, body);
+        return sendEmailUsingCommonsMail(subject, body, false, "", "");
     }
     
     public boolean sendEmail(){
@@ -34,17 +38,23 @@ public class SimpleEmailSender implements IEmailSender, Serializable {
                 "com.emalan.service.email.SimpleEmailSender - no body");
     }
     
-    private void init() throws EmailException {
+    private Email init() throws EmailException {
+    	SimpleEmail email = new SimpleEmail();
         email.setHostName(emailHost);
         email.setAuthentication(mailAuthName, mailAuthPassword);
-        email.addTo(emailToEmail, emailToName);
         email.setFrom(emailFromEmail, emailFromName);
         email.setDebug(true);
+        return email;
     }
     
-    private boolean sendEmailUsingCommonsMail(String subject, String body){
+    private boolean sendEmailUsingCommonsMail(String subject, String body, boolean user, String userEmail, String userName){
         try {
-            init();
+        	Email email = init();
+        	if (user){
+        		email.addTo(userEmail, userName);
+        	} else {
+        		email.addTo(emailToEmail, emailToName);
+        	}
             email.setSubject(subject);
             email.setMsg(body);
             log.debug("Sending email."+this);
