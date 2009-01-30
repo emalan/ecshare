@@ -49,7 +49,7 @@ public class UserAdminPanel extends Panel {
 	private static final long serialVersionUID = 9027719184960390850L;
 	private static final Log log = LogFactory.getLog(UserAdminPanel.class);
 
-	private UserData user = new UserDataView() ;
+	private UserDataView user = new UserDataView() ;
 	private boolean lockUsername = false;
 	private TextField usernameField;
 
@@ -226,7 +226,7 @@ public class UserAdminPanel extends Panel {
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
 				super.onSubmit(target, form);
 				target.addComponent(profileFeedback);
-				getRepositoryService().saveUser(user);
+				saveUserData(user);
 				form.info(getString("message.success"));
 			}
 
@@ -247,21 +247,20 @@ public class UserAdminPanel extends Panel {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
 				super.onSubmit(target, form);
+
 				target.addComponent(profileFeedback);
-				getRepositoryService().saveUser(user);
+				saveUserData(user);
 				form.info(getString("message.success"));
+
 				// clear User, hide Profile and enable Username
-				user = new UserDataView();
-				profileForm
-						.add(new SimpleAttributeModifier("class", "formHide"));
+				profileForm.add(new SimpleAttributeModifier("class", "formHide"));
 				lockUsername = false;
 				target.addComponent(userForm);
 				target.addComponent(profileForm);
 
 				// Clear and set focus on User Name Text Field
-				target.appendJavascript("$('" + usernameField.getMarkupId()
-						+ "').clear();" + "$('" + usernameField.getMarkupId()
-						+ "').focus();");
+                target.appendJavascript("$('" + usernameField.getMarkupId() + "').clear();" 
+                        + "$('" + usernameField.getMarkupId() + "').focus();");
 			}
 
 			@Override
@@ -284,6 +283,10 @@ public class UserAdminPanel extends Panel {
 		UserData dest = getRepositoryService().getUser(userData.getName());
 		BeanUtils.copyProperties(userData, dest);
 		getRepositoryService().saveUser(dest);
+	}
+	
+	private void resetUserData(){
+	    user.setName("");
 	}
 	
 	private IRepositoryService getRepositoryService() {

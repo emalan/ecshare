@@ -9,7 +9,8 @@
         form#passwordLink
         form.formShow {display: inline;}
         form.formHide {display: none;}
-        
+        p.info {clear: both; float: left; width: 25em; margin-top: 15px;}
+                
         div.wicket-aa {
                     font-family: "Lucida Grande","Lucida Sans Unicode",Tahoma,Verdana;
                     font-size: 12px;
@@ -37,7 +38,7 @@
                
     	<div id="profile" class="adminSection">
     		<span class="adminHeading"><wicket:message key="heading.profile">Label Contents</wicket:message></span>
-
+            <p class="info"><wicket:message key="label.user.info">Label Contents</wicket:message></p>
             <form id="user" wicket:id="userForm">
                 <div>    
                     <label><wicket:message key="label.username">Label Contents</wicket:message></label>
@@ -65,6 +66,18 @@
                 <div>    
                    	<label><wicket:message key="label.lastName">Label Contents</wicket:message></label>
                    	<input class="inputText" type="text" wicket:id="lastName"/>
+                </div>
+                <div>
+                    <p class="info"><wicket:message key="label.welcome.info">Label Contents</wicket:message></p>
+                    <span class="buttonwrapper">
+                        <a class="bluebutton"><span><wicket:message key="label.welcome">Label Contents</wicket:message></span></a>
+                    </span>
+                </div>
+                <div>
+                    <p class="info"><wicket:message key="label.reset.info">Label Contents</wicket:message></p>
+                    <span class="buttonwrapper">
+                        <a class="bluebutton"><span><wicket:message key="label.reset">Label Contents</wicket:message></span></a>
+                    </span>
                 </div>
                 <div class="formButtons">
                     <input type="submit" style="display: none;">
