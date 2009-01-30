@@ -12,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.HeaderContributor;
@@ -38,6 +39,7 @@ import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
@@ -257,6 +259,7 @@ public class UserAdminPanel extends Panel {
 				lockUsername = false;
 				target.addComponent(userForm);
 				target.addComponent(profileForm);
+				resetUserData();
 
 				// Clear and set focus on User Name Text Field
                 target.appendJavascript("$('" + usernameField.getMarkupId() + "').clear();" 
@@ -271,7 +274,37 @@ public class UserAdminPanel extends Panel {
 			}
 		};
 		profileForm.add(submitNewButton);
+		
+		profileForm.add(new AjaxLink("welcomeLink"){
+            private static final long serialVersionUID = 1L;
 
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                resetPassword();
+                
+            }
+		});
+		
+        profileForm.add(new AjaxLink("resetLink"){
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                resetPassword();
+                
+            }
+        });
+		
+		
+
+	}
+	
+	private String resetPassword(){
+        String password = SecurityUtils.getGeneratedPassword();
+        log.debug("resetPassword - username="+user.getName() + "password="+ password);
+        user.setPassword(SecurityUtils.encrypt(password));
+        saveUserData(user);
+        return password;
 	}
 	
 	private void retrieveUserData(String username){
