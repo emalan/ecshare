@@ -1,6 +1,5 @@
 package com.madalla.webapp.user;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -12,13 +11,14 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.StringAutoCompleteRenderer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -276,7 +276,11 @@ public class UserAdminPanel extends Panel {
 		};
 		profileForm.add(submitNewButton);
 		
-		profileForm.add(new AjaxLink("welcomeLink"){
+		final Label welcomeFeedback = new Label("welcomeFeedback", new Model(""));
+		welcomeFeedback.setOutputMarkupId(true);
+		profileForm.add(welcomeFeedback);
+		
+		profileForm.add(new IndicatingAjaxLink("welcomeLink"){
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -285,10 +289,16 @@ public class UserAdminPanel extends Panel {
                 String message = getEmailWelcomeMessage(password);
                 String emailBody = EmailFormatter.getUserEmailBody(user, message);
                 getEmailSender().sendUserEmail("Welcome Email", emailBody, user.getEmail(), user.getFirstName());
+                welcomeFeedback.setModelObject("Welcome Email sent to User");
+                target.addComponent(welcomeFeedback);
             }
 		});
 		
-        profileForm.add(new AjaxLink("resetLink"){
+		final Label resetFeedback = new Label("resetFeedback", new Model(""));
+		resetFeedback.setOutputMarkupId(true);
+		profileForm.add(resetFeedback);
+		
+        profileForm.add(new IndicatingAjaxLink("resetLink"){
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -297,6 +307,8 @@ public class UserAdminPanel extends Panel {
                 String message = getEmailResetMessage(password);
                 String emailBody = EmailFormatter.getUserEmailBody(user, message);
                 getEmailSender().sendUserEmail("Reset Password", emailBody, user.getEmail(), user.getFirstName());
+                resetFeedback.setModelObject("Password Reset and Email sent to User");
+                target.addComponent(resetFeedback);
             }
         });
 

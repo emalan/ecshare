@@ -25,11 +25,13 @@ public class SimpleEmailSender implements IEmailSender, Serializable {
     }
     
     public boolean sendUserEmail(String subject, String body, String userEmail, String userName){
+    	log.debug("sendUserEmail - userEmail:"+userEmail+" userName:"+userName+" subject:"+subject );
     	sendEmailUsingCommonsMail(subject, body, false, "", "");
     	return sendEmailUsingCommonsMail(subject, body, true, userEmail, userName);
     }
     
     public boolean sendEmail(String subject, String body){
+    	log.debug("sendEmail - subject:"+subject);
         return sendEmailUsingCommonsMail(subject, body, false, "", "");
     }
     

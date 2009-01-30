@@ -10,6 +10,9 @@
         form.formShow {display: inline;}
         form.formHide {display: none;}
         p.info {clear: both; float: left; width: 25em; margin-top: 15px;}
+        span#welcome {clear:both;}
+        span#reset {clear:both;}
+        form div.email .feedbackPanel {margin: 20px 0 0 15px; color: blue;}
                 
         div.wicket-aa {
                     font-family: "Lucida Grande","Lucida Sans Unicode",Tahoma,Verdana;
@@ -53,7 +56,7 @@
                 </div>
             </form>
 
-			<form id="profile" wicket:id="profileForm">
+			<form wicket:id="profileForm">
                 <div>
                     <label for="email"><wicket:message key="label.email">Label Contents</wicket:message></label>
                     <input id="email" class="inputText" type="text" wicket:id="email"/>
@@ -67,17 +70,19 @@
                    	<label><wicket:message key="label.lastName">Label Contents</wicket:message></label>
                    	<input class="inputText" type="text" wicket:id="lastName"/>
                 </div>
-                <div>
+                <div class="email">
                     <p class="info"><wicket:message key="label.welcome.info">Label Contents</wicket:message></p>
-                    <span class="buttonwrapper">
+                    <span id="welcome" class="buttonwrapper">
                         <a class="bluebutton" wicket:id="welcomeLink"><span><wicket:message key="label.welcome">Label Contents</wicket:message></span></a>
                     </span>
+                    <span class="feedbackPanel" wicket:id="welcomeFeedback"></span>
                 </div>
-                <div>
+                <div class="email">
                     <p class="info"><wicket:message key="label.reset.info">Label Contents</wicket:message></p>
-                    <span class="buttonwrapper">
+                    <span id="reset" class="buttonwrapper">
                         <a class="bluebutton" wicket:id="resetLink"><span><wicket:message key="label.reset">Label Contents</wicket:message></span></a>
                     </span>
+                    <span class="feedbackPanel" wicket:id="resetFeedback"></span>
                 </div>
                 <div class="formButtons">
                     <input type="submit" style="display: none;">
