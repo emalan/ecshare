@@ -33,6 +33,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.util.security.ICredentialHolder;
+import com.madalla.webapp.css.Css;
 import com.madalla.wicket.IndicatingAjaxSubmitLink;
 
 
@@ -135,6 +136,8 @@ public abstract class SignInPanel extends Panel
 	public SignInPanel(final String id, ICredentialHolder credentials, final boolean includeRememberMe)
 	{
 		super(id);
+		
+		add(Css.CSS_FORM);
 
 		this.includeRememberMe = includeRememberMe;
 		
