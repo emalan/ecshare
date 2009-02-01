@@ -36,9 +36,6 @@ public class UserLoginPanel extends Panel {
 
             }
             
-            protected void onSignInSucceeded() {
-                super.onSignInSucceeded();
-            }
             
         });
 

@@ -67,7 +67,7 @@ public abstract class CmsApplication extends WebApplication implements IReposito
     	PageAuthorization loggedInAuthorization = new PageAuthorization(ISecureWebPage.class){
 			@Override
 			protected boolean isAuthorized() {
-                return ((CmsSession)Session.get()).isCmsAdminMode();
+                return ((CmsSession)Session.get()).isLoggedIn();
             }
     	};
     	pageAuthorizations.add(loggedInAuthorization);

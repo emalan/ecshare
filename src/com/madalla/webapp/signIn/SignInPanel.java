@@ -150,7 +150,9 @@ public abstract class SignInPanel extends Panel
 
 		AjaxSubmitLink submit = new IndicatingAjaxSubmitLink("submitLink", form){
 
-			@Override
+            private static final long serialVersionUID = 1L;
+
+            @Override
 			protected void onError(AjaxRequestTarget target, Form form) {
 				log.debug("Ajax onError called");
 				target.addComponent(feedback);
@@ -162,7 +164,7 @@ public abstract class SignInPanel extends Panel
 				if (signIn(getUsername(), getPassword()))
 				{
 					feedback.info(getLocalizer().getString("signInFailed", this, "Success"));
-					onSignInSucceeded();
+					onSignInSucceeded(target);
 				}
 				else
 				{
@@ -252,15 +254,20 @@ public abstract class SignInPanel extends Panel
 	 * @return True if signin was successful
 	 */
 	public abstract boolean signIn(String username, String password);
+	
+	protected void onSignInSucceeded(){
+	    // If login has been called because the user was not yet
+        // logged in, than continue to the original destination,
+        // otherwise to the Home page
+        if (!continueToOriginalDestination())   {
+            setResponsePage(getApplication().getHomePage());
+        }
+	}
 
-	protected void onSignInSucceeded()
+	protected void onSignInSucceeded(AjaxRequestTarget target)
 	{
-		// If login has been called because the user was not yet
-		// logged in, than continue to the original destination,
-		// otherwise to the Home page
-		if (!continueToOriginalDestination())	{
-			setResponsePage(getApplication().getHomePage());
-		}
+	    onSignInSucceeded();
+
 	}
 
 
