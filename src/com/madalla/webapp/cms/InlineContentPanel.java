@@ -55,6 +55,11 @@ public class InlineContentPanel extends Panel {
                 String contentBody = getRepositoryservice().getContentText(page, id, getSession().getLocale());
                 log.debug("onBeforeRender - setting new Content.");
                 contentModel.setObject(contentBody);
+                if (((IContentAdmin)getSession()).isLoggedIn()) {
+                    setEnabled(true);
+                } else {
+                    setEnabled(false);
+                }
                 super.onBeforeRender();
             }            	
         };
