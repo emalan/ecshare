@@ -35,6 +35,7 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
 import com.madalla.util.captcha.CaptchaUtils;
+import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 
@@ -132,6 +133,8 @@ public class EmailFormPanel extends Panel {
     public EmailFormPanel(final String id, final String subject) {
         super(id);
         this.subject = subject;
+        
+        add(Css.CSS_FORM);
         
         Form form = new EmailForm("emailForm");
         form.setOutputMarkupId(true);
