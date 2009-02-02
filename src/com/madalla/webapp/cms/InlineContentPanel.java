@@ -7,6 +7,7 @@ import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
+import com.madalla.bo.ContentData;
 import com.madalla.bo.IPageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
@@ -15,7 +16,7 @@ public class InlineContentPanel extends Panel {
     private static final long serialVersionUID = 1L;
     
     private Log log = LogFactory.getLog(this.getClass());
-
+    
     /**
      * 
      * @param id
@@ -39,6 +40,13 @@ public class InlineContentPanel extends Panel {
 			protected void onSubmit(AjaxRequestTarget target) {
 				super.onSubmit(target);
 				log.debug("onSubmit - value="+ contentModel.getObject());
+	            log.debug("Submiting populated Content object to Content service.");
+	            IPageData page = getRepositoryservice().getPage(nodeName);
+	            ContentData content = getRepositoryservice().getContent(page, id, getSession().getLocale());
+	            content.setText((String)contentModel.getObject());
+	            getRepositoryservice().saveContent(content);
+	            info("Content saved to repository");
+	            log.debug("Content successfully saved to repository. content=" + content);
 			}
 			
         	@Override
