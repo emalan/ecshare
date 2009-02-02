@@ -17,6 +17,7 @@ import com.madalla.webapp.blog.BlogHomePanel;
 import com.madalla.webapp.blog.admin.BlogEntryPanel;
 import com.madalla.webapp.cms.ContentEntryPanel;
 import com.madalla.webapp.cms.ContentPanel;
+import com.madalla.webapp.cms.InlineContentPanel;
 import com.madalla.webapp.cms.admin.ContentAdminPanel;
 import com.madalla.webapp.email.EmailFormPanel;
 import com.madalla.webapp.images.AlbumPanel;
@@ -39,6 +40,13 @@ import com.madalla.webapp.user.UserProfilePanel;
 public class Panels {
 	
 	private Panels(){}
+	
+	public static Panel inlineContentPanel(String id, String node, Class<? extends Page> returnPage){
+		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(node)|| returnPage == null){
+			error("ContentPanel - All parameters need to be supplied.");
+		}
+		return new InlineContentPanel(id, node, returnPage);
+	}
 	
 	/**
 	 * @param id - wicket id
@@ -199,8 +207,5 @@ public class Panels {
 		}
 		return paramValue;
 	}
-	
-	
-	
 
 }
