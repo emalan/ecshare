@@ -41,11 +41,11 @@ public class Panels {
 	
 	private Panels(){}
 	
-	public static Panel inlineContentPanel(String id, String node, Class<? extends Page> returnPage){
-		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(node)|| returnPage == null){
+	public static Panel inlineContentPanel(String id, String node){
+		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(node)){
 			error("ContentPanel - All parameters need to be supplied.");
 		}
-		return new InlineContentPanel(id, node, returnPage);
+		return new InlineContentPanel(id, node);
 	}
 	
 	/**
