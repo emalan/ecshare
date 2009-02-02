@@ -22,7 +22,6 @@ import com.madalla.bo.ContentData;
 import com.madalla.bo.IPageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
-import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.ContentAdminPage;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 
@@ -64,7 +63,7 @@ public class ContentEntryPanel extends Panel {
 			private static final long serialVersionUID = 1801145612969874170L;
 
             protected final void onBeforeRender() {
-                if (((CmsSession)getSession()).isCmsAdminMode()) {
+                if (((IContentAdmin)getSession()).isCmsAdminMode()) {
                     setEnabled(true);
                 } else {
                     setEnabled(false);

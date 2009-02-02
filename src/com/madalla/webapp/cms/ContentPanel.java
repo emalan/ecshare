@@ -21,7 +21,6 @@ import org.apache.wicket.model.Model;
 import com.madalla.bo.IPageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
-import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.ContentEditPage;
 
 public class ContentPanel extends Panel {
@@ -51,7 +50,7 @@ public class ContentPanel extends Panel {
 
 			public Object getObject() {
                 String cssClass;
-                if (((CmsSession)getSession()).isCmsAdminMode()) {
+                if (((IContentAdmin)getSession()).isLoggedIn()) {
                     cssClass = "contentEdit";
                 } else {
                     cssClass = "contentBlock";
@@ -92,7 +91,7 @@ public class ContentPanel extends Panel {
                 private static final long serialVersionUID = 1801145612969874170L;
 
                 protected final void onBeforeRender() {
-                    if (((CmsSession)getSession()).isCmsAdminMode()) {
+                    if (((IContentAdmin)getSession()).isLoggedIn()) {
                         setEnabled(true);
                     } else {
                         setEnabled(false);
