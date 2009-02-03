@@ -12,4 +12,6 @@ public interface IUser {
 	 void setFirstName(String firstName);
 	 String getLastName();
 	 void setLastName(String lastName);
+	 Boolean getAdmin();
+	 void setAdmin(Boolean admin);
 }

@@ -11,7 +11,14 @@ public class UserDataView extends UserData {
 	private String firstName;
 	private String lastName;
 	private String password;
+	private Boolean admin;
 
+	public Boolean getAdmin() {
+		return admin;
+	}
+	public void setAdmin(Boolean admin) {
+		this.admin = admin;
+	}
 	public String getPassword() {
 		return password;
 	}

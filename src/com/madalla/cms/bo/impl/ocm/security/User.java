@@ -16,6 +16,7 @@ public class User extends UserData {
 	@Field private String email;
 	@Field private String firstName;
 	@Field private String lastName;
+	@Field private Boolean admin;
 	
 	public User(){
 		
@@ -68,5 +69,13 @@ public class User extends UserData {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+	public Boolean getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Boolean admin) {
+		this.admin = admin;
+	}
 
 }

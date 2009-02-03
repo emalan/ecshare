@@ -19,6 +19,7 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.StringAutoCompleteRenderer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -143,6 +144,7 @@ public class UserAdminPanel extends Panel {
 
 			add(new TextField("firstName", new PropertyModel(user, "firstName")));
 			add(new TextField("lastName", new PropertyModel(user, "lastName")));
+			add(new CheckBox("adminMode", new PropertyModel(user, "admin")));
 		}
 	}
 
