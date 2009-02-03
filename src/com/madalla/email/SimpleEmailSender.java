@@ -2,6 +2,7 @@ package com.madalla.email;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,6 +27,10 @@ public class SimpleEmailSender implements IEmailSender, Serializable {
     
     public boolean sendUserEmail(String subject, String body, String userEmail, String userName){
     	log.debug("sendUserEmail - userEmail:"+userEmail+" userName:"+userName+" subject:"+subject );
+    	if (StringUtils.isEmpty(userEmail)){
+    		log.error("sendUserEmail - The parameter userEmail cannot be empty. A valid email needs to be supplied");
+    		return false;
+    	}
     	sendEmailUsingCommonsMail(subject, body, false, "", "");
     	return sendEmailUsingCommonsMail(subject, body, true, userEmail, userName);
     }

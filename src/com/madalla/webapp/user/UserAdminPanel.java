@@ -213,10 +213,6 @@ public class UserAdminPanel extends Panel {
 				"document.getElementById('"+ newUserSubmit.getMarkupId()
 				+ "').onclick();return false;")));
 		
-//		userForm.add(new AttributeModifier("onSubmit", true, new Model(
-//				"document.getElementById('" + newUserSubmit.getMarkupId()
-//						+ "').onclick();return false;")));
-
 		final FeedbackPanel profileFeedback = new ComponentFeedbackPanel(
 				"profileFeedback", profileForm);
 		profileFeedback.setOutputMarkupId(true);
@@ -287,12 +283,14 @@ public class UserAdminPanel extends Panel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                String password = resetPassword();
-                String message = getEmailWelcomeMessage(password);
-                String emailBody = EmailFormatter.getUserEmailBody(user, message);
-                getEmailSender().sendUserEmail("Welcome Email", emailBody, user.getEmail(), user.getFirstName());
-                welcomeFeedback.setModelObject("Welcome Email sent to User");
-                target.addComponent(welcomeFeedback);
+            	if (profileForm.process()){
+            		if(sendEmail("Welcome Email", getEmailWelcomeMessage())){
+                		welcomeFeedback.setModelObject(getString("welcome.success"));
+            		} else {
+            			welcomeFeedback.setModelObject(getString("welcome.fail"));
+            		}
+            		target.addComponent(welcomeFeedback);
+            	}
             }
 		});
 		
@@ -305,15 +303,19 @@ public class UserAdminPanel extends Panel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                String password = resetPassword();
-                String message = getEmailResetMessage(password);
-                String emailBody = EmailFormatter.getUserEmailBody(user, message);
-                getEmailSender().sendUserEmail("Reset Password", emailBody, user.getEmail(), user.getFirstName());
-                resetFeedback.setModelObject("Password Reset and Email sent to User");
+                if (sendEmail("Reset Password", getEmailResetMessage())){
+                	resetFeedback.setModelObject(getString("reset.success"));
+                } else {
+                	resetFeedback.setModelObject(getString("reset.fail"));
+                }
                 target.addComponent(resetFeedback);
             }
         });
-
+	}
+	
+	private boolean sendEmail(String subject, String message){
+        String emailBody = EmailFormatter.getUserEmailBody(user, message);
+        return getEmailSender().sendUserEmail("Reset Password", emailBody, user.getEmail(), user.getFirstName());
 	}
 	
 	private String resetPassword(){
@@ -344,7 +346,8 @@ public class UserAdminPanel extends Panel {
 				.getRepositoryService();
 	}
 
-	private String getEmailWelcomeMessage(String password) {
+	private String getEmailWelcomeMessage() {
+		String password = resetPassword();
 		StringBuffer sb = new StringBuffer("Your new account has been created.")
 			.append(System.getProperty("line.separator"));
 		sb.append("User Name : " + user.getName()).append(System.getProperty("line.separator"));
@@ -354,7 +357,8 @@ public class UserAdminPanel extends Panel {
 		return sb.toString();
 	}
 	
-	private String getEmailResetMessage(String password) {
+	private String getEmailResetMessage() {
+		String password = resetPassword();
 		StringBuffer sb = new StringBuffer("Your password has been reset.")
 			.append(System.getProperty("line.separator"));
 		sb.append("User Name : " + user.getName()).append(System.getProperty("line.separator"));
