@@ -7,7 +7,7 @@ span.buttonwrapper{ /* Container you can use to surround a CSS button to clear f
 }
 
 /* disabled buttons */
-.buttonwrapper span.orangebutton {
+.buttonwrapper span.orangebutton, .buttonwrapper span.bluebutton{
     background: transparent url('image/square-gray-left.gif') no-repeat top left;
     display: block;
     float: left;
@@ -17,7 +17,7 @@ span.buttonwrapper{ /* Container you can use to surround a CSS button to clear f
     padding-left: 9px; /* Width of left menu image */
     text-decoration: none;
 }
-.buttonwrapper span.orangebutton  span{
+.buttonwrapper span.orangebutton  span, .buttonwrapper span.bluebutton span{
     background: transparent url('image/square-gray-right.gif') no-repeat top right;
     display: block;
     padding: 4px 9px 4px 0; /*Set 9px below to match value of 'padding-left' value above*/

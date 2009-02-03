@@ -11,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.HeaderContributor;
@@ -213,13 +214,76 @@ public class UserAdminPanel extends Panel {
 				"document.getElementById('"+ newUserSubmit.getMarkupId()
 				+ "').onclick();return false;")));
 		
+
+		//Welcome Email
+		final Label welcomeFeedback = new Label("welcomeFeedback", new Model(""));
+		welcomeFeedback.setOutputMarkupId(true);
+		profileForm.add(welcomeFeedback);
+		
+		final AjaxLink welcomeLink = new IndicatingAjaxLink("welcomeLink"){
+			private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+          		if(sendEmail("Welcome Email", getEmailWelcomeMessage())){
+               		welcomeFeedback.setModelObject(getString("welcome.success"));
+           		} else {
+           			welcomeFeedback.setModelObject(getString("welcome.fail"));
+           		}
+         		target.addComponent(welcomeFeedback);
+            }
+
+            @Override
+			protected void onBeforeRender() {
+				if(StringUtils.isEmpty(user.getEmail())){
+					setEnabled(false);
+				} else {
+					setEnabled(true);
+				}
+				super.onBeforeRender();
+			}
+
+		};
+		profileForm.add(welcomeLink);
+
+		//Reset Password 
+		final Label resetFeedback = new Label("resetFeedback", new Model(""));
+		resetFeedback.setOutputMarkupId(true);
+		profileForm.add(resetFeedback);
+		
+        final AjaxLink resetLink = new IndicatingAjaxLink("resetLink"){
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if (sendEmail("Reset Password", getEmailResetMessage())){
+                	resetFeedback.setModelObject(getString("reset.success"));
+                } else {
+                	resetFeedback.setModelObject(getString("reset.fail"));
+                }
+                target.addComponent(resetFeedback);
+            }
+            
+            @Override
+			protected void onBeforeRender() {
+				if(StringUtils.isEmpty(user.getEmail())){
+					setEnabled(false);
+				} else {
+					setEnabled(true);
+				}
+				super.onBeforeRender();
+			}
+
+        };
+        profileForm.add(resetLink);
+
 		final FeedbackPanel profileFeedback = new ComponentFeedbackPanel(
 				"profileFeedback", profileForm);
 		profileFeedback.setOutputMarkupId(true);
 		profileForm.add(profileFeedback);
 
 		//Submit Button for just Saving
-		AjaxButton submitButton = new AjaxValidationStyleSubmitButton(
+		final AjaxButton submitButton = new AjaxValidationStyleSubmitButton(
 				"profileSubmit", profileForm) {
 			private static final long serialVersionUID = 1L;
 
@@ -229,6 +293,8 @@ public class UserAdminPanel extends Panel {
 				target.addComponent(profileFeedback);
 				saveUserData(user);
 				form.info(getString("message.success"));
+				target.addComponent(welcomeLink);
+				target.addComponent(resetLink);
 			}
 
 			@Override
@@ -274,43 +340,6 @@ public class UserAdminPanel extends Panel {
 		};
 		profileForm.add(submitNewButton);
 		
-		final Label welcomeFeedback = new Label("welcomeFeedback", new Model(""));
-		welcomeFeedback.setOutputMarkupId(true);
-		profileForm.add(welcomeFeedback);
-		
-		profileForm.add(new IndicatingAjaxLink("welcomeLink"){
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-            	if (profileForm.process()){
-            		if(sendEmail("Welcome Email", getEmailWelcomeMessage())){
-                		welcomeFeedback.setModelObject(getString("welcome.success"));
-            		} else {
-            			welcomeFeedback.setModelObject(getString("welcome.fail"));
-            		}
-            		target.addComponent(welcomeFeedback);
-            	}
-            }
-		});
-		
-		final Label resetFeedback = new Label("resetFeedback", new Model(""));
-		resetFeedback.setOutputMarkupId(true);
-		profileForm.add(resetFeedback);
-		
-        profileForm.add(new IndicatingAjaxLink("resetLink"){
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                if (sendEmail("Reset Password", getEmailResetMessage())){
-                	resetFeedback.setModelObject(getString("reset.success"));
-                } else {
-                	resetFeedback.setModelObject(getString("reset.fail"));
-                }
-                target.addComponent(resetFeedback);
-            }
-        });
 	}
 	
 	private boolean sendEmail(String subject, String message){
