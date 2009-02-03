@@ -363,7 +363,6 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 					return false;
 				}
 			}
-			
 		};
 	}
 
