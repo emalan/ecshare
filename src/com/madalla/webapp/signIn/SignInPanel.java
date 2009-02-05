@@ -158,6 +158,7 @@ public abstract class SignInPanel extends Panel
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
 				log.debug("Ajax submit called");
+				target.addComponent(feedback);
 				if (signIn(getUsername(), getPassword()))
 				{
 					feedback.info(getLocalizer().getString("signInFailed", this, "Success"));
