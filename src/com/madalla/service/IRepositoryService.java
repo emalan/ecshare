@@ -1,7 +1,6 @@
 package com.madalla.service;
 
 import java.io.InputStream;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -37,12 +36,6 @@ import com.madalla.webapp.security.IAuthenticator;
  */
 public interface IRepositoryService {
 
-	
-	/**
-	 * @param id 
-	 * @param locale
-	 * @return
-	 */
 	String getLocaleId(String id, Locale locale);
 
 	// type checks

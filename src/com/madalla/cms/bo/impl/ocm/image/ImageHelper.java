@@ -10,7 +10,6 @@ import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
 import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
 import org.springmodules.jcr.JcrCallback;

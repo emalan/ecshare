@@ -40,13 +40,12 @@ public class AppAuthorizationStrategy extends AbstractPageAuthorizationStrategy{
 	/**
 	 * Construct.
 	 * 
-	 * @param securePageSuperType
-	 *            The class or interface supertype that indicates that a given Page requires
-	 *            authorization
 	 * @param signInPageClass
-	 *            The sign in page class
+	 *          The sign in page class
+	 * @param pageAuthorizations
+	 * 			Collection of PageAuthorization that need to be authorized  
 	 */
-	public AppAuthorizationStrategy(final Class signInPageClass, Collection <PageAuthorization> pageAuthorizations)
+	public AppAuthorizationStrategy(final Class<?> signInPageClass, Collection <PageAuthorization> pageAuthorizations)
 	{
 		
 		this.pageAuthorizations = pageAuthorizations;
@@ -77,6 +76,7 @@ public class AppAuthorizationStrategy extends AbstractPageAuthorizationStrategy{
 	/**
 	 * @see org.apache.wicket.authorization.strategies.page.AbstractPageAuthorizationStrategy#isPageAuthorized(java.lang.Class)
 	 */
+	@SuppressWarnings("unchecked") // need to override method 
 	protected boolean isPageAuthorized(final Class pageClass)
 	{
 		for (PageAuthorization pageAuthorization: pageAuthorizations){

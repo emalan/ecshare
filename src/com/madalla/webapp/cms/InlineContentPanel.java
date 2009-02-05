@@ -20,8 +20,7 @@ public class InlineContentPanel extends Panel {
     /**
      * 
      * @param id
-     * @param node
-     * @param returnPage
+     * @param nodeName
      */
     public InlineContentPanel(final String id, final String nodeName) {
         super(id);

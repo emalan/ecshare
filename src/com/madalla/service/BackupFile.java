@@ -104,7 +104,6 @@ public class BackupFile implements Serializable, Comparable<BackupFile> {
 	 */
 	public String getDisplayName(){
 		String s = file.getName();
-		String site = StringUtils.substringBefore(s, BACKUP);
 		String rt;
 		try {
 			String dateTimeString = StringUtils.substringBefore(StringUtils.substringAfter(s, BACKUP),FILE_SUFFIX);

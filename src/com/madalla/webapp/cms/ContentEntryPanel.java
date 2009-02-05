@@ -38,8 +38,6 @@ public class ContentEntryPanel extends Panel {
     Log log = LogFactory.getLog(this.getClass());
 
     private Class<? extends Page> contentPage;
-    private final String nodeName;
-    private final String contentId;
     private ContentData content;
 
 	/**
@@ -51,8 +49,6 @@ public class ContentEntryPanel extends Panel {
 	 */
 	public ContentEntryPanel(String name, final String nodeName, final String contentId, Class<? extends Page> returnPage) {
         super(name);
-        this.nodeName = nodeName;
-        this.contentId = contentId;
         this.contentPage = returnPage;
         add(HeaderContributor.forJavaScript(TinyMce.class, "tiny_mce.js"));
         add(HeaderContributor.forJavaScript(JAVASCRIPT));

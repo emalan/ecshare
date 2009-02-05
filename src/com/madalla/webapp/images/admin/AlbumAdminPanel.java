@@ -30,7 +30,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
 
 import com.madalla.bo.IAlbumData;
-import com.madalla.cms.bo.impl.ocm.image.Album;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;

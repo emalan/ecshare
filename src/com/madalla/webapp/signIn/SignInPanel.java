@@ -71,8 +71,6 @@ public abstract class SignInPanel extends Panel
 	{
 		private static final long serialVersionUID = 1L;
 
-		private final ICredentialHolder credentials;
-
 		/**
 		 * Constructor.
 		 * 
@@ -82,7 +80,6 @@ public abstract class SignInPanel extends Panel
 		public SignInForm(final String id, ICredentialHolder credentials)
 		{
 			super(id);
-			this.credentials = credentials;
 			// Attach textfield components that edit properties map
 			// in lieu of a formal beans model
 			add(username = new TextField("username", new PropertyModel(credentials, "username")));

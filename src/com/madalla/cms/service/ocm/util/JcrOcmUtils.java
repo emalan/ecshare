@@ -45,26 +45,32 @@ public class JcrOcmUtils {
 		} catch (RepositoryException e) {
 			throw new WicketRuntimeException("Error setting up OCM ObjectContentManager.",e);
 		}
-    	
+		
+		Mapper mapper = setupMappers();
+		ObjectContentManagerImpl ocm =  new ObjectContentManagerImpl(session, mapper);
+		
+		AtomicTypeConverterProvider convertors = setupConvertors();
+		ObjectConverterImpl converterImpl = new ObjectConverterImpl(mapper, convertors);
+		ocm.setObjectConverter(converterImpl);
+		
+		return ocm;
+    }
+    
+    @SuppressWarnings("unchecked") //need to interact with non-generics code
+	private static Mapper setupMappers(){
     	//Setup OCM annotated classes
 		List<Class> classes = new ArrayList<Class>();
 		for(RepositoryType type: RepositoryType.values()){
 			classes.add(type.typeClass);
 		}
-		Mapper mapper = new AnnotationMapperImpl(classes);
-				
-		//Setup Convertors
+		return new AnnotationMapperImpl(classes);
+    }
+    @SuppressWarnings("unchecked") //need to interact with non-generics code
+	private static AtomicTypeConverterProvider setupConvertors(){
 		Map convertors = new HashMap();
 		convertors.put(DateTime.class, JodaDateTimeTypeConverter.class);
 		convertors.put(DynamicImageResource.class, DynamicImageResourceConvertor.class);
-		AtomicTypeConverterProvider atomicTypeConverterProvider = new DefaultAtomicTypeConverterProvider(convertors);
-		
-		
-		ObjectContentManagerImpl ocm =  new ObjectContentManagerImpl(session, mapper);
-		ObjectConverterImpl converterImpl = new ObjectConverterImpl(mapper, atomicTypeConverterProvider);
-		ocm.setObjectConverter(converterImpl);
-		
-		return ocm;
+		return new DefaultAtomicTypeConverterProvider(convertors);
     }
     
     

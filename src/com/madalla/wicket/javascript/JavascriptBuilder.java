@@ -9,7 +9,7 @@ import java.util.Map;
  * Helper class for programatically constructing javascript.
  * 
  * @author <a href="mailto:wireframe6464@users.sourceforge.net">Ryan Sonnek</a>
- * @author Thanks Ryan!  made some usability changes
+ * @author Eugene Malan  - Thanks Ryan!  made some usability changes
  */
 public class JavascriptBuilder
 {
@@ -31,7 +31,7 @@ public class JavascriptBuilder
 		return buffer.toString();
 	}
 
-	public String formatAsJavascriptHash(Map options)
+	public String formatAsJavascriptHash(Map<String,Object> options)
 	{
 		if (options.isEmpty())
 		{
@@ -39,7 +39,7 @@ public class JavascriptBuilder
 		}
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("{");
-		for (Iterator iter = options.keySet().iterator(); iter.hasNext();)
+		for (Iterator<String> iter = options.keySet().iterator(); iter.hasNext();)
 		{
 			String key = (String)iter.next();
 			Object value = options.get(key);

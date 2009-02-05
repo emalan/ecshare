@@ -24,8 +24,9 @@ import org.apache.wicket.model.IModel;
 
 public class EditablePanel extends Panel {
 
+	private static final long serialVersionUID = 1L;
 
-    /**
+	/**
      * Panel constructor.
      * 
      * @param id
@@ -43,7 +44,9 @@ public class EditablePanel extends Panel {
 
         field.add(new AjaxFormComponentUpdatingBehavior("onblur")
         {
-            protected void onUpdate(AjaxRequestTarget target)
+			private static final long serialVersionUID = 1L;
+
+			protected void onUpdate(AjaxRequestTarget target)
             {
             }
         });

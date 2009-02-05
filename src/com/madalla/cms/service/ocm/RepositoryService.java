@@ -61,7 +61,7 @@ import com.madalla.webapp.security.IAuthenticator;
  * </pre>
  * 
  * @author Eugene Malan
- * @see com.madalla.cms.service.ocm.madalla.service.cms.ocm.RepositoryInfo
+ * @see com.madalla.cms.service.ocm.RepositoryInfo
  *
  */
 public class RepositoryService extends AbstractRepositoryService implements IRepositoryService, Serializable{
@@ -77,8 +77,11 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	
     	//Create default Users if they don't exist yet
     	getNewUser("guest", SecurityUtils.encrypt("password"));
-    	getNewUser("admin", SecurityUtils.encrypt("password"));
-    	
+    	UserData adminUser = getNewUser("admin", SecurityUtils.encrypt("password"));
+    	if (adminUser != null){
+    		adminUser.setAdmin(true);
+    		saveUser(adminUser);
+    	}
     }
 
     public boolean isDeletableNode(final String path){
@@ -170,8 +173,9 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         return (IImageData) ocm.getObject(Image.class, path);
     }
     
-    //TODO There is a dangerous cast from Collection to List here
-    public List<ImageData> getAlbumImages(AlbumData album){
+    
+    @SuppressWarnings("unchecked")//TODO maybe we should create new List instead of Casting
+	public List<ImageData> getAlbumImages(AlbumData album){
     	List<ImageData> list = (List<ImageData>) repositoryTemplate.getAll(RepositoryType.IMAGE, album);
     	Collections.sort(list);
     	return list;
@@ -222,7 +226,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	saveDataObject(blogEntry);
     }
     
-  //TODO There is a dangerous cast from Collection to List here
+	@SuppressWarnings("unchecked")//TODO Maybe better to create new List instead of the risky Cast
 	public List<BlogEntryData> getBlogEntries(BlogData blog){
 		List<BlogEntryData> list = (List<BlogEntryData>) repositoryTemplate.getAll(RepositoryType.BLOGENTRY, blog);
 		Collections.sort(list);

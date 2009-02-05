@@ -90,15 +90,7 @@ public class ContentAdminPanel extends Panel {
 
 			public void onClick(AjaxRequestTarget target) {
             	target.addComponent(listChoice);
-            	String fileName;
             	try {
-            		IRepositoryAdminService service = getContentAdminService();
-            		
-            		if (adminApp){
-            			fileName = service.backupContentRoot();
-            		} else {
-            			fileName = service.backupContentSite();
-            		}
                     info("Content Repository backed up successfully");
                     target.addComponent(backupMessages);
             	} catch (Exception e){

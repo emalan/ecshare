@@ -9,8 +9,6 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageOutputStream;
 
-import org.apache.jackrabbit.util.LazyFileInputStream;
-
 abstract class ImageScaleProcessor {
 	InputStream process(InputStream inputStream, LoggingImageObserver observer,
 			int width, int height){

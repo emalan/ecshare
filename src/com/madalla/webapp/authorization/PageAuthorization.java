@@ -7,8 +7,10 @@ public abstract class PageAuthorization {
 	/**
 	 * The supertype (class or interface) of Pages that require authorization to be instantiated.
 	 */
+	@SuppressWarnings("unchecked")
 	private final WeakReference/* <Class> */securePageSuperTypeRef;
 	
+	@SuppressWarnings("unchecked")
 	public PageAuthorization(final Class securePageSuperType){
 		if (securePageSuperType == null)
 		{

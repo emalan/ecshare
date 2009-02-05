@@ -7,7 +7,9 @@ public class SimpleEmailSenderTest extends TestCase {
     public void testEmailSender() {
 
         SimpleEmailSender emailSender = new SimpleEmailSender() {
-            protected String getSubject() {
+			private static final long serialVersionUID = 1L;
+
+			protected String getSubject() {
                 return "Test subject";
             }
 

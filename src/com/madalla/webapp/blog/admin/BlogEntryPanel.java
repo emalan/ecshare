@@ -114,6 +114,7 @@ public class BlogEntryPanel extends Panel {
 
 				private static final long serialVersionUID = 1L;
 
+				@SuppressWarnings("unchecked") //interacting with non-generics code
 				@Override
 				protected void configure(Map widgetProperties) {
 					super.configure(widgetProperties);
