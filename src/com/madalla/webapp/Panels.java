@@ -61,62 +61,62 @@ public class Panels {
 		return new ContentPanel(id, node, returnPage);
 	}
 	
-	public static Panel contentEntryPanel(String id, PageParameters params){
-		if (StringUtils.isEmpty(id) || params == null){
+	public static Panel contentEntryPanel(String id, PageParameters parameters){
+		if (StringUtils.isEmpty(id) || parameters == null){
 			error("ContentEntryPanel - All parameters need to be supplied.");
 		} 
-        String nodeName = getPageParameter(CONTENT_NODE, params, "ContentEntryPanel");
-        String contentId = getPageParameter(CONTENT_ID, params,"ContentEntryPanel");
-        Class<? extends Page> returnPage = getReturnPage(params, "ContentEntryPanel");
+        String nodeName = getPageParameter(CONTENT_NODE, parameters, "ContentEntryPanel");
+        String contentId = getPageParameter(CONTENT_ID, parameters,"ContentEntryPanel");
+        Class<? extends Page> returnPage = getReturnPage(parameters, "ContentEntryPanel");
 
 		return new ContentEntryPanel(id, nodeName, contentId, returnPage);
 	}
 	
-	public static Panel contentAdminPanelForSite(String id, PageParameters params){
-		if (StringUtils.isEmpty(id) || params == null){
+	public static Panel contentAdminPanelForSite(String id, PageParameters parameters){
+		if (StringUtils.isEmpty(id) || parameters == null){
 			error("ContentEntryPanel - All parameters need to be supplied.");
 		}
-		return ContentAdminPanel.newInstance(id, getReturnPage(params, "ContentEntryPanel"));
+		return ContentAdminPanel.newInstance(id, getReturnPage(parameters, "ContentEntryPanel"));
 	}
 	
-	public static Panel contentAdminPanelForAdmin(String id, PageParameters params){
-		if (StringUtils.isEmpty(id) || params == null){
+	public static Panel contentAdminPanelForAdmin(String id, PageParameters parameters){
+		if (StringUtils.isEmpty(id) || parameters == null){
 			error("ContentEntryPanel - All parameters need to be supplied.");
 		}
-		return ContentAdminPanel.newAdminInstance(id, getReturnPage(params, "ContentEntryPanel"));
+		return ContentAdminPanel.newAdminInstance(id, getReturnPage(parameters, "ContentEntryPanel"));
 	}
 
 	/**
 	 * @param id - wicket id
 	 * @param blog - Name of this Blog
 	 * @param returnPage - used to return from blog admin Page
-	 * @param params - page parameters
+	 * @param parameters - page parameters
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.blog.BlogHomePanel}
 	 */
-	public static Panel blogPanel(String id, String blog, Class<? extends Page> returnPage, PageParameters params) {
-		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(blog)|| returnPage == null || params == null){
+	public static Panel blogPanel(String id, String blog, Class<? extends Page> returnPage, PageParameters parameters) {
+		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(blog)|| returnPage == null || parameters == null){
 			error("BlogHomePanel - All parameters need to be supplied.");
 		}
-		String blogEntryId = params.getString(BLOG_ENTRY_ID);
+		String blogEntryId = parameters.getString(BLOG_ENTRY_ID);
    		return new BlogHomePanel(id, blog, blogEntryId, returnPage);
 		
 	}
 	
 	/**
-	 * @param id
-	 * @param params - page parameters
+	 * @param id - wicket id
+	 * @param parameters - page parameters including Blog name and return page
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.blog.admin.BlogEntryPanel}
 	 */
-	public static Panel blogEntryPanel(String id, PageParameters params){
-		if (StringUtils.isEmpty(id) || params == null){
+	public static Panel blogEntryPanel(String id, PageParameters parameters){
+		if (StringUtils.isEmpty(id) || parameters == null){
 			error("BlogHomePanel - All parameters need to be supplied.");
 		}
-		String blogName = getPageParameter(BLOG_NAME, params, "BlogEntryPanel");
-		String blogEntryId = params.getString(BLOG_ENTRY_ID);
+		String blogName = getPageParameter(BLOG_NAME, parameters, "BlogEntryPanel");
+		String blogEntryId = parameters.getString(BLOG_ENTRY_ID);
 		if (StringUtils.isEmpty(blogEntryId)){
-			return new BlogEntryPanel(id, blogName, getReturnPage(params, "BlogEntryPanel"));
+			return new BlogEntryPanel(id, blogName, getReturnPage(parameters, "BlogEntryPanel"));
 		} else {
-			return new BlogEntryPanel(id, blogName, blogEntryId, getReturnPage(params, "BlogEntryPanel"));
+			return new BlogEntryPanel(id, blogName, blogEntryId, getReturnPage(parameters, "BlogEntryPanel"));
 		}
 	}
 	
@@ -134,15 +134,15 @@ public class Panels {
 	
 	/**
 	 * @param id - wicket id
-	 * @param params - pageParameters - passed on to Panel
+	 * @param parameters - pageParameters - passed on to Panel
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.images.admin.AlbumAdminPanel}
 	 */
-	public static Panel albumAdminPanel(String id, PageParameters params){
-		if (StringUtils.isEmpty(id) || params == null){
+	public static Panel albumAdminPanel(String id, PageParameters parameters){
+		if (StringUtils.isEmpty(id) || parameters == null){
 			error("AlbumAdminPanel - All parameters need to be supplied.");
 		}
-		String album = getPageParameter(ALBUM, params,"AlbumAdminPanel");
-		return new AlbumAdminPanel(id, album, getReturnPage(params, "AlbumAdminPanel"));
+		String album = getPageParameter(ALBUM, parameters,"AlbumAdminPanel");
+		return new AlbumAdminPanel(id, album, getReturnPage(parameters, "AlbumAdminPanel"));
 	}
 	
 	/**
@@ -158,25 +158,43 @@ public class Panels {
 		return new AlbumPanel(id, album, returnPage);
 	}
 	
-	public static Panel userLoginPanel(String id, PageParameters params) {
-		if (StringUtils.isEmpty(id) || params == null){
+	/**
+	 * User Login Panel - with login and lost password functionality
+	 * @param id - wicket id
+	 * @param parameters - including return Page
+	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserLoginPanel}
+	 */	
+	public static Panel userLoginPanel(String id, PageParameters parameters) {
+		if (StringUtils.isEmpty(id) || parameters == null){
 			error("UserLoginPanel - All parameters need to be supplied.");
 		}
-		return new UserLoginPanel(id, getReturnPage(params, "UserLoginPanel"));
+		return new UserLoginPanel(id, getReturnPage(parameters, "UserLoginPanel"));
 	}
-	
-	public static Panel userProfilePanel(String id, PageParameters params) {
-		if (StringUtils.isEmpty(id) || params == null){
+
+	/**
+	 * User Profile Panel - change user info, reset password
+	 * @param id - wicket id
+	 * @param parameters - including return Page
+	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserProfilePanel}
+	 */	
+	public static Panel userProfilePanel(String id, PageParameters parameters) {
+		if (StringUtils.isEmpty(id) || parameters == null){
 			error("UserProfilePanel - All parameters need to be supplied.");
 		}
-		return new UserProfilePanel(id, getReturnPage(params, "UserProfilePanel"));
+		return new UserProfilePanel(id, getReturnPage(parameters, "UserProfilePanel"));
 	}
 	
-	public static Panel userAdminPanel(String id, PageParameters params) {
-		if (StringUtils.isEmpty(id) || params == null){
+	/**
+	 * User Admin Panel - create new user, edit existing user, reset password, send welcome email
+	 * @param id - wicket id
+	 * @param parameters - including return Page
+	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserAdminPanel}
+	 */	
+	public static Panel userAdminPanel(String id, PageParameters parameters) {
+		if (StringUtils.isEmpty(id) || parameters == null){
 			error("UserAdminPanel - All parameters need to be supplied.");
 		}
-		return new UserAdminPanel(id, getReturnPage(params, "UserAdminPanel"));
+		return new UserAdminPanel(id, getReturnPage(parameters, "UserAdminPanel"));
 	}
 	
 	/*  Utility methods */
@@ -187,8 +205,8 @@ public class Panels {
 		throw new WicketRuntimeException(message, e);
 	}
 	@SuppressWarnings("unchecked")
-	private static Class<? extends Page> getReturnPage(PageParameters params, String panel){
-		String pageString = getPageParameter(RETURN_PAGE, params, panel);
+	private static Class<? extends Page> getReturnPage(PageParameters parameters, String panel){
+		String pageString = getPageParameter(RETURN_PAGE, parameters, panel);
 		Class returnPage = null;
 		try {
             returnPage = Class.forName(pageString);
@@ -200,8 +218,8 @@ public class Panels {
         }
         return returnPage;
 	}
-	private static String getPageParameter(String paramName, PageParameters params, String panel){
-		String paramValue = params.getString(paramName);
+	private static String getPageParameter(String paramName, PageParameters parameters, String panel){
+		String paramValue = parameters.getString(paramName);
 		if (StringUtils.isEmpty(paramValue)){
 			error(panel + " - A pageParameter with value '"+ paramName+"' needs to supplied.");
 		}

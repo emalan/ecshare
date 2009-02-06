@@ -1,0 +1,39 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+      div.popup {
+            top: 75px; 
+            position: absolute; 
+            z-index: 1000;
+            width: 100%;
+        }
+        div.popup div.popupBorder {
+            border-style: solid; border-width: 1px;
+            border-color: #AFBFD8; padding: 1px; background-color: #eee;
+            margin-right: auto; margin-left: auto; width:35em;
+        }
+        div.popup div.popupLinks {}
+        div.popup div.popupTitle {background-color: #0022CC; color: white; font-size: 12px; font-weight: bold;}
+        div.popup div.popupContent {height: 14em; }
+      </style>
+</wicket:head>
+<body>
+    <wicket:panel>
+    
+    <!-- Login Form to float in middle of Page -->
+    <div class='popup' wicket:id="loginPopup">
+        <div class='popupBorder' style=''>
+            <div style='overflow: auto; width: 100%'>
+                <div class='popupTitle' style='padding: 0.2em; padding-left: 1em;'>
+                    Logon to enter Admin Mode
+                </div>
+                <div id="signInPanel" class='popupContent' style='width: 100%; background-color: white; overflow: auto; white-space: nowrap'>
+                    <span wicket:id="signInPanel"/>
+                </div>
+            </div>                  
+        </div>
+    </div>
+    
+    </wicket:panel>
+</body>
+</html>

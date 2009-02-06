@@ -6,10 +6,14 @@ import java.util.Collection;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Request;
+import org.apache.wicket.Response;
 import org.apache.wicket.Session;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.protocol.http.WebApplication;
 
+import com.madalla.email.IEmailSender;
+import com.madalla.email.IEmailServiceProvider;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.service.IRepositoryService;
@@ -24,24 +28,34 @@ import com.madalla.webapp.authorization.PageAuthorization;
  * @author Eugene Malan
  *
  */
-public abstract class CmsApplication extends WebApplication implements IRepositoryServiceProvider, IRepositoryAdminServiceProvider {
-
-    private IRepositoryService repositoryService;
-    private IRepositoryAdminService repositoryAdminService;
+public abstract class CmsApplication extends WebApplication implements IRepositoryServiceProvider, IRepositoryAdminServiceProvider, IEmailServiceProvider {
 
 	private final static Log log = LogFactory.getLog(CmsApplication.class);
+
+	private IRepositoryService repositoryService;
+    private IRepositoryAdminService repositoryAdminService;
+    private IEmailSender emailSender;
+
     
     protected void init() {
     	//initialization checks
     	if (repositoryService == null){
     		log.fatal("Content Service is not configured Correctly.");
-    		throw new WicketRuntimeException("Service is not configured Correctly.");
+    		throw new WicketRuntimeException("Repository Service is not configured Correctly.");
     	}
     	if (repositoryAdminService == null){
     		log.fatal("Content Admin Service is not configured Correctly.");
-    		throw new WicketRuntimeException("Service is not configured Correctly.");
+    		throw new WicketRuntimeException("Repository Admin Service is not configured Correctly.");
+    	}
+    	if (emailSender == null){
+    		log.fatal("Email Sender is not configured Correctly.");
+    		throw new WicketRuntimeException("Email Service is not configured Correctly.");
     	}
         setupApplicationSpecificConfiguration();
+    }
+    
+    public Session newSession(Request request, Response response) {
+        return new CmsSession(request);
     }
     
     private void setupApplicationSpecificConfiguration(){
@@ -77,6 +91,14 @@ public abstract class CmsApplication extends WebApplication implements IReposito
                 getHomePage(), pageAuthorizations);
  
         getSecuritySettings().setAuthorizationStrategy(authorizationStrategy);
+    }
+
+    public IEmailSender getEmailSender() {
+        return emailSender;
+    }
+
+    public void setEmailSender(IEmailSender emailSender) {
+        this.emailSender = emailSender;
     }
     
     public IRepositoryService getRepositoryService(){

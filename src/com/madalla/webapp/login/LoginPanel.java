@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.madalla.webapp.signIn;
+package com.madalla.webapp.login;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -47,10 +47,10 @@ import com.madalla.wicket.IndicatingAjaxSubmitLink;
  * @author Juergen Donnerstag
  * @author Eelco Hillenius
  */
-public abstract class SignInPanel extends Panel
+public abstract class LoginPanel extends Panel
 {
 	private static final long serialVersionUID = 1L;
-	private static final Log log = LogFactory.getLog(SignInPanel.class);
+	private static final Log log = LogFactory.getLog(LoginPanel.class);
 
 	/** True if the panel should display a remember-me checkbox */
 	private boolean includeRememberMe = true;
@@ -94,7 +94,7 @@ public abstract class SignInPanel extends Panel
 			add(rememberMeRow);
 
 			// Add rememberMe checkbox
-			rememberMeRow.add(new CheckBox("rememberMe", new PropertyModel(SignInPanel.this,
+			rememberMeRow.add(new CheckBox("rememberMe", new PropertyModel(LoginPanel.this,
 					"rememberMe")));
 
 			// Make form values persistent
@@ -118,7 +118,7 @@ public abstract class SignInPanel extends Panel
 	}
 
 
-    public SignInPanel(final String id, ICredentialHolder credentials)
+    public LoginPanel(final String id, ICredentialHolder credentials)
     {
         this(id, credentials, true);
     }	
@@ -130,7 +130,7 @@ public abstract class SignInPanel extends Panel
 	 *            True if form should include a remember-me checkbox
 	 * @see org.apache.wicket.Component#Component(String)
 	 */
-	public SignInPanel(final String id, ICredentialHolder credentials, final boolean includeRememberMe)
+	public LoginPanel(final String id, ICredentialHolder credentials, final boolean includeRememberMe)
 	{
 		super(id);
 		
@@ -187,7 +187,7 @@ public abstract class SignInPanel extends Panel
 	{
 		// Remove persisted user data. Search for child component
 		// of type SignInForm and remove its related persistence values.
-		getPage().removePersistedFormData(SignInPanel.SignInForm.class, true);
+		getPage().removePersistedFormData(LoginPanel.SignInForm.class, true);
 	}
 
 	/**

@@ -8,8 +8,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.login.LoginPanel;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
-import com.madalla.webapp.signIn.SignInPanel;
 
 public class UserLoginPanel extends Panel {
 
@@ -23,7 +23,7 @@ public class UserLoginPanel extends Panel {
 		
 		add(new PageLink("returnLink", returnPage));
 		
-		add(new SignInPanel("signInPanel", new SecureCredentials()){
+		add(new LoginPanel("signInPanel", new SecureCredentials()){
             private static final long serialVersionUID = 1L;
             
             public boolean signIn(String username, String password) {

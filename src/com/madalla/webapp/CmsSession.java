@@ -8,7 +8,7 @@ import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.cms.IContentAdmin;
 import com.madalla.webapp.security.IAuthenticator;
 
-public abstract class CmsSession  extends WebSession implements IContentAdmin{
+public class CmsSession  extends WebSession implements IContentAdmin{
 
 	private static final long serialVersionUID = 652426659740076486L;
 	private boolean cmsAdminMode = false;
