@@ -21,6 +21,7 @@ import org.apache.wicket.model.PropertyModel;
 import com.madalla.service.BackupFile;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
+import com.madalla.webapp.css.Css;
 import com.madalla.wicket.IndicatingAjaxSubmitLink;
 
 public class ContentAdminPanel extends Panel {
@@ -44,6 +45,7 @@ public class ContentAdminPanel extends Panel {
 		super(name);
 		this.adminApp = adminApp;
 		
+		add(Css.CSS_FORM);
         add(new PageLink("returnLink", returnPage));
 		
         setBackupFileList();
