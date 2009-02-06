@@ -13,7 +13,6 @@ import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.ListChoice;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -45,11 +44,7 @@ public class ContentAdminPanel extends Panel {
 		super(name);
 		this.adminApp = adminApp;
 		
-        Link link = new PageLink("returnLink", returnPage);
-        if (adminApp){
-        	link.setVisible(false);
-        }
-        add(link);
+        add(new PageLink("returnLink", returnPage));
 		
         setBackupFileList();
         final ListChoice listChoice = new ListChoice("backupFiles", new PropertyModel(this,"file"), 
@@ -91,6 +86,12 @@ public class ContentAdminPanel extends Panel {
 			public void onClick(AjaxRequestTarget target) {
             	target.addComponent(listChoice);
             	try {
+            		IRepositoryAdminService service = getContentAdminService();
+            		if (adminApp){
+            			service.backupContentRoot();
+            		} else {
+            			service.backupContentSite();
+            		}
                     info("Content Repository backed up successfully");
                     target.addComponent(backupMessages);
             	} catch (Exception e){
