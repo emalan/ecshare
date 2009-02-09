@@ -82,6 +82,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     		adminUser.setAdmin(true);
     		saveUser(adminUser);
     	}
+    	//There is data migration that comes up every now and again
+    	RepositoryDataMigration.transformData(template, site);
     }
 
     public boolean isDeletableNode(final String path){

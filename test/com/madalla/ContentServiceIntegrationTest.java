@@ -29,6 +29,7 @@ import com.madalla.bo.ImageData;
 import com.madalla.bo.security.UserData;
 import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.page.Content;
+import com.madalla.cms.service.ocm.RepositoryDataMigration;
 import com.madalla.service.BackupFile;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryService;
@@ -49,6 +50,9 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 		return configLocations;
 	}
 	
+	public void testDataMigration(){
+		RepositoryDataMigration.transformData(template, SITE);
+	}
     public void testContentBackup(){
         repositoryAdminService.backupContentRoot();
         repositoryAdminService.backupContentSite();

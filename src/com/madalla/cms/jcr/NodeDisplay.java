@@ -33,7 +33,7 @@ public class NodeDisplay {
 		if (item instanceof Node){
 			Node node = (Node) item;
 			for (PropertyIterator iter = node.getProperties(); iter.hasNext();){
-				Property prop = (Property) iter.next();
+				Property prop = iter.nextProperty();
 				String propName = prop.getName();
 				if (propName.equals(CLASS_NAME)){
 					className = prop.getValue().getString();

@@ -31,8 +31,7 @@ import com.madalla.webapp.user.UserProfilePanel;
  * for your Pages. Provided to simplify the API by providing one
  * place for getting Panels.
  * 
- * NOTE: Your Wicket Application needs to extend the {@link CmsApplication} or 
- * the {@link CmsBlogEmailApplication} before you can use these Panels
+ * NOTE: Your Wicket Application needs to extend {@link CmsApplication} before you can use these Panels
  * 
  * @author Eugene Malan
  *
