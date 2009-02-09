@@ -20,7 +20,7 @@ public class RepositoryDataMigration {
 	
 	private static final Log log = LogFactory.getLog(RepositoryDataMigration.class);
 	
-	private static final String CLASS_NAME = "ocm:classname";
+	
 
 	public static void transformData(JcrTemplate template, final String site){
 		
@@ -50,6 +50,20 @@ public class RepositoryDataMigration {
 			doBlogConversion(node);
 		}
 	}
+	
+	private static final String CLASS_NAME = "ocm:classname";
+	private static final String oldBlog = "";
+	private static final String newBlog = "com.madalla.cms.bo.impl.ocm.blog.Blog";
+	private static final String oldBlogEntry = "";
+	private static final String newBlogEntry = "com.madalla.cms.bo.impl.ocm.blog.BlogEntry";
+	private static final String oldPage = "";
+	private static final String newPage = " com.madalla.cms.bo.impl.ocm.page.Page";
+	private static final String oldContent = "";
+	private static final String newContent = "com.madalla.cms.bo.impl.ocm.page.Content";
+	private static final String oldAlbum = "";
+	private static final String newAlbum = "com.madalla.cms.bo.impl.ocm.image.Album";
+	private static final String oldImage = "";
+	private static final String newImage = "";
 	
 	private static void doBlogConversion(Node parent) throws RepositoryException{
 		String oldBlog = "";
