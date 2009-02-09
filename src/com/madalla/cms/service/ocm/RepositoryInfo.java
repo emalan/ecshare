@@ -17,6 +17,7 @@ import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.page.Content;
 import com.madalla.cms.bo.impl.ocm.page.Page;
 import com.madalla.cms.bo.impl.ocm.security.User;
+import com.madalla.cms.bo.impl.ocm.security.UserSite;
 import com.madalla.cms.jcr.JcrUtils;
 /**
  * Information regarding the Schema in the Content respository System
@@ -66,7 +67,8 @@ public class RepositoryInfo {
 		IMAGE(Image.class, true, false, EC_NODE_IMAGES),
 		PAGE(Page.class, true, true, EC_NODE_PAGES),
 		CONTENT(Content.class, true, false, EC_NODE_PAGES),
-		USER(User.class, false, true, EC_NODE_USERS);
+		USER(User.class, false, true, EC_NODE_USERS),
+		USERSITE(UserSite.class, false, false, EC_NODE_USERS);
 		
 		public final Class<? extends AbstractData> typeClass;
 		public final boolean site;

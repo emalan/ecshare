@@ -1,9 +1,6 @@
 package com.madalla.webapp.user;
 
-import java.util.Map;
-
 import com.madalla.bo.security.UserData;
-import com.madalla.cms.bo.impl.ocm.security.UserSite;
 
 public class UserDataView extends UserData {
 	private static final long serialVersionUID = 1L;
@@ -57,15 +54,6 @@ public class UserDataView extends UserData {
 	}
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	public void setApps(Map<String, UserSite> apps) {
-		// TODO Auto-generated method stub
-		
-	}
-	public Map<String, UserSite> getApps() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

@@ -36,6 +36,7 @@ import com.madalla.cms.bo.impl.ocm.image.ImageHelper;
 import com.madalla.cms.bo.impl.ocm.page.Content;
 import com.madalla.cms.bo.impl.ocm.page.Page;
 import com.madalla.cms.bo.impl.ocm.security.User;
+import com.madalla.cms.bo.impl.ocm.security.UserSite;
 import com.madalla.cms.jcr.JcrUtils;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.cms.service.ocm.template.ParentNodeCallback;
@@ -81,6 +82,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	if (adminUser != null){
     		adminUser.setAdmin(true);
     		saveUser(adminUser);
+    		//TODO add this site
+    		UserSite userSite = new UserSite(adminUser.getId(), site);
     	}
     	//There is data migration that comes up every now and again
     	RepositoryDataMigration.transformData(template, site);
