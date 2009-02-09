@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import javax.jcr.ImportUUIDBehavior;
+import javax.jcr.Item;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -19,6 +20,7 @@ import org.apache.jackrabbit.api.JackrabbitWorkspace;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
+import com.madalla.cms.jcr.NodeDisplay;
 import com.madalla.cms.jcr.model.JcrNodeModel;
 import com.madalla.cms.jcr.model.tree.JcrTreeModel;
 import com.madalla.cms.jcr.model.tree.JcrTreeNode;
@@ -56,6 +58,17 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
 				workpace.createWorkspace(workspaceName);
     			return null;
     		}
+    	});
+    }
+    
+    public NodeDisplay getNodeDisplay(final String path){
+    	return (NodeDisplay) template.execute(new JcrCallback(){
+       		
+    		public Object doInJcr(Session session) throws IOException, RepositoryException{
+				Item item = session.getItem(path);
+				return new NodeDisplay(item);
+    		}
+    		
     	});
     }
 
@@ -287,7 +300,7 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
     	});
 
     }
-
+    
 	public void setTemplate(JcrTemplate template) {
 		this.template = template;
 	}

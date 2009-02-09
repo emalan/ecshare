@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.swing.tree.TreeModel;
 
+import com.madalla.cms.jcr.NodeDisplay;
+
 /**
  * Administrative functions for the Content Repository including backup.
  * 
@@ -13,6 +15,7 @@ import javax.swing.tree.TreeModel;
  */
 public interface IRepositoryAdminService {
 
+	NodeDisplay getNodeDisplay(final String path);
 	
 	/**
 	 * All Content Data for a site/application

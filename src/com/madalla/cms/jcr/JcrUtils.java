@@ -17,6 +17,7 @@ public class JcrUtils {
 
 	private static Log log = LogFactory.getLog(JcrUtils.class);
 	
+	
     /**
      *  returns the class name node -- creates it if its not there
      */

@@ -1,5 +1,8 @@
 package com.madalla.webapp.cms.admin;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,7 +14,9 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 import com.madalla.bo.ContentData;
-import com.madalla.bo.IBlogEntryData;
+import com.madalla.cms.jcr.NodeDisplay;
+import com.madalla.service.IRepositoryAdminService;
+import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 
@@ -145,26 +150,65 @@ class ContentDisplayPanel extends Panel {
 		contentDisplay.modelChanging();
 		if (StringUtils.isEmpty(path)){
 			contentText = "";
-		} else if (getContentService().isContentNode(path)){
-			contentText = getContentService().getContent(path).getText();
-		} else if (getContentService().isBlogNode(path)){
-			IBlogEntryData blogEntry = getContentService().getBlogEntry(path);
-			StringBuffer sb = new StringBuffer("Title : ").append(blogEntry.getTitle()).append("<br/>")
-				.append("Date : ").append(blogEntry.getDateTime()).append("<br/>").append("<br/>")
-				.append(blogEntry.getText());
-			contentText = sb.toString();
-		}else if (getContentService().isImageNode(path)){
-			contentText = "Image Node";
-		} else {
-			contentText = "";
+		} else { 
+			NodeDisplay display = getAdminService().getNodeDisplay(path);
+			contentText = displayNode(display);
 		}
+//			if (getContentService().isContentNode(path)){
+//			contentText = getContentService().getContent(path).getText();
+//		} else if (getContentService().isBlogNode(path)){
+//			IBlogEntryData blogEntry = getContentService().getBlogEntry(path);
+//			StringBuffer sb = new StringBuffer("Title : ").append(blogEntry.getTitle()).append("<br/>")
+//				.append("Date : ").append(blogEntry.getDateTime()).append("<br/>").append("<br/>")
+//				.append(blogEntry.getText());
+//			contentText = sb.toString();
+//		}else if (getContentService().isImageNode(path)){
+//			contentText = "Image Node";
+//		} else {
+//			Item item = getAdminService().getItem(path);
+//			contentText = item.toString();
+//		}
 		contentDisplay.modelChanged();
 		//paste.
 		
 	}
 	
+    private static String displayNode(NodeDisplay display){
+    	StringBuffer sb = new StringBuffer("Node Name : " + display.getName()).append("<br/>");
+    	sb.append("Class Name : " + display.getClassName()).append("<br/>");
+    	sb.append("<span style='text-decoration:underline;'>Properties</span><br/>");
+    	Iterator<Map.Entry<String, NodeDisplay.NodePropertyDisplay>> iter = display.getProperties().entrySet().iterator();
+    	Map.Entry<String, NodeDisplay.NodePropertyDisplay> text = null; // keep text for last
+    	while (iter.hasNext()){
+    		Map.Entry<String, NodeDisplay.NodePropertyDisplay> entry = iter.next();
+    		if (entry.getKey().equals("text")){
+    			text = entry;
+    			continue;
+    		}
+			sb.append(displayNodeProperty(entry));
+    	}
+    	if (null != text){
+    		sb.append(displayNodeProperty(text));
+    	}
+		
+		return sb.toString();
+    	
+    }
+    
+    private static String displayNodeProperty(Map.Entry<String, NodeDisplay.NodePropertyDisplay> entry){
+    	StringBuffer sb = new StringBuffer();
+    	sb.append(entry.getKey()+"[" + entry.getValue().type + "] : ");
+		sb.append(entry.getValue().value);
+		sb.append("<br/>");
+    	return sb.toString();
+    }
+	
 	protected IRepositoryService getContentService() {
 		return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
+	}
+	
+	protected IRepositoryAdminService getAdminService() {
+		return ((IRepositoryAdminServiceProvider) getApplication()).getRepositoryAdminService();
 	}
 
 }
