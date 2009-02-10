@@ -47,37 +47,39 @@ public class RepositoryDataMigration {
 		log.debug("Checking Data Migration for " + type.name());
 		if (type.equals(RepositoryType.BLOG)){
 			log.debug("Processing Data Migration for " + type.name());
-			doBlogConversion(node);
+			doConversion(node,oldBlog, newBlog, oldBlogEntry, newBlogEntry);
+		} else if (type.equals(RepositoryType.PAGE)){
+		    log.debug("Processing Data Migration for " + type.name());
+		    doConversion(node, oldPage, newPage, oldContent, newContent);
+		} else if (type.equals(RepositoryType.ALBUM)){
+		    log.debug("Processing Data Migration for " + type.name());
+		    doConversion(node, oldAlbum, newAlbum, oldImage, newImage);
 		}
 	}
 	
 	private static final String CLASS_NAME = "ocm:classname";
-	private static final String oldBlog = "";
+	private static final String oldBlog = "com.madalla.service.cms.ocm.blog.Blog";
 	private static final String newBlog = "com.madalla.cms.bo.impl.ocm.blog.Blog";
-	private static final String oldBlogEntry = "";
+	private static final String oldBlogEntry = "com.madalla.service.cms.ocm.blog.BlogEntry";
 	private static final String newBlogEntry = "com.madalla.cms.bo.impl.ocm.blog.BlogEntry";
-	private static final String oldPage = "";
+	private static final String oldPage = "com.madalla.service.cms.ocm.page.Page";
 	private static final String newPage = " com.madalla.cms.bo.impl.ocm.page.Page";
-	private static final String oldContent = "";
+	private static final String oldContent = "com.madalla.service.cms.ocm.page.Content";
 	private static final String newContent = "com.madalla.cms.bo.impl.ocm.page.Content";
-	private static final String oldAlbum = "";
+	private static final String oldAlbum = "com.madalla.service.cms.ocm.image.Album";
 	private static final String newAlbum = "com.madalla.cms.bo.impl.ocm.image.Album";
-	private static final String oldImage = "";
-	private static final String newImage = "";
+	private static final String oldImage = "com.madalla.service.cms.ocm.image.Image";
+	private static final String newImage = "com.madalla.cms.bo.impl.ocm.image.Image";
 	
-	private static void doBlogConversion(Node parent) throws RepositoryException{
-		String oldBlog = "";
-		String newBlog = "com.madalla.cms.bo.impl.ocm.blog.Blog";
-		String oldBlogEntry = "";
-		String newBlogEntry = "com.madalla.cms.bo.impl.ocm.blog.BlogEntry";
+	private static void doConversion(Node parent, String oldParent, String newParent, String oldChild, String newChild) throws RepositoryException{
 		NodeIterator iter =(NodeIterator) parent.getNodes() ;
 		while (iter.hasNext()){
 			Node node = iter.nextNode();
-			doClassNameConversion(node,oldBlog, oldBlog );
+			doClassNameConversion(node,oldParent, newParent );
 			NodeIterator iter2 = node.getNodes();
 			while (iter2.hasNext()){
 				Node child = iter2.nextNode();
-				doClassNameConversion(node,oldBlogEntry, newBlogEntry );
+				doClassNameConversion(child,oldChild, newChild );
 			}
 		}
 	}

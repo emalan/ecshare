@@ -85,6 +85,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     		//TODO add this site
     		UserSite userSite = new UserSite(adminUser.getId(), site);
     	}
+    	
     	//There is data migration that comes up every now and again
     	RepositoryDataMigration.transformData(template, site);
     }
