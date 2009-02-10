@@ -10,6 +10,7 @@ import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.bo.AbstractData;
+import com.madalla.cms.bo.impl.ocm.Site;
 import com.madalla.cms.bo.impl.ocm.blog.Blog;
 import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
 import com.madalla.cms.bo.impl.ocm.image.Album;
@@ -60,7 +61,17 @@ public class RepositoryInfo {
     private static final String EC_NODE_USERS = NS + "users";
     private static final String OCM_CLASS = "ocm:classname";
 
+	/**
+	 * Holds Repository specific information about the classes that are to be registered
+	 * for persistence in the repository as well as the general structure of the data tree.
+	 * For Parent classes there is information about where they are positioned in the
+	 * tree. Other classes are aware of who there parent are by way of their constructors.
+	 * 
+	 * @author Eugene Malan
+	 *
+	 */
 	public enum RepositoryType {
+		SITE(Site.class, false, true, EC_NODE_APP),
 		BLOG(Blog.class, true, true, EC_NODE_BLOGS),
 		BLOGENTRY(BlogEntry.class, true, false,EC_NODE_BLOGS),
 		ALBUM(Album.class, true, true, EC_NODE_IMAGES),
@@ -70,9 +81,24 @@ public class RepositoryInfo {
 		USER(User.class, false, true, EC_NODE_USERS),
 		USERSITE(UserSite.class, false, false, EC_NODE_USERS);
 		
+		/**
+		 * This is the class that is to be registered for persistence
+		 */
 		public final Class<? extends AbstractData> typeClass;
-		public final boolean site;
-		public final boolean parent;
+
+		/**
+		 * Set to true if the class and group is positioned under the site node.
+		 */
+		public final boolean site;  
+
+		/**
+		 * If true, then this Node is positioned as a child to the group Node.
+		 */
+		public final boolean parent;  
+		
+		/**
+		 * This is the group or category Node for this class
+		 */
 		public String groupName;
 		
 		RepositoryType(Class<? extends AbstractData> typeClass, boolean site, boolean parent, String groupName){
@@ -162,11 +188,17 @@ public class RepositoryInfo {
     	Node appNode = getApplicationNode(session);
     	Node parentNode;
     	if (type.site){
-    		parentNode =  JcrUtils.getCreateNode(NS+site, appNode);
+    		parentNode =  JcrUtils.getCreateNode(NS + site, appNode);
     	} else {
     		parentNode = appNode;
     	}
-    	Node ret =  JcrUtils.getCreateNode(type.groupName, parentNode);
+    	
+    	Node ret;
+    	if (type.groupName.equals(EC_NODE_APP)){
+    		ret = appNode;
+    	} else {
+    		ret =  JcrUtils.getCreateNode(type.groupName, parentNode);
+    	}
     	session.save();
     	return ret;
 	}

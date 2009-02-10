@@ -25,9 +25,11 @@ import com.madalla.bo.IAlbumData;
 import com.madalla.bo.IBlogData;
 import com.madalla.bo.IImageData;
 import com.madalla.bo.IPageData;
+import com.madalla.bo.ISiteData;
 import com.madalla.bo.ImageData;
 import com.madalla.bo.PageData;
 import com.madalla.bo.security.UserData;
+import com.madalla.cms.bo.impl.ocm.Site;
 import com.madalla.cms.bo.impl.ocm.blog.Blog;
 import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
 import com.madalla.cms.bo.impl.ocm.image.Album;
@@ -76,6 +78,13 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	super.init();
     	repositoryTemplate = new RepositoryTemplate(template, ocm, site);
     	
+
+    	//Process data migration if necessary
+    	RepositoryDataMigration.transformData(template, site);
+
+    	//Create site node
+    	//ISiteData siteData = getSite(site);
+    	
     	//Create default Users if they don't exist yet
     	getNewUser("guest", SecurityUtils.encrypt("password"));
     	UserData adminUser = getNewUser("admin", SecurityUtils.encrypt("password"));
@@ -86,8 +95,6 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     		UserSite userSite = new UserSite(adminUser.getId(), site);
     	}
     	
-    	//There is data migration that comes up every now and again
-    	RepositoryDataMigration.transformData(template, site);
     }
 
     public boolean isDeletableNode(final String path){
@@ -313,9 +320,20 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         copyData(path, content);
     }
 
-    //*************************
-    // ******   Users    ******
-     
+    //**********************************
+    // ******   Site and Users    ******
+    
+    public ISiteData getSite(String name){
+    	return (ISiteData) repositoryTemplate.executeParent(RepositoryType.SITE, name, new ParentNodeCallback(){
+			
+    		@Override
+			public AbstractData createNew(String parentPath, String name) {
+				return new Site(parentPath, name);
+			}
+    		
+    	});
+    }
+    
     public UserData getNewUser(String username, String password){
     	username = username.toLowerCase();
     	if (isUserExists(username)){

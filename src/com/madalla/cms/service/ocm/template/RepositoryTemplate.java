@@ -64,25 +64,6 @@ public class RepositoryTemplate {
 		return ocm.getObject(type.typeClass, nodePath);
 	}
 	
-	public Object executeNode(final RepositoryType type, final String name, final NodeCallback callback){
-        String parentPath = (String)template.execute(new JcrCallback(){
-            public Object doInJcr(Session session) throws IOException,
-                    RepositoryException {
-                Node node = RepositoryInfo.getGroupNode(session, site, type);
-                session.save();
-                return node.getPath();
-                
-            }
-        });
-        String nodePath = parentPath + (StringUtils.isEmpty(name)?"" : "/" + name);
-        if (!ocm.objectExists(nodePath)){
-            Object obj = callback.createNew(parentPath, name);
-            ocm.insert(obj);
-            ocm.save();
-        }
-        return ocm.getObject(type.typeClass, nodePath);
-    }
-	
 	public Collection<? extends AbstractData> getAll(final RepositoryType type){
 		if(!type.parent){
 			return Collections.emptyList();
