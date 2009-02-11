@@ -188,7 +188,7 @@ public class RepositoryInfo {
     	Node appNode = getApplicationNode(session);
     	Node parentNode;
     	if (type.site){
-    		parentNode =  JcrUtils.getCreateNode(NS + site, appNode);
+    		parentNode =  JcrUtils.getCreateNode(site, appNode);
     	} else {
     		parentNode = appNode;
     	}

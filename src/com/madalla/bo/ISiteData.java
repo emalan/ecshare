@@ -11,4 +11,6 @@ public interface ISiteData {
 	String getAdminEmail();
 
 	String getMetaKeywords();
+	
+	void setAdminEmail(String adminEmail);
 }

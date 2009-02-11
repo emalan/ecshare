@@ -44,20 +44,13 @@
 	<classpathentry kind="lib" path="ddlutils/wstx-asl-3.0.2.jar"/>
 	<classpathentry kind="lib" path="testing/easymock.jar"/>
 	<classpathentry kind="lib" path="common/commons-collections-3.1.jar"/>
-	<classpathentry kind="lib" path="jackrabbit/jackrabbit-text-extractors-1.4.jar"/>
-	<classpathentry kind="lib" path="jackrabbit/jackrabbit-jcr-commons-1.4.2.jar"/>
-	<classpathentry kind="lib" path="jackrabbit/jackrabbit-core-1.4.5.jar"/>
-	<classpathentry kind="lib" path="jackrabbit/jackrabbit-api-1.4.jar"/>
 	<classpathentry kind="lib" path="jackrabbit/lucene-core-2.2.0.jar"/>
-	<classpathentry kind="lib" path="jackrabbit/jackrabbit-spi-commons-1.4.jar"/>
-	<classpathentry kind="lib" path="jackrabbit/jackrabbit-spi-1.4.jar"/>
 	<classpathentry kind="lib" path="common/joda-time-1.5.2.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://joda-time.sourceforge.net/api-release/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="wicket/wicket-contrib-scriptaculous-0.1.1.jar"/>
-	<classpathentry kind="lib" path="jackrabbit/jackrabbit-ocm-1.4.jar" sourcepath="/Users/emalan/Documents/devlib/jackrabbit-1.4/jackrabbit-ocm/src/main/java"/>
 	<classpathentry kind="lib" path="common/commons-beanutils-1.7.0.jar"/>
 	<classpathentry kind="lib" path="wicket/wicket-1.3.5.jar" sourcepath="/Users/emalan/Documents/devlib/apache-wicket-1.3.4/src/jdk-1.4/wicket/src/main/java">
 		<attributes>
@@ -69,5 +62,12 @@
 	<classpathentry kind="lib" path="wicket/wicket-extensions-1.3.5.jar"/>
 	<classpathentry kind="lib" path="wicket/wicket-spring-1.3.5.jar"/>
 	<classpathentry kind="lib" path="wicket/wicket-spring-annot-1.3.5.jar"/>
+	<classpathentry kind="lib" path="jackrabbit/jackrabbit-api-1.4.jar"/>
+	<classpathentry kind="lib" path="jackrabbit/jackrabbit-core-1.4.5.jar"/>
+	<classpathentry kind="lib" path="jackrabbit/jackrabbit-jcr-commons-1.4.2.jar"/>
+	<classpathentry kind="lib" path="jackrabbit/jackrabbit-ocm-1.4.jar"/>
+	<classpathentry kind="lib" path="jackrabbit/jackrabbit-spi-1.4.jar"/>
+	<classpathentry kind="lib" path="jackrabbit/jackrabbit-spi-commons-1.4.jar"/>
+	<classpathentry kind="lib" path="jackrabbit/jackrabbit-text-extractors-1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

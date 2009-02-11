@@ -30,11 +30,15 @@ public class RepositoryDataMigration {
 					RepositoryException {
 				
 				//Convert site node
-//				Node appNode = RepositoryInfo.getApplicationNode(session);
-//				Node siteNode = appNode.getNode("ec:"+site);
-//				siteNode.setProperty(CLASS_NAME, "com.madalla.cms.bo.impl.ocm.Site");
-//				session.move("ec"+site, "site");
-//				session.save();
+				Node appNode = RepositoryInfo.getApplicationNode(session);
+				try {
+				    Node siteNode = appNode.getNode("ec:"+site);
+				    siteNode.setProperty(CLASS_NAME, "com.madalla.cms.bo.impl.ocm.Site");
+				    session.move(siteNode.getPath(), appNode.getPath()+"/"+site);
+				    session.save();
+				} catch (PathNotFoundException e){
+				    //no need to convert it then
+				}
 				
 				for(RepositoryType type: RepositoryType.values()){
 					Node groupNode = RepositoryInfo.getGroupNode(session, site, type);

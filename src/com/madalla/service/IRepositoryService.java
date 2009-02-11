@@ -18,6 +18,7 @@ import com.madalla.bo.IImageData;
 import com.madalla.bo.IPageData;
 import com.madalla.bo.ImageData;
 import com.madalla.bo.PageData;
+import com.madalla.bo.SiteData;
 import com.madalla.bo.security.UserData;
 import com.madalla.webapp.security.IAuthenticator;
 
@@ -99,6 +100,10 @@ public interface IRepositoryService {
 	TreeModel getAlbumImagesAsTree(final AlbumData album);
 	
 	//User
+	SiteData getSite(String name);
+	
+	void saveSite(SiteData data);
+	
     UserData getNewUser(String username, String password);
     
     UserData getUser(String username);

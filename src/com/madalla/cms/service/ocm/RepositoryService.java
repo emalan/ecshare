@@ -28,6 +28,7 @@ import com.madalla.bo.IPageData;
 import com.madalla.bo.ISiteData;
 import com.madalla.bo.ImageData;
 import com.madalla.bo.PageData;
+import com.madalla.bo.SiteData;
 import com.madalla.bo.security.UserData;
 import com.madalla.cms.bo.impl.ocm.Site;
 import com.madalla.cms.bo.impl.ocm.blog.Blog;
@@ -83,7 +84,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	RepositoryDataMigration.transformData(template, site);
 
     	//Create site node
-    	//ISiteData siteData = getSite(site);
+    	SiteData siteData = getSite(site);
     	
     	//Create default Users if they don't exist yet
     	getNewUser("guest", SecurityUtils.encrypt("password"));
@@ -323,8 +324,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     //**********************************
     // ******   Site and Users    ******
     
-    public ISiteData getSite(String name){
-    	return (ISiteData) repositoryTemplate.executeParent(RepositoryType.SITE, name, new ParentNodeCallback(){
+    public SiteData getSite(String name){
+    	return (SiteData) repositoryTemplate.executeParent(RepositoryType.SITE, name, new ParentNodeCallback(){
 			
     		@Override
 			public AbstractData createNew(String parentPath, String name) {
@@ -332,6 +333,10 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 			}
     		
     	});
+    }
+    
+    public void saveSite(SiteData data){
+        saveDataObject(data);
     }
     
     public UserData getNewUser(String username, String password){
