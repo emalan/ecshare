@@ -25,9 +25,4 @@ public abstract class UserData extends AbstractData implements IUser, Comparable
 		return true;
 	}
 
-	@Override
-	public int hashCode() {
-		return getId().hashCode();
-	}
-
 }

@@ -15,4 +15,9 @@ public abstract class AbstractData implements Serializable {
 	public String toString() {
         return ReflectionToStringBuilder.toString(this).toString();
     }
+	
+	@Override
+	public int hashCode() {
+		return getId().hashCode();
+	}
 }

@@ -32,4 +32,5 @@ public class UserSite extends UserSiteData{
 	public void setId(String id){
 		this.id = id;
 	}
+
 }

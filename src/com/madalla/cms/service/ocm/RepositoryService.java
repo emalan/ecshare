@@ -25,11 +25,11 @@ import com.madalla.bo.IAlbumData;
 import com.madalla.bo.IBlogData;
 import com.madalla.bo.IImageData;
 import com.madalla.bo.IPageData;
-import com.madalla.bo.ISiteData;
 import com.madalla.bo.ImageData;
 import com.madalla.bo.PageData;
 import com.madalla.bo.SiteData;
 import com.madalla.bo.security.UserData;
+import com.madalla.bo.security.UserSiteData;
 import com.madalla.cms.bo.impl.ocm.Site;
 import com.madalla.cms.bo.impl.ocm.blog.Blog;
 import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
@@ -79,12 +79,11 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	super.init();
     	repositoryTemplate = new RepositoryTemplate(template, ocm, site);
     	
-
     	//Process data migration if necessary
     	RepositoryDataMigration.transformData(template, site);
 
     	//Create site node
-    	SiteData siteData = getSite(site);
+    	getSite(site);
     	
     	//Create default Users if they don't exist yet
     	getNewUser("guest", SecurityUtils.encrypt("password"));
@@ -92,8 +91,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	if (adminUser != null){
     		adminUser.setAdmin(true);
     		saveUser(adminUser);
-    		//TODO add this site
-    		UserSite userSite = new UserSite(adminUser.getId(), site);
+    		saveUserSite(new UserSite(adminUser.getId(), site));
     	}
     	
     }
@@ -329,7 +327,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 			
     		@Override
 			public AbstractData createNew(String parentPath, String name) {
-				return new Site(parentPath, name);
+    			log.debug("createNew - creating Site :"+name);
+    			return new Site(parentPath, name);
 			}
     		
     	});
@@ -337,6 +336,11 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     
     public void saveSite(SiteData data){
         saveDataObject(data);
+    }
+    
+    @SuppressWarnings("unchecked")//another not-safe cast from Collection to List
+	public List<SiteData> getSiteEntries(){
+    	return (List<SiteData>) repositoryTemplate.getAll(RepositoryType.SITE);
     }
     
     public UserData getNewUser(String username, String password){
@@ -397,6 +401,27 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 				}
 			}
 		};
+	}
+	
+	public void saveUserSite(UserSite data){
+		saveDataObject(data);
+	}
+	
+	@SuppressWarnings("unchecked") //Unsafe cast
+	public List<UserSiteData> getUserSiteEntries(UserData user){
+		List<UserSiteData> list = (List<UserSiteData>) repositoryTemplate.getAll(RepositoryType.USERSITE, user);
+		Collections.sort(list);
+		return list;
+	}
+	
+	public void saveUserSiteEntries(UserData user, List<SiteData> sites){
+		log.debug("saveUserSiteEntries -"+sites);
+		for (UserSiteData userSite : getUserSiteEntries(user)){
+			deleteNode(userSite.getId());
+		}
+		for(SiteData site : sites){
+			saveUserSite(new UserSite(user.getId(), site.getName()));
+		}
 	}
 
     //************************************

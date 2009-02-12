@@ -1,5 +1,6 @@
 package com.madalla.webapp.user;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -21,6 +22,8 @@ import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBe
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.StringAutoCompleteRenderer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -36,7 +39,9 @@ import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.springframework.beans.BeanUtils;
 
+import com.madalla.bo.SiteData;
 import com.madalla.bo.security.UserData;
+import com.madalla.bo.security.UserSiteData;
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
 import com.madalla.service.IRepositoryService;
@@ -57,6 +62,8 @@ public class UserAdminPanel extends Panel {
 	private UserDataView user = new UserDataView() ;
 	private boolean lockUsername = false;
 	private TextField usernameField;
+	private List<SiteData> sites = new ArrayList<SiteData>() ;
+	private List<SiteData> sitesChoices ;
 
 	public class NewUserForm extends Form {
 		private static final long serialVersionUID = 9033980585192727266L;
@@ -146,6 +153,10 @@ public class UserAdminPanel extends Panel {
 			add(new TextField("firstName", new PropertyModel(user, "firstName")));
 			add(new TextField("lastName", new PropertyModel(user, "lastName")));
 			add(new CheckBox("adminMode", new PropertyModel(user, "admin")));
+			sitesChoices = getRepositoryService().getSiteEntries();
+			add(new CheckBoxMultipleChoice("site", new Model((Serializable) sites) ,
+					sitesChoices, new ChoiceRenderer("name")));
+			
 		}
 	}
 
@@ -358,16 +369,26 @@ public class UserAdminPanel extends Panel {
 	private void retrieveUserData(String username){
 		UserData src = getRepositoryService().getUser(username);
 		BeanUtils.copyProperties(src, user);
+		List<UserSiteData> list = getRepositoryService().getUserSiteEntries(src);
+		for(UserSiteData userSite : list){
+			for(SiteData site : sitesChoices){
+				if (site.getName().equals(userSite.getName())){
+					sites.add(site);
+				}
+			}
+		}
 	}
 	
 	private void saveUserData(UserData userData){
 		UserData dest = getRepositoryService().getUser(userData.getName());
 		BeanUtils.copyProperties(userData, dest);
 		getRepositoryService().saveUser(dest);
+		getRepositoryService().saveUserSiteEntries(dest, sites);
 	}
 	
 	private void resetUserData(){
 	    user.setName("");
+	    sites.clear();
 	}
 	
 	private IRepositoryService getRepositoryService() {

@@ -37,7 +37,8 @@ public class RepositoryDataMigration {
 				    session.move(siteNode.getPath(), appNode.getPath()+"/"+site);
 				    session.save();
 				} catch (PathNotFoundException e){
-				    //no need to convert it then
+					log.debug("Site conversion not needed for site=" + site);
+					return null;
 				}
 				
 				for(RepositoryType type: RepositoryType.values()){

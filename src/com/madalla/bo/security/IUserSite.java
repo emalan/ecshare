@@ -5,4 +5,5 @@ public interface IUserSite {
 	String getName();
 
 	String getId();
+	
 }

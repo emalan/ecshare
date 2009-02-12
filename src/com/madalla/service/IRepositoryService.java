@@ -20,6 +20,7 @@ import com.madalla.bo.ImageData;
 import com.madalla.bo.PageData;
 import com.madalla.bo.SiteData;
 import com.madalla.bo.security.UserData;
+import com.madalla.bo.security.UserSiteData;
 import com.madalla.webapp.security.IAuthenticator;
 
 /**
@@ -102,6 +103,8 @@ public interface IRepositoryService {
 	//User
 	SiteData getSite(String name);
 	
+	List<SiteData> getSiteEntries();
+	
 	void saveSite(SiteData data);
 	
     UserData getNewUser(String username, String password);
@@ -113,4 +116,9 @@ public interface IRepositoryService {
     IAuthenticator getUserAuthenticator();
     
     List<UserData> getUsers();
+    
+    List<UserSiteData> getUserSiteEntries(UserData user);
+    
+    void saveUserSiteEntries(UserData user, List<SiteData> sites);
+    
 }
