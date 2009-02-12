@@ -30,7 +30,7 @@ abstract class AbstractRepositoryService {
 
 	public Node getSiteNode(Session session) throws RepositoryException {
     	Node appNode = getApplicationNode(session);
-    	return getCreateNode(NS+site, appNode);
+    	return getCreateNode(site, appNode);
 	}
 	
     
