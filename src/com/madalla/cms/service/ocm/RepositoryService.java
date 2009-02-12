@@ -380,10 +380,11 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 		Collections.sort(list);
 		return list;
 	}
-    
+	
 	public IAuthenticator getUserAuthenticator() {
 		return new IAuthenticator(){
-
+			UserData userData = null;
+			
 			public boolean authenticate(String user, char[] password) {
 				return authenticate(user, new String(password));
 			}
@@ -392,14 +393,21 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 				log.debug("authenticate - username="+username);
 				if (isUserExists(username)){
 					log.debug("authenticate - user found.");
-					UserData user = getUser(username);
+					userData = getUser(username);
 					log.debug("authenticate - password="+password);
-					log.debug("authenticate - compare="+user.getPassword());
-					return user.getPassword().equals(password);
-				} else {
-					return false;
+					log.debug("authenticate - compare="+userData.getPassword());
+					if (userData.getPassword().equals(password)){
+						List<UserSiteData> sites = getUserSiteEntries(userData);
+						for (UserSiteData siteData : sites){
+							if (siteData.getName().equals(site)){
+								return true;
+							}
+						}
+					}
 				}
+				return false;
 			}
+
 		};
 	}
 	

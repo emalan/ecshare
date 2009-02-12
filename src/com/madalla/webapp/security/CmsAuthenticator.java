@@ -34,5 +34,5 @@ public class CmsAuthenticator implements IAuthenticator {
     public boolean authenticate(String user, char[] password) {
         return false;
     }
-    
+
 }
