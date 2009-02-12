@@ -40,7 +40,7 @@ public class Panels {
 	
 	private Panels(){}
 	
-	public static Panel inlineContentPanel(String id, String node){
+	public static Panel contentInlinePanel(String id, String node){
 		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(node)){
 			error("ContentPanel - All parameters need to be supplied.");
 		}
