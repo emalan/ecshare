@@ -27,7 +27,9 @@ import com.madalla.bo.image.IImageData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.IPageData;
+import com.madalla.bo.page.IResourceData;
 import com.madalla.bo.page.PageData;
+import com.madalla.bo.page.ResourceData;
 import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
 import com.madalla.cms.bo.impl.ocm.Site;
@@ -38,6 +40,7 @@ import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.image.ImageHelper;
 import com.madalla.cms.bo.impl.ocm.page.Content;
 import com.madalla.cms.bo.impl.ocm.page.Page;
+import com.madalla.cms.bo.impl.ocm.page.ResourcePdf;
 import com.madalla.cms.bo.impl.ocm.security.User;
 import com.madalla.cms.bo.impl.ocm.security.UserSite;
 import com.madalla.cms.jcr.JcrUtils;
@@ -252,9 +255,6 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     // *** Page and Content ***
     
 
-    /* (non-Javadoc)
-     * @see com.madalla.service.cms.IRepositoryService#getPage(java.lang.String)
-     */
     public PageData getPage(final String name){
         return (PageData) repositoryTemplate.executeParent(RepositoryType.PAGE, name, new ParentNodeCallback(){
 
@@ -320,6 +320,25 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     
     public void pasteContent(final String path, final ContentData content){
         copyData(path, content);
+    }
+    
+    //Resources
+    public void createPageResource(final IPageData page, final String name, final InputStream inputStream ){
+    	ResourceData data = new ResourcePdf(page, name, inputStream);
+    	saveDataObject(data);
+    }
+    
+    public IResourceData getPageResource(final IPageData page, final String name){
+    	String path = page.getId() + "/" + name;
+    	IResourceData data;
+    	if (ocm.objectExists(path)){
+    		data = (IResourceData) ocm.getObject(ResourcePdf.class, path);
+    	} else {
+    		data = new ResourcePdf();
+    		data.setUrlDisplay("urlDisplay");
+    		data.setUrlTitle("urlTitle");
+    	}
+    	return data; 
     }
 
     //**********************************
