@@ -27,7 +27,7 @@ import com.madalla.webapp.user.UserLoginPanel;
 import com.madalla.webapp.user.UserProfilePanel;
 
 /**
- * Utlility static instantiation methods to create Wicket Panels
+ * Utility static instantiation methods to create Wicket Panels
  * for your Pages. Provided to simplify the API by providing one
  * place for getting Panels.
  * 
@@ -39,7 +39,12 @@ import com.madalla.webapp.user.UserProfilePanel;
 public class Panels {
 	
 	private Panels(){}
-	
+
+	/**
+	 * @param id - wicket id
+	 * @param node - Content Parent Node, normally Page Name
+	 * @return Instantiated Panel of Type {@link com.madalla.webapp.cms.InlineContentPanel}
+	 */
 	public static Panel contentInlinePanel(String id, String node){
 		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(node)){
 			error("ContentPanel - All parameters need to be supplied.");

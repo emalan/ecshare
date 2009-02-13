@@ -19,9 +19,9 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import com.madalla.bo.AlbumData;
-import com.madalla.bo.IAlbumData;
-import com.madalla.bo.ImageData;
+import com.madalla.bo.image.AlbumData;
+import com.madalla.bo.image.IAlbumData;
+import com.madalla.bo.image.ImageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.wicket.DraggableAjaxBehaviour;

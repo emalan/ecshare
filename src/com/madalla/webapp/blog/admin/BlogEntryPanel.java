@@ -29,16 +29,16 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.joda.time.DateTime;
 
-import com.madalla.bo.BlogEntryData;
-import com.madalla.bo.IBlogData;
+import com.madalla.bo.blog.BlogEntryData;
+import com.madalla.bo.blog.IBlogData;
 import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.blog.BlogEntryView;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 import com.madalla.wicket.form.AjaxValidationBehaviour;
-import com.madalla.wicket.form.ValidationStyleBehaviour;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
+import com.madalla.wicket.form.ValidationStyleBehaviour;
 
 public class BlogEntryPanel extends Panel {
     private static final long serialVersionUID = 1L;

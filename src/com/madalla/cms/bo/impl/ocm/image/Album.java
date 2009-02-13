@@ -6,7 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 
-import com.madalla.bo.AlbumData;
+import com.madalla.bo.image.AlbumData;
 
 @Node
 public class Album extends AlbumData implements Serializable{

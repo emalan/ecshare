@@ -1,4 +1,6 @@
-package com.madalla.bo;
+package com.madalla.bo.blog;
+
+import com.madalla.bo.AbstractData;
 
 
 

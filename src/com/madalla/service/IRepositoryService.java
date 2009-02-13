@@ -8,17 +8,17 @@ import javax.swing.tree.TreeModel;
 
 import org.joda.time.DateTime;
 
-import com.madalla.bo.AlbumData;
-import com.madalla.bo.BlogData;
-import com.madalla.bo.BlogEntryData;
-import com.madalla.bo.ContentData;
-import com.madalla.bo.IAlbumData;
-import com.madalla.bo.IBlogData;
-import com.madalla.bo.IImageData;
-import com.madalla.bo.IPageData;
-import com.madalla.bo.ImageData;
-import com.madalla.bo.PageData;
 import com.madalla.bo.SiteData;
+import com.madalla.bo.blog.BlogData;
+import com.madalla.bo.blog.BlogEntryData;
+import com.madalla.bo.blog.IBlogData;
+import com.madalla.bo.image.AlbumData;
+import com.madalla.bo.image.IAlbumData;
+import com.madalla.bo.image.IImageData;
+import com.madalla.bo.image.ImageData;
+import com.madalla.bo.page.ContentData;
+import com.madalla.bo.page.IPageData;
+import com.madalla.bo.page.PageData;
 import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
 import com.madalla.webapp.security.IAuthenticator;

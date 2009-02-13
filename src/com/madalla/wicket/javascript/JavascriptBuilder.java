@@ -41,7 +41,7 @@ public class JavascriptBuilder
 		buffer.append("{");
 		for (Iterator<String> iter = options.keySet().iterator(); iter.hasNext();)
 		{
-			String key = (String)iter.next();
+			String key = iter.next();
 			Object value = options.get(key);
 
 			//buffer.append("\n");
@@ -58,6 +58,7 @@ public class JavascriptBuilder
 		return buffer.toString();
 	}
 
+	@SuppressWarnings("unchecked")
 	private String formatJavascriptValue(Object value)
 	{
 		if (value instanceof CharSequence)
@@ -66,7 +67,7 @@ public class JavascriptBuilder
 		}
 		if (value instanceof Map)
 		{
-			return formatAsJavascriptHash((Map)value);
+			return formatAsJavascriptHash((Map<String, Object>)value);
 		}
 		if (value instanceof Boolean)
 		{
@@ -79,7 +80,7 @@ public class JavascriptBuilder
 		return value.toString();
 	}
 
-	public void addOptions(Map options)
+	public void addOptions(Map<String, Object> options)
 	{
 		addLine(formatAsJavascriptHash(options));
 	}

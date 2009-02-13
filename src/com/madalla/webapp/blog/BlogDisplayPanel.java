@@ -24,9 +24,9 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-import com.madalla.bo.BlogData;
-import com.madalla.bo.BlogEntryData;
-import com.madalla.bo.IBlogEntryData;
+import com.madalla.bo.blog.BlogData;
+import com.madalla.bo.blog.BlogEntryData;
+import com.madalla.bo.blog.IBlogEntryData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.CmsSession;

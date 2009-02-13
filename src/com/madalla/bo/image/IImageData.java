@@ -1,4 +1,4 @@
-package com.madalla.bo;
+package com.madalla.bo.image;
 
 import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
 

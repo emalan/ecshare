@@ -1,4 +1,6 @@
-package com.madalla.bo;
+package com.madalla.bo.image;
+
+import com.madalla.bo.AbstractData;
 
 
 public abstract class AlbumData extends AbstractData implements IAlbumData {

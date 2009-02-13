@@ -31,7 +31,7 @@ public class DroppableAjaxBehaviour extends AbstractTransformerBehavior {
 		builder.addLine("var e = $('"+id+"'); ");
 		builder.addLine("e.addClassName('droppable');");
 		
-		Map map = new LinkedHashMap();
+		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		map.put("accept", "draggable");
 		map.put("hoverclass", "hover");
 		

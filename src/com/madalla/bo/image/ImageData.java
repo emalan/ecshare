@@ -1,7 +1,8 @@
-package com.madalla.bo;
+package com.madalla.bo.image;
 
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
+import com.madalla.bo.AbstractData;
 import com.madalla.cms.bo.impl.ocm.image.Image;
 
 public abstract class ImageData extends AbstractData implements IImageData, Comparable<ImageData> {

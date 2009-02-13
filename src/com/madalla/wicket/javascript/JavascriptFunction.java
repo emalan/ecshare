@@ -1,7 +1,5 @@
 package com.madalla.wicket.javascript;
 
-import java.util.Map;
-
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 
 public class JavascriptFunction {

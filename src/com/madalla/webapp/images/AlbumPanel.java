@@ -27,8 +27,8 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 
-import com.madalla.bo.AlbumData;
-import com.madalla.bo.ImageData;
+import com.madalla.bo.image.AlbumData;
+import com.madalla.bo.image.ImageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.CmsSession;

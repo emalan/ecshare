@@ -1,4 +1,6 @@
-package com.madalla.bo;
+package com.madalla.bo.page;
+
+import com.madalla.bo.AbstractData;
 
 
 public abstract class PageData extends AbstractData implements IPageData{

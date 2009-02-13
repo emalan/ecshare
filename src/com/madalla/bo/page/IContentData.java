@@ -1,4 +1,4 @@
-package com.madalla.bo;
+package com.madalla.bo.page;
 
 public interface IContentData {
 	String getId();

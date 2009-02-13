@@ -1,4 +1,4 @@
-package com.madalla.bo;
+package com.madalla.bo.blog;
 
 public interface IBlogData {
 	 String getName();

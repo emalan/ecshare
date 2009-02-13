@@ -7,8 +7,8 @@ import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
 
-import com.madalla.bo.IAlbumData;
-import com.madalla.bo.ImageData;
+import com.madalla.bo.image.IAlbumData;
+import com.madalla.bo.image.ImageData;
 
 @Node
 public class Image extends ImageData {
