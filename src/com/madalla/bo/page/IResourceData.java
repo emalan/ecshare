@@ -7,10 +7,14 @@ public interface IResourceData {
 	String getId();
 
 	String getName();
-
-	String getValue();
-	
-	String getTitle();
 	
 	DynamicWebResource getResource();
+	
+	void setUrlDisplay(String urlDisplay);
+
+	public String getUrlDisplay();
+
+	public void setUrlTitle(String urlTitle) ;
+
+	public String getUrlTitle();
 }
