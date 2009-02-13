@@ -1,7 +1,5 @@
 package com.madalla.cms.bo.impl.ocm.image;
 
-import java.io.InputStream;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
@@ -10,6 +8,15 @@ import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.ImageData;
 
+/**
+ * OCM implementation that persists the data to Jackrabbit Repository.
+ * 
+ * See {@link com.madalla.cms.service.ocm.util.DynamicImageResourceConvertor} for
+ * how DynamicImageResource is persisted to Repository
+ * 
+ * @author Eugene Malan
+ *
+ */
 @Node
 public class Image extends ImageData {
 
@@ -27,7 +34,7 @@ public class Image extends ImageData {
 		
 	}
 	
-	public Image(final IAlbumData album, final String name, final InputStream inputStream){
+	public Image(final IAlbumData album, final String name){
 		this.id = album.getId() + "/" + name;
 	}
 

@@ -1,4 +1,4 @@
-package com.madalla.service.cms.ocm;
+package com.madalla.cms.bo.impl.ocm;
 
 import java.io.IOException;
 import java.util.ArrayList;

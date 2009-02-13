@@ -1,12 +1,12 @@
-package com.madalla.service.cms.ocm.page;
+package com.madalla.cms.bo.impl.ocm.page;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.madalla.cms.bo.impl.ocm.AbstractContentOcmTest;
 import com.madalla.cms.bo.impl.ocm.page.Content;
 import com.madalla.cms.bo.impl.ocm.page.Page;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
-import com.madalla.service.cms.ocm.AbstractContentOcmTest;
 
 public class ContentOcmPageTest extends AbstractContentOcmTest{
 

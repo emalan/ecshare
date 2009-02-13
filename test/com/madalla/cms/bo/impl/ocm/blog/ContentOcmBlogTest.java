@@ -1,4 +1,4 @@
-package com.madalla.service.cms.ocm.blog;
+package com.madalla.cms.bo.impl.ocm.blog;
 
 import java.util.Collection;
 
@@ -11,10 +11,10 @@ import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.joda.time.DateTime;
 
+import com.madalla.cms.bo.impl.ocm.AbstractContentOcmTest;
 import com.madalla.cms.bo.impl.ocm.blog.Blog;
 import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
-import com.madalla.service.cms.ocm.AbstractContentOcmTest;
 
 public class ContentOcmBlogTest extends AbstractContentOcmTest {
 

@@ -1,17 +1,16 @@
-package com.madalla.service.cms.ocm.image;
+package com.madalla.cms.bo.impl.ocm.image;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.madalla.cms.bo.impl.ocm.AbstractContentOcmTest;
 import com.madalla.cms.bo.impl.ocm.image.Album;
 import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.image.ImageHelper;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
-import com.madalla.service.cms.ocm.AbstractContentOcmTest;
 
 public class ContentOcmImageTest extends AbstractContentOcmTest{
 
@@ -44,7 +43,7 @@ public class ContentOcmImageTest extends AbstractContentOcmTest{
 			Album album = (Album) ocm.getObject(Album.class, nodePath);
 
 			
-			Image image = new Image(album,"testjpg",jpg);
+			Image image = new Image(album,"testjpg");
 			ocm.insert(image);
 			ocm.save();
 			ImageHelper.saveImageFull(template, image.getId(), jpg);

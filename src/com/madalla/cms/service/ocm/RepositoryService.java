@@ -161,9 +161,10 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 
 	public String createImage(IAlbumData album, String name, InputStream inputStream) {
 	    //scale image down to defaults if necessary
-		Image image = new Image(album, name, inputStream);
+		Image image = new Image(album, name);
 		saveDataObject(image);
-
+		
+		//get the InputStream into repository
 	    ImageHelper.saveImageFull(template, image.getId(), inputStream);
 	    ImageHelper.saveImageThumb(template, image.getId());
 	    return image.getId();

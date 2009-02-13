@@ -1,7 +1,5 @@
 package com.madalla.cms.bo.impl.ocm.page;
 
-import java.io.Serializable;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
@@ -10,7 +8,7 @@ import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 import com.madalla.bo.page.PageData;
 
 @Node
-public class Page extends PageData implements Serializable{
+public class Page extends PageData {
     private static final long serialVersionUID = 1L;
 
     @Field(path=true) private String id;
