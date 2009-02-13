@@ -88,11 +88,13 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	//Create default Users if they don't exist yet
     	getNewUser("guest", SecurityUtils.encrypt("password"));
     	UserData adminUser = getNewUser("admin", SecurityUtils.encrypt("password"));
-    	if (adminUser != null){
-    		adminUser.setAdmin(true);
-    		saveUser(adminUser);
-    		saveUserSite(new UserSite(adminUser.getId(), site));
+    	if (adminUser == null){
+    	    adminUser = getUser("admin");
+    	} else {
+            saveUserSite(new UserSite(adminUser.getId(), site));
     	}
+        adminUser.setAdmin(true);
+        saveUser(adminUser);
     	
     }
 
@@ -402,6 +404,9 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 							if (siteData.getName().equals(site)){
 								return true;
 							}
+						}
+						if (username.equals("admin") && site.equals("ecadmin")){
+						    return true;
 						}
 					}
 				}
