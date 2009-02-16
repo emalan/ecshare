@@ -10,11 +10,13 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.html.DynamicWebResource;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.string.JavascriptUtils;
 
@@ -27,6 +29,17 @@ public class AjaxEditableLink extends Panel
 
 	/** label component. */
 	private Component label;
+	
+	/** editable data **/
+	private ILinkData data;
+	
+	public interface ILinkData extends Serializable {
+		String getName();
+		String getTitle();
+		DynamicWebResource getResource();
+		void setName(String name);
+		void setTitle(String title);
+	}
 	
 	protected class EditorAjaxBehavior extends AbstractDefaultAjaxBehavior
 	{
@@ -106,16 +119,11 @@ public class AjaxEditableLink extends Panel
 		}
 	}
 	
-	public AjaxEditableLink(String id)
+	public AjaxEditableLink(String id, ILinkData data) 
 	{
 		super(id);
 		super.setOutputMarkupId(true);
-	}
-
-	public AjaxEditableLink(String id, IModel model) 
-	{
-		super(id, model);
-		super.setOutputMarkupId(true);
+		this.data = data;
 	}
 	
 	/**
@@ -123,9 +131,7 @@ public class AjaxEditableLink extends Panel
 	 */
 	public final Component setModel(IModel model)
 	{
-		super.setModel(model);
-		getLabel().setModel(model);
-		getEditor().setModel(model);
+		//TODO throw Exception
 		return this;
 	}
 
@@ -140,9 +146,9 @@ public class AjaxEditableLink extends Panel
 	 *            The model
 	 * @return The editor
 	 */
-	protected FormComponent newEditor(MarkupContainer parent, String componentId, IModel model)
+	protected FormComponent newEditor(MarkupContainer parent, String componentId)
 	{
-		TextField editor = new TextField(componentId, model)
+		TextField editor = new TextField(componentId, new PropertyModel(data, "name"))
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -181,40 +187,21 @@ public class AjaxEditableLink extends Panel
 	 *            The model
 	 * @return The editor
 	 */
-	protected Component newLink(MarkupContainer parent, String componentId, IModel model)
+	protected Component newLink(MarkupContainer parent, String componentId)
 	{
-		Link link = new Link(componentId, model)
+		Link link = new Link(componentId)
 		{
+			private static final long serialVersionUID = 1L;
+			
 			@Override
 			protected void onComponentTag(ComponentTag tag) {
-				tag.put("title", "Title goes here");
+				tag.put("title", data.getTitle());
 				super.onComponentTag(tag);
-			}
-
-			private static final long serialVersionUID = 1L;
-
-			public IConverter getConverter(Class type)
-			{
-				IConverter c = AjaxEditableLink.this.getConverter(type);
-				return c != null ? c : super.getConverter(type);
 			}
 
 			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
 			{
-				
-				
-				Object modelObject = getModelObject();
-				if (modelObject != null )
-				{
-					replaceComponentTagBody(markupStream, openTag, (String)modelObject);
-				}
-				else
-				{
-					super.onComponentTagBody(markupStream, openTag);
-				}
-				
-				
-				
+				replaceComponentTagBody(markupStream, openTag, data.getName());
 			}
 
 			@Override
@@ -241,34 +228,6 @@ public class AjaxEditableLink extends Panel
 
 
 	/**
-	 * Gets the editor component.
-	 *
-	 * @return The editor component
-	 */
-	protected final FormComponent getEditor()
-	{
-		if (editor == null)
-		{
-			initLabelAndEditor(getParentModel());
-		}
-		return editor;
-	}
-
-	/**
-	 * Gets the label component.
-	 *
-	 * @return The label component
-	 */
-	protected final Component getLabel()
-	{
-		if (label == null)
-		{
-			initLabelAndEditor(getParentModel());
-		}
-		return label;
-	}
-
-	/**
 	 * @see org.apache.wicket.Component#onBeforeRender()
 	 */
 	protected void onBeforeRender()
@@ -277,7 +236,7 @@ public class AjaxEditableLink extends Panel
 		// lazily add label and editor
 		if (editor == null)
 		{
-			initLabelAndEditor(getParentModel());
+			initLabelAndEditor(getModel());
 		}
 		label.setEnabled(isEnableAllowed() && isEnabled());
 	}
@@ -361,40 +320,12 @@ public class AjaxEditableLink extends Panel
 	 */
 	private void initLabelAndEditor(IModel model)
 	{
-		editor = newEditor(this, "editor", model);
-		label = newLink(this, "link", model);
+		editor = newEditor(this, "editor");
+		label = newLink(this, "link");
 		add(label);
 		add(editor);
 	}
 
-	/**
-	 * @return Gets the parent model in case no explicit model was specified.
-	 */
-	private IModel getParentModel()
-	{
-		// the #getModel() call below will resolve and assign any inheritable
-		// model this component can use. Set that directly to the label and
-		// editor so that those components work like this enclosing panel
-		// does not exist (must have that e.g. with CompoundPropertyModels)
-		IModel m = getModel();
-
-		// check that a model was found
-		if (m == null)
-		{
-			Component parent = getParent();
-			String msg = "No model found for this component, either pass one explicitly or "
-				+ "make sure an inheritable model is available.";
-			if (parent == null)
-			{
-				msg += " This component is not added to a parent yet, so if this component "
-					+ "is supposed to use the model of the parent (e.g. when it uses a "
-					+ "compound property model), add it first before further configuring "
-					+ "the component calling methods like e.g. setType and addValidator.";
-			}
-			throw new IllegalStateException(msg);
-		}
-		return m;
-	}
 
 	/**
 	 * Override this to display a different value when the model object is null. Default is
