@@ -17,7 +17,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.string.JavascriptUtils;
 
 public class AjaxEditableLink extends Panel 
@@ -148,15 +147,9 @@ public class AjaxEditableLink extends Panel
 	 */
 	protected FormComponent newEditor(MarkupContainer parent, String componentId)
 	{
-		TextField editor = new TextField(componentId, new PropertyModel(data, "name"))
+		TextField nameEditor = new TextField(componentId, new PropertyModel(data, "name"))
 		{
 			private static final long serialVersionUID = 1L;
-
-			public IConverter getConverter(Class type)
-			{
-				IConverter c = AjaxEditableLink.this.getConverter(type);
-				return c != null ? c : super.getConverter(type);
-			}
 
 			protected void onModelChanged()
 			{
@@ -170,10 +163,10 @@ public class AjaxEditableLink extends Panel
 				AjaxEditableLink.this.onModelChanging();
 			}
 		};
-		editor.setOutputMarkupId(true);
-		editor.setVisible(false);
-		editor.add(new EditorAjaxBehavior());
-		return editor;
+		nameEditor.setOutputMarkupId(true);
+		nameEditor.setVisible(false);
+		nameEditor.add(new EditorAjaxBehavior());
+		return nameEditor;
 	}
 
 	/**
