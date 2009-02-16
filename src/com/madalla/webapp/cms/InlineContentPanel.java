@@ -5,7 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.IPageData;
@@ -26,34 +26,27 @@ public class InlineContentPanel extends Panel {
         super(id);
         
         log.debug("Content Panel being created for node=" + nodeName + " id=" + id);
-        IPageData page = getRepositoryservice().getPage(nodeName);
-        String contentBody = getRepositoryservice().getContentText(page, id , getSession().getLocale());
-
         
-        final Model contentModel = new Model(contentBody);
-        
-        Panel editableLabel = new AjaxEditableLabel("contentText", contentModel){
+        Panel editableLabel = new AjaxEditableLabel("contentText"){
 			private static final long serialVersionUID = 1L;
 
+			private ContentData contentData;
+			
         	@Override
 			protected void onSubmit(AjaxRequestTarget target) {
 				super.onSubmit(target);
-				log.debug("onSubmit - value="+ contentModel.getObject());
+				log.debug("onSubmit - value="+ getModelObject());
 	            log.debug("Submiting populated Content object to Content service.");
-	            IPageData page = getRepositoryservice().getPage(nodeName);
-	            ContentData content = getRepositoryservice().getContent(page, id, getSession().getLocale());
-	            content.setText((String)contentModel.getObject());
-	            getRepositoryservice().saveContent(content);
+	            getRepositoryservice().saveContent(contentData);
 	            info("Content saved to repository");
-	            log.debug("Content successfully saved to repository. content=" + content);
 			}
 			
         	@Override
 			protected void onBeforeRender(){
-                IPageData page = getRepositoryservice().getPage(nodeName);
-                String contentBody = getRepositoryservice().getContentText(page, id, getSession().getLocale());
                 log.debug("onBeforeRender - setting new Content.");
-                contentModel.setObject(contentBody);
+                IPageData page = getRepositoryservice().getPage(nodeName);
+	            contentData = getRepositoryservice().getContent(page, id, getSession().getLocale());
+                setModel(new PropertyModel(contentData, "text"));
                 if (((IContentAdmin)getSession()).isLoggedIn()) {
                     setEnabled(true);
                 } else {

@@ -27,7 +27,6 @@ import com.madalla.bo.image.IImageData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.IPageData;
-import com.madalla.bo.page.IResourceData;
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
 import com.madalla.bo.security.UserData;
@@ -323,16 +322,16 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     //Resources
-    public void createPageResource(final IPageData page, final String name, final InputStream inputStream ){
+    public void createContentResource(final IPageData page, final String name, final InputStream inputStream ){
     	ResourceData data = new ResourcePdf(page, name, inputStream);
     	saveDataObject(data);
     }
     
-    public IResourceData getPageResource(final IPageData page, final String name){
+    public ResourceData getContentResource(final IPageData page, final String name){
     	String path = page.getId() + "/" + name;
-    	IResourceData data;
+    	ResourceData data;
     	if (ocm.objectExists(path)){
-    		data = (IResourceData) ocm.getObject(ResourcePdf.class, path);
+    		data = (ResourceData) ocm.getObject(ResourcePdf.class, path);
     	} else {
     		data = new ResourcePdf();
     		data.setUrlDisplay("urlDisplay");
