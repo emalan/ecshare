@@ -185,6 +185,12 @@ public class AjaxEditableLink extends Panel
 	{
 		Link link = new Link(componentId, model)
 		{
+			@Override
+			protected void onComponentTag(ComponentTag tag) {
+				tag.put("title", "Title goes here");
+				super.onComponentTag(tag);
+			}
+
 			private static final long serialVersionUID = 1L;
 
 			public IConverter getConverter(Class type)
@@ -196,6 +202,7 @@ public class AjaxEditableLink extends Panel
 			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
 			{
 				
+				
 				Object modelObject = getModelObject();
 				if (modelObject != null )
 				{
@@ -205,6 +212,8 @@ public class AjaxEditableLink extends Panel
 				{
 					super.onComponentTagBody(markupStream, openTag);
 				}
+				
+				
 				
 			}
 
