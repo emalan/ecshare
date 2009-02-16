@@ -10,9 +10,9 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
@@ -117,6 +117,17 @@ public class AjaxEditableLink extends Panel
 		super(id, model);
 		super.setOutputMarkupId(true);
 	}
+	
+	/**
+	 * @see org.apache.wicket.MarkupContainer#setModel(org.apache.wicket.model.IModel)
+	 */
+	public final Component setModel(IModel model)
+	{
+		super.setModel(model);
+		getLabel().setModel(model);
+		getEditor().setModel(model);
+		return this;
+	}
 
 	/**
 	 * Create a new form component instance to serve as editor.
@@ -170,9 +181,9 @@ public class AjaxEditableLink extends Panel
 	 *            The model
 	 * @return The editor
 	 */
-	protected Component newLabel(MarkupContainer parent, String componentId, IModel model)
+	protected Component newLink(MarkupContainer parent, String componentId, IModel model)
 	{
-		Label label = new Label(componentId, model)
+		Link link = new Link(componentId, model)
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -184,20 +195,28 @@ public class AjaxEditableLink extends Panel
 
 			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
 			{
+				
 				Object modelObject = getModelObject();
-				if (modelObject == null || "".equals(modelObject))
+				if (modelObject != null )
 				{
-					replaceComponentTagBody(markupStream, openTag, defaultNullLabel());
+					replaceComponentTagBody(markupStream, openTag, (String)modelObject);
 				}
 				else
 				{
 					super.onComponentTagBody(markupStream, openTag);
 				}
+				
+			}
+
+			@Override
+			public void onClick() {
+				// TODO Auto-generated method stub
+				
 			}
 		};
-		label.setOutputMarkupId(true);
-		label.add(new LabelAjaxBehavior(getLabelAjaxEvent()));
-		return label;
+		link.setOutputMarkupId(true);
+		link.add(new LabelAjaxBehavior(getLabelAjaxEvent()));
+		return link;
 	}
 
 	/**
@@ -334,7 +353,7 @@ public class AjaxEditableLink extends Panel
 	private void initLabelAndEditor(IModel model)
 	{
 		editor = newEditor(this, "editor", model);
-		label = newLabel(this, "label", model);
+		label = newLink(this, "link", model);
 		add(label);
 		add(editor);
 	}

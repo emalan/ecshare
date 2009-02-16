@@ -333,11 +333,15 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	if (ocm.objectExists(path)){
     		data = (ResourceData) ocm.getObject(ResourcePdf.class, path);
     	} else {
-    		data = new ResourcePdf();
-    		data.setUrlDisplay("urlDisplay");
-    		data.setUrlTitle("urlTitle");
+    		data = new ResourcePdf(page, name);
+    		data.setUrlDisplay("...");
+    		saveDataObject(data);
     	}
     	return data; 
+    }
+    
+    public void saveContentResource(final ResourceData data){
+    	saveDataObject(data);
     }
 
     //**********************************

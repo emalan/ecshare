@@ -29,6 +29,10 @@ public class ResourcePdf extends ResourceData {
 		
 	}
 	
+	public ResourcePdf(final IPageData page, final String name){
+		this.setId(page.getId() + "/" + name);
+	}
+	
 	public ResourcePdf(final IPageData page, final String name, InputStream inputStream){
 		this.setId(page.getId() + "/" + name);
 		this.inputStream = inputStream;

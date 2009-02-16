@@ -76,6 +76,8 @@ public interface IRepositoryService {
     void createContentResource(final IPageData page, final String name, final InputStream inputStream );
     
     ResourceData getContentResource(final IPageData page, final String name);
+    
+    void saveContentResource(final ResourceData data);
 
 	// Blog
 	BlogData getBlog(final String blogName);

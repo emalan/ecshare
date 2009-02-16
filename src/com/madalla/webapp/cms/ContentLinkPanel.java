@@ -31,7 +31,7 @@ public class ContentLinkPanel extends Panel{
         	@Override
 			protected void onSubmit(AjaxRequestTarget target) {
 				super.onSubmit(target);
-				log.debug("onSubmit - value="+ resourceData);
+				getRepositoryservice().saveContentResource(resourceData);
 			}
 			
         	@Override
