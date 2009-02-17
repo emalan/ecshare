@@ -2,9 +2,11 @@ package com.madalla.webapp.cms;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.RequestCycle;
+import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -29,7 +31,7 @@ public class AjaxEditableLink extends Panel
 	/** label component. */
 	private Component label;
 	
-	/** editable data **/
+	/** edit data **/
 	private ILinkData data;
 	
 	public interface ILinkData extends Serializable {
@@ -40,7 +42,7 @@ public class AjaxEditableLink extends Panel
 		void setTitle(String title);
 	}
 	
-	protected class EditorAjaxBehavior extends AbstractDefaultAjaxBehavior
+	protected abstract class EditorAjaxBehavior extends AbstractDefaultAjaxBehavior
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -80,13 +82,12 @@ public class AjaxEditableLink extends Panel
 
 			if (save)
 			{
-				editor.processInput();
 
-				if (editor.isValid())
+				if (processValidateInput())
 				{
-					onSubmit(target);
+				    onSubmit(target);	
 				}
-				else
+				else 
 				{
 					onError(target);
 				}
@@ -96,6 +97,8 @@ public class AjaxEditableLink extends Panel
 				onCancel(target);
 			}
 		}
+		
+		abstract boolean processValidateInput();
 	}
 
 	protected class LabelAjaxBehavior extends AjaxEventBehavior
@@ -123,6 +126,10 @@ public class AjaxEditableLink extends Panel
 		super(id);
 		super.setOutputMarkupId(true);
 		this.data = data;
+		if (data == null){
+			String message = "The Constructor for AjaxEditableLink requires a value for data.";
+			throw new WicketRuntimeException(message);
+		}
 	}
 	
 	/**
@@ -130,8 +137,8 @@ public class AjaxEditableLink extends Panel
 	 */
 	public final Component setModel(IModel model)
 	{
-		//TODO throw Exception
-		return this;
+		String message = "AjaxEditableLink constructs its own model. Do not set it.";
+		throw new WicketRuntimeException(message);
 	}
 
 	/**
@@ -147,7 +154,7 @@ public class AjaxEditableLink extends Panel
 	 */
 	protected FormComponent newEditor(MarkupContainer parent, String componentId)
 	{
-		TextField nameEditor = new TextField(componentId, new PropertyModel(data, "name"))
+		final TextField nameEditor = new TextField(componentId, new PropertyModel(data, "name"))
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -165,7 +172,22 @@ public class AjaxEditableLink extends Panel
 		};
 		nameEditor.setOutputMarkupId(true);
 		nameEditor.setVisible(false);
-		nameEditor.add(new EditorAjaxBehavior());
+		nameEditor.add(new EditorAjaxBehavior()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			boolean processValidateInput() 
+			{
+				nameEditor.processInput();
+				if (nameEditor.isValid())
+				{
+					return true;
+				}
+				return false;
+			}
+			
+		});
 		return nameEditor;
 	}
 
@@ -194,7 +216,14 @@ public class AjaxEditableLink extends Panel
 
 			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
 			{
-				replaceComponentTagBody(markupStream, openTag, data.getName());
+				if (StringUtils.isEmpty(data.getName()))
+				{
+					replaceComponentTagBody(markupStream, openTag, defaultNullLabel());
+				}
+				else 
+				{
+					replaceComponentTagBody(markupStream, openTag, data.getName());
+				}
 			}
 
 			@Override
