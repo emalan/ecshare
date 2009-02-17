@@ -1,17 +1,11 @@
 package com.madalla.webapp.cms;
 
-import java.io.InputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -25,13 +19,9 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.string.JavascriptUtils;
-
-import com.madalla.bo.image.IAlbumData;
-import com.madalla.wicket.form.upload.MultiFileUploadField;
 
 public class EditableResourceLink extends Panel 
 {
@@ -86,8 +76,10 @@ public class EditableResourceLink extends Panel
 		{
 			@Override
 			protected void onSubmit() {
+				EditableResourceLink.this.onSubmit();
 				FileUpload upload = data.getFileUpload();
 				String contentType = upload.getContentType();
+
 			}
 
 			private static final long serialVersionUID = 1L;
@@ -313,23 +305,10 @@ public class EditableResourceLink extends Panel
 		target.addComponent(nameEditor);
 	}
 
-	/**
-	 * Invoked when the editor was successfully updated. Use this method e.g. to persist the changed
-	 * value. This implementation displays the label and clears any window status that might have
-	 * been set in onError.
-	 *
-	 * @param target
-	 *            The ajax request target
-	 */
-	protected void onSubmit(AjaxRequestTarget target)
+	protected void onSubmit()
 	{
 		label.setVisible(true);
-		nameEditor.setVisible(false);
-		titleEditor.setVisible(false);
-		resourceEditor.setVisible(false);
-		target.addComponent(EditableResourceLink.this);
-
-		target.appendJavascript("window.status='';");
+		resourceForm.setVisible(false);
 	}
 
 	/**
