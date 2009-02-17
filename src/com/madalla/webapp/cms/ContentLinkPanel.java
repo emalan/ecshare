@@ -29,7 +29,7 @@ public class ContentLinkPanel extends Panel{
 		private String name;
 		private String title;
 		private DynamicWebResource resource;
-		private FileUpload fileUpload;
+		private transient FileUpload fileUpload;
 		
 		/**  Data object that needs to be passed to AjaxEditableLink **/
 		public LinkData(String name, String title, DynamicWebResource resource){
@@ -81,8 +81,8 @@ public class ContentLinkPanel extends Panel{
 
 			
         	@Override
-			protected void onSubmit(AjaxRequestTarget target) {
-				super.onSubmit(target);
+			protected void onSubmit() {
+				super.onSubmit();
 				resourceData.setUrlDisplay(linkData.getName());
 				resourceData.setUrlTitle(linkData.getTitle());
 				

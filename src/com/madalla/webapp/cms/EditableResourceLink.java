@@ -77,9 +77,6 @@ public class EditableResourceLink extends Panel
 			@Override
 			protected void onSubmit() {
 				EditableResourceLink.this.onSubmit();
-				FileUpload upload = data.getFileUpload();
-				String contentType = upload.getContentType();
-
 			}
 
 			private static final long serialVersionUID = 1L;
