@@ -32,6 +32,7 @@ import org.apache.wicket.util.lang.Bytes;
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.DraggableAjaxBehaviour;
 import com.madalla.wicket.form.upload.MultiFileUploadField;
@@ -127,6 +128,7 @@ public class AlbumAdminPanel extends Panel{
 	public AlbumAdminPanel(String id, String albumName, Class<? extends Page> returnPage) {
 		super(id);
 		
+		add(Css.CSS_FORM);
 		add(HeaderContributor.forJavaScript(Scriptaculous.PROTOTYPE));
 		add(HeaderContributor.forJavaScript(Scriptaculous.EFFECTS));
 		add(HeaderContributor.forJavaScript(Scriptaculous.DRAGDROP));
