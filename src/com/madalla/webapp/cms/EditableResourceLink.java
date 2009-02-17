@@ -1,6 +1,10 @@
 package com.madalla.webapp.cms;
 
+import java.io.InputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
@@ -21,16 +25,21 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.string.JavascriptUtils;
 
-public class AjaxEditableLink extends Panel 
+import com.madalla.bo.image.IAlbumData;
+import com.madalla.wicket.form.upload.MultiFileUploadField;
+
+public class EditableResourceLink extends Panel 
 {
 	private static final long serialVersionUID = 1L;
 	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(2000);
 
 	/** editor component. */
+	private Form resourceForm;
 	private FormComponent nameEditor;
 	private FormComponent titleEditor;
 	private FormComponent resourceEditor;
@@ -51,65 +60,6 @@ public class AjaxEditableLink extends Panel
 		void setFileUpload(FileUpload upload);
 	}
 	
-	protected abstract class EditorAjaxBehavior extends AbstractDefaultAjaxBehavior
-	{
-		private static final long serialVersionUID = 1L;
-
-		/**
-		 * Constructor.
-		 */
-		public EditorAjaxBehavior()
-		{
-		}
-
-		protected void onComponentTag(ComponentTag tag)
-		{
-			super.onComponentTag(tag);
-			final String saveCall = "{" +
-				generateCallbackScript("wicketAjaxGet('" + getCallbackUrl() +
-					"&save=true&'+this.name+'='+wicketEncode(this.value)") + "; return false;}";
-
-
-			final String cancelCall = "{" +
-				generateCallbackScript("wicketAjaxGet('" + getCallbackUrl() + "&save=false'") +
-				"; return false;}";
-
-
-			final String keypress = "var kc=wicketKeyCode(event); if (kc==27) " + cancelCall +
-				" else if (kc!=13) { return true; } else " + saveCall;
-
-			//tag.put("onblur", saveCall);
-			tag.put("onkeypress", keypress);
-
-		}
-
-		protected void respond(AjaxRequestTarget target)
-		{
-			RequestCycle requestCycle = RequestCycle.get();
-			boolean save = Boolean.valueOf(requestCycle.getRequest().getParameter("save"))
-				.booleanValue();
-
-			if (save)
-			{
-
-				if (processValidateInput())
-				{
-				    onSubmit(target);	
-				}
-				else 
-				{
-					onError(target);
-				}
-			}
-			else
-			{
-				onCancel(target);
-			}
-		}
-		
-		abstract boolean processValidateInput();
-	}
-
 	protected class LabelAjaxBehavior extends AjaxEventBehavior
 	{
 		private static final long serialVersionUID = 1L;
@@ -130,42 +80,31 @@ public class AjaxEditableLink extends Panel
 		}
 	}
 	
-	private class FileUploadForm extends Form{
-		private static final long serialVersionUID = 1L;
-		
-		private FileUpload upload ;
-		
-		public FileUploadForm(String name) {
-            super(name);
+	private Form newFileUploadForm(String id)
+	{
+		final Form form = new Form(id)
+		{
+			@Override
+			protected void onSubmit() {
+				FileUpload upload = data.getFileUpload();
+				String contentType = upload.getContentType();
+			}
 
-            //setMultiPart(true);
-            add(new FileUploadField("file-upload", new PropertyModel(data, "fileUpload")));
-            setMaxSize(MAX_FILE_SIZE);
-        }
-		
-		@Override
-		protected void onSubmit() {
-			FileUpload upload = data.getFileUpload();
-			String contentType = upload.getContentType();
-        	
-        	//TODO create a validator
-//        	if (!(contentType.equalsIgnoreCase("image/png") || contentType.equalsIgnoreCase("image/jpeg"))){
-//        		log.warn("file upload - Input type not supported. Type="+contentType);
-//        		warn(getString("error.type", new Model(upload)));
-//        	}
-        	//InputStream inputStream = upload.getInputStream();
-        	
+			private static final long serialVersionUID = 1L;
 			
-        }
+		};
+		form.setOutputMarkupId(true);
+		form.setVisible(false);
+		form.setMaxSize(MAX_FILE_SIZE);
+		return form;
 	}
-
 	
 	/**
 	 * @param id Wicket Id
 	 * @param data Data Object for Model
 	 * 
 	 */
-	public AjaxEditableLink(String id, ILinkData data) 
+	public EditableResourceLink(String id, ILinkData data) 
 	{
 		super(id);
 		super.setOutputMarkupId(true);
@@ -205,37 +144,21 @@ public class AjaxEditableLink extends Panel
 			protected void onModelChanged()
 			{
 				super.onModelChanged();
-				AjaxEditableLink.this.onModelChanged();
+				EditableResourceLink.this.onModelChanged();
 			}
 
 			protected void onModelChanging()
 			{
 				super.onModelChanging();
-				AjaxEditableLink.this.onModelChanging();
+				EditableResourceLink.this.onModelChanging();
 			}
 		};
 		nameEditor.setOutputMarkupId(true);
-		nameEditor.setVisible(false);
-		nameEditor.add(new EditorAjaxBehavior()
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			boolean processValidateInput() 
-			{
-				nameEditor.processInput();
-				if (nameEditor.isValid())
-				{
-					return true;
-				}
-				return false;
-			}
-			
-		});
+		//nameEditor.setVisible(false);
+		
 		return nameEditor;
 	}
 
-	//TODO combine with newEditor code
 	protected FormComponent newFileUpload(MarkupContainer parent, String componentId, IModel model)
 	{
 		final FormComponent editor = new FileUploadField(componentId, model)
@@ -245,33 +168,17 @@ public class AjaxEditableLink extends Panel
 			protected void onModelChanged()
 			{
 				super.onModelChanged();
-				AjaxEditableLink.this.onModelChanged();
+				EditableResourceLink.this.onModelChanged();
 			}
 
 			protected void onModelChanging()
 			{
 				super.onModelChanging();
-				AjaxEditableLink.this.onModelChanging();
+				EditableResourceLink.this.onModelChanging();
 			}
 		};
 		editor.setOutputMarkupId(true);
-		editor.setVisible(false);
-		editor.add(new EditorAjaxBehavior()
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			boolean processValidateInput() 
-			{
-				editor.processInput();
-				if (editor.isValid())
-				{
-					return true;
-				}
-				return false;
-			}
-			
-		});
+		//editor.setVisible(false);
 		return editor;
 	}
 
@@ -339,10 +246,10 @@ public class AjaxEditableLink extends Panel
 	protected void onBeforeRender()
 	{
 		super.onBeforeRender();
-		// lazily add label and editor
-		if (nameEditor == null)
+		// lazily add label and form
+		if (resourceForm == null)
 		{
-			initEditors(getModel());
+			initLabelForm(getModel());
 		}
 		label.setEnabled(isEnableAllowed() && isEnabled());
 	}
@@ -360,7 +267,7 @@ public class AjaxEditableLink extends Panel
 		nameEditor.setVisible(false);
 		titleEditor.setVisible(false);
 		resourceEditor.setVisible(false);
-		target.addComponent(AjaxEditableLink.this);
+		target.addComponent(EditableResourceLink.this);
 	}
 
 	/**
@@ -372,10 +279,11 @@ public class AjaxEditableLink extends Panel
 	protected void onEdit(AjaxRequestTarget target)
 	{
 		label.setVisible(false);
-		nameEditor.setVisible(true);
-		titleEditor.setVisible(true);
-		resourceEditor.setVisible(true);
-		target.addComponent(AjaxEditableLink.this);
+		resourceForm.setVisible(true);
+		//nameEditor.setVisible(true);
+		//titleEditor.setVisible(true);
+		//resourceEditor.setVisible(true);
+		target.addComponent(EditableResourceLink.this);
 		// put focus on the textfield and stupid explorer hack to move the
 		// caret to the end
 		target.appendJavascript("{ var el=wicketGet('" + nameEditor.getMarkupId() + "');" +
@@ -419,7 +327,7 @@ public class AjaxEditableLink extends Panel
 		nameEditor.setVisible(false);
 		titleEditor.setVisible(false);
 		resourceEditor.setVisible(false);
-		target.addComponent(AjaxEditableLink.this);
+		target.addComponent(EditableResourceLink.this);
 
 		target.appendJavascript("window.status='';");
 	}
@@ -430,16 +338,18 @@ public class AjaxEditableLink extends Panel
 	 * @param model
 	 *            The model for the label and editor
 	 */
-	private void initEditors(IModel model)
+	private void initLabelForm(IModel model)
 	{
+		resourceForm = newFileUploadForm("resource-form");
 		nameEditor = newEditor(this, "editor", new PropertyModel(data, "name"));
 		titleEditor = newEditor(this, "title-editor", new PropertyModel(data, "title"));
 		resourceEditor = newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload"));
 		label = newLink(this, "link");
 		add(label);
-		add(nameEditor);
-		add(titleEditor);
-		add(resourceEditor);
+		add(resourceForm);
+		resourceForm.add(nameEditor);
+		resourceForm.add(titleEditor);
+		resourceForm.add(resourceEditor);
 	}
 
 

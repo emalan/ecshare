@@ -1,5 +1,7 @@
 package com.madalla.bo.page;
 
+import java.io.InputStream;
+
 import org.apache.wicket.markup.html.DynamicWebResource;
 
 public interface IResourceData {
@@ -12,9 +14,12 @@ public interface IResourceData {
 	
 	void setUrlDisplay(String urlDisplay);
 
-	public String getUrlDisplay();
+	String getUrlDisplay();
 
-	public void setUrlTitle(String urlTitle) ;
-
-	public String getUrlTitle();
+	void setUrlTitle(String urlTitle) ;
+	
+	String getUrlTitle();
+	
+	void setInputStream(InputStream inputStream);
+	
 }

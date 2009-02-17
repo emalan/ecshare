@@ -27,6 +27,13 @@ import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.upload.FileItem;
 
+/**
+ * Obviously copied from Wicket's MultiFileUploadField, but I don't remember why...
+ * TODO Use the wicket version
+ * 
+ * @author Eugene Malan
+ *
+ */
 public class MultiFileUploadField extends FormComponentPanel implements IHeaderContributor{
 	private static final long serialVersionUID = 1L;
 
