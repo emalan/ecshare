@@ -70,6 +70,7 @@ public class ContentLinkPanel extends Panel{
 			protected void onSubmit(AjaxRequestTarget target) {
 				super.onSubmit(target);
 				resourceData.setUrlDisplay(linkData.getName());
+				resourceData.setUrlTitle(linkData.getTitle());
 				getRepositoryservice().saveContentResource(resourceData);
 			}
 			

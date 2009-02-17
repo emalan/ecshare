@@ -10,12 +10,12 @@ import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.DynamicWebResource;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -26,7 +26,8 @@ public class AjaxEditableLink extends Panel
 	private static final long serialVersionUID = 1L;
 
 	/** editor component. */
-	private FormComponent editor;
+	private FormComponent nameEditor;
+	private FormComponent titleEditor;
 
 	/** label component. */
 	private Component label;
@@ -69,7 +70,7 @@ public class AjaxEditableLink extends Panel
 			final String keypress = "var kc=wicketKeyCode(event); if (kc==27) " + cancelCall +
 				" else if (kc!=13) { return true; } else " + saveCall;
 
-			tag.put("onblur", saveCall);
+			//tag.put("onblur", saveCall);
 			tag.put("onkeypress", keypress);
 
 		}
@@ -152,9 +153,9 @@ public class AjaxEditableLink extends Panel
 	 *            The model
 	 * @return The editor
 	 */
-	protected FormComponent newEditor(MarkupContainer parent, String componentId)
+	protected FormComponent newEditor(MarkupContainer parent, String componentId, IModel model)
 	{
-		final TextField nameEditor = new TextField(componentId, new PropertyModel(data, "name"))
+		final TextField nameEditor = new TextField(componentId, model)
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -204,7 +205,7 @@ public class AjaxEditableLink extends Panel
 	 */
 	protected Component newLink(MarkupContainer parent, String componentId)
 	{
-		Link link = new Link(componentId)
+		AjaxLink link = new AjaxLink(componentId)
 		{
 			private static final long serialVersionUID = 1L;
 			
@@ -227,7 +228,7 @@ public class AjaxEditableLink extends Panel
 			}
 
 			@Override
-			public void onClick() {
+			public void onClick(AjaxRequestTarget target) {
 				// TODO Auto-generated method stub
 				
 			}
@@ -256,7 +257,7 @@ public class AjaxEditableLink extends Panel
 	{
 		super.onBeforeRender();
 		// lazily add label and editor
-		if (editor == null)
+		if (nameEditor == null)
 		{
 			initLabelAndEditor(getModel());
 		}
@@ -273,7 +274,8 @@ public class AjaxEditableLink extends Panel
 	protected void onCancel(AjaxRequestTarget target)
 	{
 		label.setVisible(true);
-		editor.setVisible(false);
+		nameEditor.setVisible(false);
+		titleEditor.setVisible(false);
 		target.addComponent(AjaxEditableLink.this);
 	}
 
@@ -286,15 +288,16 @@ public class AjaxEditableLink extends Panel
 	protected void onEdit(AjaxRequestTarget target)
 	{
 		label.setVisible(false);
-		editor.setVisible(true);
+		nameEditor.setVisible(true);
+		titleEditor.setVisible(true);
 		target.addComponent(AjaxEditableLink.this);
 		// put focus on the textfield and stupid explorer hack to move the
 		// caret to the end
-		target.appendJavascript("{ var el=wicketGet('" + editor.getMarkupId() + "');" +
+		target.appendJavascript("{ var el=wicketGet('" + nameEditor.getMarkupId() + "');" +
 			"   if (el.createTextRange) { " +
 			"     var v = el.value; var r = el.createTextRange(); " +
 			"     r.moveStart('character', v.length); r.select(); } }");
-		target.focusComponent(editor);
+		target.focusComponent(nameEditor);
 	}
 
 	/**
@@ -305,16 +308,16 @@ public class AjaxEditableLink extends Panel
 	 */
 	protected void onError(AjaxRequestTarget target)
 	{
-		Serializable errorMessage = editor.getFeedbackMessage().getMessage();
+		Serializable errorMessage = nameEditor.getFeedbackMessage().getMessage();
 		if (errorMessage instanceof String)
 		{
 			target.appendJavascript("window.status='" +
 				JavascriptUtils.escapeQuotes((String)errorMessage) + "';");
 		}
-		String editorMarkupId = editor.getMarkupId();
+		String editorMarkupId = nameEditor.getMarkupId();
 		target.appendJavascript(editorMarkupId + ".select();");
 		target.appendJavascript(editorMarkupId + ".focus();");
-		target.addComponent(editor);
+		target.addComponent(nameEditor);
 	}
 
 	/**
@@ -328,7 +331,8 @@ public class AjaxEditableLink extends Panel
 	protected void onSubmit(AjaxRequestTarget target)
 	{
 		label.setVisible(true);
-		editor.setVisible(false);
+		nameEditor.setVisible(false);
+		titleEditor.setVisible(false);
 		target.addComponent(AjaxEditableLink.this);
 
 		target.appendJavascript("window.status='';");
@@ -342,10 +346,12 @@ public class AjaxEditableLink extends Panel
 	 */
 	private void initLabelAndEditor(IModel model)
 	{
-		editor = newEditor(this, "editor");
+		nameEditor = newEditor(this, "editor", new PropertyModel(data, "name"));
+		titleEditor = newEditor(this, "title-editor", new PropertyModel(data, "title"));
 		label = newLink(this, "link");
 		add(label);
-		add(editor);
+		add(nameEditor);
+		add(titleEditor);
 	}
 
 
