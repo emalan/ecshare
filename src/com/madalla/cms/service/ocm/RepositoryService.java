@@ -26,7 +26,6 @@ import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.IImageData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.bo.page.ContentData;
-import com.madalla.bo.page.IPageData;
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
 import com.madalla.bo.security.UserData;
@@ -44,8 +43,8 @@ import com.madalla.cms.bo.impl.ocm.security.User;
 import com.madalla.cms.bo.impl.ocm.security.UserSite;
 import com.madalla.cms.jcr.JcrUtils;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
-import com.madalla.cms.service.ocm.template.ParentNodeCallback;
 import com.madalla.cms.service.ocm.template.RepositoryTemplate;
+import com.madalla.cms.service.ocm.template.RepositoryTemplateCallback;
 import com.madalla.service.IRepositoryService;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.security.IAuthenticator;
@@ -134,7 +133,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
      * @return - album
      */
     public Album getAlbum(final String name){
-    	return (Album) repositoryTemplate.executeParent(RepositoryType.ALBUM, name, new ParentNodeCallback(){
+    	return (Album) repositoryTemplate.getParentObject(RepositoryType.ALBUM, name, new RepositoryTemplateCallback(){
 
 			@Override
 			public AbstractData createNew(String parentPath, String name) {
@@ -151,7 +150,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
      * @return - the album where we store all uploaded images
      */
     public AlbumData getOriginalsAlbum(){
-		return (Album) repositoryTemplate.executeParent(RepositoryType.ALBUM,ORIGINAL_ALBUM_NAME , new ParentNodeCallback(){
+		return (Album) repositoryTemplate.getParentObject(RepositoryType.ALBUM,ORIGINAL_ALBUM_NAME , new RepositoryTemplateCallback(){
 
 			@Override
 			public AbstractData createNew(String parentPath, String name) {
@@ -217,7 +216,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     // *** Blog and BlogEntries ***
 	
 	public Blog getBlog(final String blogName){
-		return (Blog) repositoryTemplate.executeParent(RepositoryType.BLOG, blogName, new ParentNodeCallback(){
+		return (Blog) repositoryTemplate.getParentObject(RepositoryType.BLOG, blogName, new RepositoryTemplateCallback(){
 
 			@Override
 			public AbstractData createNew(String parentPath, String name) {
@@ -253,9 +252,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     //*************************
     // *** Page and Content ***
     
-
     public PageData getPage(final String name){
-        return (PageData) repositoryTemplate.executeParent(RepositoryType.PAGE, name, new ParentNodeCallback(){
+        return (PageData) repositoryTemplate.getParentObject(RepositoryType.PAGE, name, new RepositoryTemplateCallback(){
 
             @Override
             public AbstractData createNew(String parentPath, String name) {
@@ -265,24 +263,13 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         });
     }
     
-    public String getContentText(final IPageData page, final String id, Locale locale) {
+    public String getContentText(final PageData page, final String id, Locale locale) {
         String localeId = getLocaleId(id, locale);
         return getContentText(page, localeId);
     }
     
-    public String getContentText(final IPageData page, final String contentName) {
-        String path = page.getId() + "/" + contentName;
-        ContentData content;
-        if (ocm.objectExists(path)){
-            content = (Content) ocm.getObject(Content.class, page.getId() + "/" + contentName);
-        } else {
-            content = new Content(page, contentName);
-            content.setText("New Content");
-            ocm.insert(content);
-            ocm.save();
-        }
-        
-        return content.getText();
+    public String getContentText(final PageData page, final String contentName) {
+    	return getContent(page, contentName).getText();
     }
     
     public String getLocaleId(String id, Locale locale) {
@@ -305,12 +292,21 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	saveDataObject(content);
     }
     
-    public Content getContent(final IPageData parent, final String name, final Locale locale){
+    public Content getContent(final PageData parent, final String name, final Locale locale){
     	return getContent(parent, getLocaleId(name, locale));
     }
     
-    public Content getContent(final IPageData parent, final String name){
-    	return getContent(parent.getId() + "/" + name);
+    public Content getContent(final PageData page, final String contentName){
+    	return (Content) repositoryTemplate.getOcmObject(RepositoryType.CONTENT, page, contentName, new RepositoryTemplateCallback(){
+
+			@Override
+			public AbstractData createNew(String parentPath, String name) {
+				Content content = new Content(page, contentName);
+	            content.setText("New Content");
+				return content;
+			}
+    		
+    	});
     }
 
     public Content getContent(final String id) {
@@ -322,21 +318,20 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     //Resources
-    public void createContentResource(final IPageData page, final String name, final InputStream inputStream ){
+    public void createContentResource(final PageData page, final String name, final InputStream inputStream ){
     	ResourceData data = new ResourcePdf(page, name, inputStream);
     	saveDataObject(data);
     }
     
-    public ResourceData getContentResource(final IPageData page, final String name){
-    	String path = page.getId() + "/" + name;
-    	ResourceData data;
-    	if (ocm.objectExists(path)){
-    		data = (ResourceData) ocm.getObject(ResourcePdf.class, path);
-    	} else {
-    		data = new ResourcePdf(page, name);
-    		saveDataObject(data);
-    	}
-    	return data; 
+    public ResourceData getContentResource(final PageData page, final String name){
+    	return (ResourceData) repositoryTemplate.getOcmObject(RepositoryType.RESOURCE_PDF, page, name, new RepositoryTemplateCallback(){
+
+			@Override
+			public AbstractData createNew(String parentPath, String name) {
+				return new ResourcePdf(page, name);
+			}
+    		
+    	});
     }
     
     public void saveContentResource(final ResourceData data){
@@ -347,7 +342,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     // ******   Site and Users    ******
     
     public SiteData getSite(String name){
-    	return (SiteData) repositoryTemplate.executeParent(RepositoryType.SITE, name, new ParentNodeCallback(){
+    	return (SiteData) repositoryTemplate.getParentObject(RepositoryType.SITE, name, new RepositoryTemplateCallback(){
 			
     		@Override
 			public AbstractData createNew(String parentPath, String name) {
@@ -380,7 +375,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     
     public UserData getUser(String username){
     	username = username.toLowerCase();
-    	return (User) repositoryTemplate.executeParent(RepositoryType.USER, username, new ParentNodeCallback(){
+    	return (User) repositoryTemplate.getParentObject(RepositoryType.USER, username, new RepositoryTemplateCallback(){
 
 			@Override
 			public AbstractData createNew(String parentPath, String name) {

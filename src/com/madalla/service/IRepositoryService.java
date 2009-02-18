@@ -17,7 +17,6 @@ import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.IImageData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.bo.page.ContentData;
-import com.madalla.bo.page.IPageData;
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
 import com.madalla.bo.security.UserData;
@@ -58,14 +57,14 @@ public interface IRepositoryService {
 	// Content
 	PageData getPage(final String name);
 
-	String getContentText(IPageData page, String id);
+	String getContentText(PageData page, String id);
 
-	String getContentText(IPageData page, String id, Locale locale);
+	String getContentText(PageData page, String id, Locale locale);
 
-	ContentData getContent(final IPageData parent, final String name,
+	ContentData getContent(final PageData parent, final String name,
 			final Locale locale);
 
-	ContentData getContent(final IPageData parent, final String name);
+	ContentData getContent(final PageData parent, final String name);
 
 	ContentData getContent(final String id);
 
@@ -73,9 +72,9 @@ public interface IRepositoryService {
 
 	void pasteContent(String id, ContentData content);
 
-    void createContentResource(final IPageData page, final String name, final InputStream inputStream );
+    void createContentResource(final PageData page, final String name, final InputStream inputStream );
     
-    ResourceData getContentResource(final IPageData page, final String name);
+    ResourceData getContentResource(final PageData page, final String name);
     
     void saveContentResource(final ResourceData data);
 

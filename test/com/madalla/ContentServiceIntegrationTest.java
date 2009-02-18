@@ -25,7 +25,7 @@ import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.IImageData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.bo.page.ContentData;
-import com.madalla.bo.page.IPageData;
+import com.madalla.bo.page.PageData;
 import com.madalla.bo.security.UserData;
 import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.page.Content;
@@ -94,7 +94,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	String contentText = RandomStringUtils.randomAlphabetic(20);
     	
     	//test new
-    	IPageData page = contentService.getPage(CONTENT_PARENT);
+    	PageData page = contentService.getPage(CONTENT_PARENT);
     	Content content = new Content(page,contentId );
     	String text = RandomStringUtils.randomAlphanumeric(20);
     	content.setText(text);
@@ -115,7 +115,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
     public void testContentGetSetLocale() throws RepositoryException{
     	String french = RandomStringUtils.randomAlphanumeric(20) + "french stuff";
-    	IPageData page = contentService.getPage(CONTENT_PARENT);
+    	PageData page = contentService.getPage(CONTENT_PARENT);
     	Content content = new Content(page, contentService.getLocaleId(CONTENT_ID, Locale.FRENCH));
     	content.setText(french);
     	contentService.saveContent(content);

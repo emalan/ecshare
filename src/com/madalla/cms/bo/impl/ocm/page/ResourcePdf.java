@@ -22,7 +22,7 @@ public class ResourcePdf extends ResourceData {
 	@Field(path=true) private String id;
 	@Field private String urlTitle;
 	@Field private String urlDisplay;
-	@Field private InputStream inputStream;
+	@Field private transient InputStream inputStream;
 	private DynamicWebResource resource;
 	
 	public ResourcePdf(){
@@ -54,9 +54,17 @@ public class ResourcePdf extends ResourceData {
 
 	public void setInputStream(final InputStream inputStream) {
 		this.inputStream = inputStream;
+		
+		final byte[] input = new byte[]{};
+		try {
+			inputStream.read(input);
+		} catch (IOException e) {
+			log.error("setInputStream - Exception creating DynamicWebResource",e);
+		} 
+		
 		this.resource = new DynamicWebResource(){
 			private static final long serialVersionUID = 1L;
-
+			
 			@Override
 			protected ResourceState getResourceState() {
 				return new ResourceState(){
@@ -68,13 +76,7 @@ public class ResourcePdf extends ResourceData {
 
 					@Override
 					public byte[] getData() {
-						byte[] rt = new byte[]{};
-						try {
-							inputStream.read(rt);
-						} catch (IOException e) {
-							log.error("setInputStream - Exception creating DynamicWebResource",e);
-						}
-						return rt;
+						return input;
 					}
 					
 				};

@@ -19,7 +19,7 @@ import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.bo.page.ContentData;
-import com.madalla.bo.page.IPageData;
+import com.madalla.bo.page.PageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.pages.ContentAdminPage;
@@ -68,7 +68,7 @@ public class ContentEntryPanel extends Panel {
             }
 		});
 
-        IPageData page = getRepositoryservice().getPage(nodeName);
+        PageData page = getRepositoryservice().getPage(nodeName);
         content = getRepositoryservice().getContent(page, contentId, getSession().getLocale());
         add(new ContentForm("contentForm"));
     }

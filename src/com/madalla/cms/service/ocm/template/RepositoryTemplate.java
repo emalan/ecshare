@@ -45,23 +45,21 @@ public class RepositoryTemplate {
 		});
 	}
 	
-	public Object executeParent(final RepositoryType type, final String name, final ParentNodeCallback callback){
+	public Object getOcmObject(final RepositoryType type, final AbstractData parent, final String name, 
+			final RepositoryTemplateCallback callback){
+		return getCreateOcmObject(type, parent.getId(), name, callback);
+	}
+	
+	public Object getParentObject(final RepositoryType type, final String name, final RepositoryTemplateCallback callback){
 		String parentPath = (String)template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
 				Node node = RepositoryInfo.getGroupNode(session, site, type);
 				session.save();
 				return node.getPath();
-				
 			}
 		});
-		String nodePath = parentPath + (StringUtils.isEmpty(name)?"" : "/" + name);
-		if (!ocm.objectExists(nodePath)){
-			Object obj = callback.createNew(parentPath, name);
-			ocm.insert(obj);
-			ocm.save();
-		}
-		return ocm.getObject(type.typeClass, nodePath);
+		return getCreateOcmObject(type, parentPath, name, callback);
 	}
 	
 	public Collection<? extends AbstractData> getAll(final RepositoryType type){
@@ -81,6 +79,19 @@ public class RepositoryTemplate {
 	
 	public Collection<? extends AbstractData> getAll(final RepositoryType type, AbstractData parent) {
 		return getQueryData(type.typeClass, parent.getId());
+	}
+	
+	private Object getCreateOcmObject(final RepositoryType type, final String parentPath, final String name, final RepositoryTemplateCallback callback){
+		if (type == null || StringUtils.isEmpty(parentPath) || StringUtils.isEmpty(name) || callback == null){
+			throw new RuntimeException("getOcmObject method requires that all parameters are supplied.");
+		}
+		String path = parentPath + "/" + name;
+		if (!ocm.objectExists(path)){
+			Object obj = callback.createNew(parentPath, name);
+			ocm.insert(obj);
+			ocm.save();
+		}
+		return ocm.getObject(type.typeClass, path);
 	}
 	
     @SuppressWarnings("unchecked") //filter will guarantee that only 'extends AbstractData' are returned

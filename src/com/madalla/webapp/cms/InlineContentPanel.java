@@ -8,7 +8,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.bo.page.ContentData;
-import com.madalla.bo.page.IPageData;
+import com.madalla.bo.page.PageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 
@@ -44,7 +44,7 @@ public class InlineContentPanel extends Panel {
         	@Override
 			protected void onBeforeRender(){
                 log.debug("onBeforeRender - setting new Content.");
-                IPageData page = getRepositoryservice().getPage(nodeName);
+                PageData page = getRepositoryservice().getPage(nodeName);
 	            contentData = getRepositoryservice().getContent(page, id, getSession().getLocale());
                 setModel(new PropertyModel(contentData, "text"));
                 if (((IContentAdmin)getSession()).isLoggedIn()) {

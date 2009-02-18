@@ -6,12 +6,11 @@ import java.io.InputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.DynamicWebResource;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import com.madalla.bo.page.IPageData;
+import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
@@ -72,7 +71,7 @@ public class ContentLinkPanel extends Panel{
 		super(id);
 		
 		log.debug("Editable Link Panel being created for node=" + nodeName + " id=" + id);
-		IPageData page = getRepositoryservice().getPage(nodeName);
+		PageData page = getRepositoryservice().getPage(nodeName);
 		final ResourceData resourceData = getRepositoryservice().getContentResource(page, id);
 		final LinkData linkData = new LinkData(resourceData.getUrlDisplay(), resourceData.getUrlTitle(), resourceData.getResource());
 		
