@@ -54,35 +54,37 @@ public class ResourcePdf extends ResourceData {
 
 	public void setInputStream(final InputStream inputStream) {
 		this.inputStream = inputStream;
-		
-		final byte[] input = new byte[]{};
-		try {
-			inputStream.read(input);
-		} catch (IOException e) {
-			log.error("setInputStream - Exception creating DynamicWebResource",e);
-		} 
-		
-		this.resource = new DynamicWebResource(){
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			protected ResourceState getResourceState() {
-				return new ResourceState(){
-
-					@Override
-					public String getContentType() {
-						return ResourceConstants.TYPE_PDF;
-					}
-
-					@Override
-					public byte[] getData() {
-						return input;
-					}
-					
-				};
+		if (null != inputStream) {
+			final byte[] input = new byte[] {};
+			try {
+				inputStream.read(input);
+			} catch (IOException e) {
+				String m = "setInputStream - Exception creating DynamicWebResource";
+				log.error(m, e);
 			}
-			
-		};
+
+			this.resource = new DynamicWebResource() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected ResourceState getResourceState() {
+					return new ResourceState() {
+
+						@Override
+						public String getContentType() {
+							return ResourceConstants.TYPE_PDF;
+						}
+
+						@Override
+						public byte[] getData() {
+							return input;
+						}
+
+					};
+				}
+
+			};
+		}
 	}
 
 	public InputStream getInputStream() {

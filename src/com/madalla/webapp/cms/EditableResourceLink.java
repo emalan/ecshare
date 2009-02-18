@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Resource;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -17,6 +18,8 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -182,9 +185,10 @@ public class EditableResourceLink extends Panel
 	 *            The model
 	 * @return The editor
 	 */
-	protected Component newLink(MarkupContainer parent, String componentId)
+	protected Component newLink(MarkupContainer parent, Resource resource, String componentId)
 	{
-		AjaxLink link = new AjaxLink(componentId)
+		//Link link = new ResourceLink(componentId, resource)
+		Link link = new Link(componentId)
 		{
 			private static final long serialVersionUID = 1L;
 			
@@ -207,10 +211,11 @@ public class EditableResourceLink extends Panel
 			}
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
+			public void onClick() {
 				// TODO Auto-generated method stub
 				
 			}
+
 		};
 		link.setOutputMarkupId(true);
 		link.add(new LabelAjaxBehavior(getLabelAjaxEvent()));
@@ -320,7 +325,7 @@ public class EditableResourceLink extends Panel
 		nameEditor = newEditor(this, "editor", new PropertyModel(data, "name"));
 		titleEditor = newEditor(this, "title-editor", new PropertyModel(data, "title"));
 		resourceEditor = newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload"));
-		label = newLink(this, "link");
+		label = newLink(this, data.getResource() , "link");
 		add(label);
 		add(resourceForm);
 		resourceForm.add(nameEditor);
