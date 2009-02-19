@@ -1,16 +1,12 @@
 package com.madalla.webapp.cms;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.ResourceReference;
 import org.apache.wicket.markup.html.DynamicWebResource;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import com.madalla.bo.page.PageData;
@@ -76,12 +72,6 @@ public class ContentLinkPanel extends Panel{
 		
 		log.debug("Editable Link Panel being created for node=" + nodeName + " id=" + id);
 		
-		/**  Test resource link **/
-		ResourceReference resourceReference = new ResourceReference(this.getClass(),"EugeneMalan.pdf");
-		Link pdfLink = new ResourceLink("test-pdf",resourceReference);
-		add(pdfLink);
-		
-		
 		PageData page = getRepositoryservice().getPage(nodeName);
 		final ResourceData resourceData = getRepositoryservice().getContentResource(page, id, type);
 		final LinkData linkData = new LinkData(resourceData.getUrlDisplay(), resourceData.getUrlTitle(), resourceData.getResource());
@@ -97,24 +87,21 @@ public class ContentLinkPanel extends Panel{
 				resourceData.setUrlTitle(linkData.getTitle());
 				
 				try {
-
-					FileUpload upload = linkData.getFileUpload();
-					String contentType = upload.getContentType();
-					log.info("file upload - Content type=" + contentType);
-
 					// TODO create a validator
 					// if (!(contentType.equalsIgnoreCase("image/png") ||
 					// contentType.equalsIgnoreCase("image/jpeg"))){
 					// log.warn("file upload - Input type not supported. Type="+contentType);
 					// warn(getString("error.type", new Model(upload)));
 					// }
-					InputStream inputStream = upload.getInputStream();
-					String imageName = StringUtils.deleteWhitespace(upload
-							.getClientFileName());
-					imageName = StringUtils.substringBefore(imageName, ".");
 
-					// TODO validate fileUpload and get input Stream
-					resourceData.setInputStream(inputStream);
+					// Transfer values and save
+					FileUpload upload = linkData.getFileUpload();
+					resourceData.setInputStream(upload.getInputStream());
+					resourceData.setUrlDisplay(StringUtils
+							.isEmpty(linkData.name) ? upload
+							.getClientFileName() : linkData.name);
+					resourceData.setUrlTitle(linkData.title);
+					
 					getRepositoryservice().saveContentResource(resourceData);
 					upload.closeStreams();
 				} catch (IOException e) {
@@ -124,13 +111,11 @@ public class ContentLinkPanel extends Panel{
 			
         	@Override
 			protected void onBeforeRender(){
-
-        		this.setEditMode(false);
-//        		if (((IContentAdmin)getSession()).isLoggedIn()) {
-//                    setEnabled(true);
-//                } else {
-//                    setEnabled(false);
-//                }
+        		if (((IContentAdmin)getSession()).isLoggedIn()) {
+        			this.setEditMode(true);
+                } else {
+                	this.setEditMode(false);
+                }
                 super.onBeforeRender();
             }            	
 			

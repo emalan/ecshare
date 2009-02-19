@@ -294,9 +294,6 @@ public class EditableResourceLink extends Panel
 	{
 		label.setVisible(false);
 		resourceForm.setVisible(true);
-		//nameEditor.setVisible(true);
-		//titleEditor.setVisible(true);
-		//resourceEditor.setVisible(true);
 		target.addComponent(EditableResourceLink.this);
 		// put focus on the textfield and stupid explorer hack to move the
 		// caret to the end

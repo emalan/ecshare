@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.DynamicWebResource;
 
 import com.madalla.bo.page.ResourceHelper.ResourceType;
@@ -18,8 +19,8 @@ public class CachedWebResource extends DynamicWebResource {
 	/**
 	 * 
 	 */
-	public CachedWebResource(InputStream inputStream, ResourceType type) {
-		super("test.pdf");
+	public CachedWebResource(InputStream inputStream, ResourceType type, String file) {
+		super(validatedFileName(file, type.suffix));
 		this.contentType = type.resourceType;
 		try {
 			cache = CachedWebResource.bytes(inputStream, type.bufferSize);
@@ -61,6 +62,16 @@ public class CachedWebResource extends DynamicWebResource {
 				return;
 			}
 			os.write(buf, 0, tam);
+		}
+	}
+	
+	private static String validatedFileName(String file, String suffix){
+		if (StringUtils.isEmpty(file)){
+			return "temp."+suffix;
+		} else if (file.endsWith(suffix)){
+			return file;
+		} else {
+			return file+"."+suffix;
 		}
 	}
 
