@@ -12,6 +12,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.DynamicWebResource;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
@@ -213,8 +214,11 @@ public class EditableResourceLink extends Panel
 		return link;
 	}
 	
-	protected Component newResourceLink(MarkupContainer parent, Resource resource, String componentId)
+	protected Component newResourceLink(MarkupContainer parent, final Resource resource, String componentId)
 	{
+		if (null == resource){
+			return new Label(componentId);
+		}
 		Link link = new ResourceLink(componentId, resource)
 		{
 			private static final long serialVersionUID = 1L;
@@ -236,7 +240,16 @@ public class EditableResourceLink extends Panel
 					replaceComponentTagBody(markupStream, openTag, data.getName());
 				}
 			}
-
+			
+			@Override
+			protected void onBeforeRender() 
+			{
+				if (null == resource){
+					this.setEnabled(false);
+				}
+				super.onBeforeRender();
+			}
+			
 		};
 		link.setOutputMarkupId(true);
 		return link;
@@ -349,6 +362,7 @@ public class EditableResourceLink extends Panel
 		else 
 		{
 			label = newResourceLink(this, data.getResource() , "link");
+			
 		}
 		add(label);
 		add(resourceForm);
