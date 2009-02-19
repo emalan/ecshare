@@ -31,7 +31,7 @@ public class EditableResourceLink extends Panel
 	private static final long serialVersionUID = 1L;
 	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(2000);
 
-	/** editor component. */
+	private boolean editMode = false;
 	private Form resourceForm;
 	private FormComponent nameEditor;
 	private FormComponent titleEditor;
@@ -73,24 +73,6 @@ public class EditableResourceLink extends Panel
 		}
 	}
 	
-	private Form newFileUploadForm(String id)
-	{
-		final Form form = new Form(id)
-		{
-			@Override
-			protected void onSubmit() {
-				EditableResourceLink.this.onSubmit();
-			}
-
-			private static final long serialVersionUID = 1L;
-			
-		};
-		form.setOutputMarkupId(true);
-		form.setVisible(false);
-		form.setMaxSize(MAX_FILE_SIZE);
-		return form;
-	}
-	
 	/**
 	 * @param id Wicket Id
 	 * @param data Data Object for Model
@@ -116,6 +98,28 @@ public class EditableResourceLink extends Panel
 		throw new WicketRuntimeException(message);
 	}
 
+	private Form newFileUploadForm(String id)
+	{
+		final Form form = new Form(id)
+		{
+			@Override
+			protected void onSubmit() {
+				//TODO create validator for type
+				FileUpload upload = data.getFileUpload();
+				String contentType = upload.getContentType();
+            	
+				EditableResourceLink.this.onSubmit();
+			}
+
+			private static final long serialVersionUID = 1L;
+			
+		};
+		form.setOutputMarkupId(true);
+		form.setVisible(false);
+		form.setMaxSize(MAX_FILE_SIZE);
+		return form;
+	}	
+	
 	/**
 	 * Create a new form component instance to serve as editor.
 	 *
@@ -174,27 +178,15 @@ public class EditableResourceLink extends Panel
 		return editor;
 	}
 
-	/**
-	 * Create a new form component instance to serve as label.
-	 *
-	 * @param parent
-	 *            The parent component
-	 * @param componentId
-	 *            Id that should be used by the component
-	 * @param model
-	 *            The model
-	 * @return The editor
-	 */
-	protected Component newLink(MarkupContainer parent, Resource resource, String componentId)
+	protected Component newEditLink(MarkupContainer parent, String componentId)
 	{
-		//Link link = new ResourceLink(componentId, resource)
 		Link link = new Link(componentId)
 		{
 			private static final long serialVersionUID = 1L;
 			
 			@Override
 			protected void onComponentTag(ComponentTag tag) {
-				tag.put("title", data.getTitle());
+				tag.put("title", "Edit Link");
 				super.onComponentTag(tag);
 			}
 
@@ -219,6 +211,35 @@ public class EditableResourceLink extends Panel
 		};
 		link.setOutputMarkupId(true);
 		link.add(new LabelAjaxBehavior(getLabelAjaxEvent()));
+		return link;
+	}
+	
+	protected Component newResourceLink(MarkupContainer parent, Resource resource, String componentId)
+	{
+		Link link = new ResourceLink(componentId, resource)
+		{
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			protected void onComponentTag(ComponentTag tag) {
+				tag.put("title", data.getTitle());
+				super.onComponentTag(tag);
+			}
+
+			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+			{
+				if (StringUtils.isEmpty(data.getName()))
+				{
+					replaceComponentTagBody(markupStream, openTag, defaultNullLabel());
+				}
+				else 
+				{
+					replaceComponentTagBody(markupStream, openTag, data.getName());
+				}
+			}
+
+		};
+		link.setOutputMarkupId(true);
 		return link;
 	}
 
@@ -325,7 +346,14 @@ public class EditableResourceLink extends Panel
 		nameEditor = newEditor(this, "editor", new PropertyModel(data, "name"));
 		titleEditor = newEditor(this, "title-editor", new PropertyModel(data, "title"));
 		resourceEditor = newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload"));
-		label = newLink(this, data.getResource() , "link");
+		if (editMode)
+		{
+		    label = newEditLink(this, "link");
+		}
+		else 
+		{
+			label = newResourceLink(this, data.getResource() , "link");
+		}
 		add(label);
 		add(resourceForm);
 		resourceForm.add(nameEditor);
@@ -363,6 +391,10 @@ public class EditableResourceLink extends Panel
 	protected void onModelChanging()
 	{
 		super.onModelChanging();
+	}
+
+	protected void setEditMode(boolean editMode) {
+		this.editMode = editMode;
 	}
 
 	

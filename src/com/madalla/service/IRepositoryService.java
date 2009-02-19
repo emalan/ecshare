@@ -72,12 +72,10 @@ public interface IRepositoryService {
 
 	void pasteContent(String id, ContentData content);
 
-    void createContentResource(final PageData page, final String name, final InputStream inputStream );
-    
     ResourceData getContentResource(final PageData page, final String name);
     
     void saveContentResource(final ResourceData data);
-
+    
 	// Blog
 	BlogData getBlog(final String blogName);
 

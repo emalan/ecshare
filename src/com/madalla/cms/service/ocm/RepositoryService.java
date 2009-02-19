@@ -38,6 +38,7 @@ import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.image.ImageHelper;
 import com.madalla.cms.bo.impl.ocm.page.Content;
 import com.madalla.cms.bo.impl.ocm.page.Page;
+import com.madalla.cms.bo.impl.ocm.page.ResourceHelper;
 import com.madalla.cms.bo.impl.ocm.page.ResourcePdf;
 import com.madalla.cms.bo.impl.ocm.security.User;
 import com.madalla.cms.bo.impl.ocm.security.UserSite;
@@ -318,13 +319,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     //Resources
-    public void createContentResource(final PageData page, final String name, final InputStream inputStream ){
-    	ResourceData data = new ResourcePdf(page, name, inputStream);
-    	saveDataObject(data);
-    }
-    
     public ResourceData getContentResource(final PageData page, final String name){
-    	return (ResourceData) repositoryTemplate.getOcmObject(RepositoryType.RESOURCE_PDF, page, name, new RepositoryTemplateCallback(){
+    	ResourcePdf data = (ResourcePdf) repositoryTemplate.getOcmObject(RepositoryType.RESOURCE_PDF, page, name, new RepositoryTemplateCallback(){
 
 			@Override
 			public AbstractData createNew(String parentPath, String name) {
@@ -332,6 +328,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 			}
     		
     	});
+    	ResourceHelper.createWebResource(data);
+    	return data;
     }
     
     public void saveContentResource(final ResourceData data){
