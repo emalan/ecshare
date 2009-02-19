@@ -28,6 +28,7 @@ import com.madalla.bo.image.ImageData;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
+import com.madalla.bo.page.ResourceHelper.ResourceType;
 import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
 import com.madalla.cms.bo.impl.ocm.Site;
@@ -38,8 +39,7 @@ import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.image.ImageHelper;
 import com.madalla.cms.bo.impl.ocm.page.Content;
 import com.madalla.cms.bo.impl.ocm.page.Page;
-import com.madalla.cms.bo.impl.ocm.page.ResourceHelper;
-import com.madalla.cms.bo.impl.ocm.page.ResourcePdf;
+import com.madalla.cms.bo.impl.ocm.page.Resource;
 import com.madalla.cms.bo.impl.ocm.security.User;
 import com.madalla.cms.bo.impl.ocm.security.UserSite;
 import com.madalla.cms.jcr.JcrUtils;
@@ -319,18 +319,20 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     //Resources
-    public ResourceData getContentResource(final PageData page, final String name){
-    	ResourcePdf data = (ResourcePdf) repositoryTemplate.getOcmObject(RepositoryType.RESOURCE_PDF, page, name, new RepositoryTemplateCallback(){
+    public ResourceData getContentResource(final PageData page, final String name, ResourceType type){
+    	Resource data = (Resource) repositoryTemplate.getOcmObject(RepositoryType.RESOURCE, page, name, new RepositoryTemplateCallback(){
 
 			@Override
 			public AbstractData createNew(String parentPath, String name) {
-				return new ResourcePdf(page, name);
+				return new Resource(page, name);
 			}
     		
     	});
-    	ResourceHelper.createWebResource(data);
+    	type.createWebResource(data);
     	return data;
     }
+    
+    
     
     public void saveContentResource(final ResourceData data){
     	saveDataObject(data);

@@ -19,6 +19,7 @@ import com.madalla.bo.image.ImageData;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
+import com.madalla.bo.page.ResourceHelper.ResourceType;
 import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
 import com.madalla.webapp.security.IAuthenticator;
@@ -72,7 +73,7 @@ public interface IRepositoryService {
 
 	void pasteContent(String id, ContentData content);
 
-    ResourceData getContentResource(final PageData page, final String name);
+    ResourceData getContentResource(final PageData page, final String name, ResourceType type);
     
     void saveContentResource(final ResourceData data);
     

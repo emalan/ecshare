@@ -11,7 +11,7 @@ import com.madalla.bo.page.IPageData;
 import com.madalla.bo.page.ResourceData;
 
 @Node
-public class ResourcePdf extends ResourceData {
+public class Resource extends ResourceData {
 
 	private static final long serialVersionUID = 1L;
 
@@ -22,15 +22,15 @@ public class ResourcePdf extends ResourceData {
 	private DynamicWebResource resource;
 	
 	
-	public ResourcePdf(){
+	public Resource(){
 		
 	}
 	
-	public ResourcePdf(final IPageData page, final String name){
+	public Resource(final IPageData page, final String name){
 		this.setId(page.getId() + "/" + name);
 	}
 	
-	public ResourcePdf(final IPageData page, final String name, InputStream inputStream){
+	public Resource(final IPageData page, final String name, InputStream inputStream){
 		this.setId(page.getId() + "/" + name);
 		this.inputStream = inputStream;
 	}

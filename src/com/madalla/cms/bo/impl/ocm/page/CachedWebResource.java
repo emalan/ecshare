@@ -7,25 +7,27 @@ import java.io.OutputStream;
 
 import org.apache.wicket.markup.html.DynamicWebResource;
 
-public class PdfResource extends DynamicWebResource{
+import com.madalla.bo.page.ResourceHelper.ResourceType;
+
+public class CachedWebResource extends DynamicWebResource {
 	private static final long serialVersionUID = 1L;
 
-	private static int BUFFER_SIZE = 10*1024;
-	
 	private byte[] cache ;
+	private String contentType;
 	
 	/**
 	 * 
 	 */
-	public PdfResource(InputStream inputStream) {
+	public CachedWebResource(InputStream inputStream, ResourceType type) {
 		super("test.pdf");
+		this.contentType = type.resourceType;
 		try {
-			cache = PdfResource.bytes(inputStream);
+			cache = CachedWebResource.bytes(inputStream, type.bufferSize);
 		} catch (IOException e) {
 			cache = null;
 		}
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see org.apache.wicket.markup.html.DynamicWebResource#getResourceState()
 	 */
@@ -35,7 +37,7 @@ public class PdfResource extends DynamicWebResource{
 			
 			@Override
 			public String getContentType() {
-				return "application/pdf";
+				return contentType;
 			}
 			
 			@Override
@@ -45,14 +47,14 @@ public class PdfResource extends DynamicWebResource{
 		};
 	}
 	
-	public static  byte[] bytes(InputStream is) throws IOException {
+	public static  byte[] bytes(InputStream is, int buffersize) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		copy(is, out);
+		copy(is, out, buffersize);
 		return out.toByteArray();
 	}
 	
-	public static void copy(InputStream is, OutputStream os) throws IOException {
-		byte[] buf = new byte[BUFFER_SIZE];
+	public static void copy(InputStream is, OutputStream os, int bufferSize) throws IOException {
+		byte[] buf = new byte[bufferSize];
 		while (true) {
 			int tam = is.read(buf);
 			if (tam == -1) {
@@ -61,4 +63,7 @@ public class PdfResource extends DynamicWebResource{
 			os.write(buf, 0, tam);
 		}
 	}
+
+
+
 }

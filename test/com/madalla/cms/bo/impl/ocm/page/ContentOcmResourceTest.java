@@ -19,7 +19,7 @@ public class ContentOcmResourceTest extends AbstractContentOcmTest{
 	private Log log = LogFactory.getLog(this.getClass());
 	
 	public void testContentOcmResource() throws IOException{
-		String parentPath = getCreateParentNode(RepositoryType.RESOURCE_PDF);
+		String parentPath = getCreateParentNode(RepositoryType.RESOURCE);
 		
 		String nodePath ;
 		{
@@ -32,11 +32,11 @@ public class ContentOcmResourceTest extends AbstractContentOcmTest{
 	        Page testPage = (Page) ocm.getObject(Page.class, page.getId());
 	        InputStream pdf = this.getClass().getResourceAsStream("EugeneMalan.pdf");
 	        
-	        ResourcePdf resource = new ResourcePdf(testPage, "testpdf", pdf);
+	        Resource resource = new Resource(testPage, "testpdf", pdf);
 	        ocm.insert(resource);
 	        ocm.save();
 	        
-	        ResourcePdf testResource = (ResourcePdf) ocm.getObject(ResourcePdf.class, resource.getId());
+	        Resource testResource = (Resource) ocm.getObject(Resource.class, resource.getId());
 	        assertNotNull(testResource);
 	        assertNotNull(testResource.getInputStream());
 	        assertNotNull(testResource.getResource());

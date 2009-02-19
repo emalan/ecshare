@@ -15,6 +15,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
+import com.madalla.bo.page.ResourceHelper.ResourceType;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.cms.EditableResourceLink.ILinkData;
@@ -70,7 +71,7 @@ public class ContentLinkPanel extends Panel{
 		
 	}
 	
-	public ContentLinkPanel(final String id, final String nodeName) {
+	public ContentLinkPanel(final String id, final String nodeName, ResourceType type) {
 		super(id);
 		
 		log.debug("Editable Link Panel being created for node=" + nodeName + " id=" + id);
@@ -82,7 +83,7 @@ public class ContentLinkPanel extends Panel{
 		
 		
 		PageData page = getRepositoryservice().getPage(nodeName);
-		final ResourceData resourceData = getRepositoryservice().getContentResource(page, id);
+		final ResourceData resourceData = getRepositoryservice().getContentResource(page, id, type);
 		final LinkData linkData = new LinkData(resourceData.getUrlDisplay(), resourceData.getUrlTitle(), resourceData.getResource());
 		
 		Panel editableLink = new EditableResourceLink("contentLink", linkData){
