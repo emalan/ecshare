@@ -33,9 +33,7 @@ public class EditableResourceLink extends Panel
 
 	private boolean editMode = false;
 	private Form resourceForm;
-	private FormComponent nameEditor;
-	private FormComponent titleEditor;
-	private FormComponent resourceEditor;
+	
 
 	/** label component. */
 	private Component label;
@@ -241,15 +239,6 @@ public class EditableResourceLink extends Panel
 				}
 			}
 			
-			@Override
-			protected void onBeforeRender() 
-			{
-				if (null == resource){
-					this.setEnabled(false);
-				}
-				super.onBeforeRender();
-			}
-			
 		};
 		link.setOutputMarkupId(true);
 		return link;
@@ -291,9 +280,7 @@ public class EditableResourceLink extends Panel
 	protected void onCancel(AjaxRequestTarget target)
 	{
 		label.setVisible(true);
-		nameEditor.setVisible(false);
-		titleEditor.setVisible(false);
-		resourceEditor.setVisible(false);
+		resourceForm.setVisible(false);
 		target.addComponent(EditableResourceLink.this);
 	}
 
@@ -310,11 +297,11 @@ public class EditableResourceLink extends Panel
 		target.addComponent(EditableResourceLink.this);
 		// put focus on the textfield and stupid explorer hack to move the
 		// caret to the end
-		target.appendJavascript("{ var el=wicketGet('" + nameEditor.getMarkupId() + "');" +
-			"   if (el.createTextRange) { " +
-			"     var v = el.value; var r = el.createTextRange(); " +
-			"     r.moveStart('character', v.length); r.select(); } }");
-		target.focusComponent(nameEditor);
+//		target.appendJavascript("{ var el=wicketGet('" + nameEditor.getMarkupId() + "');" +
+//			"   if (el.createTextRange) { " +
+//			"     var v = el.value; var r = el.createTextRange(); " +
+//			"     r.moveStart('character', v.length); r.select(); } }");
+//		target.focusComponent(nameEditor);
 	}
 
 	/**
@@ -325,16 +312,16 @@ public class EditableResourceLink extends Panel
 	 */
 	protected void onError(AjaxRequestTarget target)
 	{
-		Serializable errorMessage = nameEditor.getFeedbackMessage().getMessage();
-		if (errorMessage instanceof String)
-		{
-			target.appendJavascript("window.status='" +
-				JavascriptUtils.escapeQuotes((String)errorMessage) + "';");
-		}
-		String editorMarkupId = nameEditor.getMarkupId();
-		target.appendJavascript(editorMarkupId + ".select();");
-		target.appendJavascript(editorMarkupId + ".focus();");
-		target.addComponent(nameEditor);
+//		Serializable errorMessage = nameEditor.getFeedbackMessage().getMessage();
+//		if (errorMessage instanceof String)
+//		{
+//			target.appendJavascript("window.status='" +
+//				JavascriptUtils.escapeQuotes((String)errorMessage) + "';");
+//		}
+//		String editorMarkupId = nameEditor.getMarkupId();
+//		target.appendJavascript(editorMarkupId + ".select();");
+//		target.appendJavascript(editorMarkupId + ".focus();");
+//		target.addComponent(nameEditor);
 	}
 
 	protected void onSubmit()
@@ -352,9 +339,6 @@ public class EditableResourceLink extends Panel
 	private void initLabelForm(IModel model)
 	{
 		resourceForm = newFileUploadForm("resource-form");
-		nameEditor = newEditor(this, "editor", new PropertyModel(data, "name"));
-		titleEditor = newEditor(this, "title-editor", new PropertyModel(data, "title"));
-		resourceEditor = newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload"));
 		if (editMode)
 		{
 		    label = newEditLink(this, "link");
@@ -366,9 +350,9 @@ public class EditableResourceLink extends Panel
 		}
 		add(label);
 		add(resourceForm);
-		resourceForm.add(nameEditor);
-		resourceForm.add(titleEditor);
-		resourceForm.add(resourceEditor);
+		resourceForm.add(newEditor(this, "editor", new PropertyModel(data, "name")));
+		resourceForm.add(newEditor(this, "title-editor", new PropertyModel(data, "title")));
+		resourceForm.add(newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload")));
 	}
 
 
