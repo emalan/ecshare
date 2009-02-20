@@ -78,34 +78,37 @@ public class ContentLinkPanel extends Panel{
 		final LinkData linkData = new LinkData();
 		linkData.setName(resourceData.getUrlDisplay());
 		linkData.setTitle(resourceData.getUrlTitle());
-		linkData.setResource(new WebResource(){
+		if (resourceData.getInputStream() != null) {
+			linkData.setResource(new WebResource() {
 
-			private static final long serialVersionUID = 1L;
+				private static final long serialVersionUID = 1L;
 
-			@Override
-			public IResourceStream getResourceStream() {
-				return new AbstractResourceStream() {
+				@Override
+				public IResourceStream getResourceStream() {
+					return new AbstractResourceStream() {
 
-		            @Override
-					public String getContentType() {
-						return resourceData.getType().resourceType;
-					}
+						@Override
+						public String getContentType() {
+							return resourceData.getType().resourceType;
+						}
 
-					private static final long serialVersionUID = 1L;
+						private static final long serialVersionUID = 1L;
 
-		            public void close() throws IOException {
+						public void close() throws IOException {
 
-		            }
+						}
 
-		            public InputStream getInputStream() throws ResourceStreamNotFoundException {
-		                return getRepositoryservice().getResourceStream(resourceData.getId(), "inputStream");
-		            }
+						public InputStream getInputStream()
+								throws ResourceStreamNotFoundException {
+							return getRepositoryservice().getResourceStream(
+									resourceData.getId(), "inputStream");
+						}
 
-		            
-		        };
-			}
-			
-		});
+					};
+				}
+
+			});
+		}
 		
 		Panel editableLink = new EditableResourceLink("contentLink", linkData){
 			private static final long serialVersionUID = 1L;
@@ -129,9 +132,6 @@ public class ContentLinkPanel extends Panel{
 					}
 				}
 				getRepositoryservice().saveContentResource(resourceData);
-				if (upload != null){
-					upload.closeStreams();
-				}
         	}
 			
         	@Override

@@ -16,6 +16,8 @@ public interface IResourceData {
 
 	void setUrlTitle(String urlTitle) ;
 	
+	InputStream getInputStream();
+	
 	void setInputStream(InputStream inputStream);
 	
 	ResourceType getType();
