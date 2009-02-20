@@ -1,10 +1,12 @@
 package com.madalla.cms.service.ocm.template;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
 
 import javax.jcr.Node;
+import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
@@ -43,6 +45,18 @@ public class RepositoryTemplate {
 			}
 			
 		});
+	}
+	
+	public InputStream getNodePropertyStream(final String path, final String property){
+	    return (InputStream) template.execute(new JcrCallback(){
+
+            public Object doInJcr(Session session) throws IOException, RepositoryException {
+                Node node = (Node) session.getItem(path);
+                Property prop = node.getProperty(property);
+                return prop.getStream();
+            }
+	        
+	    });
 	}
 	
 	public Object getOcmObject(final RepositoryType type, final AbstractData parent, final String name, 

@@ -215,7 +215,7 @@ public class EditableResourceLink extends Panel
 	protected Component newResourceLink(MarkupContainer parent, final Resource resource, String componentId)
 	{
 		if (null == resource){
-			return new Label(componentId);
+			return new Label(componentId, getString("label.notconfigured"));
 		}
 		Link link = new ResourceLink(componentId, resource)
 		{
@@ -267,6 +267,9 @@ public class EditableResourceLink extends Panel
 		{
 			initLabelForm(getModel());
 		}
+		
+
+
 		label.setEnabled(isEnableAllowed() && isEnabled());
 	}
 
@@ -339,20 +342,19 @@ public class EditableResourceLink extends Panel
 	private void initLabelForm(IModel model)
 	{
 		resourceForm = newFileUploadForm("resource-form");
-		if (editMode)
-		{
-		    label = newEditLink(this, "link");
-		}
-		else 
-		{
-			label = newResourceLink(this, data.getResource() , "link");
-			
-		}
-		add(label);
 		add(resourceForm);
 		resourceForm.add(newEditor(this, "editor", new PropertyModel(data, "name")));
 		resourceForm.add(newEditor(this, "title-editor", new PropertyModel(data, "title")));
 		resourceForm.add(newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload")));
+	      if (editMode)
+	        {
+	            label = newEditLink(this, "link");
+	        }
+	        else 
+	        {
+	            label = newResourceLink(this, data.getResource() , "link");
+	        }
+	        add(label);
 	}
 
 

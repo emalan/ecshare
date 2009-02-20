@@ -8,7 +8,7 @@ import java.io.OutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.DynamicWebResource;
 
-import com.madalla.bo.page.ResourceHelper.ResourceType;
+import com.madalla.bo.page.ResourceType;
 
 public class CachedWebResource extends DynamicWebResource {
 	private static final long serialVersionUID = 1L;

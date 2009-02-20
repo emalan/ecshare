@@ -13,7 +13,7 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import com.madalla.bo.page.ResourceHelper.ResourceType;
+import com.madalla.bo.page.ResourceType;
 import com.madalla.webapp.blog.BlogHomePanel;
 import com.madalla.webapp.blog.admin.BlogEntryPanel;
 import com.madalla.webapp.cms.ContentEntryPanel;

@@ -11,7 +11,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
-import com.madalla.bo.page.ResourceHelper.ResourceType;
+import com.madalla.bo.page.ResourceType;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.cms.EditableResourceLink.ILinkData;
