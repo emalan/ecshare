@@ -40,7 +40,6 @@ import com.madalla.cms.bo.impl.ocm.image.ImageHelper;
 import com.madalla.cms.bo.impl.ocm.page.Content;
 import com.madalla.cms.bo.impl.ocm.page.Page;
 import com.madalla.cms.bo.impl.ocm.page.Resource;
-import com.madalla.cms.bo.impl.ocm.page.ResourceHelper;
 import com.madalla.cms.bo.impl.ocm.security.User;
 import com.madalla.cms.bo.impl.ocm.security.UserSite;
 import com.madalla.cms.jcr.JcrUtils;
@@ -123,6 +122,10 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     
     public void deleteNode(final String path) {
     	JcrUtils.deleteNode(template, path);
+    }
+    
+    public InputStream getResourceStream(String path, String property){
+    	return repositoryTemplate.getNodePropertyStream(path, property);
     }
     
     //*************************
@@ -329,7 +332,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 			}
     		
     	});
-    	ResourceHelper.createWebResource(data, type, repositoryTemplate);
+    	data.setType(type);
     	return data;
     }
     

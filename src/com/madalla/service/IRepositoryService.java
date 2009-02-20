@@ -54,6 +54,8 @@ public interface IRepositoryService {
 
 	// Generic
 	void deleteNode(final String id);
+	
+	InputStream getResourceStream(String path, String property);
 
 	// Content
 	PageData getPage(final String name);

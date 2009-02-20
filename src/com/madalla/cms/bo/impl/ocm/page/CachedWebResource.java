@@ -12,7 +12,7 @@ import com.madalla.bo.page.ResourceType;
 
 public class CachedWebResource extends DynamicWebResource {
 	private static final long serialVersionUID = 1L;
-
+	private static final int BUFFER_SIZE = 10*1024;
 	private byte[] cache ;
 	private String contentType;
 	
@@ -23,7 +23,7 @@ public class CachedWebResource extends DynamicWebResource {
 		super(validatedFileName(file, type.suffix));
 		this.contentType = type.resourceType;
 		try {
-			cache = CachedWebResource.bytes(inputStream, type.bufferSize);
+			cache = CachedWebResource.bytes(inputStream);
 		} catch (IOException e) {
 			cache = null;
 		}
@@ -48,14 +48,14 @@ public class CachedWebResource extends DynamicWebResource {
 		};
 	}
 	
-	public static  byte[] bytes(InputStream is, int buffersize) throws IOException {
+	public static  byte[] bytes(InputStream is) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		copy(is, out, buffersize);
+		copy(is, out);
 		return out.toByteArray();
 	}
 	
-	public static void copy(InputStream is, OutputStream os, int bufferSize) throws IOException {
-		byte[] buf = new byte[bufferSize];
+	public static void copy(InputStream is, OutputStream os) throws IOException {
+		byte[] buf = new byte[BUFFER_SIZE];
 		while (true) {
 			int tam = is.read(buf);
 			if (tam == -1) {

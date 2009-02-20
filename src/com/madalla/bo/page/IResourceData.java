@@ -2,24 +2,21 @@ package com.madalla.bo.page;
 
 import java.io.InputStream;
 
-import org.apache.wicket.markup.html.WebResource;
-
 public interface IResourceData {
 
 	String getId();
 
 	String getName();
 	
-	WebResource getResource();
+	String getUrlDisplay();
 	
 	void setUrlDisplay(String urlDisplay);
 
-	String getUrlDisplay();
+	String getUrlTitle();
 
 	void setUrlTitle(String urlTitle) ;
 	
-	String getUrlTitle();
-	
 	void setInputStream(InputStream inputStream);
 	
+	ResourceType getType();
 }

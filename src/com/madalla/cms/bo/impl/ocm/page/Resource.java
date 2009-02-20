@@ -5,10 +5,10 @@ import java.io.InputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
-import org.apache.wicket.markup.html.WebResource;
 
 import com.madalla.bo.page.IPageData;
 import com.madalla.bo.page.ResourceData;
+import com.madalla.bo.page.ResourceType;
 
 @Node
 public class Resource extends ResourceData {
@@ -19,11 +19,9 @@ public class Resource extends ResourceData {
 	@Field private String urlTitle;
 	@Field private String urlDisplay;
 	@Field private transient InputStream inputStream;
-	private WebResource resource;
-	
+	private ResourceType type;
 	
 	public Resource(){
-		
 	}
 	
 	public Resource(final IPageData page, final String name){
@@ -57,14 +55,6 @@ public class Resource extends ResourceData {
 		return inputStream;
 	}
 
-	public WebResource getResource() {
-		return resource;
-	}
-	
-	public void setResource(WebResource dynamicWebResource){
-		this.resource = dynamicWebResource;
-	}
-
 	public void setUrlDisplay(String urlDisplay) {
 		this.urlDisplay = urlDisplay;
 	}
@@ -80,5 +70,15 @@ public class Resource extends ResourceData {
 	public String getUrlTitle() {
 		return urlTitle;
 	}
+
+	public ResourceType getType() {
+		return type;
+	}
+
+	public void setType(ResourceType type) {
+		this.type = type;
+	}
+	
+	
 
 }

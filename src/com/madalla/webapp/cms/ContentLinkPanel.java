@@ -1,6 +1,7 @@
 package com.madalla.webapp.cms;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -8,6 +9,9 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.WebResource;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.util.resource.AbstractResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
@@ -30,19 +34,16 @@ public class ContentLinkPanel extends Panel{
 		private WebResource resource;
 		private transient FileUpload fileUpload;
 		
-		/**  Data object that needs to be passed to AjaxEditableLink **/
-		public LinkData(String name, String title, WebResource resource){
-			this.name = name;
-			this.title = title;
-			this.resource = resource;
-		}
-
 		public String getName() {
 			return name;
 		}
 
 		public WebResource getResource() {
 			return resource;
+		}
+		
+		public void setResource(WebResource resource){
+			this.resource = resource;
 		}
 
 		public String getTitle() {
@@ -74,7 +75,37 @@ public class ContentLinkPanel extends Panel{
 		
 		PageData page = getRepositoryservice().getPage(nodeName);
 		final ResourceData resourceData = getRepositoryservice().getContentResource(page, id, type);
-		final LinkData linkData = new LinkData(resourceData.getUrlDisplay(), resourceData.getUrlTitle(), resourceData.getResource());
+		final LinkData linkData = new LinkData();
+		linkData.setName(resourceData.getUrlDisplay());
+		linkData.setTitle(resourceData.getUrlTitle());
+		linkData.setResource(new WebResource(){
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public IResourceStream getResourceStream() {
+				return new AbstractResourceStream() {
+
+		            @Override
+					public String getContentType() {
+						return resourceData.getType().resourceType;
+					}
+
+					private static final long serialVersionUID = 1L;
+
+		            public void close() throws IOException {
+
+		            }
+
+		            public InputStream getInputStream() throws ResourceStreamNotFoundException {
+		                return getRepositoryservice().getResourceStream(resourceData.getId(), "inputStream");
+		            }
+
+		            
+		        };
+			}
+			
+		});
 		
 		Panel editableLink = new EditableResourceLink("contentLink", linkData){
 			private static final long serialVersionUID = 1L;

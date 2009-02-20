@@ -39,7 +39,7 @@ public class ContentOcmResourceTest extends AbstractContentOcmTest{
 	        Resource testResource = (Resource) ocm.getObject(Resource.class, resource.getId());
 	        assertNotNull(testResource);
 	        assertNotNull(testResource.getInputStream());
-	        assertNotNull(testResource.getResource());
+	        //assertNotNull(testResource.getResource());
 	        
 		}
 		
