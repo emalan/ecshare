@@ -1,16 +1,16 @@
 <wicket:panel>
 	<a href="#" wicket:id="link">[[label]]</a>
-	<form wicket:id="resource-form">
+	<form class="resourceForm" wicket:id="resource-form">
 		<input type="file" wicket:id="file-upload"/><br/>
 		<div>
-			<label>Link Name</label>
+			<label><wicket:message key="label.name">[[label]]</wicket:message></label>
 			<input type="text" wicket:id="editor"/><br/>
 		</div>
 		<div>
-			<label>Title</label>
+			<label><wicket:message key="label.title">[[label]]</wicket:message></label>
 			<input type="text" wicket:id="title-editor"/><br/>
 		</div>
-		<button>Submit</button>
+		<input type="submit" value="Submit" wicket:message="value:label.submit"/>
 	</form>
 	
 </wicket:panel>
