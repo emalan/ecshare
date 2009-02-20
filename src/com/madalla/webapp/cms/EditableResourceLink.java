@@ -103,8 +103,13 @@ public class EditableResourceLink extends Panel
 			protected void onSubmit() {
 				//TODO create validator for type
 				FileUpload upload = data.getFileUpload();
-				String contentType = upload.getContentType();
-            	
+				if (upload != null)
+				{
+					String contentType = upload.getContentType();
+					String fileName = upload.getClientFileName();
+					data.setName(fileName);
+				}
+				EditableResourceLink.this.onModelChanged();
 				EditableResourceLink.this.onSubmit();
 			}
 
@@ -147,7 +152,6 @@ public class EditableResourceLink extends Panel
 			}
 		};
 		nameEditor.setOutputMarkupId(true);
-		//nameEditor.setVisible(false);
 		
 		return nameEditor;
 	}
@@ -171,7 +175,6 @@ public class EditableResourceLink extends Panel
 			}
 		};
 		editor.setOutputMarkupId(true);
-		//editor.setVisible(false);
 		return editor;
 	}
 
@@ -340,6 +343,7 @@ public class EditableResourceLink extends Panel
 	 */
 	private void initLabelForm(IModel model)
 	{
+		
 		resourceForm = newFileUploadForm("resource-form");
 		add(resourceForm);
 		resourceForm.add(newEditor(this, "editor", new PropertyModel(data, "name")));
@@ -388,7 +392,8 @@ public class EditableResourceLink extends Panel
 		super.onModelChanging();
 	}
 
-	protected void setEditMode(boolean editMode) {
+	protected void setEditMode(boolean editMode) 
+	{
 		this.editMode = editMode;
 	}
 

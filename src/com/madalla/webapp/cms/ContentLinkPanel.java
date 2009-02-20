@@ -117,28 +117,22 @@ public class ContentLinkPanel extends Panel{
 				resourceData.setUrlDisplay(linkData.getName());
 				resourceData.setUrlTitle(linkData.getTitle());
 				
-				try {
-					// TODO create a validator
-					// if (!(contentType.equalsIgnoreCase("image/png") ||
-					// contentType.equalsIgnoreCase("image/jpeg"))){
-					// log.warn("file upload - Input type not supported. Type="+contentType);
-					// warn(getString("error.type", new Model(upload)));
-					// }
-
-					// Transfer values and save
-					FileUpload upload = linkData.getFileUpload();
-					resourceData.setInputStream(upload.getInputStream());
-					resourceData.setUrlDisplay(StringUtils
+				FileUpload upload = linkData.getFileUpload();
+				if (null != upload){
+					try {
+						resourceData.setInputStream(upload.getInputStream());
+						resourceData.setUrlDisplay(StringUtils
 							.isEmpty(linkData.name) ? upload
 							.getClientFileName() : linkData.name);
-					resourceData.setUrlTitle(linkData.title);
-					
-					getRepositoryservice().saveContentResource(resourceData);
-					upload.closeStreams();
-				} catch (IOException e) {
-					// TODO catch and display this inside Editable Link
+					} catch (IOException e) {
+						log.error("Error while handling File upload.", e);
+					}
 				}
-			}
+				getRepositoryservice().saveContentResource(resourceData);
+				if (upload != null){
+					upload.closeStreams();
+				}
+        	}
 			
         	@Override
 			protected void onBeforeRender(){
