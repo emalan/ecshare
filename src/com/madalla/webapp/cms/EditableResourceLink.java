@@ -28,7 +28,7 @@ import org.apache.wicket.util.lang.Bytes;
 public class EditableResourceLink extends Panel 
 {
 	private static final long serialVersionUID = 1L;
-	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(2000);
+	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(5000);
 
 	private boolean editMode = false;
 	private Form resourceForm;
@@ -101,14 +101,6 @@ public class EditableResourceLink extends Panel
 		{
 			@Override
 			protected void onSubmit() {
-				//TODO create validator for type
-				FileUpload upload = data.getFileUpload();
-				if (upload != null)
-				{
-					String contentType = upload.getContentType();
-					String fileName = upload.getClientFileName();
-					data.setName(fileName);
-				}
 				EditableResourceLink.this.onModelChanged();
 				EditableResourceLink.this.onSubmit();
 			}
@@ -175,6 +167,7 @@ public class EditableResourceLink extends Panel
 			}
 		};
 		editor.setOutputMarkupId(true);
+		editor.setRequired(true);
 		return editor;
 	}
 
@@ -346,18 +339,21 @@ public class EditableResourceLink extends Panel
 		
 		resourceForm = newFileUploadForm("resource-form");
 		add(resourceForm);
-		resourceForm.add(newEditor(this, "editor", new PropertyModel(data, "name")));
-		resourceForm.add(newEditor(this, "title-editor", new PropertyModel(data, "title")));
-		resourceForm.add(newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload")));
-	      if (editMode)
-	        {
-	            label = newEditLink(this, "link");
-	        }
-	        else 
-	        {
-	            label = newResourceLink(this, data.getResource() , "link");
-	        }
-	        add(label);
+		resourceForm.add(
+				newEditor(this, "editor", new PropertyModel(data, "name")));
+		resourceForm.add(
+				newEditor(this, "title-editor", new PropertyModel(data, "title")));
+		resourceForm.add(
+				newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload")));
+	    if (editMode)
+	    {
+	    	label = newEditLink(this, "link");
+	    }
+	    else 
+	    {
+	        label = newResourceLink(this, data.getResource() , "link");
+	    }
+	    add(label);
 	}
 
 

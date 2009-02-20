@@ -117,20 +117,22 @@ public class ContentLinkPanel extends Panel{
         	@Override
 			protected void onSubmit() {
 				super.onSubmit();
-				resourceData.setUrlDisplay(linkData.getName());
-				resourceData.setUrlTitle(linkData.getTitle());
 				
 				FileUpload upload = linkData.getFileUpload();
-				if (null != upload){
+				if (upload == null){
+					resourceData.setInputStream(null);
+				} else {
 					try {
 						resourceData.setInputStream(upload.getInputStream());
-						resourceData.setUrlDisplay(StringUtils
-							.isEmpty(linkData.name) ? upload
-							.getClientFileName() : linkData.name);
+						if (StringUtils.isEmpty(linkData.name)){
+							linkData.name = upload.getClientFileName();
+						}
 					} catch (IOException e) {
 						log.error("Error while handling File upload.", e);
 					}
 				}
+				resourceData.setUrlDisplay(linkData.getName());
+				resourceData.setUrlTitle(linkData.getTitle());
 				getRepositoryservice().saveContentResource(resourceData);
         	}
 			
