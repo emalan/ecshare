@@ -2,7 +2,7 @@ package com.madalla.bo.page;
 
 import java.io.InputStream;
 
-import org.apache.wicket.markup.html.DynamicWebResource;
+import org.apache.wicket.markup.html.WebResource;
 
 public interface IResourceData {
 
@@ -10,7 +10,7 @@ public interface IResourceData {
 
 	String getName();
 	
-	DynamicWebResource getResource();
+	WebResource getResource();
 	
 	void setUrlDisplay(String urlDisplay);
 

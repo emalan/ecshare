@@ -11,7 +11,7 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.markup.html.DynamicWebResource;
+import org.apache.wicket.markup.html.WebResource;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -24,7 +24,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
-import org.apache.wicket.util.string.JavascriptUtils;
 
 public class EditableResourceLink extends Panel 
 {
@@ -44,7 +43,7 @@ public class EditableResourceLink extends Panel
 	public interface ILinkData extends Serializable {
 		String getName();
 		String getTitle();
-		DynamicWebResource getResource();
+		WebResource getResource();
 		FileUpload getFileUpload();
 		void setName(String name);
 		void setTitle(String title);

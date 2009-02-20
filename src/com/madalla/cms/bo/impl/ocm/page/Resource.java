@@ -5,7 +5,7 @@ import java.io.InputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
-import org.apache.wicket.markup.html.DynamicWebResource;
+import org.apache.wicket.markup.html.WebResource;
 
 import com.madalla.bo.page.IPageData;
 import com.madalla.bo.page.ResourceData;
@@ -19,7 +19,7 @@ public class Resource extends ResourceData {
 	@Field private String urlTitle;
 	@Field private String urlDisplay;
 	@Field private transient InputStream inputStream;
-	private DynamicWebResource resource;
+	private WebResource resource;
 	
 	
 	public Resource(){
@@ -57,11 +57,11 @@ public class Resource extends ResourceData {
 		return inputStream;
 	}
 
-	public DynamicWebResource getResource() {
+	public WebResource getResource() {
 		return resource;
 	}
 	
-	public void setResource(DynamicWebResource dynamicWebResource){
+	public void setResource(WebResource dynamicWebResource){
 		this.resource = dynamicWebResource;
 	}
 

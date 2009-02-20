@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.markup.html.DynamicWebResource;
+import org.apache.wicket.markup.html.WebResource;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.panel.Panel;
 
@@ -27,11 +27,11 @@ public class ContentLinkPanel extends Panel{
 		
 		private String name;
 		private String title;
-		private DynamicWebResource resource;
+		private WebResource resource;
 		private transient FileUpload fileUpload;
 		
 		/**  Data object that needs to be passed to AjaxEditableLink **/
-		public LinkData(String name, String title, DynamicWebResource resource){
+		public LinkData(String name, String title, WebResource resource){
 			this.name = name;
 			this.title = title;
 			this.resource = resource;
@@ -41,7 +41,7 @@ public class ContentLinkPanel extends Panel{
 			return name;
 		}
 
-		public DynamicWebResource getResource() {
+		public WebResource getResource() {
 			return resource;
 		}
 

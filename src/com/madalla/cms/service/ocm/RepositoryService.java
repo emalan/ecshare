@@ -329,7 +329,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 			}
     		
     	});
-    	ResourceHelper.createWebResource(data, type);
+    	ResourceHelper.createWebResource(data, type, repositoryTemplate);
     	return data;
     }
     
