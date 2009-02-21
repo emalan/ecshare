@@ -11,7 +11,7 @@ import com.madalla.bo.image.ImageData;
 /**
  * OCM implementation that persists the data to Jackrabbit Repository.
  * 
- * See {@link com.madalla.cms.service.ocm.util.DynamicPdfResourceConverter} for
+ * See {@link com.madalla.cms.service.ocm.util.DynamicImageResourceConvertor} for
  * how DynamicImageResource is persisted to Repository
  * 
  * @author Eugene Malan
