@@ -247,9 +247,9 @@ public class EditableResourceLink extends Panel
 
 			public String getIdValue(Object object, int index) {
 				if (object instanceof String){
-					return (String)object;
+					return ResourceType.valueOf((String)object).toString();
 				} else if (object instanceof ResourceType){
-					return ((ResourceType) object).suffix;
+					return object.toString();
 				} else {
 					return Integer.toString(index);
 				}
