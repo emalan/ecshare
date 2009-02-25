@@ -1,6 +1,8 @@
 package com.madalla.webapp.cms;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
@@ -13,6 +15,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebResource;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
@@ -163,6 +166,31 @@ public class EditableResourceLink extends Panel
 		nameEditor.setOutputMarkupId(true);
 		
 		return nameEditor;
+	}
+	
+	protected FormComponent newDropDownChoice(MarkupContainer parent, String componentId, 
+			IModel model, List<ResourceType> choices)
+	{
+		final FormComponent choice = new DropDownChoice(componentId, model, choices)
+		{
+
+			private static final long serialVersionUID = 1L;
+			
+			protected void onModelChanged()
+			{
+				super.onModelChanged();
+				EditableResourceLink.this.onModelChanged();
+			}
+
+			protected void onModelChanging()
+			{
+				super.onModelChanging();
+				EditableResourceLink.this.onModelChanging();
+			}
+		};
+		choice.setOutputMarkupId(true);
+		choice.setRequired(true);
+		return choice;
 	}
 
 	protected FormComponent newFileUpload(MarkupContainer parent, String componentId, IModel model)
@@ -356,12 +384,11 @@ public class EditableResourceLink extends Panel
 		
 		resourceForm = newFileUploadForm("resource-form");
 		add(resourceForm);
-		resourceForm.add(
-				newEditor(this, "editor", new PropertyModel(data, "name")));
-		resourceForm.add(
-				newEditor(this, "title-editor", new PropertyModel(data, "title")));
-		resourceForm.add(
-				newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload")));
+		resourceForm.add(newEditor(this, "editor", new PropertyModel(data, "name")));
+		resourceForm.add(newEditor(this, "title-editor", new PropertyModel(data, "title")));
+		resourceForm.add(newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload")));
+		resourceForm.add(newDropDownChoice(this, "type-select", new PropertyModel(data, "resourceType"),
+				Arrays.asList(ResourceType.values())));
 	    if (editMode)
 	    {
 	    	label = newEditLink(this, "link");
