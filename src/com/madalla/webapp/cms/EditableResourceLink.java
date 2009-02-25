@@ -14,6 +14,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebResource;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -97,6 +98,7 @@ public class EditableResourceLink extends Panel
 	
 	protected class FileUploadBehavior extends AjaxEventBehavior
 	{
+
 		private static final long serialVersionUID = 1L;
 		
 		final Component name;
@@ -106,6 +108,27 @@ public class EditableResourceLink extends Panel
 			super(event);
 			this.name = name;
 			this.choice = choice;
+		}
+
+		
+		/* (non-Javadoc)
+		 * Script that will set the Drop Down
+		 * @see org.apache.wicket.ajax.AbstractDefaultAjaxBehavior#renderHead(org.apache.wicket.markup.html.IHeaderResponse)
+		 */
+		@Override
+		public void renderHead(IHeaderResponse response) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("var updateChoiceType = function(element, fileName){");
+			sb.append("var dot = fileName.lastIndexOf('.');");
+			sb.append("var suffix = fileName.substr(dot, fileName.length);");
+			sb.append("var value = '';");
+			//TODO loop through types here
+			sb.append("if (suffix.toLowerCase() == '.pdf') value = 'TYPE_PDF';");
+			sb.append("if (suffix.toLowerCase() == '.doc') value = 'TYPE_DOC';");
+			sb.append("element.value = value;}");
+			
+			response.renderJavascript(sb.toString(), "updateChoiceType");
+			super.renderHead(response);
 		}
 
 		@Override
@@ -128,6 +151,7 @@ public class EditableResourceLink extends Panel
 				public CharSequence decorateScript(CharSequence script) 
 				{
 					StringBuffer sb = new StringBuffer("var v = Wicket.$("+ getComponent().getMarkupId() +").value;");
+					//TODO Value in IE is full path of file, we need to get just file name
 					sb.append("if (v && v.length > 0) {");
 					sb.append("updateChoiceType(Wicket.$("+choice.getMarkupId()+"), v);");
 					sb.append("Wicket.$("+name.getMarkupId()+").value = v;");
