@@ -6,8 +6,13 @@
 			<label>Select</label>
 			<select wicket:id="type-select"></select>
 			<script type="text/javascript">
-				setChoice = function(element){
-				    element.value = '1';
+				var updateChoiceType = function(element, fileName){
+				    var dot = fileName.lastIndexOf('.');
+				    var suffix = fileName.substr(dot, fileName.length);
+				    var value = "";
+				    if (suffix.toLowerCase() == '.pdf') value = 'TYPE_PDF';
+				    if (suffix.toLowerCase() == '.doc') value = 'TYPE_DOC';
+				    element.value = value;
 				}
 			</script>
 		</div>

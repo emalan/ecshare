@@ -128,10 +128,10 @@ public class EditableResourceLink extends Panel
 				public CharSequence decorateScript(CharSequence script) 
 				{
 					StringBuffer sb = new StringBuffer("var v = Wicket.$("+ getComponent().getMarkupId() +").value;");
-					sb.append("console.log(v);");
-					sb.append("console.log(v);");
-					sb.append("setChoice(Wicket.$("+choice.getMarkupId()+"));");
+					sb.append("if (v && v.length > 0) {");
+					sb.append("updateChoiceType(Wicket.$("+choice.getMarkupId()+"), v);");
 					sb.append("Wicket.$("+name.getMarkupId()+").value = v;");
+					sb.append("};");
 					return sb.toString() + script;
 				}
 
