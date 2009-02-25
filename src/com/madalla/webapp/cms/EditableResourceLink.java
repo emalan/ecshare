@@ -11,6 +11,8 @@ import org.apache.wicket.Resource;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxCallDecorator;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebResource;
@@ -27,6 +29,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
+
+import sun.misc.InvalidJarIndexException;
 
 public class EditableResourceLink extends Panel 
 {
@@ -195,7 +199,7 @@ public class EditableResourceLink extends Panel
 
 	protected FormComponent newFileUpload(MarkupContainer parent, String componentId, IModel model)
 	{
-		final FormComponent editor = new FileUploadField(componentId, model)
+		final FileUploadField upload = new FileUploadField(componentId, model)
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -211,9 +215,9 @@ public class EditableResourceLink extends Panel
 				EditableResourceLink.this.onModelChanging();
 			}
 		};
-		editor.setOutputMarkupId(true);
-		editor.setRequired(true);
-		return editor;
+		upload.setOutputMarkupId(true);
+		upload.setRequired(true);
+		return upload;
 	}
 
 	protected Component newEditLink(MarkupContainer parent, String componentId)
@@ -384,11 +388,57 @@ public class EditableResourceLink extends Panel
 		
 		resourceForm = newFileUploadForm("resource-form");
 		add(resourceForm);
-		resourceForm.add(newEditor(this, "editor", new PropertyModel(data, "name")));
+		final Component name = newEditor(this, "editor", new PropertyModel(data, "name"));
 		resourceForm.add(newEditor(this, "title-editor", new PropertyModel(data, "title")));
-		resourceForm.add(newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload")));
+		final Component upload = newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload"));
 		resourceForm.add(newDropDownChoice(this, "type-select", new PropertyModel(data, "resourceType"),
 				Arrays.asList(ResourceType.values())));
+		
+		//AjaxBehaviour to update fields once file is selected
+		upload.add(new AjaxEventBehavior("onchange"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected IAjaxCallDecorator getAjaxCallDecorator() {
+				return new IAjaxCallDecorator() {
+
+					private static final long serialVersionUID = 1L;
+
+					public CharSequence decorateOnFailureScript(CharSequence script) {
+						return script;
+					}
+
+					public CharSequence decorateOnSuccessScript(CharSequence script) {
+						return script;
+					}
+
+					public CharSequence decorateScript(CharSequence script) {
+						StringBuffer sb = new StringBuffer("var v = Wicket.$("+ getComponent().getMarkupId() +").value;");
+						sb.append("console.log(v.value);");
+						sb.append("Wicket.$("+name.getMarkupId()+").value = v;");
+						return sb.toString() + script;
+					}
+
+				};
+			}
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				FileUpload fileUpload = ((FileUploadField)getComponent()).getFileUpload();
+				if (fileUpload != null){
+					String fileName = fileUpload.getClientFileName();
+					data.setName(fileName);
+					//TODO set type select
+					
+					target.addComponent(EditableResourceLink.this);
+				}
+				
+			}
+			
+		});
+		resourceForm.add(name);
+		resourceForm.add(upload);
+		
 	    if (editMode)
 	    {
 	    	label = newEditLink(this, "link");

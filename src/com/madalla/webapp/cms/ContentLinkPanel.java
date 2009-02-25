@@ -158,7 +158,7 @@ public class ContentLinkPanel extends Panel{
         		if (((IContentAdmin)getSession()).isLoggedIn()) {
         			this.setEditMode(true);
                 } else {
-                	this.setEditMode(false);
+                	this.setEditMode(true);
                 }
                 super.onBeforeRender();
             }            	
