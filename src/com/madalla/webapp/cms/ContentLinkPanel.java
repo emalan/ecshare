@@ -89,6 +89,7 @@ public class ContentLinkPanel extends Panel{
 		
 		PageData page = getRepositoryservice().getPage(nodeName);
 		final ResourceData resourceData = getRepositoryservice().getContentResource(page, id);
+		log.debug("retrieved Resource data. " + resourceData);
 		final LinkData linkData = new LinkData();
 		linkData.setName(resourceData.getUrlDisplay());
 		linkData.setTitle(resourceData.getUrlTitle());
@@ -128,7 +129,6 @@ public class ContentLinkPanel extends Panel{
 		Panel editableLink = new EditableResourceLink("contentLink", linkData){
 			private static final long serialVersionUID = 1L;
 
-			
         	@Override
 			protected void onSubmit() {
 				super.onSubmit();
@@ -148,8 +148,8 @@ public class ContentLinkPanel extends Panel{
 				}
 				resourceData.setUrlDisplay(linkData.getName());
 				resourceData.setUrlTitle(linkData.getTitle());
-				//TODO add dropdown to select type
-				resourceData.setType(ResourceType.TYPE_PDF.name());
+				resourceData.setType(linkData.getResourceType());
+				log.debug("saving resource. " + resourceData);
 				getRepositoryservice().saveContentResource(resourceData);
         	}
 			

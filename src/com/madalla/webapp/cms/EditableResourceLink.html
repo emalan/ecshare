@@ -5,6 +5,11 @@
 		<div>
 			<label>Select</label>
 			<select wicket:id="type-select"></select>
+			<script type="text/javascript">
+				setChoice = function(element){
+				    element.value = '1';
+				}
+			</script>
 		</div>
 		<div>
 			<label><wicket:message key="label.name">[[label]]</wicket:message></label>

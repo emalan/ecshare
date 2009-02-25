@@ -12,7 +12,6 @@ import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
-import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebResource;
@@ -20,6 +19,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
@@ -29,8 +29,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
-
-import sun.misc.InvalidJarIndexException;
 
 public class EditableResourceLink extends Panel 
 {
@@ -61,17 +59,20 @@ public class EditableResourceLink extends Panel
 	
 	public enum ResourceType {
 
-	    TYPE_PDF("application/pdf", "pdf"), 
-	    TYPE_DOC("application/msword", "doc"), 
-	    TYPE_ODT("application/vnd.oasis.opendocument.text", "odt");
+	    TYPE_PDF("application/pdf", "pdf", "Adobe PDF"), 
+	    TYPE_DOC("application/msword", "doc", "Word document"), 
+	    TYPE_ODT("application/vnd.oasis.opendocument.text", "odt", "ODT document");
 
 	    public final String resourceType;
 	    public final String suffix;
+	    public final String description;
 
-	    ResourceType(String type, String suffix) {
+	    ResourceType(String type, String suffix, String description) {
 	        this.resourceType = type;
 	        this.suffix = suffix;
+	        this.description = description;
 	    }
+	    
 	}
 	
 	protected class LabelAjaxBehavior extends AjaxEventBehavior
@@ -91,6 +92,63 @@ public class EditableResourceLink extends Panel
 		protected void onEvent(AjaxRequestTarget target)
 		{
 			onEdit(target);
+		}
+	}
+	
+	protected class FileUploadBehavior extends AjaxEventBehavior
+	{
+		private static final long serialVersionUID = 1L;
+		
+		final Component name;
+		final Component choice;
+
+		public FileUploadBehavior(String event, final Component name, final Component choice){
+			super(event);
+			this.name = name;
+			this.choice = choice;
+		}
+
+		@Override
+		protected IAjaxCallDecorator getAjaxCallDecorator() 
+		{
+			return new IAjaxCallDecorator() {
+
+				private static final long serialVersionUID = 1L;
+
+				public CharSequence decorateOnFailureScript(CharSequence script) 
+				{
+					return script;
+				}
+
+				public CharSequence decorateOnSuccessScript(CharSequence script) 
+				{
+					return script;
+				}
+
+				public CharSequence decorateScript(CharSequence script) 
+				{
+					StringBuffer sb = new StringBuffer("var v = Wicket.$("+ getComponent().getMarkupId() +").value;");
+					sb.append("console.log(v);");
+					sb.append("console.log(v);");
+					sb.append("setChoice(Wicket.$("+choice.getMarkupId()+"));");
+					sb.append("Wicket.$("+name.getMarkupId()+").value = v;");
+					return sb.toString() + script;
+				}
+
+			};
+		}
+
+		@Override
+		protected void onEvent(AjaxRequestTarget target) {
+			FileUpload fileUpload = ((FileUploadField)getComponent()).getFileUpload();
+			if (fileUpload != null){
+				String fileName = fileUpload.getClientFileName();
+				data.setName(fileName);
+				//TODO set type select
+				
+				target.addComponent(EditableResourceLink.this);
+			}
+			
 		}
 	}
 	
@@ -175,7 +233,30 @@ public class EditableResourceLink extends Panel
 	protected FormComponent newDropDownChoice(MarkupContainer parent, String componentId, 
 			IModel model, List<ResourceType> choices)
 	{
-		final FormComponent choice = new DropDownChoice(componentId, model, choices)
+		IChoiceRenderer renderer = new IChoiceRenderer(){
+
+			private static final long serialVersionUID = 1L;
+
+			public Object getDisplayValue(Object object) {
+				if (object instanceof ResourceType){
+					return ((ResourceType) object).description;
+				} else {
+					return object.toString();
+				}
+			}
+
+			public String getIdValue(Object object, int index) {
+				if (object instanceof String){
+					return (String)object;
+				} else if (object instanceof ResourceType){
+					return ((ResourceType) object).suffix;
+				} else {
+					return Integer.toString(index);
+				}
+			}
+			
+		};
+		final DropDownChoice choice = new DropDownChoice(componentId, model,	choices, renderer)
 		{
 
 			private static final long serialVersionUID = 1L;
@@ -193,7 +274,8 @@ public class EditableResourceLink extends Panel
 			}
 		};
 		choice.setOutputMarkupId(true);
-		choice.setRequired(true);
+		choice.setNullValid(true);
+		//choice.setRequired(true);
 		return choice;
 	}
 
@@ -391,53 +473,14 @@ public class EditableResourceLink extends Panel
 		final Component name = newEditor(this, "editor", new PropertyModel(data, "name"));
 		resourceForm.add(newEditor(this, "title-editor", new PropertyModel(data, "title")));
 		final Component upload = newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload"));
-		resourceForm.add(newDropDownChoice(this, "type-select", new PropertyModel(data, "resourceType"),
-				Arrays.asList(ResourceType.values())));
+		final Component choice = newDropDownChoice(this, "type-select", new PropertyModel(data, "resourceType"),
+				Arrays.asList(ResourceType.values()));
 		
 		//AjaxBehaviour to update fields once file is selected
-		upload.add(new AjaxEventBehavior("onchange"){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected IAjaxCallDecorator getAjaxCallDecorator() {
-				return new IAjaxCallDecorator() {
-
-					private static final long serialVersionUID = 1L;
-
-					public CharSequence decorateOnFailureScript(CharSequence script) {
-						return script;
-					}
-
-					public CharSequence decorateOnSuccessScript(CharSequence script) {
-						return script;
-					}
-
-					public CharSequence decorateScript(CharSequence script) {
-						StringBuffer sb = new StringBuffer("var v = Wicket.$("+ getComponent().getMarkupId() +").value;");
-						sb.append("console.log(v.value);");
-						sb.append("Wicket.$("+name.getMarkupId()+").value = v;");
-						return sb.toString() + script;
-					}
-
-				};
-			}
-
-			@Override
-			protected void onEvent(AjaxRequestTarget target) {
-				FileUpload fileUpload = ((FileUploadField)getComponent()).getFileUpload();
-				if (fileUpload != null){
-					String fileName = fileUpload.getClientFileName();
-					data.setName(fileName);
-					//TODO set type select
-					
-					target.addComponent(EditableResourceLink.this);
-				}
-				
-			}
-			
-		});
+		upload.add(new FileUploadBehavior("onchange", name, choice));
 		resourceForm.add(name);
 		resourceForm.add(upload);
+		resourceForm.add(choice);
 		
 	    if (editMode)
 	    {
