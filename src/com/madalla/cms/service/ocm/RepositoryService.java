@@ -28,7 +28,6 @@ import com.madalla.bo.image.ImageData;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
-import com.madalla.bo.page.ResourceType;
 import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
 import com.madalla.cms.bo.impl.ocm.Site;
@@ -323,7 +322,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     }
     
     //Resources
-    public ResourceData getContentResource(final PageData page, final String name, ResourceType type){
+    public ResourceData getContentResource(final PageData page, final String name){
     	Resource data = (Resource) repositoryTemplate.getOcmObject(RepositoryType.RESOURCE, page, name, new RepositoryTemplateCallback(){
 
 			@Override
@@ -332,7 +331,6 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 			}
     		
     	});
-    	data.setType(type);
     	return data;
     }
     

@@ -20,5 +20,7 @@ public interface IResourceData {
 	
 	void setInputStream(InputStream inputStream);
 	
-	ResourceType getType();
+	String getType();
+	
+	void setType(String type);
 }

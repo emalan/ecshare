@@ -15,7 +15,6 @@ import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
-import com.madalla.bo.page.ResourceType;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.cms.EditableResourceLink.ILinkData;
@@ -25,6 +24,12 @@ public class ContentLinkPanel extends Panel{
 	
 	private Log log = LogFactory.getLog(this.getClass());
 	
+	/**
+	 * This is used to pass data to {@link com.madalla.webapp.cms.EditableResourceLink}
+	 * 
+	 * @author Eugene Malan
+	 *
+	 */
 	public class LinkData implements ILinkData{
 
 		private static final long serialVersionUID = 1L;
@@ -33,6 +38,7 @@ public class ContentLinkPanel extends Panel{
 		private String title;
 		private WebResource resource;
 		private transient FileUpload fileUpload;
+		private String resourceType;
 		
 		public String getName() {
 			return name;
@@ -65,19 +71,28 @@ public class ContentLinkPanel extends Panel{
 		public FileUpload getFileUpload(){
 			return fileUpload;
 		}
+
+		public String getResourceType() {
+			return resourceType;
+		}
+
+		public void setResourceType(String resourceType) {
+			this.resourceType = resourceType;
+		}
 		
 	}
 	
-	public ContentLinkPanel(final String id, final String nodeName, ResourceType type) {
+	public ContentLinkPanel(final String id, final String nodeName) {
 		super(id);
 		
 		log.debug("Editable Link Panel being created for node=" + nodeName + " id=" + id);
 		
 		PageData page = getRepositoryservice().getPage(nodeName);
-		final ResourceData resourceData = getRepositoryservice().getContentResource(page, id, type);
+		final ResourceData resourceData = getRepositoryservice().getContentResource(page, id);
 		final LinkData linkData = new LinkData();
 		linkData.setName(resourceData.getUrlDisplay());
 		linkData.setTitle(resourceData.getUrlTitle());
+		linkData.setResourceType(resourceData.getType());
 		if (resourceData.getInputStream() != null) {
 			linkData.setResource(new WebResource() {
 
@@ -87,12 +102,12 @@ public class ContentLinkPanel extends Panel{
 				public IResourceStream getResourceStream() {
 					return new AbstractResourceStream() {
 
+						private static final long serialVersionUID = 1L;
+						
 						@Override
 						public String getContentType() {
-							return resourceData.getType().resourceType;
+							return resourceData.getType();
 						}
-
-						private static final long serialVersionUID = 1L;
 
 						public void close() throws IOException {
 
@@ -133,6 +148,8 @@ public class ContentLinkPanel extends Panel{
 				}
 				resourceData.setUrlDisplay(linkData.getName());
 				resourceData.setUrlTitle(linkData.getTitle());
+				//TODO add dropdown to select type
+				resourceData.setType(ResourceType.TYPE_PDF.name());
 				getRepositoryservice().saveContentResource(resourceData);
         	}
 			

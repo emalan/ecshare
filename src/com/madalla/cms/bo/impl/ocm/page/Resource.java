@@ -8,7 +8,6 @@ import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 
 import com.madalla.bo.page.IPageData;
 import com.madalla.bo.page.ResourceData;
-import com.madalla.bo.page.ResourceType;
 
 @Node
 public class Resource extends ResourceData {
@@ -19,7 +18,7 @@ public class Resource extends ResourceData {
 	@Field private String urlTitle;
 	@Field private String urlDisplay;
 	@Field private transient InputStream inputStream;
-	private ResourceType type;
+	@Field private String type;
 	
 	public Resource(){
 	}
@@ -71,14 +70,12 @@ public class Resource extends ResourceData {
 		return urlTitle;
 	}
 
-	public ResourceType getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(ResourceType type) {
+	public void setType(String type) {
 		this.type = type;
 	}
-	
-	
 
 }

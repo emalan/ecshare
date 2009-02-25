@@ -13,7 +13,6 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import com.madalla.bo.page.ResourceType;
 import com.madalla.webapp.blog.BlogHomePanel;
 import com.madalla.webapp.blog.admin.BlogEntryPanel;
 import com.madalla.webapp.cms.ContentEntryPanel;
@@ -42,27 +41,13 @@ public class Panels {
 	
 	private Panels(){}
 	
-	public static Panel contentLinkPanelPdf(String id, String node){
+	public static Panel contentLinkPanel(String id, String node){
 		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(node)){
 			error("ContentPanel - All parameters need to be supplied.");
 		}
-		return new ContentLinkPanel(id, node, ResourceType.TYPE_PDF);
+		return new ContentLinkPanel(id, node);
 	}
 	
-	public static Panel contentLinkPanelDoc(String id, String node){
-		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(node)){
-			error("ContentPanel - All parameters need to be supplied.");
-		}
-		return new ContentLinkPanel(id, node, ResourceType.TYPE_DOC);
-	}
-	
-	public static Panel contentLinkPanelOdt(String id, String node){
-		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(node)){
-			error("ContentPanel - All parameters need to be supplied.");
-		}
-		return new ContentLinkPanel(id, node, ResourceType.TYPE_ODT);
-	}
-
 	/**
 	 * @param id - wicket id
 	 * @param node - Content Parent Node, normally Page Name
