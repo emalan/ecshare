@@ -17,7 +17,8 @@ import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
-import com.madalla.webapp.cms.EditableResourceLink.ILinkData;
+import com.madalla.wicket.resourcelink.EditableResourceLink;
+import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
 
 public class ContentLinkPanel extends Panel{
 	private static final long serialVersionUID = 1L;
@@ -25,7 +26,7 @@ public class ContentLinkPanel extends Panel{
 	private Log log = LogFactory.getLog(this.getClass());
 	
 	/**
-	 * This is used to pass data to {@link com.madalla.webapp.cms.EditableResourceLink}
+	 * This is used to pass data to {@link com.madalla.wicket.resourcelink.EditableResourceLink}
 	 * 
 	 * @author Eugene Malan
 	 *

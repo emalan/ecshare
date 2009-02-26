@@ -1,4 +1,4 @@
-package com.madalla.webapp.cms;
+package com.madalla.wicket.resourcelink;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -12,6 +12,7 @@ import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
+import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -27,6 +28,7 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
@@ -35,6 +37,8 @@ public class EditableResourceLink extends Panel
 {
 	private static final long serialVersionUID = 1L;
 	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(5000);
+	public static final HeaderContributor SCRIPT_UTILS = HeaderContributor.forJavaScript(
+			new CompressedResourceReference(EditableResourceLink.class, "resourcelink.js"));
 
 	private boolean editMode = false;
 	private Form resourceForm;
@@ -118,14 +122,12 @@ public class EditableResourceLink extends Panel
 		@Override
 		public void renderHead(IHeaderResponse response) {
 			StringBuffer sb = new StringBuffer();
-			sb.append("var updateChoiceType = function(element, fileName){");
-			sb.append("var dot = fileName.lastIndexOf('.');");
-			sb.append("var suffix = fileName.substr(dot, fileName.length);");
-			sb.append("var value = '';");
+			sb.append("Utils.translateSuffix = function(suffix){");
 			//TODO loop through types here
-			sb.append("if (suffix.toLowerCase() == '.pdf') value = 'TYPE_PDF';");
-			sb.append("if (suffix.toLowerCase() == '.doc') value = 'TYPE_DOC';");
-			sb.append("element.value = value;}");
+			sb.append("if (suffix.toLowerCase() == 'pdf') return 'TYPE_PDF';");
+			sb.append("if (suffix.toLowerCase() == 'doc') return 'TYPE_DOC';");
+			sb.append("return '';");
+			sb.append("};");
 			
 			response.renderJavascript(sb.toString(), "updateChoiceType");
 			super.renderHead(response);
@@ -151,11 +153,9 @@ public class EditableResourceLink extends Panel
 				public CharSequence decorateScript(CharSequence script) 
 				{
 					StringBuffer sb = new StringBuffer("var v = Wicket.$("+ getComponent().getMarkupId() +").value;");
-					//TODO Value in IE is full path of file, we need to get just file name
-					sb.append("if (v && v.length > 0) {");
-					sb.append("updateChoiceType(Wicket.$("+choice.getMarkupId()+"), v);");
-					sb.append("Wicket.$("+name.getMarkupId()+").value = v;");
-					sb.append("};");
+					sb.append("var file = Utils.xtractFile(v);");
+					sb.append("Wicket.$("+name.getMarkupId()+").value = file.filename + '.' + file.ext ;");
+					sb.append("Wicket.$("+choice.getMarkupId()+").value = Utils.translateSuffix(file.ext);");
 					return sb.toString() + script;
 				}
 
@@ -184,6 +184,7 @@ public class EditableResourceLink extends Panel
 	public EditableResourceLink(String id, ILinkData data) 
 	{
 		super(id);
+		add(SCRIPT_UTILS);
 		super.setOutputMarkupId(true);
 		this.data = data;
 		if (data == null){

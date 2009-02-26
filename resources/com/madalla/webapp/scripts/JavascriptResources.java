@@ -17,5 +17,8 @@ public class JavascriptResources {
 	
 	public static final HeaderContributor SCRIPTACULOUS_CONTROLS = HeaderContributor.forJavaScript(
 			Scriptaculous.CONTROLS);
+	
+	public static final HeaderContributor SCRIPT_UTILS = HeaderContributor.forJavaScript(
+			new CompressedResourceReference(JavascriptResources.class, "common.js"));
 
 }
