@@ -19,6 +19,7 @@ import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.wicket.resourcelink.EditableResourceLink;
 import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
+import com.madalla.wicket.resourcelink.EditableResourceLink.ResourceType;
 
 public class ContentLinkPanel extends Panel{
 	private static final long serialVersionUID = 1L;
@@ -108,7 +109,11 @@ public class ContentLinkPanel extends Panel{
 						
 						@Override
 						public String getContentType() {
-							return resourceData.getType();
+							ResourceType resourceType = ResourceType.valueOf(resourceData.getType());
+							if (resourceType != null){
+								return resourceType.resourceType;
+							}
+							return null;
 						}
 
 						public void close() throws IOException {
@@ -159,7 +164,7 @@ public class ContentLinkPanel extends Panel{
         		if (((IContentAdmin)getSession()).isLoggedIn()) {
         			this.setEditMode(true);
                 } else {
-                	this.setEditMode(true);
+                	this.setEditMode(false);
                 }
                 super.onBeforeRender();
             }            	
