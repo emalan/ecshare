@@ -167,7 +167,10 @@ public class ContentLinkPanel extends Panel{
 				super.onSubmit();
 				
 				FileUpload upload = linkData.getFileUpload();
-				if (upload != null){
+				if (upload == null){
+					//TODO We want to keep old value not set it to null
+					resourceData.setInputStream(null);
+				} else {
 					try {
 						resourceData.setInputStream(upload.getInputStream());
 						if (StringUtils.isEmpty(linkData.name)){
@@ -191,6 +194,7 @@ public class ContentLinkPanel extends Panel{
         			this.setEditMode(true);
                 } else {
                 	this.setEditMode(false);
+                	setVisible(!linkData.hideLink);
                 }
                 super.onBeforeRender();
             }            	

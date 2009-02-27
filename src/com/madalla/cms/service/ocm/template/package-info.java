@@ -1,5 +1,5 @@
 /**
- * Template for executing common jackrabbit OCM code 
+ * Template for executing common Jackrabbit OCM code 
  *
  * @author Eugene Malan
  */

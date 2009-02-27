@@ -22,6 +22,12 @@ import com.madalla.bo.AbstractData;
 import com.madalla.cms.service.ocm.RepositoryInfo;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 
+/**
+ * Template for executing common OCM code.
+ * 
+ * @author Eugene Malan
+ *
+ */
 public class RepositoryTemplate {
 
 	private JcrTemplate template;
