@@ -58,6 +58,7 @@ public class ContentLinkPanel extends Panel{
 		private WebResource resource;
 		private transient FileUpload fileUpload;
 		private String resourceType;
+		private Boolean hideLink;
 		
 		public String getName() {
 			return name;
@@ -98,6 +99,14 @@ public class ContentLinkPanel extends Panel{
 		public void setResourceType(String resourceType) {
 			this.resourceType = resourceType;
 		}
+
+		public Boolean getHideLink() {
+			return hideLink;
+		}
+
+		public void setHideLink(Boolean hideLink) {
+			this.hideLink = hideLink;
+		}
 		
 	}
 	
@@ -113,6 +122,7 @@ public class ContentLinkPanel extends Panel{
 		linkData.setName(resourceData.getUrlDisplay());
 		linkData.setTitle(resourceData.getUrlTitle());
 		linkData.setResourceType(resourceData.getType());
+		linkData.setHideLink(resourceData.getHideLink());
 		if (resourceData.getInputStream() != null) {
 			linkData.setResource(new WebResource() {
 
@@ -172,6 +182,7 @@ public class ContentLinkPanel extends Panel{
 				resourceData.setUrlDisplay(linkData.getName());
 				resourceData.setUrlTitle(linkData.getTitle());
 				resourceData.setType(linkData.getResourceType());
+				resourceData.setHideLink(linkData.getHideLink());
 				log.debug("saving resource. " + resourceData);
 				getRepositoryservice().saveContentResource(resourceData);
         	}

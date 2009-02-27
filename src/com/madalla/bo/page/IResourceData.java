@@ -24,7 +24,7 @@ public interface IResourceData {
 	
 	void setType(String type);
 	
-	boolean isHideLink();
+	Boolean getHideLink();
 	
-	void setHideLink(boolean hide);
+	void setHideLink(Boolean hide);
 }

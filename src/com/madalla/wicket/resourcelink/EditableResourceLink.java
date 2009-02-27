@@ -18,6 +18,7 @@ import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebResource;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -56,10 +57,12 @@ public class EditableResourceLink extends Panel
 		WebResource getResource();
 		FileUpload getFileUpload();
 		String getResourceType();
+		Boolean getHideLink();
 		void setName(String name);
 		void setTitle(String title);
 		void setFileUpload(FileUpload upload);
 		void setResourceType(String type);
+		void setHideLink(Boolean hide);
 	}
 	
 	public enum ResourceType {
@@ -124,6 +127,9 @@ public class EditableResourceLink extends Panel
 			StringBuffer sb = new StringBuffer();
 			sb.append("Utils.translateSuffix = function(suffix){");
 			//TODO loop through types here
+			for(ResourceType type : ResourceType.values()){
+				sb.append("if (suffix.toLowerCase() == '"+type.suffix+"') return '"+type+"';");
+			}
 			sb.append("if (suffix.toLowerCase() == 'pdf') return 'TYPE_PDF';");
 			sb.append("if (suffix.toLowerCase() == 'doc') return 'TYPE_DOC';");
 			sb.append("return '';");
@@ -153,6 +159,7 @@ public class EditableResourceLink extends Panel
 				public CharSequence decorateScript(CharSequence script) 
 				{
 					StringBuffer sb = new StringBuffer("var v = Wicket.$("+ getComponent().getMarkupId() +").value;");
+					//TODO send in comma seperated list of suffixes
 					sb.append("var file = Utils.xtractFile(v);");
 					sb.append("Wicket.$("+name.getMarkupId()+").value = file.filename + '.' + file.ext ;");
 					sb.append("Wicket.$("+choice.getMarkupId()+").value = Utils.translateSuffix(file.ext);");
@@ -497,6 +504,7 @@ public class EditableResourceLink extends Panel
 		add(resourceForm);
 		final Component name = newEditor(this, "editor", new PropertyModel(data, "name"));
 		resourceForm.add(newEditor(this, "title-editor", new PropertyModel(data, "title")));
+		resourceForm.add(new CheckBox("hide-link", new PropertyModel(data, "hideLink")));
 		final Component upload = newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload"));
 		final Component choice = newDropDownChoice(this, "type-select", new PropertyModel(data, "resourceType"),
 				Arrays.asList(ResourceType.values()));

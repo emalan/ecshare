@@ -19,7 +19,7 @@ public class Resource extends ResourceData {
 	@Field private String urlDisplay;
 	@Field private transient InputStream inputStream;
 	@Field private String type;
-	@Field private boolean hideLink;
+	@Field private Boolean hideLink;
 	
 	public Resource(){
 	}
@@ -79,11 +79,11 @@ public class Resource extends ResourceData {
 		this.type = type;
 	}
 
-	public boolean isHideLink() {
+	public Boolean getHideLink() {
 		return hideLink;
 	}
 
-	public void setHideLink(boolean hide) {
+	public void setHideLink(Boolean hide) {
 		this.hideLink = hide;
 	}
 
