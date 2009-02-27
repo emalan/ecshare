@@ -323,7 +323,7 @@ public class EditableResourceLink extends Panel
 			}
 		};
 		upload.setOutputMarkupId(true);
-		upload.setRequired(true);
+		//upload.setRequired(true);
 		return upload;
 	}
 

@@ -167,9 +167,7 @@ public class ContentLinkPanel extends Panel{
 				super.onSubmit();
 				
 				FileUpload upload = linkData.getFileUpload();
-				if (upload == null){
-					resourceData.setInputStream(null);
-				} else {
+				if (upload != null){
 					try {
 						resourceData.setInputStream(upload.getInputStream());
 						if (StringUtils.isEmpty(linkData.name)){
