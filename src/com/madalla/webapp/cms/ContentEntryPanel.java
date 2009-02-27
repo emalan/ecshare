@@ -26,8 +26,12 @@ import com.madalla.webapp.pages.ContentAdminPage;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 
 /**
- * The Wicket application must implement the IContentServiceProvider interface
- * 
+ * Content Entry Panel - Edit User Content using a WYSWYG HTML editor.
+ * <p>
+ * Panel uses the TinyMCE (Javascript WYSIWYG Editor).
+ * Note: The Wicket application must implement the IContentServiceProvider 
+ * interface.
+ * </p>
  * @author Eugene Malan
  * 
  */

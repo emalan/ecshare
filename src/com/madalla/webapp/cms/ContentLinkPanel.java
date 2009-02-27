@@ -21,6 +21,23 @@ import com.madalla.wicket.resourcelink.EditableResourceLink;
 import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
 import com.madalla.wicket.resourcelink.EditableResourceLink.ResourceType;
 
+/**
+ * Editable Link to a Respository Resource.
+ * <p>
+ * A link that will display a Repository Resource such as a PDF 
+ * or a Word Doc. The Resource Link is editable when a valid user is logged.
+ * The following is configurable:
+ * <ul>
+ * <li>Upload resource to Repository from desktop.</li>
+ * <li>Change File Name that is displayed</li>
+ * <li>Edit hover for link</li>
+ * <li>Hide or show the link resource</li>
+ * </ul>
+ * 
+ * </p>
+ * @author Eugene Malan
+ *
+ */
 public class ContentLinkPanel extends Panel{
 	private static final long serialVersionUID = 1L;
 	

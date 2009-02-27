@@ -23,6 +23,14 @@ import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.pages.ContentEditPage;
 
+/**
+ * Panel to display content from Repository.
+ * <p>
+ * Panel links to edit page when valid user is logged in.
+ * </p>
+ * @author Eugene Malan
+ *
+ */
 public class ContentPanel extends Panel {
     private static final long serialVersionUID = 1L;
     private Log log = LogFactory.getLog(this.getClass());

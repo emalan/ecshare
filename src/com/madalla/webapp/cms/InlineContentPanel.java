@@ -12,6 +12,12 @@ import com.madalla.bo.page.PageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 
+/**
+ * In-Line Edit Panel - allows in-line editing of Content when logged in.
+ * 
+ * @author Eugene Malan
+ *
+ */
 public class InlineContentPanel extends Panel {
     private static final long serialVersionUID = 1L;
     

@@ -1,7 +1,12 @@
 /**
  * Content Wicket Panels - display and Edit Panels
  * <p> 
- * Content Entry Panel uses the TinyMCE Javascript HTML editor
+ * <ul>
+ * <li>Content Panel</li>
+ * <li>In-line Content Panel.</li>
+ * <li>Content Link Panel</li>
+ * </ul>
+ * </p>
  * 
  * @author Eugene Malan
  */
