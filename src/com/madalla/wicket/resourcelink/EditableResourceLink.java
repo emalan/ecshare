@@ -126,16 +126,13 @@ public class EditableResourceLink extends Panel
 		public void renderHead(IHeaderResponse response) {
 			StringBuffer sb = new StringBuffer();
 			sb.append("Utils.translateSuffix = function(suffix){");
-			//TODO loop through types here
 			for(ResourceType type : ResourceType.values()){
 				sb.append("if (suffix.toLowerCase() == '"+type.suffix+"') return '"+type+"';");
 			}
-			sb.append("if (suffix.toLowerCase() == 'pdf') return 'TYPE_PDF';");
-			sb.append("if (suffix.toLowerCase() == 'doc') return 'TYPE_DOC';");
 			sb.append("return '';");
 			sb.append("};");
 			
-			response.renderJavascript(sb.toString(), "updateChoiceType");
+			response.renderJavascript(sb.toString(), "translateSuffix");
 			super.renderHead(response);
 		}
 
@@ -173,10 +170,6 @@ public class EditableResourceLink extends Panel
 		protected void onEvent(AjaxRequestTarget target) {
 			FileUpload fileUpload = ((FileUploadField)getComponent()).getFileUpload();
 			if (fileUpload != null){
-				String fileName = fileUpload.getClientFileName();
-				data.setName(fileName);
-				//TODO set type select
-				
 				target.addComponent(EditableResourceLink.this);
 			}
 			
@@ -360,8 +353,7 @@ public class EditableResourceLink extends Panel
 
 			@Override
 			public void onClick() {
-				// TODO Auto-generated method stub
-				
+
 			}
 
 		};
