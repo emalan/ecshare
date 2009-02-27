@@ -1,5 +1,22 @@
+<wicket:head>
+	<style>
+	    div.resourceFormDiv {
+	    	position:absolute ;
+
+	    	z-index: 1000;
+	    	background-color: white;
+	    	border: thin solid black;
+	    	margin-left: auto;
+	    	margin-right: auto;
+	    	padding: 1px;   
+	    }
+	</style>
+
+</wicket:head>
+
 <wicket:panel>
 	<a href="#" wicket:id="link">[[label]]</a>
+	<div class="resourceFormDiv">
 	<form class="resourceForm" wicket:id="resource-form">
 		<input type="file" wicket:id="file-upload" /><br/>
 		<div>
@@ -18,7 +35,10 @@
 			<label><wicket:message key="label.hide">[[label]]</wicket:message></label>
 			<input type="checkbox" wicket:id="hide-link"/><br/>
 		</div>
-		<input type="submit" value="Submit" wicket:message="value:label.submit"/>
+		<div>
+		    <input type="submit" value="Submit" wicket:message="value:label.submit"/>
+		</div>
 	</form>
+	</div>
 	
 </wicket:panel>

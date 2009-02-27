@@ -14,3 +14,8 @@ Utils.xtractFile = function(data, allowed){
 		return {filename: "invalid", ext: null};
 }
 
+Utils.position = function(e){
+	e = Wicket.fixEvent(e);
+	return {x: e.clientX, y: e.clientX};
+}
+

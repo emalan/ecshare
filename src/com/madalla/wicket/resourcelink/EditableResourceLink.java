@@ -448,6 +448,12 @@ public class EditableResourceLink extends Panel
 		label.setVisible(false);
 		resourceForm.setVisible(true);
 		target.addComponent(EditableResourceLink.this);
+		//TODO this is not running
+		target.appendJavascript("{ var pos = Utils.position(this); " +
+				"console.log(pos.x);var e = Wicket.$('resourceFormDiv'); e.style.top = 10px; e.style.left = 10px;}");
+		
+		//TODO set focus
+		
 		// put focus on the textfield and stupid explorer hack to move the
 		// caret to the end
 //		target.appendJavascript("{ var el=wicketGet('" + nameEditor.getMarkupId() + "');" +

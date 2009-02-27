@@ -17,6 +17,7 @@ import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.webapp.css.Css;
 import com.madalla.wicket.resourcelink.EditableResourceLink;
 import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
 import com.madalla.wicket.resourcelink.EditableResourceLink.ResourceType;
@@ -112,6 +113,8 @@ public class ContentLinkPanel extends Panel{
 	
 	public ContentLinkPanel(final String id, final String nodeName) {
 		super(id);
+		
+		add(Css.CSS_FORM);
 		
 		log.debug("Editable Link Panel being created for node=" + nodeName + " id=" + id);
 		
