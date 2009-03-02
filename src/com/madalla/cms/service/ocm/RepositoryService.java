@@ -334,8 +334,6 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	return data;
     }
     
-    
-    
     public void saveContentResource(final ResourceData data){
     	saveDataObject(data);
     }

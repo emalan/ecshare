@@ -121,6 +121,7 @@ public class ContentLinkPanel extends Panel{
 		PageData page = getRepositoryservice().getPage(nodeName);
 		final ResourceData resourceData = getRepositoryservice().getContentResource(page, id);
 		log.debug("retrieved Resource data. " + resourceData);
+		transferData(resourceData);
 		final LinkData linkData = new LinkData();
 		linkData.setName(resourceData.getUrlDisplay());
 		linkData.setTitle(resourceData.getUrlTitle());
@@ -208,6 +209,10 @@ public class ContentLinkPanel extends Panel{
 	
     private IRepositoryService getRepositoryservice(){
     	return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
+    }
+    
+    private void transferData(ResourceData resourceData){
+    	
     }
 
 
