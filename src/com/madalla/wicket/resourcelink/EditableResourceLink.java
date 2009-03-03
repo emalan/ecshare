@@ -18,6 +18,7 @@ import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebResource;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -227,15 +228,30 @@ public class EditableResourceLink extends Panel
 	{
 		final Form form = new Form(id)
 		{
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onSubmit() {
 				EditableResourceLink.this.onModelChanged();
 				EditableResourceLink.this.onSubmit();
 			}
-
-			private static final long serialVersionUID = 1L;
 			
 		};
+		
+		final Button cancel = new Button("cancel-button")
+		{
+			private static final long serialVersionUID = 1L;
+			
+			public void onSubmit() 
+			{
+				EditableResourceLink.this.onModelChanged();
+				label.setVisible(true);
+				resourceForm.setVisible(false);
+			}
+			
+		};
+		cancel.setDefaultFormProcessing(false);
+		form.add(cancel);
 		form.setOutputMarkupId(true);
 		form.setVisible(false);
 		form.setMaxSize(MAX_FILE_SIZE);
