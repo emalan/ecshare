@@ -2,7 +2,6 @@
 	<style>
 	    div.resourceFormDiv {
 	    	position:absolute ;
-
 	    	z-index: 1000;
 	    	background-color: white;
 	    	border: thin solid black;
@@ -10,12 +9,26 @@
 	    	margin-right: auto;
 	    	padding: 1px;   
 	    }
+	    
+	    div.resourceLink {
+	    	
+	    }
+	    div.resourceLink a {
+	    	float:left;
+	    }
+	    div.resourceLink span, div.resourceLink span a {
+	    	float:left;
+	    }
 	</style>
 
 </wicket:head>
 
 <wicket:panel>
-	<a href="#" wicket:id="link">[[label]]</a>
+	<div class="resourceLink">
+		<a href="#" wicket:id="link">[[label]]</a>
+		<span class="edit-wrapper"><a class="edit-menu" href="#">Configure</a></span>
+	</div>
+	
 	<div class="resourceFormDiv">
 	<form class="resourceForm" wicket:id="resource-form">
 		<input type="file" wicket:id="file-upload" /><br/>

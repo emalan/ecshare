@@ -1,0 +1,30 @@
+span.edit-wrapper {
+	height:1.3em;
+	overflow:hidden;
+	padding:1px 1px 0 0;
+	right:0;
+	top:0;
+	width:88px;
+	z-index:300;
+}
+
+span.edit-wrapper a.edit-menu {
+	background-image: url(image/icons.gif);
+	background-repeat: no-repeat;
+	height: 17px;
+	margin: 0;
+	width: 26px;
+	text-indent: -9000px;
+}
+
+a.edit-menu {
+	background-position: 0 -788px;
+}
+
+a.edit-menu:hover {
+	background-position: 0 -854px;
+}
+
+.editing a.edit-menu {
+	background-position: 0 -920px;
+}

@@ -35,6 +35,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
 
+import com.madalla.webapp.css.Css;
+
 public class EditableResourceLink extends Panel 
 {
 	private static final long serialVersionUID = 1L;
@@ -207,6 +209,7 @@ public class EditableResourceLink extends Panel
 	{
 		super(id);
 		add(SCRIPT_UTILS);
+		add(Css.CSS_ICON);
 		super.setOutputMarkupId(true);
 		this.data = data;
 		if (data == null){
@@ -224,6 +227,11 @@ public class EditableResourceLink extends Panel
 		throw new WicketRuntimeException(message);
 	}
 
+	/**
+	 * Create the Form
+	 * @param id
+	 * @return
+	 */
 	private Form newFileUploadForm(String id)
 	{
 		final Form form = new Form(id)
@@ -245,7 +253,7 @@ public class EditableResourceLink extends Panel
 			public void onSubmit() 
 			{
 				EditableResourceLink.this.onModelChanged();
-				label.setVisible(true);
+				//label.setVisible(true);
 				resourceForm.setVisible(false);
 			}
 			
@@ -455,6 +463,7 @@ public class EditableResourceLink extends Panel
 			}
 			
 		};
+		link.setVisible(!data.getHideLink());
 		link.setOutputMarkupId(true);
 		return link;
 	}
@@ -482,10 +491,6 @@ public class EditableResourceLink extends Panel
 		{
 			initLabelForm(getModel());
 		}
-		
-
-
-		label.setEnabled(isEnableAllowed() && isEnabled());
 	}
 
 	/**
@@ -497,7 +502,7 @@ public class EditableResourceLink extends Panel
 	 */
 	protected void onCancel(AjaxRequestTarget target)
 	{
-		label.setVisible(true);
+		//label.setVisible(true);
 		resourceForm.setVisible(false);
 		target.addComponent(EditableResourceLink.this);
 	}
@@ -510,7 +515,7 @@ public class EditableResourceLink extends Panel
 	 */
 	protected void onEdit(AjaxRequestTarget target)
 	{
-		label.setVisible(false);
+		//label.setVisible(false);
 		resourceForm.setVisible(true);
 		target.addComponent(EditableResourceLink.this);
 		//TODO this is not running
@@ -550,7 +555,7 @@ public class EditableResourceLink extends Panel
 
 	protected void onSubmit()
 	{
-		label.setVisible(true);
+		//label.setVisible(true);
 		resourceForm.setVisible(false);
 	}
 
