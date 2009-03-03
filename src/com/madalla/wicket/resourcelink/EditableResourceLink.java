@@ -71,14 +71,26 @@ public class EditableResourceLink extends Panel
 	    TYPE_DOC("application/msword", "doc", "Word document"), 
 	    TYPE_ODT("application/vnd.oasis.opendocument.text", "odt", "ODT document");
 
-	    public final String resourceType;
-	    public final String suffix;
+	    public final String resourceType; //Mime Type
+	    public final String suffix; // File suffix
 	    public final String description;
 
 	    ResourceType(String type, String suffix, String description) {
 	        this.resourceType = type;
 	        this.suffix = suffix;
 	        this.description = description;
+	    }
+	    
+	    /**
+	     * @param s the separator
+	     * @return Separated list of suffixes e.g. doc,pdf,htm
+	     */
+	    public static String getResourceTypeSuffixes(String s){
+	    	StringBuffer sb = new StringBuffer();
+	    	for(ResourceType type : ResourceType.values()){
+				sb.append(s + type.suffix);
+			}
+	    	return sb.toString().substring(1);
 	    }
 	    
 	}
@@ -103,6 +115,11 @@ public class EditableResourceLink extends Panel
 		}
 	}
 	
+	/**
+	 * Adds Behavior to the File Upload Form
+	 * @author Eugene Malan
+	 *
+	 */
 	protected class FileUploadBehavior extends AjaxEventBehavior
 	{
 
@@ -119,7 +136,9 @@ public class EditableResourceLink extends Panel
 
 		
 		/* (non-Javadoc)
-		 * Script that will set the Drop Down
+		 * Script that translates the suffix of a selected file to the Type value that is persisted
+		 * in the CMS and used by the Type Drop Down.
+		 * 
 		 * @see org.apache.wicket.ajax.AbstractDefaultAjaxBehavior#renderHead(org.apache.wicket.markup.html.IHeaderResponse)
 		 */
 		@Override
@@ -156,8 +175,8 @@ public class EditableResourceLink extends Panel
 				public CharSequence decorateScript(CharSequence script) 
 				{
 					StringBuffer sb = new StringBuffer("var v = Wicket.$("+ getComponent().getMarkupId() +").value;");
-					//TODO send in comma seperated list of suffixes
-					sb.append("var file = Utils.xtractFile(v);");
+					String suffixes = ResourceType.getResourceTypeSuffixes("|"); //doc|pdf|htm
+					sb.append("var file = Utils.xtractFile(v,'" + suffixes + "');");
 					sb.append("Wicket.$("+name.getMarkupId()+").value = file.filename + '.' + file.ext ;");
 					sb.append("Wicket.$("+choice.getMarkupId()+").value = Utils.translateSuffix(file.ext);");
 					return sb.toString() + script;
@@ -177,6 +196,8 @@ public class EditableResourceLink extends Panel
 	}
 	
 	/**
+	 * Constructor
+	 * 
 	 * @param id Wicket Id
 	 * @param data Data Object for Model
 	 * 
@@ -222,14 +243,11 @@ public class EditableResourceLink extends Panel
 	}	
 	
 	/**
-	 * Create a new form component instance to serve as editor.
+	 * Create a new Text Field for editing 
 	 *
-	 * @param parent
-	 *            The parent component
-	 * @param componentId
-	 *            Id that should be used by the component
-	 * @param model
-	 *            The model
+	 * @param parent The parent component
+	 * @param componentId Id that should be used by the component
+	 * @param model The model
 	 * @return The editor
 	 */
 	protected FormComponent newEditor(MarkupContainer parent, String componentId, IModel model)
@@ -255,6 +273,15 @@ public class EditableResourceLink extends Panel
 		return nameEditor;
 	}
 	
+	/**
+	 * Creates Drop Down for selecting Type
+	 * 
+	 * @param parent
+	 * @param componentId
+	 * @param model
+	 * @param choices
+	 * @return
+	 */
 	protected FormComponent newDropDownChoice(MarkupContainer parent, String componentId, 
 			IModel model, List<ResourceType> choices)
 	{
@@ -304,6 +331,14 @@ public class EditableResourceLink extends Panel
 		return choice;
 	}
 
+	/**
+	 * Create File Upload for selecting file from desktop
+	 * 
+	 * @param parent
+	 * @param componentId
+	 * @param model
+	 * @return
+	 */
 	protected FormComponent newFileUpload(MarkupContainer parent, String componentId, IModel model)
 	{
 		final FileUploadField upload = new FileUploadField(componentId, model)
@@ -326,6 +361,13 @@ public class EditableResourceLink extends Panel
 		return upload;
 	}
 
+	/**
+	 * Creates the editable version of the resource Link 
+	 * 
+	 * @param parent
+	 * @param componentId
+	 * @return
+	 */
 	protected Component newEditLink(MarkupContainer parent, String componentId)
 	{
 		Link link = new Link(componentId)
@@ -361,6 +403,14 @@ public class EditableResourceLink extends Panel
 		return link;
 	}
 	
+	/**
+	 * Creates the non-editable version of the Resource Link
+	 * 
+	 * @param parent
+	 * @param resource
+	 * @param componentId
+	 * @return
+	 */
 	protected Component newResourceLink(MarkupContainer parent, final Resource resource, String componentId)
 	{
 		if (null == resource || resource.getResourceStream() == null){
