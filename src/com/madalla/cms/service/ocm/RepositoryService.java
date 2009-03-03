@@ -325,7 +325,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     public ResourceData getContentResource(final PageData page, final String name){
     	Resource data = (Resource) repositoryTemplate.getOcmObject(RepositoryType.RESOURCE, page, name, new RepositoryTemplateCallback(){
 
-			@Override
+            @Override
 			public AbstractData createNew(String parentPath, String name) {
 				return new Resource(page, name);
 			}
@@ -336,6 +336,9 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     
     public void saveContentResource(final ResourceData data){
     	saveDataObject(data);
+    	if (data.getInputStream() != null){
+    	    repositoryTemplate.saveNodePropertyStream(data.getId(), "inputStream", data.getInputStream());
+    	}
     }
 
     //**********************************

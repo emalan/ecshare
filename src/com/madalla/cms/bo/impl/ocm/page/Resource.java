@@ -17,7 +17,7 @@ public class Resource extends ResourceData {
 	@Field(path=true) private String id;
 	@Field private String urlTitle;
 	@Field private String urlDisplay;
-	@Field private transient InputStream inputStream;
+	@Field(jcrProtected=true) private transient InputStream inputStream;
 	@Field private String type;
 	@Field private Boolean hideLink;
 	

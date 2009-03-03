@@ -65,6 +65,21 @@ public class RepositoryTemplate {
 	    });
 	}
 	
+	public void saveNodePropertyStream(final String path, final String property, final InputStream stream){
+	    template.execute(new JcrCallback(){
+
+            public Object doInJcr(Session session) throws IOException, RepositoryException {
+                Node node = (Node) session.getItem(path);
+                Property prop = node.getProperty(property);
+                prop.setValue(stream);
+                session.save();
+                return null;
+            }
+	       
+	        
+	    });
+	}
+	
 	public Object getOcmObject(final RepositoryType type, final AbstractData parent, final String name, 
 			final RepositoryTemplateCallback callback){
 		return getCreateOcmObject(type, parent.getId(), name, callback);
@@ -105,7 +120,7 @@ public class RepositoryTemplate {
 		if (type == null || StringUtils.isEmpty(parentPath) || StringUtils.isEmpty(name) || callback == null){
 			throw new RuntimeException("getOcmObject method requires that all parameters are supplied.");
 		}
-		String path = parentPath + "/" + name;
+		final String path = parentPath + "/" + name;
 		if (!ocm.objectExists(path)){
 			Object obj = callback.createNew(parentPath, name);
 			ocm.insert(obj);

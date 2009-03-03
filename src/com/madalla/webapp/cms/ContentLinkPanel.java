@@ -121,47 +121,7 @@ public class ContentLinkPanel extends Panel{
 		PageData page = getRepositoryservice().getPage(nodeName);
 		final ResourceData resourceData = getRepositoryservice().getContentResource(page, id);
 		log.debug("retrieved Resource data. " + resourceData);
-		transferData(resourceData);
-		final LinkData linkData = new LinkData();
-		linkData.setName(resourceData.getUrlDisplay());
-		linkData.setTitle(resourceData.getUrlTitle());
-		linkData.setResourceType(resourceData.getType());
-		linkData.setHideLink(resourceData.getHideLink());
-		if (resourceData.getInputStream() != null) {
-			linkData.setResource(new WebResource() {
-
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public IResourceStream getResourceStream() {
-					return new AbstractResourceStream() {
-
-						private static final long serialVersionUID = 1L;
-						
-						@Override
-						public String getContentType() {
-							ResourceType resourceType = ResourceType.valueOf(resourceData.getType());
-							if (resourceType != null){
-								return resourceType.resourceType;
-							}
-							return null;
-						}
-
-						public void close() throws IOException {
-
-						}
-
-						public InputStream getInputStream()
-								throws ResourceStreamNotFoundException {
-							return getRepositoryservice().getResourceStream(
-									resourceData.getId(), "inputStream");
-						}
-
-					};
-				}
-
-			});
-		}
+		final LinkData linkData = createView(resourceData);
 		
 		Panel editableLink = new EditableResourceLink("contentLink", linkData){
 			private static final long serialVersionUID = 1L;
@@ -172,7 +132,6 @@ public class ContentLinkPanel extends Panel{
 				
 				FileUpload upload = linkData.getFileUpload();
 				if (upload == null){
-					//TODO We want to keep old value not set it to null
 					resourceData.setInputStream(null);
 				} else {
 					try {
@@ -211,8 +170,49 @@ public class ContentLinkPanel extends Panel{
     	return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
     }
     
-    private void transferData(ResourceData resourceData){
-    	
+    private LinkData createView(final ResourceData resourceData){
+        LinkData linkData = new LinkData();
+        linkData.setName(resourceData.getUrlDisplay());
+        linkData.setTitle(resourceData.getUrlTitle());
+        linkData.setResourceType(resourceData.getType());
+        linkData.setHideLink(resourceData.getHideLink());
+        if (resourceData.getInputStream() != null) {
+            linkData.setResource(new WebResource() {
+
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                public IResourceStream getResourceStream() {
+                    return new AbstractResourceStream() {
+
+                        private static final long serialVersionUID = 1L;
+                        
+                        @Override
+                        public String getContentType() {
+                            ResourceType resourceType = ResourceType.valueOf(resourceData.getType());
+                            if (resourceType != null){
+                                return resourceType.resourceType;
+                            }
+                            return null;
+                        }
+
+                        public void close() throws IOException {
+
+                        }
+
+                        public InputStream getInputStream()
+                                throws ResourceStreamNotFoundException {
+                            return getRepositoryservice().getResourceStream(
+                                    resourceData.getId(), "inputStream");
+                        }
+
+                    };
+                }
+
+            });
+        }
+
+    	return linkData;
     }
 
 
