@@ -15,7 +15,7 @@ Utils.xtractFile = function(data, allowed){
 }
 
 Utils.position = function(e){
-	e = Wicket.fixEvent(e);
-	return {x: e.clientX, y: e.clientX};
+	e = Wicket.$(e);
+	return {x: e.offsetTop, y: e.offsetWidth};
 }
 

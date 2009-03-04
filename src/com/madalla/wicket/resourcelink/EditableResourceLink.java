@@ -12,6 +12,7 @@ import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
@@ -94,25 +95,6 @@ public class EditableResourceLink extends Panel
 	    
 	}
 	
-	protected class LabelAjaxBehavior extends AjaxEventBehavior
-	{
-		private static final long serialVersionUID = 1L;
-
-		/**
-		 * Construct.
-		 *
-		 * @param event
-		 */
-		public LabelAjaxBehavior(String event)
-		{
-			super(event);
-		}
-
-		protected void onEvent(AjaxRequestTarget target)
-		{
-			onEdit(target);
-		}
-	}
 	
 	/**
 	 * Adds Behavior to the File Upload Form
@@ -249,7 +231,6 @@ public class EditableResourceLink extends Panel
 			public void onSubmit() 
 			{
 				EditableResourceLink.this.onModelChanged();
-				//label.setVisible(true);
 				resourceForm.setVisible(false);
 			}
 			
@@ -347,7 +328,6 @@ public class EditableResourceLink extends Panel
 		};
 		choice.setOutputMarkupId(true);
 		choice.setNullValid(true);
-		//choice.setRequired(true);
 		return choice;
 	}
 
@@ -390,24 +370,49 @@ public class EditableResourceLink extends Panel
 	 */
 	protected Component newEditLink(MarkupContainer parent, String componentId)
 	{
-		Link link = new Link(componentId)
+		AjaxLink link = new AjaxLink(componentId)
 		{
 			private static final long serialVersionUID = 1L;
 			
 			@Override
 			protected void onComponentTag(ComponentTag tag) {
-				tag.put("title", "Edit Link");
+				tag.put("title", getString("label.configure"));
 				super.onComponentTag(tag);
 			}
 
 			@Override
-			public void onClick() {
+			public void onClick(AjaxRequestTarget target) {
+				onEdit(target);
+			}
 
+			@Override
+			protected IAjaxCallDecorator getAjaxCallDecorator() {
+				return new IAjaxCallDecorator(){
+
+					private static final long serialVersionUID = 1L;
+
+					public CharSequence decorateOnFailureScript(CharSequence script) {
+						return script;
+					}
+
+					public CharSequence decorateOnSuccessScript(CharSequence script) {
+						return script;
+					}
+
+					public CharSequence decorateScript(CharSequence script) {
+//						String s =("console.log('start'); var pos = Utils.position(this);"+ 
+//						"console.log(pos.x); var e = Wicket.$('resourceFormDiv'); e.style.top=\"10px\";");
+						
+						return script;
+					}
+					
+				};
 			}
 
 		};
+		//TODO uncomment this when done
+		//link.setVisible(editMode);
 		link.setOutputMarkupId(true);
-		link.add(new LabelAjaxBehavior(getLabelAjaxEvent()));
 		return link;
 	}
 	
@@ -501,9 +506,6 @@ public class EditableResourceLink extends Panel
 	{
 		resourceForm.setVisible(true);
 		target.addComponent(EditableResourceLink.this);
-		//TODO this is not running
-		target.appendJavascript("{ var pos = Utils.position(this); " +
-				"console.log(pos.x);var e = Wicket.$('resourceFormDiv'); e.style.top = 10px; e.style.left = 10px;}");
 		
 		//TODO set focus
 		

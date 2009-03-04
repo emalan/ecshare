@@ -1,7 +1,8 @@
 <wicket:head>
 	<style>
-	    div.resourceFormDiv {
-	    	position:absolute ;
+	    div#resourceFormDiv {
+	    	float: left;
+	    	clear: left;
 	    	z-index: 1000;
 	    	background-color: white;
 	    	border: thin solid black;
@@ -10,13 +11,13 @@
 	    	padding: 1px;   
 	    }
 	    
-	    div.resourceLink {
+	    div#resourceLink {
 	    	
 	    }
-	    div.resourceLink a {
+	    div#resourceLink a {
 	    	float:left;
 	    }
-	    div.resourceLink span, div.resourceLink span a {
+	    div#resourceLink span, div#resourceLink span a {
 	    	float:left;
 	    }
 	</style>
@@ -24,12 +25,12 @@
 </wicket:head>
 
 <wicket:panel>
-	<div class="resourceLink">
+	<div id="resourceLink">
 		<a href="#" wicket:id="link">[[label]]</a>
 		<span class="edit-wrapper"><a wicket:id="configure" class="edit-menu" href="#">Configure</a></span>
 	</div>
 	
-	<div class="resourceFormDiv">
+	<div id="resourceFormDiv" >
 	<form class="resourceForm" wicket:id="resource-form">
 		<input type="file" wicket:id="file-upload" /><br/>
 		<div>
