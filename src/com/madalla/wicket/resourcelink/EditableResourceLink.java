@@ -231,14 +231,12 @@ public class EditableResourceLink extends Panel
 			public void onSubmit() 
 			{
 				EditableResourceLink.this.onModelChanged();
-				resourceForm.setVisible(false);
 			}
 			
 		};
 		cancel.setDefaultFormProcessing(false);
 		form.add(cancel);
 		form.setOutputMarkupId(true);
-		form.setVisible(false);
 		form.setMaxSize(MAX_FILE_SIZE);
 		return form;
 	}	
@@ -270,7 +268,6 @@ public class EditableResourceLink extends Panel
 			}
 		};
 		nameEditor.setOutputMarkupId(true);
-		
 		return nameEditor;
 	}
 	
@@ -400,7 +397,8 @@ public class EditableResourceLink extends Panel
 					}
 
 					public CharSequence decorateScript(CharSequence script) {
-						String s =("var e = Wicket.$('resourceLink'); Utils.addClassName(e, 'editing');");
+						String s =("var e = Wicket.$('resourceLink'); Utils.addClassName(e, 'editing');"+
+								"wicketShow('resourceFormDiv');");
 						
 						return script + s;
 					}
@@ -409,8 +407,7 @@ public class EditableResourceLink extends Panel
 			}
 
 		};
-		//TODO uncomment this when done
-		//link.setVisible(editMode);
+		link.setVisible(editMode);
 		link.setOutputMarkupId(true);
 		return link;
 	}
@@ -491,8 +488,8 @@ public class EditableResourceLink extends Panel
 	protected void onCancel(AjaxRequestTarget target)
 	{
 		//label.setVisible(true);
-		resourceForm.setVisible(false);
-		target.addComponent(EditableResourceLink.this);
+		//resourceForm.setVisible(false);
+		//target.addComponent(EditableResourceLink.this);
 	}
 
 	/**
@@ -503,8 +500,10 @@ public class EditableResourceLink extends Panel
 	 */
 	protected void onEdit(AjaxRequestTarget target)
 	{
-		resourceForm.setVisible(true);
-		target.addComponent(EditableResourceLink.this);
+		//target.appendJavascript("{wicketHide('resourceFormDiv');}");
+		//resourceForm.setVisible(true);
+		//target.addComponent(resourceForm);
+		//target.addComponent(EditableResourceLink.this);
 		
 		//TODO set focus
 		
@@ -540,7 +539,7 @@ public class EditableResourceLink extends Panel
 	protected void onSubmit()
 	{
 		//label.setVisible(true);
-		resourceForm.setVisible(false);
+		//resourceForm.setVisible(false);
 	}
 
 	/**
