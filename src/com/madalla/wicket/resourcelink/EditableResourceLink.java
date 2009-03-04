@@ -47,10 +47,6 @@ public class EditableResourceLink extends Panel
 	private boolean editMode = false;
 	private Form resourceForm;
 	
-
-	/** label component. */
-	private Component label;
-	
 	/** edit data **/
 	private ILinkData data;
 	
@@ -404,18 +400,6 @@ public class EditableResourceLink extends Panel
 				super.onComponentTag(tag);
 			}
 
-			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
-			{
-				if (StringUtils.isEmpty(data.getName()))
-				{
-					replaceComponentTagBody(markupStream, openTag, defaultNullLabel());
-				}
-				else 
-				{
-					replaceComponentTagBody(markupStream, openTag, data.getName());
-				}
-			}
-
 			@Override
 			public void onClick() {
 
@@ -515,7 +499,6 @@ public class EditableResourceLink extends Panel
 	 */
 	protected void onEdit(AjaxRequestTarget target)
 	{
-		//label.setVisible(false);
 		resourceForm.setVisible(true);
 		target.addComponent(EditableResourceLink.this);
 		//TODO this is not running
@@ -583,15 +566,8 @@ public class EditableResourceLink extends Panel
 		resourceForm.add(upload);
 		resourceForm.add(choice);
 		
-	    if (editMode)
-	    {
-	    	label = newEditLink(this, "link");
-	    }
-	    else 
-	    {
-	        label = newResourceLink(this, data.getResource() , "link");
-	    }
-	    add(label);
+    	add(newEditLink(this, "configure"));
+        add(newResourceLink(this, data.getResource() , "link"));
 	}
 
 
