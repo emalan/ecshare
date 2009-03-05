@@ -397,8 +397,9 @@ public class EditableResourceLink extends Panel
 					}
 
 					public CharSequence decorateScript(CharSequence script) {
-						String s =("var e = Wicket.$('resourceLink'); Utils.addClassName(e, 'editing');"+
-								"wicketShow('resourceFormDiv');");
+						String s =("var e = Wicket.$('resourceLink'); if (Utils.hasClassName(e, 'editing'))"+
+								"{Utils.removeClassName(e, 'editing');wicketHide('resourceFormDiv');} else "+
+								"{Utils.addClassName(e, 'editing');wicketShow('resourceFormDiv');};");
 						
 						return script + s;
 					}

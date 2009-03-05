@@ -1,4 +1,4 @@
-// Create namespace
+// Create Utils namespace
 if (typeof(Utils) == "undefined")
 	Utils = { 
 	
@@ -38,5 +38,39 @@ removeClassName : function(element, className) {
  	new RegExp("(^|\\s+)" + className + "(\\s+|$)"), ' ').strip();
  	return element;
 }
-
+,
+strip : function() {
+     return this.replace(/^\s+/, '').replace(/\s+$/, '');
+}
 };
+
+
+//from Prototype.js
+Object.extend = function(destination, source) {
+  for (var property in source)
+    destination[property] = source[property];
+  return destination;
+};
+
+Object.extend(String.prototype, {
+
+  truncate: function(length, truncation) {
+    length = length || 30;
+    truncation = Object.isUndefined(truncation) ? '...' : truncation;
+    return this.length > length ?
+      this.slice(0, length - truncation.length) + truncation : String(this);
+  },
+
+  strip: function() {
+    return this.replace(/^\s+/, '').replace(/\s+$/, '');
+  },
+
+  stripTags: function() {
+    return this.replace(/<\/?[^>]+>/gi, '');
+  },
+
+  stripScripts: function() {
+    return this.replace(new RegExp(Prototype.ScriptFragment, 'img'), '');
+  }
+});
+
