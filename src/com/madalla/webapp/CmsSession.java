@@ -18,8 +18,8 @@ public class CmsSession  extends WebSession implements IContentAdmin, IRepositor
     
     public CmsSession(Request request) {
         super(request);
-        //IRepositoryServiceProvider repositoryProvider =((IRepositoryServiceProvider)getApplication());
-        //repositoryService = new AuthRepositoryService(repositoryProvider.getRepositoryService());
+        IRepositoryServiceProvider repositoryProvider =((IRepositoryServiceProvider)getApplication());
+        repositoryService = new AuthRepositoryService();
     }
 
     public boolean isCmsAdminMode() {

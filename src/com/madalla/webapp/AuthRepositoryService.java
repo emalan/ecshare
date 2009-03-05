@@ -31,6 +31,9 @@ public class AuthRepositoryService implements IRepositoryService, Serializable {
 	private IRepositoryService service;
 	private IUser user;
 	
+	public AuthRepositoryService(){
+
+	}
 	public AuthRepositoryService(IRepositoryService service){
 		this.service = service;
 	}
