@@ -8,7 +8,7 @@
 	    	border: thin solid black;
 	    	margin-left: auto;
 	    	margin-right: auto;
-	    	padding: 1px;   
+	    	padding: 4px;   
 	    }
 	    
 	    div#resourceLink {
@@ -19,6 +19,16 @@
 	    }
 	    div#resourceLink span, div#resourceLink span a {
 	    	float:left;
+	    }
+	    
+	    form div label{
+	    	width: 3em;
+	    }
+	    form div.checkbox {
+	    }
+	    form div.checkbox label{
+	    	width: 5em;
+	    	padding-top: 8px;
 	    }
 	</style>
 
@@ -34,20 +44,20 @@
 	<form class="resourceForm" wicket:id="resource-form">
 		<input type="file" wicket:id="file-upload" /><br/>
 		<div>
-			<label>Select</label>
+			<label><wicket:message key="label.type">[[label]]</wicket:message></label>
 			<select wicket:id="type-select"></select>
 		</div>
 		<div>
 			<label><wicket:message key="label.name">[[label]]</wicket:message></label>
-			<input type="text" wicket:id="editor"/><br/>
+			<input type="text" wicket:id="editor"/>
 		</div>
 		<div>
 			<label><wicket:message key="label.title">[[label]]</wicket:message></label>
-			<input type="text" wicket:id="title-editor"/><br/>
+			<input type="text" wicket:id="title-editor"/>
 		</div>
-		<div>
+		<div class="checkbox">
 			<label><wicket:message key="label.hide">[[label]]</wicket:message></label>
-			<input type="checkbox" wicket:id="hide-link"/><br/>
+			<input type="checkbox" wicket:id="hide-link"/>
 		</div>
 		<div>
 		    <input type="submit" value="Submit" wicket:message="value:label.submit"/>

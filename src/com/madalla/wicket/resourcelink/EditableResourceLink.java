@@ -407,7 +407,7 @@ public class EditableResourceLink extends Panel
 			}
 
 		};
-		link.setVisible(editMode);
+		//link.setVisible(editMode);
 		link.setOutputMarkupId(true);
 		return link;
 	}

@@ -13,17 +13,22 @@ form div label {
   padding-top: 10px; padding-right: 10px; padding-left: 5px;
 }
 
-form input.inputError {
-    background-color:#F6BCBC;
-    border:1px solid #990000;
-    color:#990000;
-}
-
 form input {
 	float: left;
     margin: 10px 0 0 0;
     font-family: verdana,arial,helvetica,sans; font-size: 11px;
     border: 1px solid #8E8E8E;
+    color: #444444;
+}
+
+form input[type="file"] {
+	
+}
+
+form input.inputError {
+    background-color:#F6BCBC;
+    border:1px solid #990000;
+    color:#990000;
 }
 
 form div.inputValid .feedbackPanel{
@@ -50,7 +55,9 @@ form div .buttonwrapper {
 form select {
 	float: left;
 	margin:10px 0 0;
-    border: 1px solid #8E8E8E; color:#2B5E2C; background-color:#FFFFFF; 
+    border: 1px solid #8E8E8E; 
+    color: #444444; 
+    background-color:#FFFFFF; 
     font-family: verdana,arial,helvetica,sans; font-size: 11px;
 }
 

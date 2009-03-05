@@ -1,6 +1,7 @@
 package com.madalla.webapp;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
@@ -25,7 +26,8 @@ import com.madalla.bo.security.UserSiteData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.webapp.security.IAuthenticator;
 
-public class AuthRepositoryService implements IRepositoryService {
+//TODO Solution for authorizing calls to RepositoryService
+public class AuthRepositoryService implements IRepositoryService, Serializable {
 	private IRepositoryService service;
 	private IUser user;
 	
