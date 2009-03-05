@@ -9,12 +9,17 @@ import javax.jcr.ValueFactory;
 import org.apache.jackrabbit.ocm.exception.IncorrectAtomicTypeException;
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter;
 
+/**
+ * Converter for InputStream
+ * 
+ * @author Eugene Malan
+ *
+ */
 public class ResourceTypeConvertor implements AtomicTypeConverter 
 	{
 		/**
 		 * Converts the Property Object to a Value for inserting into CMS
 		 * 
-		 * @see org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter#getValue(java.lang.Object)
 		 */
 	    public Value getValue(ValueFactory valueFactory, Object propValue)
 	    {
@@ -28,7 +33,6 @@ public class ResourceTypeConvertor implements AtomicTypeConverter
 	    /**
 	     * Converts the CMS Value to an Object ready to be set to the property in the Java Bean
 	     * 
-	     * @see org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter#getObject(javax.jcr.Value)
 	     */
 	    public Object getObject(Value value)
 	    {
@@ -45,7 +49,6 @@ public class ResourceTypeConvertor implements AtomicTypeConverter
 
 	    /**
 	     *
-	     * @see org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter#getStringValue(java.lang.Object)
 	     */
 		public String getXPathQueryValue(ValueFactory valueFactory,Object object)
 		{		
