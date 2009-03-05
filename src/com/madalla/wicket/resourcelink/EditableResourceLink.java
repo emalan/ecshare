@@ -19,12 +19,12 @@ import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebResource;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
@@ -188,6 +188,7 @@ public class EditableResourceLink extends Panel
 		super(id);
 		add(SCRIPT_UTILS);
 		add(Css.CSS_ICON);
+		add(Css.CSS_BUTTONS);
 		super.setOutputMarkupId(true);
 		this.data = data;
 		if (data == null){
@@ -197,12 +198,31 @@ public class EditableResourceLink extends Panel
 	}
 	
 	/**
-	 * @see org.apache.wicket.MarkupContainer#setModel(org.apache.wicket.model.IModel)
+	 * Lazy initialization of the label and editor components and set tempModel to null.
+	 *
+	 * @param model
+	 *            The model for the label and editor
 	 */
-	public final Component setModel(IModel model)
+	private void initLabelForm(IModel model)
 	{
-		String message = "AjaxEditableLink constructs its own model. Do not set it.";
-		throw new WicketRuntimeException(message);
+		
+		resourceForm = newFileUploadForm("resource-form");
+		add(resourceForm);
+		final Component name = newEditor(this, "editor", new PropertyModel(data, "name"));
+		resourceForm.add(newEditor(this, "title-editor", new PropertyModel(data, "title")));
+		resourceForm.add(new CheckBox("hide-link", new PropertyModel(data, "hideLink")));
+		final Component upload = newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload"));
+		final Component choice = newDropDownChoice(this, "type-select", new PropertyModel(data, "resourceType"),
+				Arrays.asList(ResourceType.values()));
+		
+		//AjaxBehaviour to update fields once file is selected
+		upload.add(new FileUploadBehavior("onchange", name, choice));
+		resourceForm.add(name);
+		resourceForm.add(upload);
+		resourceForm.add(choice);
+		
+    	add(newEditLink(this, "configure"));
+        add(newResourceLink(this, data.getResource() , "link"));
 	}
 
 	/**
@@ -223,19 +243,7 @@ public class EditableResourceLink extends Panel
 			}
 			
 		};
-		
-		final Button cancel = new Button("cancel-button")
-		{
-			private static final long serialVersionUID = 1L;
-			
-			public void onSubmit() 
-			{
-				EditableResourceLink.this.onModelChanged();
-			}
-			
-		};
-		cancel.setDefaultFormProcessing(false);
-		form.add(cancel);
+		form.add(new SubmitLink("submit"));
 		form.setOutputMarkupId(true);
 		form.setMaxSize(MAX_FILE_SIZE);
 		return form;
@@ -480,6 +488,15 @@ public class EditableResourceLink extends Panel
 	}
 
 	/**
+	 * @see org.apache.wicket.MarkupContainer#setModel(org.apache.wicket.model.IModel)
+	 */
+	public final Component setModel(IModel model)
+	{
+		String message = "AjaxEditableLink constructs its own model. Do not set it.";
+		throw new WicketRuntimeException(message);
+	}
+
+	/**
 	 * Invoked when the label is in edit mode, and received a cancel event. Typically, nothing
 	 * should be done here.
 	 *
@@ -542,35 +559,6 @@ public class EditableResourceLink extends Panel
 		//label.setVisible(true);
 		//resourceForm.setVisible(false);
 	}
-
-	/**
-	 * Lazy initialization of the label and editor components and set tempModel to null.
-	 *
-	 * @param model
-	 *            The model for the label and editor
-	 */
-	private void initLabelForm(IModel model)
-	{
-		
-		resourceForm = newFileUploadForm("resource-form");
-		add(resourceForm);
-		final Component name = newEditor(this, "editor", new PropertyModel(data, "name"));
-		resourceForm.add(newEditor(this, "title-editor", new PropertyModel(data, "title")));
-		resourceForm.add(new CheckBox("hide-link", new PropertyModel(data, "hideLink")));
-		final Component upload = newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload"));
-		final Component choice = newDropDownChoice(this, "type-select", new PropertyModel(data, "resourceType"),
-				Arrays.asList(ResourceType.values()));
-		
-		//AjaxBehaviour to update fields once file is selected
-		upload.add(new FileUploadBehavior("onchange", name, choice));
-		resourceForm.add(name);
-		resourceForm.add(upload);
-		resourceForm.add(choice);
-		
-    	add(newEditLink(this, "configure"));
-        add(newResourceLink(this, data.getResource() , "link"));
-	}
-
 
 	/**
 	 * Override this to display a different value when the model object is null. Default is

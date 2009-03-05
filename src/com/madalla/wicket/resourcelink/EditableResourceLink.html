@@ -30,6 +30,13 @@
 	    	width: 5em;
 	    	padding-top: 8px;
 	    }
+	    form p.info {
+	    	color:blue;
+	    	font-size: x-small;
+	    	width: 19em;
+	    	margin: 0;
+	    }
+	    
 	</style>
 
 </wicket:head>
@@ -42,6 +49,7 @@
 	
 	<div id="resourceFormDiv" style="display:none;" >
 	<form class="resourceForm" wicket:id="resource-form">
+		<p class="info"><wicket:message key="info.upload">[[label]]</wicket:message></p>
 		<input type="file" wicket:id="file-upload" /><br/>
 		<div>
 			<label><wicket:message key="label.type">[[label]]</wicket:message></label>
@@ -60,8 +68,9 @@
 			<input type="checkbox" wicket:id="hide-link"/>
 		</div>
 		<div>
-		    <input type="submit" value="Submit" wicket:message="value:label.submit"/>
-		    <input type="submit" wicket:message="value:label.cancel" wicket:id="cancel-button"/>
+			<span class="buttonwrapper">
+                <a href="#" class="bluebutton" wicket:id="submit"><span><wicket:message key="label.submit">[[label]]</wicket:message></span></a>
+            </span>
 		</div>
 	</form>
 	</div>

@@ -35,24 +35,25 @@ a.orangebutton{
     text-decoration: none;
 }
 
-    a:link.orangebutton, a:visited.orangebutton{
-        color: #494949; /*button text color*/
-    }
+a:link.orangebutton, a:visited.orangebutton{
+    color: #494949; /*button text color*/
+}
 
-    a.orangebutton span{
-        background: transparent url('image/square-orange-right.gif') no-repeat top right;
-        display: block;
-        padding: 4px 9px 4px 0; /*Set 9px below to match value of 'padding-left' value above*/
-    }
+a.orangebutton span{
+    background: transparent url('image/square-orange-right.gif') no-repeat top right;
+    display: block;
+    padding: 4px 9px 4px 0; /*Set 9px below to match value of 'padding-left' value above*/
+}
 
-    a.orangebutton:hover{ /* Hover state CSS */
-        background-position: bottom left;
-    }
+a.orangebutton:hover{ /* Hover state CSS */
+    background-position: bottom left;
+}
 
-    a.orangebutton:hover span{ /* Hover state CSS */
-        background-position: bottom right;
-        color: black;
-    }
+a.orangebutton:hover span{ /* Hover state CSS */
+    background-position: bottom right;
+    color: black;
+}
+
 /* Blue */
 a.bluebutton{
     background: transparent url('image/square-blue-left.gif') no-repeat top left;
