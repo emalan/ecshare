@@ -1,9 +1,12 @@
 package com.madalla.webapp.cms;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
@@ -34,6 +37,7 @@ public class InlineContentPanel extends Panel {
         log.debug("Content Panel being created for node=" + nodeName + " id=" + id);
         
         Panel editableLabel = new AjaxEditableLabel("contentText"){
+
 			private static final long serialVersionUID = 1L;
 
 			private ContentData contentData;
@@ -59,7 +63,17 @@ public class InlineContentPanel extends Panel {
                     setEnabled(false);
                 }
                 super.onBeforeRender();
-            }            	
+            }
+        	
+			@Override
+			protected void onComponentTag(ComponentTag tag) {
+				if (((IContentAdmin)getSession()).isLoggedIn()) {
+					CharSequence s = tag.getString("class");
+                    tag.put("class", "editabel" + (s.length()<=0?"":" "+s));
+                }
+				super.onComponentTag(tag);
+			}
+
         };
         add(editableLabel);
         
