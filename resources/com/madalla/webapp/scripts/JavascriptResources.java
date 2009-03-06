@@ -21,4 +21,7 @@ public class JavascriptResources {
 	public static final HeaderContributor SCRIPT_UTILS = HeaderContributor.forJavaScript(
 			new CompressedResourceReference(JavascriptResources.class, "common.js"));
 
+	public static final HeaderContributor SWF_OBJECT = HeaderContributor.forJavaScript(
+			new CompressedResourceReference(JavascriptResources.class, "swfobject.js"));
+
 }
