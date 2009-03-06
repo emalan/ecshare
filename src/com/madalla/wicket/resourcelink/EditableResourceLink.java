@@ -12,7 +12,6 @@ import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
@@ -37,6 +36,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
 
 import com.madalla.webapp.css.Css;
+import com.madalla.wicket.configure.AjaxConfigureIcon;
 
 public class EditableResourceLink extends Panel 
 {
@@ -187,7 +187,6 @@ public class EditableResourceLink extends Panel
 	{
 		super(id);
 		add(SCRIPT_UTILS);
-		add(Css.CSS_ICON);
 		add(Css.CSS_BUTTONS);
 		super.setOutputMarkupId(true);
 		this.data = data;
@@ -208,8 +207,8 @@ public class EditableResourceLink extends Panel
 		
 		resourceForm = newFileUploadForm("resource-form");
 		add(resourceForm);
-		final Component name = newEditor(this, "editor", new PropertyModel(data, "name"));
-		resourceForm.add(newEditor(this, "title-editor", new PropertyModel(data, "title")));
+		final Component name = newEditor("editor", new PropertyModel(data, "name"));
+		resourceForm.add(newEditor("title-editor", new PropertyModel(data, "title")));
 		resourceForm.add(new CheckBox("hide-link", new PropertyModel(data, "hideLink")));
 		final Component upload = newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload"));
 		final Component choice = newDropDownChoice(this, "type-select", new PropertyModel(data, "resourceType"),
@@ -221,7 +220,7 @@ public class EditableResourceLink extends Panel
 		resourceForm.add(upload);
 		resourceForm.add(choice);
 		
-    	add(newEditLink(this, "configure"));
+    	add(new AjaxConfigureIcon("configureIcon","resourceFormDiv"));
         add(newResourceLink(this, data.getResource() , "link"));
 	}
 
@@ -257,7 +256,7 @@ public class EditableResourceLink extends Panel
 	 * @param model The model
 	 * @return The editor
 	 */
-	protected FormComponent newEditor(MarkupContainer parent, String componentId, IModel model)
+	protected FormComponent newEditor(String componentId, IModel model)
 	{
 		final TextField nameEditor = new TextField(componentId, model)
 		{
@@ -364,61 +363,6 @@ public class EditableResourceLink extends Panel
 		};
 		upload.setOutputMarkupId(true);
 		return upload;
-	}
-
-	/**
-	 * Creates the editable version of the resource Link 
-	 * 
-	 * @param parent
-	 * @param componentId
-	 * @return
-	 */
-	protected Component newEditLink(MarkupContainer parent, String componentId)
-	{
-		AjaxLink link = new AjaxLink(componentId)
-		{
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			protected void onComponentTag(ComponentTag tag) {
-				tag.put("title", getString("label.configure"));
-				super.onComponentTag(tag);
-			}
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				onEdit(target);
-			}
-
-			@Override
-			protected IAjaxCallDecorator getAjaxCallDecorator() {
-				return new IAjaxCallDecorator(){
-
-					private static final long serialVersionUID = 1L;
-
-					public CharSequence decorateOnFailureScript(CharSequence script) {
-						return script;
-					}
-
-					public CharSequence decorateOnSuccessScript(CharSequence script) {
-						return script;
-					}
-
-					public CharSequence decorateScript(CharSequence script) {
-						String s =("var e = Wicket.$('resourceLink'); if (Utils.hasClassName(e, 'editing'))"+
-								"{Utils.removeClassName(e, 'editing');wicketHide('resourceFormDiv');} else "+
-								"{Utils.addClassName(e, 'editing');wicketShow('resourceFormDiv');};");
-						
-						return script + s;
-					}
-					
-				};
-			}
-
-		};
-		//link.setVisible(editMode);
-		link.setOutputMarkupId(true);
-		return link;
 	}
 	
 	/**
