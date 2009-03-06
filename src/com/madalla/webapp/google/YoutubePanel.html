@@ -1,0 +1,47 @@
+<wicket:head>
+	<style>
+		#videoBar {
+  			width : 160px;
+  			margin-right: 5px;
+  			margin-left: 5px;
+  			padding-top : 4px;
+  			padding-right : 4px;
+  			padding-left : 4px;
+  			padding-bottom : 0px;
+		}
+	</style>
+	
+	<script src="http://www.google.com/uds/api?file=uds.js&v=1.0"
+    type="text/javascript"></script>
+<link href="http://www.google.com/uds/css/gsearch.css"
+    rel="stylesheet" type="text/css"/>
+<script src="http://www.google.com/uds/solutions/videobar/gsvideobar.js"
+    type="text/javascript"></script>
+<link href="http://www.google.com/uds/solutions/videobar/gsvideobar.css"
+    rel="stylesheet" type="text/css"/>
+	
+	
+	<script type="text/javascript">
+  		function LoadVideoBar() {
+    		var vbr;
+
+    		var options = {
+      			largeResultSet : true
+    		}
+    		vbr = new GSvideoBar(
+                document.getElementById("videoBar"),
+                GSvideoBar.PLAYER_ROOT_FLOATING,
+                options
+                );
+    		vbr.execute("VW GTI");
+  		}
+  		/**
+   		* Arrange for LoadVideoBar to run once the page loads.
+   		*/
+  		GSearch.setOnLoadCallback(LoadVideoBar);
+	</script>
+	
+</wicket:head>
+<wicket:panel>
+	<div id="videoBar"><wicket:message key="label.loading">[[label]]</wicket:message></div>
+</wicket:panel>
