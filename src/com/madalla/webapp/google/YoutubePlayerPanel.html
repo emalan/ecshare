@@ -1,5 +1,14 @@
 <wicket:head>
-	<script type="text/javascript" src="swfobject.js"></script>  
+	<script type="text/javascript">
+		function onYouTubePlayerReady(playerId) {
+			player = Wicket.$("myytplayer");
+		}
+		function cueVideo(id){
+			if (player) {
+				player.cueVideoById(id,3);
+			}
+		}
+	</script>
 </wicket:head>
 <wicket:panel>
   
@@ -11,7 +20,7 @@
 
     var params = { allowScriptAccess: "always" };
     var atts = { id: "myytplayer" };
-    swfobject.embedSWF("http://www.youtube.com/v/VIDEO_ID&enablejsapi=1&playerapiid=ytplayer", 
+    swfobject.embedSWF("http://www.youtube.com/v/krb2OdQksMc&enablejsapi=1&playerapiid=ytplayer", 
                        "ytapiplayer", "425", "356", "8", null, null, params, atts);
 
   </script>
