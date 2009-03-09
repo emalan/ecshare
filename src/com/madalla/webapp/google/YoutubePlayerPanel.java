@@ -1,24 +1,29 @@
 package com.madalla.webapp.google;
 
+import java.io.Serializable;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
-import com.madalla.webapp.scripts.JavascriptResources;
+import com.madalla.wicket.configure.AjaxConfigureIcon;
 
-public class YoutubePlayerPanel extends Panel {
+
+public class YoutubePlayerPanel extends Panel implements IHeaderContributor{
 
 	private static final long serialVersionUID = 1L;
 	
-	public class YtVideo {
+	public class YtVideo implements Serializable {
 		private String videoId;
 		private int width;
 		private int height;
@@ -50,11 +55,33 @@ public class YoutubePlayerPanel extends Panel {
 		}
 		
 	}
-
+	
+	private YtVideo videoData;
+	/**
+	 * Constructor
+	 * 
+	 * @param id
+	 */
 	public YoutubePlayerPanel(String id) {
 		super(id);
-		add(JavascriptResources.SWF_OBJECT);
+		videoData = getYtVideo(id);
+		String url = "http://www.youtube.com/v/"+videoData.getVideoId()+"&enablejsapi=1&playerapiid=ytplayer";
+		add(new SwfObject(url,425, 356));
+		add(new AjaxConfigureIcon("configureIcon","formDiv"));
 	}
+	
+	//TODO get from Repository
+	private YtVideo getYtVideo(String id){
+		YtVideo videoData = new YtVideo();
+		videoData.setVideoId("krb2OdQksMc");
+		return videoData;
+	}
+	
+	public void renderHead(IHeaderResponse response) {
+		//response.renderOnLoadJavascript("cueVideo('"+videoData.getVideoId()+"');");
+		
+	}
+
 	
 	private Form newYtForm(String id){
 		final Form form = new Form(id){
@@ -75,52 +102,4 @@ public class YoutubePlayerPanel extends Panel {
 		return field;
 	}
 	
-	protected Component newEditLink(MarkupContainer parent, String componentId){
-		AjaxLink link = new AjaxLink(componentId)
-		{
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			protected void onComponentTag(ComponentTag tag) {
-				tag.put("title", getString("label.configure"));
-				super.onComponentTag(tag);
-			}
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				//TODO make abstract
-			}
-
-			@Override
-			protected IAjaxCallDecorator getAjaxCallDecorator() {
-				return new IAjaxCallDecorator(){
-
-					private static final long serialVersionUID = 1L;
-
-					public CharSequence decorateOnFailureScript(CharSequence script) {
-						return script;
-					}
-
-					public CharSequence decorateOnSuccessScript(CharSequence script) {
-						return script;
-					}
-
-					public CharSequence decorateScript(CharSequence script) {
-						String s =("var e = Wicket.$('resourceLink'); if (Utils.hasClassName(e, 'editing'))"+
-								"{Utils.removeClassName(e, 'editing');wicketHide('resourceFormDiv');} else "+
-								"{Utils.addClassName(e, 'editing');wicketShow('resourceFormDiv');};");
-						
-						return script + s;
-					}
-					
-				};
-			}
-
-		};
-		//link.setVisible(editMode);
-		link.setOutputMarkupId(true);
-		return link;
-	}
-
-
 }

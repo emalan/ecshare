@@ -1,28 +1,12 @@
-<wicket:head>
-	<script type="text/javascript">
-		function onYouTubePlayerReady(playerId) {
-			player = Wicket.$("myytplayer");
-		}
-		function cueVideo(id){
-			if (player) {
-				player.cueVideoById(id,3);
-			}
-		}
-	</script>
-</wicket:head>
 <wicket:panel>
-  
-  <div id="ytapiplayer">
-    You need Flash player 8+ and JavaScript enabled to view this video.
-  </div>
-
-  <script type="text/javascript">
-
-    var params = { allowScriptAccess: "always" };
-    var atts = { id: "myytplayer" };
-    swfobject.embedSWF("http://www.youtube.com/v/krb2OdQksMc&enablejsapi=1&playerapiid=ytplayer", 
-                       "ytapiplayer", "425", "356", "8", null, null, params, atts);
-
-  </script>
+  	<div id="configureDiv">
+		<span wicket:id="configureIcon"></span>
+    </div>
+	<div id="formDiv" style="display:none;">
+	    From goes here
+	</div>
+    <div id="ytapiplayer">
+      You need Flash player 8+ and JavaScript enabled to view this video.
+    </div>
 
 </wicket:panel>
