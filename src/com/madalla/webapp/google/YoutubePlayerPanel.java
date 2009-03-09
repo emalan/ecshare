@@ -62,12 +62,10 @@ public class YoutubePlayerPanel extends Panel {
 		videoData = getVideo(id);
 		String url = "http://www.youtube.com/v/"+videoData.getVideoId()+"&enablejsapi=1&playerapiid=ytplayer";
 		add(new SwfObject(url,425, 356));
-		add(new AjaxConfigureIcon("configureIcon","formDiv"));
-		add(newYtForm("videoForm"));
-	}
-	
-	private Form newYtForm(String id){
-		final Form form = new Form(id);
+		final AjaxConfigureIcon icon = new AjaxConfigureIcon("configureIcon","formDiv");
+		add(icon);
+		
+		Form form = new Form("videoForm");
 		form.setOutputMarkupId(true);
 		form.add(new AjaxSubmitLink("submit"){
 			private static final long serialVersionUID = 1L;
@@ -76,11 +74,13 @@ public class YoutubePlayerPanel extends Panel {
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
 				target.appendJavascript("cueVideo('"+videoData.getVideoId()+"');");
 				saveVideo();
+				icon.hideConfigureArea(target);
 			}
 			
 		});
 		form.add(newFormField("videoid", new PropertyModel(videoData, "videoId")));
-		return form;
+		add(form);
+		
 	}
 	
 	private FormComponent newFormField(String componentId, IModel model){

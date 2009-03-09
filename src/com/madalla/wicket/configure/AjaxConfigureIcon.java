@@ -17,9 +17,11 @@ public class AjaxConfigureIcon extends Panel{
 	public static final HeaderContributor SCRIPT_UTILS = HeaderContributor.forJavaScript(
 			new CompressedResourceReference(AjaxConfigureIcon.class, "resourcelink.js"));
 
+	private String configureAreaId;
 
 	public AjaxConfigureIcon(String id, final String configureAreaId) {
 		super(id);
+		this.configureAreaId = configureAreaId;
 		add(Css.CSS_ICON);
 		add(SCRIPT_UTILS);
 		Component link = new AjaxLink("configure"){
@@ -49,7 +51,6 @@ public class AjaxConfigureIcon extends Panel{
 						String s =("var e = Wicket.$('edit-wrapper'); if (Utils.hasClassName(e, 'editing'))"+
 								"{Utils.removeClassName(e, 'editing');wicketHide('" + configureAreaId + "');} else "+
 								"{Utils.addClassName(e, 'editing');wicketShow('" + configureAreaId + "');};");
-						
 						return script + s;
 					}
 					
@@ -58,12 +59,18 @@ public class AjaxConfigureIcon extends Panel{
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				//target.prependJavascript(javascript)
-				
+
 			}
 
 		};
 		add(link);
+	}
+	
+	public void hideConfigureArea(AjaxRequestTarget target){
+		String s =("var e = Wicket.$('edit-wrapper'); if (Utils.hasClassName(e, 'editing'))"+
+				"{Utils.removeClassName(e, 'editing');wicketHide('" + configureAreaId + "');} else "+
+				"{Utils.addClassName(e, 'editing');wicketShow('" + configureAreaId + "');};");
+		target.appendJavascript(s);
 	}
 	
 

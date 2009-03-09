@@ -1,4 +1,5 @@
 span.edit-wrapper {
+	float: left;
 	height:1.3em;
 	overflow:hidden;
 	padding:1px 1px 0 0;
