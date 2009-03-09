@@ -2,24 +2,19 @@ package com.madalla.webapp.google;
 
 import java.io.Serializable;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.IAjaxCallDecorator;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.wicket.configure.AjaxConfigureIcon;
 
 
-public class YoutubePlayerPanel extends Panel implements IHeaderContributor{
+public class YoutubePlayerPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -64,35 +59,27 @@ public class YoutubePlayerPanel extends Panel implements IHeaderContributor{
 	 */
 	public YoutubePlayerPanel(String id) {
 		super(id);
-		videoData = getYtVideo(id);
+		videoData = getVideo(id);
 		String url = "http://www.youtube.com/v/"+videoData.getVideoId()+"&enablejsapi=1&playerapiid=ytplayer";
 		add(new SwfObject(url,425, 356));
 		add(new AjaxConfigureIcon("configureIcon","formDiv"));
+		add(newYtForm("videoForm"));
 	}
-	
-	//TODO get from Repository
-	private YtVideo getYtVideo(String id){
-		YtVideo videoData = new YtVideo();
-		videoData.setVideoId("krb2OdQksMc");
-		return videoData;
-	}
-	
-	public void renderHead(IHeaderResponse response) {
-		//response.renderOnLoadJavascript("cueVideo('"+videoData.getVideoId()+"');");
-		
-	}
-
 	
 	private Form newYtForm(String id){
-		final Form form = new Form(id){
-			private static final long serialVersionUID = 1L;;
-			
-			@Override
-			protected void onSubmit() {
-
-			}			
-		};
+		final Form form = new Form(id);
 		form.setOutputMarkupId(true);
+		form.add(new AjaxSubmitLink("submit"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form form) {
+				target.appendJavascript("cueVideo('"+videoData.getVideoId()+"');");
+				saveVideo();
+			}
+			
+		});
+		form.add(newFormField("videoid", new PropertyModel(videoData, "videoId")));
 		return form;
 	}
 	
@@ -100,6 +87,17 @@ public class YoutubePlayerPanel extends Panel implements IHeaderContributor{
 		final TextField field = new TextField(componentId, model);
 		field.setOutputMarkupId(true);
 		return field;
+	}
+
+	//TODO get from Repository
+	private YtVideo getVideo(String id){
+		YtVideo videoData = new YtVideo();
+		videoData.setVideoId("krb2OdQksMc");
+		return videoData;
+	}
+	
+	private void saveVideo(){
+		
 	}
 	
 }

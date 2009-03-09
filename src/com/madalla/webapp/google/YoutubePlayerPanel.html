@@ -1,9 +1,26 @@
+<wicket:head>
+	<style>
+		div.configureDiv span {
+			float: left;
+		}
+	</style>
+</wicket:head>
 <wicket:panel>
   	<div id="configureDiv">
 		<span wicket:id="configureIcon"></span>
     </div>
 	<div id="formDiv" style="display:none;">
-	    From goes here
+	  <form wicket:id="videoForm">
+		<div>
+			<label><wicket:message key="label.videoid">[[label]]</wicket:message></label>
+			<input type="text" wicket:id="videoid"></input>
+		</div>
+	    <div>
+			<span class="buttonwrapper">
+                <a href="#" class="bluebutton" wicket:id="submit"><span><wicket:message key="label.submit">[[label]]</wicket:message></span></a>
+            </span>
+		</div>
+	  </form>	
 	</div>
     <div id="ytapiplayer">
       You need Flash player 8+ and JavaScript enabled to view this video.
