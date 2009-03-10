@@ -219,8 +219,11 @@ public class EditableResourceLink extends Panel
 		resourceForm.add(name);
 		resourceForm.add(upload);
 		resourceForm.add(choice);
-		
-    	add(new AjaxConfigureIcon("configureIcon","resourceFormDiv"));
+		if (editMode){
+		    add(new AjaxConfigureIcon("configureIcon","resourceFormDiv"));
+		} else {
+		    add(new Label("configureIcon"));
+		}
         add(newResourceLink(this, data.getResource() , "link"));
 	}
 
@@ -258,22 +261,7 @@ public class EditableResourceLink extends Panel
 	 */
 	protected FormComponent newEditor(String componentId, IModel model)
 	{
-		final TextField nameEditor = new TextField(componentId, model)
-		{
-			private static final long serialVersionUID = 1L;
-
-			protected void onModelChanged()
-			{
-				super.onModelChanged();
-				EditableResourceLink.this.onModelChanged();
-			}
-
-			protected void onModelChanging()
-			{
-				super.onModelChanging();
-				EditableResourceLink.this.onModelChanging();
-			}
-		};
+		final TextField nameEditor = new TextField(componentId, model);
 		nameEditor.setOutputMarkupId(true);
 		return nameEditor;
 	}
@@ -313,23 +301,7 @@ public class EditableResourceLink extends Panel
 			}
 			
 		};
-		final DropDownChoice choice = new DropDownChoice(componentId, model,	choices, renderer)
-		{
-
-			private static final long serialVersionUID = 1L;
-			
-			protected void onModelChanged()
-			{
-				super.onModelChanged();
-				EditableResourceLink.this.onModelChanged();
-			}
-
-			protected void onModelChanging()
-			{
-				super.onModelChanging();
-				EditableResourceLink.this.onModelChanging();
-			}
-		};
+		final DropDownChoice choice = new DropDownChoice(componentId, model,	choices, renderer);
 		choice.setOutputMarkupId(true);
 		choice.setNullValid(true);
 		return choice;
@@ -345,22 +317,7 @@ public class EditableResourceLink extends Panel
 	 */
 	protected FormComponent newFileUpload(MarkupContainer parent, String componentId, IModel model)
 	{
-		final FileUploadField upload = new FileUploadField(componentId, model)
-		{
-			private static final long serialVersionUID = 1L;
-
-			protected void onModelChanged()
-			{
-				super.onModelChanged();
-				EditableResourceLink.this.onModelChanged();
-			}
-
-			protected void onModelChanging()
-			{
-				super.onModelChanging();
-				EditableResourceLink.this.onModelChanging();
-			}
-		};
+		final FileUploadField upload = new FileUploadField(componentId, model);
 		upload.setOutputMarkupId(true);
 		return upload;
 	}
@@ -441,44 +398,6 @@ public class EditableResourceLink extends Panel
 	}
 
 	/**
-	 * Invoked when the label is in edit mode, and received a cancel event. Typically, nothing
-	 * should be done here.
-	 *
-	 * @param target
-	 *            the ajax request target
-	 */
-	protected void onCancel(AjaxRequestTarget target)
-	{
-		//label.setVisible(true);
-		//resourceForm.setVisible(false);
-		//target.addComponent(EditableResourceLink.this);
-	}
-
-	/**
-	 * Called when the label is clicked and the component is put in edit mode.
-	 *
-	 * @param target
-	 *            Ajax target
-	 */
-	protected void onEdit(AjaxRequestTarget target)
-	{
-		//target.appendJavascript("{wicketHide('resourceFormDiv');}");
-		//resourceForm.setVisible(true);
-		//target.addComponent(resourceForm);
-		//target.addComponent(EditableResourceLink.this);
-		
-		//TODO set focus
-		
-		// put focus on the textfield and stupid explorer hack to move the
-		// caret to the end
-//		target.appendJavascript("{ var el=wicketGet('" + nameEditor.getMarkupId() + "');" +
-//			"   if (el.createTextRange) { " +
-//			"     var v = el.value; var r = el.createTextRange(); " +
-//			"     r.moveStart('character', v.length); r.select(); } }");
-//		target.focusComponent(nameEditor);
-	}
-
-	/**
 	 * Invoked when the label is in edit mode, received a new input, but that input didn't validate
 	 *
 	 * @param target
@@ -486,22 +405,12 @@ public class EditableResourceLink extends Panel
 	 */
 	protected void onError(AjaxRequestTarget target)
 	{
-//		Serializable errorMessage = nameEditor.getFeedbackMessage().getMessage();
-//		if (errorMessage instanceof String)
-//		{
-//			target.appendJavascript("window.status='" +
-//				JavascriptUtils.escapeQuotes((String)errorMessage) + "';");
-//		}
-//		String editorMarkupId = nameEditor.getMarkupId();
-//		target.appendJavascript(editorMarkupId + ".select();");
-//		target.appendJavascript(editorMarkupId + ".focus();");
-//		target.addComponent(nameEditor);
+	    //form is safe
 	}
 
 	protected void onSubmit()
 	{
-		//label.setVisible(true);
-		//resourceForm.setVisible(false);
+		//override
 	}
 
 	/**

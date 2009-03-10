@@ -12,6 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.NumberValidator;
 
+import com.madalla.webapp.css.Css;
 import com.madalla.wicket.configure.AjaxConfigureIcon;
 
 
@@ -60,6 +61,8 @@ public class YoutubePlayerPanel extends Panel {
 	 */
 	public YoutubePlayerPanel(String id) {
 		super(id);
+		add(Css.CSS_FORM);
+		add(Css.CSS_BUTTONS);
 		videoData = getVideo(id);
 		String url = "http://www.youtube.com/v/"+videoData.getVideoId()+"&enablejsapi=1&playerapiid=ytplayer";
 		add(new SwfObject(url,videoData.getWidth(), videoData.getHeight()));

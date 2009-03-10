@@ -3,6 +3,24 @@
 		div.configureDiv span {
 			float: left;
 		}
+		div#formDiv {
+		    float: left;
+		    border: thin solid darkgray;
+            clear: left;
+            padding: 4px;   
+		    
+		}
+		div#playerDiv {
+		  float:left;
+		  clear: both;
+	    }
+	    form div label {
+	       width: 4em;
+        }
+	    form .buttonwrapper {
+           margin-left: 4em;
+        }
+	    
 	</style>
 </wicket:head>
 <wicket:panel>
@@ -30,8 +48,8 @@
 		</div>
 	  </form>	
 	</div>
-    <div id="ytapiplayer">
-      You need Flash player 8+ and JavaScript enabled to view this video.
+	<div id="playerDiv">
+        <div id="ytapiplayer">You need Flash player 8+ and JavaScript enabled to view this video.</div>
     </div>
 
 </wicket:panel>
