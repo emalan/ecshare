@@ -20,6 +20,7 @@ import com.madalla.cms.bo.impl.ocm.page.Page;
 import com.madalla.cms.bo.impl.ocm.page.Resource;
 import com.madalla.cms.bo.impl.ocm.security.User;
 import com.madalla.cms.bo.impl.ocm.security.UserSite;
+import com.madalla.cms.bo.impl.ocm.video.VideoPlayer;
 import com.madalla.cms.jcr.JcrUtils;
 /**
  * Information regarding the Schema in the Content respository System
@@ -80,6 +81,7 @@ public class RepositoryInfo {
 		PAGE(Page.class, true, true, EC_NODE_PAGES),
 		CONTENT(Content.class, true, false, EC_NODE_PAGES),
 		RESOURCE(Resource.class, true, false, EC_NODE_PAGES),
+		VIDEO(VideoPlayer.class, true, false, EC_NODE_PAGES),
 		USER(User.class, false, true, EC_NODE_USERS),
 		USERSITE(UserSite.class, false, false, EC_NODE_USERS);
 		
