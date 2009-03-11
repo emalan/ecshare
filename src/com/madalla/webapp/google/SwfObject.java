@@ -27,8 +27,8 @@ public class SwfObject extends AbstractBehavior{
 		StringBuffer sb = new StringBuffer();
 		sb.append("function onYouTubePlayerReady(playerId) {");
 		sb.append("player = Wicket.$(\"myytplayer\");};");
-		sb.append("function cueVideo(id, width, height){");
-		sb.append("if (player) {player.cueVideoById(id,3); player.setSize(width, height)}};");
+		sb.append("function playVideo(id, width, height){");
+		sb.append("if (player) {player.cueVideoById(id,3);}};");
 		response.renderJavascript(sb.toString(), "swfcallback");
 	}
 

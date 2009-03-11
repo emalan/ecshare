@@ -21,6 +21,7 @@ import com.madalla.webapp.cms.ContentPanel;
 import com.madalla.webapp.cms.InlineContentPanel;
 import com.madalla.webapp.cms.admin.ContentAdminPanel;
 import com.madalla.webapp.email.EmailFormPanel;
+import com.madalla.webapp.google.YoutubePlayerPanel;
 import com.madalla.webapp.images.AlbumPanel;
 import com.madalla.webapp.images.admin.AlbumAdminPanel;
 import com.madalla.webapp.user.UserAdminPanel;
@@ -41,10 +42,23 @@ public class Panels {
 	
 	private Panels(){}
 	
+	/**
+	 * @param id wicket id
+	 * @param node Content Parent Node, normally Page Name
+	 * @return Instantiated Panel of type YoutubePlayerPanel
+	 */
+	public static Panel videoPlayerPanel(String id, String node){
+		validate("YoutubePlayerPanel", id, node);
+		return new YoutubePlayerPanel(id, node);
+	}
+	
+	/**
+	 * @param id wicket id
+	 * @param node Content Parent Node, normally Page Node
+	 * @return Instantiated Panel
+	 */
 	public static Panel contentLinkPanel(String id, String node){
-		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(node)){
-			error("ContentPanel - All parameters need to be supplied.");
-		}
+		validate("ContentLinkPanel", id, node);
 		return new ContentLinkPanel(id, node);
 	}
 	
@@ -54,9 +68,7 @@ public class Panels {
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.cms.InlineContentPanel}
 	 */
 	public static Panel contentInlinePanel(String id, String node){
-		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(node)){
-			error("ContentPanel - All parameters need to be supplied.");
-		}
+		validate("InlineContentPanel", id, node);
 		return new InlineContentPanel(id, node);
 	}
 	
@@ -67,16 +79,12 @@ public class Panels {
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.cms.ContentPanel}
 	 */
 	public static Panel contentPanel(String id, String node, Class<? extends Page> returnPage){
-		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(node)|| returnPage == null){
-			error("ContentPanel - All parameters need to be supplied.");
-		}
+		validate("ContentPanel", id, node, returnPage);
 		return new ContentPanel(id, node, returnPage);
 	}
 	
 	public static Panel contentEntryPanel(String id, PageParameters parameters){
-		if (StringUtils.isEmpty(id) || parameters == null){
-			error("ContentEntryPanel - All parameters need to be supplied.");
-		} 
+		validate("ContentEntryPanel", id, parameters);
         String nodeName = getPageParameter(CONTENT_NODE, parameters, "ContentEntryPanel");
         String contentId = getPageParameter(CONTENT_ID, parameters,"ContentEntryPanel");
         Class<? extends Page> returnPage = getReturnPage(parameters, "ContentEntryPanel");
@@ -85,16 +93,12 @@ public class Panels {
 	}
 	
 	public static Panel contentAdminPanelForSite(String id, PageParameters parameters){
-		if (StringUtils.isEmpty(id) || parameters == null){
-			error("ContentEntryPanel - All parameters need to be supplied.");
-		}
+		validate("ContentAdminPanel", id, parameters);
 		return ContentAdminPanel.newInstance(id, getReturnPage(parameters, "ContentEntryPanel"));
 	}
 	
 	public static Panel contentAdminPanelForAdmin(String id, PageParameters parameters){
-		if (StringUtils.isEmpty(id) || parameters == null){
-			error("ContentEntryPanel - All parameters need to be supplied.");
-		}
+		validate("ContentAdminPanel", id, parameters);
 		return ContentAdminPanel.newAdminInstance(id, getReturnPage(parameters, "ContentEntryPanel"));
 	}
 
@@ -106,9 +110,7 @@ public class Panels {
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.blog.BlogHomePanel}
 	 */
 	public static Panel blogPanel(String id, String blog, Class<? extends Page> returnPage, PageParameters parameters) {
-		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(blog)|| returnPage == null || parameters == null){
-			error("BlogHomePanel - All parameters need to be supplied.");
-		}
+		validate("BlogHomePanel", id, blog, returnPage, parameters);
 		String blogEntryId = parameters.getString(BLOG_ENTRY_ID);
    		return new BlogHomePanel(id, blog, blogEntryId, returnPage);
 		
@@ -120,9 +122,7 @@ public class Panels {
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.blog.admin.BlogEntryPanel}
 	 */
 	public static Panel blogEntryPanel(String id, PageParameters parameters){
-		if (StringUtils.isEmpty(id) || parameters == null){
-			error("BlogHomePanel - All parameters need to be supplied.");
-		}
+		validate("BlogEntryPanel", id, parameters);
 		String blogName = getPageParameter(BLOG_NAME, parameters, "BlogEntryPanel");
 		String blogEntryId = parameters.getString(BLOG_ENTRY_ID);
 		if (StringUtils.isEmpty(blogEntryId)){
@@ -138,9 +138,7 @@ public class Panels {
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.email.EmailFormPanel}
 	 */
 	public static Panel emailPanel(String id, String subject){
-		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(subject)){
-			error("EmailFormPanel - All parameters need to be supplied.");
-		}
+		validate("EmailFormPanel", id, subject);
 		return new EmailFormPanel(id, subject);
 	}
 	
@@ -150,9 +148,7 @@ public class Panels {
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.images.admin.AlbumAdminPanel}
 	 */
 	public static Panel albumAdminPanel(String id, PageParameters parameters){
-		if (StringUtils.isEmpty(id) || parameters == null){
-			error("AlbumAdminPanel - All parameters need to be supplied.");
-		}
+		validate("AlbumAdminPanel", id, parameters);
 		String album = getPageParameter(ALBUM, parameters,"AlbumAdminPanel");
 		return new AlbumAdminPanel(id, album, getReturnPage(parameters, "AlbumAdminPanel"));
 	}
@@ -164,9 +160,7 @@ public class Panels {
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.images.AlbumPanel}
 	 */
 	public static Panel albumPanel(String id, String album, Class<? extends Page> returnPage){
-		if (StringUtils.isEmpty(id) || StringUtils.isEmpty(album) || returnPage == null){
-			error("AlbumPanel - All parameters need to be supplied.");
-		}
+		validate("AlbumPanel", id, album, returnPage);
 		return new AlbumPanel(id, album, returnPage);
 	}
 	
@@ -177,9 +171,7 @@ public class Panels {
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserLoginPanel}
 	 */	
 	public static Panel userLoginPanel(String id, PageParameters parameters) {
-		if (StringUtils.isEmpty(id) || parameters == null){
-			error("UserLoginPanel - All parameters need to be supplied.");
-		}
+		validate("UserLoginPanel", id, parameters);
 		return new UserLoginPanel(id, getReturnPage(parameters, "UserLoginPanel"));
 	}
 
@@ -190,9 +182,7 @@ public class Panels {
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserProfilePanel}
 	 */	
 	public static Panel userProfilePanel(String id, PageParameters parameters) {
-		if (StringUtils.isEmpty(id) || parameters == null){
-			error("UserProfilePanel - All parameters need to be supplied.");
-		}
+		validate("UserProfilePanel", id, parameters);
 		return new UserProfilePanel(id, getReturnPage(parameters, "UserProfilePanel"));
 	}
 	
@@ -203,13 +193,31 @@ public class Panels {
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserAdminPanel}
 	 */	
 	public static Panel userAdminPanel(String id, PageParameters parameters) {
-		if (StringUtils.isEmpty(id) || parameters == null){
-			error("UserAdminPanel - All parameters need to be supplied.");
-		}
+		validate("UserAdminPanel", id, parameters);
 		return new UserAdminPanel(id, getReturnPage(parameters, "UserAdminPanel"));
 	}
 	
 	/*  Utility methods */
+	private static void validate(String panelName, String param1, String param2){
+		if (StringUtils.isEmpty(param1) || StringUtils.isEmpty(param2)){
+			error(panelName + " - All parameters need to be supplied.");
+		}
+	}
+	private static void validate(String panelName, String s1, String s2, Object o){
+		if (StringUtils.isEmpty(s1) || StringUtils.isEmpty(s2) || o == null){
+			error(panelName + " - All parameters need to be supplied.");
+		}
+	}
+	private static void validate(String panelName, String s1, String s2, Object o, Object o2){
+		if (StringUtils.isEmpty(s1) || StringUtils.isEmpty(s2) || o == null || o2 == null){
+			error(panelName + " - All parameters need to be supplied.");
+		}
+	}
+	private static void validate(String panelName, String s1, Object o){
+		if (StringUtils.isEmpty(s1) || o == null){
+			error(panelName + " - All parameters need to be supplied.");
+		}
+	}
 	private static void error(String message){
 		throw new WicketRuntimeException(message);
 	}

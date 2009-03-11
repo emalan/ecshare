@@ -1,7 +1,5 @@
 package com.madalla.webapp.google;
 
-import java.io.Serializable;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.form.Form;
@@ -12,6 +10,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.NumberValidator;
 
+import com.madalla.bo.page.PageData;
+import com.madalla.bo.video.VideoPlayerData;
+import com.madalla.service.IRepositoryService;
+import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.css.Css;
 import com.madalla.wicket.configure.AjaxConfigureIcon;
 
@@ -20,55 +22,21 @@ public class YoutubePlayerPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
 	
-	public class YtVideo implements Serializable {
-		private String videoId;
-		private int width;
-		private int height;
-		private int startSeconds;
-		
-		public String getVideoId() {
-			return videoId;
-		}
-		public void setVideoId(String videoId) {
-			this.videoId = videoId;
-		}
-		public int getWidth() {
-			return width;
-		}
-		public void setWidth(int width) {
-			this.width = width;
-		}
-		public int getHeight() {
-			return height;
-		}
-		public void setHeight(int height) {
-			this.height = height;
-		}
-		public int getStartSeconds() {
-			return startSeconds;
-		}
-		public void setStartSeconds(int startSeconds) {
-			this.startSeconds = startSeconds;
-		}
-		
-	}
-	
-	private YtVideo videoData;
 	/**
 	 * Constructor
 	 * 
-	 * @param id
+	 * @param id wicket id
+	 * @param page Page Name
 	 */
-	public YoutubePlayerPanel(String id) {
+	public YoutubePlayerPanel(String id, String page) {
 		super(id);
 		add(Css.CSS_FORM);
 		add(Css.CSS_BUTTONS);
-		videoData = getVideo(id);
+		final VideoPlayerData videoData = getVideo(id, page);
 		String url = "http://www.youtube.com/v/"+videoData.getVideoId()+"&enablejsapi=1&playerapiid=ytplayer";
 		add(new SwfObject(url,videoData.getWidth(), videoData.getHeight()));
 		final AjaxConfigureIcon icon = new AjaxConfigureIcon("configureIcon","formDiv");
 		add(icon);
-		
 		Form form = new Form("videoForm");
 		form.setOutputMarkupId(true);
 		form.add(new AjaxSubmitLink("submit"){
@@ -76,9 +44,8 @@ public class YoutubePlayerPanel extends Panel {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
-				target.appendJavascript("cueVideo('"+videoData.getVideoId()+"','"+ videoData.getWidth()+"','"+videoData.getHeight()+"');");
-				target.appendJavascript("cueVideo('"+videoData.getVideoId()+"');");
-				saveVideo();
+				target.appendJavascript("playVideo('"+videoData.getVideoId()+"','"+ videoData.getWidth()+"','"+videoData.getHeight()+"');");
+				saveVideo(videoData);
 				icon.hideConfigureArea(target);
 			}
 			
@@ -97,17 +64,15 @@ public class YoutubePlayerPanel extends Panel {
 		return field;
 	}
 
-	//TODO get from Repository
-	private YtVideo getVideo(String id){
-		YtVideo videoData = new YtVideo();
-		videoData.setVideoId("krb2OdQksMc");
-		videoData.setWidth(425);
-		videoData.setHeight(356);
-		return videoData;
+	private VideoPlayerData getVideo(String id, String page){
+		IRepositoryService service = ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
+		PageData pageData = service.getPage(page);
+		return service.getVideoPlayerData(pageData, id);
 	}
 	
-	private void saveVideo(){
-		
+	private void saveVideo(VideoPlayerData data){
+		IRepositoryService service = ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
+		service.saveVideoPlayerData(data);
 	}
 	
 }
