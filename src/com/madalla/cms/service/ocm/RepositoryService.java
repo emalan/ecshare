@@ -30,6 +30,7 @@ import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
 import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
+import com.madalla.bo.video.VideoPlayerData;
 import com.madalla.cms.bo.impl.ocm.Site;
 import com.madalla.cms.bo.impl.ocm.blog.Blog;
 import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
@@ -41,6 +42,7 @@ import com.madalla.cms.bo.impl.ocm.page.Page;
 import com.madalla.cms.bo.impl.ocm.page.Resource;
 import com.madalla.cms.bo.impl.ocm.security.User;
 import com.madalla.cms.bo.impl.ocm.security.UserSite;
+import com.madalla.cms.bo.impl.ocm.video.VideoPlayer;
 import com.madalla.cms.jcr.JcrUtils;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.cms.service.ocm.template.RepositoryTemplate;
@@ -339,6 +341,24 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	if (data.getInputStream() != null){
     	    repositoryTemplate.saveNodePropertyStream(data.getId(), "inputStream", data.getInputStream());
     	}
+    }
+    
+    //Video PLayer
+    public VideoPlayerData getVideoPlayerData(final PageData page, final String name){
+    	return (VideoPlayerData) repositoryTemplate.getOcmObject(RepositoryType.VIDEO, page, name, new RepositoryTemplateCallback(){
+
+			@Override
+			public AbstractData createNew(String parentPath, String name) {
+				VideoPlayer data = new VideoPlayer(page, name);
+				data.setId("VIDEOID");
+				return data;
+			}
+    		
+    	});
+    }
+    
+    public void saveVideoPlayerData(final VideoPlayerData data){
+    	saveDataObject(data);
     }
 
     //**********************************

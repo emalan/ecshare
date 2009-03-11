@@ -21,6 +21,7 @@ import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
 import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
+import com.madalla.bo.video.VideoPlayerData;
 import com.madalla.webapp.security.IAuthenticator;
 
 /**
@@ -77,6 +78,10 @@ public interface IRepositoryService {
     ResourceData getContentResource(final PageData page, final String name);
     
     void saveContentResource(final ResourceData data);
+    
+    VideoPlayerData getVideoPlayerData(final PageData page, final String name);
+    
+    void saveVideoPlayerData(final VideoPlayerData data);
     
 	// Blog
 	BlogData getBlog(final String blogName);

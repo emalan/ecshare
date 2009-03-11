@@ -23,6 +23,7 @@ import com.madalla.bo.page.ResourceData;
 import com.madalla.bo.security.IUser;
 import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
+import com.madalla.bo.video.VideoPlayerData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.webapp.security.IAuthenticator;
 
@@ -225,6 +226,14 @@ public class AuthRepositoryService implements IRepositoryService, Serializable {
 	}
 
 	public void saveUserSiteEntries(UserData user, List<SiteData> sites) {
+		// TODO Auto-generated method stub
+		
+	}
+	public VideoPlayerData getVideoPlayerData(PageData page, String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public void saveVideoPlayerData(VideoPlayerData data) {
 		// TODO Auto-generated method stub
 		
 	}
