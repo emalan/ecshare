@@ -20,6 +20,10 @@
 	    form .buttonwrapper {
            margin-left: 4em;
         }
+        
+        form p.info{
+        	width: 20em;
+       	}
 	    
 	</style>
 </wicket:head>
@@ -40,6 +44,9 @@
 		<div>
 			<label><wicket:message key="label.width">[[label]]</wicket:message></label>
 			<input type="text" wicket:id="width"></input>
+		</div>
+		<div>
+			<p class="info"><wicket:message key="info.size">[[label]]</wicket:message></p>
 		</div>
 	    <div>
 			<span class="buttonwrapper">

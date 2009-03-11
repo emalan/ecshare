@@ -351,6 +351,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 			public AbstractData createNew(String parentPath, String name) {
 				VideoPlayer data = new VideoPlayer(page, name);
 				data.setVideoId("VIDEOID");
+				data.setWidth(480);
+				data.setHeight(385);
 				return data;
 			}
     		

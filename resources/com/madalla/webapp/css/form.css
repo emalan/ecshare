@@ -102,3 +102,9 @@ form .feedbackPanelINFO {
     color:blue;
 }
 
+form .info {
+	color: blue;
+	font-size: x-small;
+	margin: 0;
+}
+

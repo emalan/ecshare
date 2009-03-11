@@ -2,6 +2,7 @@ package com.madalla.webapp.google;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
@@ -14,6 +15,7 @@ import com.madalla.bo.page.PageData;
 import com.madalla.bo.video.VideoPlayerData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
 import com.madalla.wicket.configure.AjaxConfigureIcon;
 
@@ -35,8 +37,12 @@ public class YoutubePlayerPanel extends Panel {
 		final VideoPlayerData videoData = getVideo(id, page);
 		String url = "http://www.youtube.com/v/"+videoData.getVideoId()+"&enablejsapi=1&playerapiid=ytplayer";
 		add(new SwfObject(url,videoData.getWidth(), videoData.getHeight()));
-		final AjaxConfigureIcon icon = new AjaxConfigureIcon("configureIcon","formDiv");
-		add(icon);
+		if (((CmsSession)getSession()).isLoggedIn()){
+			add(new AjaxConfigureIcon("configureIcon","formDiv"));	
+		} else {
+			add(new Label("configureIcon"));
+		}
+		
 		Form form = new Form("videoForm");
 		form.setOutputMarkupId(true);
 		form.add(new AjaxSubmitLink("submit"){
@@ -46,7 +52,7 @@ public class YoutubePlayerPanel extends Panel {
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
 				target.appendJavascript("playVideo('"+videoData.getVideoId()+"','"+ videoData.getWidth()+"','"+videoData.getHeight()+"');");
 				saveVideo(videoData);
-				icon.hideConfigureArea(target);
+				AjaxConfigureIcon.hide(target, "formDiv");
 			}
 			
 		});

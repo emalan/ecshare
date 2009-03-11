@@ -67,12 +67,15 @@ public class AjaxConfigureIcon extends Panel{
 	}
 	
 	public void hideConfigureArea(AjaxRequestTarget target){
-		String s =("var e = Wicket.$('edit-wrapper'); if (Utils.hasClassName(e, 'editing'))"+
-				"{Utils.removeClassName(e, 'editing');wicketHide('" + configureAreaId + "');} else "+
-				"{Utils.addClassName(e, 'editing');wicketShow('" + configureAreaId + "');};");
-		target.appendJavascript(s);
+		hide(target, configureAreaId);
 	}
 	
+	public static void hide(AjaxRequestTarget target, String hideAreaId){
+		String s =("var e = Wicket.$('edit-wrapper'); if (Utils.hasClassName(e, 'editing'))"+
+				"{Utils.removeClassName(e, 'editing');wicketHide('" + hideAreaId + "');} else "+
+				"{Utils.addClassName(e, 'editing');wicketShow('" + hideAreaId + "');};");
+		target.appendJavascript(s);
+	}
 
 
 
