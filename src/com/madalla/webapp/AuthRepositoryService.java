@@ -237,4 +237,8 @@ public class AuthRepositoryService implements IRepositoryService, Serializable {
 		// TODO Auto-generated method stub
 		
 	}
+	public ResourceData getContentResource(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -1,12 +1,10 @@
 package com.madalla.webapp.cms;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
@@ -53,7 +51,7 @@ public class InlineContentPanel extends Panel {
 			
         	@Override
 			protected void onBeforeRender(){
-                log.debug("onBeforeRender - setting new Content.");
+                log.debug("onBeforeRender - setting new Content. id="+id);
                 PageData page = getRepositoryservice().getPage(nodeName);
 	            contentData = getRepositoryservice().getContent(page, id, getSession().getLocale());
                 setModel(new PropertyModel(contentData, "text"));

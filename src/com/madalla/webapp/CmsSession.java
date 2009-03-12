@@ -15,6 +15,7 @@ public class CmsSession  extends WebSession implements IContentAdmin, IRepositor
 	private boolean cmsAdminMode = false;
 	private String username = null;
 	private AuthRepositoryService repositoryService;
+	private volatile boolean uploading, uploadComplete;
     
     public CmsSession(Request request) {
         super(request);
@@ -51,6 +52,30 @@ public class CmsSession  extends WebSession implements IContentAdmin, IRepositor
             return true;
         }
         return false;
+    }
+    
+    public boolean isUploading(){
+      return uploading;
+    }
+
+    /**
+     * Set when the upload thread starts, and reset when the upload ends or
+     * fails.
+     */
+    public void setIsUploading(boolean uploading){
+      this.uploading = uploading;
+    }
+
+    public boolean isUploadComplete(){
+      return uploadComplete;
+    }
+
+    /**
+     * Set when the upload thread succeeds, and reset when the upload page is
+     * reloaded.
+     */
+    public void setUploadComplete(boolean uploadComplete){
+      this.uploadComplete = uploadComplete;
     }
 
 	public IRepositoryService getRepositoryService() {

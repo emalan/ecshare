@@ -70,9 +70,14 @@ public class RepositoryTemplate {
 
             public Object doInJcr(Session session) throws IOException, RepositoryException {
                 Node node = (Node) session.getItem(path);
-                Property prop = node.getProperty(property);
-                prop.setValue(stream);
+                if (node.hasProperty(property)){
+                    Property prop = node.getProperty(property);
+                    prop.setValue(stream);
+                } else {
+                	node.setProperty(property, stream);
+                }
                 session.save();
+                stream.close();
                 return null;
             }
 	       

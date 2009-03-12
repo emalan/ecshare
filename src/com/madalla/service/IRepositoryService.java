@@ -77,6 +77,8 @@ public interface IRepositoryService {
 
     ResourceData getContentResource(final PageData page, final String name);
     
+    ResourceData getContentResource(final String id);
+    
     void saveContentResource(final ResourceData data);
     
     VideoPlayerData getVideoPlayerData(final PageData page, final String name);

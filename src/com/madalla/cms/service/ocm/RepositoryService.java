@@ -337,6 +337,10 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	return data;
     }
     
+    public ResourceData getContentResource(final String id){
+    	return (ResourceData) ocm.getObject(Resource.class, id);
+    }
+    
     public void saveContentResource(final ResourceData data){
     	saveDataObject(data);
     	log.debug("saveContentResource - saved Data." + data);

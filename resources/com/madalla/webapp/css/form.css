@@ -108,3 +108,9 @@ form .info {
 	margin: 0;
 }
 
+form .message {
+	color: orange;
+	font-size: x-small;
+	margin: 0;	
+}
+

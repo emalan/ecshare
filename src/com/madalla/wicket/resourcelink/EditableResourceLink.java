@@ -11,6 +11,7 @@ import org.apache.wicket.Resource;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.ComponentTag;
@@ -31,10 +32,13 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
+import org.apache.wicket.util.time.Duration;
 
+import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
 import com.madalla.wicket.configure.AjaxConfigureIcon;
 
@@ -52,6 +56,7 @@ public class EditableResourceLink extends Panel
 	private ILinkData data;
 	
 	public interface ILinkData extends Serializable {
+		String getId();
 		String getName();
 		String getTitle();
 		WebResource getResource();
@@ -204,7 +209,10 @@ public class EditableResourceLink extends Panel
 	 */
 	private void initLabelForm(IModel model)
 	{
+		//actual displayed Link
+		add(newResourceLink(data.getResource() , "link"));
 		
+		//hidden configure form
 		resourceForm = newFileUploadForm("resource-form");
 		add(resourceForm);
 		final Component name = newEditor("editor", new PropertyModel(data, "name"));
@@ -219,12 +227,13 @@ public class EditableResourceLink extends Panel
 		resourceForm.add(name);
 		resourceForm.add(upload);
 		resourceForm.add(choice);
+		resourceForm.add(newUploadStatusLabel("uploadstatus"));
 		if (editMode){
 		    add(new AjaxConfigureIcon("configureIcon","resourceFormDiv"));
 		} else {
 		    add(new Label("configureIcon"));
 		}
-        add(newResourceLink(this, data.getResource() , "link"));
+        
 	}
 
 	/**
@@ -317,20 +326,28 @@ public class EditableResourceLink extends Panel
 	 */
 	protected FormComponent newFileUpload(MarkupContainer parent, String componentId, IModel model)
 	{
-		final FileUploadField upload = new FileUploadField(componentId, model);
+		final FileUploadField upload = new FileUploadField(componentId, model){
+
+			@Override
+			protected boolean forceCloseStreamsOnDetach() {
+				return false; //We are going to use in Thread
+			}
+			
+		};
 		upload.setOutputMarkupId(true);
+		upload.setEnabled(!getAppSession().isUploading());
 		return upload;
 	}
 	
 	/**
-	 * Creates the non-editable version of the Resource Link
+	 * Creates the Link to the Resource
 	 * 
 	 * @param parent
 	 * @param resource
 	 * @param componentId
 	 * @return
 	 */
-	protected Component newResourceLink(MarkupContainer parent, final Resource resource, String componentId)
+	protected Component newResourceLink(final Resource resource, String componentId)
 	{
 		if (resource == null  || resource.getResourceStream() == null){
 			return new Label(componentId, getString("label.notconfigured"));
@@ -360,7 +377,27 @@ public class EditableResourceLink extends Panel
 		};
 		link.setVisible(!data.getHideLink());
 		link.setOutputMarkupId(true);
+		
 		return link;
+	}
+	
+	protected Component newUploadStatusLabel(String componentId) {
+		final Label status = new Label(componentId, new AbstractReadOnlyModel() {
+			private static final long serialVersionUID = 938943178761943953L;
+
+			@Override
+			public Object getObject() {
+				if (getAppSession().isUploading()) {
+					return getString("uploading");
+				} else if (getAppSession().isUploadComplete()) {
+					return getString("uploadcomplete");
+				} else {
+					return "";
+				}
+			}
+		});
+		status.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)));
+		return status;
 	}
 
 	/**
@@ -448,6 +485,12 @@ public class EditableResourceLink extends Panel
 	{
 		this.editMode = editMode;
 	}
+	
+	private CmsSession getAppSession(){
+		return (CmsSession)getSession();
+	}
+	
+
 
 	
 }
