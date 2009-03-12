@@ -165,7 +165,10 @@ public class ContentLinkPanel extends Panel{
         			this.setEditMode(true);
                 } else {
                 	this.setEditMode(false);
-                	setVisible(!linkData.hideLink);
+                	if (linkData.getHideLink() != null && linkData.getHideLink().equals(Boolean.TRUE)){
+                		log.debug("onBeforeRender - hiding contentLink.");
+                		setVisible(false);	
+                	}
                 }
                 super.onBeforeRender();
             }            	

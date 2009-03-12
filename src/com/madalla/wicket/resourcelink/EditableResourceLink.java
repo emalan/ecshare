@@ -332,7 +332,7 @@ public class EditableResourceLink extends Panel
 	 */
 	protected Component newResourceLink(MarkupContainer parent, final Resource resource, String componentId)
 	{
-		if (null == resource || resource.getResourceStream() == null){
+		if (resource == null  || resource.getResourceStream() == null){
 			return new Label(componentId, getString("label.notconfigured"));
 		}
 		Link link = new ResourceLink(componentId, resource)
