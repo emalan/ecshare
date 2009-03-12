@@ -38,7 +38,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.time.Duration;
 
-import com.madalla.webapp.CmsSession;
+import com.madalla.webapp.cms.IFileUploadStatus;
 import com.madalla.webapp.css.Css;
 import com.madalla.wicket.configure.AjaxConfigureIcon;
 
@@ -69,7 +69,7 @@ public class EditableResourceLink extends Panel
 		void setResourceType(String type);
 		void setHideLink(Boolean hide);
 	}
-	
+
 	public enum ResourceType {
 
 	    TYPE_PDF("application/pdf", "pdf", "Adobe PDF"), 
@@ -249,6 +249,9 @@ public class EditableResourceLink extends Panel
 
 			@Override
 			protected void onSubmit() {
+				if (getAppSession().isUploading()){
+					return;
+				}
 				EditableResourceLink.this.onModelChanged();
 				EditableResourceLink.this.onSubmit();
 			}
@@ -327,6 +330,8 @@ public class EditableResourceLink extends Panel
 	protected FormComponent newFileUpload(MarkupContainer parent, String componentId, IModel model)
 	{
 		final FileUploadField upload = new FileUploadField(componentId, model){
+
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected boolean forceCloseStreamsOnDetach() {
@@ -487,8 +492,8 @@ public class EditableResourceLink extends Panel
 		this.editMode = editMode;
 	}
 	
-	private CmsSession getAppSession(){
-		return (CmsSession)getSession();
+	private IFileUploadStatus getAppSession(){
+		return (IFileUploadStatus)getSession();
 	}
 	
 

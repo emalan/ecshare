@@ -7,16 +7,12 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.markup.html.WebResource;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
-import org.apache.wicket.util.time.Duration;
 
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
@@ -145,12 +141,9 @@ public class ContentLinkPanel extends Panel{
 
 				@Override
 				protected void onSubmit() {
-					if (getAppSession().isUploading())
-						return;
 
 					// Start a thread that will continue running even if the
-					// user
-					// goes to another page.
+					// user goes to another page.
 					final SubmitThread it = new SubmitThread(getAppSession(), linkData, getRepositoryservice());
 					it.start();
 					// Refresh the page in order to disable the form field and
@@ -253,7 +246,7 @@ public class ContentLinkPanel extends Panel{
 				ContentLinkPanel.formSubmit(session, data, service);
 
 				// Sleep to simulate time-consuming work
-				Thread.sleep(10000);
+				Thread.sleep(10000); //TODO remove
 				log.debug("Done processing...");
 				session.setUploadComplete(true);
 			} catch (InterruptedException e) {

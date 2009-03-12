@@ -7,9 +7,10 @@ import com.madalla.bo.security.UserData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.cms.IContentAdmin;
+import com.madalla.webapp.cms.IFileUploadStatus;
 import com.madalla.webapp.security.IAuthenticator;
 
-public class CmsSession  extends WebSession implements IContentAdmin, IRepositoryServiceProvider{
+public class CmsSession  extends WebSession implements IContentAdmin, IRepositoryServiceProvider, IFileUploadStatus{
 
 	private static final long serialVersionUID = 652426659740076486L;
 	private boolean cmsAdminMode = false;
