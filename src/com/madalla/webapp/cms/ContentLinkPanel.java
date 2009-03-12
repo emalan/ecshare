@@ -135,27 +135,6 @@ public class ContentLinkPanel extends Panel{
 
 		log.debug("Editable Link Panel being created for node=" + nodeName + " id=" + id);
 
-		if (getAppSession().isUploading()) {
-			log.debug("File still uploading create Label.");
-			Label label = new Label("contentLink", new AbstractReadOnlyModel() {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public Object getObject() {
-					if (getAppSession().isUploading()) {
-						return getString("uploading");
-					} else if (getAppSession().isUploadComplete()) {
-						return getString("uploadcomplete");
-					} else {
-						return "";
-					}
-				}
-			});
-			label.setOutputMarkupId(true);
-			label.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(4)));
-			add(label);
-		} else {
-
 			PageData page = getRepositoryservice().getPage(nodeName);
 			final ResourceData resourceData = getRepositoryservice().getContentResource(page, id);
 			log.debug("retrieved Resource data. " + resourceData);
@@ -198,7 +177,6 @@ public class ContentLinkPanel extends Panel{
 			add(editableLink);
 		}
 
-	}
 	
     private LinkData createView(final ResourceData resourceData){
         LinkData linkData = new LinkData();

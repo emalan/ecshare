@@ -17,6 +17,12 @@
 	    	float:left;
 	    }
 	    
+	    div#resourceLink span.message{
+	        clear:left;
+	        font-size: xx-small;
+	        color: orange;
+	    }
+	    
 	    form div label{
 	    	width: 3em;
 	    }
@@ -41,12 +47,13 @@
 	<div id="resourceLink">
 		<a href="#" wicket:id="link">[[label]]</a>
 		<span wicket:id="configureIcon"></span>
+		<span class="message" wicket:id="uploadstatus">[[importing]]</span>
 	</div>
 	
 	<div id="resourceFormDiv" style="display:none;" >
 	<form class="resourceForm" wicket:id="resource-form">
 		<p class="info"><wicket:message key="info.upload">[[label]]</wicket:message></p>
-		<span class="message" wicket:id="uploadstatus">[[importing]]</span>
+		
 		<input type="file" wicket:id="file-upload" /><br/>
 		<div>
 			<label><wicket:message key="label.type">[[label]]</wicket:message></label>

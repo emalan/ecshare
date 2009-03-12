@@ -211,7 +211,7 @@ public class EditableResourceLink extends Panel
 	{
 		//actual displayed Link
 		add(newResourceLink(data.getResource() , "link"));
-		
+		add(newUploadStatusLabel("uploadstatus"));
 		//hidden configure form
 		resourceForm = newFileUploadForm("resource-form");
 		add(resourceForm);
@@ -227,7 +227,7 @@ public class EditableResourceLink extends Panel
 		resourceForm.add(name);
 		resourceForm.add(upload);
 		resourceForm.add(choice);
-		resourceForm.add(newUploadStatusLabel("uploadstatus"));
+		
 		if (editMode){
 		    add(new AjaxConfigureIcon("configureIcon","resourceFormDiv"));
 		} else {
@@ -382,6 +382,7 @@ public class EditableResourceLink extends Panel
 	}
 	
 	protected Component newUploadStatusLabel(String componentId) {
+		getAppSession().setUploadComplete(false);
 		final Label status = new Label(componentId, new AbstractReadOnlyModel() {
 			private static final long serialVersionUID = 938943178761943953L;
 
