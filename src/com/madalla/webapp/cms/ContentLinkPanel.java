@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.WebResource;
@@ -109,6 +110,9 @@ public class ContentLinkPanel extends Panel{
 			this.hideLink = hideLink;
 		}
 		
+		public String toString() {
+	        return ReflectionToStringBuilder.toString(this).toString();
+	    }
 	}
 	
 	public ContentLinkPanel(final String id, final String nodeName) {
@@ -129,16 +133,19 @@ public class ContentLinkPanel extends Panel{
         	@Override
 			protected void onSubmit() {
 				super.onSubmit();
-				
+				log.debug("onSubmit - submit Resource Form Data. " + linkData);
 				FileUpload upload = linkData.getFileUpload();
 				if (upload == null){
 					resourceData.setInputStream(null);
+					log.debug("onSubmit - setting InputStream to null");
 				} else {
 					try {
+						log.debug("onSubmit - uploading File...");
 						resourceData.setInputStream(upload.getInputStream());
 						if (StringUtils.isEmpty(linkData.name)){
 							linkData.name = upload.getClientFileName();
 						}
+						log.debug("onSubmit - uploading File... done");
 					} catch (IOException e) {
 						log.error("Error while handling File upload.", e);
 					}
@@ -147,8 +154,9 @@ public class ContentLinkPanel extends Panel{
 				resourceData.setUrlTitle(linkData.getTitle());
 				resourceData.setType(linkData.getResourceType());
 				resourceData.setHideLink(linkData.getHideLink());
-				log.debug("saving resource. " + resourceData);
+				log.debug("onSubmit - saving resource. " + resourceData);
 				getRepositoryservice().saveContentResource(resourceData);
+				log.debug("onSubmit - done..");
         	}
 			
         	@Override
@@ -200,10 +208,12 @@ public class ContentLinkPanel extends Panel{
 
                         }
 
-                        public InputStream getInputStream()
-                                throws ResourceStreamNotFoundException {
-                            return getRepositoryservice().getResourceStream(
+                        public InputStream getInputStream() throws ResourceStreamNotFoundException {
+                        	log.debug("getInputStream - " + resourceData);
+                            InputStream inputStream = getRepositoryservice().getResourceStream(
                                     resourceData.getId(), "inputStream");
+                            log.debug("getInputStream - done.");
+                            return inputStream;
                         }
 
                     };

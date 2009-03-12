@@ -329,6 +329,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 
             @Override
 			public AbstractData createNew(String parentPath, String name) {
+            	log.debug("getContentResource - creating new Resource.");
 				return new Resource(page, name);
 			}
     		
@@ -338,8 +339,10 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     
     public void saveContentResource(final ResourceData data){
     	saveDataObject(data);
+    	log.debug("saveContentResource - saved Data." + data);
     	if (data.getInputStream() != null){
     	    repositoryTemplate.saveNodePropertyStream(data.getId(), "inputStream", data.getInputStream());
+    	    log.debug("saveContentResource - saved InputStream.");
     	}
     }
     
