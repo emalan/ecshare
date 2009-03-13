@@ -43,129 +43,137 @@ import com.madalla.webapp.cms.IFileUploadStatus;
 import com.madalla.webapp.css.Css;
 import com.madalla.wicket.configure.AjaxConfigureIcon;
 
-public class EditableResourceLink extends Panel 
-{
+public class EditableResourceLink extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(5000);
-	public static final HeaderContributor SCRIPT_UTILS = HeaderContributor.forJavaScript(
-			new CompressedResourceReference(EditableResourceLink.class, "resourcelink.js"));
+	public static final HeaderContributor SCRIPT_UTILS = HeaderContributor
+			.forJavaScript(new CompressedResourceReference(EditableResourceLink.class, "resourcelink.js"));
 
 	private boolean editMode = false;
 	private Form resourceForm;
-	
+
 	/** edit data **/
 	private ILinkData data;
-	
+
 	public interface ILinkData extends Serializable {
 		String getId();
+
 		String getName();
+
 		String getTitle();
+
 		WebResource getResource();
+
 		FileUpload getFileUpload();
+
 		String getResourceType();
+
 		Boolean getHideLink();
+
 		void setName(String name);
+
 		void setTitle(String title);
+
 		void setFileUpload(FileUpload upload);
+
 		void setResourceType(String type);
+
 		void setHideLink(Boolean hide);
 	}
 
 	public enum ResourceType {
 
-	    TYPE_PDF("application/pdf", "pdf", "Adobe PDF"), 
-	    TYPE_DOC("application/msword", "doc", "Word document"), 
-	    TYPE_ODT("application/vnd.oasis.opendocument.text", "odt", "ODT document");
+		TYPE_PDF("application/pdf", "pdf", "Adobe PDF"), 
+		TYPE_DOC("application/msword", "doc", "Word document"), 
+		TYPE_ODT("application/vnd.oasis.opendocument.text", "odt", "ODT document");
 
-	    public final String resourceType; //Mime Type
-	    public final String suffix; // File suffix
-	    public final String description;
+		public final String resourceType; // Mime Type
+		public final String suffix; // File suffix
+		public final String description;
 
-	    ResourceType(String type, String suffix, String description) {
-	        this.resourceType = type;
-	        this.suffix = suffix;
-	        this.description = description;
-	    }
-	    
-	    /**
-	     * @param s the separator
-	     * @return Separated list of suffixes e.g. doc,pdf,htm
-	     */
-	    public static String getResourceTypeSuffixes(String s){
-	    	StringBuffer sb = new StringBuffer();
-	    	for(ResourceType type : ResourceType.values()){
+		ResourceType(String type, String suffix, String description) {
+			this.resourceType = type;
+			this.suffix = suffix;
+			this.description = description;
+		}
+
+		/**
+		 * @param s
+		 *            the separator
+		 * @return Separated list of suffixes e.g. doc,pdf,htm
+		 */
+		public static String getResourceTypeSuffixes(String s) {
+			StringBuffer sb = new StringBuffer();
+			for (ResourceType type : ResourceType.values()) {
 				sb.append(s + type.suffix);
 			}
-	    	return sb.toString().substring(1);
-	    }
-	    
+			return sb.toString().substring(1);
+		}
+
 	}
-	
-	
+
 	/**
 	 * Adds Behavior to the File Upload Form
+	 * 
 	 * @author Eugene Malan
-	 *
+	 * 
 	 */
-	protected class FileUploadBehavior extends AjaxEventBehavior
-	{
+	protected class FileUploadBehavior extends AjaxEventBehavior {
 
 		private static final long serialVersionUID = 1L;
-		
+
 		final Component name;
 		final Component choice;
 
-		public FileUploadBehavior(String event, final Component name, final Component choice){
+		public FileUploadBehavior(String event, final Component name, final Component choice) {
 			super(event);
 			this.name = name;
 			this.choice = choice;
 		}
 
-		
-		/* (non-Javadoc)
-		 * Script that translates the suffix of a selected file to the Type value that is persisted
-		 * in the CMS and used by the Type Drop Down.
+		/*
+		 * (non-Javadoc) Script that translates the suffix of a selected file to
+		 * the Type value that is persisted in the CMS and used by the Type Drop
+		 * Down.
 		 * 
-		 * @see org.apache.wicket.ajax.AbstractDefaultAjaxBehavior#renderHead(org.apache.wicket.markup.html.IHeaderResponse)
+		 * @see
+		 * org.apache.wicket.ajax.AbstractDefaultAjaxBehavior#renderHead(org
+		 * .apache.wicket.markup.html.IHeaderResponse)
 		 */
 		@Override
 		public void renderHead(IHeaderResponse response) {
 			StringBuffer sb = new StringBuffer();
 			sb.append("Utils.translateSuffix = function(suffix){");
-			for(ResourceType type : ResourceType.values()){
-				sb.append("if (suffix.toLowerCase() == '"+type.suffix+"') return '"+type+"';");
+			for (ResourceType type : ResourceType.values()) {
+				sb.append("if (suffix.toLowerCase() == '" + type.suffix + "') return '" + type + "';");
 			}
 			sb.append("return '';");
 			sb.append("};");
-			
+
 			response.renderJavascript(sb.toString(), "translateSuffix");
 			super.renderHead(response);
 		}
 
 		@Override
-		protected IAjaxCallDecorator getAjaxCallDecorator() 
-		{
+		protected IAjaxCallDecorator getAjaxCallDecorator() {
 			return new IAjaxCallDecorator() {
 
 				private static final long serialVersionUID = 1L;
 
-				public CharSequence decorateOnFailureScript(CharSequence script) 
-				{
+				public CharSequence decorateOnFailureScript(CharSequence script) {
 					return script;
 				}
 
-				public CharSequence decorateOnSuccessScript(CharSequence script) 
-				{
+				public CharSequence decorateOnSuccessScript(CharSequence script) {
 					return script;
 				}
 
-				public CharSequence decorateScript(CharSequence script) 
-				{
-					StringBuffer sb = new StringBuffer("var v = Wicket.$("+ getComponent().getMarkupId() +").value;");
-					String suffixes = ResourceType.getResourceTypeSuffixes("|"); //doc|pdf|htm
+				public CharSequence decorateScript(CharSequence script) {
+					StringBuffer sb = new StringBuffer("var v = Wicket.$(" + getComponent().getMarkupId() + ").value;");
+					String suffixes = ResourceType.getResourceTypeSuffixes("|"); // doc|pdf|htm
 					sb.append("var file = Utils.xtractFile(v,'" + suffixes + "');");
-					sb.append("Wicket.$("+name.getMarkupId()+").value = file.filename + '.' + file.ext ;");
-					sb.append("Wicket.$("+choice.getMarkupId()+").value = Utils.translateSuffix(file.ext);");
+					sb.append("Wicket.$(" + name.getMarkupId() + ").value = file.filename + '.' + file.ext ;");
+					sb.append("Wicket.$(" + choice.getMarkupId() + ").value = Utils.translateSuffix(file.ext);");
 					return sb.toString() + script;
 				}
 
@@ -174,14 +182,14 @@ public class EditableResourceLink extends Panel
 
 		@Override
 		protected void onEvent(AjaxRequestTarget target) {
-			FileUpload fileUpload = ((FileUploadField)getComponent()).getFileUpload();
-			if (fileUpload != null){
+			FileUpload fileUpload = ((FileUploadField) getComponent()).getFileUpload();
+			if (fileUpload != null) {
 				target.addComponent(EditableResourceLink.this);
 			}
-			
+
 		}
 	}
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -189,55 +197,53 @@ public class EditableResourceLink extends Panel
 	 * @param data Data Object for Model
 	 * 
 	 */
-	public EditableResourceLink(String id, ILinkData data) 
-	{
+	public EditableResourceLink(String id, ILinkData data) {
 		super(id);
 		add(SCRIPT_UTILS);
 		add(Css.CSS_BUTTONS);
 		super.setOutputMarkupId(true);
 		this.data = data;
-		if (data == null){
+		if (data == null) {
 			String message = "The Constructor for AjaxEditableLink requires a value for data.";
 			throw new WicketRuntimeException(message);
 		}
 	}
-	
+
 	/**
-	 * Lazy initialization of the label and editor components and set tempModel to null.
-	 *
-	 * @param model
-	 *            The model for the label and editor
+	 * Lazy initialization of the label and editor components and set tempModel
+	 * to null.
+	 * 
+	 * @param model The model for the label and editor
 	 */
-	private void initLabelForm(IModel model)
-	{
-		//actual displayed Link
-	    Component resourceLink = newResourceLink(data.getResource() , "link"); 
+	private void initLabelForm(IModel model) {
+		// actual displayed Link
+		Component resourceLink = newResourceLink(data.getResource(), "link");
 		add(resourceLink);
 		add(newUploadStatusLabel("uploadstatus", resourceLink));
-		//hidden configure form
+		// hidden configure form
 		resourceForm = newFileUploadForm("resource-form");
 		add(resourceForm);
 		final Component name = newEditor("editor", new PropertyModel(data, "name"));
 		resourceForm.add(newEditor("title-editor", new PropertyModel(data, "title")));
 		resourceForm.add(new CheckBox("hide-link", new PropertyModel(data, "hideLink")));
 		final Component upload = newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload"));
-		final Component choice = newDropDownChoice(this, "type-select", new PropertyModel(data, "resourceType"),
-				Arrays.asList(ResourceType.values()));
-		
-		//AjaxBehaviour to update fields once file is selected
+		final Component choice = newDropDownChoice(this, "type-select", new PropertyModel(data, "resourceType"), Arrays
+				.asList(ResourceType.values()));
+
+		// AjaxBehaviour to update fields once file is selected
 		upload.add(new FileUploadBehavior("onchange", name, choice));
 		resourceForm.add(name);
 		resourceForm.add(upload);
 		resourceForm.add(choice);
-		
-		if (editMode){
-		    add(new AjaxConfigureIcon("configureIcon","resourceFormDiv"));
+
+		if (editMode) {
+			add(new AjaxConfigureIcon("configureIcon", "resourceFormDiv"));
 		} else {
-		    add(new Label("configureIcon"));
+			add(new Label("configureIcon"));
 		}
-        
+
 	}
-	
+
 	/**
 	 * Creates the Link to the Resource
 	 * 
@@ -246,61 +252,55 @@ public class EditableResourceLink extends Panel
 	 * @param componentId
 	 * @return
 	 */
-	protected Component newResourceLink(final Resource resource, String componentId)
-	{
-		if (resource == null  || resource.getResourceStream() == null){
+	protected Component newResourceLink(final Resource resource, String componentId) {
+		if (resource == null || resource.getResourceStream() == null) {
 			return new Label(componentId, getString("label.notconfigured"));
 		}
-		Link link = new ResourceLink(componentId, resource)
-		{
+		Link link = new ResourceLink(componentId, resource) {
 
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			protected void onComponentTag(ComponentTag tag) {
 				tag.put("title", data.getTitle());
 				super.onComponentTag(tag);
 			}
 
-			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
-			{
-				if (StringUtils.isEmpty(data.getName()))
-				{
+			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+				if (StringUtils.isEmpty(data.getName())) {
 					replaceComponentTagBody(markupStream, openTag, defaultNullLabel());
-				}
-				else 
-				{
+				} else {
 					replaceComponentTagBody(markupStream, openTag, data.getName());
 				}
 			}
-			
-            @Override
-            protected void onBeforeRender() {
-                if (getAppSession().isUploading()){
-                    setEnabled(false);
-                } else {
-                    setEnabled(true);
-                }
-                super.onBeforeRender();
-            }
+
+			@Override
+			protected void onBeforeRender() {
+				if (getAppSession().isUploading()) {
+					setEnabled(false);
+				} else {
+					setEnabled(true);
+				}
+				super.onBeforeRender();
+			}
 
 		};
 		link.setVisible(!data.getHideLink());
 		link.setOutputMarkupId(true);
 		final WicketAjaxIndicatorAppender spinner = new WicketAjaxIndicatorAppender();
 		link.add(spinner);
-		link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)){
+		link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)) {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onPostProcessTarget(AjaxRequestTarget target) {
 				String id = spinner.getMarkupId();
-				if (getAppSession().isUploading()){
+				if (getAppSession().isUploading()) {
 					target.appendJavascript("wicketShow('" + id + "');");
-                } else {
-                	target.appendJavascript("wicketHide('" + id + "');");
-                }
+				} else {
+					target.appendJavascript("wicketHide('" + id + "');");
+				}
 			}
 		});
 		return link;
@@ -308,46 +308,47 @@ public class EditableResourceLink extends Panel
 
 	/**
 	 * Create the Form
+	 * 
 	 * @param id
 	 * @return
 	 */
-	private Form newFileUploadForm(String id)
-	{
-		final Form form = new Form(id)
-		{
+	private Form newFileUploadForm(String id) {
+		final Form form = new Form(id) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
-				if (getAppSession().isUploading()){
+				if (getAppSession().isUploading()) {
 					return;
 				}
 				EditableResourceLink.this.onModelChanged();
 				EditableResourceLink.this.onSubmit();
 			}
-			
+
 		};
 		form.add(new SubmitLink("submit"));
 		form.setOutputMarkupId(true);
 		form.setMaxSize(MAX_FILE_SIZE);
 		return form;
-	}	
-	
+	}
+
 	/**
-	 * Create a new Text Field for editing 
-	 *
-	 * @param parent The parent component
-	 * @param componentId Id that should be used by the component
-	 * @param model The model
+	 * Create a new Text Field for editing
+	 * 
+	 * @param parent
+	 *            The parent component
+	 * @param componentId
+	 *            Id that should be used by the component
+	 * @param model
+	 *            The model
 	 * @return The editor
 	 */
-	protected FormComponent newEditor(String componentId, IModel model)
-	{
+	protected FormComponent newEditor(String componentId, IModel model) {
 		final TextField nameEditor = new TextField(componentId, model);
 		nameEditor.setOutputMarkupId(true);
 		return nameEditor;
 	}
-	
+
 	/**
 	 * Creates Drop Down for selecting Type
 	 * 
@@ -357,15 +358,14 @@ public class EditableResourceLink extends Panel
 	 * @param choices
 	 * @return
 	 */
-	protected FormComponent newDropDownChoice(MarkupContainer parent, String componentId, 
-			IModel model, List<ResourceType> choices)
-	{
-		IChoiceRenderer renderer = new IChoiceRenderer(){
+	protected FormComponent newDropDownChoice(MarkupContainer parent, String componentId, IModel model,
+			List<ResourceType> choices) {
+		IChoiceRenderer renderer = new IChoiceRenderer() {
 
 			private static final long serialVersionUID = 1L;
 
 			public Object getDisplayValue(Object object) {
-				if (object instanceof ResourceType){
+				if (object instanceof ResourceType) {
 					return ((ResourceType) object).description;
 				} else {
 					return object.toString();
@@ -373,17 +373,17 @@ public class EditableResourceLink extends Panel
 			}
 
 			public String getIdValue(Object object, int index) {
-				if (object instanceof String){
-					return ResourceType.valueOf((String)object).toString();
-				} else if (object instanceof ResourceType){
+				if (object instanceof String) {
+					return ResourceType.valueOf((String) object).toString();
+				} else if (object instanceof ResourceType) {
 					return object.toString();
 				} else {
 					return Integer.toString(index);
 				}
 			}
-			
+
 		};
-		final DropDownChoice choice = new DropDownChoice(componentId, model,	choices, renderer);
+		final DropDownChoice choice = new DropDownChoice(componentId, model, choices, renderer);
 		choice.setOutputMarkupId(true);
 		choice.setNullValid(true);
 		return choice;
@@ -397,23 +397,22 @@ public class EditableResourceLink extends Panel
 	 * @param model
 	 * @return
 	 */
-	protected FormComponent newFileUpload(MarkupContainer parent, String componentId, IModel model)
-	{
-		final FileUploadField upload = new FileUploadField(componentId, model){
+	protected FormComponent newFileUpload(MarkupContainer parent, String componentId, IModel model) {
+		final FileUploadField upload = new FileUploadField(componentId, model) {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected boolean forceCloseStreamsOnDetach() {
-				return false; //We are going to use in Thread
+				return false; // We are going to use in Thread
 			}
-			
+
 		};
 		upload.setOutputMarkupId(true);
 		upload.setEnabled(!getAppSession().isUploading());
 		return upload;
 	}
-	
+
 	protected Component newUploadStatusLabel(final String componentId, final Component resourceLink) {
 		getAppSession().setUploadComplete(false);
 		final Label status = new Label(componentId, new AbstractReadOnlyModel() {
@@ -424,7 +423,7 @@ public class EditableResourceLink extends Panel
 				if (getAppSession().isUploading()) {
 					return getString("uploading");
 				} else if (getAppSession().isUploadComplete()) {
-				    //resourceLink.setEnabled(true);
+					// resourceLink.setEnabled(true);
 					return getString("uploadcomplete");
 				} else {
 					return "";
@@ -436,26 +435,22 @@ public class EditableResourceLink extends Panel
 	}
 
 	/**
-	 * By default this returns "onclick" uses can overwrite this on which event the label behavior
-	 * should be triggered
-	 *
+	 * By default this returns "onclick" uses can overwrite this on which event
+	 * the label behavior should be triggered
+	 * 
 	 * @return The event name
 	 */
-	protected String getLabelAjaxEvent()
-	{
+	protected String getLabelAjaxEvent() {
 		return "onclick";
 	}
-
 
 	/**
 	 * @see org.apache.wicket.Component#onBeforeRender()
 	 */
-	protected void onBeforeRender()
-	{
+	protected void onBeforeRender() {
 		super.onBeforeRender();
 		// lazily add label and form
-		if (resourceForm == null)
-		{
+		if (resourceForm == null) {
 			initLabelForm(getModel());
 		}
 	}
@@ -463,69 +458,61 @@ public class EditableResourceLink extends Panel
 	/**
 	 * @see org.apache.wicket.MarkupContainer#setModel(org.apache.wicket.model.IModel)
 	 */
-	public final Component setModel(IModel model)
-	{
+	public final Component setModel(IModel model) {
 		String message = "AjaxEditableLink constructs its own model. Do not set it.";
 		throw new WicketRuntimeException(message);
 	}
 
 	/**
-	 * Invoked when the label is in edit mode, received a new input, but that input didn't validate
-	 *
+	 * Invoked when the label is in edit mode, received a new input, but that
+	 * input didn't validate
+	 * 
 	 * @param target
 	 *            the ajax request target
 	 */
-	protected void onError(AjaxRequestTarget target)
-	{
-	    //form is safe
+	protected void onError(AjaxRequestTarget target) {
+		// form is safe
 	}
 
-	protected void onSubmit()
-	{
-		//override
+	protected void onSubmit() {
+		// override
 	}
 
 	/**
-	 * Override this to display a different value when the model object is null. Default is
-	 * <code>...</code>
-	 *
-	 * @return The string which should be displayed when the model object is null.
+	 * Override this to display a different value when the model object is null.
+	 * Default is <code>...</code>
+	 * 
+	 * @return The string which should be displayed when the model object is
+	 *         null.
 	 */
-	protected String defaultNullLabel()
-	{
+	protected String defaultNullLabel() {
 		return "...";
 	}
 
 	/**
 	 * Dummy override to fix WICKET-1239
-	 *
+	 * 
 	 * @see org.apache.wicket.Component#onModelChanged()
 	 */
-	protected void onModelChanged()
-	{
+	protected void onModelChanged() {
 		super.onModelChanged();
 	}
 
 	/**
 	 * Dummy override to fix WICKET-1239
-	 *
+	 * 
 	 * @see org.apache.wicket.Component#onModelChanging()
 	 */
-	protected void onModelChanging()
-	{
+	protected void onModelChanging() {
 		super.onModelChanging();
 	}
 
-	protected void setEditMode(boolean editMode) 
-	{
+	protected void setEditMode(boolean editMode) {
 		this.editMode = editMode;
 	}
-	
-	private IFileUploadStatus getAppSession(){
-		return (IFileUploadStatus)getSession();
+
+	private IFileUploadStatus getAppSession() {
+		return (IFileUploadStatus) getSession();
 	}
-	
 
-
-	
 }
