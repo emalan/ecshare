@@ -210,8 +210,9 @@ public class EditableResourceLink extends Panel
 	private void initLabelForm(IModel model)
 	{
 		//actual displayed Link
-		add(newResourceLink(data.getResource() , "link"));
-		add(newUploadStatusLabel("uploadstatus"));
+	    Component resourceLink = newResourceLink(data.getResource() , "link"); 
+		add(resourceLink);
+		add(newUploadStatusLabel("uploadstatus", resourceLink));
 		//hidden configure form
 		resourceForm = newFileUploadForm("resource-form");
 		add(resourceForm);
@@ -359,7 +360,8 @@ public class EditableResourceLink extends Panel
 		}
 		Link link = new ResourceLink(componentId, resource)
 		{
-			private static final long serialVersionUID = 1L;
+
+            private static final long serialVersionUID = 1L;
 			
 			@Override
 			protected void onComponentTag(ComponentTag tag) {
@@ -379,14 +381,25 @@ public class EditableResourceLink extends Panel
 				}
 			}
 			
+            @Override
+            protected void onBeforeRender() {
+                if (getAppSession().isUploading()){
+                    setEnabled(false);
+                } else {
+                    setEnabled(true);
+                }
+                super.onBeforeRender();
+            }
+
 		};
 		link.setVisible(!data.getHideLink());
 		link.setOutputMarkupId(true);
+		link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)));
 		
 		return link;
 	}
 	
-	protected Component newUploadStatusLabel(String componentId) {
+	protected Component newUploadStatusLabel(final String componentId, final Component resourceLink) {
 		getAppSession().setUploadComplete(false);
 		final Label status = new Label(componentId, new AbstractReadOnlyModel() {
 			private static final long serialVersionUID = 938943178761943953L;
@@ -396,6 +409,7 @@ public class EditableResourceLink extends Panel
 				if (getAppSession().isUploading()) {
 					return getString("uploading");
 				} else if (getAppSession().isUploadComplete()) {
+				    //resourceLink.setEnabled(true);
 					return getString("uploadcomplete");
 				} else {
 					return "";
