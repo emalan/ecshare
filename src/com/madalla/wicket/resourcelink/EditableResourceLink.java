@@ -288,40 +288,21 @@ public class EditableResourceLink extends Panel
 		link.setVisible(!data.getHideLink());
 		link.setOutputMarkupId(true);
 		final WicketAjaxIndicatorAppender spinner = new WicketAjaxIndicatorAppender();
-		add(spinner);
+		link.add(spinner);
 		link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)){
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected IAjaxCallDecorator getAjaxCallDecorator() {
-				return new IAjaxCallDecorator(){
-
-					private static final long serialVersionUID = 1L;
-
-					public CharSequence decorateOnFailureScript(CharSequence script) {
-						return script;
-					}
-
-					public CharSequence decorateOnSuccessScript(CharSequence script) {
-						return script;
-					}
-
-					public CharSequence decorateScript(CharSequence script) {
-						String id = spinner.getMarkupId();
-						if (getAppSession().isUploading()){
-		                    return script + "wicketShow('" + id + "');";
-		                } else {
-		                	return script + "wicketHide('" + id + "');";
-		                }
-					}
-					
-				};
+			protected void onPostProcessTarget(AjaxRequestTarget target) {
+				String id = spinner.getMarkupId();
+				if (getAppSession().isUploading()){
+					target.appendJavascript("wicketShow('" + id + "');");
+                } else {
+                	target.appendJavascript("wicketHide('" + id + "');");
+                }
 			}
-			
 		});
-		
-		
 		return link;
 	}
 
