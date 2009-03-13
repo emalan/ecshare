@@ -14,6 +14,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.behavior.HeaderContributor;
+import org.apache.wicket.extensions.ajax.markup.html.WicketAjaxIndicatorAppender;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -236,6 +237,93 @@ public class EditableResourceLink extends Panel
 		}
         
 	}
+	
+	/**
+	 * Creates the Link to the Resource
+	 * 
+	 * @param parent
+	 * @param resource
+	 * @param componentId
+	 * @return
+	 */
+	protected Component newResourceLink(final Resource resource, String componentId)
+	{
+		if (resource == null  || resource.getResourceStream() == null){
+			return new Label(componentId, getString("label.notconfigured"));
+		}
+		Link link = new ResourceLink(componentId, resource)
+		{
+
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			protected void onComponentTag(ComponentTag tag) {
+				tag.put("title", data.getTitle());
+				super.onComponentTag(tag);
+			}
+
+			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
+			{
+				if (StringUtils.isEmpty(data.getName()))
+				{
+					replaceComponentTagBody(markupStream, openTag, defaultNullLabel());
+				}
+				else 
+				{
+					replaceComponentTagBody(markupStream, openTag, data.getName());
+				}
+			}
+			
+            @Override
+            protected void onBeforeRender() {
+                if (getAppSession().isUploading()){
+                    setEnabled(false);
+                } else {
+                    setEnabled(true);
+                }
+                super.onBeforeRender();
+            }
+
+		};
+		link.setVisible(!data.getHideLink());
+		link.setOutputMarkupId(true);
+		final WicketAjaxIndicatorAppender spinner = new WicketAjaxIndicatorAppender();
+		add(spinner);
+		link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)){
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected IAjaxCallDecorator getAjaxCallDecorator() {
+				return new IAjaxCallDecorator(){
+
+					private static final long serialVersionUID = 1L;
+
+					public CharSequence decorateOnFailureScript(CharSequence script) {
+						return script;
+					}
+
+					public CharSequence decorateOnSuccessScript(CharSequence script) {
+						return script;
+					}
+
+					public CharSequence decorateScript(CharSequence script) {
+						String id = spinner.getMarkupId();
+						if (getAppSession().isUploading()){
+		                    return script + "wicketShow('" + id + "');";
+		                } else {
+		                	return script + "wicketHide('" + id + "');";
+		                }
+					}
+					
+				};
+			}
+			
+		});
+		
+		
+		return link;
+	}
 
 	/**
 	 * Create the Form
@@ -343,60 +431,6 @@ public class EditableResourceLink extends Panel
 		upload.setOutputMarkupId(true);
 		upload.setEnabled(!getAppSession().isUploading());
 		return upload;
-	}
-	
-	/**
-	 * Creates the Link to the Resource
-	 * 
-	 * @param parent
-	 * @param resource
-	 * @param componentId
-	 * @return
-	 */
-	protected Component newResourceLink(final Resource resource, String componentId)
-	{
-		if (resource == null  || resource.getResourceStream() == null){
-			return new Label(componentId, getString("label.notconfigured"));
-		}
-		Link link = new ResourceLink(componentId, resource)
-		{
-
-            private static final long serialVersionUID = 1L;
-			
-			@Override
-			protected void onComponentTag(ComponentTag tag) {
-				tag.put("title", data.getTitle());
-				super.onComponentTag(tag);
-			}
-
-			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
-			{
-				if (StringUtils.isEmpty(data.getName()))
-				{
-					replaceComponentTagBody(markupStream, openTag, defaultNullLabel());
-				}
-				else 
-				{
-					replaceComponentTagBody(markupStream, openTag, data.getName());
-				}
-			}
-			
-            @Override
-            protected void onBeforeRender() {
-                if (getAppSession().isUploading()){
-                    setEnabled(false);
-                } else {
-                    setEnabled(true);
-                }
-                super.onBeforeRender();
-            }
-
-		};
-		link.setVisible(!data.getHideLink());
-		link.setOutputMarkupId(true);
-		link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)));
-		
-		return link;
 	}
 	
 	protected Component newUploadStatusLabel(final String componentId, final Component resourceLink) {
