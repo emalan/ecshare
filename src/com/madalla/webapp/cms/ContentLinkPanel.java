@@ -141,15 +141,12 @@ public class ContentLinkPanel extends Panel{
 
 				@Override
 				protected void onSubmit() {
-
 					// Start a thread that will continue running even if the
 					// user goes to another page.
 					final SubmitThread it = new SubmitThread(getAppSession(), linkData, getRepositoryservice());
 					it.start();
 					// Refresh the page in order to disable the form field and
 					// buttons.
-					//setResponsePage(getPage());
-
 				}
 
 				@Override
@@ -157,7 +154,7 @@ public class ContentLinkPanel extends Panel{
 					if (((IContentAdmin) getSession()).isLoggedIn()) {
 						this.setEditMode(true);
 					} else {
-						this.setEditMode(true);// TODO set to false
+						this.setEditMode(false);
 						if (linkData.getHideLink() != null && linkData.getHideLink().equals(Boolean.TRUE)) {
 							log.debug("onBeforeRender - hiding contentLink.");
 							setVisible(false);
@@ -227,7 +224,7 @@ public class ContentLinkPanel extends Panel{
     	return (CmsSession) getSession();
     }
 
-	/** This class does the actual uploading */
+	/** This class does the file uploading and form submit */
 	private static class SubmitThread extends Thread {
 		private final CmsSession session;
 		private final ILinkData data;
@@ -246,11 +243,11 @@ public class ContentLinkPanel extends Panel{
 				ContentLinkPanel.formSubmit(session, data, service);
 
 				// Sleep to simulate time-consuming work
-				Thread.sleep(10000); //TODO remove
+				//Thread.sleep(10000);
 				log.debug("Done processing...");
 				session.setUploadComplete(true);
-			} catch (InterruptedException e) {
-				session.error(e.getMessage());
+//			} catch (InterruptedException e) {
+//				session.error(e.getMessage());
 			} finally {
 				session.setIsUploading(false);
 			}
