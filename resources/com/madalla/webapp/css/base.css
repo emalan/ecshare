@@ -1,16 +1,14 @@
-/*
-Copyright (c) 2009, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-version: 2.7.0
-*/
-/**
- * YUI Base
- * @module base
- * @namespace yui-
- * @requires reset, fonts
-*/
+/*-----------------------------------------------------------------------------
+Style Sheet - base for all applications
 
+version:   1.0
+author:    Eugene Malan
+email:     eugene@emalan.com
+website:   http://www.emalan.com/
+-----------------------------------------------------------------------------*/
+
+/* =Base
+-----------------------------------------------------------------------------*/
 body {
 	/* For breathing room between content and viewport. */
 	margin:10px;
@@ -128,4 +126,10 @@ input[type="radio"],
 input[type="reset"],
 input[type="submit"] {
 	padding:1px;
+}
+
+/* =Class
+-----------------------------------------------------------------------------*/
+.no {
+  display: none;
 }
