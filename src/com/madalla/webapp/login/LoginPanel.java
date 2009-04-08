@@ -83,6 +83,7 @@ public abstract class LoginPanel extends Panel
 			// Attach textfield components that edit properties map
 			// in lieu of a formal beans model
 			add(username = new TextField("username", new PropertyModel(credentials, "username")));
+			username.setRequired(true);
 			add(password = new PasswordTextField("password", new PropertyModel(credentials,"password")));
             username.setLabel(new Model("User Name"));
             password.setLabel(new Model("Password"));
