@@ -116,6 +116,8 @@ public interface IRepositoryService {
 	//User
 	SiteData getSite(String name);
 	
+	SiteData getSiteData();
+	
 	List<SiteData> getSiteEntries();
 	
 	void saveSite(SiteData data);

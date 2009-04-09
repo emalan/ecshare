@@ -1,7 +1,14 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
-
+        form div label {
+            width:7em;
+        }
+        form div p {
+            margin-left: 15px;
+            width: 30em;
+            clear:both;
+        }
     </style>
 </wicket:head>
 <body>
@@ -11,6 +18,33 @@
             <span class="buttonwrapper">
                 <a href="#" class="bluebutton" wicket:id="returnLink"><span><wicket:message key="label.return">Label Contents</wicket:message></span></a>
             </span>
+        </div>
+        
+        <div id="siteadmin" class="adminSection">
+            <span class="adminHeading"><wicket:message key="heading.site">Label Contents</wicket:message></span>
+            <form wicket:id="siteForm">
+                <div>
+                    <label><wicket:message key="label.email">Label Contents</wicket:message></label>
+                    <input wicket:id="Email" class="inputText" type="text"/>
+                    <span class="feedbackPanel" wicket:id="emailFeedback"></span>
+                </div>
+                <div>
+                    <label><wicket:message key="label.description">Label Contents</wicket:message></label>
+                    <input wicket:id="description" class="inputText" type="text"/>
+                </div>
+                <div>
+                    <label><wicket:message key="label.keywords">Label Contents</wicket:message></label>
+                    <input wicket:id="keywords" class="inputText" type="text"/>
+                    <p class="info"><wicket:message key="info.keywords">Label Contents</wicket:message></p>
+                </div>
+                <div class="formButtons">
+                    <span class="buttonwrapper">
+                        <a wicket:id="submitLink" class="orangebutton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
+                    </span>
+                    <span wicket:id="siteFeedback" class="feedbackPanel"></span>
+                </div>
+                
+            </form>
         </div>
                
         

@@ -373,6 +373,10 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     //**********************************
     // ******   Site and Users    ******
     
+    public SiteData getSiteData(){
+        return getSite(site);
+    }
+    
     public SiteData getSite(String name){
     	return (SiteData) repositoryTemplate.getParentObject(RepositoryType.SITE, name, new RepositoryTemplateCallback(){
 			
