@@ -1,10 +1,13 @@
 package com.madalla.webapp.cms.admin;
 
+import static com.madalla.webapp.PageParams.RETURN_PAGE;
+
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
@@ -22,6 +25,8 @@ import com.madalla.service.BackupFile;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
+import com.madalla.webapp.pages.UserAdminPage;
 import com.madalla.wicket.IndicatingAjaxSubmitLink;
 
 public class ContentAdminPanel extends Panel {
@@ -47,6 +52,10 @@ public class ContentAdminPanel extends Panel {
 		
 		add(Css.CSS_FORM);
         add(new PageLink("returnLink", returnPage));
+        
+        //User Admin Page Link
+        add(new LoggedinBookmarkablePageLink("userAdminPageLink", UserAdminPage.class,
+                new PageParameters(RETURN_PAGE + "=" + returnPage.getName()), true));
 		
         setBackupFileList();
         final ListChoice listChoice = new ListChoice("backupFiles", new PropertyModel(this,"file"), 
