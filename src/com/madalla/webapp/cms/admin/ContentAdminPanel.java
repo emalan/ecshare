@@ -26,6 +26,7 @@ import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
+import com.madalla.webapp.pages.SiteAdminPage;
 import com.madalla.webapp.pages.UserAdminPage;
 import com.madalla.wicket.IndicatingAjaxSubmitLink;
 
@@ -55,6 +56,10 @@ public class ContentAdminPanel extends Panel {
         
         //User Admin Page Link
         add(new LoggedinBookmarkablePageLink("userAdminPageLink", UserAdminPage.class,
+                new PageParameters(RETURN_PAGE + "=" + returnPage.getName()), true));
+
+        //Site Admin Page Link
+        add(new LoggedinBookmarkablePageLink("siteAdminPageLink", SiteAdminPage.class,
                 new PageParameters(RETURN_PAGE + "=" + returnPage.getName()), true));
 		
         setBackupFileList();

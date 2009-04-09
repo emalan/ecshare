@@ -24,6 +24,7 @@ import com.madalla.webapp.email.EmailFormPanel;
 import com.madalla.webapp.google.YoutubePlayerPanel;
 import com.madalla.webapp.images.AlbumPanel;
 import com.madalla.webapp.images.admin.AlbumAdminPanel;
+import com.madalla.webapp.site.SiteAdminPanel;
 import com.madalla.webapp.user.UserAdminPanel;
 import com.madalla.webapp.user.UserLoginPanel;
 import com.madalla.webapp.user.UserProfilePanel;
@@ -100,6 +101,11 @@ public class Panels {
 	public static Panel contentAdminPanelForAdmin(String id, PageParameters parameters){
 		validate("ContentAdminPanel", id, parameters);
 		return ContentAdminPanel.newAdminInstance(id, getReturnPage(parameters, "ContentEntryPanel"));
+	}
+	
+	public static Panel siteAdminPanel(String id, PageParameters parameters){
+	    validate("SiteAdminPanel", id, parameters);
+	    return new SiteAdminPanel(id, getReturnPage(parameters, "SiteAdminPanel"));
 	}
 
 	/**
