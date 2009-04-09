@@ -2,6 +2,7 @@ package com.madalla.webapp.email;
 
 import java.text.MessageFormat;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
@@ -32,8 +33,10 @@ import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
+import com.madalla.bo.SiteData;
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
+import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.util.captcha.CaptchaUtils;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
@@ -195,10 +198,15 @@ public class EmailFormPanel extends Panel {
     }
     
     private boolean sendEmail(){
-		
+		SiteData site = getSiteData();
         IEmailSender email = getEmailSender();
         String body = getEmailBody(properties.getString("name"),properties.getString("email"),properties.getString("comment"));
-        return email.sendEmail(subject, body);
+
+        if (StringUtils.isEmpty(site.getAdminEmail())){
+            return email.sendEmail(subject, body);
+        } else {
+            return email.sendUserEmail(subject, body, site.getAdminEmail(), "Site Admin");
+        }
     }
     
 
@@ -231,6 +239,10 @@ public class EmailFormPanel extends Panel {
     
     protected IEmailSender getEmailSender(){
     	return ((IEmailServiceProvider)getApplication()).getEmailSender();
+    }
+    
+    protected SiteData getSiteData(){
+        return ((IRepositoryServiceProvider)getApplication()).getRepositoryService().getSiteData();
     }
     
 }
