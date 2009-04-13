@@ -18,6 +18,10 @@ public interface IResourceData {
 	
 	InputStream getInputStream();
 	
+	void setFileName(String fileName);
+	
+	String getFileName();
+	
 	void setInputStream(InputStream inputStream);
 	
 	String getType();

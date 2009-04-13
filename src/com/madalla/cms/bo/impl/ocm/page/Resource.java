@@ -20,6 +20,7 @@ public class Resource extends ResourceData {
 	@Field(jcrProtected=true) private transient InputStream inputStream;
 	@Field private String type;
 	@Field private Boolean hideLink;
+	@Field private String fileName;
 	
 	public Resource(){
 	}
@@ -86,5 +87,13 @@ public class Resource extends ResourceData {
 	public void setHideLink(Boolean hide) {
 		this.hideLink = hide;
 	}
+
+    public String getFileName() {
+        return this.fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
 }

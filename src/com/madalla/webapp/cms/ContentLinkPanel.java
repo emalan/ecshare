@@ -63,6 +63,7 @@ public class ContentLinkPanel extends Panel{
 		private String name;
 		private String title;
 		private ResourceReference resourceReference;
+		private String path;
 		private transient FileUpload fileUpload;
 		private String resourceType;
 		private Boolean hideLink;
@@ -75,7 +76,7 @@ public class ContentLinkPanel extends Panel{
 			this.id = id;
 		}
 
-		public String getName() {
+        public String getName() {
 			return name;
 		}
 
@@ -89,6 +90,14 @@ public class ContentLinkPanel extends Panel{
 
         public ResourceReference getResourceReference() {
             return resourceReference;
+        }
+
+        public void setPath(String path) {
+            this.path = path;
+        }
+
+        public String getPath() {
+            return path;
         }
 
         public void setName(String name) {
@@ -149,8 +158,45 @@ public class ContentLinkPanel extends Panel{
 					// user goes to another page.
 					final SubmitThread it = new SubmitThread(getAppSession(), linkData, getRepositoryservice());
 					it.start();
-					// Refresh the page in order to disable the form field and
-					// buttons.
+
+					//Register shared resource
+		            Resource resource = new WebResource() {
+		                private static final long serialVersionUID = 1L;
+
+		                @Override
+		                public IResourceStream getResourceStream() {
+		                    return new AbstractResourceStream() {
+
+		                        private static final long serialVersionUID = 1L;
+		                        
+		                        @Override
+		                        public String getContentType() {
+		                            ResourceType resourceType = ResourceType.valueOf(resourceData.getType());
+		                            if (resourceType != null){
+		                                return resourceType.resourceType;
+		                            }
+		                            return null;
+		                        }
+
+		                        public void close() throws IOException {
+
+		                        }
+
+		                        public InputStream getInputStream() throws ResourceStreamNotFoundException {
+		                            log.debug("getInputStream - " + resourceData);
+		                            InputStream inputStream = getRepositoryservice().getResourceStream(
+		                                    resourceData.getId(), "inputStream");
+		                            log.debug("getInputStream - done.");
+		                            return inputStream;
+		                        }
+
+		                    };
+		                }
+
+		            };
+					ContentSharedResource.registerResource((WebApplication) getApplication(), linkData.getId(), linkData.getFileUpload().getClientFileName(), resource);
+
+
 				}
 
 				@Override
@@ -180,51 +226,7 @@ public class ContentLinkPanel extends Panel{
         linkData.setResourceType(resourceData.getType());
         linkData.setHideLink(resourceData.getHideLink());
         if (resourceData.getInputStream() != null) {
-            
-            WebApplication application = (WebApplication) getApplication();
-            SharedResources resources = application.getSharedResources();
-            
-            Resource resource = new WebResource() {
-
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public IResourceStream getResourceStream() {
-                    return new AbstractResourceStream() {
-
-                        private static final long serialVersionUID = 1L;
-                        
-                        @Override
-                        public String getContentType() {
-                            ResourceType resourceType = ResourceType.valueOf(resourceData.getType());
-                            if (resourceType != null){
-                                return resourceType.resourceType;
-                            }
-                            return null;
-                        }
-
-                        public void close() throws IOException {
-
-                        }
-
-                        public InputStream getInputStream() throws ResourceStreamNotFoundException {
-                        	log.debug("getInputStream - " + resourceData);
-                            InputStream inputStream = getRepositoryservice().getResourceStream(
-                                    resourceData.getId(), "inputStream");
-                            log.debug("getInputStream - done.");
-                            return inputStream;
-                        }
-
-                    };
-                }
-
-            };
-            
-            resources.add(linkData.getName(), resource);
-            ResourceReference resourceReference = new ResourceReference(linkData.getName());
-            application.mountSharedResource("/sharedresource/"+linkData.getName(), resourceReference.getSharedResourceKey());
-            linkData.setResourceReference(resourceReference);
-
+            linkData.setPath(ContentSharedResource.RESOURCE_PATH + resourceData.getFileName());
         }
 
         
@@ -260,6 +262,7 @@ public class ContentLinkPanel extends Panel{
 				// Sleep to simulate time-consuming work
 				//Thread.sleep(10000);
 				log.debug("Done processing...");
+
 				session.setUploadComplete(true);
 //			} catch (InterruptedException e) {
 //				session.error(e.getMessage());
@@ -282,6 +285,7 @@ public class ContentLinkPanel extends Panel{
 			resourceData.setInputStream(null);
 			log.debug("onSubmit - setting InputStream to null");
 		} else {
+		    resourceData.setFileName(upload.getClientFileName());
 			try {
 				log.debug("onSubmit - uploading File...");
 				resourceData.setInputStream(upload.getInputStream());
@@ -299,6 +303,7 @@ public class ContentLinkPanel extends Panel{
 		resourceData.setHideLink(linkData.getHideLink());
 		log.debug("onSubmit - saving resource. " + resourceData);
 		service.saveContentResource(resourceData);
+
 		log.debug("onSubmit - done..");
     }
 

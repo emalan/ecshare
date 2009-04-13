@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
@@ -63,6 +64,8 @@ public class EditableResourceLink extends Panel {
 		
 		ResourceReference getResourceReference();
 		
+		String getPath();
+		
 		FileUpload getFileUpload();
 
 		String getResourceType();
@@ -78,6 +81,7 @@ public class EditableResourceLink extends Panel {
 		void setResourceType(String type);
 
 		void setHideLink(Boolean hide);
+
 	}
 
 	public enum ResourceType {
@@ -216,7 +220,7 @@ public class EditableResourceLink extends Panel {
 	 */
 	private void initLabelForm(IModel model) {
 		// actual displayed Link
-		Component resourceLink = newSharedResourceLink(data.getResourceReference(), "link");
+		Component resourceLink = newSharedResourceLink(data.getPath(), "link");
 		add(resourceLink);
 		add(newUploadStatusLabel("uploadstatus", resourceLink));
 		// hidden configure form
@@ -243,12 +247,11 @@ public class EditableResourceLink extends Panel {
 
 	}
 	
-	protected Component newSharedResourceLink(final ResourceReference resourceReference, final String componentId){
-        if (resourceReference == null || resourceReference.getResource() == null) {
+	protected Component newSharedResourceLink(final String path, final String componentId){
+        if (StringUtils.isEmpty(path)) {
             return new Label(componentId, getString("label.notconfigured"));
         }
-        ResourceLink link = new ResourceLink(componentId, resourceReference) {
-
+        Component link = new ExternalLink(componentId, path){
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -274,8 +277,37 @@ public class EditableResourceLink extends Panel {
                 }
                 super.onBeforeRender();
             }
-
         };
+        
+//        ResourceLink link = new ResourceLink(componentId, resourceReference) {
+//
+//            private static final long serialVersionUID = 1L;
+//
+//            @Override
+//            protected void onComponentTag(ComponentTag tag) {
+//                tag.put("title", data.getTitle());
+//                super.onComponentTag(tag);
+//            }
+//
+//            protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+//                if (StringUtils.isEmpty(data.getName())) {
+//                    replaceComponentTagBody(markupStream, openTag, defaultNullLabel());
+//                } else {
+//                    replaceComponentTagBody(markupStream, openTag, data.getName());
+//                }
+//            }
+//
+//            @Override
+//            protected void onBeforeRender() {
+//                if (getAppSession().isUploading()) {
+//                    setEnabled(false);
+//                } else {
+//                    setEnabled(true);
+//                }
+//                super.onBeforeRender();
+//            }
+//
+//        };
         
         link.setVisible(!data.getHideLink());
         link.setOutputMarkupId(true);
