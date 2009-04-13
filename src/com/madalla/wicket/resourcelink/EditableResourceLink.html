@@ -1,6 +1,6 @@
 <wicket:head>
 	<style><!--
-	    div#resourceFormDiv {
+	    div.resourceFormDiv {
 	    	float: left;
 	    	clear: left;
 	    	border: thin solid darkgray;
@@ -44,7 +44,7 @@
 		<span class="message" wicket:id="uploadstatus">[[importing]]</span>
 	</div>
 	
-	<div id="resourceFormDiv" style="display:none;" >
+	<div class="resourceFormDiv" wicket:id="resource-form-div" style="display:none;" >
 	<form class="resourceForm" wicket:id="resource-form">
 		<p class="info"><wicket:message key="info.upload">[[label]]</wicket:message></p>
 		

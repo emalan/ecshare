@@ -19,6 +19,7 @@ import org.apache.wicket.extensions.ajax.markup.html.WicketAjaxIndicatorAppender
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -223,9 +224,14 @@ public class EditableResourceLink extends Panel {
 		Component resourceLink = newSharedResourceLink(data.getPath(), "link");
 		add(resourceLink);
 		add(newUploadStatusLabel("uploadstatus", resourceLink));
+		
+		WebMarkupContainer formDiv = new WebMarkupContainer("resource-form-div");
+		formDiv.setOutputMarkupId(true);
+		add(formDiv);
+		
 		// hidden configure form
 		resourceForm = newFileUploadForm("resource-form");
-		add(resourceForm);
+		formDiv.add(resourceForm);
 		final Component name = newEditor("editor", new PropertyModel(data, "name"));
 		resourceForm.add(newEditor("title-editor", new PropertyModel(data, "title")));
 		resourceForm.add(new CheckBox("hide-link", new PropertyModel(data, "hideLink")));
@@ -240,7 +246,7 @@ public class EditableResourceLink extends Panel {
 		resourceForm.add(choice);
 
 		if (editMode) {
-			add(new AjaxConfigureIcon("configureIcon", "resourceFormDiv"));
+			add(new AjaxConfigureIcon("configureIcon", formDiv.getMarkupId()));
 		} else {
 			add(new Label("configureIcon"));
 		}
@@ -279,54 +285,24 @@ public class EditableResourceLink extends Panel {
             }
         };
         
-//        ResourceLink link = new ResourceLink(componentId, resourceReference) {
-//
-//            private static final long serialVersionUID = 1L;
-//
-//            @Override
-//            protected void onComponentTag(ComponentTag tag) {
-//                tag.put("title", data.getTitle());
-//                super.onComponentTag(tag);
-//            }
-//
-//            protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-//                if (StringUtils.isEmpty(data.getName())) {
-//                    replaceComponentTagBody(markupStream, openTag, defaultNullLabel());
-//                } else {
-//                    replaceComponentTagBody(markupStream, openTag, data.getName());
-//                }
-//            }
-//
-//            @Override
-//            protected void onBeforeRender() {
-//                if (getAppSession().isUploading()) {
-//                    setEnabled(false);
-//                } else {
-//                    setEnabled(true);
-//                }
-//                super.onBeforeRender();
-//            }
-//
-//        };
-        
         link.setVisible(!data.getHideLink());
         link.setOutputMarkupId(true);
         final WicketAjaxIndicatorAppender spinner = new WicketAjaxIndicatorAppender();
         link.add(spinner);
-        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void onPostProcessTarget(AjaxRequestTarget target) {
-                String id = spinner.getMarkupId();
-                if (getAppSession().isUploading()) {
-                    target.appendJavascript("wicketShow('" + id + "');");
-                } else {
-                    target.appendJavascript("wicketHide('" + id + "');");
-                }
-            }
-        });
+//        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)) {
+//
+//            private static final long serialVersionUID = 1L;
+//
+//            @Override
+//            protected void onPostProcessTarget(AjaxRequestTarget target) {
+//                String id = spinner.getMarkupId();
+//                if (getAppSession().isUploading()) {
+//                    target.appendJavascript("wicketShow('" + id + "');");
+//                } else {
+//                    target.appendJavascript("wicketHide('" + id + "');");
+//                }
+//            }
+//        });
         return link;
 	    
 	}
