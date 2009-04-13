@@ -7,9 +7,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Resource;
+import org.apache.wicket.ResourceReference;
+import org.apache.wicket.SharedResources;
 import org.apache.wicket.markup.html.WebResource;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
@@ -58,7 +62,7 @@ public class ContentLinkPanel extends Panel{
 		private String id;
 		private String name;
 		private String title;
-		private WebResource resource;
+		private ResourceReference resourceReference;
 		private transient FileUpload fileUpload;
 		private String resourceType;
 		private Boolean hideLink;
@@ -75,19 +79,19 @@ public class ContentLinkPanel extends Panel{
 			return name;
 		}
 
-		public WebResource getResource() {
-			return resource;
-		}
-		
-		public void setResource(WebResource resource){
-			this.resource = resource;
-		}
-
 		public String getTitle() {
 			return title;
 		}
 
-		public void setName(String name) {
+		public void setResourceReference(ResourceReference resourceReference) {
+            this.resourceReference = resourceReference;
+        }
+
+        public ResourceReference getResourceReference() {
+            return resourceReference;
+        }
+
+        public void setName(String name) {
 			this.name = name;
 		}
 
@@ -95,7 +99,7 @@ public class ContentLinkPanel extends Panel{
 			this.title = title;
 		}
 
-		public void setFileUpload(FileUpload fileUpload){
+        public void setFileUpload(FileUpload fileUpload){
 			this.fileUpload = fileUpload;
 		}
 		
@@ -176,7 +180,11 @@ public class ContentLinkPanel extends Panel{
         linkData.setResourceType(resourceData.getType());
         linkData.setHideLink(resourceData.getHideLink());
         if (resourceData.getInputStream() != null) {
-            linkData.setResource(new WebResource() {
+            
+            WebApplication application = (WebApplication) getApplication();
+            SharedResources resources = application.getSharedResources();
+            
+            Resource resource = new WebResource() {
 
                 private static final long serialVersionUID = 1L;
 
@@ -210,9 +218,16 @@ public class ContentLinkPanel extends Panel{
                     };
                 }
 
-            });
+            };
+            
+            resources.add(linkData.getName(), resource);
+            ResourceReference resourceReference = new ResourceReference(linkData.getName());
+            application.mountSharedResource("/sharedresource/"+linkData.getName(), resourceReference.getSharedResourceKey());
+            linkData.setResourceReference(resourceReference);
+
         }
 
+        
     	return linkData;
     }
 

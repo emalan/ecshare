@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Resource;
+import org.apache.wicket.ResourceReference;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -18,7 +19,6 @@ import org.apache.wicket.extensions.ajax.markup.html.WicketAjaxIndicatorAppender
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.WebResource;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -29,7 +29,6 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
@@ -61,9 +60,9 @@ public class EditableResourceLink extends Panel {
 		String getName();
 
 		String getTitle();
-
-		WebResource getResource();
-
+		
+		ResourceReference getResourceReference();
+		
 		FileUpload getFileUpload();
 
 		String getResourceType();
@@ -217,7 +216,7 @@ public class EditableResourceLink extends Panel {
 	 */
 	private void initLabelForm(IModel model) {
 		// actual displayed Link
-		Component resourceLink = newResourceLink(data.getResource(), "link");
+		Component resourceLink = newSharedResourceLink(data.getResourceReference(), "link");
 		add(resourceLink);
 		add(newUploadStatusLabel("uploadstatus", resourceLink));
 		// hidden configure form
@@ -243,6 +242,62 @@ public class EditableResourceLink extends Panel {
 		}
 
 	}
+	
+	protected Component newSharedResourceLink(final ResourceReference resourceReference, final String componentId){
+        if (resourceReference == null || resourceReference.getResource() == null) {
+            return new Label(componentId, getString("label.notconfigured"));
+        }
+        ResourceLink link = new ResourceLink(componentId, resourceReference) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                tag.put("title", data.getTitle());
+                super.onComponentTag(tag);
+            }
+
+            protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+                if (StringUtils.isEmpty(data.getName())) {
+                    replaceComponentTagBody(markupStream, openTag, defaultNullLabel());
+                } else {
+                    replaceComponentTagBody(markupStream, openTag, data.getName());
+                }
+            }
+
+            @Override
+            protected void onBeforeRender() {
+                if (getAppSession().isUploading()) {
+                    setEnabled(false);
+                } else {
+                    setEnabled(true);
+                }
+                super.onBeforeRender();
+            }
+
+        };
+        
+        link.setVisible(!data.getHideLink());
+        link.setOutputMarkupId(true);
+        final WicketAjaxIndicatorAppender spinner = new WicketAjaxIndicatorAppender();
+        link.add(spinner);
+        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void onPostProcessTarget(AjaxRequestTarget target) {
+                String id = spinner.getMarkupId();
+                if (getAppSession().isUploading()) {
+                    target.appendJavascript("wicketShow('" + id + "');");
+                } else {
+                    target.appendJavascript("wicketHide('" + id + "');");
+                }
+            }
+        });
+        return link;
+	    
+	}
 
 	/**
 	 * Creates the Link to the Resource
@@ -256,7 +311,7 @@ public class EditableResourceLink extends Panel {
 		if (resource == null || resource.getResourceStream() == null) {
 			return new Label(componentId, getString("label.notconfigured"));
 		}
-		Link link = new ResourceLink(componentId, resource) {
+		ResourceLink link = new ResourceLink(componentId, resource) {
 
 			private static final long serialVersionUID = 1L;
 
@@ -285,6 +340,7 @@ public class EditableResourceLink extends Panel {
 			}
 
 		};
+		
 		link.setVisible(!data.getHideLink());
 		link.setOutputMarkupId(true);
 		final WicketAjaxIndicatorAppender spinner = new WicketAjaxIndicatorAppender();
