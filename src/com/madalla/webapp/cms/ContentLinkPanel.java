@@ -1,22 +1,15 @@
 package com.madalla.webapp.cms;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.Resource;
 import org.apache.wicket.ResourceReference;
-import org.apache.wicket.SharedResources;
-import org.apache.wicket.markup.html.WebResource;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.util.resource.AbstractResourceStream;
-import org.apache.wicket.util.resource.IResourceStream;
-import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
@@ -26,7 +19,6 @@ import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
 import com.madalla.wicket.resourcelink.EditableResourceLink;
 import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
-import com.madalla.wicket.resourcelink.EditableResourceLink.ResourceType;
 
 /**
  * Editable Link to a Respository Resource.
@@ -148,6 +140,9 @@ public class ContentLinkPanel extends Panel{
 			final ResourceData resourceData = getRepositoryservice().getContentResource(page, id);
 			log.debug("retrieved Resource data. " + resourceData);
 			final LinkData linkData = createView(resourceData);
+			if (!StringUtils.isEmpty(linkData.getPath())){
+			    ContentSharedResource.registerResource((WebApplication)getApplication(), linkData, getRepositoryservice());
+			}
 
 			Panel editableLink = new EditableResourceLink("contentLink", linkData) {
 				private static final long serialVersionUID = 1L;
@@ -156,46 +151,8 @@ public class ContentLinkPanel extends Panel{
 				protected void onSubmit() {
 					// Start a thread that will continue running even if the
 					// user goes to another page.
-					final SubmitThread it = new SubmitThread(getAppSession(), linkData, getRepositoryservice());
+					final SubmitThread it = new SubmitThread(getAppSession(), linkData, getRepositoryservice(), (WebApplication) getApplication());
 					it.start();
-
-					//Register shared resource
-		            Resource resource = new WebResource() {
-		                private static final long serialVersionUID = 1L;
-
-		                @Override
-		                public IResourceStream getResourceStream() {
-		                    return new AbstractResourceStream() {
-
-		                        private static final long serialVersionUID = 1L;
-		                        
-		                        @Override
-		                        public String getContentType() {
-		                            ResourceType resourceType = ResourceType.valueOf(resourceData.getType());
-		                            if (resourceType != null){
-		                                return resourceType.resourceType;
-		                            }
-		                            return null;
-		                        }
-
-		                        public void close() throws IOException {
-
-		                        }
-
-		                        public InputStream getInputStream() throws ResourceStreamNotFoundException {
-		                            log.debug("getInputStream - " + resourceData);
-		                            InputStream inputStream = getRepositoryservice().getResourceStream(
-		                                    resourceData.getId(), "inputStream");
-		                            log.debug("getInputStream - done.");
-		                            return inputStream;
-		                        }
-
-		                    };
-		                }
-
-		            };
-					ContentSharedResource.registerResource((WebApplication) getApplication(), linkData.getId(), linkData.getFileUpload().getClientFileName(), resource);
-
 
 				}
 
@@ -246,18 +203,20 @@ public class ContentLinkPanel extends Panel{
 		private final CmsSession session;
 		private final ILinkData data;
 		private final IRepositoryService service;
+		private final WebApplication application;
 
-		public SubmitThread(CmsSession session, ILinkData data, IRepositoryService service) {
+		public SubmitThread(CmsSession session, ILinkData data, IRepositoryService service, WebApplication application) {
 			this.session = session;
 			this.data = data;
 			this.service = service;
+			this.application = application;
 		}
 
 		public void run() {
 			session.setIsUploading(true);
 			try {
 				log.debug("Start processing...");
-				ContentLinkPanel.formSubmit(session, data, service);
+				ContentLinkPanel.formSubmit(session, data, service, application);
 
 				// Sleep to simulate time-consuming work
 				//Thread.sleep(10000);
@@ -277,7 +236,7 @@ public class ContentLinkPanel extends Panel{
      * @param session
      * @param linkData
      */
-    public static void formSubmit(CmsSession session, ILinkData linkData, IRepositoryService service){
+    public static void formSubmit(CmsSession session, ILinkData linkData, IRepositoryService service, WebApplication application){
     	log.debug("onSubmit - submit Resource Form Data. " + linkData);
     	ResourceData resourceData = service.getContentResource(linkData.getId());
 		FileUpload upload = linkData.getFileUpload();
@@ -286,6 +245,7 @@ public class ContentLinkPanel extends Panel{
 			log.debug("onSubmit - setting InputStream to null");
 		} else {
 		    resourceData.setFileName(upload.getClientFileName());
+		    linkData.setPath(ContentSharedResource.RESOURCE_PATH + upload.getClientFileName());
 			try {
 				log.debug("onSubmit - uploading File...");
 				resourceData.setInputStream(upload.getInputStream());
@@ -304,6 +264,11 @@ public class ContentLinkPanel extends Panel{
 		log.debug("onSubmit - saving resource. " + resourceData);
 		service.saveContentResource(resourceData);
 
+        //Register shared resource
+        if (upload != null) {
+            ContentSharedResource.registerResource(application, linkData, service);
+        }
+        
 		log.debug("onSubmit - done..");
     }
 

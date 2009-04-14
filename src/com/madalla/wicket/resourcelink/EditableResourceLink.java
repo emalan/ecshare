@@ -78,6 +78,8 @@ public class EditableResourceLink extends Panel {
 		void setTitle(String title);
 
 		void setFileUpload(FileUpload upload);
+		
+		void setPath(String path);
 
 		void setResourceType(String type);
 
@@ -289,20 +291,20 @@ public class EditableResourceLink extends Panel {
         link.setOutputMarkupId(true);
         final WicketAjaxIndicatorAppender spinner = new WicketAjaxIndicatorAppender();
         link.add(spinner);
-//        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)) {
-//
-//            private static final long serialVersionUID = 1L;
-//
-//            @Override
-//            protected void onPostProcessTarget(AjaxRequestTarget target) {
-//                String id = spinner.getMarkupId();
-//                if (getAppSession().isUploading()) {
-//                    target.appendJavascript("wicketShow('" + id + "');");
-//                } else {
-//                    target.appendJavascript("wicketHide('" + id + "');");
-//                }
-//            }
-//        });
+        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void onPostProcessTarget(AjaxRequestTarget target) {
+                String id = spinner.getMarkupId();
+                if (getAppSession().isUploading()) {
+                    target.appendJavascript("wicketShow('" + id + "');");
+                } else {
+                    target.appendJavascript("wicketHide('" + id + "');");
+                }
+            }
+        });
         return link;
 	    
 	}
