@@ -58,7 +58,7 @@ public class ContentEntryPanel extends Panel {
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
 
         add(new PageLink("returnLink", returnPage));
-        //Content Admin Page
+        //Content Admin Page Link
         add(new LoggedinBookmarkablePageLink("contentAdminLink", ContentAdminPage.class,
                 new PageParameters(RETURN_PAGE + "=" + returnPage.getName()), true));
 
