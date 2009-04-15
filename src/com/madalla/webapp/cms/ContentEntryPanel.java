@@ -10,7 +10,6 @@ import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -22,6 +21,7 @@ import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.PageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
 import com.madalla.webapp.pages.ContentAdminPage;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 
@@ -58,19 +58,9 @@ public class ContentEntryPanel extends Panel {
         add(HeaderContributor.forJavaScript(JAVASCRIPT));
 
         add(new PageLink("returnLink", returnPage));
-		add(new BookmarkablePageLink("contentAdminLink", ContentAdminPage.class, 
-				new PageParameters(RETURN_PAGE + "=" + returnPage.getName())){
-			private static final long serialVersionUID = 1801145612969874170L;
-
-            protected final void onBeforeRender() {
-                if (((IContentAdmin)getSession()).isCmsAdminMode()) {
-                    setEnabled(true);
-                } else {
-                    setEnabled(false);
-                }
-                super.onBeforeRender();
-            }
-		});
+        //Content Admin Page
+        add(new LoggedinBookmarkablePageLink("contentAdminLink", ContentAdminPage.class,
+                new PageParameters(RETURN_PAGE + "=" + returnPage.getName()), true));
 
         PageData page = getRepositoryservice().getPage(nodeName);
         content = getRepositoryservice().getContent(page, contentId, getSession().getLocale());
