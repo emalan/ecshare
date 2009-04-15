@@ -6,9 +6,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.protocol.http.WebApplication;
 
 import com.madalla.bo.page.PageData;
@@ -55,10 +57,10 @@ public class ContentLinkPanel extends Panel{
 		private String name;
 		private String title;
 		private ResourceReference resourceReference;
-		private String path;
 		private transient FileUpload fileUpload;
 		private String resourceType;
 		private Boolean hideLink;
+		private String url;
 		
 		public String getId() {
 			return id;
@@ -82,14 +84,6 @@ public class ContentLinkPanel extends Panel{
 
         public ResourceReference getResourceReference() {
             return resourceReference;
-        }
-
-        public void setPath(String path) {
-            this.path = path;
-        }
-
-        public String getPath() {
-            return path;
         }
 
         public void setName(String name) {
@@ -127,6 +121,14 @@ public class ContentLinkPanel extends Panel{
 		public String toString() {
 	        return ReflectionToStringBuilder.toString(this).toString();
 	    }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
 	}
 	
 	public ContentLinkPanel(final String id, final String nodeName) {
@@ -140,8 +142,8 @@ public class ContentLinkPanel extends Panel{
 			final ResourceData resourceData = getRepositoryservice().getContentResource(page, id);
 			log.debug("retrieved Resource data. " + resourceData);
 			final LinkData linkData = createView(resourceData);
-			if (!StringUtils.isEmpty(linkData.getPath())){
-			    ContentSharedResource.registerResource((WebApplication)getApplication(), linkData, getRepositoryservice());
+			if (!StringUtils.isEmpty(resourceData.getUrl())){
+			    ContentSharedResource.registerResource((WebApplication)getApplication(), linkData, resourceData.getUrl(), getRepositoryservice());
 			}
 
 			Panel editableLink = new EditableResourceLink("contentLink", linkData) {
@@ -149,19 +151,20 @@ public class ContentLinkPanel extends Panel{
 
 				@Override
 				protected void onSubmit() {
+				    String mountPath = "";
+				    if (linkData.getFileUpload() !=null){
+	                    mountPath = ContentSharedResource.registerResource((WebApplication)getApplication(), linkData, getRepositoryservice());;
+				    }
 					// Start a thread that will continue running even if the
 					// user goes to another page.
-					final SubmitThread it = new SubmitThread(getAppSession(), linkData, getRepositoryservice(), (WebApplication) getApplication());
+					final SubmitThread it = new SubmitThread(getAppSession(), linkData, mountPath, getRepositoryservice());
 					it.start();
-
+			        
 				}
 
 				@Override
 				protected void onBeforeRender() {
-					if (((IContentAdmin) getSession()).isLoggedIn()) {
-						this.setEditMode(true);
-					} else {
-						this.setEditMode(false);
+					if (!((IContentAdmin) getSession()).isLoggedIn()) {
 						if (linkData.getHideLink() != null && linkData.getHideLink().equals(Boolean.TRUE)) {
 							log.debug("onBeforeRender - hiding contentLink.");
 							setVisible(false);
@@ -171,6 +174,19 @@ public class ContentLinkPanel extends Panel{
 				}
 
 			};
+			editableLink.add(new AttributeModifier("class", new AbstractReadOnlyModel() {
+			    private static final long serialVersionUID = -3131361470864509715L;
+
+			    public Object getObject() {
+			        String cssClass;
+			        if (((IContentAdmin)getSession()).isLoggedIn()) {
+			            cssClass = "contentLinkEdit";
+			        } else {
+			            cssClass = "contentLink";
+			        }
+			        return cssClass;
+			    }
+			}));
 			add(editableLink);
 		}
 
@@ -182,11 +198,7 @@ public class ContentLinkPanel extends Panel{
         linkData.setTitle(resourceData.getUrlTitle());
         linkData.setResourceType(resourceData.getType());
         linkData.setHideLink(resourceData.getHideLink());
-        if (resourceData.getInputStream() != null) {
-            linkData.setPath(ContentSharedResource.RESOURCE_PATH + resourceData.getFileName());
-        }
-
-        
+        linkData.setUrl(resourceData.getUrl());
     	return linkData;
     }
 
@@ -202,29 +214,29 @@ public class ContentLinkPanel extends Panel{
 	private static class SubmitThread extends Thread {
 		private final CmsSession session;
 		private final ILinkData data;
+		private final String mountPath;
 		private final IRepositoryService service;
-		private final WebApplication application;
 
-		public SubmitThread(CmsSession session, ILinkData data, IRepositoryService service, WebApplication application) {
+		public SubmitThread(CmsSession session, ILinkData data, String mountPath, IRepositoryService service) {
 			this.session = session;
 			this.data = data;
 			this.service = service;
-			this.application = application;
+			this.mountPath = mountPath;
 		}
 
 		public void run() {
 			session.setIsUploading(true);
 			try {
 				log.debug("Start processing...");
-				ContentLinkPanel.formSubmit(session, data, service, application);
+				ContentLinkPanel.formSubmit(session, data, mountPath, service);
 
 				// Sleep to simulate time-consuming work
-				//Thread.sleep(10000);
+				Thread.sleep(10000);
 				log.debug("Done processing...");
 
 				session.setUploadComplete(true);
-//			} catch (InterruptedException e) {
-//				session.error(e.getMessage());
+			} catch (InterruptedException e) {
+				session.error(e.getMessage());
 			} finally {
 				session.setIsUploading(false);
 			}
@@ -236,7 +248,7 @@ public class ContentLinkPanel extends Panel{
      * @param session
      * @param linkData
      */
-    public static void formSubmit(CmsSession session, ILinkData linkData, IRepositoryService service, WebApplication application){
+    public static void formSubmit(CmsSession session, ILinkData linkData, String mountPath, IRepositoryService service){
     	log.debug("onSubmit - submit Resource Form Data. " + linkData);
     	ResourceData resourceData = service.getContentResource(linkData.getId());
 		FileUpload upload = linkData.getFileUpload();
@@ -244,8 +256,7 @@ public class ContentLinkPanel extends Panel{
 			resourceData.setInputStream(null);
 			log.debug("onSubmit - setting InputStream to null");
 		} else {
-		    resourceData.setFileName(upload.getClientFileName());
-		    linkData.setPath(ContentSharedResource.RESOURCE_PATH + upload.getClientFileName());
+		    resourceData.setUrl(mountPath);
 			try {
 				log.debug("onSubmit - uploading File...");
 				resourceData.setInputStream(upload.getInputStream());
@@ -264,11 +275,6 @@ public class ContentLinkPanel extends Panel{
 		log.debug("onSubmit - saving resource. " + resourceData);
 		service.saveContentResource(resourceData);
 
-        //Register shared resource
-        if (upload != null) {
-            ContentSharedResource.registerResource(application, linkData, service);
-        }
-        
 		log.debug("onSubmit - done..");
     }
 

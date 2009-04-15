@@ -1,5 +1,13 @@
 <wicket:head>
 	<style><!--
+	
+	    .contentLink .configure{
+	       visibility: hidden;
+	    }
+	    .contentLinkEdit .configure {
+	       visibility: visible;
+	    }
+	    
 	    div.resourceFormDiv {
 	    	float: left;
 	    	clear: left;
@@ -39,7 +47,7 @@
 
 <wicket:panel>
 	<div id="resourceLink">
-		<span wicket:id="configureIcon"></span>
+		<span wicket:id="configureIcon" class="configure"></span>
 		<a href="#" wicket:id="link">[[label]]</a>
 		<span class="message" wicket:id="uploadstatus">[[importing]]</span>
 	</div>

@@ -18,9 +18,9 @@ public interface IResourceData {
 	
 	InputStream getInputStream();
 	
-	void setFileName(String fileName);
+	void setUrl(String fileName);
 	
-	String getFileName();
+	String getUrl();
 	
 	void setInputStream(InputStream inputStream);
 	

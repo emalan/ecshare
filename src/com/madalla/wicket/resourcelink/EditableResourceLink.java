@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Resource;
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -31,7 +30,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -50,7 +48,6 @@ public class EditableResourceLink extends Panel {
 	public static final HeaderContributor SCRIPT_UTILS = HeaderContributor
 			.forJavaScript(new CompressedResourceReference(EditableResourceLink.class, "resourcelink.js"));
 
-	private boolean editMode = false;
 	private Form resourceForm;
 
 	/** edit data **/
@@ -65,8 +62,6 @@ public class EditableResourceLink extends Panel {
 		
 		ResourceReference getResourceReference();
 		
-		String getPath();
-		
 		FileUpload getFileUpload();
 
 		String getResourceType();
@@ -79,11 +74,13 @@ public class EditableResourceLink extends Panel {
 
 		void setFileUpload(FileUpload upload);
 		
-		void setPath(String path);
-
 		void setResourceType(String type);
 
 		void setHideLink(Boolean hide);
+
+        String getUrl();
+        
+        void setUrl(String url);
 
 	}
 
@@ -223,7 +220,7 @@ public class EditableResourceLink extends Panel {
 	 */
 	private void initLabelForm(IModel model) {
 		// actual displayed Link
-		Component resourceLink = newSharedResourceLink(data.getPath(), "link");
+		Component resourceLink = newSharedResourceLink(data.getUrl(), "link");
 		add(resourceLink);
 		add(newUploadStatusLabel("uploadstatus", resourceLink));
 		
@@ -247,11 +244,7 @@ public class EditableResourceLink extends Panel {
 		resourceForm.add(upload);
 		resourceForm.add(choice);
 
-		if (editMode) {
-			add(new AjaxConfigureIcon("configureIcon", formDiv.getMarkupId()));
-		} else {
-			add(new Label("configureIcon"));
-		}
+		add(new AjaxConfigureIcon("configureIcon", formDiv.getMarkupId()));
 
 	}
 	
@@ -307,69 +300,6 @@ public class EditableResourceLink extends Panel {
         });
         return link;
 	    
-	}
-
-	/**
-	 * Creates the Link to the Resource
-	 * 
-	 * @param parent
-	 * @param resource
-	 * @param componentId
-	 * @return
-	 */
-	protected Component newResourceLink(final Resource resource, String componentId) {
-		if (resource == null || resource.getResourceStream() == null) {
-			return new Label(componentId, getString("label.notconfigured"));
-		}
-		ResourceLink link = new ResourceLink(componentId, resource) {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onComponentTag(ComponentTag tag) {
-				tag.put("title", data.getTitle());
-				super.onComponentTag(tag);
-			}
-
-			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-				if (StringUtils.isEmpty(data.getName())) {
-					replaceComponentTagBody(markupStream, openTag, defaultNullLabel());
-				} else {
-					replaceComponentTagBody(markupStream, openTag, data.getName());
-				}
-			}
-
-			@Override
-			protected void onBeforeRender() {
-				if (getAppSession().isUploading()) {
-					setEnabled(false);
-				} else {
-					setEnabled(true);
-				}
-				super.onBeforeRender();
-			}
-
-		};
-		
-		link.setVisible(!data.getHideLink());
-		link.setOutputMarkupId(true);
-		final WicketAjaxIndicatorAppender spinner = new WicketAjaxIndicatorAppender();
-		link.add(spinner);
-		link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)) {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onPostProcessTarget(AjaxRequestTarget target) {
-				String id = spinner.getMarkupId();
-				if (getAppSession().isUploading()) {
-					target.appendJavascript("wicketShow('" + id + "');");
-				} else {
-					target.appendJavascript("wicketHide('" + id + "');");
-				}
-			}
-		});
-		return link;
 	}
 
 	/**
@@ -571,10 +501,6 @@ public class EditableResourceLink extends Panel {
 	 */
 	protected void onModelChanging() {
 		super.onModelChanging();
-	}
-
-	protected void setEditMode(boolean editMode) {
-		this.editMode = editMode;
 	}
 
 	private IFileUploadStatus getAppSession() {
