@@ -16,7 +16,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.behavior.HeaderContributor;
-import org.apache.wicket.extensions.ajax.markup.html.WicketAjaxIndicatorAppender;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -283,6 +282,7 @@ public class EditableResourceLink extends Panel {
         if (StringUtils.isEmpty(path)) {
             return new Label(componentId, getString("label.notconfigured"));
         }
+
         Component link = new ExternalLink(componentId, path){
             private static final long serialVersionUID = 1L;
 
@@ -302,8 +302,13 @@ public class EditableResourceLink extends Panel {
 
             @Override
             protected void onBeforeRender() {
-                if (getAppSession().isUploading()) {
-                    setEnabled(false);
+                String id = data.getId();
+                if (!StringUtils.isEmpty(id) && id.equals(getAppSession().getUploadId()) ){
+                    if (getAppSession().isUploading()) {
+                        setEnabled(false);
+                    } else {
+                        setEnabled(true);
+                    }
                 } else {
                     setEnabled(true);
                 }
@@ -313,24 +318,8 @@ public class EditableResourceLink extends Panel {
         
         link.setVisible(!data.getHideLink());
         link.setOutputMarkupId(true);
-        final WicketAjaxIndicatorAppender spinner = new WicketAjaxIndicatorAppender();
-        link.add(spinner);
-        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void onPostProcessTarget(AjaxRequestTarget target) {
-                String id = spinner.getMarkupId();
-                if (getAppSession().isUploading()) {
-                    target.appendJavascript("wicketShow('" + id + "');");
-                } else {
-                    target.appendJavascript("wicketHide('" + id + "');");
-                }
-            }
-        });
+        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(5)));
         return link;
-	    
 	}
 
 	/**
