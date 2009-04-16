@@ -17,6 +17,7 @@ public class CmsSession  extends WebSession implements IContentAdmin, IRepositor
 	private String username = null;
 	private AuthRepositoryService repositoryService;
 	private volatile boolean uploading, uploadComplete;
+	private volatile String uploadId;
     
     public CmsSession(Request request) {
         super(request);
@@ -82,5 +83,13 @@ public class CmsSession  extends WebSession implements IContentAdmin, IRepositor
 	public IRepositoryService getRepositoryService() {
 		return repositoryService;
 	}
+
+    public String getUploadId() {
+        return uploadId;
+    }
+
+    public void setUploadId(String id) {
+        this.uploadId = id;
+    }
 
 }

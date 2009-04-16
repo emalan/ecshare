@@ -146,7 +146,7 @@ public class ContentLinkPanel extends Panel{
 			    ContentSharedResource.registerResource((WebApplication)getApplication(), linkData, resourceData.getUrl(), getRepositoryservice());
 			}
 
-			Panel editableLink = new EditableResourceLink("contentLink", linkData) {
+			final EditableResourceLink editableLink = new EditableResourceLink("contentLink", linkData) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -165,10 +165,13 @@ public class ContentLinkPanel extends Panel{
 				@Override
 				protected void onBeforeRender() {
 					if (!((IContentAdmin) getSession()).isLoggedIn()) {
+					    setActive(false);
 						if (linkData.getHideLink() != null && linkData.getHideLink().equals(Boolean.TRUE)) {
 							log.debug("onBeforeRender - hiding contentLink.");
 							setVisible(false);
 						}
+					} else {
+					    setActive(true);
 					}
 					super.onBeforeRender();
 				}
@@ -225,6 +228,7 @@ public class ContentLinkPanel extends Panel{
 		}
 
 		public void run() {
+		    session.setUploadId(data.getId());
 			session.setIsUploading(true);
 			try {
 				log.debug("Start processing...");

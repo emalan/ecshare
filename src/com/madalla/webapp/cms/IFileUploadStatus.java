@@ -17,4 +17,12 @@ public interface IFileUploadStatus {
 	 * reloaded.
 	 */
 	void setUploadComplete(boolean uploadComplete);
+	
+	String getUploadId();
+	
+	/**
+	 * Set unique id to identify current upload
+	 * @param id
+	 */
+	void setUploadId(String id);
 }

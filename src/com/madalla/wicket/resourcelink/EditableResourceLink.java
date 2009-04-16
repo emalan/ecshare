@@ -5,12 +5,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.extensions.ajax.markup.html.WicketAjaxIndicatorAppender;
@@ -31,11 +34,11 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
+import org.apache.wicket.util.time.Duration;
 
 import com.madalla.webapp.cms.IFileUploadStatus;
 import com.madalla.webapp.css.Css;
@@ -45,10 +48,12 @@ import com.madalla.wicket.configure.AjaxConfigureIcon;
 public class EditableResourceLink extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(5000);
+	private static final Log log = LogFactory.getLog(EditableResourceLink.class);
 	public static final HeaderContributor SCRIPT_UTILS = HeaderContributor
 			.forJavaScript(new CompressedResourceReference(EditableResourceLink.class, "resourcelink.js"));
 
 	private Form resourceForm;
+	private boolean active;
 
 	/** edit data **/
 	private ILinkData data;
@@ -195,27 +200,26 @@ public class EditableResourceLink extends Panel {
 	
 	protected class StatusModel extends Model{
         private static final long serialVersionUID = 1L;
-        private boolean submit;
+        private String id;
 	    
-	    @Override
-        public Object getObject() {
-            if (getAppSession().isUploading() && isSubmit()) {
-                return getString("uploading");
-            } else if (getAppSession().isUploadComplete()) {
-                // resourceLink.setEnabled(true);
-                return getString("uploadcomplete");
-            } else {
-                return "";
-            }
+	    public StatusModel(String id) {
+            this.id = id;
         }
-	    
-	    public void setSubmit(boolean submit){
-	        this.submit = submit;
-	    }
-	    
-	    public boolean isSubmit(){
-	        return submit;
-	    }
+
+        @Override
+        public Object getObject() {
+	        if (!StringUtils.isEmpty(id) && id.equals(getAppSession().getUploadId()) ){
+	            if (getAppSession().isUploading()) {
+	                return getString("uploading");
+	            } else if (getAppSession().isUploadComplete()) {
+	                return getString("uploadcomplete");
+	            } else {
+	                return "";
+	            }
+	        } else {
+	            return "";
+	        }
+        }
 	}
 
 	/**
@@ -245,10 +249,9 @@ public class EditableResourceLink extends Panel {
 	 */
 	private void initLabelForm(IModel model) {
 		// actual displayed Link
-		Component resourceLink = newSharedResourceLink(data.getUrl(), "link");
-		add(resourceLink);
+		add(newSharedResourceLink(data.getUrl(), "link"));
 		
-		StatusModel statusModel = new StatusModel();
+		StatusModel statusModel = new StatusModel(data.getId());
 		AjaxSelfUpdatingLabel statusLabel = newUploadStatusLabel("uploadstatus",statusModel);
 		add(statusLabel);
 		
@@ -257,7 +260,7 @@ public class EditableResourceLink extends Panel {
 		add(formDiv);
 		
 		// hidden configure form
-		resourceForm = newFileUploadForm("resource-form", statusLabel, statusModel);
+		resourceForm = newFileUploadForm("resource-form", statusModel);
 		formDiv.add(resourceForm);
 		final Component name = newEditor("editor", new PropertyModel(data, "name"));
 		resourceForm.add(newEditor("title-editor", new PropertyModel(data, "title")));
@@ -312,20 +315,20 @@ public class EditableResourceLink extends Panel {
         link.setOutputMarkupId(true);
         final WicketAjaxIndicatorAppender spinner = new WicketAjaxIndicatorAppender();
         link.add(spinner);
-//        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)) {
-//
-//            private static final long serialVersionUID = 1L;
-//
-//            @Override
-//            protected void onPostProcessTarget(AjaxRequestTarget target) {
-//                String id = spinner.getMarkupId();
-//                if (getAppSession().isUploading()) {
-//                    target.appendJavascript("wicketShow('" + id + "');");
-//                } else {
-//                    target.appendJavascript("wicketHide('" + id + "');");
-//                }
-//            }
-//        });
+        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void onPostProcessTarget(AjaxRequestTarget target) {
+                String id = spinner.getMarkupId();
+                if (getAppSession().isUploading()) {
+                    target.appendJavascript("wicketShow('" + id + "');");
+                } else {
+                    target.appendJavascript("wicketHide('" + id + "');");
+                }
+            }
+        });
         return link;
 	    
 	}
@@ -337,18 +340,16 @@ public class EditableResourceLink extends Panel {
 	 * @param statusModel 
 	 * @return
 	 */
-	private Form newFileUploadForm(String id, final AjaxSelfUpdatingLabel status, final StatusModel statusModel) {
+	private Form newFileUploadForm(String id, final StatusModel statusModel) {
 		final Form form = new Form(id) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
 				if (getAppSession().isUploading()) {
+				    log.warn("File Upload cancelled. Session is busy loading another file.");
 					return;
 				}
-				status.startTimer();
-				statusModel.setSubmit(true);
-				//EditableResourceLink.this.onModelChanged();
 				EditableResourceLink.this.onSubmit();
 			}
 
@@ -436,13 +437,18 @@ public class EditableResourceLink extends Panel {
 
 		};
 		upload.setOutputMarkupId(true);
-		upload.setEnabled(!getAppSession().isUploading());
+		//TODO set from Self updater
+		//upload.setEnabled(!getAppSession().isUploading());
 		return upload;
 	}
 	
 	protected AjaxSelfUpdatingLabel newUploadStatusLabel(final String componentId, IModel model) {
 		getAppSession().setUploadComplete(false);
-		return new AjaxSelfUpdatingLabel(componentId, model, 5);
+		AjaxSelfUpdatingLabel label =  new AjaxSelfUpdatingLabel(componentId, model, 5);
+		if (active){
+		    label.startTimer();
+		}
+		return label;
 	}
 
     /**
@@ -521,5 +527,9 @@ public class EditableResourceLink extends Panel {
 	private IFileUploadStatus getAppSession() {
 		return (IFileUploadStatus) getSession();
 	}
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
 }
