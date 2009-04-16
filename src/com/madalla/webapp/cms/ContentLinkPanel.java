@@ -235,12 +235,12 @@ public class ContentLinkPanel extends Panel{
 				ContentLinkPanel.formSubmit(session, data, mountPath, service);
 
 				// Sleep to simulate time-consuming work
-				Thread.sleep(10000);
+				//Thread.sleep(10000);
 				log.debug("Done processing...");
 
 				session.setUploadComplete(true);
-			} catch (InterruptedException e) {
-				session.error(e.getMessage());
+			//} catch (InterruptedException e) {
+			//	session.error(e.getMessage());
 			} finally {
 				session.setIsUploading(false);
 			}
