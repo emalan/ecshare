@@ -11,7 +11,6 @@ import org.apache.wicket.ResourceReference;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.extensions.ajax.markup.html.WicketAjaxIndicatorAppender;
@@ -34,12 +33,13 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
-import org.apache.wicket.util.time.Duration;
 
 import com.madalla.webapp.cms.IFileUploadStatus;
 import com.madalla.webapp.css.Css;
+import com.madalla.wicket.AjaxSelfUpdatingLabel;
 import com.madalla.wicket.configure.AjaxConfigureIcon;
 
 public class EditableResourceLink extends Panel {
@@ -187,10 +187,35 @@ public class EditableResourceLink extends Panel {
 		protected void onEvent(AjaxRequestTarget target) {
 			FileUpload fileUpload = ((FileUploadField) getComponent()).getFileUpload();
 			if (fileUpload != null) {
-				target.addComponent(EditableResourceLink.this);
+				//target.addComponent(EditableResourceLink.this);
 			}
 
 		}
+	}
+	
+	protected class StatusModel extends Model{
+        private static final long serialVersionUID = 1L;
+        private boolean submit;
+	    
+	    @Override
+        public Object getObject() {
+            if (getAppSession().isUploading() && isSubmit()) {
+                return getString("uploading");
+            } else if (getAppSession().isUploadComplete()) {
+                // resourceLink.setEnabled(true);
+                return getString("uploadcomplete");
+            } else {
+                return "";
+            }
+        }
+	    
+	    public void setSubmit(boolean submit){
+	        this.submit = submit;
+	    }
+	    
+	    public boolean isSubmit(){
+	        return submit;
+	    }
 	}
 
 	/**
@@ -222,14 +247,17 @@ public class EditableResourceLink extends Panel {
 		// actual displayed Link
 		Component resourceLink = newSharedResourceLink(data.getUrl(), "link");
 		add(resourceLink);
-		add(newUploadStatusLabel("uploadstatus", resourceLink));
+		
+		StatusModel statusModel = new StatusModel();
+		AjaxSelfUpdatingLabel statusLabel = newUploadStatusLabel("uploadstatus",statusModel);
+		add(statusLabel);
 		
 		WebMarkupContainer formDiv = new WebMarkupContainer("resource-form-div");
 		formDiv.setOutputMarkupId(true);
 		add(formDiv);
 		
 		// hidden configure form
-		resourceForm = newFileUploadForm("resource-form");
+		resourceForm = newFileUploadForm("resource-form", statusLabel, statusModel);
 		formDiv.add(resourceForm);
 		final Component name = newEditor("editor", new PropertyModel(data, "name"));
 		resourceForm.add(newEditor("title-editor", new PropertyModel(data, "title")));
@@ -284,20 +312,20 @@ public class EditableResourceLink extends Panel {
         link.setOutputMarkupId(true);
         final WicketAjaxIndicatorAppender spinner = new WicketAjaxIndicatorAppender();
         link.add(spinner);
-        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void onPostProcessTarget(AjaxRequestTarget target) {
-                String id = spinner.getMarkupId();
-                if (getAppSession().isUploading()) {
-                    target.appendJavascript("wicketShow('" + id + "');");
-                } else {
-                    target.appendJavascript("wicketHide('" + id + "');");
-                }
-            }
-        });
+//        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)) {
+//
+//            private static final long serialVersionUID = 1L;
+//
+//            @Override
+//            protected void onPostProcessTarget(AjaxRequestTarget target) {
+//                String id = spinner.getMarkupId();
+//                if (getAppSession().isUploading()) {
+//                    target.appendJavascript("wicketShow('" + id + "');");
+//                } else {
+//                    target.appendJavascript("wicketHide('" + id + "');");
+//                }
+//            }
+//        });
         return link;
 	    
 	}
@@ -306,9 +334,10 @@ public class EditableResourceLink extends Panel {
 	 * Create the Form
 	 * 
 	 * @param id
+	 * @param statusModel 
 	 * @return
 	 */
-	private Form newFileUploadForm(String id) {
+	private Form newFileUploadForm(String id, final AjaxSelfUpdatingLabel status, final StatusModel statusModel) {
 		final Form form = new Form(id) {
 			private static final long serialVersionUID = 1L;
 
@@ -317,7 +346,9 @@ public class EditableResourceLink extends Panel {
 				if (getAppSession().isUploading()) {
 					return;
 				}
-				EditableResourceLink.this.onModelChanged();
+				status.startTimer();
+				statusModel.setSubmit(true);
+				//EditableResourceLink.this.onModelChanged();
 				EditableResourceLink.this.onSubmit();
 			}
 
@@ -408,29 +439,13 @@ public class EditableResourceLink extends Panel {
 		upload.setEnabled(!getAppSession().isUploading());
 		return upload;
 	}
-
-	protected Component newUploadStatusLabel(final String componentId, final Component resourceLink) {
+	
+	protected AjaxSelfUpdatingLabel newUploadStatusLabel(final String componentId, IModel model) {
 		getAppSession().setUploadComplete(false);
-		final Label status = new Label(componentId, new AbstractReadOnlyModel() {
-			private static final long serialVersionUID = 938943178761943953L;
-
-			@Override
-			public Object getObject() {
-				if (getAppSession().isUploading()) {
-					return getString("uploading");
-				} else if (getAppSession().isUploadComplete()) {
-					// resourceLink.setEnabled(true);
-					return getString("uploadcomplete");
-				} else {
-					return "";
-				}
-			}
-		});
-		status.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)));
-		return status;
+		return new AjaxSelfUpdatingLabel(componentId, model, 5);
 	}
 
-	/**
+    /**
 	 * By default this returns "onclick" uses can overwrite this on which event
 	 * the label behavior should be triggered
 	 * 
