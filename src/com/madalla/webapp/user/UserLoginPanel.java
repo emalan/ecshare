@@ -2,6 +2,7 @@ package com.madalla.webapp.user;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.behavior.HeaderContributor;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 
@@ -18,7 +19,7 @@ public class UserLoginPanel extends Panel {
 	public UserLoginPanel(String id, Class<? extends Page> returnPage) {
 		super(id);
 		
-		add(HeaderContributor.forJavaScript(Scriptaculous.PROTOTYPE));
+		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
 		add(Css.CSS_FORM);
 		
 		add(new PageLink("returnLink", returnPage));

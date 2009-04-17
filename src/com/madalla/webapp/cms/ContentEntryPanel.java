@@ -6,7 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.behavior.HeaderContributor;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -54,10 +54,10 @@ public class ContentEntryPanel extends Panel {
 	public ContentEntryPanel(String name, final String nodeName, final String contentId, Class<? extends Page> returnPage) {
         super(name);
         this.contentPage = returnPage;
-        add(HeaderContributor.forJavaScript(TinyMce.class, "tiny_mce.js"));
-        add(HeaderContributor.forJavaScript(JAVASCRIPT));
+        add( JavascriptPackageResource.getHeaderContribution(TinyMce.class, "tiny_mce.js"));
+        add( JavascriptPackageResource.getHeaderContribution(JAVASCRIPT));
 
-        add(new PageLink("returnLink", returnPage));
+        add(new PageLink<Page>("returnLink", returnPage));
         //Content Admin Page Link
         add(new LoggedinBookmarkablePageLink("contentAdminLink", ContentAdminPage.class,
                 new PageParameters(RETURN_PAGE + "=" + returnPage.getName()), true));
@@ -67,16 +67,16 @@ public class ContentEntryPanel extends Panel {
         add(new ContentForm("contentForm"));
     }
 
-    final class ContentForm extends Form {
+    final class ContentForm extends Form<Object> {
         private static final long serialVersionUID = -3526743712542402160L;
 
         public ContentForm(final String name) {
             super(name);
             //content.setText(text);
-            add(new TextArea("text", new PropertyModel(this, "text")));
+            add(new TextArea<String>("text", new PropertyModel<String>(this, "text")));
             add(new FeedbackPanel("feedback"));
 
-            add(new Link("cancelButton") {
+            add(new Link<Object>("cancelButton") {
                 private static final long serialVersionUID = 1L;
 
 				@Override

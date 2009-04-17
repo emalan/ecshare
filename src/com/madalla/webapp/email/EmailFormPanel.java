@@ -9,9 +9,9 @@ import org.apache.wicket.Component;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -56,7 +56,7 @@ public class EmailFormPanel extends Panel {
     String subject ;
 
     
-    public class EmailForm extends Form {
+    public class EmailForm extends Form<Object> {
         private static final long serialVersionUID = -2684823497770522924L;
         
         //private final CaptchaImageResource captchaImageResource;
@@ -68,22 +68,22 @@ public class EmailFormPanel extends Panel {
     
             FeedbackPanel nameFeedback = new FeedbackPanel("nameFeedback");
             add(nameFeedback);
-            add(new AjaxValidationStyleRequiredTextField("name",new PropertyModel(properties,"name"), nameFeedback));
+            add(new AjaxValidationStyleRequiredTextField("name",new PropertyModel<String>(properties,"name"), nameFeedback));
             
             FeedbackPanel emailFeedback = new FeedbackPanel("emailFeedback");
             add(emailFeedback);
-            TextField email = new AjaxValidationStyleRequiredTextField("email",new PropertyModel(properties,"email"), emailFeedback);
+            TextField<String> email = new AjaxValidationStyleRequiredTextField("email",new PropertyModel<String>(properties,"email"), emailFeedback);
             email.add(EmailAddressValidator.getInstance());
             add(email);
             
-            TextArea comment = new TextArea("comment",new PropertyModel(properties,"comment"));
+            TextArea<String> comment = new TextArea<String>("comment",new PropertyModel<String>(properties,"comment"));
             add(comment);
             
             add(new Label("captchaString", first+" + "+second+" = "));
             
             FeedbackPanel passwordFeedback = new FeedbackPanel("passwordFeedback");
             add(passwordFeedback);
-            RequiredTextField password = new AjaxValidationStyleRequiredTextField("password", new PropertyModel(properties, "password"), passwordFeedback){
+            RequiredTextField<String> password = new AjaxValidationStyleRequiredTextField("password", new PropertyModel<String>(properties, "password"), passwordFeedback){
 				private static final long serialVersionUID = -108228073455105029L;
 				protected final void onComponentTag(final ComponentTag tag) {
                         super.onComponentTag(tag);
@@ -91,10 +91,10 @@ public class EmailFormPanel extends Panel {
                         //tag.put("value", "");
                 }
             };
-            password.add(new AbstractValidator(){
+            password.add(new AbstractValidator<String>(){
 				private static final long serialVersionUID = 2572094991300700912L;
-				protected void onValidate(IValidatable validatable) {
-                    String password = (String)validatable.getValue();
+				protected void onValidate(IValidatable<String> validatable) {
+                    String password = validatable.getValue();
                     try {
                         int answer = Integer.parseInt(password);
                         if (answer != first.intValue() + second.intValue()){
@@ -139,7 +139,7 @@ public class EmailFormPanel extends Panel {
         
         add(Css.CSS_FORM);
         
-        Form form = new EmailForm("emailForm");
+        Form<Object> form = new EmailForm("emailForm");
         form.setOutputMarkupId(true);
 
         final FeedbackPanel feedbackPanel = new ComponentFeedbackPanel("feedback",form);
@@ -150,7 +150,7 @@ public class EmailFormPanel extends Panel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form form) {
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax onsubmit called.");
 				target.addComponent(feedbackPanel);
 				if (sendEmail()){
@@ -162,10 +162,10 @@ public class EmailFormPanel extends Panel {
 			}
 			
 			@Override
-			protected void onError(final AjaxRequestTarget target, Form form) {
+			protected void onError(final AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax onerror called");
 				target.addComponent(feedbackPanel);
-	           	form.visitChildren(new Component.IVisitor() {
+	           	form.visitChildren(new Component.IVisitor<Component>() {
 					public Object component(Component component) {
 	           			log.debug("formVisitor="+component);
 	           			if (component instanceof FormComponent) {
@@ -193,8 +193,8 @@ public class EmailFormPanel extends Panel {
         
         add(form);
         
-        add(HeaderContributor.forJavaScript(JS_PROTOTYPE));
-        add(HeaderContributor.forJavaScript(JS_EFFECTS));
+        add(JavascriptPackageResource.getHeaderContribution(JS_PROTOTYPE));
+        add(JavascriptPackageResource.getHeaderContribution(JS_EFFECTS));
     }
     
     private boolean sendEmail(){

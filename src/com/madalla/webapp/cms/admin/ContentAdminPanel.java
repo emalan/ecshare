@@ -52,7 +52,7 @@ public class ContentAdminPanel extends Panel {
 		this.adminApp = adminApp;
 		
 		add(Css.CSS_FORM);
-        add(new PageLink("returnLink", returnPage));
+        add(new PageLink<Page>("returnLink", returnPage));
         
         //User Admin Page Link
         add(new LoggedinBookmarkablePageLink("userAdminPageLink", UserAdminPage.class,
@@ -96,7 +96,7 @@ public class ContentAdminPanel extends Panel {
 		add(backupMessages);
 
 		//Backup link
-        AjaxLink backupLink = new IndicatingAjaxLink("backupLink"){
+        AjaxLink<Object> backupLink = new IndicatingAjaxLink<Object>("backupLink"){
 			private static final long serialVersionUID = 1L;
 
 			public void onClick(AjaxRequestTarget target) {
@@ -134,7 +134,7 @@ public class ContentAdminPanel extends Panel {
 		add(restoreMessages);
 
         //Rollback link
-        final AjaxLink rollBackLink = new IndicatingAjaxLink("rollbackLink"){
+        final AjaxLink<Object> rollBackLink = new IndicatingAjaxLink<Object>("rollbackLink"){
 			private static final long serialVersionUID = -6873075723947980651L;
 
 			@Override

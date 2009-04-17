@@ -11,6 +11,7 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.HeaderContributor;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -116,7 +117,7 @@ public class UserProfilePanel extends Panel{
 		
 		super(id);
 		
-		add(HeaderContributor.forJavaScript(Scriptaculous.PROTOTYPE));
+		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
 		add(Css.CSS_FORM);
 		
 		add(new PageLink("returnLink", returnPage));

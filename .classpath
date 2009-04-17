@@ -62,7 +62,7 @@
 	<classpathentry kind="lib" path="wicket/wicket-1.4-rc2.jar" sourcepath="/Users/emalan/Documents/devlib/apache-wicket-1.4-rc2/src/wicket/src/main/java"/>
 	<classpathentry kind="lib" path="wicket/wicket-auth-roles-1.4-rc2.jar"/>
 	<classpathentry kind="lib" path="wicket/wicket-datetime-1.4-rc2.jar"/>
-	<classpathentry kind="lib" path="wicket/wicket-extensions-1.4-rc2.jar"/>
+	<classpathentry kind="lib" path="wicket/wicket-extensions-1.4-rc2.jar" sourcepath="/Users/emalan/Documents/devlib/apache-wicket-1.4-rc2/src/wicket-extensions/src/main/java"/>
 	<classpathentry kind="lib" path="wicket/wicket-spring-1.4-rc2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

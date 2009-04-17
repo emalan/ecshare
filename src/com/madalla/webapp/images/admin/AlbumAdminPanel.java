@@ -12,6 +12,7 @@ import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -129,9 +130,9 @@ public class AlbumAdminPanel extends Panel{
 		super(id);
 		
 		add(Css.CSS_FORM);
-		add(HeaderContributor.forJavaScript(Scriptaculous.PROTOTYPE));
-		add(HeaderContributor.forJavaScript(Scriptaculous.EFFECTS));
-		add(HeaderContributor.forJavaScript(Scriptaculous.DRAGDROP));
+		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
+		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.EFFECTS));
+		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.DRAGDROP));
 		
 		add(new PageLink("returnLink", returnPage));
 		

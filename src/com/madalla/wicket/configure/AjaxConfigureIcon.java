@@ -6,6 +6,7 @@ import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 
@@ -14,7 +15,7 @@ import com.madalla.webapp.css.Css;
 public class AjaxConfigureIcon extends Panel{
 
 	private static final long serialVersionUID = 1L;
-	public static final HeaderContributor SCRIPT_UTILS = HeaderContributor.forJavaScript(
+	public static final HeaderContributor SCRIPT_UTILS = JavascriptPackageResource.getHeaderContribution(
 			new CompressedResourceReference(AjaxConfigureIcon.class, "resourcelink.js"));
 
 	private String configureAreaId;

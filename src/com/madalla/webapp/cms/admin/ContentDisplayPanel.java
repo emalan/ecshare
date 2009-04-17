@@ -61,7 +61,7 @@ class ContentDisplayPanel extends Panel {
 		add(contentDisplay);
 		
         //Delete Link
-        Component delete = new IndicatingAjaxLink("deleteNode"){
+        Component delete = new IndicatingAjaxLink<Object>("deleteNode"){
             private static final long serialVersionUID = 1L;
             
             protected final void onBeforeRender(){
@@ -86,7 +86,7 @@ class ContentDisplayPanel extends Panel {
         add(delete);
 
         //Paste Link
-        paste = new IndicatingAjaxLink("pasteNode"){
+        paste = new IndicatingAjaxLink<Object>("pasteNode"){
 			private static final long serialVersionUID = -4315390241296210531L;
 
 			@Override
@@ -112,7 +112,7 @@ class ContentDisplayPanel extends Panel {
         add(paste);
 
         //Copy Link
-        final Component copy = new IndicatingAjaxLink("copyNode"){
+        final Component copy = new IndicatingAjaxLink<Object>("copyNode"){
             
 			private static final long serialVersionUID = -1062211579369743790L;
 			

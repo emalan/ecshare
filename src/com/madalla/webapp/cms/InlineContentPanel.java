@@ -34,7 +34,7 @@ public class InlineContentPanel extends Panel {
         
         log.debug("Content Panel being created for node=" + nodeName + " id=" + id);
         
-        Panel editableLabel = new AjaxEditableLabel("contentText"){
+        Panel editableLabel = new AjaxEditableLabel<Object>("contentText"){
 
 			private static final long serialVersionUID = 1L;
 
@@ -54,7 +54,7 @@ public class InlineContentPanel extends Panel {
                 log.debug("onBeforeRender - setting new Content. id="+id);
                 PageData page = getRepositoryservice().getPage(nodeName);
 	            contentData = getRepositoryservice().getContent(page, id, getSession().getLocale());
-                setDefaultModel(new PropertyModel(contentData, "text"));
+                setDefaultModel(new PropertyModel<String>(contentData, "text"));
                 if (((IContentAdmin)getSession()).isLoggedIn()) {
                     setEnabled(true);
                 } else {

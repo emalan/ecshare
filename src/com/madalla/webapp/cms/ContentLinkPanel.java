@@ -177,10 +177,10 @@ public class ContentLinkPanel extends Panel{
 				}
 
 			};
-			editableLink.add(new AttributeModifier("class", new AbstractReadOnlyModel() {
+			editableLink.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
 			    private static final long serialVersionUID = -3131361470864509715L;
 
-			    public Object getObject() {
+			    public String getObject() {
 			        String cssClass;
 			        if (((IContentAdmin)getSession()).isLoggedIn()) {
 			            cssClass = "contentLinkEdit";

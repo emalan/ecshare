@@ -53,10 +53,10 @@ public class ContentPanel extends Panel {
         PageData page = getRepositoryservice().getPage(node);
         String contentBody = getRepositoryservice().getContentText(page, id , getSession().getLocale());
         Component contentBlock = new ContentContainer("contentBlock", id, node, contentBody);
-        contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel() {
+        contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
 			private static final long serialVersionUID = -3131361470864509715L;
 
-			public Object getObject() {
+			public String getObject() {
                 String cssClass;
                 if (((IContentAdmin)getSession()).isLoggedIn()) {
                     cssClass = "contentEdit";
@@ -75,7 +75,7 @@ public class ContentPanel extends Panel {
         public ContentContainer(String id, String contentId, String contentNode, String contentBody) {
             super(id);
 
-            final Model contentModel = new Model(contentBody);
+            final Model<String> contentModel = new Model<String>(contentBody);
             
             // add content
             Component label = new Label("contentBody", contentModel){
@@ -93,7 +93,7 @@ public class ContentPanel extends Panel {
             add(label);
 
             // add link to edit it
-            Link link = new BookmarkablePageLink("contentLink", ContentEditPage.class, new PageParameters(CONTENT_NODE + "="
+            Link<Page> link = new BookmarkablePageLink<Page>("contentLink", ContentEditPage.class, new PageParameters(CONTENT_NODE + "="
                     + contentNode + "," + CONTENT_ID + "=" + contentId + "," + RETURN_PAGE + "="
                     + returnPage.getName())) {
                 private static final long serialVersionUID = 1801145612969874170L;

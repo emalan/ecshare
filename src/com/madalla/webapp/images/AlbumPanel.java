@@ -19,6 +19,7 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.HeaderContributor;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -42,11 +43,11 @@ public class AlbumPanel extends Panel {
 	public AlbumPanel(String id, String albumName, Class<? extends Page> returnPage) {
 		super(id);
 
-		add(HeaderContributor.forJavaScript(PROTOTYPE));
-        add(HeaderContributor.forJavaScript(EFFECTS));
-        add(HeaderContributor.forJavaScript(FAST_INIT));
-        add(HeaderContributor.forJavaScript(CROSSFADE));
-        add(HeaderContributor.forJavaScript(BANNER));
+		add(JavascriptPackageResource.getHeaderContribution(PROTOTYPE));
+        add(JavascriptPackageResource.getHeaderContribution(EFFECTS));
+        add(JavascriptPackageResource.getHeaderContribution(FAST_INIT));
+        add(JavascriptPackageResource.getHeaderContribution(CROSSFADE));
+        add(JavascriptPackageResource.getHeaderContribution(BANNER));
         add(CSS_IMAGE);
         
         AlbumData album = getRepositoryService().getAlbum(albumName);
