@@ -19,6 +19,7 @@ import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -48,9 +49,8 @@ public class EditableResourceLink extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(5000);
 	private static final Log log = LogFactory.getLog(EditableResourceLink.class);
-	public static final HeaderContributor SCRIPT_UTILS = HeaderContributor
-			.forJavaScript(new CompressedResourceReference(EditableResourceLink.class, "resourcelink.js"));
-
+	public static final HeaderContributor SCRIPT_UTILS = JavascriptPackageResource.getHeaderContribution(new CompressedResourceReference(EditableResourceLink.class, "resourcelink.js")); 
+	
 	private Form resourceForm;
 	private boolean active;
 
@@ -197,7 +197,7 @@ public class EditableResourceLink extends Panel {
 		}
 	}
 	
-	protected class StatusModel extends Model{
+	protected class StatusModel extends Model<String>{
         private static final long serialVersionUID = 1L;
         private String id;
 	    
@@ -206,7 +206,7 @@ public class EditableResourceLink extends Panel {
         }
 
         @Override
-        public Object getObject() {
+        public String getObject() {
 	        if (!StringUtils.isEmpty(id) && id.equals(getAppSession().getUploadId()) ){
 	            if (getAppSession().isUploading()) {
 	                return getString("uploading");
@@ -457,7 +457,7 @@ public class EditableResourceLink extends Panel {
 		super.onBeforeRender();
 		// lazily add label and form
 		if (resourceForm == null) {
-			initLabelForm(getModel());
+			initLabelForm(getDefaultModel());
 		}
 	}
 

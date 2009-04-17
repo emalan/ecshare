@@ -4,6 +4,7 @@ import static com.madalla.webapp.blog.BlogParameters.BLOG_ENTRY_ID;
 import static com.madalla.webapp.blog.BlogParameters.BLOG_NAME;
 import static com.madalla.webapp.blog.BlogParameters.RETURN_PAGE;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -60,7 +61,7 @@ public class BlogDisplayPanel extends Panel {
 		final boolean adminMode = ((CmsSession)getSession()).isCmsAdminMode();
 		
 		//new Blog link
-        add(new BookmarkablePageLink("createNew",BlogEntryPage.class, 
+        add(new BookmarkablePageLink<Page>("createNew",BlogEntryPage.class, 
         		new PageParameters(RETURN_PAGE+"="+returnPage.getName()+","+BLOG_ENTRY_ID+"=,"+BLOG_NAME+"="+blog.getName())){
     		private static final long serialVersionUID = -6335468391788102638L;
     		
@@ -81,14 +82,14 @@ public class BlogDisplayPanel extends Panel {
         log.debug("construtor - retrieved blog entries. count="+blogList.size());
         
         //ListView repeater
-        final ListView listView = new ListView("comments", blogList) {
+        final ListView<BlogEntryData> listView = new ListView<BlogEntryData>("comments", blogList) {
 			private static final long serialVersionUID = 1L;
 
 			public void populateItem(final ListItem listItem) {
 				final BlogEntryData current = (BlogEntryData) listItem.getModelObject();
-                listItem.add(new Label("title", new Model(current.getTitle())));
-                listItem.add(new DateLabel("date", new Model(current.getDate().toDate()), new StyleDateConverter("MS",true)));
-                listItem.add(new Label("keywords", new Model(current.getKeywords())));
+                listItem.add(new Label("title", new Model<String>(current.getTitle())));
+                listItem.add(new DateLabel("date", new Model<Date>(current.getDate().toDate()), new StyleDateConverter("MS",true)));
+                listItem.add(new Label("keywords", new Model<String>(current.getKeywords())));
 
                 final Component textSummary = new Label("textSummary", current.getSummary()).
                 	setEscapeModelStrings(false).setOutputMarkupId(true);
@@ -144,7 +145,7 @@ public class BlogDisplayPanel extends Panel {
         	blogEntry.init(blogList.get(0));
         }
 		add(new Label("blogTitle", new PropertyModel(blogEntry, "title")).setOutputMarkupId(true));
-		add(new DateLabel("date", new PropertyModel(blogEntry, "date" ), new StyleDateConverter("MS",true)).setOutputMarkupId(true));
+		add(new DateLabel("date", new PropertyModel<Date>(blogEntry, "date" ), new StyleDateConverter("MS",true)).setOutputMarkupId(true));
 		add(new Label("keywords", new PropertyModel(blogEntry, "keywords")).setOutputMarkupId(true));
 		add(new Label("text", new PropertyModel(blogEntry, "text")).setOutputMarkupId(true).setEscapeModelStrings(false));
 		PageParameters params = new PageParameters(RETURN_PAGE+"="+returnPage.getName()+","+BLOG_ENTRY_ID+"="+blogEntry.getId()+","+BLOG_NAME+"="+blog);

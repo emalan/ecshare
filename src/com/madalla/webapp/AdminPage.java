@@ -1,6 +1,6 @@
 package com.madalla.webapp;
 
-import org.apache.wicket.behavior.HeaderContributor;
+import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.border.Border;
 
@@ -15,7 +15,7 @@ public abstract class AdminPage extends WebPage {
 	    border = new AdminBorder("border");
         border.setTransparentResolver(true);
         super.add(border);
-        add(HeaderContributor.forCss(AdminPage.class,"AdminPage.css"));
+        add(CSSPackageResource.getHeaderContribution(AdminPage.class,"AdminPage.css"));
         add(Css.CSS_BUTTONS);
 	}
 	

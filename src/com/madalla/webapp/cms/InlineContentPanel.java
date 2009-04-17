@@ -43,7 +43,7 @@ public class InlineContentPanel extends Panel {
         	@Override
 			protected void onSubmit(AjaxRequestTarget target) {
 				super.onSubmit(target);
-				log.debug("onSubmit - value="+ getModelObject());
+				log.debug("onSubmit - value="+ getDefaultModel());
 	            log.debug("Submiting populated Content object to Content service.");
 	            getRepositoryservice().saveContent(contentData);
 	            info("Content saved to repository");
@@ -54,7 +54,7 @@ public class InlineContentPanel extends Panel {
                 log.debug("onBeforeRender - setting new Content. id="+id);
                 PageData page = getRepositoryservice().getPage(nodeName);
 	            contentData = getRepositoryservice().getContent(page, id, getSession().getLocale());
-                setModel(new PropertyModel(contentData, "text"));
+                setDefaultModel(new PropertyModel(contentData, "text"));
                 if (((IContentAdmin)getSession()).isLoggedIn()) {
                     setEnabled(true);
                 } else {

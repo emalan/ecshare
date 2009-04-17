@@ -45,7 +45,7 @@ public class AppAuthorizationStrategy extends AbstractPageAuthorizationStrategy{
 	 * @param pageAuthorizations
 	 * 			Collection of PageAuthorization that need to be authorized  
 	 */
-	public AppAuthorizationStrategy(final Class<?> signInPageClass, Collection <PageAuthorization> pageAuthorizations)
+	public AppAuthorizationStrategy(final Class<? extends Page> signInPageClass, Collection <PageAuthorization> pageAuthorizations)
 	{
 		
 		this.pageAuthorizations = pageAuthorizations;

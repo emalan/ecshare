@@ -6,12 +6,12 @@ import org.apache.wicket.model.IModel;
 public class AjaxValidationStyleRequiredTextField extends ValidationStyleRequiredTextField implements ValidationStyleComponent{
 	private static final long serialVersionUID = 1L;
 
-	public AjaxValidationStyleRequiredTextField(final String id, final IModel model) {
+	public AjaxValidationStyleRequiredTextField(final String id, final IModel<String> model) {
 		super(id, model);
 		add(new AjaxValidationBehaviour());
 	}
 	
-	public AjaxValidationStyleRequiredTextField(final String id, final IModel model, FeedbackPanel feedback) {
+	public AjaxValidationStyleRequiredTextField(final String id, final IModel<String> model, FeedbackPanel feedback) {
 		super(id, model, feedback);
 		add(new AjaxValidationBehaviour(feedback));
 	}

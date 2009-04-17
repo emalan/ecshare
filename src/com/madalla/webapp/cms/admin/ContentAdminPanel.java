@@ -207,11 +207,10 @@ public class ContentAdminPanel extends Panel {
 		}
 
 		@Override
-		protected void validate() {
+		protected void onValidate() {
 			if (null == file){
 				error("You must select a File to restore");
 			}
-			super.validate();
 		}
 
 	}

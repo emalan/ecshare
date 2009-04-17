@@ -34,11 +34,11 @@ class ContentDisplayPanel extends Panel {
 	public ContentDisplayPanel(String name, final ContentAdminPanel parentPanel) {
 		super(name);
 		
-		Model pathModel = new Model(){
+		Model<String> pathModel = new Model<String>(){
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Object getObject(){
+			public String getObject(){
 				return path;
 			}
 		};
@@ -46,11 +46,11 @@ class ContentDisplayPanel extends Panel {
 		nodePath.setOutputMarkupId(true);
 		add(nodePath);
 		
-		Model textModel = new Model(){
+		Model<String> textModel = new Model<String>(){
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Object getObject() {
+			public String getObject() {
 				return contentText;
 			}
 			

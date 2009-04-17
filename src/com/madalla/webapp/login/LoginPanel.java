@@ -62,7 +62,7 @@ public abstract class LoginPanel extends Panel
 	private boolean rememberMe = true;
 
 	/** Field for user name. */
-	private TextField username;
+	private TextField<String> username;
     
 	/**
 	 * Sign in form.
@@ -82,11 +82,11 @@ public abstract class LoginPanel extends Panel
 			super(id);
 			// Attach textfield components that edit properties map
 			// in lieu of a formal beans model
-			add(username = new TextField("username", new PropertyModel(credentials, "username")));
+			add(username = new TextField<String>("username", new PropertyModel<String>(credentials, "username")));
 			username.setRequired(true);
-			add(password = new PasswordTextField("password", new PropertyModel(credentials,"password")));
-            username.setLabel(new Model("User Name"));
-            password.setLabel(new Model("Password"));
+			add(password = new PasswordTextField("password", new PropertyModel<String>(credentials,"password")));
+            username.setLabel(new Model<String>("User Name"));
+            password.setLabel(new Model<String>("Password"));
             add(new FormComponentLabel("usernameLabel",username));
             add(new FormComponentLabel("passwordLabel",password));
 
@@ -95,7 +95,7 @@ public abstract class LoginPanel extends Panel
 			add(rememberMeRow);
 
 			// Add rememberMe checkbox
-			rememberMeRow.add(new CheckBox("rememberMe", new PropertyModel(LoginPanel.this,
+			rememberMeRow.add(new CheckBox("rememberMe", new PropertyModel<Boolean>(LoginPanel.this,
 					"rememberMe")));
 
 			// Make form values persistent
@@ -198,7 +198,7 @@ public abstract class LoginPanel extends Panel
 	 */
 	public String getPassword()
 	{
-		return password.getModelObjectAsString();
+		return password.getDefaultModelObjectAsString();
 	}
 
 	/**
@@ -218,7 +218,7 @@ public abstract class LoginPanel extends Panel
 	 */
 	public String getUsername()
 	{
-		return username.getModelObjectAsString();
+		return username.getDefaultModelObjectAsString();
 	}
 
 	/**

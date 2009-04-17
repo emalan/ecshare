@@ -237,9 +237,9 @@ public class UserAdminPanel extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
           		if(sendEmail("Welcome Email", getEmailWelcomeMessage())){
-               		welcomeFeedback.setModelObject(getString("welcome.success"));
+               		welcomeFeedback.setDefaultModelObject(getString("welcome.success"));
            		} else {
-           			welcomeFeedback.setModelObject(getString("welcome.fail"));
+           			welcomeFeedback.setDefaultModelObject(getString("welcome.fail"));
            		}
          		target.addComponent(welcomeFeedback);
             }
@@ -268,9 +268,9 @@ public class UserAdminPanel extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 if (sendEmail("Reset Password", getEmailResetMessage())){
-                	resetFeedback.setModelObject(getString("reset.success"));
+                	resetFeedback.setDefaultModelObject(getString("reset.success"));
                 } else {
-                	resetFeedback.setModelObject(getString("reset.fail"));
+                	resetFeedback.setDefaultModelObject(getString("reset.fail"));
                 }
                 target.addComponent(resetFeedback);
             }

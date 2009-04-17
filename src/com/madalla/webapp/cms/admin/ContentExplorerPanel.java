@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.markup.html.tree.LinkTree;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.util.GenericBaseModel;
 
 import com.madalla.cms.jcr.model.ContentNode;
 import com.madalla.cms.jcr.model.IContentNode;
@@ -40,13 +41,18 @@ class ContentExplorerPanel extends Panel {
 		refresh();
 		
 		// Create Content Tree Model
-		IModel treeModelModel = new Model(){
+		IModel<TreeModel> treeModelModel = new GenericBaseModel<TreeModel>(){
 			private static final long serialVersionUID = 1L;
 			
 			@Override
-			public Object getObject() {
+			public TreeModel getObject() {
 				return treeModel;
 			}
+
+            @Override
+            protected TreeModel createSerializableVersionOf(TreeModel object) {
+                return treeModel;
+            }
 		};
 		
 		BaseTree tree = new LinkTree("ContentTree", treeModelModel) {

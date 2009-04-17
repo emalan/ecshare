@@ -1,5 +1,6 @@
 package com.madalla.webapp.blog.admin;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -9,10 +10,10 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.datetime.StyleDateConverter;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -45,7 +46,7 @@ public class BlogEntryPanel extends Panel {
     private static final CompressedResourceReference JAVASCRIPT = new CompressedResourceReference(BlogEntryPanel.class, "BlogEntryPanel.js");
     private Log log = LogFactory.getLog(this.getClass());
     private final BlogEntryView blogEntry = new BlogEntryView();
-    private Class<?> returnPage;
+    private Class<? extends Page> returnPage;
     
     /**
      * Constructor for creating a new Blog Entry
@@ -76,8 +77,8 @@ public class BlogEntryPanel extends Panel {
     }
     
     private void init(){
-    	add(new PageLink("returnLink", returnPage));
-    	Form form = new BlogEntryForm("blogForm");
+    	add(new PageLink<Page>("returnLink", returnPage));
+    	Form<Object> form = new BlogEntryForm("blogForm");
         final FeedbackPanel feedbackPanel = new ComponentFeedbackPanel("feedback",form);
         feedbackPanel.setOutputMarkupId(true);
         form.add(feedbackPanel);
@@ -87,11 +88,11 @@ public class BlogEntryPanel extends Panel {
     private BlogEntryPanel(String id, Class<? extends Page> returnPage){
     	super(id);
     	this.returnPage = returnPage;
-    	add(HeaderContributor.forJavaScript(TinyMce.class,"tiny_mce.js"));
-        add(HeaderContributor.forJavaScript(JAVASCRIPT));
+    	add(JavascriptPackageResource.getHeaderContribution(TinyMce.class,"tiny_mce.js"));
+        add(JavascriptPackageResource.getHeaderContribution(JAVASCRIPT));
     }
     
-    final class BlogEntryForm extends Form{
+    final class BlogEntryForm extends Form<Object>{
         private static final long serialVersionUID = 1L;
         
         public BlogEntryForm(final String name) {
@@ -101,20 +102,20 @@ public class BlogEntryPanel extends Panel {
             if (blogEntry.getDate() == null){
             	blogEntry.setDate(new DateTime().toDate());
             }
-            DateTextField dateTextField = new DateTextField("dateTextField", new PropertyModel(blogEntry,"date"), new StyleDateConverter("S-",true));
+            DateTextField dateTextField = new DateTextField("dateTextField", new PropertyModel<Date>(blogEntry,"date"), new StyleDateConverter("S-",true));
             dateTextField.setRequired(true);
             dateTextField.add(new ValidationStyleBehaviour());
             FeedbackPanel dateFeedback = new ComponentFeedbackPanel("dateFeedback", dateTextField);
             dateFeedback.setOutputMarkupId(true);
             add(dateFeedback);
             dateTextField.add(new AjaxValidationBehaviour(dateFeedback));
-            dateTextField.setLabel(new Model(BlogEntryPanel.this.getString("label.date")));
+            dateTextField.setLabel(new Model<String>(BlogEntryPanel.this.getString("label.date")));
             add(dateTextField);
             dateTextField.add(new DatePicker(){
 
 				private static final long serialVersionUID = 1L;
 
-				@SuppressWarnings("unchecked") //interacting with non-generics code
+				@SuppressWarnings("unchecked") //interacting with non-generics code - YUI datePicker
 				@Override
 				protected void configure(Map widgetProperties) {
 					super.configure(widgetProperties);
@@ -127,7 +128,7 @@ public class BlogEntryPanel extends Panel {
 
             //Category select
             List<String> categories = BlogEntry.getBlogCategories();
-            FormComponent categoryDropDown = new DropDownChoice("category", new PropertyModel(blogEntry,"category"), categories);
+            FormComponent<String> categoryDropDown = new DropDownChoice<String>("category", new PropertyModel<String>(blogEntry,"category"), categories);
             categoryDropDown.setRequired(true);
             categoryDropDown.add(new ValidationStyleBehaviour());
             categoryDropDown.add(new AjaxFormComponentUpdatingBehavior("onblur"){
@@ -137,25 +138,25 @@ public class BlogEntryPanel extends Panel {
             		target.addComponent(getFormComponent());
             	}
             });
-            categoryDropDown.setLabel(new Model(BlogEntryPanel.this.getString("label.category")));
+            categoryDropDown.setLabel(new Model<String>(BlogEntryPanel.this.getString("label.category")));
             add(categoryDropDown);
             add(new ComponentFeedbackPanel("categoryFeedback", categoryDropDown));
 
             //Title
             FeedbackPanel titleFeedback = new FeedbackPanel("titleFeedback");
             add(titleFeedback);
-            TextField title = new AjaxValidationStyleRequiredTextField("title",new PropertyModel(blogEntry,"title"), titleFeedback);
-            title.setLabel(new Model(BlogEntryPanel.this.getString("label.title")));
+            TextField<String> title = new AjaxValidationStyleRequiredTextField("title",new PropertyModel<String>(blogEntry,"title"), titleFeedback);
+            title.setLabel(new Model<String>(BlogEntryPanel.this.getString("label.title")));
             add(title);
             
-            add(new TextArea("description",new PropertyModel(blogEntry,"description")).setConvertEmptyInputStringToNull(false));
-            add(new TextField("keywords",new PropertyModel(blogEntry,"keywords")).setConvertEmptyInputStringToNull(false));
+            add(new TextArea<String>("description",new PropertyModel<String>(blogEntry,"description")).setConvertEmptyInputStringToNull(false));
+            add(new TextField<String>("keywords",new PropertyModel<String>(blogEntry,"keywords")).setConvertEmptyInputStringToNull(false));
             
-            add(new TextArea("text", new PropertyModel(blogEntry, "text")));
+            add(new TextArea<String>("text", new PropertyModel<String>(blogEntry, "text")));
             
             add(new SubmitLink("submitButton"));
             
-            add(new Link("cancelButton"){
+            add(new Link<Object>("cancelButton"){
 				private static final long serialVersionUID = 1L;
 
 				@Override
