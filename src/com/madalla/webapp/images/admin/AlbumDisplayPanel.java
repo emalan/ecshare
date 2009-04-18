@@ -1,6 +1,7 @@
 package com.madalla.webapp.images.admin;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
 import org.apache.commons.logging.Log;
@@ -35,7 +36,7 @@ class AlbumDisplayPanel extends Panel {
 	public AlbumDisplayPanel(String id, final String albumName) {
 		super(id);
 		
-		final Form form = new Form("albumForm");
+		final Form<Object> form = new Form<Object>("albumForm");
 		
 		form.add(new FeedbackPanel("albumFeedback"));
 		
@@ -62,11 +63,11 @@ class AlbumDisplayPanel extends Panel {
 		
 		
 
-		IModel treeModel = new LoadableDetachableModel(){
+		IModel<TreeModel> treeModel = new LoadableDetachableModel<TreeModel>(){
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected Object load() {
+			protected TreeModel load() {
 			    AlbumData album = getRepositoryService().getAlbum(albumName);
 				return getRepositoryService().getAlbumImagesAsTree(album);
 			}

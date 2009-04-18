@@ -22,6 +22,7 @@ public class ValidationStyleBehaviour extends AbstractBehavior {
 		this.invalidClass = invalidClass;
 	}
 	
+	@Override
 	public void onComponentTag(final Component component,
 			final ComponentTag tag) {
 		FormComponent comp = (FormComponent) component;

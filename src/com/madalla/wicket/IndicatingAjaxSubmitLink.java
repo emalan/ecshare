@@ -10,7 +10,7 @@ public abstract class IndicatingAjaxSubmitLink extends AjaxSubmitLink implements
 	private final WicketAjaxIndicatorAppender indicatorAppender = new WicketAjaxIndicatorAppender();
 
 
-	public IndicatingAjaxSubmitLink(String id, Form form) {
+	public IndicatingAjaxSubmitLink(String id, Form<?> form) {
 		super(id, form);
 		add(indicatorAppender);
 	}

@@ -19,7 +19,7 @@ public class PropertyEditableColumn extends PropertyRenderableColumn{
 
 	    public Component newCell(MarkupContainer parent, String id, TreeNode node, int level)
 	    {
-	        return new EditablePanel(id, new PropertyModel(node, getPropertyExpression()));
+	        return new EditablePanel(id, new PropertyModel<String>(node, getPropertyExpression()));
 	    }
 
 	    public IRenderable newCell(TreeNode node, int level)

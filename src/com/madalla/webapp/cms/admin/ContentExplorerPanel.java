@@ -1,7 +1,6 @@
 package com.madalla.webapp.cms.admin;
 
 import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreeNode;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -56,14 +55,15 @@ class ContentExplorerPanel extends Panel {
 		};
 		
 		BaseTree tree = new LinkTree("ContentTree", treeModelModel) {
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			protected IModel getNodeTextModel(IModel model) {
-				JcrTreeNode jcrTreeNode = (JcrTreeNode) model.getObject();
+            @Override
+            protected IModel<Object> getNodeTextModel(IModel<Object> nodeModel) {
+                JcrTreeNode jcrTreeNode = (JcrTreeNode) nodeModel.getObject();
                 return new Model(jcrTreeNode.renderNode());
-			}
+            }
 			
-			protected Component newNodeComponent(String id, IModel model) {
+			protected Component newNodeComponent(String id, IModel<Object> model) {
 				return new LinkIconPanel(id, model, this) {
 
 				    private static final long serialVersionUID = 1L;
@@ -86,7 +86,7 @@ class ContentExplorerPanel extends Panel {
 				    }
 					
 					@Override
-					protected Component newContentComponent(String componentId, BaseTree tree, IModel model) {
+					protected Component newContentComponent(String componentId, BaseTree tree, IModel<Object> model) {
 						return new Label(componentId, getNodeTextModel(model));
 					}
 				};

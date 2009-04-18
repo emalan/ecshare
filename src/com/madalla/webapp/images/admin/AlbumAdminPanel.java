@@ -4,13 +4,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -31,6 +31,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
 
 import com.madalla.bo.image.IAlbumData;
+import com.madalla.bo.image.ImageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.css.Css;
@@ -41,7 +42,7 @@ import com.madalla.wicket.form.upload.MultiFileUploadField;
 public class AlbumAdminPanel extends Panel{
 	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(2000);
 	
-	private class FileUploadForm extends Form{
+	private class FileUploadForm extends Form<Object>{
 		private static final long serialVersionUID = 1L;
 		
 		private final Collection<FileUpload> uploads = new ArrayList<FileUpload>();
@@ -50,7 +51,7 @@ public class AlbumAdminPanel extends Panel{
             super(name);
 
             setMultiPart(true);
-            add(new MultiFileUploadField("fileInput", new PropertyModel(this, "uploads"), 5));
+            add(new MultiFileUploadField("fileInput", new PropertyModel<Collection<FileUpload>>(this, "uploads"), 5));
             setMaxSize(MAX_FILE_SIZE);
         }
 		
@@ -66,13 +67,13 @@ public class AlbumAdminPanel extends Panel{
                 	log.info("file upload - Content type="+contentType);
                 	if (!(contentType.equalsIgnoreCase("image/png") || contentType.equalsIgnoreCase("image/jpeg"))){
                 		log.warn("file upload - Input type not supported. Type="+contentType);
-                		warn(getString("error.type", new Model(upload)));
+                		warn(getString("error.type", new Model<FileUpload>(upload)));
                 		continue;
                 	}
                 	InputStream inputStream = upload.getInputStream();
                 	if (inputStream == null){
                 		log.warn("file upload - Input resource invalid.");
-                		warn(getString("error.resource", new Model(upload)));
+                		warn(getString("error.resource", new Model<FileUpload>(upload)));
                 		continue;
                 	} 
                 	String imageName = StringUtils.deleteWhitespace(upload.getClientFileName());
@@ -80,7 +81,7 @@ public class AlbumAdminPanel extends Panel{
                 	IAlbumData album = getRepositoryService().getOriginalsAlbum();
                 	getRepositoryService().createImage(album, imageName, inputStream);
                 	log.info("finished processing upload "+ imageName);
-                	info(getString("info.success", new Model(upload)));
+                	info(getString("info.success", new Model<FileUpload>(upload)));
                 	
 				} catch (Exception e) {
 					log.error("onSubmit - failed to upload File."+e.getLocalizedMessage());
@@ -90,15 +91,15 @@ public class AlbumAdminPanel extends Panel{
         }
 	}
 	
-	private class ImageListView extends ListView{
+	private class ImageListView extends ListView<ImageData>{
 		private static final long serialVersionUID = 1L;
 
-		public ImageListView(String id, final IModel files) {
+		public ImageListView(String id, final IModel<List<ImageData>> files) {
 			super(id, files);
 		}
 
 		@Override
-		protected void populateItem(final ListItem listItem) {
+		protected void populateItem(final ListItem<ImageData> listItem) {
 			final com.madalla.cms.bo.impl.ocm.image.Image imageData = (com.madalla.cms.bo.impl.ocm.image.Image)listItem.getModelObject();
             listItem.add(new Label("file", imageData.getName()));
             Image image = new Image("thumb",imageData.getImageThumb());
@@ -106,7 +107,7 @@ public class AlbumAdminPanel extends Panel{
             image.add(new DraggableAjaxBehaviour(imageData.getName()));
             
             listItem.add(image);
-            listItem.add(new IndicatingAjaxFallbackLink("delete") {
+            listItem.add(new IndicatingAjaxFallbackLink<Object>("delete") {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -134,7 +135,7 @@ public class AlbumAdminPanel extends Panel{
 		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.EFFECTS));
 		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.DRAGDROP));
 		
-		add(new PageLink("returnLink", returnPage));
+		add(new PageLink<Page>("returnLink", returnPage));
 		
         final FileUploadForm simpleUploadForm = new FileUploadForm("simpleUpload");
         final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
@@ -144,10 +145,10 @@ public class AlbumAdminPanel extends Panel{
         add(new AlbumDisplayPanel("albumDisplay", albumName));
         
         // Add folder view
-        imageListView = new ImageListView("imageListView", new LoadableDetachableModel() {
+        imageListView = new ImageListView("imageListView", new LoadableDetachableModel<List<ImageData>>() {
 			private static final long serialVersionUID = 1L;
 
-			protected Object load() {
+			protected List<ImageData> load() {
                 return getRepositoryService().getAlbumOriginalImages();
             }
 			

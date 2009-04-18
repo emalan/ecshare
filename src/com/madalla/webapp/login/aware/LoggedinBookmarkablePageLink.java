@@ -1,15 +1,16 @@
 package com.madalla.webapp.login.aware;
 
+import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 
 import com.madalla.webapp.cms.IContentAdmin;
 
-public class LoggedinBookmarkablePageLink extends BookmarkablePageLink{
+public class LoggedinBookmarkablePageLink extends BookmarkablePageLink<Page>{
 	private static final long serialVersionUID = 1L;
 	final private boolean admin;
 	
-	public LoggedinBookmarkablePageLink(String id, Class<?> pageClass, PageParameters parameters,
+	public LoggedinBookmarkablePageLink(String id, Class<? extends Page> pageClass, PageParameters parameters,
 			final boolean admin){
 		super(id, pageClass, parameters);
 		this.admin = admin;

@@ -67,7 +67,7 @@ public abstract class LoginPanel extends Panel
 	/**
 	 * Sign in form.
 	 */
-	public final class SignInForm extends Form
+	public final class SignInForm extends Form<Object>
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -139,7 +139,7 @@ public abstract class LoginPanel extends Panel
 
 		this.includeRememberMe = includeRememberMe;
 		
-		Form form = new SignInForm("signInForm", credentials);
+		Form<Object> form = new SignInForm("signInForm", credentials);
 		add(form);
 		
 		final FeedbackPanel feedback = new FeedbackPanel("loginFeedback");
@@ -151,13 +151,13 @@ public abstract class LoginPanel extends Panel
             private static final long serialVersionUID = 1L;
 
             @Override
-			protected void onError(AjaxRequestTarget target, Form form) {
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax onError called");
 				target.addComponent(feedback);
 			}
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form form) {
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax submit called");
 				target.addComponent(feedback);
 				if (signIn(getUsername(), getPassword()))
@@ -177,7 +177,7 @@ public abstract class LoginPanel extends Panel
 
 		submit.setVisibilityAllowed(true);
 		form.add(submit);
-		form.add(new AttributeModifier("onSubmit", true, new Model("document.getElementById('" + submit.getMarkupId() + "').onclick();return false;")));
+		form.add(new AttributeModifier("onSubmit", true, new Model<String>("document.getElementById('" + submit.getMarkupId() + "').onclick();return false;")));
 		
 	}
 

@@ -7,7 +7,7 @@ public class AjaxValidationStylePasswordField extends ValidationStylePasswordFie
 
     private static final long serialVersionUID = -1566218353018783473L;
 
-    public AjaxValidationStylePasswordField(final String id, final IModel model, FeedbackPanel feedback){
+    public AjaxValidationStylePasswordField(final String id, final IModel<String> model, FeedbackPanel feedback){
         super(id, model, feedback);
         add(new AjaxValidationBehaviour(feedback));
     }

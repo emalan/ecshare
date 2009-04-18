@@ -15,12 +15,12 @@ public abstract class AjaxValidationStyleSubmitLink extends IndicatingAjaxSubmit
 	private static final long serialVersionUID = 5857888282264283281L;
 	private static final Log log = LogFactory.getLog(AjaxValidationStyleSubmitLink.class);
 	
-	public AjaxValidationStyleSubmitLink(String id, Form form) {
+	public AjaxValidationStyleSubmitLink(String id, Form<?> form) {
 		super(id, form);
 	}
 
 	@Override
-	protected void onSubmit(final AjaxRequestTarget target, Form form){
+	protected void onSubmit(final AjaxRequestTarget target, Form<?> form){
         log.debug("Ajax onSubmit called.");
         form.visitChildren(new Component.IVisitor() {
             public Object component(Component component){
@@ -41,7 +41,7 @@ public abstract class AjaxValidationStyleSubmitLink extends IndicatingAjaxSubmit
 	}
 	
 	@Override
-	protected void onError(final AjaxRequestTarget target, Form form){
+	protected void onError(final AjaxRequestTarget target, Form<?> form){
         log.debug("Ajax onError called");
         form.visitChildren(new Component.IVisitor() {
             public Object component(Component component) {

@@ -20,7 +20,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 
 public class EditablePanel extends Panel {
 
@@ -32,14 +32,14 @@ public class EditablePanel extends Panel {
      * @param id
      *            Markup id
      * 
-     * @param inputModel
+     * @param propertyModel
      *            Model of the text field
      */
-    public EditablePanel(String id, IModel inputModel)
+    public EditablePanel(String id, PropertyModel<String> propertyModel)
     {
         super(id);
 
-        TextField field = new TextField("textfield", inputModel);
+        TextField<String> field = new TextField<String>("textfield", propertyModel);
         add(field);
 
         field.add(new AjaxFormComponentUpdatingBehavior("onblur")

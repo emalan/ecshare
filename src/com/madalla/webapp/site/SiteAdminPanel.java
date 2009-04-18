@@ -11,7 +11,8 @@ import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import com.madalla.bo.SiteData;
@@ -26,22 +27,20 @@ public class SiteAdminPanel extends Panel{
     private static final long serialVersionUID = 1L;
     private static final Log log = LogFactory.getLog(SiteAdminPanel.class);
     
-    private SiteData data;
-    
-    public class SiteForm extends Form {
+    public class SiteForm extends Form<SiteData> {
 
-        public SiteForm(String id) {
-            super(id);
+        public SiteForm(String id, IModel<SiteData> model) {
+            super(id, model);
             
             FeedbackPanel emailFeedback = new FeedbackPanel("emailFeedback");
             add(emailFeedback);
-            TextField email = new AjaxValidationStyleRequiredTextField("Email",
-                    new PropertyModel(data, "adminEmail"), emailFeedback);
+            TextField<String> email = new AjaxValidationStyleRequiredTextField("adminEmail",emailFeedback);
             email.add(EmailAddressValidator.getInstance());
             add(email);
 
-            add(new TextField("description", new PropertyModel(data, "metaDescription")));
-            add(new TextField("keywords", new PropertyModel(data, "metaKeywords")));
+            add(new TextField<String>("metaDescription"));
+           
+            add(new TextField<String>("metaKeywords"));
         }
 
         private static final long serialVersionUID = 1L;
@@ -52,11 +51,9 @@ public class SiteAdminPanel extends Panel{
         super(id);
         add(Css.CSS_FORM);
         
-        add(new PageLink("returnLink", returnPage));
+        add(new PageLink<Page>("returnLink", returnPage));
         
-        data = getSiteData();
-        
-        final Form form = new SiteForm("siteForm");
+        final Form<SiteData> form = new SiteForm("siteForm", new CompoundPropertyModel<SiteData>(getSiteData()));
         add(form);
         
         final FeedbackPanel siteFeedback = new ComponentFeedbackPanel("siteFeedback", form);
@@ -68,14 +65,14 @@ public class SiteAdminPanel extends Panel{
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onError(AjaxRequestTarget target, Form form) {
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
                 super.onError(target, form);
             }
 
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form form) {
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 super.onSubmit(target, form);
-                saveSiteData();
+                saveSiteData((SiteData)form.getModelObject());
                 form.info(getString("message.success"));
             }
             
@@ -91,7 +88,7 @@ public class SiteAdminPanel extends Panel{
         return getRepositoryService().getSiteData();
     }
     
-    private void saveSiteData(){
+    private void saveSiteData(SiteData data){
         log.debug("saveSiteData - + " + data);
         getRepositoryService().saveSite(data);
     }

@@ -18,11 +18,8 @@ import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -32,7 +29,7 @@ import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
-import com.madalla.webapp.CmsSession;
+import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
 import com.madalla.webapp.pages.AlbumAdminPage;
 
 public class AlbumPanel extends Panel {
@@ -52,30 +49,16 @@ public class AlbumPanel extends Panel {
         
         AlbumData album = getRepositoryService().getAlbum(albumName);
         
-        Link link = new BookmarkablePageLink("adminLink", AlbumAdminPage.class, new PageParameters(ALBUM +"="+albumName+","+RETURN_PAGE+"="+returnPage.getName())) {
-            private static final long serialVersionUID = 1801145612969874170L;
-
-            protected final void onBeforeRender() {
-                if (((CmsSession)getSession()).isCmsAdminMode()) {
-                    setEnabled(true);
-                } else {
-                    setEnabled(false);
-                }
-                super.onBeforeRender();
-            }
-
-        };
-        link.setAfterDisabledLink("");
-        link.setBeforeDisabledLink("");
-        add(link);
+        add(new LoggedinBookmarkablePageLink("adminLink", AlbumAdminPage.class, 
+                new PageParameters(ALBUM +"="+albumName+","+RETURN_PAGE+"="+returnPage.getName()), true));
         
         List<ImageData> images = getRepositoryService().getAlbumImages(album);
         
-        add(new ListView("image-list", images){
+        add(new ListView<ImageData>("image-list", images){
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem item) {
+			protected void populateItem(ListItem<ImageData> item) {
 				final com.madalla.cms.bo.impl.ocm.image.Image imageData = (com.madalla.cms.bo.impl.ocm.image.Image) item.getModelObject();
 				if (imageData.getImageFull() != null){
 					Image image = new Image("id",imageData.getImageFull());
