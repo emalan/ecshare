@@ -63,8 +63,8 @@ public class ContentAdminPanel extends Panel {
                 new PageParameters(RETURN_PAGE + "=" + returnPage.getName()), true));
 		
         setBackupFileList();
-        final ListChoice listChoice = new ListChoice("backupFiles", new PropertyModel(this,"file"), 
-        		new PropertyModel(this,"backupFiles"),new ChoiceRenderer("displayName"), 8){ 
+        final ListChoice<BackupFile> listChoice = new ListChoice<BackupFile>("backupFiles", new PropertyModel<BackupFile>(this,"file"), 
+        		 new PropertyModel<List<? extends BackupFile>>(this,"backupFiles"),new ChoiceRenderer<BackupFile>("displayName"), 8){ 
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -78,7 +78,7 @@ public class ContentAdminPanel extends Panel {
 					}
         };
         listChoice.setOutputMarkupId(true);
-        final Form form = new RestoreForm("restoreForm", listChoice);
+        final Form<Object> form = new RestoreForm("restoreForm", listChoice);
         add(form);
 		
         final FeedbackPanel backupMessages = new FeedbackPanel("backupMessages",new IFeedbackMessageFilter(){
@@ -169,7 +169,7 @@ public class ContentAdminPanel extends Panel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form form) {
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				restoreContent();
 				info("Restore successful.");
 				target.addComponent(restoreMessages);
@@ -187,12 +187,12 @@ public class ContentAdminPanel extends Panel {
 
 	}
 	
-	public class RestoreForm extends Form{
+	public class RestoreForm extends Form<Object>{
 
 		private static final long serialVersionUID = 4729370802782788350L;
 		
 		
-		public RestoreForm(String id, final ListChoice listChoice){
+		public RestoreForm(String id, final ListChoice<BackupFile> listChoice){
 			super(id);
 	        add(listChoice);
 		}

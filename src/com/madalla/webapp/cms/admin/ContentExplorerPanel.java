@@ -65,22 +65,27 @@ class ContentExplorerPanel extends Panel {
 			
 			protected Component newNodeComponent(String id, IModel model) {
 				return new LinkIconPanel(id, model, this) {
-					private static final long serialVersionUID = 1L;
 
-					protected void onNodeLinkClicked(TreeNode node,
-							BaseTree tree, AjaxRequestTarget target) {
-						super.onNodeLinkClicked(node, tree, target);
-						log.debug("onNodeLinkClicked - " + node);
-						JcrTreeNode jcrTreeNode = (JcrTreeNode) node;
-						if (jcrTreeNode.getObject() instanceof ContentNode) {
-							IContentNode contentNode = (IContentNode) jcrTreeNode.getObject();
-							String path = contentNode.getPath();
-							log.debug("onNodeLinkClicked - path=" + path);
-							parentPanel.refreshDisplayPanel(path);
-							target.addComponent(parentPanel.getDisplayPanel());
-						}
-					}
+				    private static final long serialVersionUID = 1L;
 
+				    @Override
+                    protected void onNodeLinkClicked(Object node, BaseTree tree,
+                            AjaxRequestTarget target) {
+                        super.onNodeLinkClicked(node, tree, target);
+                        log.debug("onNodeLinkClicked - " + node);
+                        super.onNodeLinkClicked(node, tree, target);
+                        
+                        JcrTreeNode jcrTreeNode = (JcrTreeNode) node;
+                        if (jcrTreeNode.getObject() instanceof ContentNode) {
+                            IContentNode contentNode = (IContentNode) jcrTreeNode.getObject();
+                            String path = contentNode.getPath();
+                            log.debug("onNodeLinkClicked - path=" + path);
+                            parentPanel.refreshDisplayPanel(path);
+                            target.addComponent(parentPanel.getDisplayPanel());
+                        }
+				    }
+					
+					@Override
 					protected Component newContentComponent(String componentId, BaseTree tree, IModel model) {
 						return new Label(componentId, getNodeTextModel(model));
 					}
