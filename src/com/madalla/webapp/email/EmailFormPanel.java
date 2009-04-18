@@ -169,7 +169,7 @@ public class EmailFormPanel extends Panel {
 					public Object component(Component component) {
 	           			log.debug("formVisitor="+component);
 	           			if (component instanceof FormComponent) {
-	           				FormComponent formComponent = (FormComponent) component;
+	           				FormComponent<?> formComponent = (FormComponent<?>) component;
 	           				if (!formComponent.isValid()){
 	           					target.addComponent(formComponent);
 	           					log.debug("Component is invalid. Component MarkupId="+formComponent.getMarkupId()+". Message is " +formComponent.getFeedbackMessage().getMessage());

@@ -9,14 +9,14 @@ form div {
 form div label {
   float: left;
   left: 0;  
-  font-size: 12px; 
+  font-size: 93%; 
   padding-top: 10px; padding-right: 10px; padding-left: 5px;
 }
 
 form input {
 	float: left;
     margin: 10px 0 0 0;
-    font-family: verdana,arial,helvetica,sans; font-size: 11px;
+    font-family: verdana,arial,helvetica,sans; font-size: 85%;
     border: 1px solid #8E8E8E;
     color: #444444;
 }
@@ -57,20 +57,22 @@ form select {
     border: 1px solid #8E8E8E; 
     color: #444444; 
     background-color:#FFFFFF; 
-    font-family: verdana,arial,helvetica,sans; font-size: 11px;
+    font-family: verdana,arial,helvetica,sans; font-size: 85%;
 }
 
 textarea {
   margin: 10px 0 0 0;
   border: 1px solid #8E8E8E; color:#2B5E2C; background-color:#FFFFFF; 
-  font-family: verdana,arial,helvetica,sans; font-size: 11px;
+  font-family: verdana,arial,helvetica,sans; font-size: 85%;
 }
 
 form div .feedbackPanel {
 	float: left;
-	margin-top: 10px;
+	margin-top: 0.4em;
 }
-
+ul.feedbackPanel{
+    margin:0;
+}
 .feedbackPanel ul li {
     font-style:normal;
     list-style-image:none;
