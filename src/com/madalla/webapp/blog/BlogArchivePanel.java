@@ -52,7 +52,8 @@ public class BlogArchivePanel extends Panel {
 		BaseTree tree = new LinkTree("BlogTree", blogEntries) {
 			private static final long serialVersionUID = 1L;
 			
-			protected IModel getNodeTextModel(IModel model) {
+			@Override
+			protected IModel<Object> getNodeTextModel(IModel<Object> model) {
 				DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) model.getObject();
 				if (treeNode.getUserObject() instanceof ICalendarTreeInput ){
 					ICalendarTreeInput treeInput = (ICalendarTreeInput) treeNode.getUserObject();
@@ -63,15 +64,18 @@ public class BlogArchivePanel extends Panel {
 				}
 			}
 
-			protected Component newNodeComponent(String id, IModel model) {
+			@Override
+			protected Component newNodeComponent(String id, IModel<Object> model) {
 				return new LinkIconPanel(id, model, this) {
-					private static final long serialVersionUID = 1L;
+                    private static final long serialVersionUID = 1L;
 
-					protected void onNodeLinkClicked(TreeNode node,	BaseTree tree, AjaxRequestTarget target) {
+					@Override
+					protected void onNodeLinkClicked(Object node,	BaseTree tree, AjaxRequestTarget target) {
 						super.onNodeLinkClicked(node, tree, target);
 						log.debug("onNodeLinkClicked - " + node);
 
-						if (node.isLeaf()) {
+						
+						if (node instanceof TreeNode && ((TreeNode)node).isLeaf()) {
 							log.debug("onNodeLinkClicked - "+node);
 							DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) node;
 							if (treeNode.getUserObject() instanceof BlogEntryData){
@@ -91,7 +95,8 @@ public class BlogArchivePanel extends Panel {
 						}
 					}
 
-					protected Component newContentComponent(String componentId, BaseTree tree, IModel model) {
+					@Override
+					protected Component newContentComponent(String componentId, BaseTree tree, IModel<Object> model) {
 						return new Label(componentId, getNodeTextModel(model));
 					}
 				};
@@ -102,7 +107,7 @@ public class BlogArchivePanel extends Panel {
 		tree.setLinkType(LinkType.AJAX_FALLBACK);
 		add(tree);
 		
-		Link home = new AjaxFallbackLink("home"){
+		Link<Object> home = new AjaxFallbackLink<Object>("home"){
 			private static final long serialVersionUID = 1L;
 
 			@Override

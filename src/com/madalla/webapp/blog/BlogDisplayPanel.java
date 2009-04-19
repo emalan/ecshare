@@ -85,8 +85,9 @@ public class BlogDisplayPanel extends Panel {
         final ListView<BlogEntryData> listView = new ListView<BlogEntryData>("comments", blogList) {
 			private static final long serialVersionUID = 1L;
 
-			public void populateItem(final ListItem listItem) {
-				final BlogEntryData current = (BlogEntryData) listItem.getModelObject();
+			@Override
+			public void populateItem(final ListItem<BlogEntryData> listItem) {
+				final BlogEntryData current = listItem.getModelObject();
                 listItem.add(new Label("title", new Model<String>(current.getTitle())));
                 listItem.add(new DateLabel("date", new Model<Date>(current.getDate().toDate()), new StyleDateConverter("MS",true)));
                 listItem.add(new Label("keywords", new Model<String>(current.getKeywords())));
@@ -99,7 +100,7 @@ public class BlogDisplayPanel extends Panel {
                 	.setEscapeModelStrings(false).setOutputMarkupId(true);	
                 listItem.add(textFull);
                 
-                AjaxFallbackLink link = new AjaxFallbackLink("showFullText"){
+                AjaxFallbackLink<Object> link = new AjaxFallbackLink<Object>("showFullText"){
 					private static final long serialVersionUID = 8535809673244662238L;
 
 					@Override
@@ -122,7 +123,7 @@ public class BlogDisplayPanel extends Panel {
                 
                 
                 PageParameters params = new PageParameters(RETURN_PAGE+"="+returnPage.getName()+","+BLOG_ENTRY_ID+"="+current.getId()+","+BLOG_NAME+"="+blog);
-                listItem.add(new BookmarkablePageLink("editBlog",BlogEntryPage.class, params){
+                listItem.add(new BookmarkablePageLink<Page>("editBlog",BlogEntryPage.class, params){
                     
         			private static final long serialVersionUID = 1L;
 
@@ -144,12 +145,12 @@ public class BlogDisplayPanel extends Panel {
         if (blogList.size() > 0){
         	blogEntry.init(blogList.get(0));
         }
-		add(new Label("blogTitle", new PropertyModel(blogEntry, "title")).setOutputMarkupId(true));
+		add(new Label("blogTitle", new PropertyModel<String>(blogEntry, "title")).setOutputMarkupId(true));
 		add(new DateLabel("date", new PropertyModel<Date>(blogEntry, "date" ), new StyleDateConverter("MS",true)).setOutputMarkupId(true));
-		add(new Label("keywords", new PropertyModel(blogEntry, "keywords")).setOutputMarkupId(true));
-		add(new Label("text", new PropertyModel(blogEntry, "text")).setOutputMarkupId(true).setEscapeModelStrings(false));
+		add(new Label("keywords", new PropertyModel<String>(blogEntry, "keywords")).setOutputMarkupId(true));
+		add(new Label("text", new PropertyModel<String>(blogEntry, "text")).setOutputMarkupId(true).setEscapeModelStrings(false));
 		PageParameters params = new PageParameters(RETURN_PAGE+"="+returnPage.getName()+","+BLOG_ENTRY_ID+"="+blogEntry.getId()+","+BLOG_NAME+"="+blog);
-        add(new BookmarkablePageLink("editBlogLink",BlogEntryPage.class, params){
+        add(new BookmarkablePageLink<Page>("editBlogLink",BlogEntryPage.class, params){
             
 			private static final long serialVersionUID = 1L;
 
