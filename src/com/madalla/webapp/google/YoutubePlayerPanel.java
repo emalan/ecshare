@@ -9,7 +9,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.validation.validator.NumberValidator;
+import org.apache.wicket.validation.validator.RangeValidator;
 
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.video.VideoPlayerData;
@@ -57,8 +57,8 @@ public class YoutubePlayerPanel extends Panel {
 			
 		});
 		form.add(newFormField("videoid", new PropertyModel(videoData, "videoId")));
-		form.add(newFormField("height", new PropertyModel(videoData, "height")).add(new NumberValidator.RangeValidator(10,700)));
-		form.add(newFormField("width", new PropertyModel(videoData, "width")).add(new NumberValidator.RangeValidator(10,900)));
+		form.add(newFormField("height", new PropertyModel(videoData, "height")).add(new RangeValidator(10,700)));
+		form.add(newFormField("width", new PropertyModel(videoData, "width")).add(new RangeValidator(10,900)));
 		add(form);
 		
 	}
