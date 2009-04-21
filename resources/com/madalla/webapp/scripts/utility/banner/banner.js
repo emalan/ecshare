@@ -2,83 +2,73 @@
 * Banner
 * Author : Eugene Malan
 * 
-* This Class will use Crossfade to crossfade from one block of html
-* to another. It will also add controls that allow you to select a
-* block.
+* The Banner class extends Crossfade to supply a navigation bar that allows
+* you to navigate from one fade element to another.
 * 
-* We are extending the Crossfade class found in crossfade.js
-* the Crossfade class depends on the Scriptaculous and Prototype libraries 
+* We are extending the Crossfade class found in crossfade.js. Crossfade supplies the 
+* functionality that fades form one html element to another. Crossfade depends on 
+* the Scriptaculous (effects) and Prototype libraries.
 * 
-* * 
 */
 
 var Banner = Class.create(Crossfade, {
-    initialize : function($super, elm, options) {
-        $super(elm, options);
-        /* We are going to create some navigation html and DOM insert them in the page */
-        if (this.elm.id) {
-            
-            /* Main Div */
-            var element = new Element('div', {id :'controls'});
-            
-            /* create previous element, bind to previous method and add to the main div */
-            var prev = new Element('span', {id :$(elm).className + '-previous'})
-                .addClassName('control').update('&lt;').setStyle(Banner.controlStyle)
-                .observe('click', this.previous.bind(this));
-            element.appendChild(prev);
-            
-            /* For each slide create an element, bind to gotoSlide method and add to div */
-            for ( var index = 0; index < this.slides.length; ++index) {
-                var nav = new Element('span', {id :$(elm).className + '-' + index})
-                    .addClassName('control').update(index + 1).setStyle(Banner.controlStyle)
-                    .observe('click', this.gotoSlide.bindAsEventListener( this, index));
-                element.appendChild(nav);
-            }
-            
-            /* create the next element, bind to the next method and add to the div */
-            var next = new Element('span', {id :$(elm).className + '-next'})
-                .addClassName('control').update('&gt;').setStyle(Banner.controlStyle)
-                .observe('click', this.next.bind(this));
-            element.appendChild(next);
-            
-            /* add the controls div to the banner elelent */
-            $($(elm).parentNode).appendChild(element);
-            
-            /* set the counter to the first one */
-            this.setNav(0);
+	initialize : function($super, elm, options) {
+		$super(elm, Object.extend(Object.clone(Banner.defaults),options || {}));
+		
+		var element = new Element('div', {id :'controls'});
+		var prev = new Element('span', {id : $(elm).className + '-previous'})
+			.addClassName('control').update('<')
+			.setStyle(Banner.controlStyle)
+			.observe('click', this.previous.bind(this));
+		element.appendChild(prev);
+		for ( var index = 0; index < this.slides.length; ++index) {
+			var nav = new Element('span', {id : $(elm).className + '-' + index})
+				.addClassName('control').update(index + 1).setStyle(Banner.controlStyle)
+			    .observe('click', this.gotoSlide.bindAsEventListener(	this, index));
+			element.appendChild(nav);
+		}
+		var next = new Element('span', {id : $(elm).className + '-next'})
+			.addClassName('control')
+            .update('>')
+            .setStyle(Banner.controlStyle)
+		    .observe('click', this.next.bind(this));
+		element.appendChild(next);
+		$($(elm).parentNode).appendChild(element);
+		this.setNav(0);
+        if(!this.options.autoStart) { 
+             setTimeout(this.start.bind(this),this.rndm((this.options.interval-1)*1000,(this.options.interval+1)*1000)); 
         }
-        /* Start the timer */
-        if (this.slides.length > 1) {setTimeout(this.start.bind(this),this.rndm((this.options.interval-1)*1000,(this.options.interval+1)*1000))};
-    },
-    cycle : function($super, dir) {
-        $super(dir);
-        this.setNav(this.counter);
-    },  
+	},
+	cycle : function($super, dir) {
+		$super(dir);
+		this.setNav(this.counter);
+	},	
     gotoSlide : function(e){
-        if(!this.ready) { return; }
-        this.stop();
-        this.ready = false;
-        var data = $A(arguments);
-        var me = this;
-        var clicked = data[1]; 
-        if (this.counter == clicked) { this.ready = true; return; }
-        this.setNav(clicked)
-        var prevSlide = this.slides[this.counter];
-        var me = this; 
-        var nav = $(me.elm.id + '-' + this.counter );
-        var nextSlide = this.slides[clicked];
-        this.counter = clicked;
-            this.loadSlide(nextSlide, me.options.transition.cycle(prevSlide, nextSlide, me));   
+		if(!this.ready) { return; }
+ 		this.stop();
+		this.ready = false;
+  		var data = $A(arguments);
+		var clicked = data[1]; 
+		if (this.counter == clicked) { this.ready = true; return; }
+		this.setNav(clicked)
+		var prevSlide = this.slides[this.counter];
+		var me = this; 
+		var nextSlide = this.slides[clicked];
+		this.counter = clicked;
+        	this.loadSlide(nextSlide, me.options.transition.cycle(prevSlide, nextSlide, me));	
         },
     setNav : function(counter){
-        for (var index = 0; index < this.slides.length; ++index){
-            var nav = $(this.elm.id + '-' + index);
-            if (nav) { nav.setStyle({fontWeight:'normal', color:'#FFFFFF'});}
-        }
-        var nav = $(this.elm.className + '-' + counter);
-        if (nav) { new Effect.Pulsate(nav,{pulses:1, duration:0.5}); nav.setStyle({fontWeight:'bold', color:'#D3D3D3'});} 
-    }
+		for (var index = 0; index < this.slides.length; ++index){
+			var nav = $(this.elm.className + '-' + index);
+			if (nav) { nav.setStyle({fontWeight:'normal', color:'#FFFFFF'});}
+		}
+		var nav = $(this.elm.className + '-' + counter);
+		if (nav) { new Effect.Pulsate(nav,{pulses:1, duration:0.5}); nav.setStyle({fontWeight:'bold', color:'#D3D3D3'});} 
+	}
 });
+Banner.defaults = {
+	autoStart : false
+};
 Banner.controlStyle = {
 	zIndex: '100', 
 	cursor:'pointer', 
@@ -88,15 +78,15 @@ Banner.controlStyle = {
 	color : '#FFFFFF'
 };
 Banner.load = function() {
-    Crossfade.defaults.selectors.each(function(s){
-        $$(s).each(function(c){
-            return new Banner(c);
-        });
-    });
+	Crossfade.defaults.selectors.each(function(s){
+		$$(s).each(function(c){
+                        return new Banner(c,{autoStart:false});
+		});
+	});
 };
 
 if(window.FastInit) {
-    FastInit.addOnLoad(Banner.load);
+	FastInit.addOnLoad(Banner.load);
 } else {
-    Event.observe(window, 'load', Banner.load);
+	Event.observe(window, 'load', Banner.load);
 }

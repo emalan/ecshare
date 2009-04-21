@@ -26,9 +26,7 @@
 * * 
 */
 
-var Crossfade = Class.create();
-
-Crossfade.prototype = {
+var Crossfade = Class.create({
 	loaded : false,
 	initialize : function(elm, options) {
 		var me = this, next, prev;
@@ -58,7 +56,9 @@ Crossfade.prototype = {
 		});
 		this.loadSlide(this.slides[1]);
 		
-		//if(this.options.autoStart) { setTimeout(this.start.bind(this),this.rndm((this.options.interval-1)*1000,(this.options.interval+1)*1000)); }
+		if(this.options.autoStart) { 
+            setTimeout(this.start.bind(this),this.rndm((this.options.interval-1)*1000,(this.options.interval+1)*1000)); 
+        }
 	},
 	start : function() {
 		this.ready = true;
@@ -66,7 +66,7 @@ Crossfade.prototype = {
 		return this.timer = new PeriodicalExecuter(this.cycle.bind(this), this.options.interval); 
 	},
 	stop : function() {
-		this.options.transition.cancel(this); 
+		this.options.transition.cancel(this);
 		if (this.timer) {this.timer.stop();}; 
 	},
 	next : function(){
@@ -88,7 +88,6 @@ Crossfade.prototype = {
 			this.loaded = true;
 		}
 		nextSlide = this.slides[this.counter];
-		this.setNav(this.counter);
 		this.loadSlide(nextSlide, me.options.transition.cycle(prevSlide, nextSlide, me));
 		if(!this.loaded) {
 			this.loadSlide(this.slides[this.loopCount(this.counter+1)]);
@@ -131,7 +130,7 @@ Crossfade.prototype = {
 		return Math.floor(Math.random() * (max - min + 1) + min);
 	},
 	timer : null,effect : null,ready : false
-};
+});
 Crossfade.Transition = {};
 Crossfade.Transition.Switch = {
 	className : 'transition-switch',
@@ -166,7 +165,7 @@ Crossfade.Transition.Crossfade = {
 	},
 	prepare : function(show){
 		show.slides.each(function(s,i){
-			$(s).setStyle({opacity:(i === 0 ? 1 : 0),display:(i === 0 ? '' : 'none'),visibility:'visible'});
+			$(s).setStyle({opacity:(i === 0 ? 1 : 0),visibility:'visible'});
 		});	
 	}
 };
@@ -247,13 +246,13 @@ Crossfade.Transition.FadeOutResizeFadeIn = {
 };
 Crossfade.defaults = {
 	autoLoad : false,
-	autoStart : false,
+	autoStart : true,
 	random : false,
 	randomClassName : 'random',
 	selectors : ['.crossfade'],
 	imageLoadSelector : 'a.loadimage',
 	ajaxLoadSelector : 'a.load',
-	interval : 15,
+	interval : 5,
 	duration : 2,
 	transition : Crossfade.Transition.Crossfade
 };
