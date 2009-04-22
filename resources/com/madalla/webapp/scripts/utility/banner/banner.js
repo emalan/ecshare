@@ -33,7 +33,7 @@ var Banner = Class.create(Crossfade, {
             .setStyle(Banner.controlStyle)
 		    .observe('click', this.next.bind(this));
 		element.appendChild(next);
-		$($(elm).parentNode).appendChild(element);
+		$(elm).appendChild(element);
 		this.setNav(0);
         if(!this.options.autoStart) { 
              setTimeout(this.start.bind(this),this.rndm((this.options.interval-1)*1000,(this.options.interval+1)*1000)); 
@@ -67,7 +67,8 @@ var Banner = Class.create(Crossfade, {
 	}
 });
 Banner.defaults = {
-	autoStart : false
+	autoStart : false,
+	selectors : ['.banner']
 };
 Banner.controlStyle = {
 	zIndex: '100', 
@@ -78,9 +79,9 @@ Banner.controlStyle = {
 	color : '#FFFFFF'
 };
 Banner.load = function() {
-	Crossfade.defaults.selectors.each(function(s){
+	Banner.defaults.selectors.each(function(s){
 		$$(s).each(function(c){
-                        return new Banner(c,{autoStart:false});
+             return new Banner(c,{autoStart:false});
 		});
 	});
 };

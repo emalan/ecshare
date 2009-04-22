@@ -245,7 +245,7 @@ Crossfade.Transition.FadeOutResizeFadeIn = {
 	}
 };
 Crossfade.defaults = {
-	autoLoad : false,
+	autoLoad : true,
 	autoStart : true,
 	random : false,
 	randomClassName : 'random',
