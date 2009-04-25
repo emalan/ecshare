@@ -3,6 +3,8 @@ package com.madalla.webapp;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.behavior.StringHeaderContributor;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.bo.SiteData;
 import com.madalla.service.IRepositoryServiceProvider;
@@ -11,8 +13,15 @@ import com.madalla.wicket.KeywordHeaderContributor;
 
 public class CmsPage extends WebPage {
 
+    private static final String PAGE_TITLE = "page.title";
+
+    private String pageTitle = "(no title)";
+    
 	public CmsPage(){
-		super();
+	    super();
+	    setPageTitle(getString(PAGE_TITLE));
+        add(new Label("title", new PropertyModel<String>(this,"pageTitle")));
+
 		add(Css.YUI_CORE);
 		add(Css.BASE);
 		
@@ -31,4 +40,12 @@ public class CmsPage extends WebPage {
 	protected boolean overrideMetaData(){
 	    return false;
 	}
+
+    protected void setPageTitle(String pageTitle) {
+        this.pageTitle = pageTitle;
+    }
+
+    protected String getPageTitle() {
+        return pageTitle;
+    }
 }
