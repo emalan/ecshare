@@ -6,7 +6,6 @@ import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.StringHeaderContributor;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -17,8 +16,6 @@ import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.LoginPanel;
-import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
-import com.madalla.webapp.scripts.utility.ScriptUtils;
 import com.madalla.wicket.KeywordHeaderContributor;
 
 public class CmsPage extends WebPage {
@@ -48,11 +45,6 @@ public class CmsPage extends WebPage {
 		
         if (isPopupLoginEnabled()) {
 
-            //popup login TODO remove dependancy on libraries
-            add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
-            add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.EFFECTS));
-            add(JavascriptPackageResource.getHeaderContribution(ScriptUtils.FADE_POPUP));
-            
             //Login feedback
             FeedbackPanel feedback = new FeedbackPanel("feedback");
             feedback.setOutputMarkupId(true);
@@ -69,7 +61,7 @@ public class CmsPage extends WebPage {
                         setResponsePage(getPage());
                     } else {
                         if (target != null){
-                            target.appendJavascript("$('loginPopup').show()");
+                            target.appendJavascript("wicketShow('loginPopup')");
                         } else {
                             error(getString("label.javascript.error"));
                         }
