@@ -256,7 +256,7 @@ public abstract class LoginPanel extends Panel
 	
 	protected void onSignInSucceeded(){
 	    // If login has been called because the user was not yet
-        // logged in, than continue to the original destination,
+        // logged in, then continue to the original destination,
         // otherwise to the Home page
         if (!continueToOriginalDestination())   {
             setResponsePage(getApplication().getHomePage());
