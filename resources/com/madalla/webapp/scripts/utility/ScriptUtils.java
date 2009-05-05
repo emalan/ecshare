@@ -14,6 +14,7 @@ public class ScriptUtils {
 	public static final CompressedResourceReference FAST_INIT = new CompressedResourceReference(ScriptUtils.class,"banner/fastinit.js");
 	public static final CompressedResourceReference CROSSFADE = new CompressedResourceReference(ScriptUtils.class,"banner/crossfade.js");
 	public static final CompressedResourceReference BANNER = new CompressedResourceReference(ScriptUtils.class,"banner/banner.js");
+	public static final CompressedResourceReference SLIDESHOW = new CompressedResourceReference(ScriptUtils.class,"slideshow/slideshow.js");
 	
 	private ScriptUtils(){}
 }
