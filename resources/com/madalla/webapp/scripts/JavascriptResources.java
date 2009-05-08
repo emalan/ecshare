@@ -25,5 +25,7 @@ public class JavascriptResources {
 	public static final HeaderContributor SWF_OBJECT = JavascriptPackageResource.getHeaderContribution(
 			new CompressedResourceReference(JavascriptResources.class, "swfobject.js"));
 	
+	public static final HeaderContributor ANIMATOR = JavascriptPackageResource.getHeaderContribution(
+	        new CompressedResourceReference(JavascriptResources.class, "animator.js"));
 
 }

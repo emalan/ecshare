@@ -195,5 +195,5 @@ TINY.load = function() {
     slideshow.active="#fff";
     slideshow.init("slideshow","image","imgprev","imgnext","imglink");
 }
-Event.observe(window, 'load', TINY.load);
+//Event.observe(window, 'load', TINY.load);
 

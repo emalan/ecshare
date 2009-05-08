@@ -2,35 +2,13 @@
 <wicket:head>
     <style type="text/css">
     
+     
        ul#images{
-            position:relative;
             width: 368px;
             height: 286px;
         }
-        ul.banner {
-                padding: 0;
-                margin: 0;
-                list-style: none;
-                position: relative;
-        }
-        .banner li{
-            list-style: none;
-            list-style-type: none;
-                position: absolute;
-                top: 0;
-                left: 0;
-                background-color: #FFF;
-                visibility: hidden;
-        }
+              
 
-        div#controls{
-            position: absolute;
-            left: 8%;
-            bottom: 4%;
-            margin: 10px;
-
-        }
-        
     </style>
 </wicket:head>
 <body>
@@ -40,7 +18,7 @@
               <a href="#" wicket:id="adminLink"><wicket:message key="admin.label">Label Contents</wicket:message></a>
         </div>  
         
-        <ul id="images" class="banner">
+        <ul id="images" class="bannerAuto">
                 <li wicket:id="image-list" style="visibility: visible; list-style: none; list-style-type: none;">
                     <div class="imageWrapper">
                         <div>

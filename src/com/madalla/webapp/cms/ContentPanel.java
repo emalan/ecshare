@@ -40,23 +40,24 @@ public class ContentPanel extends Panel {
 
     /**
      * 
-     * @param id
-     * @param node
+     * @param id - wicket id
+     * @param name - storage name
+     * @param node - parent node of Content
      * @param returnPage
      */
-    public ContentPanel(String id, String node, Class<? extends Page> returnPage) {
+    public ContentPanel(String id, String name, String node, Class<? extends Page> returnPage){
         super(id);
         this.nodeName = node;
-        this.nodeId = id;
+        this.nodeId = name;
         this.returnPage = returnPage;
         log.debug("Content Panel being created for node=" + node + " id=" + id);
         PageData page = getRepositoryservice().getPage(node);
-        String contentBody = getRepositoryservice().getContentText(page, id , getSession().getLocale());
-        Component contentBlock = new ContentContainer("contentBlock", id, node, contentBody);
+        String contentBody = getRepositoryservice().getContentText(page, nodeId , getSession().getLocale());
+        Component contentBlock = new ContentContainer("contentBlock", nodeId, node, contentBody);
         contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
-			private static final long serialVersionUID = -3131361470864509715L;
+            private static final long serialVersionUID = -3131361470864509715L;
 
-			public String getObject() {
+            public String getObject() {
                 String cssClass;
                 if (((IContentAdmin)getSession()).isLoggedIn()) {
                     cssClass = "contentEdit";
@@ -67,6 +68,15 @@ public class ContentPanel extends Panel {
             }
         }));
         add(contentBlock);
+    }
+    /**
+     * 
+     * @param id - wicket id and name
+     * @param node - parent node of Content
+     * @param returnPage - Return Page duh!
+     */
+    public ContentPanel(String id, String node, Class<? extends Page> returnPage) {
+        this(id, id, node, returnPage);
     }
 
     public class ContentContainer extends WebMarkupContainer {

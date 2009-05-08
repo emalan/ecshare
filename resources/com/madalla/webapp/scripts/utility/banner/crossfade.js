@@ -24,24 +24,22 @@
 * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 * * 
+* Changes by Eugene Malan
+* Changed to using animator.js instead of Scriptaculous. Remove effects I did not need.
+* Did "fixes".
+* !!! Thanks Millstream !!!
+* 
 */
 
 var Crossfade = Class.create({
 	loaded : false,
 	initialize : function(elm, options) {
+		this.transition = Crossfade.Transition;
 		var me = this, next, prev;
 		this.elm = $(elm);
 		this.counter = 0;
 		this.prevSlide = null;
-		var t_opt = {};
-		for(t in Crossfade.Transition) {
-			var trans = Crossfade.Transition[t];
-			if(trans.className && this.elm.hasClassName(trans.className)) {
-				t_opt = {transition:trans};
-				break;
-			}
-		}
-		this.options = Object.extend(Object.clone(Crossfade.defaults),Object.extend(options || {},t_opt));
+		this.options = Object.extend(Object.clone(Crossfade.defaults),options || {});
 		this.options.interval = Math.max(2,this.options.interval);
 		this.elm.makePositioned();
 		this.slides = this.elm.immediateDescendants();
@@ -52,13 +50,15 @@ var Crossfade = Class.create({
 		}
 		
 		this.loadSlide(this.slides[0],function() {
-			me.options.transition.prepare(me);
+			me.transition.prepare(me);
 		});
 		this.loadSlide(this.slides[1]);
 		
 		if(this.options.autoStart) { 
             setTimeout(this.start.bind(this),this.rndm((this.options.interval-1)*1000,(this.options.interval+1)*1000)); 
         }
+		
+		
 	},
 	start : function() {
 		this.ready = true;
@@ -66,7 +66,6 @@ var Crossfade = Class.create({
 		return this.timer = new PeriodicalExecuter(this.cycle.bind(this), this.options.interval); 
 	},
 	stop : function() {
-		this.options.transition.cancel(this);
 		if (this.timer) {this.timer.stop();}; 
 	},
 	next : function(){
@@ -88,7 +87,7 @@ var Crossfade = Class.create({
 			this.loaded = true;
 		}
 		nextSlide = this.slides[this.counter];
-		this.loadSlide(nextSlide, me.options.transition.cycle(prevSlide, nextSlide, me));
+		this.loadSlide(nextSlide, me.transition.cycle(prevSlide, nextSlide, me));
 		if(!this.loaded) {
 			this.loadSlide(this.slides[this.loopCount(this.counter+1)]);
 		}
@@ -97,9 +96,9 @@ var Crossfade = Class.create({
 		var loaders = [], me = this, img, pnode, onloadFunction;
 		onload = typeof onload === 'function' ? onload : function(){};
 		onloadFunction = function() {
-				onload();
-				me.ready = true;
-			};
+			onload();
+			//me.ready = true;
+		};
 		slide = $(slide);
 		loaders = Selector.findChildElements(slide,[this.options.imageLoadSelector]);
 		if(loaders.length && loaders[0].href !== ''){
@@ -130,61 +129,16 @@ var Crossfade = Class.create({
 		return Math.floor(Math.random() * (max - min + 1) + min);
 	},
 	timer : null,effect : null,ready : false
+    
 });
-Crossfade.Transition = {};
-Crossfade.Transition.Switch = {
-	className : 'transition-switch',
-	cycle : function(prev, next, show) {
-		show.slides.without(next).each(function(s){
-			$(s).hide();
-		})
-		$(next).show();
-	},
-	cancel : function(show){},
-	prepare : function(show){
-		show.slides.each(function(s,i){
-			$(s).setStyle({display:(i === 0 ? 'block' : 'none')});
-		});	
-	}
-};
-Crossfade.Transition.Crossfade = {
-	className : 'transition-crossfade',
+
+Crossfade.Transition = {
 	cycle : function(prev, next, show) {
 		var opt = show.options;
-		show.effect = new Effect.Parallel([new Effect.Fade(prev ,{sync:true}),
-			new Effect.Appear(next,{sync:true})],
-			{duration: opt.duration, queue : 'Crossfade', afterFinish:function(){
-				show.slides.without(next).each(function(s){
-					$(s).setStyle({opacity:0});
-				})
-			}}
-		);
-	},
-	cancel : function(show){
-		if(show.effect) { show.effect.cancel(); }
-	},
-	prepare : function(show){
-		show.slides.each(function(s,i){
-			$(s).setStyle({opacity:(i === 0 ? 1 : 0),visibility:'visible'});
-		});	
-	}
-};
-Crossfade.Transition.FadeOutFadeIn = {
-	className : 'transition-fadeoutfadein',
-	cycle : function(prev, next, show) {
-		var opt = show.options;
-		show.effect = new Effect.Fade(prev ,{
-			duration: opt.duration/2,
-			afterFinish: function(){
-				show.effect = new Effect.Appear(next,{duration: opt.duration/2});
-				show.slides.without(next).each(function(s){
-					$(s).setStyle({opacity:0});
-				})
-			}
-		});
-	},
-	cancel : function(show){
-		if(show.effect) { show.effect.cancel(); }
+		show.effect = new Animator({duration: opt.duration, onComplete: function(){show.ready = true;}})
+		.addSubject(new NumericalStyleSubject(prev, 'opacity', 1 , 0))
+		.addSubject(new NumericalStyleSubject(next, 'opacity', 0, 1))
+		.toggle();
 	},
 	prepare : function(show){
 		show.slides.each(function(s,i){
@@ -193,57 +147,6 @@ Crossfade.Transition.FadeOutFadeIn = {
 	}
 };
 
-Effect.DoNothing = Class.create();
-Object.extend(Object.extend(Effect.DoNothing.prototype, Effect.Base.prototype), {
-	initialize: function() {
-		this.start({duration: 0});
-	},
-	update: Prototype.emptyFunction
-});
-Crossfade.Transition.FadeOutResizeFadeIn = {
-	className : 'transition-fadeoutresizefadein',
-	cycle : function(prev, next, show) {
-		var opt = show.options;
-		show.effect = new Effect.Fade(prev ,{
-			duration: (opt.duration-1)/2,
-			afterFinish: function(){
-				show.slides.without(next).each(function(s){
-					$(s).setStyle({opacity:0});
-				})
-				var slideDims = [next.getWidth(),next.getHeight()];
-				var loadimg = Selector.findChildElements(next,['img.loadimage']);
-				if(loadimg.length && loadimg[0].offsetWidth && loadimg[0].offsetHeight){
-					slideDims[0] += slideDims[0] < loadimg[0].offsetWidth ? loadimg[0].offsetWidth : 0;
-					slideDims[1] += slideDims[1] < loadimg[0].offsetHeight ? loadimg[0].offsetHeight : 0;
-				}
-				var showDims = [show.elm.getWidth(),show.elm.getHeight()];
-				var scale = [(showDims[0] > 0 && slideDims[0] > 0 ? slideDims[0]/showDims[0] : 1)*100,(showDims[1] > 0 && slideDims[1] > 0 ? slideDims[1]/showDims[1] : 1)*100];
-				show.effect = new Effect.Parallel([
-						(scale[0] === 100 ? new Effect.DoNothing() : new Effect.Scale(show.elm,scale[0],{sync:true,scaleY:false,scaleContent:false})),
-						(scale[1] === 100 ? new Effect.DoNothing() : new Effect.Scale(show.elm,scale[1],{sync:true,scaleX:false,scaleContent:false}))
-					],
-					{
-						duration: 1,
-						queue : 'FadeOutResizeFadeIn',
-						afterFinish: function(){
-							show.effect = new Effect.Appear(next,{duration: (opt.duration-1)/2});
-						}
-					}
-				);
-			}
-		});
-	},
-	cancel : function(show){
-		if(show.effect) { show.effect.cancel(); }
-	},
-	prepare : function(show){
-		var slideDims = [$(show.slides[0]).getWidth(),$(show.slides[0]).getHeight()];
-		show.elm.setStyle({width:slideDims[0]+'px', height:slideDims[1]+'px'});
-		show.slides.each(function(s,i){
-			$(s).setStyle({opacity:(i === 0 ? 1 : 0),visibility:'visible'});
-		});	
-	}
-};
 Crossfade.defaults = {
 	autoLoad : true,
 	autoStart : true,
@@ -253,8 +156,7 @@ Crossfade.defaults = {
 	imageLoadSelector : 'a.loadimage',
 	ajaxLoadSelector : 'a.load',
 	interval : 5,
-	duration : 2,
-	transition : Crossfade.Transition.Crossfade
+	duration : 1000 /* milliseconds */
 };
 Crossfade.setup = function(options) {
 	Object.extend(Crossfade.defaults,options);

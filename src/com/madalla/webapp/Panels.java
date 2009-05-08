@@ -24,6 +24,7 @@ import com.madalla.webapp.email.EmailFormPanel;
 import com.madalla.webapp.google.YoutubePlayerPanel;
 import com.madalla.webapp.images.AlbumPanel;
 import com.madalla.webapp.images.admin.AlbumAdminPanel;
+import com.madalla.webapp.images.exhibit.ExhibitPanel;
 import com.madalla.webapp.site.SiteAdminPanel;
 import com.madalla.webapp.user.UserAdminPanel;
 import com.madalla.webapp.user.UserLoginPanel;
@@ -169,6 +170,16 @@ public class Panels {
 		validate("AlbumPanel", id, album, returnPage);
 		return new AlbumPanel(id, album, returnPage);
 	}
+
+	/**
+     * @param id - wicket id & name
+     * @param returnPage - used to create return link
+     * @return Instantiated Panel of Type {@link com.madalla.webapp.images.AlbumPanel}
+     */
+    public static Panel exhibitPanel(String id, Class<? extends Page> returnPage){
+        validate("ExhibitPanel", id, returnPage);
+        return new ExhibitPanel(id, returnPage);
+    }
 	
 	/**
 	 * User Login Panel - with login and lost password functionality

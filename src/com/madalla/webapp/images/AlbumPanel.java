@@ -1,11 +1,8 @@
 package com.madalla.webapp.images;
 
-import static com.madalla.webapp.css.Css.CSS_IMAGE;
 import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
 import static com.madalla.webapp.images.admin.AlbumParams.RETURN_PAGE;
-import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.EFFECTS;
 import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
-import static com.madalla.webapp.scripts.utility.ScriptUtils.BANNER;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.CROSSFADE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.FAST_INIT;
 
@@ -29,8 +26,11 @@ import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
 import com.madalla.webapp.pages.AlbumAdminPage;
+import com.madalla.webapp.scripts.JavascriptResources;
+import com.madalla.webapp.scripts.utility.ScriptUtils;
 
 public class AlbumPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -41,11 +41,12 @@ public class AlbumPanel extends Panel {
 		super(id);
 
 		add(JavascriptPackageResource.getHeaderContribution(PROTOTYPE));
-        add(JavascriptPackageResource.getHeaderContribution(EFFECTS));
+		add(JavascriptResources.ANIMATOR);
         add(JavascriptPackageResource.getHeaderContribution(FAST_INIT));
         add(JavascriptPackageResource.getHeaderContribution(CROSSFADE));
-        add(JavascriptPackageResource.getHeaderContribution(BANNER));
-        add(CSS_IMAGE);
+        add(JavascriptPackageResource.getHeaderContribution(ScriptUtils.BANNER));
+        add(ScriptUtils.BANNER_CSS);
+        add(Css.CSS_IMAGE);
         
         AlbumData album = getRepositoryService().getAlbum(albumName);
         

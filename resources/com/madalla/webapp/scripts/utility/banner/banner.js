@@ -7,30 +7,37 @@
 * 
 * We are extending the Crossfade class found in crossfade.js. Crossfade supplies the 
 * functionality that fades form one html element to another. Crossfade depends on 
-* the Scriptaculous (effects) and Prototype libraries.
+* the Animator.js and Prototype libraries.
 * 
 */
 
 var Banner = Class.create(Crossfade, {
 	initialize : function($super, elm, options) {
 		$super(elm, Object.extend(Object.clone(Banner.defaults),options || {}));
-		
-		var element = new Element('div', {id :'controls'});
-		var prev = new Element('span', {id : $(elm).className + '-previous'})
-			.addClassName('control').update('<')
-			.setStyle(Banner.controlStyle)
+		$(elm).addClassName(Banner.defaults.bannerStyle);
+		this.bannerId =  $(elm).id || 'banner';
+		var element = new Element('div', {id : this.bannerId+'-controls'});
+		element.addClassName(Banner.defaults.controlsStyle);
+		var prev = new Element('span', {id : this.bannerId+'-previous'})
+			.addClassName(Banner.defaults.controlStyle).update('<')
+			.setStyle(Banner.controlStyleDefault)
 			.observe('click', this.previous.bind(this));
 		element.appendChild(prev);
+		this.anim = [];
 		for ( var index = 0; index < this.slides.length; ++index) {
-			var nav = new Element('span', {id : $(elm).className + '-' + index})
-				.addClassName('control').update(index + 1).setStyle(Banner.controlStyle)
+			var nav = new Element('span', {id : this.bannerId + '-' + index})
+			    .addClassName(Banner.defaults.controlStyle)
+				.update(index + 1)
 			    .observe('click', this.gotoSlide.bindAsEventListener(	this, index));
 			element.appendChild(nav);
+			this.anim[index] = new Animator().addSubject(
+				new CSSStyleSubject(nav,Banner.defaults.controlStyleDefault, Banner.defaults.controlStyleActive)
+			);
 		}
-		var next = new Element('span', {id : $(elm).className + '-next'})
-			.addClassName('control')
+		var next = new Element('span', {id : this.bannerId + '-next'})
+			.addClassName(Banner.defaults.controlStyle)
             .update('>')
-            .setStyle(Banner.controlStyle)
+            .setStyle(Banner.controlStyleDefault)
 		    .observe('click', this.next.bind(this));
 		element.appendChild(next);
 		$(elm).appendChild(element);
@@ -40,44 +47,44 @@ var Banner = Class.create(Crossfade, {
         }
 	},
 	cycle : function($super, dir) {
+		var prev = this.counter;
 		$super(dir);
-		this.setNav(this.counter);
+		this.setNav(this.counter, prev);
 	},	
     gotoSlide : function(e){
+		this.stop();
 		if(!this.ready) { return; }
- 		this.stop();
 		this.ready = false;
   		var data = $A(arguments);
 		var clicked = data[1]; 
+		var prev = this.counter;
 		if (this.counter == clicked) { this.ready = true; return; }
-		this.setNav(clicked)
+		this.setNav(clicked, prev)
 		var prevSlide = this.slides[this.counter];
 		var me = this; 
 		var nextSlide = this.slides[clicked];
 		this.counter = clicked;
-        	this.loadSlide(nextSlide, me.options.transition.cycle(prevSlide, nextSlide, me));	
+        	this.loadSlide(nextSlide, me.transition.cycle(prevSlide, nextSlide, me));	
         },
-    setNav : function(counter){
-		for (var index = 0; index < this.slides.length; ++index){
-			var nav = $(this.elm.className + '-' + index);
-			if (nav) { nav.setStyle({fontWeight:'normal', color:'#FFFFFF'});}
-		}
-		var nav = $(this.elm.className + '-' + counter);
-		if (nav) { new Effect.Pulsate(nav,{pulses:1, duration:0.5}); nav.setStyle({fontWeight:'bold', color:'#D3D3D3'});} 
+    setNav : function(counter, prev){
+		if (this.anim[prev]) { this.anim[prev].toggle();}
+		if (this.anim[counter]) { this.anim[counter].toggle();}
 	}
 });
 Banner.defaults = {
 	autoStart : false,
-	selectors : ['.banner']
+	selectors : ['.bannerAuto'],
+	bannerStyle : 'banner',
+	controlsStyle : 'bannerControls',
+	controlStyle : 'bannerControl',
+	controlStyleDefault : 'defaultBannerControl',
+	controlStyleActive : 'activeBannerControl'
 };
-Banner.controlStyle = {
-	zIndex: '100', 
-	cursor:'pointer', 
-	fontSize:'14px', 
-	marginRight:'10px',
-	fontWeight: 'normal', 
-	color : '#FFFFFF'
-};
+
+/* The autoStart is passed on to Crossfade, so the idea is that 
+ * crossface won't autostart and we can start Banner. That way we don't have 2
+ * timers. Ugly huh! Sorry!!
+ */
 Banner.load = function() {
 	Banner.defaults.selectors.each(function(s){
 		$$(s).each(function(c){

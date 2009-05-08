@@ -1,6 +1,9 @@
 package com.madalla.webapp;
 
+import static com.madalla.webapp.PageParams.RETURN_PAGE;
+
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.StringHeaderContributor;
@@ -16,6 +19,7 @@ import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.LoginPanel;
+import com.madalla.webapp.pages.UserLoginPage;
 import com.madalla.wicket.KeywordHeaderContributor;
 
 public class CmsPage extends WebPage {
@@ -95,6 +99,33 @@ public class CmsPage extends WebPage {
         } else {
             //dummy label that will end up hidden on page
             add(new Label("signInPanel"));
+
+            //Logon link
+            add(new AjaxFallbackLink<Object>("logon") {
+                private static final long serialVersionUID = 1L;
+                CmsSession session = (CmsSession) getSession();
+                
+                public void onClick(AjaxRequestTarget target) {
+                    if (session.isLoggedIn()){
+                        session.logout();
+                        setResponsePage(getPage());
+                    } else {
+                        if (target != null){
+                            setResponsePage(new UserLoginPage(new PageParameters(RETURN_PAGE + "=" + getPage().getClass().getName())));
+                        } else {
+                            error(getString("label.javascript.error"));
+                        }
+                    } 
+                }
+                protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+                    if(session.isLoggedIn()){
+                        replaceComponentTagBody(markupStream, openTag, getString("label.logout"));
+                    } else {
+                        replaceComponentTagBody(markupStream, openTag, getString("label.login"));
+                    }
+                }
+            });
+
         }
 
 	}

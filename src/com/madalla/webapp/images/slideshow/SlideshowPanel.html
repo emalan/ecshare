@@ -1,0 +1,41 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+     
+    </style>
+</wicket:head>
+<body>
+    <wicket:panel>
+ 
+         <ul id="slideshow" wicket:id="slideshowList">
+            <li wicket:id="slideshowImage">
+                <h3>Testing slideshow</h3>
+                <span>resources/photos/orange-fish.jpg</span>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut urna. Mauris nulla. Donec nec mauris. Proin nulla dolor, bibendum et, dapibus in, euismod ut, felis.</p>
+                <a href="#"><img wicket:id="thumb" /></a>
+            </li>
+        </ul>
+        
+        <div id="slideshow-display">
+             <div id="fullsize">
+                <div id="imgprev" class="imgnav" title="Previous Image"></div>
+                <div id="imglink"></div>
+                <div id="imgnext" class="imgnav" title="Next Image"></div>
+                <div id="image"></div>
+                <div id="information">
+                    <h3></h3>
+                    <p></p>
+                </div>
+            </div>
+            <div id="thumbnails">
+                <div id="slideleft" title="Slide Left"></div>
+                <div id="slidearea">
+                    <div id="slider"></div>
+                </div>
+                <div id="slideright" title="Slide Right"></div>
+            </div>
+        </div>
+    
+     </wicket:panel>
+</body>
+</html>
