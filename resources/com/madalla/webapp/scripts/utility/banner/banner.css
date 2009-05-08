@@ -29,7 +29,7 @@
         margin: 0;
         list-style: none;
         position: relative;
-        width: 450px; height: 325px;
+        width: 470px; height: 345px; /* 20 px more than image */
     }
     .banner li{
         position: absolute;

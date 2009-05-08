@@ -9,12 +9,19 @@ import com.madalla.webapp.cms.IContentAdmin;
 public class LoggedinBookmarkablePageLink extends BookmarkablePageLink<Page>{
 	private static final long serialVersionUID = 1L;
 	final private boolean admin;
+	final private boolean hide;
 	
 	public LoggedinBookmarkablePageLink(String id, Class<? extends Page> pageClass, PageParameters parameters,
 			final boolean admin){
-		super(id, pageClass, parameters);
-		this.admin = admin;
+		this(id, pageClass, parameters, admin, false);
 	}
+
+	public LoggedinBookmarkablePageLink(String id, Class<? extends Page> pageClass, PageParameters parameters,
+            final boolean admin, final boolean hide){
+        super(id, pageClass, parameters);
+        this.admin = admin;
+        this.hide = hide;
+    }
     
 	protected final void onBeforeRender(){
 		IContentAdmin session = (IContentAdmin) getSession();
@@ -23,6 +30,11 @@ public class LoggedinBookmarkablePageLink extends BookmarkablePageLink<Page>{
         } else {
             setEnabled(session.isLoggedIn());
         }
+		if (hide){
+		    if (!isEnabled()){
+		        setVisible(false);
+		    }
+		}
         super.onBeforeRender();
     }
 }
