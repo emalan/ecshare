@@ -16,6 +16,9 @@ public class Album extends AlbumData implements Serializable{
 	@Field(path=true) private String id;
 	@Field private String title;
 	@Field private String type;
+	@Field private Integer width;
+	@Field private Integer height;
+	@Field private Integer interval;
 	
 	public Album(){
 		
@@ -51,5 +54,29 @@ public class Album extends AlbumData implements Serializable{
 	public void setType(String type) {
 		this.type = type;
 	}
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    public Integer getWidth() {
+        return width;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    public Integer getInterval() {
+        return interval;
+    }
+
+    public void setInterval(Integer interval) {
+        this.interval = interval;
+    }
 	
 }

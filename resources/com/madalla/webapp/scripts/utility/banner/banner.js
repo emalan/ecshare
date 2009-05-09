@@ -14,28 +14,31 @@
 var Banner = Class.create(Crossfade, {
 	initialize : function($super, elm, options) {
 		$super(elm, Object.extend(Object.clone(Banner.defaults),options || {}));
-		$(elm).addClassName(Banner.defaults.bannerStyle);
+		this.bannerOptions = Object.extend(Object.clone(Banner.defaults),options || {});
+		$(elm).addClassName(this.bannerOptions.bannerStyle);
+		elm.style.height = this.bannerOptions.height + 20 + 'px';
+        elm.style.width = this.bannerOptions.width + 20 + 'px';
 		this.bannerId =  $(elm).id || 'banner';
 		var element = new Element('div', {id : this.bannerId+'-controls'});
-		element.addClassName(Banner.defaults.controlsStyle);
+		element.addClassName(this.bannerOptions.controlsStyle);
 		var prev = new Element('span', {id : this.bannerId+'-previous'})
-			.addClassName(Banner.defaults.controlStyle).update('<')
+			.addClassName(this.bannerOptions.controlStyle).update('<')
 			.setStyle(Banner.controlStyleDefault)
 			.observe('click', this.previous.bind(this));
 		element.appendChild(prev);
 		this.anim = [];
 		for ( var index = 0; index < this.slides.length; ++index) {
 			var nav = new Element('span', {id : this.bannerId + '-' + index})
-			    .addClassName(Banner.defaults.controlStyle)
+			    .addClassName(this.bannerOptions.controlStyle)
 				.update(index + 1)
 			    .observe('click', this.gotoSlide.bindAsEventListener(	this, index));
 			element.appendChild(nav);
 			this.anim[index] = new Animator().addSubject(
-				new CSSStyleSubject(nav,Banner.defaults.controlStyleDefault, Banner.defaults.controlStyleActive)
+				new CSSStyleSubject(nav,this.bannerOptions.controlStyleDefault, this.bannerOptions.controlStyleActive)
 			);
 		}
 		var next = new Element('span', {id : this.bannerId + '-next'})
-			.addClassName(Banner.defaults.controlStyle)
+			.addClassName(this.bannerOptions.controlStyle)
             .update('>')
             .setStyle(Banner.controlStyleDefault)
 		    .observe('click', this.next.bind(this));
@@ -74,6 +77,7 @@ var Banner = Class.create(Crossfade, {
 Banner.defaults = {
 	autoStart : false,
 	selectors : ['.bannerAuto'],
+	width : 450, height : 325, //in pixels - note: frame will be 20 px larger
 	bannerStyle : 'banner',
 	controlsStyle : 'bannerControls',
 	controlStyle : 'bannerControl',

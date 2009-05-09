@@ -40,8 +40,12 @@ public class AlbumPanel extends Panel implements IHeaderContributor {
 	private static final long serialVersionUID = 1L;
 	
     private static final Log log = LogFactory.getLog(AlbumPanel.class);
+    private static final int INTERVAL = 5;
+    private static final int WIDTH = 450;
+    private static final int HEIGHT = 325;
     
     private WebMarkupContainer container;
+    private AlbumData album;
 
 	public AlbumPanel(String id, String albumName, Class<? extends Page> returnPage) {
 		super(id);
@@ -54,7 +58,7 @@ public class AlbumPanel extends Panel implements IHeaderContributor {
         add(ScriptUtils.BANNER_CSS);
         add(Css.CSS_IMAGE);
         
-        AlbumData album = getRepositoryService().getAlbum(albumName);
+        album = getRepositoryService().getAlbum(albumName);
         
         add(new LoggedinBookmarkablePageLink("adminLink", AlbumAdminPage.class, 
                 new PageParameters(ALBUM +"="+albumName+","+RETURN_PAGE+"="+returnPage.getName()), true, true));
@@ -69,9 +73,21 @@ public class AlbumPanel extends Panel implements IHeaderContributor {
 
 			@Override
 			protected void populateItem(ListItem<ImageData> item) {
-				final com.madalla.cms.bo.impl.ocm.image.Image imageData = (com.madalla.cms.bo.impl.ocm.image.Image) item.getModelObject();
+				final ImageData imageData =  item.getModelObject();
 				if (imageData.getImageFull() != null){
-					Image image = new Image("id",imageData.getImageFull());
+					Image image = new Image("id",imageData.getImageFull()){
+                        private static final long serialVersionUID = 1L;
+
+                        @Override
+                        protected void onComponentTag(ComponentTag tag) {
+                            super.onComponentTag(tag);
+                            album.getHeight();
+                            tag.put("height", album.getHeight() == null ? HEIGHT : album.getHeight());
+                            tag.put("width", album.getWidth() == null ? WIDTH : album.getWidth());
+                        }
+					    
+					};
+
 					if(StringUtils.isEmpty(imageData.getUrl())){
 						//TODO create a link to URL
 						image.add(new AjaxEventBehavior("onclick"){
@@ -105,8 +121,12 @@ public class AlbumPanel extends Panel implements IHeaderContributor {
 	}
 
     public void renderHead(IHeaderResponse response) {
-        //TODO pass in size height and width
-        response.renderOnLoadJavascript("new Banner($('"+ container.getMarkupId() +"'),{interval:5});");
+        int interval = album.getInterval() == null ? INTERVAL : album.getInterval();
+        int width = album.getWidth() == null ? WIDTH : album.getWidth();
+        int height = album.getHeight() == null ? HEIGHT : album.getHeight();
+        String params = "{interval:"+interval+", height:"+height+", width: "+ width+"}";
+        
+        response.renderOnLoadJavascript("new Banner($('"+ container.getMarkupId() +"')," + params + ");");
         
     }
 

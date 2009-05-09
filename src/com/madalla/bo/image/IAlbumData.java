@@ -13,4 +13,16 @@ public interface IAlbumData {
 	String getType();
 
 	void setType(String type);
+	
+	Integer getHeight();
+	
+	void setHeight(Integer height);
+	
+	Integer getWidth();
+	
+	void setWidth(Integer width);
+	
+	Integer getInterval();
+	
+	void setInterval(Integer interval);
 }
