@@ -92,7 +92,12 @@ public class CmsPage extends WebPage {
                 }
 
                 protected void onSignInSucceeded() {
-                    super.onSignInSucceeded();
+                    // If login has been called because the user was not yet
+                    // logged in, then continue to the original destination,
+                    // otherwise to the Home page
+                    if (!continueToOriginalDestination())   {
+                        setResponsePage(getPage());
+                    }
                 }
             });
 
