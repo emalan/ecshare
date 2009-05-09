@@ -61,7 +61,7 @@ public class AlbumPanel extends Panel implements IHeaderContributor {
         album = getRepositoryService().getAlbum(albumName);
         
         add(new LoggedinBookmarkablePageLink("adminLink", AlbumAdminPage.class, 
-                new PageParameters(ALBUM +"="+albumName+","+RETURN_PAGE+"="+returnPage.getName()), true, true));
+                new PageParameters(ALBUM +"="+albumName+","+RETURN_PAGE+"="+returnPage.getName()), false, true));
         
         List<ImageData> images = getRepositoryService().getAlbumImages(album);
         

@@ -7,7 +7,8 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import com.madalla.webapp.cms.IContentAdmin;
 
 public class LoggedinBookmarkablePageLink extends BookmarkablePageLink<Page>{
-	private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 1L;
 	final private boolean admin;
 	final private boolean hide;
 	
@@ -33,8 +34,16 @@ public class LoggedinBookmarkablePageLink extends BookmarkablePageLink<Page>{
 		if (hide){
 		    if (!isEnabled()){
 		        setVisible(false);
+		    } else {
+		        setVisible(true);
 		    }
 		}
         super.onBeforeRender();
     }
+
+    @Override
+    protected boolean callOnBeforeRenderIfNotVisible() {
+        return hide;
+    }
+
 }
