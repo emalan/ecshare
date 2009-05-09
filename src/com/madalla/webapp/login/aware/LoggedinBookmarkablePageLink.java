@@ -43,7 +43,7 @@ public class LoggedinBookmarkablePageLink extends BookmarkablePageLink<Page>{
 
     @Override
     protected boolean callOnBeforeRenderIfNotVisible() {
-        return hide;
+        return true;
     }
 
 }
