@@ -15,7 +15,7 @@ import org.apache.wicket.extensions.markup.html.tree.table.TreeTable;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Alignment;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Unit;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -38,7 +38,7 @@ class AlbumDisplayPanel extends Panel {
 		
 		final Form<Object> form = new Form<Object>("albumForm");
 		
-		form.add(new FeedbackPanel("albumFeedback"));
+		form.add(new ComponentFeedbackPanel("albumFeedback", form));
 		
 		//Setting up Tree Table
 		IColumn column = new AbstractTreeColumn(new ColumnLocation(Alignment.LEFT,20, Unit.EM),"Images"){

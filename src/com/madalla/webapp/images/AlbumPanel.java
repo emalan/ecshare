@@ -40,9 +40,6 @@ public class AlbumPanel extends Panel implements IHeaderContributor {
 	private static final long serialVersionUID = 1L;
 	
     private static final Log log = LogFactory.getLog(AlbumPanel.class);
-    private static final int INTERVAL = 5;
-    private static final int WIDTH = 450;
-    private static final int HEIGHT = 325;
     
     private WebMarkupContainer container;
     private AlbumData album;
@@ -82,8 +79,8 @@ public class AlbumPanel extends Panel implements IHeaderContributor {
                         protected void onComponentTag(ComponentTag tag) {
                             super.onComponentTag(tag);
                             album.getHeight();
-                            tag.put("height", album.getHeight() == null ? HEIGHT : album.getHeight());
-                            tag.put("width", album.getWidth() == null ? WIDTH : album.getWidth());
+                            tag.put("height", album.getHeight() == null ? ImageDefaults.DISPLAY_HEIGHT : album.getHeight());
+                            tag.put("width", album.getWidth() == null ? ImageDefaults.DISPLAY_WIDTH : album.getWidth());
                         }
 					    
 					};
@@ -121,9 +118,9 @@ public class AlbumPanel extends Panel implements IHeaderContributor {
 	}
 
     public void renderHead(IHeaderResponse response) {
-        int interval = album.getInterval() == null ? INTERVAL : album.getInterval();
-        int width = album.getWidth() == null ? WIDTH : album.getWidth();
-        int height = album.getHeight() == null ? HEIGHT : album.getHeight();
+        int interval = album.getInterval() == null ? ImageDefaults.DISPLAY_INTERVAL : album.getInterval();
+        int width = album.getWidth() == null ? ImageDefaults.DISPLAY_WIDTH : album.getWidth();
+        int height = album.getHeight() == null ? ImageDefaults.DISPLAY_HEIGHT : album.getHeight();
         String params = "{interval:"+interval+", height:"+height+", width: "+ width+"}";
         
         response.renderOnLoadJavascript("new Banner($('"+ container.getMarkupId() +"')," + params + ");");

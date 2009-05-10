@@ -22,25 +22,25 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.lang.Bytes;
 
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.images.ImageDefaults;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.DraggableAjaxBehaviour;
 import com.madalla.wicket.form.upload.MultiFileUploadField;
 
 public class AlbumAdminPanel extends Panel{
-	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(2000);
 	
 	private class FileUploadForm extends Form<Object>{
 		private static final long serialVersionUID = 1L;
@@ -52,7 +52,7 @@ public class AlbumAdminPanel extends Panel{
 
             setMultiPart(true);
             add(new MultiFileUploadField("fileInput", new PropertyModel<Collection<FileUpload>>(this, "uploads"), 5));
-            setMaxSize(MAX_FILE_SIZE);
+            setMaxSize(ImageDefaults.MAX_UPLOAD_SIZE);
         }
 		
 		@Override
@@ -138,7 +138,7 @@ public class AlbumAdminPanel extends Panel{
 		add(new PageLink<Page>("returnLink", returnPage));
 		
         final FileUploadForm simpleUploadForm = new FileUploadForm("simpleUpload");
-        final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
+        final FeedbackPanel uploadFeedback = new ComponentFeedbackPanel("uploadFeedback",simpleUploadForm);
         simpleUploadForm.add(uploadFeedback);
         simpleUploadForm.add(new SubmitLink("submitLink"));
         add(simpleUploadForm);
