@@ -25,18 +25,6 @@ form input[type="file"] {
 	
 }
 
-form input.inputError {
-    background-color:#F6BCBC;
-    border:1px solid #990000;
-    color:#990000;
-}
-
-form div.inputValid .feedbackPanel{
-	background-image: url("image/inputValid.gif");
-    background-position: left bottom;
-    background-repeat: no-repeat;
-}
-
 form div .buttonwrapper {
 	float: left;
     margin-top:15px;
@@ -66,6 +54,7 @@ textarea {
   font-family: verdana,arial,helvetica,sans; font-size: 85%;
 }
 
+/* FeedbackPanel style */
 form div .feedbackPanel {
 	float: left;
 	margin-top: 0.4em;
@@ -73,7 +62,7 @@ form div .feedbackPanel {
 ul.feedbackPanel{
     margin:0;
 }
-.feedbackPanel ul li {
+.feedbackPanel li {
     font-style:normal;
     list-style-image:none;
     list-style-position: inside;
@@ -84,15 +73,6 @@ ul.feedbackPanel{
     float: left;
     clear: both;
 }
-form .feedbackPanelERROR {
-    color:red;
-}
-
-/* space for image */
-form .feedbackPanelINFO {
-    padding-left: 15px;
-    color: blue;
-}
 
 .feedbackPanelERROR {
     color:red;
@@ -102,6 +82,32 @@ form .feedbackPanelINFO {
 }
 .feedbackPanelINFO {
     color:blue;
+}
+
+form .feedbackPanelERROR {
+    color:red;
+    font-style: italic;
+}
+
+form .feedbackPanelINFO {
+    color: blue;
+    font-style: italic;
+}
+
+/* The classes : inputError & inputValid will enable extra visual styling */
+form input.inputError {
+    background-color:#F6BCBC;
+    border:1px solid #990000;
+    color:#990000;
+}
+
+form div.inputValid span.feedbackPanel{
+    background-image: url("image/inputValid.gif");
+    background-position: left bottom;
+    background-repeat: no-repeat;
+}
+form div.inputValid span.feedbackPanel span.feedbackPanelINFO{
+    padding-left: 10px;
 }
 
 form .info {
@@ -115,4 +121,3 @@ form .message {
 	font-size: x-small;
 	margin: 0;	
 }
-
