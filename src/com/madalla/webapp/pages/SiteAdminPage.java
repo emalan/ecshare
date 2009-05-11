@@ -9,6 +9,6 @@ import com.madalla.webapp.Panels;
 public class SiteAdminPage extends AdminPage implements ISecureAdminPage{
 
     public SiteAdminPage(final PageParameters parameters){
-        add(Panels.siteAdminPanel("siteAdminPanel", parameters));
+        add(Panels.siteAdminPanel("adminPanel", parameters));
     }
 }

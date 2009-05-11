@@ -17,22 +17,30 @@ public class ValidationStyleBehaviour extends AbstractBehavior {
 	public ValidationStyleBehaviour(){
 		this("inputValid","inputError");
 	}
+	
 	public ValidationStyleBehaviour(String validClass, String invalidClass){
 		this.validClass = validClass;
 		this.invalidClass = invalidClass;
 	}
 	
-	@Override
+	@SuppressWarnings("unchecked")
+    @Override
 	public void onComponentTag(final Component component,
 			final ComponentTag tag) {
-		FormComponent comp = (FormComponent) component;
-		if (comp.isValid() && comp.getConvertedInput() != null) {
-			log.debug("onComponentTag - Valid, setting class to "+validClass+". component="+comp.getId());
-			tag.getAttributes().put("class", validClass);
-		} else if (!comp.isValid()) {
-			log.debug("onComponentTag - Invalid, setting class to "+invalidClass+". component="+comp.getId());
-			tag.getAttributes().put("class", invalidClass);
-		}
+	    if (component instanceof FormComponent) {
+	        FormComponent formComponent = (FormComponent) component;
+	        processFormComponent(formComponent, tag);
+        }
+	}
+	
+	private void processFormComponent(FormComponent<?> comp, ComponentTag tag){
+        if (comp.isValid() && comp.getConvertedInput() != null) {
+            log.debug("onComponentTag - Valid, setting class to "+validClass+". component="+comp.getId());
+            tag.getAttributes().put("class", validClass);
+        } else if (!comp.isValid()) {
+            log.debug("onComponentTag - Invalid, setting class to "+invalidClass+". component="+comp.getId());
+            tag.getAttributes().put("class", invalidClass);
+        }
 	}
 	
 }

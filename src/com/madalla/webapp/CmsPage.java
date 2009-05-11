@@ -47,7 +47,7 @@ public class CmsPage extends WebPage {
 		    }
 		}
 		
-        if (isPopupLoginEnabled()) {
+        if (hasPopupLogin()) {
 
             //Login feedback
             FeedbackPanel feedback = new FeedbackPanel("feedback");
@@ -104,8 +104,9 @@ public class CmsPage extends WebPage {
         } else {
             //dummy label that will end up hidden on page
             add(new Label("signInPanel"));
-
-            //Logon link
+        }
+        
+        if (hasLoginLink()){
             add(new AjaxFallbackLink<Object>("logon") {
                 private static final long serialVersionUID = 1L;
                 CmsSession session = (CmsSession) getSession();
@@ -146,9 +147,16 @@ public class CmsPage extends WebPage {
 	/**
 	 * @return true if you want to use the built in popup login
 	 */
-	protected boolean isPopupLoginEnabled(){
+	protected boolean hasPopupLogin(){
 	    return false;
 	}
+	
+    /**
+     * @return true if you want to use the built in popup login
+     */
+    protected boolean hasLoginLink(){
+        return false;
+    }
 
     protected void setPageTitle(String pageTitle) {
         this.pageTitle = pageTitle;

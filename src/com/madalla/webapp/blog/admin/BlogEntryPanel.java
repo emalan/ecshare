@@ -36,6 +36,7 @@ import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.blog.BlogEntryView;
+import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 import com.madalla.wicket.form.AjaxValidationBehaviour;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
@@ -90,6 +91,7 @@ public class BlogEntryPanel extends Panel {
     	this.returnPage = returnPage;
     	add(JavascriptPackageResource.getHeaderContribution(TinyMce.class,"tiny_mce.js"));
         add(JavascriptPackageResource.getHeaderContribution(JAVASCRIPT));
+        add(Css.CSS_FORM);
     }
     
     final class BlogEntryForm extends Form<Object>{

@@ -9,6 +9,6 @@ import com.madalla.webapp.Panels;
 public class UserProfilePage extends AdminPage implements ISecureWebPage  {
 
 	public UserProfilePage(final PageParameters params){
-		add(Panels.userProfilePanel("userProfilePanel", params));
+		add(Panels.userProfilePanel("adminPanel", params));
 	}
 }

@@ -1,57 +1,61 @@
-/* =General
------------------------------------------------------------------------------*/
-
-/* Zero down margin and padding on all elements */
-* {
-  margin: 0;
-  padding: 0;
-}
 
 body {
-    background-color:#FFFFFF;
-    text-align: center; 
-    min-width: 760px;
-}
-
-body {
-    font-size: 62.5%;
     font-family:"Trebuchet MS",Verdana,Arial,Sans-serif;
 }
 
-/* =Layout
-----------------------------------------------------------------------------*/
-/*****************
-* Fixed width : px
-* Liquid width : %
-* Elastic width : em
-****************/
-#wrapper {
-  width: 72em;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: left;
-}
-#border {
-	float: left;
-    width: 72em;
-    max-width: 100%;
-    margin: 0 auto;
-    text-align: left;
-}
-.border {
+#doc {
     border-left: 1px solid #AFBFD8;
     border-right:1px solid #AFBFD8;
 }
 
-/* =Elements
-----------------------------------------------------------------------------*/
-a:link { }
-a:visited { color:#551a8b;}
-a:hover{color:#000099;}
-a:active { color:#ff0000; }
+/* Header */
+#hd {
+    background:#0022CC none repeat-x scroll left bottom;
+    color:#FFFFFF;
+}
 
-/* =Headings
+#hd h1{ 
+    padding-left: 50px;
+    padding-top: 10px;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+    font-size: 2.4em;
+    font-stretch: wider;
+}
+#ft {
+    background-color: #A4B3CA;
+    background-image: none;
+    background-repeat: repeat;
+    background-attachment: scroll;
+    background-position: 0%;
+    color : #808080;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.msg {
+    text-align: center;
+    margin: 0 0 5px 0;
+}
+
+.msg .message_box {
+     border: 1px solid #FFCC35;
+     color:#000000;
+     font-weight: bold;
+     display: inline;
+}
+
+#noscript_box {
+   background-color: #FAD163;
+}
+
+/* =Body
 -----------------------------------------------------------------------------*/
+#bd {
+    padding: 1em;
+}
+
 div.adminSection {
     clear:both; 
     float:left;

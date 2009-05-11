@@ -18,6 +18,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -38,7 +39,6 @@ import com.madalla.webapp.css.Css;
 import com.madalla.webapp.images.ImageDefaults;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.DraggableAjaxBehaviour;
-import com.madalla.wicket.form.upload.MultiFileUploadField;
 
 public class AlbumAdminPanel extends Panel{
 	
