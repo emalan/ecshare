@@ -30,105 +30,108 @@
         	    <a href="#" class="bluebutton" wicket:id="returnLink"><span><wicket:message key="label.return">Label Contents</wicket:message></span></a>
         	</span>
     	</div>
-    	<span class="adminHeading"><wicket:message key="heading.login">Label Contents</wicket:message></span>
-        <span wicket:id="signInPanel"></span>
+    	<div class="adminSection">
+    	    <span class="adminHeading"><wicket:message key="heading.login">Label Contents</wicket:message></span>
+            <span wicket:id="signInPanel"></span>
 
-        <div id=navLinks>
-            <a href="#" onClick="$('forgotUsername').toggle()">Forgot User Name</a>
-            <a href="#" onClick="$('forgotPassword').toggle()">Forgot Password</a>
-            <a href="#" onClick="$('supportEmail').toggle()">Send Support Email</a>
-        </div>
+            <div id=navLinks>
+                <a href="#" onClick="$('forgotUsername').toggle()">Forgot User Name</a>
+                <a href="#" onClick="$('forgotPassword').toggle()">Forgot Password</a>
+                <a href="#" onClick="$('supportEmail').toggle()">Send Support Email</a>
+            </div>
         
-        <div id="forgotUsername" style="display: none;">
-            <hr/>
-            <span class="divHeadings"><wicket:message key="heading.forgotUsername">Label Contents</wicket:message></span>
-            <form>
-                <div>
-                    <label><wicket:message key="label.email">Label Contents</wicket:message></label>
-                    <input class="inputText" type="text"/>
-                </div>
-                <div>
-                    <label><wicket:message key="label.question">Label Contents</wicket:message></label>
-                    <span class="question">What is it?</span>
-                </div>
-                <div>
-                    <label><wicket:message key="label.answer">Label Contents</wicket:message></label>
-                    <input class="inputText" type="text"/>
-                </div>
-                <div class="formButtons">
-                    <span class="buttonwrapper">
-                        <a class="orangebutton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
-                    </span>
-                    <span class="feedbackPanel"></span>
-                </div>
-            </form>
-        </div>
-        
-        <div id="forgotPassword" style="display: none;">
-            <hr/>
-            <span class="divHeadings"><wicket:message key="heading.forgotPassword">Label Contents</wicket:message></span>
-            <form>
-                <div>
-                    <label><wicket:message key="label.username">Label Contents</wicket:message></label>
-                    <input class="inputText" type="text"/>
-                </div>
-                <div>
-                    <label><wicket:message key="label.question">Label Contents</wicket:message></label>
-                    <span class="question">What is it?</span>
-                </div>
-                <div>
-                    <label><wicket:message key="label.answer">Label Contents</wicket:message></label>
-                    <input class="inputText" type="text"/>
-                </div>
-                <div class="formButtons">
-                    <span class="buttonwrapper">
-                        <a class="orangebutton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
-                    </span>
-                    <span class="feedbackPanel"></span>
-                </div>
-            </form>
-        </div>
-        
-        <div id=supportEmail style="display: none;">
-            <hr/>
-            <span class="divHeadings"><wicket:message key="heading.supportEmail">Label Contents</wicket:message></span>
-            <form>
-                <div>
-                    <label><wicket:message key="label.username">Label Contents</wicket:message></label>
-                    <input class="inputText" type="text"/>
-                </div>
-                <div>
-                    <label><wicket:message key="label.email">Label Contents</wicket:message></label>
-                    <input class="inputText" type="text"/>
-                </div>
-                <div>
-                    <label><wicket:message key="label.address1">Label Contents</wicket:message></label>
-                    <input class="inputText" type="text"/>
-                </div>
-                <div>
-                    <label><wicket:message key="label.address2">Label Contents</wicket:message></label>
-                    <input class="inputText" type="text"/>
-                </div>
-                <div>
-                    <label><wicket:message key="label.city">Label Contents</wicket:message></label>
-                    <input class="inputText" type="text"/>
-                </div>
-                <div>
-                    <label><wicket:message key="label.phone">Label Contents</wicket:message></label>
-                    <input class="inputText" type="text"/>
-                </div>
-                <div>
-                    <label><wicket:message key="label.text">Label Contents</wicket:message></label>
-                    <input class="inputText" type="text"/>
-                </div>
-                <div class="formButtons">
-                    <span class="buttonwrapper">
-                        <a class="orangebutton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
-                    </span>
-                    <span class="feedbackPanel"></span>
-                </div>
-            </form>
-        </div>
+            <div id="forgotUsername" style="display: none;">
+                <hr/>
+                <span class="divHeadings"><wicket:message key="heading.forgotUsername">Label Contents</wicket:message></span>
+                <form>
+                    <div>
+                        <label><wicket:message key="label.email">Label Contents</wicket:message></label>
+                        <input class="inputText" type="text"/>
+                    </div>
+	                <div>
+	                    <label><wicket:message key="label.question">Label Contents</wicket:message></label>
+	                    <span class="question">What is it?</span>
+	                </div>
+	                <div>
+	                    <label><wicket:message key="label.answer">Label Contents</wicket:message></label>
+	                    <input class="inputText" type="text"/>
+	                </div>
+	                <div class="formButtons">
+	                    <span class="buttonwrapper">
+	                        <a class="orangebutton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
+	                    </span>
+	                    <span class="feedbackPanel"></span>
+	                </div>
+	            </form>
+	        </div>
+	        
+	        <div id="forgotPassword" style="display: none;">
+	            <hr/>
+	            <span class="divHeadings"><wicket:message key="heading.forgotPassword">Label Contents</wicket:message></span>
+	            <form>
+	                <div>
+	                    <label><wicket:message key="label.username">Label Contents</wicket:message></label>
+	                    <input class="inputText" type="text"/>
+	                </div>
+	                <div>
+	                    <label><wicket:message key="label.question">Label Contents</wicket:message></label>
+	                    <span class="question">What is it?</span>
+	                </div>
+	                <div>
+	                    <label><wicket:message key="label.answer">Label Contents</wicket:message></label>
+	                    <input class="inputText" type="text"/>
+	                </div>
+	                <div class="formButtons">
+	                    <span class="buttonwrapper">
+	                        <a class="orangebutton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
+	                    </span>
+	                    <span class="feedbackPanel"></span>
+	                </div>
+	            </form>
+	        </div>
+	        
+	        <div id=supportEmail style="display: none;">
+	            <hr/>
+	            <span class="divHeadings"><wicket:message key="heading.supportEmail">Label Contents</wicket:message></span>
+	            <form>
+	                <div>
+	                    <label><wicket:message key="label.username">Label Contents</wicket:message></label>
+	                    <input class="inputText" type="text"/>
+	                </div>
+	                <div>
+	                    <label><wicket:message key="label.email">Label Contents</wicket:message></label>
+	                    <input class="inputText" type="text"/>
+	                </div>
+	                <div>
+	                    <label><wicket:message key="label.address1">Label Contents</wicket:message></label>
+	                    <input class="inputText" type="text"/>
+	                </div>
+	                <div>
+	                    <label><wicket:message key="label.address2">Label Contents</wicket:message></label>
+	                    <input class="inputText" type="text"/>
+	                </div>
+	                <div>
+	                    <label><wicket:message key="label.city">Label Contents</wicket:message></label>
+	                    <input class="inputText" type="text"/>
+	                </div>
+	                <div>
+	                    <label><wicket:message key="label.phone">Label Contents</wicket:message></label>
+	                    <input class="inputText" type="text"/>
+	                </div>
+	                <div>
+	                    <label><wicket:message key="label.text">Label Contents</wicket:message></label>
+	                    <input class="inputText" type="text"/>
+	                </div>
+	                <div class="formButtons">
+	                    <span class="buttonwrapper">
+	                        <a class="orangebutton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
+	                    </span>
+	                    <span class="feedbackPanel"></span>
+	                </div>
+	            </form>
+	        </div>
+	        
+	    </div>
         
     </wicket:panel>
 </body>

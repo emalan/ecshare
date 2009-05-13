@@ -6,15 +6,22 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
 public abstract class AjaxValidationStyleSubmitButton extends IndicatingAjaxButton{
 
 	private static final long serialVersionUID = 5857888282264283281L;
 	private static final Log log = LogFactory.getLog(AjaxValidationStyleSubmitButton.class);
 	
-	public AjaxValidationStyleSubmitButton(String id, Form<Object> form) {
-		super(id, form);
+	private final FeedbackPanel feedbackPanel;
+	
+	public AjaxValidationStyleSubmitButton(String id, Form<Object> form, FeedbackPanel feedbackPanel) {
+	    super(id, form);
+	    this.feedbackPanel = feedbackPanel;
 	}
+	public AjaxValidationStyleSubmitButton(String id, Form<Object> form) {
+        this(id, form, null);
+    }
 
     @Override
 	protected void onSubmit(final AjaxRequestTarget target, Form<?> form){
@@ -29,6 +36,9 @@ public abstract class AjaxValidationStyleSubmitButton extends IndicatingAjaxButt
             }
             
         };
+        if (feedbackPanel != null){
+            target.addComponent(feedbackPanel);
+        }
 	}
 	
     @Override
@@ -46,6 +56,10 @@ public abstract class AjaxValidationStyleSubmitButton extends IndicatingAjaxButt
             }
             
         };
+        if (feedbackPanel != null){
+            target.addComponent(feedbackPanel);
+        }
+
     }
 	
 

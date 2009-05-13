@@ -51,7 +51,7 @@ public class EditableResourceLink extends Panel {
 	private static final Log log = LogFactory.getLog(EditableResourceLink.class);
 	public static final HeaderContributor SCRIPT_UTILS = JavascriptPackageResource.getHeaderContribution(new CompressedResourceReference(EditableResourceLink.class, "resourcelink.js")); 
 	
-	private Form resourceForm;
+	private Form<Object> resourceForm;
 	private boolean active;
 
 	/** edit data **/
@@ -246,7 +246,7 @@ public class EditableResourceLink extends Panel {
 	 * 
 	 * @param model The model for the label and editor
 	 */
-	private void initLabelForm(IModel model) {
+	private void initLabelForm(IModel<?> model) {
 		// actual displayed Link
 		add(newSharedResourceLink(data.getUrl(), "link"));
 		
@@ -261,11 +261,11 @@ public class EditableResourceLink extends Panel {
 		// hidden configure form
 		resourceForm = newFileUploadForm("resource-form", statusModel);
 		formDiv.add(resourceForm);
-		final Component name = newEditor("editor", new PropertyModel(data, "name"));
-		resourceForm.add(newEditor("title-editor", new PropertyModel(data, "title")));
-		resourceForm.add(new CheckBox("hide-link", new PropertyModel(data, "hideLink")));
-		final Component upload = newFileUpload(this, "file-upload", new PropertyModel(data, "fileUpload"));
-		final Component choice = newDropDownChoice(this, "type-select", new PropertyModel(data, "resourceType"), Arrays
+		final Component name = newEditor("editor", new PropertyModel<String>(data, "name"));
+		resourceForm.add(newEditor("title-editor", new PropertyModel<String>(data, "title")));
+		resourceForm.add(new CheckBox("hide-link", new PropertyModel<Boolean>(data, "hideLink")));
+		final Component upload = newFileUpload(this, "file-upload", new PropertyModel<FileUpload>(data, "fileUpload"));
+		final Component choice = newDropDownChoice(this, "type-select", new PropertyModel<String>(data, "resourceType"), Arrays
 				.asList(ResourceType.values()));
 
 		// AjaxBehaviour to update fields once file is selected
@@ -278,7 +278,7 @@ public class EditableResourceLink extends Panel {
 
 	}
 	
-	protected Component newSharedResourceLink(final String path, final String componentId){
+    protected Component newSharedResourceLink(final String path, final String componentId){
         if (StringUtils.isEmpty(path)) {
             return new Label(componentId, getString("label.notconfigured"));
         }
@@ -329,8 +329,8 @@ public class EditableResourceLink extends Panel {
 	 * @param statusModel 
 	 * @return
 	 */
-	private Form newFileUploadForm(String id, final StatusModel statusModel) {
-		final Form form = new Form(id) {
+	private Form<Object> newFileUploadForm(String id, final StatusModel statusModel) {
+		final Form<Object> form = new Form<Object>(id) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -360,8 +360,8 @@ public class EditableResourceLink extends Panel {
 	 *            The model
 	 * @return The editor
 	 */
-	protected FormComponent newEditor(String componentId, IModel model) {
-		final TextField nameEditor = new TextField(componentId, model);
+	protected FormComponent<String> newEditor(String componentId, IModel<String> model) {
+		final TextField<String> nameEditor = new TextField<String>(componentId, model);
 		nameEditor.setOutputMarkupId(true);
 		return nameEditor;
 	}
@@ -375,10 +375,11 @@ public class EditableResourceLink extends Panel {
 	 * @param choices
 	 * @return
 	 */
-	protected FormComponent newDropDownChoice(MarkupContainer parent, String componentId, IModel model,
+	@SuppressWarnings("unchecked") //this seems safe and the best way to implement
+    protected FormComponent<String> newDropDownChoice(MarkupContainer parent, String componentId, IModel<String> model,
 			List<ResourceType> choices) {
-		IChoiceRenderer renderer = new IChoiceRenderer() {
-
+		
+	    IChoiceRenderer renderer = new IChoiceRenderer() {
 			private static final long serialVersionUID = 1L;
 
 			public Object getDisplayValue(Object object) {
@@ -414,7 +415,7 @@ public class EditableResourceLink extends Panel {
 	 * @param model
 	 * @return
 	 */
-	protected FormComponent newFileUpload(MarkupContainer parent, String componentId, IModel model) {
+	protected FormComponent<FileUpload> newFileUpload(MarkupContainer parent, String componentId, IModel<FileUpload> model) {
 		final FileUploadField upload = new FileUploadField(componentId, model) {
 
 			private static final long serialVersionUID = 1L;
@@ -431,7 +432,7 @@ public class EditableResourceLink extends Panel {
 		return upload;
 	}
 	
-	protected AjaxSelfUpdatingLabel newUploadStatusLabel(final String componentId, IModel model) {
+	protected AjaxSelfUpdatingLabel newUploadStatusLabel(final String componentId, IModel<String> model) {
 		getAppSession().setUploadComplete(false);
 		AjaxSelfUpdatingLabel label =  new AjaxSelfUpdatingLabel(componentId, model, 5);
 		if (active){
@@ -461,13 +462,13 @@ public class EditableResourceLink extends Panel {
 		}
 	}
 
-	/**
-	 * @see org.apache.wicket.MarkupContainer#setModel(org.apache.wicket.model.IModel)
-	 */
-	public final Component setModel(IModel model) {
-		String message = "AjaxEditableLink constructs its own model. Do not set it.";
-		throw new WicketRuntimeException(message);
-	}
+	
+	@Override
+    public MarkupContainer setDefaultModel(IModel<?> model) {
+        String message = "AjaxEditableLink constructs its own model. Do not set it.";
+        throw new WicketRuntimeException(message);
+    }
+
 
 	/**
 	 * Invoked when the label is in edit mode, received a new input, but that

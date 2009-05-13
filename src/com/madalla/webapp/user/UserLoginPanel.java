@@ -1,7 +1,6 @@
 package com.madalla.webapp.user;
 
 import org.apache.wicket.Page;
-import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -22,7 +21,7 @@ public class UserLoginPanel extends Panel {
 		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
 		add(Css.CSS_FORM);
 		
-		add(new PageLink("returnLink", returnPage));
+		add(new PageLink<Page>("returnLink", returnPage));
 		
 		add(new LoginPanel("signInPanel", new SecureCredentials()){
             private static final long serialVersionUID = 1L;

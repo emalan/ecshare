@@ -5,23 +5,17 @@ import java.text.MessageFormat;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.Component;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebRequestCycle;
@@ -39,13 +33,11 @@ import com.madalla.email.IEmailServiceProvider;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.util.captcha.CaptchaUtils;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
+import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
 
 public class EmailFormPanel extends Panel {
     private static final long serialVersionUID = -1643728343421366820L;
-    private static final CompressedResourceReference JS_PROTOTYPE = new CompressedResourceReference(Scriptaculous.class, "prototype.js");
-    private static final CompressedResourceReference JS_EFFECTS = new CompressedResourceReference(Scriptaculous.class, "effects.js");
 
     private Log log = LogFactory.getLog(this.getClass());
     //private String imagePass = CaptchaUtils.randomString(4, 6);
@@ -146,55 +138,24 @@ public class EmailFormPanel extends Panel {
         feedbackPanel.setOutputMarkupId(true);
         form.add(feedbackPanel);
         
-        AjaxButton submitButton = new IndicatingAjaxButton("submit", form){
-			private static final long serialVersionUID = 1L;
+        form.add(new AjaxValidationStyleSubmitButton("submit", form, feedbackPanel){
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				log.debug("Ajax onsubmit called.");
-				target.addComponent(feedbackPanel);
-				if (sendEmail()){
-					form.info(getString("message.success"));
-	            } else {
-	            	form.error(getString("message.fail"));
-	            }
-				//setResponsePage(this.findPage());
-			}
-			
-			@Override
-			protected void onError(final AjaxRequestTarget target, Form<?> form) {
-				log.debug("Ajax onerror called");
-				target.addComponent(feedbackPanel);
-	           	form.visitChildren(new Component.IVisitor<Component>() {
-					public Object component(Component component) {
-	           			log.debug("formVisitor="+component);
-	           			if (component instanceof FormComponent) {
-	           				FormComponent<?> formComponent = (FormComponent<?>) component;
-	           				if (!formComponent.isValid()){
-	           					target.addComponent(formComponent);
-	           					log.debug("Component is invalid. Component MarkupId="+formComponent.getMarkupId()+". Message is " +formComponent.getFeedbackMessage().getMessage());
-	           				}
-	           			} else if (component instanceof ComponentFeedbackPanel){
-	           				log.debug("Ajax onerror - adding feedback to target.");
-	           				ComponentFeedbackPanel feedback = (ComponentFeedbackPanel) component;
-	           				target.addComponent(feedback);
-	           			}
-	           			return null;
-					}
-	           	});
+          @Override
+          protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                super.onSubmit(target, form);
+                if (sendEmail()){
+                    form.info(getString("message.success"));
+                } else {
+                    form.error(getString("message.fail"));
+                }
+            }
 
-			}
-			
-        	
-        };
-        submitButton.setOutputMarkupId(true);
-        form.setDefaultButton(submitButton);
-        form.add(submitButton);
+            
+        });
         
         add(form);
         
-        add(JavascriptPackageResource.getHeaderContribution(JS_PROTOTYPE));
-        add(JavascriptPackageResource.getHeaderContribution(JS_EFFECTS));
     }
     
     private boolean sendEmail(){

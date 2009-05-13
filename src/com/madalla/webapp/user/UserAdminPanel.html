@@ -1,9 +1,8 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
-        form div#createNew {clear:none;}
         div#profile form div label {width: 7em;}
-        form div#createNew .buttonwrapper {margin: 5px 0 0 10px;}
+        form #createNew {margin: 5px 0 0 10px;}
         form div.formButtons {margin-left: 10em;}
         form div.formButtons .buttonwrapper {margin-right: 5px;}
         form#passwordLink
@@ -46,10 +45,8 @@
                 <div>    
                     <label><wicket:message key="label.username">Label Contents</wicket:message></label>
                     <input class="inputText" type="text" wicket:id="username"/>
-                </div>
-                <div id="createNew">
                     <input type="submit" style="display: none;">
-                    <span class="buttonwrapper">
+                    <span id="createNew" class="buttonwrapper">
                         <a wicket:id="userSubmit" class="orangebutton"><span><wicket:message key="label.create">Label Contents</wicket:message></span></a>
                     </span>
                     <span class="feedbackPanel" wicket:id="userFeedback"></span>

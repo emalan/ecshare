@@ -123,7 +123,7 @@ public class AlbumPanel extends Panel implements IHeaderContributor {
         int height = album.getHeight() == null ? ImageDefaults.DISPLAY_HEIGHT : album.getHeight();
         String params = "{interval:"+interval+", height:"+height+", width: "+ width+"}";
         
-        response.renderOnLoadJavascript("new Banner($('"+ container.getMarkupId() +"')," + params + ");");
+        //response.renderOnLoadJavascript("new Banner($('"+ container.getMarkupId() +"')," + params + ")");
         
     }
 

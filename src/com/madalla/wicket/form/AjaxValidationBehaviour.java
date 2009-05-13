@@ -1,11 +1,11 @@
 package com.madalla.wicket.form;
 
-import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+
+import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 
 public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 	private static final long serialVersionUID = 1L;
@@ -60,7 +60,8 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.renderCSSReference(PROTOTYPE);
+		response.renderJavascriptReference(Scriptaculous.PROTOTYPE);
+		response.renderJavascriptReference(Scriptaculous.EFFECTS);
 	}
 
 }
