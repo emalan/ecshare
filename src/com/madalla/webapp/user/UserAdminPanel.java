@@ -15,7 +15,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior;
@@ -62,19 +61,20 @@ public class UserAdminPanel extends Panel {
 
 	private UserDataView user = new UserDataView() ;
 	private boolean lockUsername = false;
-	private TextField usernameField;
+	private TextField<String> usernameField;
 	private List<SiteData> sites = new ArrayList<SiteData>() ;
 	private List<SiteData> sitesChoices ;
 
-	public class NewUserForm extends Form {
+	public class NewUserForm extends Form<Object> {
 		private static final long serialVersionUID = 9033980585192727266L;
 
-		public NewUserForm(String id) {
+
+        public NewUserForm(String id) {
 			super(id);
 			
 			//User Name Field
-			usernameField = new RequiredTextField("username",
-					new PropertyModel(user,"name")) {
+			usernameField = new RequiredTextField<String>("username",
+					new PropertyModel<String>(user,"name")) {
 
 				private static final long serialVersionUID = 1L;
 
@@ -90,12 +90,12 @@ public class UserAdminPanel extends Panel {
 
 			};
 			usernameField.setOutputMarkupId(true);
-			usernameField.add(new AutoCompleteBehavior(StringAutoCompleteRenderer.INSTANCE) {
+			usernameField.add(new AutoCompleteBehavior<String>(StringAutoCompleteRenderer.INSTANCE) {
 
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				protected Iterator<?> getChoices(String input) {
+				protected Iterator<String> getChoices(String input) {
 					if (Strings.isEmpty(input)) {
 						return Collections.EMPTY_LIST.iterator();
 					}
@@ -136,9 +136,14 @@ public class UserAdminPanel extends Panel {
 			
 			add(usernameField);
 		}
-	}
+        
 
-	public class ProfileForm extends Form {
+        
+	}
+	
+	
+
+	public class ProfileForm extends Form<Object> {
 		private static final long serialVersionUID = -2684823497770522924L;
 
 		public ProfileForm(String id) {
@@ -180,7 +185,7 @@ public class UserAdminPanel extends Panel {
 		userForm.add(userFeedback);
 
 		// User edit form
-		final Form profileForm = new ProfileForm("profileForm");
+		final Form<Object> profileForm = new ProfileForm("profileForm");
 		profileForm.setOutputMarkupId(true);
 		profileForm.add(new SimpleAttributeModifier("class", "formHide"));
 		add(profileForm);
@@ -191,7 +196,7 @@ public class UserAdminPanel extends Panel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form form) {
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
 				target.addComponent(userFeedback);
 
@@ -204,7 +209,7 @@ public class UserAdminPanel extends Panel {
 			}
 
 			@Override
-			protected void onError(final AjaxRequestTarget target, Form form) {
+			protected void onError(final AjaxRequestTarget target, Form<?> form) {
 				super.onError(target, form);
 				target.addComponent(userFeedback);
 			}

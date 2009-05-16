@@ -6,18 +6,24 @@
     http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
+    <bean id="repositoryWorkspaceAdmin" class="com.madalla.cms.service.jcr.RepositoryWorkspaceAdmin"
+        init-method="init">
+        <property name="workspace" value="${repository.workspace}"/>
+        <property name="template" ref="defaultWorkspaceTemplate"/>
+    </bean>
+
+    <bean id="repositoryAdminService" class="com.madalla.cms.service.jcr.RepositoryAdminService">
+        <property name="template" ref="jcrTemplate"/>
+        <property name="site" value="${site.code}"/>
+        <property name="repositoryHome" value="${repository.home}"/>
+    </bean>
+
     <bean id="repositoryService" class="com.madalla.cms.service.ocm.RepositoryService"
         init-method="init">
         <property name="template" ref="jcrTemplate"/>
         <property name="site" value="${site.code}"/>
         <property name="locales" ref="siteLocales"/>
     </bean>
-    
-	<bean id="repositoryAdminService" class="com.madalla.cms.service.jcr.RepositoryAdminService">
-    	<property name="template" ref="jcrTemplate"/>
-    	<property name="site" value="${site.code}"/>
-    	<property name="repositoryHome" value="${repository.home}"/>
-	</bean>
 	
 	<bean id="backupCreator" class="com.madalla.cms.service.jcr.RepositoryBackupCreator">
 		<constructor-arg ref="repositoryAdminService"/>

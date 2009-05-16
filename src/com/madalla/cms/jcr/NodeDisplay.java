@@ -13,8 +13,9 @@ import javax.jcr.ValueFormatException;
 
 public class NodeDisplay {
 	
-	private static final String CLASS_NAME = "ocm:classname";
+	private static final String CLASS_NAME = "ocm_classname";
 	private static final String JCR_PREFIX = "jcr:";
+	private static final String NULL_CLASS_DISPLAY = "Not an OCM Node";
 
 	private String name;
 	private String className;
@@ -60,7 +61,7 @@ public class NodeDisplay {
 	}
 
 	public String getClassName() {
-		return className;
+		return className == null? NULL_CLASS_DISPLAY : className;
 	}
 
 	public Map<String, NodePropertyDisplay> getProperties() {

@@ -21,7 +21,10 @@
 -->
 <project name="Deployer" basedir=".">
 
-  <property file="deployer.properties"/>
+  <!-- File that has the deploy properties.  Set this property before calling any deplaoyer targets.
+       webapp, path, url, username, password -->
+	<property name="deploy.properties.file" value="deployer.properties" />
+  <property file="${deploy.properties.file}" />
   
   <property name="webapp.path" value="${build.dir}"/>
   <property name="deploy.war" value="${build.dir}/${war.name}.war" />
@@ -36,28 +39,30 @@
   <taskdef resource="org/apache/catalina/ant/catalina.tasks"
            classpathref="deployer.classpath"/>
            
-  <target name="undeployDeploy" depends="stop, undeploy, deploy"></target>         
+  <target name="undeployDeploy" depends="stop, undeploy, deploy" description="Will stop, undeploy and Deploy web application">
+      <echo message="Deploy property file is set to : ${deploy.properties.file}"></echo>
+  </target>         
 
-  <target name="deploy" description="Deploy web application">
+  <target name="deploy">
     <deploy url="${url}" username="${username}" password="${password}"
             path="${path}" war="${deploy.war}" update="true" />
   </target>
 
-  <target name="undeploy" description="Undeploy web application">
+  <target name="undeploy">
     <undeploy url="${url}" username="${username}" password="${password}"
               path="${path}"/>
   </target>
 
   <!-- Webapp lifecycle control -->
-  <target name="start" description="Start web application">
+  <target name="start">
     <start url="${url}" username="${username}" password="${password}"
            path="${path}"/>
   </target>
-  <target name="reload" description="Reload web application">
+  <target name="reload">
     <reload url="${url}" username="${username}" password="${password}"
             path="${path}"/>
   </target>
-  <target name="stop" description="Stop web application">
+  <target name="stop">
     <stop url="${url}" username="${username}" password="${password}"
           path="${path}"/>
   </target>

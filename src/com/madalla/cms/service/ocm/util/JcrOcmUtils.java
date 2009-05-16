@@ -30,7 +30,10 @@ import org.joda.time.DateTime;
 
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 
+//TODO decouple this from Jackrabbit code if possible
+//TODO From 1.5 we don't need the name space
 public class JcrOcmUtils {
+    
 	
 	/** namespace prefix constant */
     public static final String OCM_NAMESPACE_PREFIX   = "ocm";
@@ -142,7 +145,7 @@ public class JcrOcmUtils {
 		
 	}
 
-	public static void registerNodeTypes(Session session, String nodeTypeFile) throws RepositoryException
+	private static void registerNodeTypes(Session session, String nodeTypeFile) throws RepositoryException
     {
         try {
 			InputStream xml = new FileInputStream(nodeTypeFile);

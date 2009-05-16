@@ -12,9 +12,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springmodules.jcr.JcrTemplate;
 
-abstract class AbstractRepositoryService {
+abstract class AbstractJcrRepositoryService {
 	
-	private static final Log log = LogFactory.getLog(AbstractRepositoryService.class);
+	private static final Log log = LogFactory.getLog(AbstractJcrRepositoryService.class);
 	
     private String site ;
 	protected JcrTemplate template;

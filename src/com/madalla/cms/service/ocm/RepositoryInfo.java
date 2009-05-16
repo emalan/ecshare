@@ -61,7 +61,7 @@ public class RepositoryInfo {
     private static final String EC_NODE_PAGES = NS + "pages";
     private static final String EC_NODE_IMAGES = NS + "images";
     private static final String EC_NODE_USERS = NS + "users";
-    private static final String OCM_CLASS = "ocm:classname";
+    private static final String OCM_CLASS = "ocm_classname";
 
 	/**
 	 * Holds Repository specific information about the classes that are to be registered

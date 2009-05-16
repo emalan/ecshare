@@ -29,6 +29,8 @@ import org.apache.wicket.util.upload.FileItem;
 
 /**
  * Obviously copied from Wicket's MultiFileUploadField, but I don't remember why...
+ * Ahh! I remember now, I wanted to use a link instead of a button
+ * TODO style button and get rid
  * TODO Use the wicket version
  * 
  * @author Eugene Malan

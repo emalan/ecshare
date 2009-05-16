@@ -16,7 +16,6 @@ import javax.swing.tree.TreeModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.jackrabbit.api.JackrabbitWorkspace;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
@@ -27,39 +26,14 @@ import com.madalla.cms.jcr.model.tree.JcrTreeNode;
 import com.madalla.service.BackupFile;
 import com.madalla.service.IRepositoryAdminService;
 
-public class RepositoryAdminService extends AbstractRepositoryService implements IRepositoryAdminService {
+public class RepositoryAdminService extends AbstractJcrRepositoryService implements IRepositoryAdminService {
 	
-    private static final long serialVersionUID = 1L;
     private static final String APP = "applications";
     private JcrTemplate template;
     private String repositoryHome;
     private final Log log = LogFactory.getLog(this.getClass());
     
     static final String EC_NODE_BACKUP = NS + "backup";
-    
-	
-    //TODO allow switching between different workspaces
-    public String[] getAvailableWorkspaces(){
-    	return (String[]) template.execute(new JcrCallback(){
-    		
-    		public Object doInJcr(Session session) throws IOException, RepositoryException{
- 				JackrabbitWorkspace workpace = (JackrabbitWorkspace)session.getWorkspace();
-				return workpace.getAccessibleWorkspaceNames();
-    		}
-    	});
-    }
-    
-    //TODO create new workspaces from admin console
-    public void createNewWorkspace(final String workspaceName){
-    	template.execute(new JcrCallback(){
-    		
-    		public Object doInJcr(Session session) throws IOException, RepositoryException{
-				JackrabbitWorkspace workpace = (JackrabbitWorkspace)session.getWorkspace();
-				workpace.createWorkspace(workspaceName);
-    			return null;
-    		}
-    	});
-    }
     
     public NodeDisplay getNodeDisplay(final String path){
     	return (NodeDisplay) template.execute(new JcrCallback(){
@@ -308,6 +282,5 @@ public class RepositoryAdminService extends AbstractRepositoryService implements
 	public void setRepositoryHome(String repositoryHome) {
 		this.repositoryHome = repositoryHome;
 	}
-
 
 }
