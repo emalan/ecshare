@@ -65,7 +65,7 @@ public class AlbumAdminPanel extends Panel{
                 	
                 	String contentType = upload.getContentType();
                 	log.info("file upload - Content type="+contentType);
-                	if (!(contentType.equalsIgnoreCase("image/png") || contentType.equalsIgnoreCase("image/jpeg"))){
+                	if (contentType == null || !(contentType.equalsIgnoreCase("image/png") || contentType.equalsIgnoreCase("image/jpeg"))){
                 		log.warn("file upload - Input type not supported. Type="+contentType);
                 		warn(getString("error.type", new Model<FileUpload>(upload)));
                 		continue;

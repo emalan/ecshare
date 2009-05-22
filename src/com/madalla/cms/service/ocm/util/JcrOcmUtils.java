@@ -24,14 +24,11 @@ import org.apache.jackrabbit.ocm.manager.impl.ObjectContentManagerImpl;
 import org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImpl;
 import org.apache.jackrabbit.ocm.mapper.Mapper;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.AnnotationMapperImpl;
-import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
 import org.joda.time.DateTime;
 
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 
-//TODO decouple this from Jackrabbit code if possible
-//TODO From 1.5 we don't need the name space
 public class JcrOcmUtils {
     
 	
@@ -43,11 +40,12 @@ public class JcrOcmUtils {
     
     public static ObjectContentManager getObjectContentManager(Session session){
 
-    	try {
-			JcrOcmUtils.setupOcmNodeTypes(session);
-		} catch (RepositoryException e) {
-			throw new WicketRuntimeException("Error setting up OCM ObjectContentManager.",e);
-		}
+//TODO remove code 
+//    	try {
+//			JcrOcmUtils.setupOcmNodeTypes(session);
+//		} catch (RepositoryException e) {
+//			throw new WicketRuntimeException("Error setting up OCM ObjectContentManager.",e);
+//		}
 		
 		Mapper mapper = setupMappers();
 		ObjectContentManagerImpl ocm =  new ObjectContentManagerImpl(session, mapper);

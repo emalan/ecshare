@@ -7,6 +7,9 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.InputStream;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Graphics Utilities class that provide default application methods.
  * 
@@ -15,9 +18,12 @@ import java.io.InputStream;
  */
 public class ImageUtilities {
 	
+    private static Log log = LogFactory.getLog(ImageUtilities.class);
 
 	public static InputStream scaleImageDownProportionately(InputStream inputStream, LoggingImageObserver observer,
 			int maxWidth, int maxHeight){
+		
+	    log.debug("scaleImageDownProportionately - maxWidth="+maxWidth+" maxHeight="+maxHeight);
 		
 		ImageScaleProcessor processor = new ImageScaleProcessor(){
 			@Override
@@ -27,6 +33,7 @@ public class ImageUtilities {
 			}
 			
 		};
+		
 		return processor.process(inputStream, observer, maxWidth, maxHeight);
 	}
 	

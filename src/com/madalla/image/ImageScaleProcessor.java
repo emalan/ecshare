@@ -13,17 +13,19 @@ abstract class ImageScaleProcessor {
 	InputStream process(InputStream inputStream, LoggingImageObserver observer,
 			int width, int height){
 		
+	    observer.logInfo("ImageScaleProcessor starting process.");
 		BufferedImage bufferedImage;
 		try {
 //			if (inputStream instanceof LazyFileInputStream){
 //				LazyFileInputStream fileInputStream = (LazyFileInputStream) inputStream;
 //				fileInputStream.reset();
 //			}
-			
+			observer.logInfo("ImageIO.read inputstream="+inputStream.getClass().getName());
 			bufferedImage = ImageIO.read(inputStream);
 			if (bufferedImage == null){
 				throw new RuntimeException("scaleImage - ImagIO unable to read inputStream.");
 			}
+			observer.logInfo("ImageScaleProcessor calling processScaling.");
 			BufferedImage scaledImage = processScaling(bufferedImage, width, height, observer);
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();

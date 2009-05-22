@@ -83,6 +83,7 @@ public class ImageHelper {
 	}
 	
 	public static void saveImageFull(JcrTemplate template, final String path, final InputStream inputStream){
+	    log.info("saveImageFull - path="+path);
 	        template.execute(new JcrCallback(){
 	            public Object doInJcr(Session session) throws IOException,
 	                    RepositoryException {

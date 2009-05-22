@@ -18,7 +18,6 @@ public class RepositoryWorkspaceAdmin {
         createNewWorkspace(workspace);
     }
 
-    //TODO allow switching between different workspaces
     public String[] getAvailableWorkspaces(){
         return (String[]) template.execute(new JcrCallback(){
             
@@ -29,7 +28,6 @@ public class RepositoryWorkspaceAdmin {
         });
     }
     
-    // TODO create new workspaces from admin console
     public void createNewWorkspace(final String workspaceName) {
         if (!doesWorkspaceExist(workspaceName)) {
             template.execute(new JcrCallback() {

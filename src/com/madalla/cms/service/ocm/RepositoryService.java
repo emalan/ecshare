@@ -83,7 +83,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	repositoryTemplate = new RepositoryTemplate(template, ocm, site);
     	
     	//Process data migration if necessary
-    	RepositoryDataMigration.transformData(template, site);
+    	//RepositoryDataMigration.transformData(template, site);
 
     	//Create site node
     	getSite(site);
