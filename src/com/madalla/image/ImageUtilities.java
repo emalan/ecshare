@@ -6,6 +6,13 @@ import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,14 +26,75 @@ import org.apache.commons.logging.LogFactory;
 public class ImageUtilities {
 	
     private static Log log = LogFactory.getLog(ImageUtilities.class);
+    private static final String JPEG = "image/jpeg";
+    private static final String PNG = "image/png";
+    private static final String GIF = "image/gif";
+    
+    public static void validateImageIO(){
+        log.info("ImageIO validation. If there is no Success message below, then validation has failed.");
+        
+        // This code crashes jvm in OpenJava !!!!
+        //validateImageIO(JPEG);
+        //validateImageIO(PNG);
+        //validateImageIO(GIF);
+        
+        log.info("ImageIO reader formats :" + getImageIOReaderFormats());
+        log.info("ImageIO reader MIME Types :" + getImageIOReaderMIMETypes());
+        log.info("ImageIO writer formats :" + getImageIOWriterFormats());
+        log.info("ImageIO writer MIME Types :" + getImageIOWriterMIMETypes());
+        log.info("Success!! ImageIO validation completed.");
+        
+    }
+    
+    private static void validateImageIO(String type){
+        boolean found = false;
+        log.info("ImageIO Reader validation. checking for MimeType="+ type);
+        Iterator<ImageReader> iter = ImageIO.getImageReadersByMIMEType(type);
+        while (iter.hasNext()) {
+            found = true;
+            ImageReader reader = iter.next();
+            log.info("ImageIO Reader validation. Found reader.. "+ reader.getClass().getName());
+        }
+        if (!found){
+            log.error("ImageIO - No readers found for type. Type="+type + ". Application may behave erratically when processing images of this type.");
+        }
+    }
 
-	public static InputStream scaleImageDownProportionately(InputStream inputStream, LoggingImageObserver observer,
+    private static Collection<String> getImageIOReaderFormats(){
+        String[] formatNames = ImageIO.getReaderFormatNames();
+        return(unique(formatNames));
+    }
+    private static Collection<String> getImageIOWriterFormats(){
+        String[] formatNames = ImageIO.getWriterFormatNames();
+        return unique(formatNames);
+    }
+    private static Collection<String> getImageIOReaderMIMETypes(){
+        String[] formatNames = ImageIO.getReaderMIMETypes();
+        return unique(formatNames);
+    }
+    private static Collection<String> getImageIOWriterMIMETypes(){
+        String[] formatNames = ImageIO.getWriterMIMETypes();
+        return unique(formatNames);
+    }
+    
+    private static Collection<String> unique(String[] strings) {
+        Set<String> set = new HashSet<String>();
+        for (int i=0; i<strings.length; i++) {
+            String name = strings[i].toLowerCase();
+            set.add(name);
+        }
+        return set;
+    }
+
+    
+    public static InputStream scaleImageDownProportionately(InputStream inputStream, LoggingImageObserver observer,
 			int maxWidth, int maxHeight){
 		
 	    log.debug("scaleImageDownProportionately - maxWidth="+maxWidth+" maxHeight="+maxHeight);
 		
 		ImageScaleProcessor processor = new ImageScaleProcessor(){
-			@Override
+			
+		    @Override
 			BufferedImage processScaling(BufferedImage bufferedImage, int targetWidth, int targetHeight,
 					ImageObserver imageObserver) {
 				return getScaledDownProportionalInstance(bufferedImage, targetWidth, targetHeight, imageObserver);

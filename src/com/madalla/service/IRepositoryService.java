@@ -102,7 +102,7 @@ public interface IRepositoryService {
 	AlbumData getAlbum(final String name);
 
 	String createImage(IAlbumData album, String name, InputStream inputStream);
-
+	
 	void addImageToAlbum(IAlbumData album, String name);
 
 	IImageData getImage(final String id);

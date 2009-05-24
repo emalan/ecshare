@@ -1,17 +1,13 @@
 package com.madalla.cms.bo.impl.ocm.image;
 
-import java.io.IOException;
 import java.io.InputStream;
 
-import javax.imageio.ImageIO;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
-import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
@@ -34,34 +30,6 @@ public class ImageHelper {
     
     private static final Log log = LogFactory.getLog(ImageHelper.class);
 	
-	public static InputStream scaleOriginalImage(InputStream inputStream){
-		LoggingImageObserver observer = new LoggingImageObserver(log);
-		return ImageUtilities.scaleImageDownProportionately(inputStream, observer, MAX_WIDTH, MAX_HEIGHT);
-	}
-	
-	public static InputStream scaleThumbnailImage(InputStream inputStream){
-		LoggingImageObserver observer = new LoggingImageObserver(log);
-		return ImageUtilities.scaleImageDownProportionately(inputStream, observer, THUMB_WIDTH, THUMB_HEIGHT);
-	}
-	
-	public static InputStream scaleAlbumImage(InputStream inputStream){
-		LoggingImageObserver observer = new LoggingImageObserver(log);
-		return ImageUtilities.scaleImageDownProportionately(inputStream, observer, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-	}
-	
-	static DynamicImageResource createImageResource(InputStream inputStream){
-		BufferedDynamicImageResource webResource = null;
-		try {
-			webResource = new BufferedDynamicImageResource();
-			webResource.setImage(ImageIO.read(inputStream));
-
-		} catch (Exception e) {
-			log.error("Exception while reading image from Content.",e);
-			//throw new WicketRuntimeException("Error while reading image from Content Management System.");
-		}
-		return webResource;
-	}
-	
 	private static final String IMAGE_FULL = "imageFull";
 	private static final String IMAGE_THUMB = "imageThumb";
 	
@@ -70,8 +38,7 @@ public class ImageHelper {
 	    //TODO resize all images in album
 	    template.execute(new JcrCallback(){
 
-            public Object doInJcr(Session session) throws IOException,
-                    RepositoryException {
+            public Object doInJcr(Session session) throws RepositoryException {
                 Node node = (Node) session.getItem(path);
                 InputStream inputStream = node.getProperty(IMAGE_FULL).getStream();
                 node.setProperty(IMAGE_FULL, scaleAlbumImage(inputStream));
@@ -85,8 +52,7 @@ public class ImageHelper {
 	public static void saveImageFull(JcrTemplate template, final String path, final InputStream inputStream){
 	    log.info("saveImageFull - path="+path);
 	        template.execute(new JcrCallback(){
-	            public Object doInJcr(Session session) throws IOException,
-	                    RepositoryException {
+	            public Object doInJcr(Session session) throws RepositoryException {
 	                Node node = (Node) session.getItem(path);
 	                InputStream scaled = scaleOriginalImage(inputStream);
 	                node.setProperty(IMAGE_FULL, scaled);
@@ -98,8 +64,7 @@ public class ImageHelper {
 
 	public static void saveImageThumb(JcrTemplate template, final String path){
         template.execute(new JcrCallback(){
-            public Object doInJcr(Session session) throws IOException,
-                    RepositoryException {
+            public Object doInJcr(Session session) throws RepositoryException {
                 Node node = (Node) session.getItem(path);
                 InputStream fullImage = node.getProperty(IMAGE_FULL).getStream();
                 InputStream thumb = scaleThumbnailImage(fullImage);
@@ -108,6 +73,21 @@ public class ImageHelper {
                 return null;
             }
         });
-}
-	
+	}
+
+   private static InputStream scaleOriginalImage(InputStream inputStream){
+        LoggingImageObserver observer = new LoggingImageObserver(log);
+        return ImageUtilities.scaleImageDownProportionately(inputStream, observer, MAX_WIDTH, MAX_HEIGHT);
+    }
+    
+    private static InputStream scaleThumbnailImage(InputStream inputStream){
+        LoggingImageObserver observer = new LoggingImageObserver(log);
+        return ImageUtilities.scaleImageDownProportionately(inputStream, observer, THUMB_WIDTH, THUMB_HEIGHT);
+    }
+    
+    private static InputStream scaleAlbumImage(InputStream inputStream){
+        LoggingImageObserver observer = new LoggingImageObserver(log);
+        return ImageUtilities.scaleImageDownProportionately(inputStream, observer, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    }
+
 }

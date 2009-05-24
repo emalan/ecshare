@@ -47,6 +47,7 @@ import com.madalla.cms.jcr.JcrUtils;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.cms.service.ocm.template.RepositoryTemplate;
 import com.madalla.cms.service.ocm.template.RepositoryTemplateCallback;
+import com.madalla.image.ImageUtilities;
 import com.madalla.service.IRepositoryService;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.security.IAuthenticator;
@@ -84,6 +85,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	
     	//Process data migration if necessary
     	//RepositoryDataMigration.transformData(template, site);
+    	
+    	ImageUtilities.validateImageIO();
 
     	//Create site node
     	getSite(site);
@@ -165,7 +168,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 			
 		});
 	}
-
+    
 	public String createImage(IAlbumData album, String name, InputStream inputStream) {
 	    //scale image down to defaults if necessary
 		Image image = new Image(album, name);

@@ -23,11 +23,9 @@
 
   <!-- File that has the deploy properties.  Set this property before calling any deplaoyer targets.
        webapp, path, url, username, password -->
-	<property name="deploy.properties.file" value="deployer.properties" />
   <property file="${deploy.properties.file}" />
   
   <property name="webapp.path" value="${build.dir}"/>
-  <property name="deploy.war" value="${build.dir}/${war.name}.war" />
 
   <path id="deployer.classpath">
     <fileset dir="${share.dir}/deployer">
@@ -39,18 +37,23 @@
   <taskdef resource="org/apache/catalina/ant/catalina.tasks"
            classpathref="deployer.classpath"/>
            
-  <target name="undeployDeploy" depends="stop, undeploy, deploy" description="Will stop, undeploy and Deploy web application">
-      <echo message="Deploy property file is set to : ${deploy.properties.file}"></echo>
+  <target name="undeployDeploy" if="deploy.properties.file">
+  	  <echo message="Deploy property file is set to : ${deploy.properties.file}"></echo>
+      <antcall target="stop"></antcall>
+  	  <antcall target="undeploy"></antcall>
+      <antcall target="deploy"></antcall>
   </target>         
 
   <target name="deploy">
+  	
     <deploy url="${url}" username="${username}" password="${password}"
-            path="${path}" war="${deploy.war}" update="true" />
+            path="${path}" war="${build.dir}/${war.name}.war" update="true" />
   </target>
+	
 
   <target name="undeploy">
     <undeploy url="${url}" username="${username}" password="${password}"
-              path="${path}"/>
+              path="${path}" failOnError="false" />
   </target>
 
   <!-- Webapp lifecycle control -->
@@ -60,11 +63,11 @@
   </target>
   <target name="reload">
     <reload url="${url}" username="${username}" password="${password}"
-            path="${path}"/>
+            path="${path}" />
   </target>
   <target name="stop">
     <stop url="${url}" username="${username}" password="${password}"
-          path="${path}"/>
+          path="${path}" failOnError="false" />
   </target>
 
 </project>
