@@ -6,6 +6,8 @@ import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.CROSSFADE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.FAST_INIT;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -60,7 +62,7 @@ public class AlbumPanel extends Panel implements IHeaderContributor {
         add(new LoggedinBookmarkablePageLink("adminLink", AlbumAdminPage.class, 
                 new PageParameters(ALBUM +"="+albumName+","+RETURN_PAGE+"="+returnPage.getName()), false, true));
         
-        List<ImageData> images = getRepositoryService().getAlbumImages(album);
+        List<ImageData> images = getAlbumImages(album);
         
         container  = new WebMarkupContainer("images");
         container.setOutputMarkupId(true);
@@ -112,7 +114,18 @@ public class AlbumPanel extends Panel implements IHeaderContributor {
         });
 	}
 	
-	public IRepositoryService getRepositoryService(){
+	private List<ImageData> getAlbumImages(AlbumData albumData){
+	    List<ImageData> images;
+	    try {
+	        images = getRepositoryService().getAlbumImages(albumData);
+	    }catch (Exception e){
+	        images = Collections.emptyList();
+	        error("Images corrupt");
+	    }
+	    return images;
+	}
+	
+	private IRepositoryService getRepositoryService(){
 		IRepositoryServiceProvider provider = (IRepositoryServiceProvider)getApplication();
 		return provider.getRepositoryService();
 	}

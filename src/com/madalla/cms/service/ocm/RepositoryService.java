@@ -201,7 +201,9 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     
     @SuppressWarnings("unchecked")//TODO maybe we should create new List instead of Casting
 	public List<ImageData> getAlbumImages(AlbumData album){
+        log.info("getAlbumImages - " + album);
     	List<ImageData> list = (List<ImageData>) repositoryTemplate.getAll(RepositoryType.IMAGE, album);
+    	log.info("getAlbumImages - list items =" + list.size());
     	Collections.sort(list);
     	return list;
     }

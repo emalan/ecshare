@@ -34,6 +34,9 @@ public class DynamicImageResourceConvertor implements AtomicTypeConverter {
      */
     public Object getObject(Value value)
     {
+        if(value == null) {
+            return null;
+        }
         try
         {
             InputStream inputStream = value.getStream();

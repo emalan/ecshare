@@ -3,6 +3,7 @@ package com.madalla.webapp.images.admin;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -101,7 +102,8 @@ public class AlbumAdminPanel extends Panel{
 		@Override
 		protected void populateItem(final ListItem<ImageData> listItem) {
 			final ImageData imageData = listItem.getModelObject();
-            listItem.add(new Label("file", imageData.getName()));
+			log.info("ImageListView - populateItem - "+imageData );
+			listItem.add(new Label("file", imageData.getName()));
             Image image = new Image("thumb",imageData.getImageThumb());
             image.setOutputMarkupId(true);
             image.add(new DraggableAjaxBehaviour(imageData.getName()));
@@ -149,7 +151,8 @@ public class AlbumAdminPanel extends Panel{
 			private static final long serialVersionUID = 1L;
 
 			protected List<ImageData> load() {
-                return getRepositoryService().getAlbumOriginalImages();
+			    log.info("ImageListView - load images.");
+                return getAlbumImages();
             }
 			
 			
@@ -160,6 +163,17 @@ public class AlbumAdminPanel extends Panel{
         add(listContainer);
 		
 	}
+	
+	private List<ImageData> getAlbumImages() {
+        List<ImageData> images;
+        try {
+            images = getRepositoryService().getAlbumOriginalImages();
+        } catch (Exception e) {
+            images = Collections.emptyList();
+            error("Images corrupt");
+        }
+        return images;
+    }
 	
 	private IRepositoryService getRepositoryService(){
 		IRepositoryServiceProvider provider = (IRepositoryServiceProvider)getApplication();

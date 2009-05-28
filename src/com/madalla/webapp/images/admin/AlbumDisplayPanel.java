@@ -1,6 +1,10 @@
 package com.madalla.webapp.images.admin;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
@@ -69,7 +73,7 @@ class AlbumDisplayPanel extends Panel {
 			@Override
 			protected TreeModel load() {
 			    AlbumData album = getRepositoryService().getAlbum(albumName);
-				return getRepositoryService().getAlbumImagesAsTree(album);
+				return getAlbumImagesTree(album);
 			}
 		};
 		final TreeTable tree = new TreeTable("albumTreeTable", treeModel, columns);
@@ -101,6 +105,17 @@ class AlbumDisplayPanel extends Panel {
 	private IRepositoryService getRepositoryService(){
 		IRepositoryServiceProvider provider = (IRepositoryServiceProvider)getApplication();
 		return provider.getRepositoryService();
+	}
+	
+	private TreeModel getAlbumImagesTree(AlbumData albumData){
+	        TreeModel tree;
+	        try {
+	            tree = getRepositoryService().getAlbumImagesAsTree(albumData);
+	        }catch (Exception e){
+	            tree = new DefaultTreeModel(new DefaultMutableTreeNode(""));
+	            error("Images corrupt");
+	        }
+	        return tree;
 	}
 
 }
