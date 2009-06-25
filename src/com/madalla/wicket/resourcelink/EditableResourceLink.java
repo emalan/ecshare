@@ -40,8 +40,9 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.time.Duration;
 
-import com.madalla.webapp.cms.IFileUploadStatus;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.upload.IFileUploadInfo;
+import com.madalla.webapp.upload.IFileUploadStatus;
 import com.madalla.wicket.AjaxSelfUpdatingLabel;
 import com.madalla.wicket.configure.AjaxConfigureIcon;
 
@@ -207,16 +208,14 @@ public class EditableResourceLink extends Panel {
 
         @Override
         public String getObject() {
-	        if (!StringUtils.isEmpty(id) && id.equals(getAppSession().getUploadId()) ){
-	            if (getAppSession().isUploading()) {
-	                return getString("uploading");
-	            } else if (getAppSession().isUploadComplete()) {
-	                return getString("uploadcomplete");
-	            } else {
-	                return "";
-	            }
+        	log.debug("StatusModel - checking status for id=" + id);
+        	Boolean fileUploading = isFileUploading(id);
+	        if ( fileUploading == null) {
+	        	return "";
+	        } else if (fileUploading) {
+	        	return getString("uploading");
 	        } else {
-	            return "";
+	        	return getString("uploadcomplete");
 	        }
         }
 	}
@@ -302,13 +301,9 @@ public class EditableResourceLink extends Panel {
 
             @Override
             protected void onBeforeRender() {
-                String id = data.getId();
-                if (!StringUtils.isEmpty(id) && id.equals(getAppSession().getUploadId()) ){
-                    if (getAppSession().isUploading()) {
-                        setEnabled(false);
-                    } else {
-                        setEnabled(true);
-                    }
+            	log.debug("sharedresourceLink - checking status for id=" + data.getId());
+                if (isFileUploading(data.getId()) != null && isFileUploading(data.getId())) {
+                    setEnabled(false);
                 } else {
                     setEnabled(true);
                 }
@@ -329,14 +324,14 @@ public class EditableResourceLink extends Panel {
 	 * @param statusModel 
 	 * @return
 	 */
-	private Form<Object> newFileUploadForm(String id, final StatusModel statusModel) {
+	private Form<Object> newFileUploadForm(final String id, final StatusModel statusModel) {
 		final Form<Object> form = new Form<Object>(id) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
-				if (getAppSession().isUploading()) {
-				    log.warn("File Upload cancelled. Session is busy loading another file.");
+				if (isFileUploading(id) != null && isFileUploading(id)) {
+				    log.warn("File Upload cancelled. Session is busy uploading file.");
 					return;
 				}
 				EditableResourceLink.this.onSubmit();
@@ -427,17 +422,22 @@ public class EditableResourceLink extends Panel {
 
 		};
 		upload.setOutputMarkupId(true);
-		//TODO set from Self updater
-		//upload.setEnabled(!getAppSession().isUploading());
 		return upload;
 	}
 	
 	protected AjaxSelfUpdatingLabel newUploadStatusLabel(final String componentId, IModel<String> model) {
-		getAppSession().setUploadComplete(false);
-		AjaxSelfUpdatingLabel label =  new AjaxSelfUpdatingLabel(componentId, model, 5);
-		if (active){
-		    label.startTimer();
-		}
+		AjaxSelfUpdatingLabel label =  new AjaxSelfUpdatingLabel(componentId, model, 5){
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onBeforeRender() {
+				if (active){
+				    startTimer();
+				}
+				super.onBeforeRender();
+			}
+		};
 		return label;
 	}
 
@@ -513,9 +513,19 @@ public class EditableResourceLink extends Panel {
 	protected void onModelChanging() {
 		super.onModelChanging();
 	}
-
-	private IFileUploadStatus getAppSession() {
-		return (IFileUploadStatus) getSession();
+	
+	private Boolean isFileUploading(String id) {
+		if (StringUtils.isEmpty(id)) {
+			return null;
+		}
+		IFileUploadStatus status = ((IFileUploadInfo) getSession()).getFileUploadStatus(id);
+		if (status == null ) {
+			return null;
+		} else if (status.isUploading()) {
+			return true;
+		} else {
+			return false;
+		} 
 	}
 
     public void setActive(boolean active) {

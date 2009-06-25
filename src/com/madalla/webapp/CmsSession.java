@@ -1,5 +1,8 @@
 package com.madalla.webapp;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.wicket.Request;
 import org.apache.wicket.protocol.http.WebSession;
 
@@ -7,22 +10,23 @@ import com.madalla.bo.security.UserData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.cms.IContentAdmin;
-import com.madalla.webapp.cms.IFileUploadStatus;
 import com.madalla.webapp.security.IAuthenticator;
+import com.madalla.webapp.upload.IFileUploadInfo;
+import com.madalla.webapp.upload.IFileUploadStatus;
 
-public class CmsSession  extends WebSession implements IContentAdmin, IRepositoryServiceProvider, IFileUploadStatus{
+public class CmsSession  extends WebSession implements IContentAdmin, IRepositoryServiceProvider, IFileUploadInfo{
 
 	private static final long serialVersionUID = 652426659740076486L;
 	private boolean cmsAdminMode = false;
 	private String username = null;
 	private AuthRepositoryService repositoryService;
-	private volatile boolean uploading, uploadComplete;
-	private volatile String uploadId;
+	private volatile Map<String, IFileUploadStatus> fileUploadInfo;
     
     public CmsSession(Request request) {
         super(request);
         IRepositoryServiceProvider repositoryProvider =((IRepositoryServiceProvider)getApplication());
         repositoryService = new AuthRepositoryService();
+        fileUploadInfo = new HashMap<String, IFileUploadStatus>();
     }
 
     public boolean isCmsAdminMode() {
@@ -41,6 +45,7 @@ public class CmsSession  extends WebSession implements IContentAdmin, IRepositor
     	cmsAdminMode = false;
     	username = null;
     	repositoryService.setUser(null);
+    	fileUploadInfo.clear();
     }
     
     public boolean login(String userName, String password) {
@@ -56,40 +61,21 @@ public class CmsSession  extends WebSession implements IContentAdmin, IRepositor
         return false;
     }
     
-    public boolean isUploading(){
-      return uploading;
-    }
-
-    /**
-     * Set when the upload thread starts, and reset when the upload ends or
-     * fails.
-     */
-    public void setIsUploading(boolean uploading){
-      this.uploading = uploading;
-    }
-
-    public boolean isUploadComplete(){
-      return uploadComplete;
-    }
-
-    /**
-     * Set when the upload thread succeeds, and reset when the upload page is
-     * reloaded.
-     */
-    public void setUploadComplete(boolean uploadComplete){
-      this.uploadComplete = uploadComplete;
-    }
-
 	public IRepositoryService getRepositoryService() {
 		return repositoryService;
 	}
 
-    public String getUploadId() {
-        return uploadId;
-    }
+	public IFileUploadStatus getFileUploadStatus(String id) {
+		return fileUploadInfo.get(id);
+	}
 
-    public void setUploadId(String id) {
-        this.uploadId = id;
-    }
+	public void setFileUploadStatus(String id, IFileUploadStatus status) {
+		fileUploadInfo.put(id, status);
+		
+	}
+
+	public void setFileUploadComplete(String id) {
+		fileUploadInfo.remove(id);
+	}
 
 }

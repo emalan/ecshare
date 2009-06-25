@@ -7,12 +7,12 @@ import org.apache.wicket.util.time.Duration;
 
 public class AjaxSelfUpdatingLabel extends Label{
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
     
     private int duration;
     private AjaxSelfUpdatingTimerBehavior timer;
 
-    public AjaxSelfUpdatingLabel(String componentId, IModel model, int duration){
+    public AjaxSelfUpdatingLabel(String componentId, IModel<String> model, int duration){
         super(componentId, model);
         this.duration = duration;
     }

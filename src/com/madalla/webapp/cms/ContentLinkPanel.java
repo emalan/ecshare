@@ -19,6 +19,8 @@ import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.upload.FileUploadStatus;
+import com.madalla.webapp.upload.IFileUploadStatus;
 import com.madalla.wicket.resourcelink.EditableResourceLink;
 import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
 
@@ -228,21 +230,27 @@ public class ContentLinkPanel extends Panel{
 		}
 
 		public void run() {
-		    session.setUploadId(data.getId());
-			session.setIsUploading(true);
+			IFileUploadStatus uploadStatus = new FileUploadStatus();
+			session.setFileUploadStatus(data.getId(), uploadStatus);
+			uploadStatus.setIsUploading(true);
 			try {
 				log.debug("Start processing...");
 				ContentLinkPanel.formSubmit(session, data, mountPath, service);
 
 				// Sleep to simulate time-consuming work
-				//Thread.sleep(10000);
+				try {
+					Thread.sleep(10000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				log.debug("Done processing...");
-
-				session.setUploadComplete(true);
+				uploadStatus.setIsUploading(false);
 			//} catch (InterruptedException e) {
 			//	session.error(e.getMessage());
 			} finally {
-				session.setIsUploading(false);
+				//session.setFileUploadComplete(data.getId());
+
 			}
 		}
 	}
