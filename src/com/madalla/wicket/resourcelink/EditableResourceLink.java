@@ -21,7 +21,6 @@ import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -53,7 +52,7 @@ public class EditableResourceLink extends Panel {
 	public static final HeaderContributor SCRIPT_UTILS = JavascriptPackageResource.getHeaderContribution(new CompressedResourceReference(EditableResourceLink.class, "resourcelink.js")); 
 	
 	private Form<Object> resourceForm;
-	private boolean active;
+	private boolean editMode;
 
 	/** edit data **/
 	private ILinkData data;
@@ -247,7 +246,7 @@ public class EditableResourceLink extends Panel {
 	 */
 	private void initLabelForm(IModel<?> model) {
 		// actual displayed Link
-		add(newSharedResourceLink(data.getUrl(), "link"));
+		add(newSharedResourceLink(data, "link"));
 		
 		StatusModel statusModel = new StatusModel(data.getId());
 		AjaxSelfUpdatingLabel statusLabel = newUploadStatusLabel("uploadstatus",statusModel);
@@ -277,13 +276,40 @@ public class EditableResourceLink extends Panel {
 
 	}
 	
-    protected Component newSharedResourceLink(final String path, final String componentId){
-        if (StringUtils.isEmpty(path)) {
-            return new Label(componentId, getString("label.notconfigured"));
-        }
+    protected Component newSharedResourceLink(final ILinkData data, final String componentId){
+    	
+    	//href Model
+    	IModel<String> hrefModel = new Model<String>(){
+			private static final long serialVersionUID = 1L;
 
-        Component link = new ExternalLink(componentId, path){
-            private static final long serialVersionUID = 1L;
+    		@Override
+			public String getObject() {
+				if (StringUtils.isEmpty(data.getUrl())){
+					return "#";
+				} else {
+					return data.getUrl();
+				}
+			}
+    		
+    	};
+    	
+    	//label model
+    	IModel<String> labelModel = new Model<String>(){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public String getObject() {
+				if (StringUtils.isEmpty(data.getName())) {
+					return getString("label.notconfigured");
+                } else {
+                	return data.getName();
+                }
+			}
+    		
+    	};
+
+        Component link = new ExternalLink(componentId, hrefModel, labelModel){
+			private static final long serialVersionUID = 1L;
 
             @Override
             protected void onComponentTag(ComponentTag tag) {
@@ -291,27 +317,42 @@ public class EditableResourceLink extends Panel {
                 super.onComponentTag(tag);
             }
 
-            protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-                if (StringUtils.isEmpty(data.getName())) {
-                    replaceComponentTagBody(markupStream, openTag, defaultNullLabel());
-                } else {
-                    replaceComponentTagBody(markupStream, openTag, data.getName());
-                }
-            }
-
             @Override
             protected void onBeforeRender() {
             	log.debug("sharedresourceLink - checking status for id=" + data.getId());
-                if (isFileUploading(data.getId()) != null && isFileUploading(data.getId())) {
+            	if (data == null){
+            		log.error("data is null");
+            	} 
+            	
+            	if(!editMode && data.getHideLink() != null && data.getHideLink().equals(Boolean.TRUE)){
+            		setVisible(false);
+            	} else {
+            		setVisible(true);
+            	}
+            	
+            	if (StringUtils.isEmpty(data.getUrl()) || (isFileUploading(data.getId()) != null && isFileUploading(data.getId()))) {
                     setEnabled(false);
                 } else {
                     setEnabled(true);
                 }
-                super.onBeforeRender();
+            	
+            	super.onBeforeRender();
             }
+
+            @Override
+			protected void onRender(MarkupStream markupStream) {
+            	super.onRender(markupStream);
+			}
+        
         };
         
-        link.setVisible(!data.getHideLink());
+//        if(data.getHideLink() == null || !data.getHideLink()){
+//        	link.setVisible(true);
+//        } else {
+//        	link.setVisible(false);
+//        }
+        //link.setVisible( !data.getHideLink());
+        link.setVisibilityAllowed(true);
         link.setOutputMarkupId(true);
         link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(5)));
         return link;
@@ -432,8 +473,10 @@ public class EditableResourceLink extends Panel {
 
 			@Override
 			protected void onBeforeRender() {
-				if (active){
+				if (editMode){
 				    startTimer();
+				} else {
+					stopTimer();
 				}
 				super.onBeforeRender();
 			}
@@ -528,8 +571,8 @@ public class EditableResourceLink extends Panel {
 		} 
 	}
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+	public void setEditMode(boolean editMode) {
+		this.editMode = editMode;
+	}
 
 }

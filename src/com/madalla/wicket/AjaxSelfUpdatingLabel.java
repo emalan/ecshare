@@ -18,10 +18,18 @@ public class AjaxSelfUpdatingLabel extends Label{
     }
 
     public void startTimer() {
-        if (timer == null){
+        if (timer == null ){
             timer = new AjaxSelfUpdatingTimerBehavior(Duration.seconds(duration));
             this.add(timer);
         }
+    }
+    
+    public void stopTimer() {
+    	if (timer != null){
+    		timer.stop();
+    		this.remove(timer);
+    		timer = null;
+    	}
     }
 
 }

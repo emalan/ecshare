@@ -155,25 +155,22 @@ public class ContentLinkPanel extends Panel{
 				protected void onSubmit() {
 				    String mountPath = "";
 				    if (linkData.getFileUpload() !=null){
-	                    mountPath = ContentSharedResource.registerResource((WebApplication)getApplication(), linkData, getRepositoryservice());;
+	                    mountPath = ContentSharedResource.registerResource((WebApplication)getApplication(), linkData, getRepositoryservice());
+	                    linkData.setUrl(mountPath);
+	                    //Start seperate thread so upload can continue if user navigates away
+	                    final SubmitThread it = new SubmitThread(getAppSession(), linkData, getRepositoryservice());
+						it.start();
+				    } else {
+				    	formSubmit(getAppSession(), linkData, getRepositoryservice());
 				    }
-					// Start a thread that will continue running even if the
-					// user goes to another page.
-					final SubmitThread it = new SubmitThread(getAppSession(), linkData, mountPath, getRepositoryservice());
-					it.start();
-			        
 				}
 
 				@Override
 				protected void onBeforeRender() {
-					if (!((IContentAdmin) getSession()).isLoggedIn()) {
-					    setActive(false);
-						if (linkData.getHideLink() != null && linkData.getHideLink().equals(Boolean.TRUE)) {
-							log.debug("onBeforeRender - hiding contentLink.");
-							setVisible(false);
-						}
+					if (((IContentAdmin) getSession()).isLoggedIn()) {
+						setEditMode(true);
 					} else {
-					    setActive(true);
+						setEditMode(false);
 					}
 					super.onBeforeRender();
 				}
@@ -219,23 +216,23 @@ public class ContentLinkPanel extends Panel{
 	private static class SubmitThread extends Thread {
 		private final CmsSession session;
 		private final ILinkData data;
-		private final String mountPath;
 		private final IRepositoryService service;
 
-		public SubmitThread(CmsSession session, ILinkData data, String mountPath, IRepositoryService service) {
+		public SubmitThread(CmsSession session, ILinkData data, IRepositoryService service) {
 			this.session = session;
 			this.data = data;
 			this.service = service;
-			this.mountPath = mountPath;
 		}
 
 		public void run() {
-			IFileUploadStatus uploadStatus = new FileUploadStatus();
+			IFileUploadStatus uploadStatus = null;
+			uploadStatus = new FileUploadStatus();
 			session.setFileUploadStatus(data.getId(), uploadStatus);
 			uploadStatus.setIsUploading(true);
+			
 			try {
 				log.debug("Start processing...");
-				ContentLinkPanel.formSubmit(session, data, mountPath, service);
+				ContentLinkPanel.formSubmit(session, data, service);
 
 				// Sleep to simulate time-consuming work
 				try {
@@ -260,7 +257,7 @@ public class ContentLinkPanel extends Panel{
      * @param session
      * @param linkData
      */
-    public static void formSubmit(CmsSession session, ILinkData linkData, String mountPath, IRepositoryService service){
+    public static void formSubmit(CmsSession session, ILinkData linkData, IRepositoryService service){
     	log.debug("onSubmit - submit Resource Form Data. " + linkData);
     	ResourceData resourceData = service.getContentResource(linkData.getId());
 		FileUpload upload = linkData.getFileUpload();
@@ -268,7 +265,7 @@ public class ContentLinkPanel extends Panel{
 			resourceData.setInputStream(null);
 			log.debug("onSubmit - setting InputStream to null");
 		} else {
-		    resourceData.setUrl(mountPath);
+		    resourceData.setUrl(linkData.getUrl());
 			try {
 				log.debug("onSubmit - uploading File...");
 				resourceData.setInputStream(upload.getInputStream());
