@@ -17,7 +17,6 @@ import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -30,7 +29,6 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.IModel;
@@ -308,9 +306,9 @@ public class EditableResourceLink extends Panel {
     		
     	};
 
-        Component link = new ExternalLink(componentId, hrefModel, labelModel){
+        Component link = new IndicatingUploadLink(componentId, data,  hrefModel, labelModel){
 			private static final long serialVersionUID = 1L;
-
+			
             @Override
             protected void onComponentTag(ComponentTag tag) {
                 tag.put("title", data.getTitle());
@@ -320,6 +318,7 @@ public class EditableResourceLink extends Panel {
             @Override
             protected void onBeforeRender() {
             	log.debug("sharedresourceLink - checking status for id=" + data.getId());
+   				
             	if (data == null){
             		log.error("data is null");
             	} 
@@ -339,22 +338,36 @@ public class EditableResourceLink extends Panel {
             	super.onBeforeRender();
             }
 
-            @Override
-			protected void onRender(MarkupStream markupStream) {
-            	super.onRender(markupStream);
-			}
-        
         };
         
-//        if(data.getHideLink() == null || !data.getHideLink()){
-//        	link.setVisible(true);
-//        } else {
-//        	link.setVisible(false);
-//        }
-        //link.setVisible( !data.getHideLink());
         link.setVisibilityAllowed(true);
         link.setOutputMarkupId(true);
-        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(5)));
+        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(5)){
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onPostProcessTarget(AjaxRequestTarget target) {
+				String indicatorId = getIndicator();
+				if (isFileUploading(data.getId()) != null && isFileUploading(data.getId())){
+					target.appendJavascript("wicketShow('" + indicatorId +"');");
+				} else {
+					target.appendJavascript("wicketHide('" + indicatorId +"');");
+				}
+				
+			}
+			
+			protected String getIndicator()
+			{
+				if (getComponent() instanceof IndicatingUploadLink)
+				{
+					return ((IndicatingUploadLink)getComponent()).getAjaxIndicatorMarkupId();
+				}
+				return null;
+			}
+
+        	
+        });
         return link;
 	}
 
@@ -557,7 +570,7 @@ public class EditableResourceLink extends Panel {
 		super.onModelChanging();
 	}
 	
-	private Boolean isFileUploading(String id) {
+	public Boolean isFileUploading(String id) {
 		if (StringUtils.isEmpty(id)) {
 			return null;
 		}

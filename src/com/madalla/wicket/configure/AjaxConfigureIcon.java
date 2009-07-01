@@ -1,12 +1,14 @@
 package com.madalla.wicket.configure;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 
@@ -25,6 +27,7 @@ public class AjaxConfigureIcon extends Panel{
 		this.configureAreaId = configureAreaId;
 		add(Css.CSS_ICON);
 		add(SCRIPT_UTILS);
+		final MarkupContainer container = new WebMarkupContainer("editContainer");
 		Component link = new AjaxLink("configure"){
 			private static final long serialVersionUID = 1L;
 
@@ -49,7 +52,7 @@ public class AjaxConfigureIcon extends Panel{
 					}
 
 					public CharSequence decorateScript(CharSequence script) {
-						String s =("var e = Wicket.$('edit-wrapper'); if (Utils.hasClassName(e, 'editing'))"+
+						String s =("var e = Wicket.$('"+container.getMarkupId()+"'); if (Utils.hasClassName(e, 'editing'))"+
 								"{Utils.removeClassName(e, 'editing');wicketHide('" + configureAreaId + "');} else "+
 								"{Utils.addClassName(e, 'editing');wicketShow('" + configureAreaId + "');};");
 						return script + s;
@@ -64,7 +67,10 @@ public class AjaxConfigureIcon extends Panel{
 			}
 
 		};
-		add(link);
+		
+		container.add(link);
+		container.setOutputMarkupId(true);
+		add(container);
 	}
 	
 	public void hideConfigureArea(AjaxRequestTarget target){
