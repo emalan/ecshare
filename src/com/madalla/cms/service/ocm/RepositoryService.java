@@ -21,6 +21,8 @@ import com.madalla.bo.SiteData;
 import com.madalla.bo.blog.BlogData;
 import com.madalla.bo.blog.BlogEntryData;
 import com.madalla.bo.blog.IBlogData;
+import com.madalla.bo.email.EmailData;
+import com.madalla.bo.email.EmailEntryData;
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.IImageData;
@@ -34,6 +36,7 @@ import com.madalla.bo.video.VideoPlayerData;
 import com.madalla.cms.bo.impl.ocm.Site;
 import com.madalla.cms.bo.impl.ocm.blog.Blog;
 import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
+import com.madalla.cms.bo.impl.ocm.email.Email;
 import com.madalla.cms.bo.impl.ocm.image.Album;
 import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.image.ImageHelper;
@@ -374,6 +377,29 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     public void saveVideoPlayerData(final VideoPlayerData data){
     	saveDataObject(data);
     }
+    
+    //*********************************
+    //******  Data    *****************
+    
+    public EmailData getEmail(){
+    	return (EmailData) repositoryTemplate.getParentObject(RepositoryType.EMAIL, "Email", new RepositoryTemplateCallback(){
+
+			@Override
+			public AbstractData createNew(String parentPath, String name) {
+				return new Email(parentPath,name);
+			}
+    		
+    	});
+    }
+    
+    public void saveEmailEntry(final EmailEntryData data){
+    	saveDataObject(data);
+    }
+    
+    @SuppressWarnings("unchecked")//another not-safe cast from Collection to List
+	public List<EmailEntryData> getEmailEntries(){
+    	return (List<EmailEntryData>) repositoryTemplate.getAll(RepositoryType.EMAILENTRY);
+    } 
 
     //**********************************
     // ******   Site and Users    ******

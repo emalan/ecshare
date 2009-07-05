@@ -1,4 +1,4 @@
-span.edit-wrapper {
+div.edit-wrapper {
 	height:1.3em;
 	overflow:hidden;
 	padding:1px 1px 0 0;
@@ -7,7 +7,7 @@ span.edit-wrapper {
 	z-index:300;
 }
 
-span.edit-wrapper a.edit-menu {
+div.edit-wrapper a.edit-menu {
 	float: left;
 	background-image: url(image/icons.gif);
 	background-repeat: no-repeat;

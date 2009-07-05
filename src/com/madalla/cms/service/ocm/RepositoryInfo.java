@@ -13,6 +13,8 @@ import com.madalla.bo.AbstractData;
 import com.madalla.cms.bo.impl.ocm.Site;
 import com.madalla.cms.bo.impl.ocm.blog.Blog;
 import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
+import com.madalla.cms.bo.impl.ocm.email.Email;
+import com.madalla.cms.bo.impl.ocm.email.EmailEntry;
 import com.madalla.cms.bo.impl.ocm.image.Album;
 import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.page.Content;
@@ -60,6 +62,7 @@ public class RepositoryInfo {
     private static final String EC_NODE_BLOGS = NS + "blogs";
     private static final String EC_NODE_PAGES = NS + "pages";
     private static final String EC_NODE_IMAGES = NS + "images";
+    private static final String EC_NODE_DATA = NS + "data";
     private static final String EC_NODE_USERS = NS + "users";
     private static final String OCM_CLASS = "ocm_classname";
 
@@ -83,7 +86,9 @@ public class RepositoryInfo {
 		RESOURCE(Resource.class, true, false, EC_NODE_PAGES),
 		VIDEO(VideoPlayer.class, true, false, EC_NODE_PAGES),
 		USER(User.class, false, true, EC_NODE_USERS),
-		USERSITE(UserSite.class, false, false, EC_NODE_USERS);
+		USERSITE(UserSite.class, false, false, EC_NODE_USERS),
+		EMAIL(Email.class, true, true, EC_NODE_DATA),
+		EMAILENTRY(EmailEntry.class, true, false, EC_NODE_DATA);
 		
 		/**
 		 * This is the class that is to be registered for persistence
@@ -132,6 +137,10 @@ public class RepositoryInfo {
 	
 	public static boolean isContentNodeType(final String path){
         return isNodeType(path, EC_NODE_PAGES);
+    }
+	
+	public static boolean isDataNodeType(final String path){
+        return isNodeType(path, EC_NODE_DATA);
     }
 	
 	public static boolean isContentPasteNode(JcrTemplate template, final String path){

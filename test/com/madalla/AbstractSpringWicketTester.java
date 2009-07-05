@@ -10,10 +10,16 @@ public abstract class AbstractSpringWicketTester  extends AbstractDependencyInje
 
 	protected Log log = LogFactory.getLog(this.getClass());
 	
+	public AbstractSpringWicketTester(){
+		super();
+		setAutowireMode(AUTOWIRE_BY_NAME);
+	}
+	
 	public AppTester appTester;
     protected void onSetUp() throws Exception {
     	super.onSetUp();
     	appTester = new AppTester();
+    	
     }
     
     abstract protected List getTestConfigLocations();

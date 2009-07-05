@@ -8,10 +8,13 @@ import javax.swing.tree.TreeModel;
 
 import org.joda.time.DateTime;
 
+import com.madalla.bo.AbstractData;
 import com.madalla.bo.SiteData;
 import com.madalla.bo.blog.BlogData;
 import com.madalla.bo.blog.BlogEntryData;
 import com.madalla.bo.blog.IBlogData;
+import com.madalla.bo.email.EmailData;
+import com.madalla.bo.email.EmailEntryData;
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.IImageData;
@@ -22,6 +25,9 @@ import com.madalla.bo.page.ResourceData;
 import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
 import com.madalla.bo.video.VideoPlayerData;
+import com.madalla.cms.bo.impl.ocm.email.Email;
+import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
+import com.madalla.cms.service.ocm.template.RepositoryTemplateCallback;
 import com.madalla.webapp.security.IAuthenticator;
 
 /**
@@ -113,6 +119,13 @@ public interface IRepositoryService {
 
 	TreeModel getAlbumImagesAsTree(final AlbumData album);
 	
+	// email
+	EmailData getEmail();
+
+	void saveEmailEntry(final EmailEntryData data);
+
+	List<EmailEntryData> getEmailEntries();
+
 	//User
 	SiteData getSite(String name);
 	

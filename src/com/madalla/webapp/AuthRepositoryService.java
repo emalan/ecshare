@@ -13,6 +13,8 @@ import com.madalla.bo.SiteData;
 import com.madalla.bo.blog.BlogData;
 import com.madalla.bo.blog.BlogEntryData;
 import com.madalla.bo.blog.IBlogData;
+import com.madalla.bo.email.EmailData;
+import com.madalla.bo.email.EmailEntryData;
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.IImageData;
@@ -245,4 +247,16 @@ public class AuthRepositoryService implements IRepositoryService, Serializable {
         // TODO Auto-generated method stub
         return null;
     }
+	public EmailData getEmail() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public List<EmailEntryData> getEmailEntries() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public void saveEmailEntry(EmailEntryData data) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -20,6 +20,7 @@ import org.springmodules.jcr.JcrTemplate;
 import com.madalla.bo.blog.BlogEntryData;
 import com.madalla.bo.blog.IBlogData;
 import com.madalla.bo.blog.IBlogEntryData;
+import com.madalla.bo.email.EmailData;
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.IImageData;
@@ -39,20 +40,22 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 	Log log = LogFactory.getLog(this.getClass());
 	private IRepositoryService contentService;
     private IRepositoryAdminService repositoryAdminService;
-    protected JcrTemplate template;
+    private JcrTemplate jcrTemplate;
 	private final static String SITE = "test";
 	
 	protected List<String> getTestConfigLocations() {
 		List<String> configLocations = new ArrayList<String>();
 		configLocations.add("classpath:com/madalla/cms/service/ocm/applicationContext-cms.xml");
-        configLocations.add("classpath:com/madalla/cms/jcr/applicationContext-jcr-local.xml");
+        configLocations.add("classpath:com/madalla/cms/jcr/applicationContext-jcr.xml");
         
 		return configLocations;
 	}
 	
-	public void testDataMigration(){
-		RepositoryDataMigration.transformData(template, SITE);
-	}
+//fails cause ocm: namespace is not set anymore
+//not needed - all migrations done already
+//	public void testDataMigration(){
+//		RepositoryDataMigration.transformData(jcrTemplate, SITE);
+//	}
     public void testContentBackup(){
         repositoryAdminService.backupContentRoot();
         repositoryAdminService.backupContentSite();
@@ -161,6 +164,11 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	assertTrue(treeModel.getChildCount(treeModel.getRoot()) >= 1);
     }
     
+    //Email
+    public void testEmailGetSet(){
+    	EmailData data = contentService.getEmail();
+    }
+    
     private final static String BLOG = "testBlog";
     private final static String BLOGCATEGORY = "testCategory";
     private final static String BLOGDESCRIPTION = "Blog Description Test";
@@ -213,12 +221,12 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
         this.repositoryAdminService = contentAdminService;
     }
 
-	public JcrTemplate getTemplate() {
-		return template;
+	public void setJcrTemplate(JcrTemplate jcrTemplate) {
+		this.jcrTemplate = jcrTemplate;
 	}
 
-	public void setTemplate(JcrTemplate template) {
-		this.template = template;
+	public JcrTemplate getJcrTemplate() {
+		return jcrTemplate;
 	}
 
 

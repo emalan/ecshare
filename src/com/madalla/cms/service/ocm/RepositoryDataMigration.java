@@ -106,7 +106,7 @@ public class RepositoryDataMigration {
                 node.setProperty(CLASS_NODE_NEW, property.getString());
                 property.remove();
         } catch (PathNotFoundException e) {
-            log.warn("Mmmmm WTF! Maybe a previous incomplete conversion");
+            log.warn("Mmmmm... WTF! Maybe a previous incomplete conversion");
         }
 	}
 
