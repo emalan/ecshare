@@ -10,6 +10,6 @@ public class UserAdminPage extends AdminPage implements ISecureAdminPage {
 
 	public UserAdminPage(final PageParameters parameters){
 		super(parameters);
-		add(Panels.userAdminPanel("adminPanel", parameters));
+		add(Panels.userAdminPanel("adminPanel"));
 	}
 }

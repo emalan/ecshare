@@ -26,6 +26,7 @@ import com.madalla.webapp.images.AlbumPanel;
 import com.madalla.webapp.images.admin.AlbumAdminPanel;
 import com.madalla.webapp.images.exhibit.ExhibitPanel;
 import com.madalla.webapp.site.SiteAdminPanel;
+import com.madalla.webapp.site.SiteDataPanel;
 import com.madalla.webapp.user.UserAdminPanel;
 import com.madalla.webapp.user.UserLoginPanel;
 import com.madalla.webapp.user.UserProfilePanel;
@@ -89,24 +90,23 @@ public class Panels {
 		validate("ContentEntryPanel", id, parameters);
         String nodeName = getPageParameter(CONTENT_NODE, parameters, "ContentEntryPanel");
         String contentId = getPageParameter(CONTENT_ID, parameters,"ContentEntryPanel");
-        Class<? extends Page> returnPage = getReturnPage(parameters, "ContentEntryPanel");
+		return new ContentEntryPanel(id, nodeName, contentId);
+	}
+	
+	public static Panel contentAdminPanelForSite(String id){
+		return ContentAdminPanel.newInstance(id);
+	}
+	
+	public static Panel contentAdminPanelForAdmin(String id){
+		return ContentAdminPanel.newAdminInstance(id);
+	}
+	
+	public static Panel siteAdminPanel(String id){
+	    return new SiteAdminPanel(id);
+	}
 
-		return new ContentEntryPanel(id, nodeName, contentId, returnPage);
-	}
-	
-	public static Panel contentAdminPanelForSite(String id, PageParameters parameters){
-		validate("ContentAdminPanel", id, parameters);
-		return ContentAdminPanel.newInstance(id, getReturnPage(parameters, "ContentEntryPanel"));
-	}
-	
-	public static Panel contentAdminPanelForAdmin(String id, PageParameters parameters){
-		validate("ContentAdminPanel", id, parameters);
-		return ContentAdminPanel.newAdminInstance(id, getReturnPage(parameters, "ContentEntryPanel"));
-	}
-	
-	public static Panel siteAdminPanel(String id, PageParameters parameters){
-	    validate("SiteAdminPanel", id, parameters);
-	    return new SiteAdminPanel(id, getReturnPage(parameters, "SiteAdminPanel"));
+	public static Panel siteDataPanel(String id){
+	    return new SiteDataPanel(id);
 	}
 
 	/**
@@ -155,9 +155,8 @@ public class Panels {
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.images.admin.AlbumAdminPanel}
 	 */
 	public static Panel albumAdminPanel(String id, PageParameters parameters){
-		validate("AlbumAdminPanel", id, parameters);
 		String album = getPageParameter(ALBUM, parameters,"AlbumAdminPanel");
-		return new AlbumAdminPanel(id, album, getReturnPage(parameters, "AlbumAdminPanel"));
+		return new AlbumAdminPanel(id, album);
 	}
 	
 	/**
@@ -187,9 +186,8 @@ public class Panels {
 	 * @param parameters - including return Page
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserLoginPanel}
 	 */	
-	public static Panel userLoginPanel(String id, PageParameters parameters) {
-		validate("UserLoginPanel", id, parameters);
-		return new UserLoginPanel(id, getReturnPage(parameters, "UserLoginPanel"));
+	public static Panel userLoginPanel(String id) {
+		return new UserLoginPanel(id);
 	}
 
 	/**
@@ -198,9 +196,8 @@ public class Panels {
 	 * @param parameters - including return Page
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserProfilePanel}
 	 */	
-	public static Panel userProfilePanel(String id, PageParameters parameters) {
-		validate("UserProfilePanel", id, parameters);
-		return new UserProfilePanel(id, getReturnPage(parameters, "UserProfilePanel"));
+	public static Panel userProfilePanel(String id) {
+		return new UserProfilePanel(id);
 	}
 	
 	/**
@@ -209,9 +206,8 @@ public class Panels {
 	 * @param parameters - including return Page
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserAdminPanel}
 	 */	
-	public static Panel userAdminPanel(String id, PageParameters parameters) {
-		validate("UserAdminPanel", id, parameters);
-		return new UserAdminPanel(id, getReturnPage(parameters, "UserAdminPanel"));
+	public static Panel userAdminPanel(String id) {
+		return new UserAdminPanel(id);
 	}
 	
 	/*  Utility methods */
@@ -241,8 +237,9 @@ public class Panels {
 	private static void error(String message, Exception e){
 		throw new WicketRuntimeException(message, e);
 	}
+	
 	@SuppressWarnings("unchecked")
-	private static Class<? extends Page> getReturnPage(PageParameters parameters, String panel){
+	static Class<? extends Page> getReturnPage(PageParameters parameters, String panel){
 		String pageString = getPageParameter(RETURN_PAGE, parameters, panel);
 		Class returnPage = null;
 		try {

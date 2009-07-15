@@ -7,19 +7,10 @@
             form textarea {float:left; clear:both;}
             
             div#formButtons { margin: 10px 0 0 5px;}
-            .buttonwrapper {
-                margin: 0 5px 10px 0 ;
-                float: left; 
-            }
     	</style>
 </wicket:head>
 <body>
     <wicket:panel>
-        <div id="control">
-            <span class="buttonwrapper">
-                <a href="#" class="bluebutton" wicket:id="returnLink"><span><wicket:message key="label.return">Label Contents</wicket:message></span></a>
-            </span>
-        </div>
         <form wicket:id="contentForm">
             <div>
                 <a href="javascript:;" onmousedown="tinyMCE.get('text').show();">[Show]</a>

@@ -1,13 +1,9 @@
 package com.madalla.webapp.cms.admin;
 
-import static com.madalla.webapp.PageParams.RETURN_PAGE;
-
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
@@ -16,7 +12,6 @@ import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.ListChoice;
-import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
@@ -25,9 +20,6 @@ import com.madalla.service.BackupFile;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
-import com.madalla.webapp.pages.SiteAdminPage;
-import com.madalla.webapp.pages.UserAdminPage;
 import com.madalla.wicket.IndicatingAjaxSubmitLink;
 
 public class ContentAdminPanel extends Panel {
@@ -40,19 +32,18 @@ public class ContentAdminPanel extends Panel {
 	private ContentDisplayPanel contentDisplayPanel;
 	private ContentExplorerPanel contentExplorerPanel;
 	
-	public static ContentAdminPanel newInstance(String name, Class<? extends Page> returnPage){
-	    return new ContentAdminPanel(name, false, returnPage);	
+	public static ContentAdminPanel newInstance(String name){
+	    return new ContentAdminPanel(name, false);	
 	}
-	public static ContentAdminPanel newAdminInstance(String name, Class<? extends Page> returnPage){
-		return new ContentAdminPanel(name, true, returnPage);
+	public static ContentAdminPanel newAdminInstance(String name){
+		return new ContentAdminPanel(name, true);
 	}
 
-	private ContentAdminPanel(String name, final Boolean adminApp, Class<? extends Page> returnPage) {
+	private ContentAdminPanel(String name, final Boolean adminApp) {
 		super(name);
 		this.adminApp = adminApp;
 		
 		add(Css.CSS_FORM);
-        add(new PageLink<Page>("returnLink", returnPage));
         
         setBackupFileList();
         final ListChoice<BackupFile> listChoice = new ListChoice<BackupFile>("backupFiles", new PropertyModel<BackupFile>(this,"file"), 

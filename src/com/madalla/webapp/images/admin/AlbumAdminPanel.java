@@ -10,7 +10,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
@@ -21,7 +20,6 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
@@ -129,15 +127,13 @@ public class AlbumAdminPanel extends Panel{
 	private ImageListView imageListView;
 	
 	
-	public AlbumAdminPanel(String id, String albumName, Class<? extends Page> returnPage) {
+	public AlbumAdminPanel(String id, String albumName) {
 		super(id);
 		
 		add(Css.CSS_FORM);
 		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
 		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.EFFECTS));
 		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.DRAGDROP));
-		
-		add(new PageLink<Page>("returnLink", returnPage));
 		
         final FileUploadForm simpleUploadForm = new FileUploadForm("simpleUpload");
         final FeedbackPanel uploadFeedback = new ComponentFeedbackPanel("uploadFeedback",simpleUploadForm);

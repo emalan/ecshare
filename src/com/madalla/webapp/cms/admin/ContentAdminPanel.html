@@ -14,7 +14,7 @@
         #backupBackup p {
             color: blue;
         }
-        #backupBackup p, #backupBackup div.buttonwrapper, #backupBackup span.feedbackPanel {
+        #backupBackup p, #backupBackup span.feedbackPanel {
             margin: 10px 0 0 10px;
         }
         #backup form {
@@ -65,11 +65,6 @@
 </wicket:head>
 <body>
     <wicket:panel>
-    <div id="control">
-        <span class="buttonwrapper">
-            <a href="#" class="bluebutton" wicket:id="returnLink"><span><wicket:message key="label.return">Label Contents</wicket:message></span></a>
-        </span>
-    </div>
     <div id="backup">
         <div id="backupBackup">
             <p><wicket:message key="label.backup.info">Label Contents</wicket:message></p>

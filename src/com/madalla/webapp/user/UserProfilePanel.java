@@ -4,7 +4,6 @@ package com.madalla.webapp.user;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
@@ -13,7 +12,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
-import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -107,14 +105,12 @@ public class UserProfilePanel extends Panel{
         }
     }
 
-	public UserProfilePanel(String id, Class<? extends Page> returnPage){
+	public UserProfilePanel(String id){
 		
 		super(id);
 		
 		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
 		add(Css.CSS_FORM);
-		
-		add(new PageLink("returnLink", returnPage));
 
 		//get logged in User Data
 		String username = ((CmsSession)getSession()).getUsername();

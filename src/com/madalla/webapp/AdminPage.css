@@ -82,7 +82,7 @@ td, th {
 /* =Menu
 ----------------------------------------------------------------------------*/
 #mainNav ul {
-	background:#FAA819 url(image/mainNavBg.gif) repeat-x scroll 0 0;
+	background-color:#FAA819;
 	float:left;
 	margin:0;
 	padding:0;

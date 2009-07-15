@@ -10,6 +10,6 @@ public class ApplicationContentAdminPage extends AdminPage implements ISecureAdm
 
     public ApplicationContentAdminPage(final PageParameters parameters){
     	super(parameters);
-        add(Panels.contentAdminPanelForAdmin("adminPanel", parameters));
+        add(Panels.contentAdminPanelForAdmin("adminPanel"));
     }
 }

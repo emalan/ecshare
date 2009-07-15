@@ -2,12 +2,10 @@ package com.madalla.webapp.site;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -47,11 +45,9 @@ public class SiteAdminPanel extends Panel{
         
     }
     
-    public SiteAdminPanel(String id, Class<? extends Page> returnPage) {
+    public SiteAdminPanel(String id) {
         super(id);
         add(Css.CSS_FORM);
-        
-        add(new PageLink<Page>("returnLink", returnPage));
         
         final Form<SiteData> form = new SiteForm("siteForm", new CompoundPropertyModel<SiteData>(getSiteData()));
         add(form);
@@ -75,8 +71,6 @@ public class SiteAdminPanel extends Panel{
                 saveSiteData((SiteData)form.getModelObject());
                 form.info(getString("message.success"));
             }
-            
-            
             
         };
         submitLink.setOutputMarkupId(true);

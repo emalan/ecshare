@@ -1,16 +1,19 @@
 package com.madalla.webapp;
 
+import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.behavior.StringHeaderContributor;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
 import com.madalla.webapp.pages.ContentAdminPage;
 import com.madalla.webapp.pages.SiteAdminPage;
+import com.madalla.webapp.pages.SiteDataPage;
 import com.madalla.webapp.pages.UserAdminPage;
 import com.madalla.webapp.pages.UserProfilePage;
 
@@ -39,9 +42,9 @@ public abstract class AdminPage extends WebPage {
 		add(new LoggedinBookmarkablePageLink("UserProfile", UserProfilePage.class, params, true).setAutoEnable(true));
 		add(new LoggedinBookmarkablePageLink("UserAdmin", UserAdminPage.class, params, true).setAutoEnable(true));
 		add(new LoggedinBookmarkablePageLink("SiteAdmin", SiteAdminPage.class, params, true).setAutoEnable(true));
-		//add(new LoggedinBookmarkablePageLink("Data", UserProfilePage.class, params, true));
+		add(new LoggedinBookmarkablePageLink("Data", SiteDataPage.class, params, true).setAutoEnable(true));
 		add(new LoggedinBookmarkablePageLink("Content", ContentAdminPage.class, params, true).setAutoEnable(true));
-		
+		add(new PageLink<Page>("returnLink", Panels.getReturnPage(params, "AdminPage")));
 	}
 	
 	public CmsSession getAppSession(){

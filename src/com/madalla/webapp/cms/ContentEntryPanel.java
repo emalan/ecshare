@@ -1,17 +1,13 @@
 package com.madalla.webapp.cms;
 
-import static com.madalla.webapp.PageParams.RETURN_PAGE;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
@@ -21,8 +17,6 @@ import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.PageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
-import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
-import com.madalla.webapp.pages.ContentAdminPage;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 
 /**
@@ -51,13 +45,10 @@ public class ContentEntryPanel extends Panel {
 	 * @param returnPage - used to create return Link
 	 * 
 	 */
-	public ContentEntryPanel(String name, final String nodeName, final String contentId, Class<? extends Page> returnPage) {
+	public ContentEntryPanel(String name, final String nodeName, final String contentId) {
         super(name);
-        this.contentPage = returnPage;
         add( JavascriptPackageResource.getHeaderContribution(TinyMce.class, "tiny_mce.js"));
         add( JavascriptPackageResource.getHeaderContribution(JAVASCRIPT));
-
-        add(new PageLink<Page>("returnLink", returnPage));
 
         PageData page = getRepositoryservice().getPage(nodeName);
         content = getRepositoryservice().getContent(page, contentId, getSession().getLocale());
