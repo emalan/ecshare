@@ -54,14 +54,6 @@ public class ContentAdminPanel extends Panel {
 		add(Css.CSS_FORM);
         add(new PageLink<Page>("returnLink", returnPage));
         
-        //User Admin Page Link
-        add(new LoggedinBookmarkablePageLink("userAdminPageLink", UserAdminPage.class,
-                new PageParameters(RETURN_PAGE + "=" + returnPage.getName()), true));
-
-        //Site Admin Page Link
-        add(new LoggedinBookmarkablePageLink("siteAdminPageLink", SiteAdminPage.class,
-                new PageParameters(RETURN_PAGE + "=" + returnPage.getName()), true));
-		
         setBackupFileList();
         final ListChoice<BackupFile> listChoice = new ListChoice<BackupFile>("backupFiles", new PropertyModel<BackupFile>(this,"file"), 
         		 new PropertyModel<List<? extends BackupFile>>(this,"backupFiles"),new ChoiceRenderer<BackupFile>("displayName"), 8){ 
@@ -117,7 +109,6 @@ public class ContentAdminPanel extends Panel {
         };
         add(backupLink);
 		
-
 		final FeedbackPanel restoreMessages = new FeedbackPanel("restoreMessages", new IFeedbackMessageFilter(){
 			private static final long serialVersionUID = 1L;
 

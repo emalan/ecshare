@@ -10,6 +10,7 @@ public class BlogEntryPage extends AdminPage implements ISecureWebPage {
     private static final long serialVersionUID = 1L;
     
     public BlogEntryPage(final PageParameters parameters){
+    	super(parameters);
         add(Panels.blogEntryPanel("adminPanel", parameters));
     }
 }

@@ -7,8 +7,8 @@ import com.madalla.webapp.Panels;
 
 public class UserLoginPage extends AdminPage{
 
-	public UserLoginPage(final PageParameters params){
-		
-		add(Panels.userLoginPanel("adminPanel", params));
+	public UserLoginPage(final PageParameters parameters){
+		super(parameters);
+		add(Panels.userLoginPanel("adminPanel", parameters));
 	}
 }

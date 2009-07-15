@@ -1,16 +1,12 @@
 package com.madalla.webapp.user;
 
 
-import static com.madalla.webapp.PageParams.RETURN_PAGE;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -36,8 +32,6 @@ import com.madalla.util.security.SecureCredentials;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
-import com.madalla.webapp.pages.ContentAdminPage;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
@@ -121,10 +115,6 @@ public class UserProfilePanel extends Panel{
 		add(Css.CSS_FORM);
 		
 		add(new PageLink("returnLink", returnPage));
-
-		//Content Admin Page
-        add(new LoggedinBookmarkablePageLink("contentAdminLink", ContentAdminPage.class,
-                new PageParameters(RETURN_PAGE + "=" + returnPage.getName()), true));
 
 		//get logged in User Data
 		String username = ((CmsSession)getSession()).getUsername();

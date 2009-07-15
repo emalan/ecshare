@@ -1,5 +1,6 @@
 package com.madalla.webapp;
 
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.behavior.StringHeaderContributor;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.WebPage;
@@ -7,6 +8,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
 import com.madalla.webapp.pages.ContentAdminPage;
 import com.madalla.webapp.pages.SiteAdminPage;
 import com.madalla.webapp.pages.UserAdminPage;
@@ -18,7 +20,7 @@ public abstract class AdminPage extends WebPage {
 	
 	private String pageTitle = "(no title)";
 	
-	public AdminPage(){
+	public AdminPage(final PageParameters params){
 	    super();
 	    
 	    setPageTitle(getString("page.title"));
@@ -30,14 +32,16 @@ public abstract class AdminPage extends WebPage {
         add(CSSPackageResource.getHeaderContribution(AdminPage.class,"AdminPage.css"));
         add(Css.CSS_BUTTONS);
         add(Css.CSS_FORM);
-        setupMenu();
+        setupMenu(params);
 	}
 	
-	private void setupMenu(){
-		add(new AppPageLink("UserProfile",UserProfilePage.class));
-        add(new AppPageLink("UserAdmin",UserAdminPage.class));
-        add(new AppPageLink("SiteAdmin",SiteAdminPage.class));
-        add(new AppPageLink("Content",ContentAdminPage.class));
+	private void setupMenu(final PageParameters params){
+		add(new LoggedinBookmarkablePageLink("UserProfile", UserProfilePage.class, params, true).setAutoEnable(true));
+		add(new LoggedinBookmarkablePageLink("UserAdmin", UserAdminPage.class, params, true).setAutoEnable(true));
+		add(new LoggedinBookmarkablePageLink("SiteAdmin", SiteAdminPage.class, params, true).setAutoEnable(true));
+		//add(new LoggedinBookmarkablePageLink("Data", UserProfilePage.class, params, true));
+		add(new LoggedinBookmarkablePageLink("Content", ContentAdminPage.class, params, true).setAutoEnable(true));
+		
 	}
 	
 	public CmsSession getAppSession(){

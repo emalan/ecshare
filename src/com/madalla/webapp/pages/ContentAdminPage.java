@@ -9,6 +9,7 @@ import com.madalla.webapp.Panels;
 public class ContentAdminPage extends AdminPage implements ISecureAdminPage  {
     
     public ContentAdminPage(final PageParameters parameters){
+    	super(parameters);
         add(Panels.contentAdminPanelForSite("adminPanel", parameters));
     }
 

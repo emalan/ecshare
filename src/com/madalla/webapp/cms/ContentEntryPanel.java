@@ -58,9 +58,6 @@ public class ContentEntryPanel extends Panel {
         add( JavascriptPackageResource.getHeaderContribution(JAVASCRIPT));
 
         add(new PageLink<Page>("returnLink", returnPage));
-        //Content Admin Page Link
-        add(new LoggedinBookmarkablePageLink("contentAdminLink", ContentAdminPage.class,
-                new PageParameters(RETURN_PAGE + "=" + returnPage.getName()), true));
 
         PageData page = getRepositoryservice().getPage(nodeName);
         content = getRepositoryservice().getContent(page, contentId, getSession().getLocale());
