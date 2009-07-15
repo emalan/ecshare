@@ -8,7 +8,6 @@ import javax.swing.tree.TreeModel;
 
 import org.joda.time.DateTime;
 
-import com.madalla.bo.AbstractData;
 import com.madalla.bo.SiteData;
 import com.madalla.bo.blog.BlogData;
 import com.madalla.bo.blog.BlogEntryData;
@@ -25,9 +24,6 @@ import com.madalla.bo.page.ResourceData;
 import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
 import com.madalla.bo.video.VideoPlayerData;
-import com.madalla.cms.bo.impl.ocm.email.Email;
-import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
-import com.madalla.cms.service.ocm.template.RepositoryTemplateCallback;
 import com.madalla.webapp.security.IAuthenticator;
 
 /**
@@ -122,7 +118,11 @@ public interface IRepositoryService {
 	// email
 	EmailData getEmail();
 
-	void saveEmailEntry(final EmailEntryData data);
+	String createEmailEntry(final EmailData parent, DateTime dateTime, String name, String email, String comment);
+	
+	EmailEntryData getEmailEntry(String id);
+	
+	void deleteEmailEntry(String id);
 
 	List<EmailEntryData> getEmailEntries();
 

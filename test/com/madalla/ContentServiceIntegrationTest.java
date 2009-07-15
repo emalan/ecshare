@@ -21,6 +21,7 @@ import com.madalla.bo.blog.BlogEntryData;
 import com.madalla.bo.blog.IBlogData;
 import com.madalla.bo.blog.IBlogEntryData;
 import com.madalla.bo.email.EmailData;
+import com.madalla.bo.email.EmailEntryData;
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.IImageData;
@@ -30,7 +31,6 @@ import com.madalla.bo.page.PageData;
 import com.madalla.bo.security.UserData;
 import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.page.Content;
-import com.madalla.cms.service.ocm.RepositoryDataMigration;
 import com.madalla.service.BackupFile;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryService;
@@ -166,7 +166,18 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     
     //Email
     public void testEmailGetSet(){
-    	EmailData data = contentService.getEmail();
+    	EmailData email = contentService.getEmail();
+    	DateTime dateTime = new DateTime();
+    	String id = contentService.createEmailEntry(email, dateTime, "testName", "me@me.com", "Hallo");
+    	log.debug("Created Email Entry with id:" + id);
+    	EmailEntryData emailEntryData = contentService.getEmailEntry(id);
+    	assertNotNull(emailEntryData);
+    	log.debug(emailEntryData);
+    	contentService.deleteEmailEntry(id);
+    	
+    	EmailEntryData validateDelete = contentService.getEmailEntry(id);
+    	assertNull(validateDelete);
+    	
     }
     
     private final static String BLOG = "testBlog";

@@ -14,7 +14,15 @@
                     <div id="noscript_box" class="message_box"><wicket:message key="label.javascript">[label]</wicket:message></div>
                 </div>
             </noscript>
-        
+            <div id="mainNav">
+            	<ul>
+            		<li><a href="#" wicket:id="UserProfile"><wicket:message key="label.profile">Page</wicket:message></a></li>
+            		<li><a href="#" wicket:id="UserAdmin"><wicket:message key="label.user">Page</wicket:message></a></li>
+            		<li><a href="#" wicket:id="SiteAdmin"><wicket:message key="label.site">Page</wicket:message></a></li>
+            		<li><a href="#"><wicket:message key="label.data">Page</wicket:message></a></li>
+            		<li><a href="#" wicket:id="Content"><wicket:message key="label.content">Page</wicket:message></a></li>
+				</ul>            		
+            </div>
         </div>
         <div id="bd">
             <wicket:child />    

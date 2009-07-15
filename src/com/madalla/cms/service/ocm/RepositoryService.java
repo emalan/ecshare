@@ -37,6 +37,7 @@ import com.madalla.cms.bo.impl.ocm.Site;
 import com.madalla.cms.bo.impl.ocm.blog.Blog;
 import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
 import com.madalla.cms.bo.impl.ocm.email.Email;
+import com.madalla.cms.bo.impl.ocm.email.EmailEntry;
 import com.madalla.cms.bo.impl.ocm.image.Album;
 import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.image.ImageHelper;
@@ -392,9 +393,30 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	});
     }
     
-    public void saveEmailEntry(final EmailEntryData data){
+    public String createEmailEntry(final EmailData parent, DateTime dateTime, String name, String email, String comment){
+    	EmailEntry data = new EmailEntry(parent, dateTime.toString("yyyy-MM-dd'T'HHmmssSSS"));
+    	data.setDateTime(dateTime);
+    	data.setSenderName(name);
+    	data.setSenderEmailAddress(email);
+    	data.setSenderComment(comment);
     	saveDataObject(data);
+    	return data.getId();
     }
+        
+	public void deleteEmailEntry(String id) {
+		EmailEntryData data = getEmailEntry(id);
+		ocm.remove(data);
+		
+	}
+
+	public EmailEntryData getEmailEntry(String path) {
+		if (StringUtils.isEmpty(path)) {
+			log.error("getEmailEntry - path is required.");
+			return null;
+		}
+		return (EmailEntryData) ocm.getObject(EmailEntry.class, path);
+	}
+
     
     @SuppressWarnings("unchecked")//another not-safe cast from Collection to List
 	public List<EmailEntryData> getEmailEntries(){
@@ -542,4 +564,5 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         ocm.copy(data.getId(), destPath);
         ocm.save();
     }
+
 }

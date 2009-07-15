@@ -26,10 +26,13 @@ import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.joda.time.DateTime;
 
 import com.madalla.bo.SiteData;
+import com.madalla.bo.email.EmailData;
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
+import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.util.captcha.CaptchaUtils;
 import com.madalla.webapp.css.Css;
@@ -116,7 +119,7 @@ public class EmailFormPanel extends Panel {
 		protected void onSubmit() {
 			if (!isSubmitted()) {
 				log.debug("onSumit called- sending email.");
-				if (sendEmail()) {
+				if (sendEmail(properties.getString("name"),properties.getString("email"),properties.getString("comment"))) {
 					info("Email sent successfully");
 				} else {
 					error("Failed to send email!");
@@ -144,7 +147,7 @@ public class EmailFormPanel extends Panel {
           @Override
           protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 super.onSubmit(target, form);
-                if (sendEmail()){
+                if (sendEmail(properties.getString("name"),properties.getString("email"),properties.getString("comment"))){
                     form.info(getString("message.success"));
                 } else {
                     form.error(getString("message.fail"));
@@ -158,16 +161,23 @@ public class EmailFormPanel extends Panel {
         
     }
     
-    private boolean sendEmail(){
+    private boolean sendEmail(String name, String email, String comment){
+    	logEmail(name, email, comment);
 		SiteData site = getSiteData();
-        IEmailSender email = getEmailSender();
-        String body = getEmailBody(properties.getString("name"),properties.getString("email"),properties.getString("comment"));
+        IEmailSender emailSender = getEmailSender();
+        String body = getEmailBody(name, email, comment);
 
         if (StringUtils.isEmpty(site.getAdminEmail())){
-            return email.sendEmail(subject, body);
+            return emailSender.sendEmail(subject, body);
         } else {
-            return email.sendUserEmail(subject, body, site.getAdminEmail(), "Site Admin");
+            return emailSender.sendUserEmail(subject, body, site.getAdminEmail(), "Site Admin");
         }
+    }
+    
+    private void logEmail(String name, String email, String comment){
+    	IRepositoryService service = ((IRepositoryServiceProvider)getApplication()).getRepositoryService();
+    	EmailData emailData = service.getEmail();
+    	service.createEmailEntry(emailData, new DateTime(), name, email, comment);
     }
     
 

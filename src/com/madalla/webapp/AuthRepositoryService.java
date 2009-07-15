@@ -259,4 +259,17 @@ public class AuthRepositoryService implements IRepositoryService, Serializable {
 		// TODO Auto-generated method stub
 		
 	}
+	public String createEmailEntry(EmailData parent, DateTime dateTime,
+			String name, String email, String comment) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public void deleteEmailEntry(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+	public EmailEntryData getEmailEntry(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
