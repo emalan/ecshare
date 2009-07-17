@@ -420,7 +420,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     
     @SuppressWarnings("unchecked")//another not-safe cast from Collection to List
 	public List<EmailEntryData> getEmailEntries(){
-    	return (List<EmailEntryData>) repositoryTemplate.getAll(RepositoryType.EMAILENTRY);
+    	return (List<EmailEntryData>) repositoryTemplate.getAll(RepositoryType.EMAILENTRY, getEmail());
     } 
 
     //**********************************

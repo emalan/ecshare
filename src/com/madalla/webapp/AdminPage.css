@@ -123,3 +123,68 @@ td, th {
   	background: none;
 }
 
+/* =Table
+----------------------------------------------------------------------------*/
+table.dataview {
+	border-bottom:1px solid #0079D6;
+	font-family:arial;
+	font-size:1em;
+	margin-bottom:10px;
+}
+
+table.dataview caption {
+	text-align:left;
+}
+
+table.dataview tr {
+	padding-bottom:2px;
+	padding-top:2px;
+}
+
+table.dataview tr.even {
+	background-color:#FFEBCD;
+}
+table.dataview tr.odd {
+	background-color:#FFFFFF;
+}
+
+table.dataview tr td {
+	padding-left:8px;
+	padding-right:30px;
+}
+
+table.dataview tr th {
+	background-color:#C1E4FF;
+	border-bottom:1px solid #0079D6;
+	border-top:1px solid #0079D6;
+	color:black;
+	padding:3px 30px 3px 8px;
+	text-align:left;
+	vertical-align:middle;
+	white-space:nowrap;
+}
+table.dataview tr th {
+	background-position:right center;
+	background-repeat:no-repeat;
+}
+table.dataview tr th.wicket_orderDown {
+	background-color:#87CBFF;
+	background-image:url(displaytag/img/arrow_down.png);
+}
+table.dataview tr th.wicket_orderUp {
+	background-color:#87CBFF;
+	background-image:url(displaytag/img/arrow_up.png);
+}
+table.dataview tr th.wicket_orderNone {
+	background-image:url(displaytag/img/arrow_off.png);
+}
+table.dataview tr th a {
+	font-weight:normal;
+}
+table.dataview #message {
+	padding-left:3px;
+}
+table.dataview caption {
+	padding-bottom:2px;
+}
+
