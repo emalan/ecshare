@@ -6,10 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByLink.CssProvider;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
@@ -27,7 +26,6 @@ import com.madalla.service.IRepositoryServiceProvider;
 public class SiteDataPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
-	private static final Log log = LogFactory.getLog(SiteDataPanel.class);
 	
 	private class SortableEmailEntryProvider extends SortableDataProvider<EmailEntryData> {
 
@@ -141,9 +139,9 @@ public class SiteDataPanel extends Panel {
 			
 		};
 		
-		dataView.setItemsPerPage(5);
+		dataView.setItemsPerPage(10);
 		
-		add(new OrderByBorder("orderByDateTime", "id", provider) {
+		add(new OrderByBorder("orderByDateTime", "id", provider, NumericCssProvider.instance) {
 			private static final long serialVersionUID = 1L;
 
 			protected void onSortChanged() {
@@ -167,5 +165,31 @@ public class SiteDataPanel extends Panel {
     private IRepositoryService getRepositoryService(){
         return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
     }
+    
+	/**
+	 * Default implementation of ICssProvider
+	 * 
+	 * @author Igor Vaynberg ( ivaynberg )
+	 */
+	public static class NumericCssProvider extends CssProvider
+	{
+		private static final long serialVersionUID = 1L;
+
+		private static NumericCssProvider instance = new NumericCssProvider();
+
+		private NumericCssProvider()
+		{
+			super("wicket_orderUp_n", "wicket_orderDown_n", "wicket_orderNone");
+		}
+
+		/**
+		 * @return singleton instance
+		 */
+		public static NumericCssProvider getInstance()
+		{
+			return instance;
+		}
+	}
+
 
 }

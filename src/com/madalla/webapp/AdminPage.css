@@ -169,14 +169,22 @@ table.dataview tr th {
 }
 table.dataview tr th.wicket_orderDown {
 	background-color:#87CBFF;
-	background-image:url(displaytag/img/arrow_down.png);
+	background-image:url(sort_decrease.png);
 }
 table.dataview tr th.wicket_orderUp {
 	background-color:#87CBFF;
-	background-image:url(displaytag/img/arrow_up.png);
+	background-image:url(sort_incr.png);
 }
-table.dataview tr th.wicket_orderNone {
-	background-image:url(displaytag/img/arrow_off.png);
+table.dataview tr th.wicket_orderDown_n {
+	background-color:#87CBFF;
+	background-image:url(move_task_down.png);
+}
+table.dataview tr th.wicket_orderUp_n {
+	background-color:#87CBFF;
+	background-image:url(move_task_up.png);
+}
+table.dataview tr th.wicket_orderNone_n {
+	background-image:url(arrow_off.png);
 }
 table.dataview tr th a {
 	font-weight:normal;
