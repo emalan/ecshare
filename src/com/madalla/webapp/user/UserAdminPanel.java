@@ -149,17 +149,17 @@ public class UserAdminPanel extends Panel {
 
 			FeedbackPanel emailFeedback = new FeedbackPanel("emailFeedback");
 			add(emailFeedback);
-			TextField email = new AjaxValidationStyleRequiredTextField("email",
-					new PropertyModel(user, "email"), emailFeedback);
+			TextField<String> email = new AjaxValidationStyleRequiredTextField("email",
+					new PropertyModel<String>(user, "email"), emailFeedback);
 			email.add(EmailAddressValidator.getInstance());
 			add(email);
 
-			add(new TextField("firstName", new PropertyModel(user, "firstName")));
-			add(new TextField("lastName", new PropertyModel(user, "lastName")));
-			add(new CheckBox("adminMode", new PropertyModel(user, "admin")));
+			add(new TextField<String>("firstName", new PropertyModel<String>(user, "firstName")));
+			add(new TextField<String>("lastName", new PropertyModel<String>(user, "lastName")));
+			add(new CheckBox("adminMode", new PropertyModel<Boolean>(user, "admin")));
 			sitesChoices = getRepositoryService().getSiteEntries();
-			add(new CheckBoxMultipleChoice("site", new Model((Serializable) sites) ,
-					sitesChoices, new ChoiceRenderer("name")));
+			add(new CheckBoxMultipleChoice<SiteData>("site", new Model((Serializable) sites) ,
+					sitesChoices, new ChoiceRenderer<SiteData>("name")));
 			
 		}
 	}

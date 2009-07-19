@@ -93,7 +93,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	ImageUtilities.validateImageIO();
 
     	//Create site node
-    	getSite(site);
+    	SiteData siteData = getSite(site);
     	
     	//Create default Users if they don't exist yet
     	getNewUser("guest", SecurityUtils.encrypt("password"));
@@ -105,6 +105,9 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	}
         adminUser.setAdmin(true);
         saveUser(adminUser);
+        
+        //setup locales
+        setLocales(siteData.getLocaleList());
     	
     }
 
@@ -436,7 +439,9 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     		@Override
 			public AbstractData createNew(String parentPath, String name) {
     			log.debug("createNew - creating Site :"+name);
-    			return new Site(parentPath, name);
+    			Site site = new Site(parentPath, name);
+    			site.setLocales("en"); //set default to english
+    			return site;
 			}
     		
     	});

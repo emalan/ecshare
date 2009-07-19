@@ -14,6 +14,7 @@ public class Site extends SiteData{
 	@Field private String metaKeywords;
 	@Field private String metaDescription;
 	@Field private String adminEmail;
+	@Field private String locales;
 	
 	public Site(){
 		
@@ -58,6 +59,14 @@ public class Site extends SiteData{
 
 	public void setAdminEmail(String adminEmail) {
 		this.adminEmail = adminEmail;
+	}
+
+	public void setLocales(String locales) {
+		this.locales = locales;
+	}
+
+	public String getLocales() {
+		return locales;
 	}
 
 

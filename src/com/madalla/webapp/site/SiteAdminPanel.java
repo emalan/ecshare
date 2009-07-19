@@ -1,9 +1,13 @@
 package com.madalla.webapp.site;
 
+import java.util.Locale;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
@@ -11,6 +15,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import com.madalla.bo.SiteData;
@@ -39,6 +44,10 @@ public class SiteAdminPanel extends Panel{
             add(new TextField<String>("metaDescription"));
            
             add(new TextField<String>("metaKeywords"));
+            
+            add(new CheckBoxMultipleChoice<Locale>("localeList", Model.of(SiteData.getAvailableLocales()), 
+            		new ChoiceRenderer<Locale>("displayName")));
+            
         }
 
         private static final long serialVersionUID = 1L;

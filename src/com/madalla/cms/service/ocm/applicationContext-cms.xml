@@ -22,7 +22,6 @@
         init-method="init">
         <property name="template" ref="jcrTemplate"/>
         <property name="site" value="${site.code}"/>
-        <property name="locales" ref="siteLocales"/>
     </bean>
 	
 	<bean id="backupCreator" class="com.madalla.cms.service.jcr.RepositoryBackupCreator">
