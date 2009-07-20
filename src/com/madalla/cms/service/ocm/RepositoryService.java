@@ -18,6 +18,7 @@ import org.joda.time.DateTime;
 
 import com.madalla.bo.AbstractData;
 import com.madalla.bo.SiteData;
+import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.blog.BlogData;
 import com.madalla.bo.blog.BlogEntryData;
 import com.madalla.bo.blog.IBlogData;
@@ -107,8 +108,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         saveUser(adminUser);
         
         //setup locales
-        List<Locale> localeList = siteData.getLocaleList();
-        localeList.add(Locale.ENGLISH); // english is default
+        List<SiteLanguage> localeList = siteData.getLocaleList();
+        localeList.add(SiteLanguage.ENGLISH); // english is default
         setLocales(localeList);
     	
     }
@@ -294,10 +295,10 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     
     public String getLocaleId(String id, Locale locale) {
         Locale found = null;
-        for (Iterator<Locale> iter = locales.iterator(); iter.hasNext();) {
-            Locale current = iter.next();
-            if (current.getLanguage().equals(locale.getLanguage())){
-                found = current;
+        for (Iterator<SiteLanguage> iter = locales.iterator(); iter.hasNext();) {
+        	SiteLanguage current = iter.next();
+            if (current.locale.getLanguage().equals(locale.getLanguage())){
+                found = current.locale;
                 break;
             }
         }

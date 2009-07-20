@@ -1,7 +1,6 @@
 package com.madalla.cms.service.ocm;
 
 import java.util.List;
-import java.util.Locale;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -13,6 +12,7 @@ import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.apache.wicket.WicketRuntimeException;
 import org.springmodules.jcr.JcrTemplate;
 
+import com.madalla.bo.SiteLanguage;
 import com.madalla.cms.jcr.JcrUtils;
 import com.madalla.cms.service.ocm.util.JcrOcmUtils;
 
@@ -22,7 +22,7 @@ abstract class AbstractRepositoryService{
 	
     protected String site ;
 	protected JcrTemplate template;
-    protected List<Locale> locales;
+    protected List<SiteLanguage> locales;
     protected ObjectContentManager ocm;
 
     public void init(){
@@ -45,7 +45,7 @@ abstract class AbstractRepositoryService{
         this.template = template;
     }
 
-	public void setLocales(List<Locale> locales) {
+	public void setLocales(List<SiteLanguage> locales) {
 		this.locales = locales;
 	}
 	

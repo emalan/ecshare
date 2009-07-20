@@ -1,7 +1,5 @@
 package com.madalla.webapp.site;
 
-import java.util.Locale;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -19,6 +17,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import com.madalla.bo.SiteData;
+import com.madalla.bo.SiteLanguage;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.css.Css;
@@ -45,8 +44,8 @@ public class SiteAdminPanel extends Panel{
            
             add(new TextField<String>("metaKeywords"));
             
-            add(new CheckBoxMultipleChoice<Locale>("localeList", Model.of(SiteData.getAvailableLocales()), 
-            		new ChoiceRenderer<Locale>("displayName")));
+            add(new CheckBoxMultipleChoice<SiteLanguage>("localeList", Model.of(SiteData.getAvailableLocales()), 
+            		new ChoiceRenderer<SiteLanguage>("displayName")));
             
         }
 
