@@ -107,7 +107,9 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         saveUser(adminUser);
         
         //setup locales
-        setLocales(siteData.getLocaleList());
+        List<Locale> localeList = siteData.getLocaleList();
+        localeList.add(Locale.ENGLISH); // english is default
+        setLocales(localeList);
     	
     }
 
@@ -439,9 +441,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     		@Override
 			public AbstractData createNew(String parentPath, String name) {
     			log.debug("createNew - creating Site :"+name);
-    			Site site = new Site(parentPath, name);
-    			site.setLocales("en"); //set default to english
-    			return site;
+    			return new Site(parentPath, name);
 			}
     		
     	});

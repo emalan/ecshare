@@ -15,11 +15,11 @@ public abstract class AjaxValidationStyleSubmitButton extends IndicatingAjaxButt
 	
 	private final FeedbackPanel feedbackPanel;
 	
-	public AjaxValidationStyleSubmitButton(String id, Form<Object> form, FeedbackPanel feedbackPanel) {
+	public AjaxValidationStyleSubmitButton(String id, Form<?> form, FeedbackPanel feedbackPanel) {
 	    super(id, form);
 	    this.feedbackPanel = feedbackPanel;
 	}
-	public AjaxValidationStyleSubmitButton(String id, Form<Object> form) {
+	public AjaxValidationStyleSubmitButton(String id, Form<?> form) {
         this(id, form, null);
     }
 

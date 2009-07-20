@@ -19,11 +19,6 @@
 	<classpathentry kind="lib" path="common/mail.jar"/>
 	<classpathentry kind="lib" path="common/log4j-1.2.13.jar"/>
 	<classpathentry kind="lib" path="common/commons-logging-1.0.4.jar"/>
-	<classpathentry kind="lib" path="common/commons-lang-2.3.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://commons.apache.org/lang/api/org/apache/commons/lang/StringUtils.html"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="common/commons-email-1.1.jar"/>
 	<classpathentry kind="lib" path="common/activation.jar"/>
 	<classpathentry kind="lib" path="spring/spring-modules-jcr.jar"/>
@@ -73,5 +68,10 @@
 	<classpathentry kind="lib" path="common/commons-io-1.4.jar"/>
 	<classpathentry kind="lib" path="jackrabbit/slf4j-api-1.5.3.jar"/>
 	<classpathentry kind="lib" path="jackrabbit/slf4j-log4j12-1.5.3.jar"/>
+	<classpathentry kind="lib" path="common/commons-lang-2.4.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/Users/emalan/devlib/commons-lang-2.4/apidocs/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

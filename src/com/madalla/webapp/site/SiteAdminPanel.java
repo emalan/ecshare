@@ -5,7 +5,8 @@ import java.util.Locale;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
@@ -22,8 +23,9 @@ import com.madalla.bo.SiteData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
-import com.madalla.wicket.form.AjaxValidationStyleSubmitLink;
+import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
 
 public class SiteAdminPanel extends Panel{
 
@@ -56,6 +58,7 @@ public class SiteAdminPanel extends Panel{
     
     public SiteAdminPanel(String id) {
         super(id);
+        add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
         add(Css.CSS_FORM);
         
         final Form<SiteData> form = new SiteForm("siteForm", new CompoundPropertyModel<SiteData>(getSiteData()));
@@ -65,7 +68,7 @@ public class SiteAdminPanel extends Panel{
         siteFeedback.setOutputMarkupId(true);
         form.add(siteFeedback);
         
-        AjaxSubmitLink submitLink = new AjaxValidationStyleSubmitLink("submitLink", form) {
+        AjaxButton submitLink = new AjaxValidationStyleSubmitButton("submitLink", form) {
 
             private static final long serialVersionUID = 1L;
 
@@ -77,6 +80,12 @@ public class SiteAdminPanel extends Panel{
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 super.onSubmit(target, form);
+                try {
+					Thread.sleep(10000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 saveSiteData((SiteData)form.getModelObject());
                 form.info(getString("message.success"));
             }

@@ -229,7 +229,7 @@ public class UserAdminPanel extends Panel {
 		
 
 		//Welcome Email
-		final Label welcomeFeedback = new Label("welcomeFeedback", new Model(""));
+		final Label welcomeFeedback = new Label("welcomeFeedback", new Model<String>(""));
 		welcomeFeedback.setOutputMarkupId(true);
 		profileForm.add(welcomeFeedback);
 		
@@ -260,7 +260,7 @@ public class UserAdminPanel extends Panel {
 		profileForm.add(welcomeLink);
 
 		//Reset Password 
-		final Label resetFeedback = new Label("resetFeedback", new Model(""));
+		final Label resetFeedback = new Label("resetFeedback", new Model<String>(""));
 		resetFeedback.setOutputMarkupId(true);
 		profileForm.add(resetFeedback);
 		

@@ -26,6 +26,10 @@
                 }
        div.wicket-aa ul { list-style:none; padding: 2px; margin:0; }
        div.wicket-aa ul li.selected { background-color: grey; padding: 2px; margin:0; }
+       
+       div#sites input, div#sites label {
+           float:none;
+       }
             
     </style>
 </wicket:head>
@@ -65,7 +69,7 @@
                    	<label><wicket:message key="label.admin">Label Contents</wicket:message></label>
                    	<input class="checkbox" type="checkbox" wicket:id="adminMode"/>
                 </div>
-                <div>
+                <div id="sites">
                 	<span valign="top" wicket:id="site">
         				<input type="checkbox">site 1</input>
         				<input type="checkbox">site 2</input>

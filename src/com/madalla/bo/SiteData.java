@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.ctc.wstx.util.StringUtil;
+
 public abstract class SiteData  extends AbstractData implements ISiteData{
 
 	private static final long serialVersionUID = 1L;
@@ -12,9 +16,12 @@ public abstract class SiteData  extends AbstractData implements ISiteData{
 	
 	public List<Locale> getLocaleList(){
 		localeList.clear();
-		String[] codes = getLocales().split(",");
-		for (int i = 0; i < codes.length; i++) {
-			localeList.add(new Locale(codes[i]));
+		String localeString = getLocales();
+		if (StringUtils.isNotEmpty(localeString)){
+			String[] codes = StringUtils.split(localeString, ',');
+			for (int i = 0; i < codes.length; i++) {
+				localeList.add(new Locale(codes[i]));
+			}
 		}
         return localeList;
 	}
@@ -29,7 +36,6 @@ public abstract class SiteData  extends AbstractData implements ISiteData{
 	
 	public static List<Locale> getAvailableLocales(){
 		List<Locale> list = new ArrayList<Locale>();
-		list.add(Locale.ENGLISH);
 		list.add(Locale.FRENCH);
 		list.add(Locale.GERMAN);
 		list.add(Locale.ITALIAN);
