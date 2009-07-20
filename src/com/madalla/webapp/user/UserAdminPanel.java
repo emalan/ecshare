@@ -13,7 +13,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior;
@@ -50,7 +49,6 @@ import com.madalla.webapp.email.EmailFormatter;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
-import com.madalla.wicket.form.AjaxValidationStyleSubmitLink;
 
 public class UserAdminPanel extends Panel {
 
@@ -187,7 +185,7 @@ public class UserAdminPanel extends Panel {
 		add(profileForm);
 
 		//Select or Create New User
-		AjaxSubmitLink newUserSubmit = new AjaxValidationStyleSubmitLink(
+		AjaxButton newUserSubmit = new AjaxValidationStyleSubmitButton(
 				"userSubmit", userForm) {
 			private static final long serialVersionUID = 1L;
 

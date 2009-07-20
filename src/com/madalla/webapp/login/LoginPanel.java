@@ -20,7 +20,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
@@ -34,7 +35,6 @@ import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.webapp.css.Css;
-import com.madalla.wicket.IndicatingAjaxSubmitLink;
 
 
 /**
@@ -146,7 +146,7 @@ public abstract class LoginPanel extends Panel
 		feedback.setOutputMarkupId(true);
 		form.add(feedback);
 
-		AjaxSubmitLink submit = new IndicatingAjaxSubmitLink("submitLink", form){
+		AjaxButton submit = new IndicatingAjaxButton("submitLink", form){
 
             private static final long serialVersionUID = 1L;
 
