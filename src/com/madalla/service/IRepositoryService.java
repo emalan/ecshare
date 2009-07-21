@@ -63,8 +63,8 @@ public interface IRepositoryService {
 
 	String getContentText(final ContentData parent, Locale locale); 
 
-	ContentData getContent(final PageData parent, final String name,
-			final Locale locale);
+	//ContentData getContent(final PageData parent, final String name,
+	//		final Locale locale);
 
 	ContentData getContent(final PageData parent, final String name);
 

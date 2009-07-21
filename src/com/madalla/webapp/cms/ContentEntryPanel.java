@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.bo.page.ContentData;
+import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
@@ -36,7 +37,7 @@ public class ContentEntryPanel extends Panel {
     Log log = LogFactory.getLog(this.getClass());
 
     private Class<? extends Page> contentPage;
-    private ContentData content;
+    private ContentEntryData contentEntry;
 
 	/**
 	 * @param name - wicket id
@@ -51,7 +52,9 @@ public class ContentEntryPanel extends Panel {
         add( JavascriptPackageResource.getHeaderContribution(JAVASCRIPT));
 
         PageData page = getRepositoryservice().getPage(nodeName);
-        content = getRepositoryservice().getContent(page, contentId, getSession().getLocale());
+        ContentData content = getRepositoryservice().getContent(page, contentId);
+        contentEntry = getRepositoryservice().getContentEntry(content, getSession().getLocale());
+        
         add(new ContentForm("contentForm"));
     }
 
@@ -78,16 +81,16 @@ public class ContentEntryPanel extends Panel {
             
         }
         public String getText() {
-    		return content.getText();
+    		return contentEntry.getText();
     	}
         public void setText(String val){
-        	content.setText(val);
+        	contentEntry.setText(val);
         }
         public void onSubmit() {
             log.debug("Submiting populated Content object to Content service.");
-            getRepositoryservice().saveContent(content);
+            getRepositoryservice().saveContentEntry(contentEntry);
             info("Content saved to repository");
-            log.debug("Content successfully saved to repository. content=" + content);
+            log.debug("Content successfully saved to repository. content=" + contentEntry);
             setResponsePage(contentPage);
         }
 

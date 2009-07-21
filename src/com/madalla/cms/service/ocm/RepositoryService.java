@@ -3,7 +3,6 @@ package com.madalla.cms.service.ocm;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -286,28 +285,8 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         });
     }
     
-    private String getLocaleId(String id, Locale locale) {
-        Locale found = null;
-        for (Iterator<SiteLanguage> iter = locales.iterator(); iter.hasNext();) {
-        	SiteLanguage current = iter.next();
-            if (current.locale.getLanguage().equals(locale.getLanguage())){
-                found = current.locale;
-                break;
-            }
-        }
-        if (null == found){
-            return id;
-        } else {
-            return id + "_"+ found.getLanguage();
-        }
-    }
-
     public void saveContent(ContentData content){
     	saveDataObject(content);
-    }
-    
-    public ContentData getContent(final PageData parent, final String name, final Locale locale){
-    	return getContent(parent, getLocaleId(name, locale));
     }
     
     public ContentData getContent(final PageData page, final String contentName){
