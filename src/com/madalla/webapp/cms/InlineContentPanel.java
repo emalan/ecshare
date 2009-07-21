@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.bo.page.ContentData;
+import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
@@ -38,14 +39,14 @@ public class InlineContentPanel extends Panel {
 
 			private static final long serialVersionUID = 1L;
 
-			private ContentData contentData;
+			private ContentEntryData contentEntry;
 			
         	@Override
 			protected void onSubmit(AjaxRequestTarget target) {
 				super.onSubmit(target);
 				log.debug("onSubmit - value="+ getDefaultModel());
 	            log.debug("Submiting populated Content object to Content service.");
-	            getRepositoryservice().saveContent(contentData);
+	            getRepositoryservice().saveContentEntry(contentEntry);
 	            info("Content saved to repository");
 			}
 			
@@ -53,8 +54,10 @@ public class InlineContentPanel extends Panel {
 			protected void onBeforeRender(){
                 log.debug("onBeforeRender - setting new Content. id="+id);
                 PageData page = getRepositoryservice().getPage(nodeName);
-	            contentData = getRepositoryservice().getContent(page, id, getSession().getLocale());
-                setDefaultModel(new PropertyModel<String>(contentData, "text"));
+	            ContentData contentData = getRepositoryservice().getContent(page, id);
+	            contentEntry = getRepositoryservice().getInlineContentEntry(contentData, getSession().getLocale());
+
+                setDefaultModel(new PropertyModel<String>(contentEntry, "text"));
                 if (((IContentAdmin)getSession()).isLoggedIn()) {
                     setEnabled(true);
                 } else {

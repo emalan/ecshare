@@ -20,6 +20,7 @@ import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.IImageData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.bo.page.ContentData;
+import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
 import com.madalla.bo.security.IUser;
@@ -269,6 +270,23 @@ public class AuthRepositoryService implements IRepositoryService, Serializable {
 		
 	}
 	public EmailEntryData getEmailEntry(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public ContentEntryData getContentEntry(ContentData parent, Locale locale) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public ContentEntryData getInlineContentEntry(ContentData parent,
+			Locale locale) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public void saveContentEntry(ContentEntryData data) {
+		// TODO Auto-generated method stub
+		
+	}
+	public String getContentText(ContentData parent, Locale locale) {
 		// TODO Auto-generated method stub
 		return null;
 	}

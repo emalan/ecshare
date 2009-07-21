@@ -29,6 +29,7 @@ import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.IImageData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.bo.page.ContentData;
+import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
 import com.madalla.bo.security.UserData;
@@ -43,6 +44,7 @@ import com.madalla.cms.bo.impl.ocm.image.Album;
 import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.image.ImageHelper;
 import com.madalla.cms.bo.impl.ocm.page.Content;
+import com.madalla.cms.bo.impl.ocm.page.ContentEntry;
 import com.madalla.cms.bo.impl.ocm.page.Page;
 import com.madalla.cms.bo.impl.ocm.page.Resource;
 import com.madalla.cms.bo.impl.ocm.security.User;
@@ -284,16 +286,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         });
     }
     
-    public String getContentText(final PageData page, final String id, Locale locale) {
-        String localeId = getLocaleId(id, locale);
-        return getContentText(page, localeId);
-    }
-    
-    public String getContentText(final PageData page, final String contentName) {
-    	return getContent(page, contentName).getText();
-    }
-    
-    public String getLocaleId(String id, Locale locale) {
+    private String getLocaleId(String id, Locale locale) {
         Locale found = null;
         for (Iterator<SiteLanguage> iter = locales.iterator(); iter.hasNext();) {
         	SiteLanguage current = iter.next();
@@ -313,18 +306,16 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	saveDataObject(content);
     }
     
-    public Content getContent(final PageData parent, final String name, final Locale locale){
+    public ContentData getContent(final PageData parent, final String name, final Locale locale){
     	return getContent(parent, getLocaleId(name, locale));
     }
     
-    public Content getContent(final PageData page, final String contentName){
+    public ContentData getContent(final PageData page, final String contentName){
     	return (Content) repositoryTemplate.getOcmObject(RepositoryType.CONTENT, page, contentName, new RepositoryTemplateCallback(){
 
 			@Override
 			public AbstractData createNew(String parentPath, String name) {
-				Content content = new Content(page, contentName);
-	            content.setText("New Content");
-				return content;
+				return new Content(page, contentName);
 			}
     		
     	});
@@ -336,6 +327,61 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     
     public void pasteContent(final String path, final ContentData content){
         copyData(path, content);
+    }
+    
+    public String getContentText(final ContentData parent, Locale locale) {
+        return getContentEntry(parent, locale).getText();
+    }
+
+    public ContentEntryData getInlineContentEntry(final ContentData parent, final Locale locale){
+    	SiteLanguage language = getSiteLanguage(locale);
+    	String defaultText;
+    	if ("en".equals(locale.getLanguage()) && StringUtils.isNotEmpty(parent.getText()) ){
+    		defaultText = parent.getText();
+    	} else {
+    		defaultText = language.defaultInlineContent;
+    	}
+    	return getContentEntry(parent, language.getDisplayName(), defaultText);
+    }
+    
+    public ContentEntryData getContentEntry(final ContentData parent, final Locale locale){
+    	SiteLanguage language = getSiteLanguage(locale);
+    	String defaultText;
+    	if ("en".equals(locale.getLanguage()) && StringUtils.isNotEmpty(parent.getText()) ){
+    		defaultText = parent.getText();
+    	} else {
+    		defaultText = language.defaultInlineContent;
+    	}
+    	return getContentEntry(parent, language.getDisplayName(), defaultText);
+    }
+    
+    public ContentEntryData getContentEntry(final ContentData parent, String name, final String defaultText){
+    	return (ContentEntryData) repositoryTemplate.getOcmObject(RepositoryType.CONTENTENTRY, parent, name, new RepositoryTemplateCallback(){
+
+			@Override
+			public AbstractData createNew(String parentPath, String name) {
+				ContentEntry contentEntry = new ContentEntry(parent, name);
+				contentEntry.setText(defaultText);
+				return contentEntry;
+			}
+    		
+    	});
+    }
+    
+    private SiteLanguage getSiteLanguage(Locale locale){
+    	String langString = getSiteData().getLocales();
+    	boolean supported = StringUtils.contains(langString, locale.getLanguage());
+    	final SiteLanguage language;
+    	if (supported){
+    		language = SiteLanguage.getLanguage(locale.getLanguage());
+    	} else {
+    		language = SiteLanguage.getLanguage("en");
+    	}
+    	return language;
+    }
+    
+    public void saveContentEntry(ContentEntryData data){
+    	saveDataObject(data);
     }
     
     //Resources

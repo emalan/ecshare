@@ -18,6 +18,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 
+import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.PageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
@@ -52,7 +53,8 @@ public class ContentPanel extends Panel {
         this.returnPage = returnPage;
         log.debug("Content Panel being created for node=" + node + " id=" + id);
         PageData page = getRepositoryservice().getPage(node);
-        String contentBody = getRepositoryservice().getContentText(page, nodeId , getSession().getLocale());
+        ContentData content = getRepositoryservice().getContent(page, nodeId);
+        String contentBody = getRepositoryservice().getContentText(content, getSession().getLocale());
         Component contentBlock = new ContentContainer("contentBlock", nodeId, node, contentBody);
         contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
             private static final long serialVersionUID = -3131361470864509715L;
@@ -93,7 +95,8 @@ public class ContentPanel extends Panel {
 
 				protected void onBeforeRender(){
                     PageData page = getRepositoryservice().getPage(nodeName);
-                    String contentBody = getRepositoryservice().getContentText(page, nodeId, getSession().getLocale());
+                    ContentData content = getRepositoryservice().getContent(page, nodeId);
+                    String contentBody = getRepositoryservice().getContentText(content, getSession().getLocale());
                     log.debug("onBeforeRender - setting new Content.");
                     contentModel.setObject(contentBody);
                     super.onBeforeRender();

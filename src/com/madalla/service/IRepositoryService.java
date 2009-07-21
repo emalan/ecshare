@@ -19,6 +19,7 @@ import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.IImageData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.bo.page.ContentData;
+import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
 import com.madalla.bo.security.UserData;
@@ -41,8 +42,6 @@ import com.madalla.webapp.security.IAuthenticator;
  */
 public interface IRepositoryService {
 
-	String getLocaleId(String id, Locale locale);
-
 	// type checks
 	boolean isDeletableNode(final String id);
 
@@ -62,9 +61,7 @@ public interface IRepositoryService {
 	// Content
 	PageData getPage(final String name);
 
-	String getContentText(PageData page, String id);
-
-	String getContentText(PageData page, String id, Locale locale);
+	String getContentText(final ContentData parent, Locale locale); 
 
 	ContentData getContent(final PageData parent, final String name,
 			final Locale locale);
@@ -76,6 +73,12 @@ public interface IRepositoryService {
 	void saveContent(ContentData content);
 
 	void pasteContent(String id, ContentData content);
+	
+    void saveContentEntry(ContentEntryData data);
+    
+    ContentEntryData getInlineContentEntry(final ContentData parent, final Locale locale);
+    
+    ContentEntryData getContentEntry(final ContentData parent, final Locale locale);
 
     ResourceData getContentResource(final PageData page, final String name);
     
