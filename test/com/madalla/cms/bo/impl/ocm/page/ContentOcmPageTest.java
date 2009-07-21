@@ -4,8 +4,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.madalla.cms.bo.impl.ocm.AbstractContentOcmTest;
-import com.madalla.cms.bo.impl.ocm.page.Content;
-import com.madalla.cms.bo.impl.ocm.page.Page;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 
 public class ContentOcmPageTest extends AbstractContentOcmTest{
@@ -26,6 +24,11 @@ public class ContentOcmPageTest extends AbstractContentOcmTest{
         Content content = new Content(testPage, "test");
         content.setText("Content goes here");
         ocm.insert(content);
+        ocm.save();
+        
+        ContentEntry contentEntry = new ContentEntry(content, "english");
+        contentEntry.setText("Editable Content");
+        ocm.insert(contentEntry);
         ocm.save();
         
         

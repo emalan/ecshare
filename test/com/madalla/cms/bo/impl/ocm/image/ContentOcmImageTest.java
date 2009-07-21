@@ -7,9 +7,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.madalla.cms.bo.impl.ocm.AbstractContentOcmTest;
-import com.madalla.cms.bo.impl.ocm.image.Album;
-import com.madalla.cms.bo.impl.ocm.image.Image;
-import com.madalla.cms.bo.impl.ocm.image.ImageHelper;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 
 public class ContentOcmImageTest extends AbstractContentOcmTest{
@@ -46,8 +43,8 @@ public class ContentOcmImageTest extends AbstractContentOcmTest{
 			Image image = new Image(album,"testjpg");
 			ocm.insert(image);
 			ocm.save();
-			ImageHelper.saveImageFull(template, image.getId(), jpg);
-			ImageHelper.saveImageThumb(template, image.getId());
+			ImageHelper.saveImageFull(jcrTemplate, image.getId(), jpg);
+			ImageHelper.saveImageThumb(jcrTemplate, image.getId());
 			
 			Image testImage = (Image) ocm.getObject(Image.class, image.getId());
 			assertNotNull(testImage);

@@ -12,8 +12,6 @@ import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.joda.time.DateTime;
 
 import com.madalla.cms.bo.impl.ocm.AbstractContentOcmTest;
-import com.madalla.cms.bo.impl.ocm.blog.Blog;
-import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 
 public class ContentOcmBlogTest extends AbstractContentOcmTest {

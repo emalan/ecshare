@@ -18,6 +18,7 @@ import com.madalla.cms.bo.impl.ocm.email.EmailEntry;
 import com.madalla.cms.bo.impl.ocm.image.Album;
 import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.page.Content;
+import com.madalla.cms.bo.impl.ocm.page.ContentEntry;
 import com.madalla.cms.bo.impl.ocm.page.Page;
 import com.madalla.cms.bo.impl.ocm.page.Resource;
 import com.madalla.cms.bo.impl.ocm.security.User;
@@ -83,6 +84,7 @@ public class RepositoryInfo {
 		IMAGE(Image.class, true, false, EC_NODE_IMAGES),
 		PAGE(Page.class, true, true, EC_NODE_PAGES),
 		CONTENT(Content.class, true, false, EC_NODE_PAGES),
+		CONTENTENTRY(ContentEntry.class, true, false, EC_NODE_PAGES),
 		RESOURCE(Resource.class, true, false, EC_NODE_PAGES),
 		VIDEO(VideoPlayer.class, true, false, EC_NODE_PAGES),
 		USER(User.class, false, true, EC_NODE_USERS),

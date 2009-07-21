@@ -1,8 +1,5 @@
 package com.madalla.webapp.images.admin;
 
-import java.util.Collections;
-import java.util.List;
-
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;

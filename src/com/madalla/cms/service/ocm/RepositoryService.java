@@ -61,7 +61,7 @@ import com.madalla.webapp.security.IAuthenticator;
  * Content Service Implementation for Jackrabbit JCR Content Repository
  * using Jackrabbit OCM framework
  * <p>
- * This implentation uses Jackrabbit OCM to persist most of the Bean 
+ * This implementation uses Jackrabbit OCM to persist most of the Bean 
  * data. The schema of the Repository is stored in the RepositoryInfo class  
  * <p>
  * <pre>

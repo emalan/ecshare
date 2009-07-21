@@ -5,14 +5,9 @@ import java.io.InputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.markup.html.DynamicWebResource;
 
 import com.madalla.cms.bo.impl.ocm.AbstractContentOcmTest;
-import com.madalla.cms.bo.impl.ocm.image.Album;
-import com.madalla.cms.bo.impl.ocm.image.Image;
-import com.madalla.cms.bo.impl.ocm.image.ImageHelper;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
-import com.sun.org.apache.regexp.internal.RESyntaxException;
 
 public class ContentOcmResourceTest extends AbstractContentOcmTest{
 

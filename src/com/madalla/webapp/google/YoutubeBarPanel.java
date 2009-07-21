@@ -1,6 +1,5 @@
 package com.madalla.webapp.google;
 
-import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.panel.Panel;
 
 public class YoutubeBarPanel extends Panel{

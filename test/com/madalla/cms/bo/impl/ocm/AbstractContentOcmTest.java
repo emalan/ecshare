@@ -28,14 +28,14 @@ public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester 
 	protected static final String NS_TEST = "test";
 	
 	Log log = LogFactory.getLog(this.getClass());
-	protected JcrTemplate template;
+	protected JcrTemplate jcrTemplate;
 	protected ObjectContentManager ocm;
 	
 	@Override
 	protected void onSetUp() throws Exception {
 		super.onSetUp();
 		
-		Session session = template.getSessionFactory().getSession();
+		Session session = jcrTemplate.getSessionFactory().getSession();
 		ocm =  JcrOcmUtils.getObjectContentManager(session);
 	}
 	
@@ -51,17 +51,17 @@ public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester 
 		configLocations
 				.add("classpath:com/madalla/cms/service/ocm/applicationContext-cms.xml");
 		configLocations
-				.add("classpath:com/madalla/cms/jcr/applicationContext-jcr-local.xml");
+				.add("classpath:com/madalla/cms/jcr/applicationContext-jcr.xml");
 
 		return configLocations;
 	}
 	
-	public JcrTemplate getTemplate() {
-		return template;
+	public void setJcrTemplate(JcrTemplate jcrTemplate) {
+		this.jcrTemplate = jcrTemplate;
 	}
 
-	public void setTemplate(JcrTemplate template) {
-		this.template = template;
+	public JcrTemplate getJcrTemplate() {
+		return jcrTemplate;
 	}
 	
 	protected String getRandomName(String post){
@@ -69,7 +69,7 @@ public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester 
 	}
 	
     protected String getCreateParentNode(final RepositoryType type){
-        return (String) template.execute(new JcrCallback(){
+        return (String) jcrTemplate.execute(new JcrCallback(){
 
             public Object doInJcr(Session session) throws IOException,
                     RepositoryException {

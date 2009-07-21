@@ -6,7 +6,6 @@ import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.CROSSFADE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.FAST_INIT;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
