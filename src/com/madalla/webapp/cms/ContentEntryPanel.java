@@ -13,12 +13,13 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.PropertyModel;
 
+import tiny_mce.TinyMce;
+
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
-import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 
 /**
  * Content Entry Panel - Edit User Content using a WYSWYG HTML editor.

@@ -196,8 +196,8 @@ public class Panels {
 	 * @param parameters - including return Page
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserProfilePanel}
 	 */	
-	public static Panel userProfilePanel(String id) {
-		return new UserProfilePanel(id);
+	public static Panel userProfilePanel(String id, PageParameters parameters) {
+		return new UserProfilePanel(id, getReturnPage(parameters ,"UserProfilePanel").getName());
 	}
 	
 	/**

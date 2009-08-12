@@ -14,7 +14,6 @@ import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
 import com.madalla.webapp.pages.ContentAdminPage;
 import com.madalla.webapp.pages.SiteAdminPage;
 import com.madalla.webapp.pages.SiteDataPage;
-import com.madalla.webapp.pages.UserAdminPage;
 import com.madalla.webapp.pages.UserProfilePage;
 
 public abstract class AdminPage extends WebPage {
@@ -39,8 +38,7 @@ public abstract class AdminPage extends WebPage {
 	}
 	
 	private void setupMenu(final PageParameters params){
-		add(new LoggedinBookmarkablePageLink("UserProfile", UserProfilePage.class, params, true).setAutoEnable(true));
-		add(new LoggedinBookmarkablePageLink("UserAdmin", UserAdminPage.class, params, true).setAutoEnable(true));
+		add(new LoggedinBookmarkablePageLink("UserProfile", UserProfilePage.class, params, false).setAutoEnable(true));
 		add(new LoggedinBookmarkablePageLink("SiteAdmin", SiteAdminPage.class, params, true).setAutoEnable(true));
 		add(new LoggedinBookmarkablePageLink("Data", SiteDataPage.class, params, true).setAutoEnable(true));
 		add(new LoggedinBookmarkablePageLink("Content", ContentAdminPage.class, params, true).setAutoEnable(true));

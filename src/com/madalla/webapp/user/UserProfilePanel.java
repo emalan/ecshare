@@ -1,9 +1,12 @@
 package com.madalla.webapp.user;
 
 
+import static com.madalla.webapp.PageParams.RETURN_PAGE;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
@@ -30,6 +33,8 @@ import com.madalla.util.security.SecureCredentials;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
+import com.madalla.webapp.pages.UserAdminPage;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
@@ -105,9 +110,13 @@ public class UserProfilePanel extends Panel{
         }
     }
 
-	public UserProfilePanel(String id){
+	public UserProfilePanel(String id, String returnPage){
 		
 		super(id);
+		
+		//User admin link
+		PageParameters params = new PageParameters(RETURN_PAGE + "=" + returnPage);
+		add(new LoggedinBookmarkablePageLink("UserAdmin", UserAdminPage.class, params, true, true, true).setAutoEnable(true));
 		
 		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
 		add(Css.CSS_FORM);

@@ -86,6 +86,15 @@ public abstract class CmsApplication extends WebApplication implements IReposito
     	};
     	pageAuthorizations.add(loggedInAuthorization);
     	
+    	//Super Admin page authorization
+    	PageAuthorization superAdminAthorization = new PageAuthorization(ISecureSuperPage.class){
+    		@Override
+    		protected boolean isAuthorized() {
+    			return ((CmsSession)Session.get()).isSuperAdmin();
+    		}
+    	};
+    	pageAuthorizations.add(superAdminAthorization);
+    	
     	//create Authorization strategy
     	AppAuthorizationStrategy authorizationStrategy = new AppAuthorizationStrategy(
                 getHomePage(), pageAuthorizations);

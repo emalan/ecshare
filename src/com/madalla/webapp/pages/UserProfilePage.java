@@ -10,6 +10,6 @@ public class UserProfilePage extends AdminPage implements ISecureWebPage  {
 
 	public UserProfilePage(final PageParameters params){
 		super(params);
-		add(Panels.userProfilePanel("adminPanel"));
+		add(Panels.userProfilePanel("adminPanel",params));
 	}
 }

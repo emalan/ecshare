@@ -33,6 +33,10 @@ public class CmsSession  extends WebSession implements IContentAdmin, IRepositor
         return cmsAdminMode;
     }
     
+    public boolean isSuperAdmin() {
+    	return username.equalsIgnoreCase("admin");
+    }
+    
     public boolean isLoggedIn() {
 		return username != null;
 	}
@@ -77,5 +81,6 @@ public class CmsSession  extends WebSession implements IContentAdmin, IRepositor
 	public void setFileUploadComplete(String id) {
 		fileUploadInfo.remove(id);
 	}
+
 
 }

@@ -81,6 +81,8 @@ td, th {
 
 /* =Menu
 ----------------------------------------------------------------------------*/
+#control {float: left; width: 100%;}
+
 #mainNav ul {
 	background-color:#FAA819;
 	float:left;

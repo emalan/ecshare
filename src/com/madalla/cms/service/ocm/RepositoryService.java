@@ -64,7 +64,7 @@ import com.madalla.webapp.security.IAuthenticator;
  * <p>
  * This implementation uses Jackrabbit OCM to persist most of the Bean 
  * data. The schema of the Repository is stored in the RepositoryInfo class  
- * <p>
+ * </p>
  * <pre>
  *            ec:apps 
  *         -----|------------------------------                 
