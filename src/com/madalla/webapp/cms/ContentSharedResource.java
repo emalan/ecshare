@@ -19,6 +19,13 @@ import com.madalla.service.IRepositoryService;
 import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
 import com.madalla.wicket.resourcelink.EditableResourceLink.ResourceType;
 
+/**
+ * Utility methods for managing the mounting of resources, so that they can have URL's that the browser 
+ * can interepret correctly. For example : pdf's
+ * 
+ * @author Eugene Malan
+ *
+ */
 public class ContentSharedResource {
 
     public static final String RESOURCE_PATH = "resource/";
