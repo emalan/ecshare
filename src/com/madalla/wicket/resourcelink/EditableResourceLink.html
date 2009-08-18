@@ -9,20 +9,30 @@
 	    }
 	    
 	    div.resourceFormDiv {
-	    	float: left;
-	    	clear: left;
 	    	border: thin solid darkgray;
-	    	padding: 4px;   
+	    	padding: 4px;
+	    	float: left;   
+	    }
+	    
+	    form.resourceForm {
+	    	float: left;
+	    	clear: both;
 	    }
 	    
 	    div#resourceLink {
-	    	
+	    	clear: both;
 	    }
 
 	    div#resourceLink span.message{
 	        clear:left;
 	        font-size: xx-small;
 	        color: orange;
+	    }
+	    
+	    div#resourceLink span.feedback{
+	        clear:left;
+	        font-size: xx-small;
+	        color: red;
 	    }
 	    
 	    form div label{
@@ -50,6 +60,7 @@
 		<span wicket:id="configureIcon" class="configure"></span>
 		<a href="#" wicket:id="link">[[label]]</a>
 		<span class="message" wicket:id="uploadstatus">[[importing]]</span>
+		<span class="feedback" wicket:id="uploadFeedback"></span>
 	</div>
 	
 	<div class="resourceFormDiv" wicket:id="resource-form-div" style="display:none;" >

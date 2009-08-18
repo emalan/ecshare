@@ -50,9 +50,9 @@ public class CmsPage extends WebPage {
         if (hasPopupLogin()) {
 
             //Login feedback
-            FeedbackPanel feedback = new FeedbackPanel("feedback");
-            feedback.setOutputMarkupId(true);
-            add(feedback);
+//            FeedbackPanel feedback = new FeedbackPanel("feedback");
+//            feedback.setOutputMarkupId(true);
+//            add(feedback);
 
             //Logon link
             add(new AjaxFallbackLink<Object>("logon") {

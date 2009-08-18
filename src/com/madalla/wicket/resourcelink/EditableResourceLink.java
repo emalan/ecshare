@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.IModel;
@@ -89,8 +90,8 @@ public class EditableResourceLink extends Panel {
 	public enum ResourceType {
 
 		TYPE_PDF("application/pdf", "pdf", "Adobe PDF"), 
-		TYPE_DOC("application/msword", "doc", "Word document"), 
-		TYPE_ODT("application/vnd.oasis.opendocument.text", "odt", "ODT document");
+		TYPE_DOC("application/msword", "doc", "Word document");
+		//TYPE_ODT("application/vnd.oasis.opendocument.text", "odt", "ODT document");
 
 		public final String resourceType; // Mime Type
 		public final String suffix; // File suffix
@@ -198,14 +199,22 @@ public class EditableResourceLink extends Panel {
 	protected class StatusModel extends Model<String>{
         private static final long serialVersionUID = 1L;
         private String id;
+        private String status;
 	    
-	    public StatusModel(String id) {
+	    public void setStatus(String status) {
+			this.status = status;
+		}
+
+		public StatusModel(String id) {
             this.id = id;
         }
 
         @Override
         public String getObject() {
         	log.debug("StatusModel - checking status for id=" + id);
+        	if (StringUtils.isNotEmpty(status)){
+        		return status;
+        	}
         	Boolean fileUploading = isFileUploading(id);
 	        if ( fileUploading == null) {
 	        	return "";
@@ -250,6 +259,8 @@ public class EditableResourceLink extends Panel {
 		AjaxSelfUpdatingLabel statusLabel = newUploadStatusLabel("uploadstatus",statusModel);
 		add(statusLabel);
 		
+		
+		
 		WebMarkupContainer formDiv = new WebMarkupContainer("resource-form-div");
 		formDiv.setOutputMarkupId(true);
 		add(formDiv);
@@ -269,6 +280,8 @@ public class EditableResourceLink extends Panel {
 		resourceForm.add(name);
 		resourceForm.add(upload);
 		resourceForm.add(choice);
+		
+		add(new ComponentFeedbackPanel("uploadFeedback", resourceForm));
 
 		add(new AjaxConfigureIcon("configureIcon", formDiv.getMarkupId()));
 
@@ -388,6 +401,12 @@ public class EditableResourceLink extends Panel {
 				    log.warn("File Upload cancelled. Session is busy uploading file.");
 					return;
 				}
+				if (data.getFileUpload() != null){
+					if (!validateFile(data.getFileUpload().getClientFileName())){
+						statusModel.setStatus("Selected file invalid.");
+						return;
+					}
+				}
 				EditableResourceLink.this.onSubmit();
 			}
 
@@ -396,6 +415,15 @@ public class EditableResourceLink extends Panel {
 		form.setOutputMarkupId(true);
 		form.setMaxSize(MAX_FILE_SIZE);
 		return form;
+	}
+	
+	private boolean validateFile(String fileName){
+		for (ResourceType type : ResourceType.values()) {
+			if (StringUtils.endsWith(fileName, type.suffix)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
