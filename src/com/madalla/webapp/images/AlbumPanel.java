@@ -1,7 +1,7 @@
 package com.madalla.webapp.images;
 
 import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
-import static com.madalla.webapp.images.admin.AlbumParams.RETURN_PAGE;
+import static com.madalla.webapp.PageParams.RETURN_PAGE;
 import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.CROSSFADE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.FAST_INIT;

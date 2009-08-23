@@ -62,6 +62,4 @@ public abstract class AjaxValidationStyleSubmitButton extends IndicatingAjaxButt
 
     }
 	
-
-
 }

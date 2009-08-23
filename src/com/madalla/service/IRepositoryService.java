@@ -41,6 +41,8 @@ import com.madalla.webapp.security.IAuthenticator;
  *
  */
 public interface IRepositoryService {
+	
+	boolean isAdminApp();
 
 	// type checks
 	boolean isDeletableNode(final String id);

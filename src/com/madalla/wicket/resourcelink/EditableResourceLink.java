@@ -281,8 +281,6 @@ public class EditableResourceLink extends Panel {
 		resourceForm.add(upload);
 		resourceForm.add(choice);
 		
-		add(new ComponentFeedbackPanel("uploadFeedback", resourceForm));
-
 		add(new AjaxConfigureIcon("configureIcon", formDiv.getMarkupId()));
 
 	}

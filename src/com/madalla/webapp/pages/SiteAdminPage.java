@@ -10,6 +10,6 @@ public class SiteAdminPage extends AdminPage implements ISecureAdminPage{
 
     public SiteAdminPage(final PageParameters parameters){
     	super(parameters);
-        add(Panels.siteAdminPanel("adminPanel"));
+   		add(Panels.siteAdminPanel("adminPanel"));
     }
 }

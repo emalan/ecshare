@@ -114,6 +114,14 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         setLocales(localeList);
     	
     }
+    
+    public boolean isAdminApp(){
+    	if("ecadmin".equals(site)){
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
 
     public boolean isDeletableNode(final String path){
     	return RepositoryInfo.isDeletableNode(template, path);
@@ -329,7 +337,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	if ("en".equals(locale.getLanguage()) && StringUtils.isNotEmpty(parent.getText()) ){
     		defaultText = parent.getText();
     	} else {
-    		defaultText = language.defaultInlineContent;
+    		defaultText = language.defaultContent;
     	}
     	return getContentEntry(parent, language.getDisplayName(), defaultText);
     }

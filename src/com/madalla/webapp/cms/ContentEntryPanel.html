@@ -13,14 +13,13 @@
     <wicket:panel>
         <form wicket:id="contentForm">
             <div>
-                <a href="javascript:;" onmousedown="tinyMCE.get('text').show();">[Show]</a>
-                <a href="javascript:;" onmousedown="tinyMCE.get('text').hide();">[Hide]</a>
+            	<ul>
+            		<li><a href="#">English</a></li>
+            		<li><a href="#">Afrikaans</a></li>
+            	</ul>
             </div>
             <textarea style="textarea" wicket:id="text" rows="25" cols="60">Input comes here</textarea>
             <div id="formButtons">
-                <span class="buttonwrapper">
-                    <a href="#" class="orangebutton" wicket:id="cancelButton"><span><wicket:message key="label.cancel">Label Contents</wicket:message></span></a>
-                </span>
                 <span class="buttonwrapper">
                     <a href="#" class="orangebutton" wicket:id="submitButton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
                 </span>

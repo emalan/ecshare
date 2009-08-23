@@ -42,7 +42,8 @@ public abstract class AdminPage extends WebPage {
 		add(new LoggedinBookmarkablePageLink("SiteAdmin", SiteAdminPage.class, params, true).setAutoEnable(true));
 		add(new LoggedinBookmarkablePageLink("Data", SiteDataPage.class, params, true).setAutoEnable(true));
 		add(new LoggedinBookmarkablePageLink("Content", ContentAdminPage.class, params, true).setAutoEnable(true));
-		add(new PageLink<Page>("returnLink", Panels.getReturnPage(params, "AdminPage")));
+		
+		add(new PageLink<Page>("returnLink", Panels.getReturnPage(params, "AdminPage") ));
 	}
 	
 	public CmsSession getAppSession(){

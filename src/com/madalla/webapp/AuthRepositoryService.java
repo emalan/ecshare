@@ -290,4 +290,8 @@ public class AuthRepositoryService implements IRepositoryService, Serializable {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	public boolean isAdminApp() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

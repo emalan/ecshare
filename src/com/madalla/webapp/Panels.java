@@ -5,7 +5,7 @@ import static com.madalla.webapp.blog.BlogParameters.BLOG_NAME;
 import static com.madalla.webapp.cms.ContentParameters.CONTENT_ID;
 import static com.madalla.webapp.cms.ContentParameters.CONTENT_NODE;
 import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
-import static com.madalla.webapp.images.admin.AlbumParams.RETURN_PAGE;
+import static com.madalla.webapp.PageParams.RETURN_PAGE;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Page;
@@ -239,7 +239,7 @@ public class Panels {
 	}
 	
 	@SuppressWarnings("unchecked")
-	static Class<? extends Page> getReturnPage(PageParameters parameters, String panel){
+	public static Class<? extends Page> getReturnPage(PageParameters parameters, String panel){
 		String pageString = getPageParameter(RETURN_PAGE, parameters, panel);
 		Class returnPage = null;
 		try {

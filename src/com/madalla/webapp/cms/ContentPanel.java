@@ -2,7 +2,7 @@ package com.madalla.webapp.cms;
 
 import static com.madalla.webapp.cms.ContentParameters.CONTENT_ID;
 import static com.madalla.webapp.cms.ContentParameters.CONTENT_NODE;
-import static com.madalla.webapp.images.admin.AlbumParams.RETURN_PAGE;
+import static com.madalla.webapp.PageParams.RETURN_PAGE;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
