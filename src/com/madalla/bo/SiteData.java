@@ -32,13 +32,7 @@ public abstract class SiteData  extends AbstractData implements ISiteData{
 	}
 	
 	public static List<SiteLanguage> getAvailableLocales(){
-		List<SiteLanguage> ret = new ArrayList<SiteLanguage>(SiteLanguage.values().length -1);
-		for (int i = 0; i < SiteLanguage.values().length; i++) {
-			if (!SiteLanguage.values()[i].equals(SiteLanguage.ENGLISH)){
-				ret.add(SiteLanguage.values()[i]);
-			}
-		}
-		return ret;
+		return SiteLanguage.getLanguages();
 	}
 
 }

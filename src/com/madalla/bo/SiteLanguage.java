@@ -1,5 +1,7 @@
 package com.madalla.bo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public enum SiteLanguage{
@@ -52,6 +54,16 @@ public enum SiteLanguage{
 		} else {
 			return SiteLanguage.ENGLISH;
 		}
+	}
+	
+	public static List<SiteLanguage> getLanguages(){
+		List<SiteLanguage> ret = new ArrayList<SiteLanguage>(SiteLanguage.values().length -1);
+		for (int i = 0; i < SiteLanguage.values().length; i++) {
+			if (!SiteLanguage.values()[i].equals(SiteLanguage.ENGLISH)){
+				ret.add(SiteLanguage.values()[i]);
+			}
+		}
+		return ret;
 	}
 
 }

@@ -1,0 +1,27 @@
+<html xmlns:wicket>
+<wicket:head>
+       <style type="text/css">
+            #control {float: left; width: 100%;}
+        	form {float:left;}
+
+            form textarea {float:left; clear:both;}
+            
+            div#formButtons { margin: 10px 0 0 5px;}
+    	</style>
+</wicket:head>
+<body>
+    <wicket:panel>
+        <form wicket:id="contentForm">
+            <div wicket:id="langtabs" class=tabpanel>[tabbed panel will be here]</div>
+            <textarea style="textarea" wicket:id="text" rows="25" cols="60">Input comes here</textarea>
+            <div id="formButtons">
+                <span class="buttonwrapper">
+                    <a href="#" class="orangebutton" wicket:id="submitButton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
+                </span>
+            </div>
+            <span wicket:id="feedback">feedbackmessages will be put here</span>
+        </form>
+    </wicket:panel>
+</body>
+</html>    
+    

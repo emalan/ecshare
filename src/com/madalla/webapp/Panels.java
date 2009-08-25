@@ -15,11 +15,11 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 import com.madalla.webapp.blog.BlogHomePanel;
 import com.madalla.webapp.blog.admin.BlogEntryPanel;
-import com.madalla.webapp.cms.ContentEntryPanel;
 import com.madalla.webapp.cms.ContentLinkPanel;
 import com.madalla.webapp.cms.ContentPanel;
 import com.madalla.webapp.cms.InlineContentPanel;
 import com.madalla.webapp.cms.admin.ContentAdminPanel;
+import com.madalla.webapp.cms.editor.ContentEntryPanel;
 import com.madalla.webapp.email.EmailFormPanel;
 import com.madalla.webapp.google.YoutubePlayerPanel;
 import com.madalla.webapp.images.AlbumPanel;
