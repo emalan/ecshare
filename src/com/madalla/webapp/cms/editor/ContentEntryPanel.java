@@ -7,7 +7,6 @@ import java.util.Locale;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
@@ -15,13 +14,13 @@ import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
-import org.apache.wicket.markup.html.resources.StyleSheetReference;
 import org.apache.wicket.model.Model;
 
 import tiny_mce.TinyMce;
 
 import com.madalla.bo.SiteLanguage;
-import com.madalla.webapp.AdminPage;
+import com.madalla.service.IRepositoryService;
+import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.CmsSession;
 
 /**
@@ -65,40 +64,56 @@ public class ContentEntryPanel extends Panel {
         	add( JavascriptPackageResource.getHeaderContribution(JAVASCRIPT));
         }
         
-        //add(new ContentFormPanel("contentEditor", nodeName, contentId, getSession().getLocale()));
-        add(CSSPackageResource.getHeaderContribution(ContentEntryPanel.class,"tabs.css"));
-        List<ITab> tabs = new ArrayList<ITab>();
-        
-        //Default English tab
-        tabs.add(new AbstractTab(new Model<String>(Locale.ENGLISH.getDisplayLanguage())){
-        	private static final long serialVersionUID = 1L;
-        	
-			@Override
-			public Panel getPanel(String panelId) {
-				return new ContentFormPanel(panelId, nodeName, contentId, Locale.ENGLISH);
-			}
-        	
-        });
-        
-        //Supported Languages
-        for (Iterator<SiteLanguage> iterator = SiteLanguage.getLanguages().iterator(); iterator.hasNext();) {
-			final SiteLanguage siteLanguage = (SiteLanguage) iterator.next();
-			tabs.add(new AbstractTab(new Model<String>(siteLanguage.getDisplayName())){
+        Locale currentLocale = getSession().getLocale();
+        // no language tab
+		if (false) {
+			add(new ContentFormPanel("contentEditor", nodeName, contentId, currentLocale));
+		} else {
+			// with language tabs
+			add(CSSPackageResource.getHeaderContribution(ContentEntryPanel.class, "tabs.css"));
+			int selectedTab = 0;
+			List<ITab> tabs = new ArrayList<ITab>();
+
+			// Default English tab
+			tabs.add(new AbstractTab(new Model<String>(Locale.ENGLISH
+					.getDisplayLanguage())) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
 				public Panel getPanel(String panelId) {
-					return new ContentFormPanel(panelId, nodeName, contentId, siteLanguage.locale);
+					return new ContentFormPanel(panelId, nodeName, contentId,
+							Locale.ENGLISH);
 				}
-				
-			});
-			
-		}
-        add(new TabbedPanel("contentEditor", tabs));
-        
-    }
 
-    
+			});
+
+			// Supported Languages
+			List<SiteLanguage> locales = getRepositoryservice().getSiteData().getLocaleList();
+			for (final SiteLanguage siteLanguage: locales) {
+				if (siteLanguage.locale.equals(currentLocale)){
+					selectedTab = tabs.size();
+				}
+				tabs.add(new AbstractTab(new Model<String>(siteLanguage.getDisplayName())) {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public Panel getPanel(String panelId) {
+						return new ContentFormPanel(panelId, nodeName,
+								contentId, siteLanguage.locale);
+					}
+
+				});
+
+			}
+			TabbedPanel tabPanel = new TabbedPanel("contentEditor", tabs);
+			tabPanel.setSelectedTab(selectedTab);
+			add(tabPanel);
+		}
+	}
+
+	private IRepositoryService getRepositoryservice(){
+    	return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
+    }
 
 
 }
