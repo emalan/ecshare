@@ -5,19 +5,24 @@
 
             form textarea {float:left; clear:both;}
             
-            div#formButtons { margin: 10px 0 0 5px;}
+            div#formButtons { margin: 10px 0 50px 5px;}
+            
+            div#formButtons .buttonwrapper {margin: 0}
+            
+            form div#formButtons .feedbackPanel{ margin-top: 16px;}
     	</style>
 </wicket:head>
 <body>
     <wicket:panel>
         <form wicket:id="contentForm">
-            <textarea style="textarea" wicket:id="text" rows="25" cols="60">Input comes here</textarea>
+            <textarea style="textarea" wicket:id="text">Input comes here</textarea>
             <div id="formButtons">
                 <span class="buttonwrapper">
                     <a href="#" class="orangebutton" wicket:id="submitButton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
                 </span>
+                <span wicket:id="feedback">feedbackmessages will be put here</span>
             </div>
-            <span wicket:id="feedback">feedbackmessages will be put here</span>
+            
         </form>
 
 

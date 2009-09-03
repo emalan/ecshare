@@ -32,6 +32,10 @@ public enum SiteLanguage{
 		return locale.getDisplayName();
 	}
 	
+	public String getLanguageCode(){
+		return locale.getLanguage();
+	}
+	
 	public static SiteLanguage getLanguage(String code){
 		if ("nl".equalsIgnoreCase(code)){
 			return NEDERLANDS;

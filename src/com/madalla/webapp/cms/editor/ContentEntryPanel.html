@@ -6,10 +6,11 @@
 
             form textarea {float:left; clear:both;}
             
-            div#formButtons { margin: 10px 0 0 5px;}
+            
             
             div#translate {
             	clear:both;
+            	margin-top: 20px;
             }
             div#translate form select , div#translate form input{
                 float:none;
@@ -18,56 +19,13 @@
             	clear: both;
             }
             div#results_body {
-            	border: thin solid black;
+            	border: thin solid #CCCCCC;
             }
+            p.info {margin-bottom: 0;}
     	</style>
     	<script type="text/javascript" src="http://www.google.com/jsapi">
     	</script>
-    	
-    	<script type="text/javascript">
 
-    		google.load("language", "1");
-
-    		google.setOnLoadCallback(init);
-
-    	    function init() {
-    	      var src = document.getElementById('src');
-    	      var dst = document.getElementById('dst');
-
-    	      src.options.add(new Option("english", "en"));
-    	      src.options.add(new Option("dutch", "nl"));
-    	      src.options.add(new Option("french", "fr"));
-    	      src.options.add(new Option("german", "de"));
-    	      
-	          dst.options.add(new Option("english", "en"));
-	          dst.options.add(new Option("dutch", "nl"));
-	          dst.options.add(new Option("french", "fr"));
-	          dst.options.add(new Option("german", "de"));
-	          
-    	      google.language.getBranding('branding', { type : 'vertical' });
-
-    	      //submitChange();
-    	    }
-
-    	    function submitChange() {
-        	    
-    	      var value = tinyMCE.get('text').getContent();
-    	      var src = document.getElementById('src').value;
-    	      var dest = document.getElementById('dst').value;
-    	      google.language.translate(value, src, dest, translateResult);
-    	      return false;
-    	    }
-
-    	    function translateResult(result) {
-    	      var resultBody = document.getElementById("results_body");
-    	      if (result.translation) {
-    	        resultBody.innerHTML = result.translation;
-    	      } else {
-    	        resultBody.innerHTML = '<span style="color:red">Error Translating</span>';
-    	      }
-    	    }
-
-    </script>
 </wicket:head>
 <body>
     <wicket:panel>
@@ -75,13 +33,12 @@
         	<span wicket:id="contentEditor"/>
         </div>
         <div id="translate">
+        	<p class="info"><wicket:message key="translate.info">[message]</wicket:message></p>
             <form class="query-box" onsubmit="return submitChange();">
 
-  				<select name="src" id="src"></select>
-  				>>
   				<select name="dst" id="dst"></select>
 
-				  <input class="button" type="submit" value="Translate"/>
+				<input class="button" type="submit" value="Translate"/>
 
   			</form>
         </div>
@@ -89,6 +46,7 @@
 			<div id="results_title">Translation:</div>
   			<div id="results_body"></div>
   			<div id="branding"></div>
+  			<input class="button" type="button" onclick="javascript:copyupResult();" value="Copy up"/>
 		</div>
         
     </wicket:panel>

@@ -1,14 +1,13 @@
 package com.madalla.webapp.cms.editor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
@@ -16,14 +15,10 @@ import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.html.resources.CompressedResourceReference;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.template.TextTemplateHeaderContributor;
 
 import tiny_mce.TinyMce;
 
@@ -34,7 +29,6 @@ import com.madalla.bo.page.PageData;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.CmsSession;
-import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
 
 /**
  * Content Entry Panel - Edit User Content using a WYSWYG HTML editor.
@@ -48,12 +42,6 @@ import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
  */
 public class ContentEntryPanel extends Panel {
 	private static final long serialVersionUID = 1L;
-	private static final CompressedResourceReference JAVASCRIPT_ADM = new CompressedResourceReference(
-			ContentEntryPanel.class, "ContentEntryPanel_admin.js");
-	private static final CompressedResourceReference JAVASCRIPT = new CompressedResourceReference(
-			ContentEntryPanel.class, "ContentEntryPanel.js");
-	private static final CompressedResourceReference JAVASCRIPT_SPR = new CompressedResourceReference(
-			ContentEntryPanel.class, "ContentEntryPanel_super.js");
 
 	private Log log = LogFactory.getLog(this.getClass());
 
@@ -66,57 +54,7 @@ public class ContentEntryPanel extends Panel {
 		}
 	}
 
-	final class ContentFormFragment extends Fragment {
-
-		private static final long serialVersionUID = 1L;
-
-		private ContentEntryData contentEntry;
-
-		public ContentFormFragment(String name, String markupId, MarkupContainer markupProvider, final String nodeName,
-				final String contentId, final Locale locale) {
-			super(name, markupId, markupProvider);
-
-			PageData page = getRepositoryservice().getPage(nodeName);
-			ContentData content = getRepositoryservice().getContent(page, contentId);
-			contentEntry = getRepositoryservice().getContentEntry(content, locale);
-
-			Form<ContentEntryData> form = new ContentForm("contentForm", new CompoundPropertyModel<ContentEntryData>(
-					contentEntry));
-
-			final FeedbackPanel feedback = new ComponentFeedbackPanel("feedback", form);
-			feedback.setOutputMarkupId(true);
-			form.add(feedback);
-
-			AjaxButton submitLink = new AjaxValidationStyleSubmitButton("submitButton", form) {
-
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onError(AjaxRequestTarget target, Form<?> form) {
-					super.onError(target, form);
-				}
-
-				@Override
-				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-					super.onSubmit(target, form);
-					log.debug("Submiting populated Content object to Content service.");
-					getRepositoryservice().saveContentEntry((ContentEntryData) form.getModelObject());
-					log.debug("Content successfully saved to repository. content=" + contentEntry);
-					form.info(getString("message.success"));
-				}
-
-				@Override
-				protected String getOnClickScript() {
-					return "tinyMCE.get('text').save();";
-				}
-
-			};
-			submitLink.setOutputMarkupId(true);
-			form.add(submitLink);
-			add(form);
-		}
-	}
-
+	
 	/**
 	 * @param name
 	 *            - wicket id
@@ -129,16 +67,25 @@ public class ContentEntryPanel extends Panel {
 	public ContentEntryPanel(String name, final String nodeName, final String contentId) {
 		super(name);
 		add(JavascriptPackageResource.getHeaderContribution(TinyMce.class, "tiny_mce.js"));
-		if (((CmsSession) getSession()).isSuperAdmin()) {
-			add(JavascriptPackageResource.getHeaderContribution(JAVASCRIPT_SPR));
-		} else if (((CmsSession) getSession()).isCmsAdminMode()) {
-			add(JavascriptPackageResource.getHeaderContribution(JAVASCRIPT_ADM));
-		} else {
-			add(JavascriptPackageResource.getHeaderContribution(JAVASCRIPT));
-		}
 
-		Locale currentLocale = getSession().getLocale();
+		//tabs style sheet
 		add(CSSPackageResource.getHeaderContribution(ContentEntryPanel.class, "tabs.css"));
+		
+		
+		List<SiteLanguage> locales = getRepositoryservice().getSiteData().getLocaleList();
+		Locale currentLocale = getSession().getLocale();
+		
+		//setup Javascript template
+		Map<String, Object> vars = setupTemplateVariables((CmsSession) getSession(), locales, currentLocale);
+		add(TextTemplateHeaderContributor.forJavaScript(this.getClass(),"ContentEntryPanel.js", Model.of(vars)));
+		
+		
+		log.debug("init - surrentLocale="+currentLocale);
+        PageData page = getRepositoryservice().getPage(nodeName);
+        final ContentData content = getRepositoryservice().getContent(page, contentId);
+        log.debug("init - content" + content);
+        
+		//setup tabs
 		int selectedTab = 0;
 		List<ITab> tabs = new ArrayList<ITab>();
 
@@ -148,13 +95,13 @@ public class ContentEntryPanel extends Panel {
 
 			@Override
 			public Panel getPanel(String panelId) {
-				return new ContentFormPanel(panelId, nodeName, contentId, Locale.ENGLISH);
+				return new ContentFormPanel(panelId, content, Locale.ENGLISH);
 			}
 
 		});
 
 		// Supported Languages
-		List<SiteLanguage> locales = getRepositoryservice().getSiteData().getLocaleList();
+		
 		for (final SiteLanguage siteLanguage : locales) {
 			if (siteLanguage.locale.equals(currentLocale)) {
 				selectedTab = tabs.size();
@@ -164,7 +111,7 @@ public class ContentEntryPanel extends Panel {
 
 				@Override
 				public Panel getPanel(String panelId) {
-					return new ContentFormPanel(panelId, nodeName, contentId, siteLanguage.locale);
+					return new ContentFormPanel(panelId, content, siteLanguage.locale);
 				}
 
 			});
@@ -173,6 +120,34 @@ public class ContentEntryPanel extends Panel {
 		TabbedPanel tabPanel = new TabbedPanel("contentEditor", tabs);
 		tabPanel.setSelectedTab(selectedTab);
 		add(tabPanel);
+	}
+	
+	private Map<String, Object> setupTemplateVariables(CmsSession session, List<SiteLanguage> locales, Locale currentLocale){
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (session.isSuperAdmin()) {
+			map.put("button1", "newdocument,fullscreen,cleanup,removeformat,code,help,|,undo,redo,|,paste,pastetext,pasteword,|,link,unlink,anchor,image,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,");
+			map.put("button2", "formatselect,fontselect,fontsizeselect|,forecolor,backcolor,|,tablecontrols");
+			map.put("button3", "bold,italic,underline,strikethrough,|,undo,redo,|,cleanup,|,bullist,numlist,|,sub,sup,|,charmap,|,removeformat");
+		} else if (session.isCmsAdminMode()) {
+			map.put("button1", "bold,italic,underline,strikethrough,|,sub,sup,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect");
+			map.put("button2", "bullist,numlist,|,hr,charmap,removeformat,|,outdent,indent,|,undo,redo,|,link,unlink,anchor,cleanup,code");
+			map.put("button3", "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,outdent,indent,blockquote,|,hr,advhr,charmap,emotions,|,insertdate,inserttime");
+		} else {
+			map.put("button1", "bold,italic,underline,strikethrough,|,undo,redo,|,cleanup,|,bullist,numlist,|,sub,sup,|,charmap,|,removeformat");
+			map.put("button2", "");
+			map.put("button3", "");
+		}
+		
+		//Translate source langs
+		StringBuffer sb = new StringBuffer();
+		for (SiteLanguage lang : locales) {
+			sb.append("if (google.language.isTranslatable('"+ lang.getLanguageCode() +"')) {dst.options.add(new Option('" +lang.getDisplayName() + "','" + lang.getLanguageCode() + "'))};");
+		}
+		map.put("dstlangs", sb.toString());
+		
+		//map.put("srclang", "src.options.add(new Option('" + currentLocale.getDisplayLanguage() + "','" + currentLocale.getLanguage()+ "'));");
+		
+		return map;
 	}
 
 	private IRepositoryService getRepositoryservice() {

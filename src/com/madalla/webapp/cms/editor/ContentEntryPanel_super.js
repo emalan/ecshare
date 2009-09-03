@@ -14,7 +14,7 @@
 		//theme_advanced_buttons2:"bullist,numlist,|,outdent,indent,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code",
 		//theme_advanced_buttons3:"hr,removeformat,visualaid,|,sub,sup,|,charmap"
 
-		theme_advanced_buttons1 : "newdocument,fullscreen,cleanup,removeformat,code,help,|,undo,redo,|,paste,pastetext,pasteword,|,link,unlink,anchor,image,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,",
+		theme_advanced_buttons1 : "\"newdocument,fullscreen,cleanup,removeformat,code,help,|,undo,redo,|,paste,pastetext,pasteword,|,link,unlink,anchor,image,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,/"",
 		theme_advanced_buttons2 : "formatselect,fontselect,fontsizeselect|,forecolor,backcolor,|,tablecontrols",
 		theme_advanced_buttons3 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,outdent,indent,blockquote,|,hr,advhr,charmap,emotions,|,insertdate,inserttime"
 
