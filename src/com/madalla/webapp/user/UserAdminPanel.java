@@ -2,6 +2,7 @@ package com.madalla.webapp.user;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior;
+import org.apache.wicket.extensions.ajax.markup.html.autocomplete.IAutoCompleteRenderer;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.StringAutoCompleteRenderer;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.basic.Label;
@@ -28,6 +30,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
@@ -64,8 +67,7 @@ public class UserAdminPanel extends Panel {
 	public class NewUserForm extends Form<Object> {
 		private static final long serialVersionUID = 9033980585192727266L;
 
-
-        public NewUserForm(String id) {
+		public NewUserForm(String id) {
 			super(id);
 			
 			//User Name Field
@@ -86,14 +88,16 @@ public class UserAdminPanel extends Panel {
 
 			};
 			usernameField.setOutputMarkupId(true);
-			usernameField.add(new AutoCompleteBehavior<String>(StringAutoCompleteRenderer.INSTANCE) {
+			IAutoCompleteRenderer<String> autoCompleteRenderer = StringAutoCompleteRenderer.instance();
+			usernameField.add(new AutoCompleteBehavior<String>(autoCompleteRenderer) {
 
 				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected Iterator<String> getChoices(String input) {
 					if (Strings.isEmpty(input)) {
-						return Collections.EMPTY_LIST.iterator();
+						List<String> s = Collections.emptyList();
+						return s.iterator();
 					}
 					List<String> choices = new ArrayList<String>(10);
 
@@ -112,10 +116,10 @@ public class UserAdminPanel extends Panel {
 			});
 			
 			//Validation
-			usernameField.add(new AbstractValidator(){
+			usernameField.add(new AbstractValidator<String>(){
 				private static final long serialVersionUID = 1L;
 				@Override
-				protected void onValidate(IValidatable validatable) {
+				protected void onValidate(IValidatable<String> validatable) {
 					String value = (String) validatable.getValue();
 					if (StringUtils.isEmpty(value)){
 						error(validatable,"error.required");
@@ -156,9 +160,8 @@ public class UserAdminPanel extends Panel {
 			add(new TextField<String>("lastName", new PropertyModel<String>(user, "lastName")));
 			add(new CheckBox("adminMode", new PropertyModel<Boolean>(user, "admin")));
 			sitesChoices = getRepositoryService().getSiteEntries();
-			add(new CheckBoxMultipleChoice<SiteData>("site", new Model((Serializable) sites) ,
+			add(new CheckBoxMultipleChoice<SiteData>("site", getSitesModel() ,
 					sitesChoices, new ChoiceRenderer<SiteData>("name")));
-			
 		}
 	}
 
@@ -169,7 +172,7 @@ public class UserAdminPanel extends Panel {
 		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
 		add(Css.CSS_FORM);
 
-		final Form userForm = new NewUserForm("userForm");
+		final Form<Object> userForm = new NewUserForm("userForm");
 		userForm.setOutputMarkupId(true);
 		add(userForm);
 
@@ -221,7 +224,7 @@ public class UserAdminPanel extends Panel {
 		newUserSubmit.setOutputMarkupId(true);
 		userForm.add(newUserSubmit);
 		
-		usernameField.add(new AttributeModifier("onchange", true, new Model(
+		usernameField.add(new AttributeModifier("onchange", true, new Model<String>(
 				"document.getElementById('"+ newUserSubmit.getMarkupId()
 				+ "').onclick();return false;")));
 		
@@ -231,7 +234,7 @@ public class UserAdminPanel extends Panel {
 		welcomeFeedback.setOutputMarkupId(true);
 		profileForm.add(welcomeFeedback);
 		
-		final AjaxLink welcomeLink = new IndicatingAjaxLink("welcomeLink"){
+		final AjaxLink<String> welcomeLink = new IndicatingAjaxLink<String>("welcomeLink"){
 			private static final long serialVersionUID = 1L;
 
             @Override
@@ -262,7 +265,7 @@ public class UserAdminPanel extends Panel {
 		resetFeedback.setOutputMarkupId(true);
 		profileForm.add(resetFeedback);
 		
-        final AjaxLink resetLink = new IndicatingAjaxLink("resetLink"){
+        final AjaxLink<String> resetLink = new IndicatingAjaxLink<String>("resetLink"){
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -299,7 +302,7 @@ public class UserAdminPanel extends Panel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form form) {
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
 				target.addComponent(profileFeedback);
 				saveUserData(user);
@@ -309,7 +312,7 @@ public class UserAdminPanel extends Panel {
 			}
 
 			@Override
-			protected void onError(final AjaxRequestTarget target, Form form) {
+			protected void onError(final AjaxRequestTarget target, Form<?> form) {
 				super.onError(target, form);
 				target.addComponent(profileFeedback);
 
@@ -323,7 +326,7 @@ public class UserAdminPanel extends Panel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form form) {
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
 
 				target.addComponent(profileFeedback);
@@ -343,7 +346,7 @@ public class UserAdminPanel extends Panel {
 			}
 
 			@Override
-			protected void onError(final AjaxRequestTarget target, Form form) {
+			protected void onError(final AjaxRequestTarget target, Form<?> form) {
 				super.onError(target, form);
 				target.addComponent(profileFeedback);
 
@@ -351,6 +354,11 @@ public class UserAdminPanel extends Panel {
 		};
 		profileForm.add(submitNewButton);
 		
+	}
+	
+	@SuppressWarnings("unchecked")
+	private IModel<Collection<SiteData>> getSitesModel(){
+		return new Model((Serializable) sites);
 	}
 	
 	private boolean sendEmail(String subject, String message){

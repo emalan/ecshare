@@ -15,12 +15,14 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.apache.wicket.validation.validator.UrlValidator;
 
 import com.madalla.bo.SiteData;
 import com.madalla.bo.SiteLanguage;
 import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.css.Css;
+import com.madalla.wicket.form.AjaxValidationBehaviour;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
 
@@ -43,6 +45,14 @@ public class SiteAdminPanel extends Panel{
             add(new TextField<String>("metaDescription"));
            
             add(new TextField<String>("metaKeywords"));
+            
+            FeedbackPanel urlFeedback = new FeedbackPanel("urlFeedback");
+            urlFeedback.setOutputMarkupId(true);
+            add(urlFeedback);
+            TextField<String> url = new TextField<String>("url");
+            url.add(new AjaxValidationBehaviour(urlFeedback));
+            url.add(new UrlValidator(UrlValidator.NO_FRAGMENTS));
+            add(url);
             
             add(new CheckBoxMultipleChoice<SiteLanguage>("localeList", Model.of(SiteData.getAvailableLocales()), 
             		new ChoiceRenderer<SiteLanguage>("displayName")));

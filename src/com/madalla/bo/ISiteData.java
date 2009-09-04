@@ -12,6 +12,10 @@ public interface ISiteData {
 
 	String getMetaKeywords();
 	
+	String getUrl();
+	
+	void setUrl(String url);
+	
 	void setAdminEmail(String adminEmail);
 	
 	String getLocales();

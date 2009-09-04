@@ -15,6 +15,7 @@ public class Site extends SiteData{
 	@Field private String metaDescription;
 	@Field private String adminEmail;
 	@Field private String locales;
+	@Field private String url;
 	
 	public Site(){
 		
@@ -67,6 +68,14 @@ public class Site extends SiteData{
 
 	public String getLocales() {
 		return locales;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+	
+	public void setUrl(String url){
+		this.url = url;
 	}
 
 
