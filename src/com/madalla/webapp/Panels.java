@@ -29,6 +29,7 @@ import com.madalla.webapp.site.SiteAdminPanel;
 import com.madalla.webapp.site.SiteDataPanel;
 import com.madalla.webapp.user.UserAdminPanel;
 import com.madalla.webapp.user.UserLoginPanel;
+import com.madalla.webapp.user.UserPasswordPanel;
 import com.madalla.webapp.user.UserProfilePanel;
 
 /**
@@ -198,6 +199,16 @@ public class Panels {
 	 */	
 	public static Panel userProfilePanel(String id, PageParameters parameters) {
 		return new UserProfilePanel(id, getReturnPage(parameters ,"UserProfilePanel").getName());
+	}
+	
+	/**
+	 * User Password Panel - change user info, reset password
+	 * @param id - wicket id
+	 * @param parameters - User name
+	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserProfilePanel}
+	 */	
+	public static Panel userPasswordPanel(String id, PageParameters parameters) {
+		return new UserPasswordPanel(id, getPageParameter("user", parameters, "UserPasswordPanel"));
 	}
 	
 	/**

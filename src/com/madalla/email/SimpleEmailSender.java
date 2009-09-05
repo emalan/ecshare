@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.SimpleEmail;
 
 public class SimpleEmailSender implements IEmailSender, Serializable {
@@ -26,18 +27,26 @@ public class SimpleEmailSender implements IEmailSender, Serializable {
     }
     
     public boolean sendUserEmail(String subject, String body, String userEmail, String userName){
+    	return sendUserEmail(new SimpleEmail(), subject, body, userEmail, userName);
+    }
+    
+    public boolean sendUserHtmlEmail(String subject, String body, String userEmail, String userName){
+    	return sendUserEmail(new HtmlEmail(), subject, body, userEmail, userName);
+    }
+    
+    private boolean sendUserEmail(Email email, String subject, String body, String userEmail, String userName){
     	log.debug("sendUserEmail - userEmail:"+userEmail+" userName:"+userName+" subject:"+subject );
     	if (StringUtils.isEmpty(userEmail)){
     		log.error("sendUserEmail - The parameter userEmail cannot be empty. A valid email needs to be supplied");
     		return false;
     	}
-    	sendEmailUsingCommonsMail(subject, body, false, "", "");
-    	return sendEmailUsingCommonsMail(subject, body, true, userEmail, userName);
+    	sendEmailUsingCommonsMail(email, subject, body, false, "", "");
+    	return sendEmailUsingCommonsMail(email, subject, body, true, userEmail, userName);
     }
     
     public boolean sendEmail(String subject, String body){
     	log.debug("sendEmail - subject:"+subject);
-        return sendEmailUsingCommonsMail(subject, body, false, "", "");
+        return sendEmailUsingCommonsMail(new SimpleEmail(), subject, body, false, "", "");
     }
     
     public boolean sendEmail(){
@@ -45,18 +54,16 @@ public class SimpleEmailSender implements IEmailSender, Serializable {
                 "com.emalan.service.email.SimpleEmailSender - no body");
     }
     
-    private Email init() throws EmailException {
-    	SimpleEmail email = new SimpleEmail();
+    private void init(Email email) throws EmailException {
         email.setHostName(emailHost);
         email.setAuthentication(mailAuthName, mailAuthPassword);
         email.setFrom(emailFromEmail, emailFromName);
         email.setDebug(true);
-        return email;
     }
     
-    private boolean sendEmailUsingCommonsMail(String subject, String body, boolean user, String userEmail, String userName){
+    private boolean sendEmailUsingCommonsMail(Email email, String subject, String body, boolean user, String userEmail, String userName){
         try {
-        	Email email = init();
+        	init(email);
         	if (user){
         		email.addTo(userEmail, userName);
         	} else {

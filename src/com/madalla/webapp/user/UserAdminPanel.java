@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -33,6 +35,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.util.MapModel;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.AbstractValidator;
@@ -48,7 +51,6 @@ import com.madalla.service.IRepositoryService;
 import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.email.EmailFormatter;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
@@ -239,7 +241,8 @@ public class UserAdminPanel extends Panel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-          		if(sendEmail("Welcome Email", getEmailWelcomeMessage())){
+            	SiteData site = getRepositoryService().getSiteData();
+          		if(sendEmail("Welcome Email", formatUserMessage("message.new", user, site))){
                		welcomeFeedback.setDefaultModelObject(getString("welcome.success"));
            		} else {
            			welcomeFeedback.setDefaultModelObject(getString("welcome.fail"));
@@ -270,7 +273,7 @@ public class UserAdminPanel extends Panel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                if (sendEmail("Reset Password", getEmailResetMessage())){
+                if (sendEmail("Reset Password", formatUserMessage("message.reset", user, getRepositoryService().getSiteData()))){
                 	resetFeedback.setDefaultModelObject(getString("reset.success"));
                 } else {
                 	resetFeedback.setDefaultModelObject(getString("reset.fail"));
@@ -362,8 +365,7 @@ public class UserAdminPanel extends Panel {
 	}
 	
 	private boolean sendEmail(String subject, String message){
-        String emailBody = EmailFormatter.getUserEmailBody(user, message);
-        return getEmailSender().sendUserEmail("Reset Password", emailBody, user.getEmail(), user.getFirstName());
+        return getEmailSender().sendUserEmail("Reset Password", message, user.getEmail(), user.getFirstName());
 	}
 	
 	private String resetPassword(){
@@ -403,53 +405,22 @@ public class UserAdminPanel extends Panel {
 		return ((IRepositoryServiceProvider) getApplication())
 				.getRepositoryService();
 	}
-	
-	private class MessageValues implements Serializable{
-		private static final long serialVersionUID = 1L;
-		private String password;
-		private String userName;
-		private String url;
-		public String getPassword() {
-			return password;
-		}
-		public void setPassword(String password) {
-			this.password = password;
-		}
-		public String getUserName() {
-			return userName;
-		}
-		public void setUserName(String userName) {
-			this.userName = userName;
-		}
-		public String getUrl() {
-			return url;
-		}
-		public void setUrl(String url) {
-			this.url = url;
-		}
-	}
 
-	private String getEmailWelcomeMessage() {
-		MessageValues values = new MessageValues();
-		values.setPassword(resetPassword());
-		values.setUserName(user.getName());
+	private String formatUserMessage(String key, UserDataView user, SiteData site) {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("firstName", StringUtils.defaultString(user.getFirstName()));
+		map.put("lastName", StringUtils.defaultString(user.getLastName()));
+		map.put("name", user.getName());
+		map.put("password", resetPassword());
+		map.put("url",  StringUtils.defaultString(site.getUrl()));
+		map.put("description", StringUtils.defaultString(site.getMetaDescription()));
 		
-		IModel<MessageValues> model = new Model<MessageValues>(values);
-		String message = getString("message.reset", model);
+		MapModel<String, String> model = new MapModel<String,String>(map);
+		String message = getString(key, model);
+		log.debug("formatUserMessage - " + message);
 		return message;
 	}
 	
-	private String getEmailResetMessage() {
-		MessageValues values = new MessageValues();
-		values.setPassword(resetPassword());
-		values.setUserName(user.getName());
-		
-		IModel<MessageValues> model = new Model<MessageValues>(values);
-		String message = getString("message.new", model);
-		log.debug("###!!! TEMPPPP " + message);
-		return message;
-	}
-
 	protected IEmailSender getEmailSender() {
 		return ((IEmailServiceProvider) getApplication()).getEmailSender();
 	}
