@@ -403,27 +403,51 @@ public class UserAdminPanel extends Panel {
 		return ((IRepositoryServiceProvider) getApplication())
 				.getRepositoryService();
 	}
+	
+	private class MessageValues implements Serializable{
+		private static final long serialVersionUID = 1L;
+		private String password;
+		private String userName;
+		private String url;
+		public String getPassword() {
+			return password;
+		}
+		public void setPassword(String password) {
+			this.password = password;
+		}
+		public String getUserName() {
+			return userName;
+		}
+		public void setUserName(String userName) {
+			this.userName = userName;
+		}
+		public String getUrl() {
+			return url;
+		}
+		public void setUrl(String url) {
+			this.url = url;
+		}
+	}
 
 	private String getEmailWelcomeMessage() {
-		String password = resetPassword();
-		StringBuffer sb = new StringBuffer("Your new account has been created.")
-			.append(System.getProperty("line.separator"));
-		sb.append("User Name : " + user.getName()).append(System.getProperty("line.separator"));
-		sb.append("Password : " + password).append(System.getProperty("line.separator"))
-			.append(System.getProperty("line.separator"));
-		sb.append("Please change your password after you have Logged In using the 'User Profile Page'.");
-		return sb.toString();
+		MessageValues values = new MessageValues();
+		values.setPassword(resetPassword());
+		values.setUserName(user.getName());
+		
+		IModel<MessageValues> model = new Model<MessageValues>(values);
+		String message = getString("message.reset", model);
+		return message;
 	}
 	
 	private String getEmailResetMessage() {
-		String password = resetPassword();
-		StringBuffer sb = new StringBuffer("Your password has been reset.")
-			.append(System.getProperty("line.separator"));
-		sb.append("User Name : " + user.getName()).append(System.getProperty("line.separator"));
-		sb.append("New Password : " + password).append(System.getProperty("line.separator"))
-			.append(System.getProperty("line.separator"));
-		sb.append("Please change your password after you have Logged In using the 'User Profile Page'.");
-		return sb.toString();
+		MessageValues values = new MessageValues();
+		values.setPassword(resetPassword());
+		values.setUserName(user.getName());
+		
+		IModel<MessageValues> model = new Model<MessageValues>(values);
+		String message = getString("message.new", model);
+		log.debug("###!!! TEMPPPP " + message);
+		return message;
 	}
 
 	protected IEmailSender getEmailSender() {
