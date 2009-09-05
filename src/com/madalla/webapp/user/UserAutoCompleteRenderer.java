@@ -5,21 +5,20 @@ import org.apache.wicket.extensions.ajax.markup.html.autocomplete.IAutoCompleteR
 
 import com.madalla.bo.security.UserData;
 
-public class UserAutoCompleteRenderer extends AbstractAutoCompleteTextRenderer {
+public class UserAutoCompleteRenderer extends AbstractAutoCompleteTextRenderer<UserData> {
 
 	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * A singleton instance
 	 */
-	public static final IAutoCompleteRenderer INSTANCE = new UserAutoCompleteRenderer();
+	public static final IAutoCompleteRenderer<UserData> INSTANCE = new UserAutoCompleteRenderer();
 
 	/**
 	 * @see AbstractAutoCompleteTextRenderer#getTextValue(Object)
 	 */
-	protected String getTextValue(Object object)
+	protected String getTextValue(UserData user)
 	{
-		UserData user = (UserData) object ;
 		return user.getName();
 	}
 
