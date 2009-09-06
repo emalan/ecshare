@@ -11,6 +11,9 @@ import org.apache.wicket.Response;
 import org.apache.wicket.Session;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.https.HttpsConfig;
+import org.apache.wicket.protocol.https.HttpsRequestCycleProcessor;
+import org.apache.wicket.request.IRequestCycleProcessor;
 
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
@@ -100,6 +103,13 @@ public abstract class CmsApplication extends WebApplication implements IReposito
                 getHomePage(), pageAuthorizations);
  
         getSecuritySettings().setAuthorizationStrategy(authorizationStrategy);
+    }
+    
+    @Override
+    protected IRequestCycleProcessor newRequestCycleProcessor()
+    {
+    	HttpsConfig config = new HttpsConfig(8081,8443);
+            return new HttpsRequestCycleProcessor(config);
     }
 
     public IEmailSender getEmailSender() {

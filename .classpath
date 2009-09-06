@@ -44,19 +44,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="wicket/wicket-contrib-scriptaculous-0.1.1.jar"/>
 	<classpathentry kind="lib" path="common/commons-beanutils-1.7.0.jar"/>
-	<classpathentry kind="lib" path="wicket/wicket-1.4-rc2.jar" sourcepath="/Users/emalan/devlib/apache-wicket-1.4-rc2/src/wicket/src/main/java">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/Users/emalan/devlib/apache-wicket-1.4-rc2/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="wicket/wicket-auth-roles-1.4-rc2.jar"/>
-	<classpathentry kind="lib" path="wicket/wicket-datetime-1.4-rc2.jar"/>
-	<classpathentry kind="lib" path="wicket/wicket-extensions-1.4-rc2.jar" sourcepath="/Users/emalan/devlib/apache-wicket-1.4-rc2/src/wicket-extensions/src/main/java">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/Users/emalan/devlib/apache-wicket-1.4-rc2/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="wicket/wicket-spring-1.4-rc2.jar"/>
 	<classpathentry kind="lib" path="jackrabbit/jackrabbit-spi-1.5.0.jar"/>
 	<classpathentry kind="lib" path="jackrabbit/jackrabbit-spi-commons-1.5.5.jar"/>
 	<classpathentry kind="lib" path="jackrabbit/jackrabbit-text-extractors-1.5.0.jar"/>
@@ -73,5 +60,14 @@
 			<attribute name="javadoc_location" value="file:/Users/emalan/devlib/commons-lang-2.4/apidocs/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="wicket/wicket-1.4.1.jar" sourcepath="/Users/emalan/devlib/apache-wicket-1.4.1/src/wicket/src/main/java">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/Users/emalan/devlib/apache-wicket-1.4.1/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="wicket/wicket-auth-roles-1.4.1.jar"/>
+	<classpathentry kind="lib" path="wicket/wicket-datetime-1.4.1.jar"/>
+	<classpathentry kind="lib" path="wicket/wicket-extensions-1.4.1.jar"/>
+	<classpathentry kind="lib" path="wicket/wicket-spring-1.4.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
