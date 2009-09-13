@@ -17,12 +17,13 @@ import org.apache.wicket.request.IRequestCycleProcessor;
 
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
+import com.madalla.service.IDataService;
+import com.madalla.service.IDataServiceProvider;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.authorization.AppAuthorizationStrategy;
 import com.madalla.webapp.authorization.PageAuthorization;
+import com.madalla.webapp.panel.Panels;
 
 /**
  * Abstract Wicket Application class that needs to extended to enable usage 
@@ -31,21 +32,16 @@ import com.madalla.webapp.authorization.PageAuthorization;
  * @author Eugene Malan
  *
  */
-public abstract class CmsApplication extends WebApplication implements IRepositoryServiceProvider, IRepositoryAdminServiceProvider, IEmailServiceProvider {
+public abstract class CmsApplication extends WebApplication implements IDataServiceProvider, IRepositoryAdminServiceProvider, IEmailServiceProvider {
 
 	private final static Log log = LogFactory.getLog(CmsApplication.class);
 
-	private IRepositoryService repositoryService;
     private IRepositoryAdminService repositoryAdminService;
     private IEmailSender emailSender;
-
+    private IDataService dataService;
     
     protected void init() {
     	//initialization checks
-    	if (repositoryService == null){
-    		log.fatal("Content Service is not configured Correctly.");
-    		throw new WicketRuntimeException("Repository Service is not configured Correctly.");
-    	}
     	if (repositoryAdminService == null){
     		log.fatal("Content Admin Service is not configured Correctly.");
     		throw new WicketRuntimeException("Repository Admin Service is not configured Correctly.");
@@ -108,7 +104,7 @@ public abstract class CmsApplication extends WebApplication implements IReposito
     @Override
     protected IRequestCycleProcessor newRequestCycleProcessor()
     {
-    	HttpsConfig config = new HttpsConfig(8081,8443);
+    	HttpsConfig config = new HttpsConfig(80,443);
             return new HttpsRequestCycleProcessor(config);
     }
 
@@ -120,14 +116,6 @@ public abstract class CmsApplication extends WebApplication implements IReposito
         this.emailSender = emailSender;
     }
     
-    public IRepositoryService getRepositoryService(){
-        return repositoryService;
-    }
-    
-    public void setRepositoryService(IRepositoryService repositoryService){
-        this.repositoryService = repositoryService;
-    }
-
     public IRepositoryAdminService getRepositoryAdminService() {
 		return repositoryAdminService;
 	}
@@ -135,6 +123,14 @@ public abstract class CmsApplication extends WebApplication implements IReposito
 	public void setRepositoryAdminService(
 			IRepositoryAdminService repositoryAdminService) {
 		this.repositoryAdminService = repositoryAdminService;
+	}
+	
+	public IDataService getRepositoryService() {
+		return dataService;
+	}
+	
+	public void setRepositoryService(IDataService dataService){
+		this.dataService = dataService;
 	}
 
 }

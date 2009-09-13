@@ -9,7 +9,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.value.ValueMap;
@@ -17,16 +16,15 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.AbstractValidator;
 
 import com.madalla.bo.security.UserData;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
 import com.madalla.wicket.form.ValidationStylePasswordField;
 
-public class UserPasswordPanel extends Panel{
+public class UserPasswordPanel extends CmsPanel{
 
 	private static final long serialVersionUID = 3207705274626512033L;
 
@@ -105,7 +103,7 @@ public class UserPasswordPanel extends Panel{
 				super.onSubmit(target, form);
 				target.addComponent(passwordFeedback);
                 user.setPassword(credentials.getPassword());
-                getRepositoryService().saveUser(user);
+                saveData(user);
                 form.info(getString("message.success"));
 			}
 
@@ -118,10 +116,6 @@ public class UserPasswordPanel extends Panel{
         passwordForm.add(passwordSubmit);
         passwordForm.add(new AttributeModifier("onSubmit", true, new Model<String>("document.getElementById('" + passwordSubmit.getMarkupId() + "').onclick();return false;")));
         
-    }
-    
-    private IRepositoryService getRepositoryService(){
-    	return ((IRepositoryServiceProvider)getApplication()).getRepositoryService();
     }
 
 }

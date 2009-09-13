@@ -9,17 +9,15 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
 
-public class ContentFormPanel extends Panel{
+public class ContentFormPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
 	
 	private Log log = LogFactory.getLog(this.getClass());
@@ -37,7 +35,7 @@ public class ContentFormPanel extends Panel{
 	public ContentFormPanel(String name, final ContentData content, final Locale locale){
 		super(name);
 
-        contentEntry = getRepositoryservice().getContentEntry(content, locale);
+        contentEntry = getRepositoryService().getContentEntry(content, locale);
         log.debug("init - "+contentEntry);
 
         final Form<ContentEntryData> form = new ContentForm("contentForm", new CompoundPropertyModel<ContentEntryData>(contentEntry));
@@ -60,7 +58,7 @@ public class ContentFormPanel extends Panel{
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
 				log.debug("Submiting populated Content object to Content service.");
-                getRepositoryservice().saveContentEntry((ContentEntryData)form.getModelObject());
+                getRepositoryService().saveContentEntry((ContentEntryData)form.getModelObject());
                 log.debug("Content successfully saved to repository. content=" + contentEntry);
                 target.addComponent(feedback);
                 form.info(getString("message.success"));
@@ -79,9 +77,5 @@ public class ContentFormPanel extends Panel{
         add(form);
 
 	}
-	
-    private IRepositoryService getRepositoryservice(){
-    	return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
-    }
 
 }

@@ -13,8 +13,8 @@ import org.apache.wicket.validation.validator.RangeValidator;
 
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.video.VideoPlayerData;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.service.IDataService;
+import com.madalla.service.IDataServiceProvider;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
 import com.madalla.wicket.configure.AjaxConfigureIcon;
@@ -71,13 +71,13 @@ public class YoutubePlayerPanel extends Panel {
 	}
 
 	private VideoPlayerData getVideo(String id, String page){
-		IRepositoryService service = ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
+		IDataService service = ((IDataServiceProvider) getApplication()).getRepositoryService();
 		PageData pageData = service.getPage(page);
 		return service.getVideoPlayerData(pageData, id);
 	}
 	
 	private void saveVideo(VideoPlayerData data){
-		IRepositoryService service = ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
+		IDataService service = ((IDataServiceProvider) getApplication()).getRepositoryService();
 		service.saveVideoPlayerData(data);
 	}
 	

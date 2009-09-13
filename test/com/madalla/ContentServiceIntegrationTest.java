@@ -32,12 +32,12 @@ import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.page.Content;
 import com.madalla.service.BackupFile;
 import com.madalla.service.IRepositoryAdminService;
-import com.madalla.service.IRepositoryService;
+import com.madalla.service.IDataService;
 
 public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
 	Log log = LogFactory.getLog(this.getClass());
-	private IRepositoryService contentService;
+	private IDataService contentService;
     private IRepositoryAdminService repositoryAdminService;
     private JcrTemplate jcrTemplate;
 	private final static String SITE = "test";
@@ -212,7 +212,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	}
     }
     
-    public void setRepositoryService(IRepositoryService contentService) {
+    public void setRepositoryService(IDataService contentService) {
 		this.contentService = contentService;
 	}
 

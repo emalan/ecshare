@@ -24,7 +24,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -32,14 +31,13 @@ import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.ImageData;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.images.ImageDefaults;
+import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.DraggableAjaxBehaviour;
 
-public class AlbumAdminPanel extends Panel{
+public class AlbumAdminPanel extends CmsPanel{
 	
 	private class FileUploadForm extends Form<Object>{
 		private static final long serialVersionUID = 1L;
@@ -170,10 +168,5 @@ public class AlbumAdminPanel extends Panel{
         }
         return images;
     }
-	
-	private IRepositoryService getRepositoryService(){
-		IRepositoryServiceProvider provider = (IRepositoryServiceProvider)getApplication();
-		return provider.getRepositoryService();
-	}
 	
 }

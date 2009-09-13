@@ -7,25 +7,28 @@ import org.apache.wicket.Request;
 import org.apache.wicket.protocol.http.WebSession;
 
 import com.madalla.bo.security.UserData;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.cms.service.ocm.SessionDataService;
+import com.madalla.service.IDataService;
+import com.madalla.service.IDataServiceProvider;
+import com.madalla.service.ISessionDataService;
+import com.madalla.service.ISessionDataServiceProvider;
 import com.madalla.webapp.cms.IContentAdmin;
 import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.webapp.upload.IFileUploadInfo;
 import com.madalla.webapp.upload.IFileUploadStatus;
 
-public class CmsSession  extends WebSession implements IContentAdmin, IRepositoryServiceProvider, IFileUploadInfo{
+public class CmsSession  extends WebSession implements IContentAdmin, ISessionDataServiceProvider, IFileUploadInfo{
 
 	private static final long serialVersionUID = 652426659740076486L;
 	private boolean cmsAdminMode = false;
 	private String username = null;
-	private AuthRepositoryService repositoryService;
+	private ISessionDataService repositoryService;
+
 	private volatile Map<String, IFileUploadStatus> fileUploadInfo;
     
     public CmsSession(Request request) {
         super(request);
-        IRepositoryServiceProvider repositoryProvider =((IRepositoryServiceProvider)getApplication());
-        repositoryService = new AuthRepositoryService();
+        this.repositoryService = new SessionDataService();
         fileUploadInfo = new HashMap<String, IFileUploadStatus>();
     }
 
@@ -53,10 +56,10 @@ public class CmsSession  extends WebSession implements IContentAdmin, IRepositor
     }
     
     public boolean login(String userName, String password) {
-    	IRepositoryServiceProvider repositoryProvider =((IRepositoryServiceProvider)getApplication());
-        IAuthenticator authenticator = repositoryProvider.getRepositoryService().getUserAuthenticator();
+    	IDataService service = ((IDataServiceProvider) getApplication()).getRepositoryService();
+        IAuthenticator authenticator = service.getUserAuthenticator();
         if (authenticator.authenticate(userName, password)){
-        	UserData user = repositoryProvider.getRepositoryService().getUser(userName);
+        	UserData user = service.getUser(userName);
         	repositoryService.setUser(user);
             cmsAdminMode = (user.getAdmin()==null) ? false : user.getAdmin() ;
         	this.username = userName;
@@ -65,8 +68,12 @@ public class CmsSession  extends WebSession implements IContentAdmin, IRepositor
         return false;
     }
     
-	public IRepositoryService getRepositoryService() {
+	public ISessionDataService getRepositoryService() {
 		return repositoryService;
+	}
+	
+	public void setRepositoryService(ISessionDataService repositoryService) {
+		this.repositoryService = repositoryService;
 	}
 
 	public IFileUploadStatus getFileUploadStatus(String id) {

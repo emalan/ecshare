@@ -17,8 +17,8 @@ import com.madalla.bo.page.ContentData;
 import com.madalla.cms.jcr.NodeDisplay;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.service.IDataService;
+import com.madalla.service.IDataServiceProvider;
 
 class ContentDisplayPanel extends Panel {
 
@@ -203,8 +203,8 @@ class ContentDisplayPanel extends Panel {
     	return sb.toString();
     }
 	
-	protected IRepositoryService getContentService() {
-		return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
+	protected IDataService getContentService() {
+		return ((IDataServiceProvider) getApplication()).getRepositoryService();
 	}
 	
 	protected IRepositoryAdminService getAdminService() {

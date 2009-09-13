@@ -20,8 +20,8 @@ import com.madalla.cms.jcr.model.IContentNode;
 import com.madalla.cms.jcr.model.tree.JcrTreeNode;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.service.IDataService;
+import com.madalla.service.IDataServiceProvider;
 
 class ContentExplorerPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -98,8 +98,8 @@ class ContentExplorerPanel extends Panel {
 	}
 
 
-	protected IRepositoryService getContentService() {
-		return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
+	protected IDataService getContentService() {
+		return ((IDataServiceProvider) getApplication()).getRepositoryService();
 	}
     
     protected IRepositoryAdminService getContentAdminService() {

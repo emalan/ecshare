@@ -11,6 +11,7 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.WicketRuntimeException;
 
 import com.madalla.webapp.pages.AlbumAdminPage;
+import com.madalla.webapp.panel.Panels;
 
 public class PanelsTest extends TestCase{
 	Log log = LogFactory.getLog(this.getClass());

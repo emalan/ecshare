@@ -24,8 +24,8 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.ImageData;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.service.IDataService;
+import com.madalla.service.IDataServiceProvider;
 import com.madalla.wicket.DraggableAjaxBehaviour;
 import com.madalla.wicket.DroppableAjaxBehaviour;
 
@@ -99,8 +99,8 @@ class AlbumDisplayPanel extends Panel {
 		add(form);
 	}
 	
-	private IRepositoryService getRepositoryService(){
-		IRepositoryServiceProvider provider = (IRepositoryServiceProvider)getApplication();
+	private IDataService getRepositoryService(){
+		IDataServiceProvider provider = (IDataServiceProvider)getApplication();
 		return provider.getRepositoryService();
 	}
 	

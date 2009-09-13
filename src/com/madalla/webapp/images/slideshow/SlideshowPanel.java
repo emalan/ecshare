@@ -13,8 +13,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 import com.madalla.bo.image.ImageData;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.service.IDataService;
+import com.madalla.service.IDataServiceProvider;
 import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.webapp.scripts.utility.ScriptUtils;
 
@@ -64,8 +64,8 @@ public class SlideshowPanel extends Panel {
 
     }
     
-    private IRepositoryService getRepositoryService(){
-        IRepositoryServiceProvider provider = (IRepositoryServiceProvider)getApplication();
+    private IDataService getRepositoryService(){
+        IDataServiceProvider provider = (IDataServiceProvider)getApplication();
         return provider.getRepositoryService();
     }
 

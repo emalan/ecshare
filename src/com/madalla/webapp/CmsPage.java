@@ -11,11 +11,11 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.bo.SiteData;
-import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.service.IDataService;
+import com.madalla.service.IDataServiceProvider;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.LoginPanel;
@@ -38,7 +38,7 @@ public class CmsPage extends WebPage {
 		
 		add(new StringHeaderContributor("<meta name=\"AUTHOR\" content=\"Eugene Malan\" />"));
 		if (!isMetadataOveridden()){
-		    SiteData siteData = ((IRepositoryServiceProvider)getApplication()).getRepositoryService().getSiteData();
+		    SiteData siteData = getRepositoryService().getSiteData();
 		    if (StringUtils.isNotEmpty(siteData.getMetaDescription())){
 		        add(new StringHeaderContributor("<meta name=\"description\" content=\"" + siteData.getMetaDescription() + "\"/>" ));
 		    }
@@ -164,5 +164,9 @@ public class CmsPage extends WebPage {
 
     protected String getPageTitle() {
         return pageTitle;
+    }
+    
+    protected IDataService getRepositoryService(){
+    	return ((IDataServiceProvider)getApplication()).getRepositoryService();
     }
 }

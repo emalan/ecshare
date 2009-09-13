@@ -11,8 +11,7 @@ import org.apache.wicket.model.PropertyModel;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.webapp.panel.CmsPanel;
 
 /**
  * In-Line Edit Panel - allows in-line editing of Content when logged in.
@@ -20,7 +19,7 @@ import com.madalla.service.IRepositoryServiceProvider;
  * @author Eugene Malan
  *
  */
-public class InlineContentPanel extends Panel {
+public class InlineContentPanel extends CmsPanel {
     private static final long serialVersionUID = 1L;
     
     private Log log = LogFactory.getLog(this.getClass());
@@ -46,16 +45,16 @@ public class InlineContentPanel extends Panel {
 				super.onSubmit(target);
 				log.debug("onSubmit - value="+ getDefaultModel());
 	            log.debug("Submiting populated Content object to Content service.");
-	            getRepositoryservice().saveContentEntry(contentEntry);
+	            getRepositoryService().saveContentEntry(contentEntry);
 	            info("Content saved to repository");
 			}
 			
         	@Override
 			protected void onBeforeRender(){
                 log.debug("onBeforeRender - setting new Content. id="+id);
-                PageData page = getRepositoryservice().getPage(nodeName);
-	            ContentData contentData = getRepositoryservice().getContent(page, id);
-	            contentEntry = getRepositoryservice().getInlineContentEntry(contentData, getSession().getLocale());
+                PageData page = getRepositoryService().getPage(nodeName);
+	            ContentData contentData = getRepositoryService().getContent(page, id);
+	            contentEntry = getRepositoryService().getInlineContentEntry(contentData, getSession().getLocale());
 
                 setDefaultModel(new PropertyModel<String>(contentEntry, "text"));
                 if (((IContentAdmin)getSession()).isLoggedIn()) {
@@ -80,8 +79,5 @@ public class InlineContentPanel extends Panel {
         
     }
 
-    private IRepositoryService getRepositoryservice(){
-    	return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
-    }
 
 }

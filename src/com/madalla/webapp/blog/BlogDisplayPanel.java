@@ -28,8 +28,8 @@ import org.apache.wicket.model.PropertyModel;
 import com.madalla.bo.blog.BlogData;
 import com.madalla.bo.blog.BlogEntryData;
 import com.madalla.bo.blog.IBlogEntryData;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.service.IDataService;
+import com.madalla.service.IDataServiceProvider;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.BlogEntryPage;
 import com.madalla.wicket.KeywordHeaderContributor;
@@ -172,8 +172,8 @@ public class BlogDisplayPanel extends Panel {
 		log.debug("changeModel - "+ blogEntry);
 	}
 	
-    private IRepositoryService getRepositoryService(){
-    	return ((IRepositoryServiceProvider)getApplication()).getRepositoryService();
+    private IDataService getRepositoryService(){
+    	return ((IDataServiceProvider)getApplication()).getRepositoryService();
     }
 
 	

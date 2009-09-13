@@ -17,9 +17,9 @@
         <property name="site" value="${site.code}"/>
         <property name="repositoryHome" value="${repository.home}"/>
     </bean>
-
-    <bean id="repositoryService" class="com.madalla.cms.service.ocm.RepositoryService"
-        init-method="init">
+    
+    <bean id="dataService" class="com.madalla.cms.service.ocm.RepositoryService"
+        init-method="init" scope="singleton">
         <property name="template" ref="jcrTemplate"/>
         <property name="site" value="${site.code}"/>
     </bean>
@@ -27,7 +27,7 @@
 	<bean id="backupCreator" class="com.madalla.cms.service.jcr.RepositoryBackupCreator">
 		<constructor-arg ref="repositoryAdminService"/>
 	</bean>
-
+	
 </beans>
 
 

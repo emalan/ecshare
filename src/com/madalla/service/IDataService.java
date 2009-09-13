@@ -8,6 +8,7 @@ import javax.swing.tree.TreeModel;
 
 import org.joda.time.DateTime;
 
+import com.madalla.bo.AbstractData;
 import com.madalla.bo.SiteData;
 import com.madalla.bo.blog.BlogData;
 import com.madalla.bo.blog.BlogEntryData;
@@ -40,7 +41,7 @@ import com.madalla.webapp.security.IAuthenticator;
  * @author Eugene Malan
  *
  */
-public interface IRepositoryService {
+public interface IDataService {
 	
 	boolean isAdminApp();
 
@@ -57,6 +58,8 @@ public interface IRepositoryService {
 
 	// Generic
 	void deleteNode(final String id);
+	
+	void saveDataObject(AbstractData data);
 	
 	InputStream getResourceStream(String path, String property);
 
@@ -138,13 +141,9 @@ public interface IRepositoryService {
 	
 	List<SiteData> getSiteEntries();
 	
-	void saveSite(SiteData data);
-	
     UserData getNewUser(String username, String password);
     
     UserData getUser(String username);
-    
-    void saveUser(UserData user);
     
     IAuthenticator getUserAuthenticator();
     

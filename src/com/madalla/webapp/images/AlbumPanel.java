@@ -1,7 +1,7 @@
 package com.madalla.webapp.images;
 
-import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
 import static com.madalla.webapp.PageParams.RETURN_PAGE;
+import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
 import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.CROSSFADE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.FAST_INIT;
@@ -24,20 +24,18 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.ImageData;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
 import com.madalla.webapp.pages.AlbumAdminPage;
+import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.webapp.scripts.utility.ScriptUtils;
 
-public class AlbumPanel extends Panel implements IHeaderContributor {
+public class AlbumPanel extends CmsPanel implements IHeaderContributor {
 	private static final long serialVersionUID = 1L;
 	
     private static final Log log = LogFactory.getLog(AlbumPanel.class);
@@ -124,11 +122,6 @@ public class AlbumPanel extends Panel implements IHeaderContributor {
 	    return images;
 	}
 	
-	private IRepositoryService getRepositoryService(){
-		IRepositoryServiceProvider provider = (IRepositoryServiceProvider)getApplication();
-		return provider.getRepositoryService();
-	}
-
     public void renderHead(IHeaderResponse response) {
         int interval = album.getInterval() == null ? ImageDefaults.DISPLAY_INTERVAL : album.getInterval();
         int width = album.getWidth() == null ? ImageDefaults.DISPLAY_WIDTH : album.getWidth();

@@ -29,8 +29,8 @@ import org.joda.time.format.DateTimeFormatter;
 
 import com.madalla.bo.blog.BlogData;
 import com.madalla.bo.blog.BlogEntryData;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.service.IDataService;
+import com.madalla.service.IDataServiceProvider;
 import com.madalla.util.ui.CalendarUtils;
 import com.madalla.util.ui.ICalendarTreeInput;
 
@@ -127,8 +127,8 @@ public class BlogArchivePanel extends Panel {
 
 	}
 	
-    private IRepositoryService getRepositoryService(){
-    	return ((IRepositoryServiceProvider)getApplication()).getRepositoryService();
+    private IDataService getRepositoryService(){
+    	return ((IDataServiceProvider)getApplication()).getRepositoryService();
     }
 
 }

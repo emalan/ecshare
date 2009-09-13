@@ -28,7 +28,7 @@ import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
  * @author Eugene Malan
  *
  */
-public class RepositoryTemplate {
+public class RepositoryTemplate{
 
 	private JcrTemplate template;
 	private ObjectContentManager ocm;

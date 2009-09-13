@@ -3,7 +3,7 @@ package com.madalla.webapp.pages;
 import org.apache.wicket.PageParameters;
 
 import com.madalla.webapp.AdminPage;
-import com.madalla.webapp.Panels;
+import com.madalla.webapp.panel.Panels;
 
 public class UserLoginPage extends AdminPage{
 

@@ -17,7 +17,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.value.ValueMap;
@@ -26,8 +25,6 @@ import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import com.madalla.bo.security.UserData;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.util.security.SecurityUtils;
@@ -35,12 +32,13 @@ import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
 import com.madalla.webapp.pages.UserAdminPage;
+import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
 import com.madalla.wicket.form.ValidationStylePasswordField;
 
-public class UserProfilePanel extends Panel{
+public class UserProfilePanel extends CmsPanel{
 
 	private static final long serialVersionUID = 9027719184960390850L;
 	private static final Log log = LogFactory.getLog(UserProfilePanel.class);
@@ -148,7 +146,7 @@ public class UserProfilePanel extends Panel{
 				super.onSubmit(target, form);
 				target.addComponent(passwordFeedback);
                 user.setPassword(credentials.getPassword());
-                getRepositoryService().saveUser(user);
+                saveData(user);
                 form.info(getString("message.success"));
 			}
 
@@ -185,7 +183,7 @@ public class UserProfilePanel extends Panel{
 				super.onSubmit(target, form);
 				target.addComponent(profileFeedback);
 
-				getRepositoryService().saveUser(user);
+				saveData(user);
 				form.info(getString("message.success"));
 				//setResponsePage(this.findPage());
 			}
@@ -202,8 +200,4 @@ public class UserProfilePanel extends Panel{
 		
 	}
 	
-    private IRepositoryService getRepositoryService(){
-    	return ((IRepositoryServiceProvider)getApplication()).getRepositoryService();
-    }
-
 }

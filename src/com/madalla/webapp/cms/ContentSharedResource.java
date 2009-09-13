@@ -15,7 +15,7 @@ import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 
-import com.madalla.service.IRepositoryService;
+import com.madalla.service.IDataService;
 import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
 import com.madalla.wicket.resourcelink.EditableResourceLink.ResourceType;
 
@@ -31,11 +31,11 @@ public class ContentSharedResource {
     public static final String RESOURCE_PATH = "resource/";
     Log log = LogFactory.getLog(ContentSharedResource.class);
     
-    public static void registerResource(WebApplication application, ILinkData data, String path, IRepositoryService service){
+    public static void registerResource(WebApplication application, ILinkData data, String path, IDataService service){
         mountResource(application, data.getId(), data.getResourceType(), path, service);
     }
     
-    public static String registerResource(WebApplication application, ILinkData data, IRepositoryService service){
+    public static String registerResource(WebApplication application, ILinkData data, IDataService service){
         if (data.getFileUpload() == null){
             return "";
         }
@@ -44,7 +44,7 @@ public class ContentSharedResource {
         return mountPath;
     }
 
-    private static void mountResource(WebApplication application, String id, String resourceType, String path, IRepositoryService service){
+    private static void mountResource(WebApplication application, String id, String resourceType, String path, IDataService service){
         SharedResources resources = application.getSharedResources();
         ResourceReference resourceReference = new ResourceReference(id);
         //remove previous
@@ -55,7 +55,7 @@ public class ContentSharedResource {
         application.mountSharedResource(path, resourceReference.getSharedResourceKey());
     }
     
-    private static Resource createDynamicResource(final String id, final String type, final IRepositoryService service){
+    private static Resource createDynamicResource(final String id, final String type, final IDataService service){
         Resource resource = new WebResource() {
             private static final long serialVersionUID = 1L;
 

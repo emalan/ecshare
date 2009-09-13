@@ -26,9 +26,8 @@ import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.CmsSession;
+import com.madalla.webapp.panel.CmsPanel;
 
 /**
  * Content Entry Panel - Edit User Content using a WYSWYG HTML editor.
@@ -40,7 +39,7 @@ import com.madalla.webapp.CmsSession;
  * @author Eugene Malan
  * 
  */
-public class ContentEntryPanel extends Panel {
+public class ContentEntryPanel extends CmsPanel {
 	private static final long serialVersionUID = 1L;
 
 	private Log log = LogFactory.getLog(this.getClass());
@@ -72,17 +71,17 @@ public class ContentEntryPanel extends Panel {
 		add(CSSPackageResource.getHeaderContribution(ContentEntryPanel.class, "tabs.css"));
 		
 		
-		List<SiteLanguage> locales = getRepositoryservice().getSiteData().getLocaleList();
+		List<SiteLanguage> locales = getRepositoryService().getSiteData().getLocaleList();
 		Locale currentLocale = getSession().getLocale();
 		
 		//setup Javascript template
 		Map<String, Object> vars = setupTemplateVariables((CmsSession) getSession(), locales, currentLocale);
-		add(TextTemplateHeaderContributor.forJavaScript(this.getClass(),"ContentEntryPanel.js", Model.of(vars)));
+		add(TextTemplateHeaderContributor.forJavaScript(this.getClass(),"ContentEntryPanel.js", Model.ofMap(vars)));
 		
 		
 		log.debug("init - surrentLocale="+currentLocale);
-        PageData page = getRepositoryservice().getPage(nodeName);
-        final ContentData content = getRepositoryservice().getContent(page, contentId);
+        PageData page = getRepositoryService().getPage(nodeName);
+        final ContentData content = getRepositoryService().getContent(page, contentId);
         log.debug("init - content" + content);
         
 		//setup tabs
@@ -148,10 +147,6 @@ public class ContentEntryPanel extends Panel {
 		//map.put("srclang", "src.options.add(new Option('" + currentLocale.getDisplayLanguage() + "','" + currentLocale.getLanguage()+ "'));");
 		
 		return map;
-	}
-
-	private IRepositoryService getRepositoryservice() {
-		return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
 	}
 
 }

@@ -10,7 +10,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -19,14 +18,13 @@ import org.apache.wicket.validation.validator.UrlValidator;
 
 import com.madalla.bo.SiteData;
 import com.madalla.bo.SiteLanguage;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationBehaviour;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
 
-public class SiteAdminPanel extends Panel{
+public class SiteAdminPanel extends CmsPanel{
 
     private static final long serialVersionUID = 1L;
     private static final Log log = LogFactory.getLog(SiteAdminPanel.class);
@@ -54,7 +52,7 @@ public class SiteAdminPanel extends Panel{
             url.add(new UrlValidator(UrlValidator.NO_FRAGMENTS));
             add(url);
             
-            add(new CheckBoxMultipleChoice<SiteLanguage>("localeList", Model.of(SiteData.getAvailableLocales()), 
+            add(new CheckBoxMultipleChoice<SiteLanguage>("localeList", Model.ofList(SiteData.getAvailableLocales()), 
             		new ChoiceRenderer<SiteLanguage>("displayName")));
             
         }
@@ -97,16 +95,13 @@ public class SiteAdminPanel extends Panel{
     }
     
     private SiteData getSiteData(){
-        return getRepositoryService().getSiteData();
+    	return getRepositoryService().getSiteData();
     }
     
     private void saveSiteData(SiteData data){
         log.debug("saveSiteData - + " + data);
-        getRepositoryService().saveSite(data);
+        saveData(data);
     }
-    
-    private IRepositoryService getRepositoryService(){
-        return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
-    }
+
     
 }

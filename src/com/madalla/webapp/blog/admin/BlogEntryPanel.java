@@ -20,11 +20,10 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -33,16 +32,15 @@ import org.joda.time.DateTime;
 import com.madalla.bo.blog.BlogEntryData;
 import com.madalla.bo.blog.IBlogData;
 import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.blog.BlogEntryView;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 import com.madalla.wicket.form.AjaxValidationBehaviour;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 import com.madalla.wicket.form.ValidationStyleBehaviour;
 
-public class BlogEntryPanel extends Panel {
+public class BlogEntryPanel extends CmsPanel {
     private static final long serialVersionUID = 1L;
     private static final CompressedResourceReference JAVASCRIPT = new CompressedResourceReference(BlogEntryPanel.class, "BlogEntryPanel.js");
     private Log log = LogFactory.getLog(this.getClass());
@@ -78,7 +76,7 @@ public class BlogEntryPanel extends Panel {
     }
     
     private void init(){
-    	add(new PageLink<Page>("returnLink", returnPage));
+    	add(new BookmarkablePageLink<Page>("returnLink", returnPage));
     	Form<Object> form = new BlogEntryForm("blogForm");
         final FeedbackPanel feedbackPanel = new ComponentFeedbackPanel("feedback",form);
         feedbackPanel.setOutputMarkupId(true);
@@ -182,10 +180,6 @@ public class BlogEntryPanel extends Panel {
             }
         }
 
-    }
-    
-    private IRepositoryService getRepositoryService(){
-    	return ((IRepositoryServiceProvider)getApplication()).getRepositoryService();
     }
     
     private void saveBlogEntry(BlogEntryView view){

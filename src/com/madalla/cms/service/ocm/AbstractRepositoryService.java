@@ -4,39 +4,20 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
-import org.apache.wicket.WicketRuntimeException;
 import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.bo.SiteLanguage;
 import com.madalla.cms.jcr.JcrUtils;
-import com.madalla.cms.service.ocm.util.JcrOcmUtils;
 
 abstract class AbstractRepositoryService{
-	
-	private static final Log log = LogFactory.getLog(AbstractRepositoryService.class);
 	
     protected String site ;
 	protected JcrTemplate template;
     protected List<SiteLanguage> locales;
     protected ObjectContentManager ocm;
-
-    public void init(){
-    	Session session;
-		try {
-			session = template.getSessionFactory().getSession();
-		} catch (RepositoryException e) {
-			log.error("Exception while getting Session from JcrTemplate", e);
-			throw new WicketRuntimeException("Exception getting Session from JcrTemplate", e);
-		}
-		ocm =  JcrOcmUtils.getObjectContentManager(session);
-		
-    }
-
+    
     protected Node getCreateNode(String nodeName, Node parent) throws RepositoryException{
     	return JcrUtils.getCreateNode(nodeName, parent);
     }
@@ -45,18 +26,8 @@ abstract class AbstractRepositoryService{
         this.template = template;
     }
 
-	public void setLocales(List<SiteLanguage> locales) {
-		this.locales = locales;
-	}
-	
 	public void setSite(String site) {
 		this.site = site;
 	}
-	
-	public String getSite(){
-		return site;
-	}
-
-
 
 }

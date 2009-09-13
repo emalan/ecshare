@@ -12,7 +12,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByLink.C
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -20,10 +19,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 import com.madalla.bo.email.EmailEntryData;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.webapp.panel.CmsPanel;
 
-public class SiteDataPanel extends Panel {
+public class SiteDataPanel extends CmsPanel {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -162,10 +160,6 @@ public class SiteDataPanel extends Panel {
 		add(new PagingNavigator("navigator", dataView));
 	}
 	
-    private IRepositoryService getRepositoryService(){
-        return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
-    }
-    
 	/**
 	 * Default implementation of ICssProvider
 	 * 

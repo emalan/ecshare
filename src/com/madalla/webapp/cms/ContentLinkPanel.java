@@ -9,16 +9,15 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.protocol.http.WebApplication;
 
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.service.IDataService;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.upload.FileUploadStatus;
 import com.madalla.webapp.upload.IFileUploadStatus;
 import com.madalla.wicket.resourcelink.EditableResourceLink;
@@ -41,7 +40,7 @@ import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
  * @author Eugene Malan
  *
  */
-public class ContentLinkPanel extends Panel{
+public class ContentLinkPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
 	private static final Log log = LogFactory.getLog(ContentLinkPanel.class);
 	
@@ -140,12 +139,12 @@ public class ContentLinkPanel extends Panel{
 
 		log.debug("Editable Link Panel being created for node=" + nodeName + " id=" + id);
 
-			PageData page = getRepositoryservice().getPage(nodeName);
-			final ResourceData resourceData = getRepositoryservice().getContentResource(page, id);
+			PageData page = getRepositoryService().getPage(nodeName);
+			final ResourceData resourceData = getRepositoryService().getContentResource(page, id);
 			log.debug("retrieved Resource data. " + resourceData);
 			final LinkData linkData = createView(resourceData);
 			if (!StringUtils.isEmpty(resourceData.getUrl())){
-			    ContentSharedResource.registerResource((WebApplication)getApplication(), linkData, resourceData.getUrl(), getRepositoryservice());
+			    ContentSharedResource.registerResource((WebApplication)getApplication(), linkData, resourceData.getUrl(), getRepositoryService());
 			}
 
 			final EditableResourceLink editableLink = new EditableResourceLink("contentLink", linkData) {
@@ -155,13 +154,13 @@ public class ContentLinkPanel extends Panel{
 				protected void onSubmit() {
 				    String mountPath = "";
 				    if (linkData.getFileUpload() !=null){
-	                    mountPath = ContentSharedResource.registerResource((WebApplication)getApplication(), linkData, getRepositoryservice());
+	                    mountPath = ContentSharedResource.registerResource((WebApplication)getApplication(), linkData, getRepositoryService());
 	                    linkData.setUrl(mountPath);
 	                    //Start seperate thread so upload can continue if user navigates away
-	                    final SubmitThread it = new SubmitThread(getAppSession(), linkData, getRepositoryservice());
+	                    final SubmitThread it = new SubmitThread(getAppSession(), linkData, getRepositoryService());
 						it.start();
 				    } else {
-				    	formSubmit(getAppSession(), linkData, getRepositoryservice());
+				    	formSubmit(getAppSession(), linkData, getRepositoryService());
 				    }
 				}
 
@@ -204,9 +203,6 @@ public class ContentLinkPanel extends Panel{
     	return linkData;
     }
 
-    private IRepositoryService getRepositoryservice(){
-    	return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
-    }
     
     private CmsSession getAppSession(){
     	return (CmsSession) getSession();
@@ -216,9 +212,9 @@ public class ContentLinkPanel extends Panel{
 	private static class SubmitThread extends Thread {
 		private final CmsSession session;
 		private final ILinkData data;
-		private final IRepositoryService service;
+		private final IDataService service;
 
-		public SubmitThread(CmsSession session, ILinkData data, IRepositoryService service) {
+		public SubmitThread(CmsSession session, ILinkData data, IDataService service) {
 			this.session = session;
 			this.data = data;
 			this.service = service;
@@ -257,7 +253,7 @@ public class ContentLinkPanel extends Panel{
      * @param session
      * @param linkData
      */
-    public static void formSubmit(CmsSession session, ILinkData linkData, IRepositoryService service){
+    public static void formSubmit(CmsSession session, ILinkData linkData, IDataService service){
     	log.debug("onSubmit - submit Resource Form Data. " + linkData);
     	ResourceData resourceData = service.getContentResource(linkData.getId());
 		FileUpload upload = linkData.getFileUpload();

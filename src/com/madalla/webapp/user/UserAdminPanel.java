@@ -31,7 +31,6 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -47,15 +46,14 @@ import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
 
-public class UserAdminPanel extends Panel {
+public class UserAdminPanel extends CmsPanel {
 
 	private static final long serialVersionUID = 9027719184960390850L;
 	private static final Log log = LogFactory.getLog(UserAdminPanel.class);
@@ -392,7 +390,7 @@ public class UserAdminPanel extends Panel {
 	private void saveUserData(UserData userData){
 		UserData dest = getRepositoryService().getUser(userData.getName());
 		BeanUtils.copyProperties(userData, dest);
-		getRepositoryService().saveUser(dest);
+		saveData(dest);
 		getRepositoryService().saveUserSiteEntries(dest, sites);
 	}
 	
@@ -401,11 +399,6 @@ public class UserAdminPanel extends Panel {
 	    sites.clear();
 	}
 	
-	private IRepositoryService getRepositoryService() {
-		return ((IRepositoryServiceProvider) getApplication())
-				.getRepositoryService();
-	}
-
 	private String formatUserMessage(String key, UserDataView user, SiteData site) {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("firstName", StringUtils.defaultString(user.getFirstName()));

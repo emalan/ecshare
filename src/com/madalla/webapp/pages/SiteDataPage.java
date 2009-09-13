@@ -4,7 +4,7 @@ import org.apache.wicket.PageParameters;
 
 import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.ISecureAdminPage;
-import com.madalla.webapp.Panels;
+import com.madalla.webapp.panel.Panels;
 
 public class SiteDataPage extends AdminPage implements ISecureAdminPage{
 

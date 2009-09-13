@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
@@ -13,6 +15,7 @@ import javax.swing.tree.TreeModel;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.WicketRuntimeException;
 import org.joda.time.DateTime;
 
 import com.madalla.bo.AbstractData;
@@ -53,8 +56,9 @@ import com.madalla.cms.jcr.JcrUtils;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.cms.service.ocm.template.RepositoryTemplate;
 import com.madalla.cms.service.ocm.template.RepositoryTemplateCallback;
+import com.madalla.cms.service.ocm.util.JcrOcmUtils;
 import com.madalla.image.ImageUtilities;
-import com.madalla.service.IRepositoryService;
+import com.madalla.service.IDataService;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.security.IAuthenticator;
 
@@ -78,15 +82,23 @@ import com.madalla.webapp.security.IAuthenticator;
  * @see com.madalla.cms.service.ocm.RepositoryInfo
  *
  */
-public class RepositoryService extends AbstractRepositoryService implements IRepositoryService, Serializable{
+public class RepositoryService extends AbstractRepositoryService implements IDataService, Serializable{
 
 	private static final long serialVersionUID = 795763276139305054L;
 	private static final Log log = LogFactory.getLog(RepositoryService.class);
 
     private RepositoryTemplate repositoryTemplate;
-
+    
     public void init(){
-    	super.init();
+       	Session session;
+		try {
+			session = template.getSessionFactory().getSession();
+		} catch (RepositoryException e) {
+			log.error("Exception while getting Session from JcrTemplate", e);
+			throw new WicketRuntimeException("Exception getting Session from JcrTemplate", e);
+		}
+		ocm =  JcrOcmUtils.getObjectContentManager(session);
+		
     	repositoryTemplate = new RepositoryTemplate(template, ocm, site);
     	
     	//Process data migration if necessary
@@ -103,15 +115,14 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	if (adminUser == null){
     	    adminUser = getUser("admin");
     	} else {
-            saveUserSite(new UserSite(adminUser.getId(), site));
+    		saveUserSite(new UserSite(adminUser.getId(), site));
     	}
         adminUser.setAdmin(true);
-        saveUser(adminUser);
+        saveDataObject(adminUser);
         
         //setup locales
-        List<SiteLanguage> localeList = siteData.getLocaleList();
-        localeList.add(SiteLanguage.ENGLISH); // english is default
-        setLocales(localeList);
+        locales = siteData.getLocaleList();
+        locales.add(SiteLanguage.ENGLISH); // english is default
     	
     }
     
@@ -481,10 +492,6 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	});
     }
     
-    public void saveSite(SiteData data){
-        saveDataObject(data);
-    }
-    
     @SuppressWarnings("unchecked")//another not-safe cast from Collection to List
 	public List<SiteData> getSiteEntries(){
     	return (List<SiteData>) repositoryTemplate.getAll(RepositoryType.SITE);
@@ -497,7 +504,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     	}
     	UserData user = getUser(username);
     	user.setPassword(password);
-    	saveUser(user);
+    	saveDataObject(user);
     	return user;
     }
     
@@ -511,10 +518,6 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
 			}
 
     	});
-    }
-    
-    public void saveUser(UserData user){
-        saveDataObject(user);
     }
     
     private boolean isUserExists(String username){
@@ -585,7 +588,7 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
     //************************************
     // *****  Utility methods
     
-    private void saveDataObject(AbstractData data){
+    public void saveDataObject(AbstractData data){
     	if (ocm.objectExists(data.getId())){
     		ocm.update(data);
     	} else {
@@ -603,5 +606,13 @@ public class RepositoryService extends AbstractRepositoryService implements IRep
         ocm.copy(data.getId(), destPath);
         ocm.save();
     }
+
+	public void setRepositoryTemplate(RepositoryTemplate repositoryTemplate) {
+		this.repositoryTemplate = repositoryTemplate;
+	}
+	
+	public RepositoryTemplate getRepositoryTemplate(){
+		return repositoryTemplate;
+	}
 
 }

@@ -1,4 +1,4 @@
-package com.madalla.webapp;
+package com.madalla.webapp.panel;
 
 import static com.madalla.webapp.blog.BlogParameters.BLOG_ENTRY_ID;
 import static com.madalla.webapp.blog.BlogParameters.BLOG_NAME;
@@ -13,6 +13,7 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.panel.Panel;
 
+import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.blog.BlogHomePanel;
 import com.madalla.webapp.blog.admin.BlogEntryPanel;
 import com.madalla.webapp.cms.ContentLinkPanel;

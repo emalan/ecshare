@@ -15,7 +15,6 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebRequestCycle;
@@ -32,14 +31,15 @@ import com.madalla.bo.SiteData;
 import com.madalla.bo.email.EmailData;
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.service.IDataService;
+import com.madalla.service.IDataServiceProvider;
 import com.madalla.util.captcha.CaptchaUtils;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
 
-public class EmailFormPanel extends Panel {
+public class EmailFormPanel extends CmsPanel {
     private static final long serialVersionUID = -1643728343421366820L;
 
     private Log log = LogFactory.getLog(this.getClass());
@@ -175,7 +175,7 @@ public class EmailFormPanel extends Panel {
     }
     
     private void logEmail(String name, String email, String comment){
-    	IRepositoryService service = ((IRepositoryServiceProvider)getApplication()).getRepositoryService();
+    	IDataService service = ((IDataServiceProvider)getApplication()).getRepositoryService();
     	EmailData emailData = service.getEmail();
     	service.createEmailEntry(emailData, new DateTime(), name, email, comment);
     }
@@ -213,7 +213,7 @@ public class EmailFormPanel extends Panel {
     }
     
     protected SiteData getSiteData(){
-        return ((IRepositoryServiceProvider)getApplication()).getRepositoryService().getSiteData();
+        return getRepositoryService().getSiteData();
     }
     
 }

@@ -350,7 +350,7 @@ public class MultiFileUploadField extends FormComponentPanel implements IHeaderC
 			}
 			else
 			{
-				return getString(RESOURCE_LIMITED, Model.of(Collections.singletonMap("max",
+				return getString(RESOURCE_LIMITED, Model.ofMap(Collections.singletonMap("max",
 					new Integer(max))));
 			}
 		}

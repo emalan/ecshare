@@ -4,13 +4,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.markup.html.panel.Panel;
 
 import com.madalla.bo.blog.BlogData;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
+import com.madalla.service.IDataServiceProvider;
+import com.madalla.webapp.panel.CmsPanel;
 
-public class BlogHomePanel extends Panel{
+public class BlogHomePanel extends CmsPanel{
 
 	private static final long serialVersionUID = 1548972105193261539L;
 	private static Log log = LogFactory.getLog(BlogHomePanel.class);
@@ -19,7 +18,7 @@ public class BlogHomePanel extends Panel{
 		super(id);
 		
 		//Instantiation checks
-		if (!(getApplication() instanceof IRepositoryServiceProvider)){
+		if (!(getApplication() instanceof IDataServiceProvider)){
 			log.error("BlogHomePanel instanciation check failed on instanceof check.");
 			throw new WicketRuntimeException("BlogHomePanel needs your wicket Application class to extend " +
 					"the abstract class CmsApplication.");
@@ -36,10 +35,6 @@ public class BlogHomePanel extends Panel{
 		add(displayPanel);
 		add(new BlogArchivePanel("blogExplorerPanel", blog, displayPanel));
 	}
-
-    private IRepositoryService getRepositoryService(){
-    	return ((IRepositoryServiceProvider)getApplication()).getRepositoryService();
-    }
 
 
 }

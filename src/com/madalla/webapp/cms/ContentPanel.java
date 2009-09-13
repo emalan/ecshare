@@ -1,8 +1,8 @@
 package com.madalla.webapp.cms;
 
+import static com.madalla.webapp.PageParams.RETURN_PAGE;
 import static com.madalla.webapp.cms.ContentParameters.CONTENT_ID;
 import static com.madalla.webapp.cms.ContentParameters.CONTENT_NODE;
-import static com.madalla.webapp.PageParams.RETURN_PAGE;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,15 +14,13 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.PageData;
-import com.madalla.service.IRepositoryService;
-import com.madalla.service.IRepositoryServiceProvider;
 import com.madalla.webapp.pages.ContentEditPage;
+import com.madalla.webapp.panel.CmsPanel;
 
 /**
  * Panel to display content from Repository.
@@ -32,7 +30,7 @@ import com.madalla.webapp.pages.ContentEditPage;
  * @author Eugene Malan
  *
  */
-public class ContentPanel extends Panel {
+public class ContentPanel extends CmsPanel {
     private static final long serialVersionUID = 1L;
     private Log log = LogFactory.getLog(this.getClass());
     private Class<? extends Page> returnPage;
@@ -52,9 +50,9 @@ public class ContentPanel extends Panel {
         this.nodeId = name;
         this.returnPage = returnPage;
         log.debug("Content Panel being created for node=" + node + " id=" + id);
-        PageData page = getRepositoryservice().getPage(node);
-        ContentData content = getRepositoryservice().getContent(page, nodeId);
-        String contentBody = getRepositoryservice().getContentText(content, getSession().getLocale());
+        PageData page = getRepositoryService().getPage(node);
+        ContentData content = getRepositoryService().getContent(page, nodeId);
+        String contentBody = getRepositoryService().getContentText(content, getSession().getLocale());
         Component contentBlock = new ContentContainer("contentBlock", nodeId, node, contentBody);
         contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
             private static final long serialVersionUID = -3131361470864509715L;
@@ -94,9 +92,9 @@ public class ContentPanel extends Panel {
 				private static final long serialVersionUID = 6930776696843471636L;
 
 				protected void onBeforeRender(){
-                    PageData page = getRepositoryservice().getPage(nodeName);
-                    ContentData content = getRepositoryservice().getContent(page, nodeId);
-                    String contentBody = getRepositoryservice().getContentText(content, getSession().getLocale());
+                    PageData page = getRepositoryService().getPage(nodeName);
+                    ContentData content = getRepositoryService().getContent(page, nodeId);
+                    String contentBody = getRepositoryService().getContentText(content, getSession().getLocale());
                     log.debug("onBeforeRender - setting new Content.");
                     contentModel.setObject(contentBody);
                     super.onBeforeRender();
@@ -126,10 +124,6 @@ public class ContentPanel extends Panel {
             add(link);
 
         }
-    }
-    
-    private IRepositoryService getRepositoryservice(){
-    	return ((IRepositoryServiceProvider) getApplication()).getRepositoryService();
     }
 
 }

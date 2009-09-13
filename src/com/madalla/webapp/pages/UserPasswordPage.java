@@ -4,7 +4,7 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.protocol.https.RequireHttps;
 
 import com.madalla.webapp.AdminPage;
-import com.madalla.webapp.Panels;
+import com.madalla.webapp.panel.Panels;
 
 @RequireHttps
 public class UserPasswordPage extends AdminPage {
