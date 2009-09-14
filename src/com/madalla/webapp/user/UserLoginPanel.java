@@ -1,25 +1,30 @@
 package com.madalla.webapp.user;
 
-import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.panel.Panel;
 
+import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.CmsSession;
-import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.LoginPanel;
-import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 
 public class UserLoginPanel extends Panel {
 
 	private static final long serialVersionUID = 5349334518027160490L;
-
+	
 	public UserLoginPanel(String id) {
+		this(id, new SecureCredentials());
+	}
+
+	public UserLoginPanel(String id, String username) {
+		this(id, new SecureCredentials().setUsername(username));
+	}
+	
+	private UserLoginPanel(String id, ICredentialHolder credentials){
 		super(id);
-		
-		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
-		add(Css.CSS_FORM);
-		
-		add(new LoginPanel("signInPanel", new SecureCredentials()){
+
+		//add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
+
+		add(new LoginPanel("signInPanel", credentials){
             private static final long serialVersionUID = 1L;
             
             public boolean signIn(String username, String password) {

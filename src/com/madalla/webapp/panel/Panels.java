@@ -185,11 +185,20 @@ public class Panels {
 	/**
 	 * User Login Panel - with login and lost password functionality
 	 * @param id - wicket id
-	 * @param parameters - including return Page
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserLoginPanel}
 	 */	
 	public static Panel userLoginPanel(String id) {
 		return new UserLoginPanel(id);
+	}
+	
+	/**
+	 * User Login Panel - with login and lost password functionality
+	 * @param id - wicket id
+	 * @param username - in case you already have the user name
+	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserLoginPanel}
+	 */	
+	public static Panel userLoginPanel(String id, String username) {
+		return new UserLoginPanel(id, username);
 	}
 
 	/**

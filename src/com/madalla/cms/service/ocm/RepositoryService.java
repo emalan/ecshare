@@ -535,6 +535,10 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 		return new IAuthenticator(){
 			UserData userData = null;
 			
+			public boolean authenticate(String username){
+				return isUserExists(username);
+			}
+			
 			public boolean authenticate(String user, char[] password) {
 				return authenticate(user, new String(password));
 			}
@@ -546,7 +550,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 					userData = getUser(username);
 					log.debug("authenticate - password="+password);
 					log.debug("authenticate - compare="+userData.getPassword());
-					if (userData.getPassword().equals(password)){
+					if (StringUtils.isNotEmpty(userData.getPassword()) && userData.getPassword().equals(password)){
 						List<UserSiteData> sites = getUserSiteEntries(userData);
 						for (UserSiteData siteData : sites){
 							if (siteData.getName().equals(site)){
@@ -557,6 +561,22 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 						    return true;
 						}
 					}
+				}
+				return false;
+			}
+
+			public boolean requiresSecureAuthentication(String username) {
+				if ("admin".equalsIgnoreCase(username)){
+					return true;
+				}
+				
+				//TODO Site will be able to require secure authentication
+				//for all users 
+				//or for only admin users
+				if (isUserExists(username)){
+					SiteData siteData = getSiteData();
+					UserData user = getUser(username);
+					return false;
 				}
 				return false;
 			}

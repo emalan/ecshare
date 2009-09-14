@@ -22,8 +22,9 @@ public class SecureCredentials implements ICredentialHolder, Serializable{
 		this.password = SecurityUtils.encrypt(password);
 	}
 
-	public void setUsername(String username) {
+	public ICredentialHolder setUsername(String username) {
 		this.username = username;
+		return this;
 	}
 
 }

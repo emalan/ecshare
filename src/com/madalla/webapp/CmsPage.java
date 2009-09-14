@@ -19,7 +19,9 @@ import com.madalla.service.IDataServiceProvider;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.LoginPanel;
+import com.madalla.webapp.pages.SecureLoginPage;
 import com.madalla.webapp.pages.UserLoginPage;
+import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.wicket.KeywordHeaderContributor;
 
 public class CmsPage extends WebPage {
@@ -81,7 +83,21 @@ public class CmsPage extends WebPage {
             });
 
             add(new LoginPanel("signInPanel", new SecureCredentials()){
-                private static final long serialVersionUID = 1L;
+            	private static final long serialVersionUID = 1L;
+            	
+            	@Override
+				protected void preSignIn(String username) {
+            		//TODO No secure login in development mode
+            		//if (getApplication().getConfigurationType().equals(Application.DEVELOPMENT)){
+            		//	return;
+            		//}
+            		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
+            		if (authenticator.requiresSecureAuthentication(username)){
+            			redirectToInterceptPage(new SecureLoginPage(new PageParameters(RETURN_PAGE + "=" + getPage().getClass().getName()), username));
+            		}
+				}
+                
+				@Override
                 public boolean signIn(String username, String password) {
                     CmsSession session = (CmsSession) getSession();
                     if (session.login(username, password)) {
@@ -91,6 +107,7 @@ public class CmsPage extends WebPage {
                     }
                 }
 
+                @Override
                 protected void onSignInSucceeded() {
                     // If login has been called because the user was not yet
                     // logged in, then continue to the original destination,

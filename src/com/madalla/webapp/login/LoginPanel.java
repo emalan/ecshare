@@ -85,10 +85,12 @@ public abstract class LoginPanel extends Panel
 			add(username = new TextField<String>("username", new PropertyModel<String>(credentials, "username")));
 			username.setRequired(true);
 			add(password = new PasswordTextField("password", new PropertyModel<String>(credentials,"password")));
-            username.setLabel(new Model<String>("User Name"));
-            password.setLabel(new Model<String>("Password"));
+ 
             add(new FormComponentLabel("usernameLabel",username));
             add(new FormComponentLabel("passwordLabel",password));
+            
+            password.setVisibilityAllowed(true);
+            password.setVisible(false);
 
 			// MarkupContainer row for remember me checkbox
 			final WebMarkupContainer rememberMeRow = new WebMarkupContainer("rememberMeRow");
@@ -140,6 +142,8 @@ public abstract class LoginPanel extends Panel
 		this.includeRememberMe = includeRememberMe;
 		
 		Form<Object> form = new SignInForm("signInForm", credentials);
+        username.setLabel(new Model<String>(getString("label.name")));
+        password.setLabel(new Model<String>(getString("label.password")));
 		add(form);
 		
 		final FeedbackPanel feedback = new FeedbackPanel("loginFeedback");
@@ -160,6 +164,7 @@ public abstract class LoginPanel extends Panel
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax submit called");
 				target.addComponent(feedback);
+				preSignIn(getUsername());
 				if (signIn(getUsername(), getPassword()))
 				{
 					feedback.info(getLocalizer().getString("signInFailed", this, "Success"));
@@ -253,6 +258,10 @@ public abstract class LoginPanel extends Panel
 	 * @return True if signin was successful
 	 */
 	public abstract boolean signIn(String username, String password);
+	
+	protected void preSignIn(String username){
+		
+	}
 	
 	protected void onSignInSucceeded(){
 	    // If login has been called because the user was not yet

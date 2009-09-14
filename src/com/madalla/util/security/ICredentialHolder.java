@@ -4,6 +4,6 @@ public interface ICredentialHolder {
 
 	String getUsername();
 	String getPassword();
-	void setUsername(String username);
+	ICredentialHolder setUsername(String username);
 	void setPassword(String password);
 }

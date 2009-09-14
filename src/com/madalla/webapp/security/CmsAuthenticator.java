@@ -35,4 +35,12 @@ public class CmsAuthenticator implements IAuthenticator {
         return false;
     }
 
+	public boolean authenticate(String user) {
+		return false;
+	}
+
+	public boolean requiresSecureAuthentication(String user) {
+		return false;
+	}
+
 }
