@@ -211,7 +211,7 @@ public class EditableResourceLink extends Panel {
 
         @Override
         public String getObject() {
-        	log.debug("StatusModel - checking status for id=" + id);
+        	//log.debug("StatusModel - checking status for id=" + id);
         	if (StringUtils.isNotEmpty(status)){
         		return status;
         	}
@@ -328,7 +328,7 @@ public class EditableResourceLink extends Panel {
 
             @Override
             protected void onBeforeRender() {
-            	log.debug("sharedresourceLink - checking status for id=" + data.getId());
+            	//log.debug("sharedresourceLink - checking status for id=" + data.getId());
    				
             	if (data == null){
             		log.error("data is null");

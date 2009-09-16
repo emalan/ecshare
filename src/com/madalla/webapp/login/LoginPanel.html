@@ -2,11 +2,13 @@
 <wicket:head>
     <style type="text/css">
     	form.signInForm div{clear: both; float: left; width: 100%;}
-    	form.signInForm div label {float: left;}
+    	form.signInForm div label, form.signInForm div a, form.signInForm div span {float: left;}
     	form.signInForm div input {float: left;}
     	form.signInForm div label {width:7em;}
     	form.signInForm div .buttonwrapper {margin-left: 7em; float: left;}
     	form.signInForm div .feedbackPanel {float: left;}
+    	form.signInForm .info {font-size: medium; padding-left: 15px;}
+    	form.signInForm .message {clear: both; padding-left: 15px; }
     </style>
 </wicket:head>
 <body>
@@ -15,6 +17,11 @@
             <div>
                 <label wicket:id="usernameLabel"><wicket:message key="label.name">Label Contents</wicket:message></label>
                 <input class="inputText" wicket:id="username" type="text" />
+                
+            </div>
+            <div>
+                <span class="info" wicket:id="lockedLabel">[label]</span><br/>
+                <a class="message" href="#" wicket:id="unlockUser"><wicket:message key="label.unlock">[label]</wicket:message></a>
             </div>
             <div>
                 <label wicket:id="passwordLabel"><wicket:message key="label.password">Label Contents</wicket:message></label>

@@ -82,7 +82,7 @@ public class CmsPage extends WebPage {
                 }
             });
 
-            add(new LoginPanel("signInPanel", new SecureCredentials()){
+            add(new LoginPanel("signInPanel", new SecureCredentials(), false){
             	private static final long serialVersionUID = 1L;
             	
             	@Override

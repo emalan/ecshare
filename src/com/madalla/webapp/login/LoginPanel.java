@@ -16,13 +16,16 @@
  */
 package com.madalla.webapp.login;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
@@ -32,6 +35,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.webapp.css.Css;
@@ -57,12 +61,17 @@ public abstract class LoginPanel extends Panel
 
 	/** Field for password. */
 	private PasswordTextField password;
-
+	private FormComponentLabel passwordLabel;
+	
 	/** True if the user should be remembered via form persistence (cookies) */
 	private boolean rememberMe = true;
 
 	/** Field for user name. */
 	private TextField<String> username;
+	private FormComponentLabel usernameLabel;
+	
+	private AjaxLink<String> unlockUser;
+	private Label lockedLabel;
     
 	/**
 	 * Sign in form.
@@ -86,25 +95,32 @@ public abstract class LoginPanel extends Panel
 			username.setRequired(true);
 			add(password = new PasswordTextField("password", new PropertyModel<String>(credentials,"password")));
  
-            add(new FormComponentLabel("usernameLabel",username));
-            add(new FormComponentLabel("passwordLabel",password));
+            add(usernameLabel = new FormComponentLabel("usernameLabel",username));
+            usernameLabel.setOutputMarkupId(true);
             
+            add(passwordLabel = new FormComponentLabel("passwordLabel",password));
+            passwordLabel.setVisibilityAllowed(true);
+            passwordLabel.setOutputMarkupId(true);
+            
+            password.setRequired(false);
+            password.setOutputMarkupId(true);
             password.setVisibilityAllowed(true);
-            password.setVisible(false);
 
 			// MarkupContainer row for remember me checkbox
 			final WebMarkupContainer rememberMeRow = new WebMarkupContainer("rememberMeRow");
+			rememberMeRow.setOutputMarkupId(true);
 			add(rememberMeRow);
 
 			// Add rememberMe checkbox
 			rememberMeRow.add(new CheckBox("rememberMe", new PropertyModel<Boolean>(LoginPanel.this,
 					"rememberMe")));
 
+			// Show remember me checkbox?
+			rememberMeRow.setVisible(includeRememberMe);
+
 			// Make form values persistent
 			setPersistent(rememberMe);
 
-			// Show remember me checkbox?
-			rememberMeRow.setVisible(includeRememberMe);
 			
 			//add(new SubmitLink("submitLink"));
 		}
@@ -133,7 +149,7 @@ public abstract class LoginPanel extends Panel
 	 *            True if form should include a remember-me checkbox
 	 * @see org.apache.wicket.Component#Component(String)
 	 */
-	public LoginPanel(final String id, ICredentialHolder credentials, final boolean includeRememberMe)
+	public LoginPanel(final String id, final ICredentialHolder credentials, final boolean includeRememberMe)
 	{
 		super(id);
 		
@@ -141,7 +157,7 @@ public abstract class LoginPanel extends Panel
 
 		this.includeRememberMe = includeRememberMe;
 		
-		Form<Object> form = new SignInForm("signInForm", credentials);
+		final Form<Object> form = new SignInForm("signInForm", credentials);
         username.setLabel(new Model<String>(getString("label.name")));
         password.setLabel(new Model<String>(getString("label.password")));
 		add(form);
@@ -149,6 +165,28 @@ public abstract class LoginPanel extends Panel
 		final FeedbackPanel feedback = new FeedbackPanel("loginFeedback");
 		feedback.setOutputMarkupId(true);
 		form.add(feedback);
+		
+		lockedLabel = new Label("lockedLabel", new StringResourceModel("label.locked", this, new Model<ICredentialHolder>(credentials)));
+		lockedLabel.setVisibilityAllowed(true);
+		lockedLabel.setVisible(false);
+		form.add(lockedLabel);
+		
+		unlockUser = new AjaxLink<String>("unlockUser"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				target.addComponent(form);
+				lockUserName(false);
+				credentials.setUsername("");
+			}
+
+		};
+		unlockUser.setVisibilityAllowed(true);
+		form.add(unlockUser);
+
+		//set up depending on if we have a username or not
+		lockUserName(StringUtils.isNotEmpty(credentials.getUsername()));
 
 		AjaxButton submit = new IndicatingAjaxButton("submitLink", form){
 
@@ -163,27 +201,40 @@ public abstract class LoginPanel extends Panel
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax submit called");
-				target.addComponent(feedback);
+				target.addComponent(form);
 				preSignIn(getUsername());
-				if (signIn(getUsername(), getPassword()))
-				{
-					feedback.info(getLocalizer().getString("signInFailed", this, "Success"));
-					onSignInSucceeded(target);
+				
+				if (StringUtils.isEmpty(getPassword())){
+					lockUserName(true);
+				} else {
+					if (signIn(getUsername(), getPassword())){
+						feedback.info(getLocalizer().getString("signInFailed", this, "Success"));
+						onSignInSucceeded(target);
+					} else {
+						feedback.error(getLocalizer().getString("signInFailed", this, "Sign in failed"));
+						target.addComponent(feedback);
+					}
+				
 				}
-				else
-				{
-					feedback.error(getLocalizer().getString("signInFailed", this, "Sign in failed"));
-					target.addComponent(feedback);
-				}
+				
 			}
 			
 		};
 		submit.setEnabled(true);
 
-		submit.setVisibilityAllowed(true);
+		//submit.setVisibilityAllowed(true);
 		form.add(submit);
 		form.add(new AttributeModifier("onSubmit", true, new Model<String>("document.getElementById('" + submit.getMarkupId() + "').onclick();return false;")));
 		
+	}
+	
+	private void lockUserName(boolean lock){
+		username.setVisible(!lock);
+		usernameLabel.setVisible(!lock);
+		unlockUser.setVisible(lock);
+		password.setVisible(lock);
+		passwordLabel.setVisible(lock);
+		lockedLabel.setVisible(lock);
 	}
 
 	/**

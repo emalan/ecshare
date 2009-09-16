@@ -1,6 +1,8 @@
 package com.madalla.util.security;
 
-public interface ICredentialHolder {
+import java.io.Serializable;
+
+public interface ICredentialHolder extends Serializable{
 
 	String getUsername();
 	String getPassword();
