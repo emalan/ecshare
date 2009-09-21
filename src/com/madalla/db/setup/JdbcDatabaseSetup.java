@@ -1,4 +1,4 @@
-package com.madalla.dao.utils;
+package com.madalla.db.setup;
 
 import java.io.InputStream;
 
@@ -15,7 +15,7 @@ import org.xml.sax.InputSource;
 
 /**
  * Creates derby database and schema.
- * @author exmalan
+ * @author Eugene Malan
  *
  */
 public class JdbcDatabaseSetup {

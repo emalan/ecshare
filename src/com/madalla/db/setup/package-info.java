@@ -6,4 +6,4 @@
  * 
  * @author Eugene Malan
  */
-package com.madalla.dao.utils;
+package com.madalla.db.setup;
