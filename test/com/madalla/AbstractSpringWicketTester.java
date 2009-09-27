@@ -22,10 +22,10 @@ public abstract class AbstractSpringWicketTester  extends AbstractDependencyInje
     	
     }
     
-    abstract protected List getTestConfigLocations();
+    abstract protected List<String> getTestConfigLocations();
     
     protected String[] getConfigLocations() {
-        List configLocations = getTestConfigLocations();
+        List<String> configLocations = getTestConfigLocations();
         configLocations.add("classpath:com/madalla/applicationContext-test.xml");
         return (String[])configLocations.toArray(new String[configLocations.size()]);
     }

@@ -13,7 +13,6 @@ import com.madalla.bo.SiteData;
 import com.madalla.bo.blog.BlogData;
 import com.madalla.bo.blog.BlogEntryData;
 import com.madalla.bo.blog.IBlogData;
-import com.madalla.bo.email.EmailData;
 import com.madalla.bo.email.EmailEntryData;
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.IAlbumData;
@@ -124,13 +123,12 @@ public interface IDataService {
 	TreeModel getAlbumImagesAsTree(final AlbumData album);
 	
 	// email
-	EmailData getEmail();
 
-	String createEmailEntry(final EmailData parent, DateTime dateTime, String name, String email, String comment);
+	void createEmailEntry(DateTime dateTime, String name, String email, String comment);
 	
 	EmailEntryData getEmailEntry(String id);
 	
-	void deleteEmailEntry(String id);
+	void deleteEmailEntry(EmailEntryData email);
 
 	List<EmailEntryData> getEmailEntries();
 
@@ -152,5 +150,7 @@ public interface IDataService {
     List<UserSiteData> getUserSiteEntries(UserData user);
     
     void saveUserSiteEntries(UserData user, List<SiteData> sites);
+    
+    UserSiteData getUserSite(UserData user, String name);
     
 }

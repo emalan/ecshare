@@ -24,7 +24,6 @@ import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.blog.BlogData;
 import com.madalla.bo.blog.BlogEntryData;
 import com.madalla.bo.blog.IBlogData;
-import com.madalla.bo.email.EmailData;
 import com.madalla.bo.email.EmailEntryData;
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.IAlbumData;
@@ -40,8 +39,6 @@ import com.madalla.bo.video.VideoPlayerData;
 import com.madalla.cms.bo.impl.ocm.Site;
 import com.madalla.cms.bo.impl.ocm.blog.Blog;
 import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
-import com.madalla.cms.bo.impl.ocm.email.Email;
-import com.madalla.cms.bo.impl.ocm.email.EmailEntry;
 import com.madalla.cms.bo.impl.ocm.image.Album;
 import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.image.ImageHelper;
@@ -57,6 +54,8 @@ import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.cms.service.ocm.template.RepositoryTemplate;
 import com.madalla.cms.service.ocm.template.RepositoryTemplateCallback;
 import com.madalla.cms.service.ocm.util.JcrOcmUtils;
+import com.madalla.db.dao.EmailEntry;
+import com.madalla.db.dao.EmailEntryDao;
 import com.madalla.image.ImageUtilities;
 import com.madalla.service.IDataService;
 import com.madalla.util.security.SecurityUtils;
@@ -88,6 +87,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 	private static final Log log = LogFactory.getLog(RepositoryService.class);
 
     private RepositoryTemplate repositoryTemplate;
+    private EmailEntryDao emailEntryDao;
     
     public void init(){
        	Session session;
@@ -432,45 +432,29 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     //*********************************
     //******  Data    *****************
     
-    public EmailData getEmail(){
-    	return (EmailData) repositoryTemplate.getParentObject(RepositoryType.EMAIL, "Email", new RepositoryTemplateCallback(){
-
-			@Override
-			public AbstractData createNew(String parentPath, String name) {
-				return new Email(parentPath,name);
-			}
-    		
-    	});
-    }
-    
-    public String createEmailEntry(final EmailData parent, DateTime dateTime, String name, String email, String comment){
-    	EmailEntry data = new EmailEntry(parent, dateTime.toString("yyyy-MM-dd'T'HHmmssSSS"));
+    public void createEmailEntry(DateTime dateTime, String name, String email, String comment){
+    	EmailEntry data = new EmailEntry();
     	data.setDateTime(dateTime);
     	data.setSenderName(name);
     	data.setSenderEmailAddress(email);
     	data.setSenderComment(comment);
-    	saveDataObject(data);
-    	return data.getId();
+    	emailEntryDao.create(data);
     }
         
-	public void deleteEmailEntry(String id) {
-		EmailEntryData data = getEmailEntry(id);
-		ocm.remove(data);
-		
+	public void deleteEmailEntry(EmailEntryData email) {
+		emailEntryDao.delete(email);
 	}
 
-	public EmailEntryData getEmailEntry(String path) {
-		if (StringUtils.isEmpty(path)) {
-			log.error("getEmailEntry - path is required.");
+	public EmailEntryData getEmailEntry(String id) {
+		if (StringUtils.isEmpty(id)) {
+			log.error("getEmailEntry - id is required.");
 			return null;
 		}
-		return (EmailEntryData) ocm.getObject(EmailEntry.class, path);
+		return emailEntryDao.find(id);
 	}
 
-    
-    @SuppressWarnings("unchecked")//another not-safe cast from Collection to List
 	public List<EmailEntryData> getEmailEntries(){
-    	return (List<EmailEntryData>) repositoryTemplate.getAll(RepositoryType.EMAILENTRY, getEmail());
+		return emailEntryDao.fetch();
     } 
 
     //**********************************
@@ -570,13 +554,10 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 					return true;
 				}
 				
-				//TODO Site will be able to require secure authentication
-				//for all users 
-				//or for only admin users
 				if (isUserExists(username)){
-					SiteData siteData = getSiteData();
 					UserData user = getUser(username);
-					return false;
+					UserSiteData userSite= getUserSite(user, site);
+					return Boolean.TRUE.equals(userSite.getRequiresAuthentication());
 				}
 				return false;
 			}
@@ -586,6 +567,17 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 	
 	public void saveUserSite(UserSite data){
 		saveDataObject(data);
+	}
+	
+	public UserSiteData getUserSite(UserData user, String name){
+		return (UserSiteData) repositoryTemplate.getOcmObject(RepositoryType.USERSITE, user, name, new RepositoryTemplateCallback(){
+
+			@Override
+			public AbstractData createNew(String parentPath, String name) {
+				return new UserSite(parentPath, name) ;
+			}
+			
+		});
 	}
 	
 	@SuppressWarnings("unchecked") //Unsafe cast
@@ -633,6 +625,10 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 	
 	public RepositoryTemplate getRepositoryTemplate(){
 		return repositoryTemplate;
+	}
+
+	public void setEmailEntryDao(EmailEntryDao emailEntryDao) {
+		this.emailEntryDao = emailEntryDao;
 	}
 
 }

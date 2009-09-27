@@ -2,29 +2,24 @@
 <!DOCTYPE database SYSTEM "http://db.apache.org/torque/dtd/database">
   <database name="ecdata">
     <table name="CHANGE_LOG">
-      <column name="CHANGE_DATE" primaryKey="true" required="true" type="DATE" size="10" autoIncrement="false"/>
-      <column name="USER_ID" primaryKey="false" required="true" type="VARCHAR" size="10" autoIncrement="false"/>
-      <column name="CATEGORY_NAME" primaryKey="false" required="true" type="VARCHAR" size="128" autoIncrement="false"/>
+      <column name="CHANGE_DATE" primaryKey="true" required="true" type="TIMESTAMP" autoIncrement="false"/>
+      <column name="USER_ID" primaryKey="false" required="true" type="VARCHAR" size="15" autoIncrement="false"/>
+      <column name="SITE_NAME" primaryKey="false" required="true" type="VARCHAR" size="15" autoIncrement="false"/>
+      <column name="OBJECT_ID" primaryKey="false" required="true" type="VARCHAR" size="40" autoIncrement="false"/>
     </table>
     <table name="SECURITY_LOG">
-      <column name="CATEGORY_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="CATEGORY_NAME" primaryKey="false" required="true" type="VARCHAR" size="128" autoIncrement="false"/>
+      <column name="LOG_DATE" primaryKey="true" required="true" type="TIMESTAMP" autoIncrement="false"/>
+      <column name="IP_ADDRESS" primaryKey="false" required="false" type="VARCHAR" size="15" autoIncrement="false"/>
+      <column name="USER_ID" primaryKey="false" required="true" type="VARCHAR" size="15" autoIncrement="false"/>
+      <column name="SITE_NAME" primaryKey="false" required="true" type="VARCHAR" size="15" autoIncrement="false"/>
+      <column name="TRANSACTION_TYPE" primaryKey="false" required="true" type="VARCHAR" size="15" autoIncrement="false"/>
     </table>
-    <table name="ENTRY">
-      <column name="ENTRY_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="ENTRY_DATE" primaryKey="false" required="true" type="DATE" size="10" autoIncrement="false"/>
-      <column name="ENTRY_TITLE" primaryKey="false" required="false" type="VARCHAR" size="128" autoIncrement="false"/>
-      <column name="ENTRY_KEYWORDS" primaryKey="false" required="false" type="VARCHAR" size="128" autoIncrement="false"/>
-      <column name="ENTRY_DESCRIPTION" primaryKey="false" required="false" type="VARCHAR" size="255" autoIncrement="false"/>
-      <column name="CATEGORY_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="SITE_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <foreign-key foreignTable="SITE" name="SQL080306041928991">
-        <reference local="SITE_ID" foreign="SITE_ID"/>
-      </foreign-key>
-    </table>
-    <table name="SITE">
-      <column name="SITE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="SITE_NAME" primaryKey="false" required="true" type="VARCHAR" size="128" autoIncrement="false"/>
-      <column name="DESCRIPTION" primaryKey="false" required="true" type="VARCHAR" size="128" autoIncrement="false"/>
+    <table name="EMAIL_RECORD">
+      <column name="ID" primaryKey="true" required="true" type="INTEGER" autoIncrement="true"/>
+      <column name="SENT_DATE" primaryKey="false" required="true" type="TIMESTAMP" autoIncrement="false"/>
+      <column name="SITE_NAME" primaryKey="false" required="true" type="VARCHAR" size="15" autoIncrement="false"/>
+      <column name="SENDER_NAME" primaryKey="false" required="true" type="VARCHAR" size="25" autoIncrement="false"/>
+      <column name="SENDER_EMAIL" primaryKey="false" required="true" type="VARCHAR" size="25" autoIncrement="false"/>
+      <column name="COMMENT" primaryKey="false" required="false" type="VARCHAR" size="256" autoIncrement="false"/>
     </table>
   </database>

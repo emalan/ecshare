@@ -3,6 +3,7 @@ package com.madalla.webapp;
 import static com.madalla.webapp.PageParams.RETURN_PAGE;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.Application;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
@@ -87,10 +88,9 @@ public class CmsPage extends WebPage {
             	
             	@Override
 				protected void preSignIn(String username) {
-            		//TODO No secure login in development mode
-            		//if (getApplication().getConfigurationType().equals(Application.DEVELOPMENT)){
-            		//	return;
-            		//}
+            		if (getApplication().getConfigurationType().equals(Application.DEVELOPMENT)){
+            			return;
+            		}
             		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
             		if (authenticator.requiresSecureAuthentication(username)){
             			redirectToInterceptPage(new SecureLoginPage(new PageParameters(RETURN_PAGE + "=" + getPage().getClass().getName()), username));

@@ -12,6 +12,7 @@ public class UserSite extends UserSiteData{
 	private static final long serialVersionUID = 1L;
 
 	@Field(path=true) private String id;
+	@Field private Boolean requiresAuthentication;
 	
 	public UserSite(){
 		
@@ -31,6 +32,14 @@ public class UserSite extends UserSiteData{
 	
 	public void setId(String id){
 		this.id = id;
+	}
+
+	public Boolean getRequiresAuthentication() {
+		return requiresAuthentication;
+	}
+	
+	public void setRequiresAuthentication(Boolean requiresAuthentication){
+		this.requiresAuthentication = requiresAuthentication;
 	}
 
 }

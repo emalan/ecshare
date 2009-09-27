@@ -6,4 +6,6 @@ public interface IUserSite {
 
 	String getId();
 	
+	Boolean getRequiresAuthentication();
+	
 }

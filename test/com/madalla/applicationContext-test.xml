@@ -6,32 +6,19 @@
     http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
     
-    <bean id="contentOcmTest" class="com.madalla.cms.bo.impl.ocm.blog.ContentOcmBlogTest">
-        <property name="jcrTemplate" ref="jcrTemplate"/>
-    </bean>
-    
-    <bean id="propertyConfigurer" 
-        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations">
-            <value>classpath:com/madalla/AbstractSpringWicketTester.properties</value>
-        </property>
-    </bean>
-    
-    <!-- These are defined in the client webapps so that they can decide which languages they support -->
-    <util:list id="siteLocales">
-    	<ref bean="french"/>
-    	<ref bean="afrikaans"/>
-	</util:list>
+    <bean id="dataSource"
+    	class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<value>org.apache.derby.jdbc.EmbeddedDriver</value>
+		</property>
+		<property name="url" value="jdbc:derby:database;create=true"/>
+	</bean>
 
-	<bean id="french" class="java.util.Locale">
-    	<constructor-arg value="fr"/>
-    	<constructor-arg value=""/>
-    	<constructor-arg value=""/>
-	</bean>
-	<bean id="afrikaans" class="java.util.Locale">
-    	<constructor-arg value="af"/>
-    	<constructor-arg value=""/>
-    	<constructor-arg value=""/>
-	</bean>
+   <bean id="databaseSetup" class="com.madalla.db.setup.JdbcDatabaseSetup" init-method="init">
+    	<property name="dataSource" ref="dataSource"/>
+    	<property name="schema">
+    		<value>classpath:com/madalla/db/setup/db-schema.xml</value>
+    	</property>
+    </bean>
     
 </beans>

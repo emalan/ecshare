@@ -176,8 +176,7 @@ public class EmailFormPanel extends CmsPanel {
     
     private void logEmail(String name, String email, String comment){
     	IDataService service = ((IDataServiceProvider)getApplication()).getRepositoryService();
-    	EmailData emailData = service.getEmail();
-    	service.createEmailEntry(emailData, new DateTime(), name, email, comment);
+    	service.createEmailEntry(new DateTime(), name, email, comment);
     }
     
 

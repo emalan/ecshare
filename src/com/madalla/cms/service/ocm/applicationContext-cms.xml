@@ -22,6 +22,7 @@
         init-method="init" scope="singleton">
         <property name="template" ref="jcrTemplate"/>
         <property name="site" value="${site.code}"/>
+        <property name="emailEntryDao" ref="emailEntryDao"/>
     </bean>
 	
 	<bean id="backupCreator" class="com.madalla.cms.service.jcr.RepositoryBackupCreator">

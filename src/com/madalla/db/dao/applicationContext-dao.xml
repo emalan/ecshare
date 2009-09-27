@@ -1,0 +1,11 @@
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+		"http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+
+    <bean id="emailEntryDao" class="com.madalla.db.dao.EmailEntryDao">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="site" value="${site.code}"/>
+    </bean>
+    
+</beans>
