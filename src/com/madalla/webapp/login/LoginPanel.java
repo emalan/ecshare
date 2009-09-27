@@ -204,7 +204,7 @@ public abstract class LoginPanel extends Panel
 				target.addComponent(form);
 				preSignIn(getUsername());
 				
-				if (StringUtils.isEmpty(getPassword())){
+				if (!isUserLocked()){
 					lockUserName(true);
 				} else {
 					if (signIn(getUsername(), getPassword())){
@@ -233,8 +233,13 @@ public abstract class LoginPanel extends Panel
 		usernameLabel.setVisible(!lock);
 		unlockUser.setVisible(lock);
 		password.setVisible(lock);
+		password.setRequired(lock);
 		passwordLabel.setVisible(lock);
 		lockedLabel.setVisible(lock);
+	}
+	
+	private boolean isUserLocked(){
+		return !username.isVisible();
 	}
 
 	/**

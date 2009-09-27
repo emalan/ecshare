@@ -15,6 +15,9 @@ public class SecurityUtils {
 	private static final Log log = LogFactory.getLog(SecurityUtils.class);
 
 	public static String encrypt(String string) {
+		if (string == null){
+			throw new RuntimeException("encrypt - Cannot encrypt Null.");
+		}
 		try {
 			MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 			messageDigest.update(string.getBytes("UTF-8"));

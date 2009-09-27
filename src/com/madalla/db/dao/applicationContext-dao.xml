@@ -8,4 +8,11 @@
         <property name="site" value="${site.code}"/>
     </bean>
     
+    <bean id="databaseSetup" class="com.madalla.db.setup.JdbcDatabaseSetup" init-method="init">
+    	<property name="dataSource" ref="dataSource"/>
+    	<property name="schema">
+    		<value>classpath:com/madalla/db/setup/db-schema.xml</value>
+    	</property>
+    </bean>
+    
 </beans>
