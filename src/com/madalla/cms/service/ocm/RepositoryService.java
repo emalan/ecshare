@@ -102,7 +102,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     	repositoryTemplate = new RepositoryTemplate(template, ocm, site);
     	
     	//Process data migration if necessary
-    	//RepositoryDataMigration.transformData(template, site);
+    	RepositoryDataMigration.transformData(template, site);
     	
     	ImageUtilities.validateImageIO();
 
