@@ -1,5 +1,7 @@
 package com.madalla.webapp.pages;
 
+import static com.madalla.webapp.PageParams.RETURN_PAGE;
+
 import org.apache.wicket.PageParameters;
 
 import com.madalla.webapp.AdminPage;
@@ -12,5 +14,13 @@ public class UserPasswordPage extends AdminPage {
 		super(params);
 		add(Panels.userPasswordPanel("adminPanel",params));
 	}
+
+	@Override
+	protected void setupMenu(PageParameters params) {
+		params.add(RETURN_PAGE, getApplication().getHomePage().getName());
+		super.setupMenu(params);
+	}
+	
+	
 
 }

@@ -38,7 +38,7 @@ public abstract class AdminPage extends WebPage {
         setupMenu(params);
 	}
 	
-	private void setupMenu(final PageParameters params){
+	protected void setupMenu(final PageParameters params){
 		add(new LoggedinBookmarkablePageLink("UserProfile", UserProfilePage.class, params, false).setAutoEnable(true));
 		add(new LoggedinBookmarkablePageLink("SiteAdmin", SiteAdminPage.class, params, true).setAutoEnable(true));
 		add(new LoggedinBookmarkablePageLink("Data", SiteDataPage.class, params, true).setAutoEnable(true));

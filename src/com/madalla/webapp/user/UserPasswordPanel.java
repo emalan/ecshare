@@ -19,6 +19,7 @@ import com.madalla.bo.security.UserData;
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.util.security.SecurityUtils;
+import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
@@ -101,10 +102,15 @@ public class UserPasswordPanel extends CmsPanel{
             @Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
-				target.addComponent(passwordFeedback);
-                user.setPassword(credentials.getPassword());
-                saveData(user);
-                form.info(getString("message.success"));
+				
+				//validation passed we can log user in
+				if (((CmsSession)getSession()).login(user.getName(), user.getPassword())){
+					target.addComponent(passwordFeedback);
+	                user.setPassword(credentials.getPassword());
+	                saveData(user);
+	                form.info(getString("message.success"));
+	                setResponsePage(getApplication().getHomePage());
+				}
 			}
 
             @Override
