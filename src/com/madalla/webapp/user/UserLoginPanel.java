@@ -6,6 +6,7 @@ import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.login.LoginPanel;
+import com.madalla.webapp.scripts.JavascriptResources;
 
 public class UserLoginPanel extends Panel {
 
@@ -22,7 +23,7 @@ public class UserLoginPanel extends Panel {
 	private UserLoginPanel(String id, ICredentialHolder credentials){
 		super(id);
 
-		//add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
+		add(JavascriptResources.ANIMATOR);
 
 		add(new LoginPanel("signInPanel", credentials){
             private static final long serialVersionUID = 1L;

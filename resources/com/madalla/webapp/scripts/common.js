@@ -13,7 +13,7 @@ Utils.xtractFile = function(data, allowed){
                 return {filename: "invalid file type", ext: null};
         }
 
-}
+
 
 function ecGet(id) {
     return typeof id == 'string' ? document.getElementById(id) : id;
