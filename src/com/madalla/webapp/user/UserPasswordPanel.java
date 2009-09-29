@@ -36,8 +36,10 @@ public class UserPasswordPanel extends CmsPanel{
         
         private static final long serialVersionUID = 9033980585192727266L;
         private final ValueMap properties = new ValueMap();
-        public PasswordForm(String id) {
+        public PasswordForm(String id, String pwd) {
             super(id);
+            
+            properties.add("existingPassword", pwd);
             
             FeedbackPanel existingFeedback = new FeedbackPanel("existingFeedback");
             add(existingFeedback);
@@ -56,6 +58,7 @@ public class UserPasswordPanel extends CmsPanel{
                 }
                 
             });
+            existingPassword.setResetPassword(false);
             
             
             FeedbackPanel newFeedback = new FeedbackPanel("newFeedback");
@@ -75,8 +78,11 @@ public class UserPasswordPanel extends CmsPanel{
             
         }
     }
-    
     public UserPasswordPanel(String id, String userName){
+    	this(id,userName,"");
+    }
+    
+    public UserPasswordPanel(String id, String userName, String existingPassword){
     	super(id);
     	
 		add(Css.CSS_FORM);
@@ -87,7 +93,7 @@ public class UserPasswordPanel extends CmsPanel{
         //Password Section
         
         //Form
-        Form<Object> passwordForm = new PasswordForm("passwordForm");
+        Form<Object> passwordForm = new PasswordForm("passwordForm", existingPassword);
         passwordForm.setOutputMarkupId(true);
         
         add(passwordForm);

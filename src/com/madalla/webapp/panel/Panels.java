@@ -218,7 +218,8 @@ public class Panels {
 	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserProfilePanel}
 	 */	
 	public static Panel userPasswordPanel(String id, PageParameters parameters) {
-		return new UserPasswordPanel(id, getPageParameter("user", parameters, "UserPasswordPanel"));
+		return new UserPasswordPanel(id, getPageParameter("user", parameters, "UserPasswordPanel"),
+				getPageParameter("pwd", parameters, "UserPasswordPanel"));
 	}
 	
 	/**
