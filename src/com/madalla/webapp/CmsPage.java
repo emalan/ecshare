@@ -68,7 +68,7 @@ public class CmsPage extends WebPage {
                         setResponsePage(getPage());
                     } else {
                         if (target != null){
-                            target.appendJavascript("wicketShow('loginPopup')");
+                            target.appendJavascript("var elm = wicketGet('loginPopup'); wicketShow(elm); elm.focus();");
                         } else {
                             error(getString("label.javascript.error"));
                         }

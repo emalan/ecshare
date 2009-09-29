@@ -39,6 +39,7 @@ import org.apache.wicket.model.StringResourceModel;
 
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.webapp.css.Css;
+import com.madalla.wicket.form.FocusOnLoadBehavior;
 
 
 /**
@@ -236,6 +237,11 @@ public abstract class LoginPanel extends Panel
 		password.setRequired(lock);
 		passwordLabel.setVisible(lock);
 		lockedLabel.setVisible(lock);
+		if (lock){
+			password.add(new FocusOnLoadBehavior());
+		} else {
+			username.add(new FocusOnLoadBehavior());
+		}
 	}
 	
 	private boolean isUserLocked(){
