@@ -49,7 +49,7 @@ public class ContentEntryPanel extends CmsPanel {
 
 		public ContentForm(final String name, IModel<ContentEntryData> model) {
 			super(name, model);
-			add(new TextArea<String>("text"));
+			add(new TextArea<String>("text").setOutputMarkupId(true));
 		}
 	}
 
@@ -70,7 +70,7 @@ public class ContentEntryPanel extends CmsPanel {
 		//tabs style sheet
 		add(CSSPackageResource.getHeaderContribution(ContentEntryPanel.class, "tabs.css"));
 		
-		
+		// Supported Languages
 		List<SiteLanguage> locales = getRepositoryService().getSiteData().getLocaleList();
 		Locale currentLocale = getSession().getLocale();
 		
@@ -78,11 +78,27 @@ public class ContentEntryPanel extends CmsPanel {
 		Map<String, Object> vars = setupTemplateVariables((CmsSession) getSession(), locales, currentLocale);
 		add(TextTemplateHeaderContributor.forJavaScript(this.getClass(),"ContentEntryPanel.js", Model.ofMap(vars)));
 		
-		
-		log.debug("init - surrentLocale="+currentLocale);
         PageData page = getRepositoryService().getPage(nodeName);
         final ContentData content = getRepositoryService().getContent(page, contentId);
         log.debug("init - content" + content);
+        
+//        //Temporary link to test AJAX unload of editor
+//        WebMarkupContainer testLink = new AjaxFallbackLink("testLink")
+//		{
+//
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			public void onClick(AjaxRequestTarget target)
+//			{
+//				if (target != null)
+//				{
+//					target.appendJavascript("removeEditors();");
+//				}
+//			}
+//
+//		};
+//		add(testLink);
         
 		//setup tabs
 		int selectedTab = 0;
@@ -99,8 +115,6 @@ public class ContentEntryPanel extends CmsPanel {
 
 		});
 
-		// Supported Languages
-		
 		for (final SiteLanguage siteLanguage : locales) {
 			if (siteLanguage.locale.equals(currentLocale)) {
 				selectedTab = tabs.size();
@@ -117,6 +131,16 @@ public class ContentEntryPanel extends CmsPanel {
 
 		}
 		TabbedPanel tabPanel = new TabbedPanel("contentEditor", tabs);
+		
+//		TabbedPanel tabPanel = new AjaxTabbedPanel("contentEditor", tabs){
+//
+//			@Override
+//			protected void onAjaxUpdate(AjaxRequestTarget target) {
+//				target.appendJavascript("addEditors();");
+//				
+//			}
+//			
+//		};
 		tabPanel.setSelectedTab(selectedTab);
 		add(tabPanel);
 	}

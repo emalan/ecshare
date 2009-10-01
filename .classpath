@@ -67,7 +67,11 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="wicket/wicket-auth-roles-1.4.1.jar"/>
 	<classpathentry kind="lib" path="wicket/wicket-datetime-1.4.1.jar"/>
-	<classpathentry kind="lib" path="wicket/wicket-extensions-1.4.1.jar"/>
+	<classpathentry kind="lib" path="wicket/wicket-extensions-1.4.1.jar" sourcepath="/Users/emalan/devlib/apache-wicket-1.4.1/src/wicket-extensions/src/main/java">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/Users/emalan/devlib/apache-wicket-1.4.1/apidocs/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="wicket/wicket-spring-1.4.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

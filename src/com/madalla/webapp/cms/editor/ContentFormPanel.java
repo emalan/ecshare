@@ -35,6 +35,8 @@ public class ContentFormPanel extends CmsPanel{
 	public ContentFormPanel(String name, final ContentData content, final Locale locale){
 		super(name);
 
+
+		
         contentEntry = getRepositoryService().getContentEntry(content, locale);
         log.debug("init - "+contentEntry);
 
@@ -76,6 +78,6 @@ public class ContentFormPanel extends CmsPanel{
 
         add(form);
 
-	}
+	}	
 
 }

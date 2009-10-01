@@ -29,13 +29,14 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.joda.time.DateTime;
 
+import tiny_mce.TinyMce;
+
 import com.madalla.bo.blog.BlogEntryData;
 import com.madalla.bo.blog.IBlogData;
 import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
 import com.madalla.webapp.blog.BlogEntryView;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.panel.CmsPanel;
-import com.madalla.webapp.scripts.tiny_mce.TinyMce;
 import com.madalla.wicket.form.AjaxValidationBehaviour;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 import com.madalla.wicket.form.ValidationStyleBehaviour;
