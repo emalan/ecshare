@@ -37,9 +37,9 @@ public class DroppableAjaxBehaviour extends AbstractTransformerBehavior {
 		
 		JavascriptFunction onDropFunction = new JavascriptFunction("dragged, dropped, event");
 		onDropFunction.addLine("console.log(dragged);").
-		addLine("console.log(dragged.readAttribute('dragId'));").
-		addLine("console.log(dropped);").
-		addLine("console.log(event);").
+		//addLine("console.log(dragged.readAttribute('dragId'));").
+		//addLine("console.log(dropped);").
+		//addLine("console.log(event);").
 		addLine("var dragId = dragged.readAttribute('dragId');").
 		addAjaxCallback(callback,"'&amp;dragId=' + dragId");
 		

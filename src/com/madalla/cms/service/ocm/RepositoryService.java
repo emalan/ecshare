@@ -102,7 +102,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     	repositoryTemplate = new RepositoryTemplate(template, ocm, site);
     	
     	//Process data migration if necessary
-    	RepositoryDataMigration.transformData(template, site);
+    	//RepositoryDataMigration.transformData(template, site);
     	
     	ImageUtilities.validateImageIO();
 
@@ -550,7 +550,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 			}
 
 			public boolean requiresSecureAuthentication(String username) {
-				if ("admin".equalsIgnoreCase(username)){
+				if ("admin".equalsIgnoreCase(username) && !site.equals("ecsite")){
 					return true;
 				}
 				

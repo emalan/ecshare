@@ -231,12 +231,12 @@ public class ContentLinkPanel extends CmsPanel{
 				ContentLinkPanel.formSubmit(session, data, service);
 
 				// Sleep to simulate time-consuming work
-				try {
-					Thread.sleep(10000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				try {
+//					Thread.sleep(10000);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 				log.debug("Done processing...");
 				uploadStatus.setIsUploading(false);
 			//} catch (InterruptedException e) {
