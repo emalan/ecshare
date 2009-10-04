@@ -42,19 +42,34 @@ public class AlbumPanel extends CmsPanel implements IHeaderContributor {
     
     private WebMarkupContainer container;
     private AlbumData album;
+    private boolean navigation = false;
+    
+    public AlbumPanel(String id, String albumName, Class<? extends Page> returnPage) {
+    	this(id, albumName, returnPage, false);
+    }
 
-	public AlbumPanel(String id, String albumName, Class<? extends Page> returnPage) {
+	public AlbumPanel(String id, String albumName, Class<? extends Page> returnPage, boolean navigation) {
 		super(id);
 
+		this.navigation = navigation;
+		
 		add(JavascriptPackageResource.getHeaderContribution(PROTOTYPE));
 		add(JavascriptResources.ANIMATOR);
         add(JavascriptPackageResource.getHeaderContribution(FAST_INIT));
-        add(JavascriptPackageResource.getHeaderContribution(CROSSFADE));
-        add(JavascriptPackageResource.getHeaderContribution(ScriptUtils.BANNER));
-        add(ScriptUtils.BANNER_CSS);
         add(Css.CSS_IMAGE);
+
+        if (navigation) {
+        	add(JavascriptPackageResource.getHeaderContribution(CROSSFADE));
+        	add(JavascriptPackageResource.getHeaderContribution(ScriptUtils.BANNER));
+        	add(ScriptUtils.BANNER_CSS);
+        } else {
+        	add(JavascriptPackageResource.getHeaderContribution(CROSSFADE));
+        	add(ScriptUtils.CROSSFADE_CSS);
+        }
         
         album = getRepositoryService().getAlbum(albumName);
+        album.setHeight(160);
+        album.setWidth(220);
         
         add(new LoggedinBookmarkablePageLink("adminLink", AlbumAdminPage.class, 
                 new PageParameters(ALBUM +"="+albumName+","+RETURN_PAGE+"="+returnPage.getName()), false, true));
@@ -78,8 +93,8 @@ public class AlbumPanel extends CmsPanel implements IHeaderContributor {
                         protected void onComponentTag(ComponentTag tag) {
                             super.onComponentTag(tag);
                             album.getHeight();
-                            tag.put("height", album.getHeight() == null ? ImageDefaults.DISPLAY_HEIGHT : album.getHeight());
-                            tag.put("width", album.getWidth() == null ? ImageDefaults.DISPLAY_WIDTH : album.getWidth());
+                            tag.put("height", album.getHeight() );
+                            tag.put("width", album.getWidth() );
                         }
 					    
 					};
@@ -122,13 +137,19 @@ public class AlbumPanel extends CmsPanel implements IHeaderContributor {
 	    return images;
 	}
 	
+
     public void renderHead(IHeaderResponse response) {
-        int interval = album.getInterval() == null ? ImageDefaults.DISPLAY_INTERVAL : album.getInterval();
-        int width = album.getWidth() == null ? ImageDefaults.DISPLAY_WIDTH : album.getWidth();
-        int height = album.getHeight() == null ? ImageDefaults.DISPLAY_HEIGHT : album.getHeight();
+        int interval = album.getInterval() ;
+        int width = album.getWidth() ;
+        int height = album.getHeight() ;
         String params = "{interval:"+interval+", height:"+height+", width: "+ width+"}";
         
-        //response.renderOnLoadJavascript("new Banner($('"+ container.getMarkupId() +"')," + params + ")");
+        if (navigation) {
+        	response.renderOnLoadJavascript("new Banner($('"+ container.getMarkupId() +"')," + params + ")");
+        } else {
+        	response.renderOnLoadJavascript("new Crossfade($('"+ container.getMarkupId() +"')," + params + ")");
+        }
+        
         
     }
 

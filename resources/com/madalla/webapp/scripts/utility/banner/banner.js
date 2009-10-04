@@ -16,8 +16,8 @@ var Banner = Class.create(Crossfade, {
 		$super(elm, Object.extend(Object.clone(Banner.defaults),options || {}));
 		this.bannerOptions = Object.extend(Object.clone(Banner.defaults),options || {});
 		$(elm).addClassName(this.bannerOptions.bannerStyle);
-		elm.style.height = this.bannerOptions.height + 20 + 'px';
-        elm.style.width = this.bannerOptions.width + 20 + 'px';
+		//elm.style.height = this.bannerOptions.height + 20 + 'px';
+        //elm.style.width = this.bannerOptions.width + 20 + 'px';
 		this.bannerId =  $(elm).id || 'banner';
 		var element = new Element('div', {id : this.bannerId+'-controls'});
 		element.addClassName(this.bannerOptions.controlsStyle);
@@ -77,7 +77,6 @@ var Banner = Class.create(Crossfade, {
 Banner.defaults = {
 	autoStart : false,
 	selectors : ['.bannerAuto'],
-	width : 450, height : 325, //in pixels - note: frame will be 20 px larger
 	bannerStyle : 'banner',
 	controlsStyle : 'bannerControls',
 	controlStyle : 'bannerControl',

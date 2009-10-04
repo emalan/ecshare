@@ -10,8 +10,14 @@
 </wicket:head>
 <body>
     <wicket:panel>
-
         <form wicket:id="albumForm">
+            <input wicket:id="title"/>
+            <input wicket:id="interval"/>
+            <input wicket:id="height"/>
+            <input wicket:id="width"/>
+        </form>
+
+        <form wicket:id="imagesForm">
             <span wicket:id="albumFeedback"></span>
             <div wicket:id="albumTreeTable" class="treeTable">
             </div>

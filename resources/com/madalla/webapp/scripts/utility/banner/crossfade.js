@@ -40,6 +40,8 @@ var Crossfade = Class.create({
 		this.counter = 0;
 		this.prevSlide = null;
 		this.options = Object.extend(Object.clone(Crossfade.defaults),options || {});
+		this.elm.style.height = this.options.height + 20 + 'px';
+        this.elm.style.width = this.options.width + 20 + 'px';
 		this.options.interval = Math.max(2,this.options.interval);
 		this.elm.makePositioned();
 		this.slides = this.elm.immediateDescendants();
@@ -151,6 +153,7 @@ Crossfade.defaults = {
 	autoLoad : true,
 	autoStart : true,
 	random : false,
+	//width : 450, height : 325, //in pixels - note: frame will be 20 px larger
 	randomClassName : 'random',
 	selectors : ['.crossfade'],
 	imageLoadSelector : 'a.loadimage',

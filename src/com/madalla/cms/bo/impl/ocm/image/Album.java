@@ -7,6 +7,7 @@ import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
 
 import com.madalla.bo.image.AlbumData;
+import com.madalla.webapp.images.ImageDefaults;
 
 @Node
 public class Album extends AlbumData implements Serializable{
@@ -56,11 +57,11 @@ public class Album extends AlbumData implements Serializable{
 	}
 
     public Integer getHeight() {
-        return height;
+        return height == null ? ImageDefaults.DISPLAY_HEIGHT : height;
     }
 
     public Integer getWidth() {
-        return width;
+        return width == null ? ImageDefaults.DISPLAY_WIDTH : width;
     }
 
     public void setHeight(Integer height) {
@@ -72,7 +73,7 @@ public class Album extends AlbumData implements Serializable{
     }
 
     public Integer getInterval() {
-        return interval;
+        return interval == null ? ImageDefaults.DISPLAY_INTERVAL : interval;
     }
 
     public void setInterval(Integer interval) {

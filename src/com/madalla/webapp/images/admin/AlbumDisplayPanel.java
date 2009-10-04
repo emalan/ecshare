@@ -16,28 +16,50 @@ import org.apache.wicket.extensions.markup.html.tree.table.TreeTable;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Alignment;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Unit;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.validation.validator.RangeValidator;
 
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
+import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.DraggableAjaxBehaviour;
 import com.madalla.wicket.DroppableAjaxBehaviour;
 
-class AlbumDisplayPanel extends Panel {
+class AlbumDisplayPanel extends CmsPanel {
 	
 	private static final long serialVersionUID = 1L;
 	private final static Log log = LogFactory.getLog(AlbumDisplayPanel.class);
 	
+	private class AlbumForm extends Form<AlbumData>{
+		public AlbumForm(String id, IModel<AlbumData> model) {
+			super(id);
+			
+			add(new TextField<String>("title"));
+			add(new TextField<Integer>("interval").add(new RangeValidator<Integer>(1,30)));
+			add(new TextField<Integer>("height").add(new RangeValidator<Integer>(50,700)));
+			add(new TextField<Integer>("width").add(new RangeValidator<Integer>(100,950)));
+			
+		}
+
+		private static final long serialVersionUID = 1L;
+		
+	}
+	
 	public AlbumDisplayPanel(String id, final String albumName) {
 		super(id);
 		
-		final Form<Object> form = new Form<Object>("albumForm");
+		final Form<AlbumData> albumForm = new AlbumForm("albumForm", new CompoundPropertyModel<AlbumData>(getAlbum(albumName)));
+		add(albumForm);
+		
+		final Form<Object> form = new Form<Object>("imagesForm");
 		
 		form.add(new ComponentFeedbackPanel("albumFeedback", form));
 		
@@ -83,7 +105,7 @@ class AlbumDisplayPanel extends Panel {
 			protected void respond(final AjaxRequestTarget target) {
 				String dragId = DraggableAjaxBehaviour.getDraggablesId(getRequest());
 				log.debug("something dropped. arg="+dragId);
-				IAlbumData album = getRepositoryService().getAlbum(albumName);
+				IAlbumData album = getAlbum(albumName);
 		    	getRepositoryService().addImageToAlbum(album, dragId);
 		    	form.info("Success! Image saved to album.");
 		    	target.addComponent(tree);
@@ -99,9 +121,8 @@ class AlbumDisplayPanel extends Panel {
 		add(form);
 	}
 	
-	private IDataService getRepositoryService(){
-		IDataServiceProvider provider = (IDataServiceProvider)getApplication();
-		return provider.getRepositoryService();
+	private AlbumData getAlbum(String name){
+		return getRepositoryService().getAlbum(name);
 	}
 	
 	private TreeModel getAlbumImagesTree(AlbumData albumData){
