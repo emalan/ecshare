@@ -18,7 +18,7 @@ import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Unit;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -27,8 +27,6 @@ import org.apache.wicket.validation.validator.RangeValidator;
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.ImageData;
-import com.madalla.service.IDataService;
-import com.madalla.service.IDataServiceProvider;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.DraggableAjaxBehaviour;
 import com.madalla.wicket.DroppableAjaxBehaviour;
@@ -43,8 +41,17 @@ class AlbumDisplayPanel extends CmsPanel {
 			super(id);
 			
 			add(new TextField<String>("title"));
+			
+			FeedbackPanel intervalFeedback = new FeedbackPanel("intervalFeedback");
+			add(intervalFeedback);
 			add(new TextField<Integer>("interval").add(new RangeValidator<Integer>(1,30)));
+			
+			FeedbackPanel heightFeedback = new FeedbackPanel("heightFeedback");
+			add(heightFeedback);
 			add(new TextField<Integer>("height").add(new RangeValidator<Integer>(50,700)));
+			
+			FeedbackPanel widthFeedback = new FeedbackPanel("widthFeedback");
+			add(widthFeedback);
 			add(new TextField<Integer>("width").add(new RangeValidator<Integer>(100,950)));
 			
 		}

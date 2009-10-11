@@ -11,10 +11,25 @@
 <body>
     <wicket:panel>
         <form wicket:id="albumForm">
-            <input wicket:id="title"/>
-            <input wicket:id="interval"/>
-            <input wicket:id="height"/>
-            <input wicket:id="width"/>
+        	<div>
+        		<label><wicket:message key="label.title">Label Contents</wicket:message></label>
+            	<input wicket:id="title" class="inputText"/>
+            </div>
+            <div>
+            	<label><wicket:message key="label.interval">Label Contents</wicket:message></label>
+            	<input wicket:id="interval"/>
+            	<span class="feedbackPanel" wicket:id="intervalFeedback"></span>
+            </div>
+            <div>
+            	<label><wicket:message key="label.height">Label Contents</wicket:message></label>
+            	<input wicket:id="height"/>
+            	<span class="feedbackPanel" wicket:id="heightFeedback"></span>
+            </div>
+            <div>
+            	<label><wicket:message key="label.width">Label Contents</wicket:message></label>
+            	<input wicket:id="width"/>
+            	<span class="feedbackPanel" wicket:id="widthFeedback"></span>
+            </div>
         </form>
 
         <form wicket:id="imagesForm">
