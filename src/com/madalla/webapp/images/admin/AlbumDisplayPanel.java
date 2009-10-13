@@ -7,8 +7,10 @@ import javax.swing.tree.TreeNode;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.markup.html.tree.table.AbstractTreeColumn;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation;
 import org.apache.wicket.extensions.markup.html.tree.table.IColumn;
@@ -16,9 +18,9 @@ import org.apache.wicket.extensions.markup.html.tree.table.TreeTable;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Alignment;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Unit;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -30,6 +32,7 @@ import com.madalla.bo.image.ImageData;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.DraggableAjaxBehaviour;
 import com.madalla.wicket.DroppableAjaxBehaviour;
+import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
 
 class AlbumDisplayPanel extends CmsPanel {
 	
@@ -38,21 +41,21 @@ class AlbumDisplayPanel extends CmsPanel {
 	
 	private class AlbumForm extends Form<AlbumData>{
 		public AlbumForm(String id, IModel<AlbumData> model) {
-			super(id);
+			super(id, model);
 			
 			add(new TextField<String>("title"));
 			
-			FeedbackPanel intervalFeedback = new FeedbackPanel("intervalFeedback");
-			add(intervalFeedback);
-			add(new TextField<Integer>("interval").add(new RangeValidator<Integer>(1,30)));
+			Component interval = new RequiredTextField<Integer>("interval").add(new RangeValidator<Integer>(1,30));
+			add(new ComponentFeedbackPanel("intervalFeedback",interval).setOutputMarkupId(true));
+			add(interval);
 			
-			FeedbackPanel heightFeedback = new FeedbackPanel("heightFeedback");
-			add(heightFeedback);
-			add(new TextField<Integer>("height").add(new RangeValidator<Integer>(50,700)));
-			
-			FeedbackPanel widthFeedback = new FeedbackPanel("widthFeedback");
-			add(widthFeedback);
-			add(new TextField<Integer>("width").add(new RangeValidator<Integer>(100,950)));
+			Component height = new RequiredTextField<Integer>("height").add(new RangeValidator<Integer>(50,700));
+			add(new ComponentFeedbackPanel("heightFeedback", height).setOutputMarkupId(true));
+			add(height);
+
+			Component width = new RequiredTextField<Integer>("width").add(new RangeValidator<Integer>(100,950)); 
+			add(new ComponentFeedbackPanel("widthFeedback", width).setOutputMarkupId(true));
+			add(width);
 			
 		}
 
@@ -65,10 +68,30 @@ class AlbumDisplayPanel extends CmsPanel {
 		
 		final Form<AlbumData> albumForm = new AlbumForm("albumForm", new CompoundPropertyModel<AlbumData>(getAlbum(albumName)));
 		add(albumForm);
+		AjaxButton submitLink = new AjaxValidationStyleSubmitButton("submitLink", albumForm) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				super.onError(target, form);
+			}
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				super.onSubmit(target, form);
+				saveData((AlbumData) form.getModelObject());
+				form.info(getString("message.success"));
+			}
+
+		};
+		submitLink.setOutputMarkupId(true);
+		albumForm.add(submitLink);
+		albumForm.add(new ComponentFeedbackPanel("albumFeedback", albumForm).setOutputMarkupId(true));
 		
 		final Form<Object> form = new Form<Object>("imagesForm");
 		
-		form.add(new ComponentFeedbackPanel("albumFeedback", form));
+		form.add(new ComponentFeedbackPanel("formFeedback", form).setOutputMarkupId(true));
 		
 		//Setting up Tree Table
 		IColumn column = new AbstractTreeColumn(new ColumnLocation(Alignment.LEFT,20, Unit.EM),"Images"){
@@ -91,8 +114,6 @@ class AlbumDisplayPanel extends CmsPanel {
 				column
 		};
 		
-		
-
 		IModel<TreeModel> treeModel = new LoadableDetachableModel<TreeModel>(){
 			private static final long serialVersionUID = 1L;
 

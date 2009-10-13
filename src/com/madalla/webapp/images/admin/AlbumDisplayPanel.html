@@ -5,35 +5,50 @@
         .droppable.hover {
             border: dashed thin #aaa;
         }
+        
+        form div label { width: 5em;}
+        
+        form div.formButtons .feedbackPanel {
+			margin-top:1em;
+		}
     
     </style>
 </wicket:head>
 <body>
     <wicket:panel>
+        <span class="adminHeading">
+			<wicket:message key="heading.album">[heading]</wicket:message>
+		</span>
         <form wicket:id="albumForm">
         	<div>
         		<label><wicket:message key="label.title">Label Contents</wicket:message></label>
-            	<input wicket:id="title" class="inputText"/>
+            	<input wicket:id="title" class="inputText" type="text"/>
             </div>
             <div>
             	<label><wicket:message key="label.interval">Label Contents</wicket:message></label>
-            	<input wicket:id="interval"/>
+            	<input wicket:id="interval" type="text" size="4"/>
             	<span class="feedbackPanel" wicket:id="intervalFeedback"></span>
             </div>
             <div>
             	<label><wicket:message key="label.height">Label Contents</wicket:message></label>
-            	<input wicket:id="height"/>
+            	<input wicket:id="height" type="text" size="4"/>
             	<span class="feedbackPanel" wicket:id="heightFeedback"></span>
             </div>
             <div>
             	<label><wicket:message key="label.width">Label Contents</wicket:message></label>
-            	<input wicket:id="width"/>
+            	<input wicket:id="width" type="text" size="4"/>
             	<span class="feedbackPanel" wicket:id="widthFeedback"></span>
+            </div>
+            <div class="formButtons">
+                    <span class="buttonwrapper">
+                        <a wicket:id="submitLink" class="orangebutton"><span><wicket:message key="label.save">Label Contents</wicket:message></span></a>
+                    </span>
+ 					<span wicket:id="albumFeedback"></span>
             </div>
         </form>
 
         <form wicket:id="imagesForm">
-            <span wicket:id="albumFeedback"></span>
+            <span wicket:id="formFeedback"></span>
             <div wicket:id="albumTreeTable" class="treeTable">
             </div>
         </form>

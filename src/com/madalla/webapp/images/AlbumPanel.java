@@ -68,8 +68,6 @@ public class AlbumPanel extends CmsPanel implements IHeaderContributor {
         }
         
         album = getRepositoryService().getAlbum(albumName);
-        album.setHeight(160);
-        album.setWidth(220);
         
         add(new LoggedinBookmarkablePageLink("adminLink", AlbumAdminPage.class, 
                 new PageParameters(ALBUM +"="+albumName+","+RETURN_PAGE+"="+returnPage.getName()), false, true));
