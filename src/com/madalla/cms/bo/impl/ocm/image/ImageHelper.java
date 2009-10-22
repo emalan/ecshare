@@ -23,8 +23,6 @@ import com.madalla.image.LoggingImageObserver;
 public class ImageHelper {
     private static final int MAX_WIDTH = 900;
     private static final int MAX_HEIGHT = 600;
-    private static final int DEFAULT_WIDTH = 400;
-    private static final int DEFAULT_HEIGHT = 266;
     private static final int THUMB_WIDTH = 90;
     private static final int THUMB_HEIGHT = 60;
     
@@ -33,15 +31,13 @@ public class ImageHelper {
 	private static final String IMAGE_FULL = "imageFull";
 	private static final String IMAGE_THUMB = "imageThumb";
 	
-	public static void resizeAlbumImage(JcrTemplate template, final String path){
-	    //TODO use default sizes setup in album
-	    //TODO resize all images in album
+	public static void resizeAlbumImage(JcrTemplate template, final String path, final int width, final int height){
 	    template.execute(new JcrCallback(){
 
             public Object doInJcr(Session session) throws RepositoryException {
                 Node node = (Node) session.getItem(path);
                 InputStream inputStream = node.getProperty(IMAGE_FULL).getStream();
-                node.setProperty(IMAGE_FULL, scaleAlbumImage(inputStream));
+                node.setProperty(IMAGE_FULL, scaleAlbumImage(inputStream, width, height));
                 session.save();
                 return null;
             }
@@ -85,9 +81,9 @@ public class ImageHelper {
         return ImageUtilities.scaleImageDownProportionately(inputStream, observer, THUMB_WIDTH, THUMB_HEIGHT);
     }
     
-    private static InputStream scaleAlbumImage(InputStream inputStream){
+    private static InputStream scaleAlbumImage(InputStream inputStream, int width, int height){
         LoggingImageObserver observer = new LoggingImageObserver(log);
-        return ImageUtilities.scaleImageDownProportionately(inputStream, observer, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        return ImageUtilities.scaleImageDownProportionately(inputStream, observer, width, height );
     }
 
 }

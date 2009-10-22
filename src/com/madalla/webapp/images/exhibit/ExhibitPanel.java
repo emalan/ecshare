@@ -10,14 +10,15 @@ public class ExhibitPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
     private static final String CONTENT = "content";
-    private static final String ALBUM = "album";
     private static final String NODE = "Exhibit";
 
     public ExhibitPanel(String id, Class<? extends Page> returnPage) {
         super(id);
         add(new ContentPanel(CONTENT + "1", id+"first", NODE, returnPage));
-        add(Panels.albumPanel(ALBUM, id, returnPage));
-        add(new ContentPanel(CONTENT + "2", id+"next", NODE, returnPage));
+        
+        Panel album = Panels.albumPanel("nested", id, returnPage);
+        Panel para2 = new ContentPanel(CONTENT + "2", id+"next", NODE, returnPage, album);
+        add(para2);
     }
 
 

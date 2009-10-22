@@ -124,4 +124,25 @@
 
 	</target>
 	
+	<target name="deploy-jar">
+		<echo message="Deploy server is : ${deployto.server}"></echo>
+		<scp todir="ubuntu@${deployto.server}:/vol/install/java/stage/jar/" keyfile="/Users/emalan/.ec2/emalan.pem" passphrase="" >
+			<fileset dir="jackrabbit">
+				<include name="**/*.jar"></include>
+			</fileset>
+		</scp>
+	</target>
+	
+	<target name="deploy-jars-prod" description="deploy jars to prod">
+		<property name="deployto.server" value="174.129.192.163"></property>
+	    <antcall target="deploy-jar">
+	    </antcall>
+	</target>
+
+	<target name="deploy-jars-dev" description="deploy jars to dev">
+		<property name="deployto.server" value="174.129.203.113"></property>
+	    <antcall target="deploy-jar">
+	    </antcall>
+	</target>
+	
 </project>

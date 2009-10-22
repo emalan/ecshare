@@ -41,7 +41,8 @@
             	</constructor-arg>
         	</bean>
     	</property>
-    	<property name="namespaces">
+    	<property name="skipExistingNamespaces" value="true" />
+	   	<property name="namespaces">
     	    <props>
     	        <prop key="ec">http://madalla.com/jcr</prop>
     	    </props>

@@ -26,6 +26,8 @@ import com.madalla.util.security.SecurityUtils;
  * Factory for creating Repository Services. Will also do some repository setup 
  * if neccessary.
  * 
+ * NOTE : At present this class is not used
+ * 
  * @author Eugene Malan
  *
  */

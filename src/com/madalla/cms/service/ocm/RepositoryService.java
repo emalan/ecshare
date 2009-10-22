@@ -217,7 +217,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 	    String path = album.getId() + "/" + original.getName();
 	    ocm.copy(original.getId(), path);
 	    ocm.save();
-	    ImageHelper.resizeAlbumImage(template, path);
+	    ImageHelper.resizeAlbumImage(template, path, album.getWidth(), album.getHeight());
 	}
 	
     public IImageData getImage(final String path) {

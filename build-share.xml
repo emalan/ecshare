@@ -59,5 +59,12 @@
 		</copy>
 	</target>
 	
+	<target name="deploy-war">
+		<echo message="Deploy server is : ${deployto.server}"></echo>
+		<echo message="war name : ${war.name}"></echo>
+		<scp file="${war.name}" todir="ubuntu@${deployto.server}:/vol/install/java/stage/war/" keyfile="/Users/emalan/.ec2/emalan.pem" passphrase="" >
+		</scp>
+	</target>
+	
 
 </project>
