@@ -113,12 +113,12 @@ public class RepositoryTemplate{
 	    		return parent.getPath();
 			}
 		});
-		Collection<? extends AbstractData> result = getQueryData(type.typeClass, parentPath);
+		Collection<? extends AbstractData> result = getQueryData(type.typeClass, parentPath, true);
         return result;
 	}
 	
 	public Collection<? extends AbstractData> getAll(final RepositoryType type, AbstractData parent) {
-		return getQueryData(type.typeClass, parent.getId());
+		return getQueryData(type.typeClass, parent.getId(), false);
 	}
 	
 	private Object getCreateOcmObject(final RepositoryType type, final String parentPath, final String name, final RepositoryTemplateCallback callback){
@@ -135,10 +135,14 @@ public class RepositoryTemplate{
 	}
 	
     @SuppressWarnings("unchecked") //filter will guarantee that only 'extends AbstractData' are returned
-	private Collection<? extends AbstractData> getQueryData(Class<? extends AbstractData> data, String path){
+	private Collection<? extends AbstractData> getQueryData(Class<? extends AbstractData> data, String path, boolean onlyChildren){
         QueryManager queryManager = ocm.getQueryManager();
         Filter filter = queryManager.createFilter(data);
-		filter.setScope(path+"//");
+        if (onlyChildren){
+    		filter.setScope(path+"/");
+        } else {
+    		filter.setScope(path+"//");
+        }
         Query query = queryManager.createQuery(filter);
         return  ocm.getObjects(query);
     }

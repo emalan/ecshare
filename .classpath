@@ -50,7 +50,7 @@
 	<classpathentry kind="lib" path="jackrabbit/jackrabbit-api-1.5.0.jar"/>
 	<classpathentry kind="lib" path="jackrabbit/jackrabbit-core-1.5.5.jar" sourcepath="/Users/emalan/devlib/jackrabbit-1.5.5/jackrabbit-core/src/main/java"/>
 	<classpathentry kind="lib" path="jackrabbit/jackrabbit-jcr-commons-1.5.5.jar"/>
-	<classpathentry kind="lib" path="jackrabbit/jackrabbit-ocm-1.5.3.jar"/>
+	<classpathentry kind="lib" path="jackrabbit/jackrabbit-ocm-1.5.3.jar" sourcepath="/Users/emalan/devlib/jackrabbit-1.5.5/jackrabbit-ocm/src/main/java"/>
 	<classpathentry kind="lib" path="jackrabbit/lucene-core-2.3.2.jar"/>
 	<classpathentry kind="lib" path="common/commons-io-1.4.jar"/>
 	<classpathentry kind="lib" path="jackrabbit/slf4j-api-1.5.3.jar"/>
