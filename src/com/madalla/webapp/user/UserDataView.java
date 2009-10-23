@@ -12,6 +12,7 @@ public class UserDataView extends UserData {
 	private String lastName;
 	private String password;
 	private Boolean admin;
+	private Boolean requiresAuth;
 
 	public Boolean getAdmin() {
 		return admin;
@@ -54,6 +55,12 @@ public class UserDataView extends UserData {
 	}
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+	public void setRequiresAuth(Boolean requiresAuth) {
+		this.requiresAuth = requiresAuth;
+	}
+	public Boolean getRequiresAuth() {
+		return requiresAuth;
 	}
 
 }

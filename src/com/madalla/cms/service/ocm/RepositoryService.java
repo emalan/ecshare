@@ -587,13 +587,15 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 		return list;
 	}
 	
-	public void saveUserSiteEntries(UserData user, List<SiteData> sites){
+	public void saveUserSiteEntries(UserData user, List<SiteData> sites, boolean auth){
 		log.debug("saveUserSiteEntries -"+sites);
 		for (UserSiteData userSite : getUserSiteEntries(user)){
 			deleteNode(userSite.getId());
 		}
 		for(SiteData site : sites){
-			saveUserSite(new UserSite(user.getId(), site.getName()));
+			UserSite userSite = new UserSite(user.getId(), site.getName());
+			userSite.setRequiresAuthentication(auth);
+			saveUserSite(userSite);
 		}
 	}
 

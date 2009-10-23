@@ -159,6 +159,7 @@ public class UserAdminPanel extends CmsPanel {
 			add(new TextField<String>("firstName", new PropertyModel<String>(user, "firstName")));
 			add(new TextField<String>("lastName", new PropertyModel<String>(user, "lastName")));
 			add(new CheckBox("adminMode", new PropertyModel<Boolean>(user, "admin")));
+			add(new CheckBox("requiresAuth", new PropertyModel<Boolean>(user, "requiresAuth")));
 			sitesChoices = getRepositoryService().getSiteEntries();
 			add(new CheckBoxMultipleChoice<SiteData>("site", getSitesModel() ,
 					sitesChoices, new ChoiceRenderer<SiteData>("name")));
@@ -306,7 +307,7 @@ public class UserAdminPanel extends CmsPanel {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
 				target.addComponent(profileFeedback);
-				saveUserData(user);
+				saveUserData(user, user.getRequiresAuth());
 				form.info(getString("message.success"));
 				target.addComponent(welcomeLink);
 				target.addComponent(resetLink);
@@ -331,7 +332,7 @@ public class UserAdminPanel extends CmsPanel {
 				super.onSubmit(target, form);
 
 				target.addComponent(profileFeedback);
-				saveUserData(user);
+				saveUserData(user, user.getRequiresAuth());
 				form.info(getString("message.success"));
 
 				// clear User, hide Profile and enable Username
@@ -370,7 +371,7 @@ public class UserAdminPanel extends CmsPanel {
         String password = SecurityUtils.getGeneratedPassword();
         log.debug("resetPassword - username="+user.getName() + "password="+ password);
         user.setPassword(SecurityUtils.encrypt(password));
-        saveUserData(user);
+        saveUserData(user, user.getRequiresAuth());
         return password;
 	}
 	
@@ -387,11 +388,12 @@ public class UserAdminPanel extends CmsPanel {
 		}
 	}
 	
-	private void saveUserData(UserData userData){
+	private void saveUserData(UserData userData, Boolean auth){
 		UserData dest = getRepositoryService().getUser(userData.getName());
 		BeanUtils.copyProperties(userData, dest);
 		saveData(dest);
-		getRepositoryService().saveUserSiteEntries(dest, sites);
+		//TODO get boolean from form
+		getRepositoryService().saveUserSiteEntries(dest, sites, auth);
 	}
 	
 	private void resetUserData(){
