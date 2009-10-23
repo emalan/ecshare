@@ -1,14 +1,20 @@
 package com.madalla.webapp.user;
 
-import org.apache.wicket.markup.html.panel.Panel;
+import static com.madalla.webapp.PageParams.RETURN_PAGE;
+
+import org.apache.wicket.Application;
+import org.apache.wicket.PageParameters;
 
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.login.LoginPanel;
+import com.madalla.webapp.pages.SecureLoginPage;
+import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.JavascriptResources;
+import com.madalla.webapp.security.IAuthenticator;
 
-public class UserLoginPanel extends Panel {
+public class UserLoginPanel extends CmsPanel {
 
 	private static final long serialVersionUID = 5349334518027160490L;
 	
@@ -28,6 +34,18 @@ public class UserLoginPanel extends Panel {
 		add(new LoginPanel("signInPanel", credentials){
             private static final long serialVersionUID = 1L;
             
+           	@Override
+			protected void preSignIn(String username) {
+        		if (getApplication().getConfigurationType().equals(Application.DEVELOPMENT)){
+        			return;
+        		}
+        		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
+        		if (authenticator.requiresSecureAuthentication(username)){
+        			redirectToInterceptPage(new SecureLoginPage(new PageParameters(RETURN_PAGE + "=" + getPage().getClass().getName()), username));
+        		}
+			}
+           	
+            @Override
             public boolean signIn(String username, String password) {
             	CmsSession session = (CmsSession) getSession();
                 if (session.login(username, password)) {

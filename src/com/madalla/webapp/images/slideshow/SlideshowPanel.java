@@ -1,5 +1,6 @@
 package com.madalla.webapp.images.slideshow;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.markup.html.CSSPackageResource;
@@ -50,7 +51,7 @@ public class SlideshowPanel extends Panel {
             private static final long serialVersionUID = 1L;
 
             protected List<ImageData> load() {
-                return getRepositoryService().getAlbumOriginalImages();
+                return getAlbumImages();
             }
             
             
@@ -62,6 +63,17 @@ public class SlideshowPanel extends Panel {
         add(listContainer);
 
 
+    }
+    
+	private List<ImageData> getAlbumImages() {
+        List<ImageData> images;
+        try {
+            images = getRepositoryService().getAlbumOriginalImages();
+        } catch (Exception e) {
+            images = Collections.emptyList();
+            error("Images corrupt");
+        }
+        return images;
     }
     
     private IDataService getRepositoryService(){
