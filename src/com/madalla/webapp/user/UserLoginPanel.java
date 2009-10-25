@@ -5,9 +5,11 @@ import static com.madalla.webapp.PageParams.RETURN_PAGE;
 import org.apache.wicket.Application;
 import org.apache.wicket.PageParameters;
 
+import com.madalla.bo.SiteData;
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.CmsSession;
+import com.madalla.webapp.email.EmailFormPanel;
 import com.madalla.webapp.login.LoginPanel;
 import com.madalla.webapp.pages.SecureLoginPage;
 import com.madalla.webapp.panel.CmsPanel;
@@ -58,6 +60,9 @@ public class UserLoginPanel extends CmsPanel {
             
             
         });
+		
+		SiteData site = getRepositoryService().getSiteData();
+		add(new EmailFormPanel("supportEmail", "Support email - sent from " + site.getName()));
 
 	}
 

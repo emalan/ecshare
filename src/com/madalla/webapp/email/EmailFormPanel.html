@@ -8,7 +8,7 @@
         /* form {width:100%;} */
 
         form div label {width:12em;}
-        form div textarea {width:15em; height:10em;}
+        form div textarea {width:30em; height:10em;}
         form div#captcha {float:left; width:15em; padding-top:10px;}
         form #captcha {clear:both; width:17em; text-align:right;}
         img#captcha {
@@ -18,16 +18,20 @@
 
         div.formButtons input {margin-bottom: 1em;}
         
+        p.info {width: 50em;}
+        
     </style>
 </wicket:head>
 <body>
     <wicket:panel>
     
         <form id="emailForm" wicket:id="emailForm">
-            
+            <div>
+                <p class="info"><wicket:message key="label.info">[label]</wicket:message></p>
+            </div>
             <div id="nameDiv">
                 <label for="name">
-                    <wicket:message key="label.name">Label Contents</wicket:message>
+                    <wicket:message key="label.name">[label]</wicket:message>
                 </label>
                 <input id="name" class="inputText" wicket:id="name" type="text" />
                 <span class="feedbackPanel" wicket:id="nameFeedback"/>
@@ -35,7 +39,7 @@
             </div>
             <div id="emailDiv">
                 <label for="email">
-                    <wicket:message key="label.email">Label Contents</wicket:message>
+                    <wicket:message key="label.email">[label]</wicket:message>
                 </label>
                 <input id="email" class="inputText" wicket:id="email" type="text" />
                 <span class="feedbackPanel" wicket:id="emailFeedback"/>
@@ -43,7 +47,7 @@
             </div>
             <div id="captchaDiv">
                 <label for="password">
-                    <wicket:message key="label.captcha">Label contents</wicket:message>
+                    <wicket:message key="label.captcha">[label]</wicket:message>
                 </label>
                 <input id="password" class="inputText" wicket:id="password" type="text" />
                 <span class="feedbackPanel" wicket:id="passwordFeedback"/>
@@ -52,7 +56,7 @@
             </div>
             <div id="commentDiv">
                 <label for="comment">
-                    <wicket:message key="label.comment">Label Contents</wicket:message>
+                    <wicket:message key="label.comment">[label]</wicket:message>
                 </label>
                 <textarea id="comment" class="inputText" wicket:id="comment" type="textArea" rows="7" cols="40">Content goes here</textarea>
             </div>

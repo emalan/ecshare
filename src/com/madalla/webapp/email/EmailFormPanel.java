@@ -28,7 +28,6 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.joda.time.DateTime;
 
 import com.madalla.bo.SiteData;
-import com.madalla.bo.email.EmailData;
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
 import com.madalla.service.IDataService;
