@@ -92,7 +92,8 @@ public class CmsPage extends WebPage {
 
             add(new LoginPanel("signInPanel", new SecureCredentials(), false){
             	private static final long serialVersionUID = 1L;
-            	
+            	private static final int loginMax = 4;
+            	private int count = 0;
             	@Override
 				protected void preSignIn(String username) {
             		if (getApplication().getConfigurationType().equals(Application.DEVELOPMENT)){
@@ -127,7 +128,10 @@ public class CmsPage extends WebPage {
 				@Override
 				protected void onSignInFailed(String username) {
 					super.onSignInFailed(username);
-					redirectToInterceptPage(new UserLoginPage(new PageParameters(RETURN_PAGE + "=" + getPage().getClass().getName()))); 
+					count++;
+					if (count >= loginMax) {
+						redirectToInterceptPage(new UserLoginPage(new PageParameters(RETURN_PAGE + "=" + getPage().getClass().getName()), username));
+					}
 				}
                 
                 
