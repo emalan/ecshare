@@ -11,4 +11,5 @@ public interface ISessionDataService {
 	
 	void validateTransaction(AbstractData data) throws DataAccessException;
 
+
 }

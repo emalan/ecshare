@@ -3,7 +3,7 @@ package com.madalla.webapp.security;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class CmsAuthenticator implements IAuthenticator {
+public class CmsAuthenticator implements IPasswordAuthenticator {
     private static final Log log = LogFactory.getLog(CmsAuthenticator.class);
 
     private Credentials credentials;

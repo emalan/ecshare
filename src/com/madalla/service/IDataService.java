@@ -26,6 +26,7 @@ import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
 import com.madalla.bo.video.VideoPlayerData;
 import com.madalla.webapp.security.IAuthenticator;
+import com.madalla.webapp.security.IPasswordAuthenticator;
 
 /**
  * Main API for accessing Data Objects from the Content Repository.
@@ -144,6 +145,8 @@ public interface IDataService {
     UserData getUser(String username);
     
     IAuthenticator getUserAuthenticator();
+    
+    IPasswordAuthenticator getPasswordAuthenticator(String username);
     
     List<UserData> getUsers();
     

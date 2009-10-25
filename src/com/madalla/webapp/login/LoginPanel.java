@@ -197,6 +197,7 @@ public abstract class LoginPanel extends Panel
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax onError called");
 				target.addComponent(feedback);
+				onSignInFailed(getUsername());
 			}
 
 			@Override
@@ -323,6 +324,14 @@ public abstract class LoginPanel extends Panel
 	
 	protected void preSignIn(String username){
 		
+	}
+	
+	protected void onSignInFailed(String username){
+		if (null == username) {
+			log.warn("onSignInFailed - no user name.");
+		} else {
+			log.warn("onSignInFailed - user = " + username);
+		}
 	}
 	
 	protected void onSignInSucceeded(){

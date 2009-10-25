@@ -60,6 +60,7 @@ import com.madalla.image.ImageUtilities;
 import com.madalla.service.IDataService;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.security.IAuthenticator;
+import com.madalla.webapp.security.IPasswordAuthenticator;
 
 /**
  * Content Service Implementation for Jackrabbit JCR Content Repository
@@ -515,13 +516,12 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 		return list;
 	}
 	
-	public IAuthenticator getUserAuthenticator() {
-		return new IAuthenticator(){
+	public IPasswordAuthenticator getPasswordAuthenticator(String username){
+		//TODO store authenticators and count attempts
+		//for locking account
+		return new IPasswordAuthenticator() {
+
 			UserData userData = null;
-			
-			public boolean authenticate(String username){
-				return isUserExists(username);
-			}
 			
 			public boolean authenticate(String user, char[] password) {
 				return authenticate(user, new String(password));
@@ -534,21 +534,38 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 					userData = getUser(username);
 					log.debug("authenticate - password="+password);
 					log.debug("authenticate - compare="+userData.getPassword());
+					
+					//validate password
 					if (StringUtils.isNotEmpty(userData.getPassword()) && userData.getPassword().equals(password)){
+						log.debug("authenticate - password validated. Now doing Site validation...");
 						List<UserSiteData> sites = getUserSiteEntries(userData);
 						for (UserSiteData siteData : sites){
 							if (siteData.getName().equals(site)){
+								log.debug("authenticate - site validation success.");
 								return true;
 							}
 						}
 						if (username.equals("admin") && site.equals("ecadmin")){
+							log.debug("authenticate - site validation success. Special case for admin user.");
 						    return true;
 						}
+						log.debug("authenticate - site validation failed!");
 					}
 				}
 				return false;
 			}
-
+			
+		};
+	}
+	
+	public IAuthenticator getUserAuthenticator() {
+		return new IAuthenticator(){
+			
+			
+			public boolean authenticate(String username){
+				return isUserExists(username);
+			}
+			
 			public boolean requiresSecureAuthentication(String username) {
 				if ("admin".equalsIgnoreCase(username) && !site.equals("ecsite")){
 					return true;

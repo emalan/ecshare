@@ -2,19 +2,26 @@ package com.madalla.webapp;
 
 import static com.madalla.webapp.PageParams.RETURN_PAGE;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.StringHeaderContributor;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.bo.SiteData;
+import com.madalla.bo.SiteLanguage;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.util.security.SecureCredentials;
@@ -116,6 +123,14 @@ public class CmsPage extends WebPage {
                         setResponsePage(getPage());
                     }
                 }
+
+				@Override
+				protected void onSignInFailed(String username) {
+					super.onSignInFailed(username);
+					redirectToInterceptPage(new UserLoginPage(new PageParameters(RETURN_PAGE + "=" + getPage().getClass().getName()))); 
+				}
+                
+                
             });
 
         } else {
@@ -148,7 +163,29 @@ public class CmsPage extends WebPage {
                     }
                 }
             });
+        }
+        
+        if (hasLangDropDown()) {
+        	List<SiteLanguage> langs = getRepositoryService().getSiteData().getLocaleList();
+        	langs.add(SiteLanguage.ENGLISH);
+        	
+        	final IModel<SiteLanguage> langModel = new Model<SiteLanguage>();
+        	langModel.setObject(SiteLanguage.getLanguage(getSession().getLocale().getLanguage()));
+        	DropDownChoice<SiteLanguage> choice = new DropDownChoice<SiteLanguage>("langSelect", langModel, langs);
+        	
+        	choice.setNullValid(false);
+        	choice.add(new OnChangeAjaxBehavior(){
+				private static final long serialVersionUID = 1L;
 
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {
+					getSession().setLocale(langModel.getObject().locale);
+					setResponsePage(getPage());
+				}
+        		
+        	});
+        	add(choice);
+        	
         }
 
 	}
@@ -173,6 +210,14 @@ public class CmsPage extends WebPage {
      */
     protected boolean hasLoginLink(){
         return false;
+    }
+    
+    /**
+     * 
+     * @return true if you want a lang dropdown for dynamic languae switching
+     */
+    protected boolean hasLangDropDown(){
+    	return false;
     }
 
     protected void setPageTitle(String pageTitle) {

@@ -11,7 +11,7 @@ public class CmsAuthenticatorTest extends TestCase {
         Credentials credentials = new Credentials(user,charPassword);
         authenticatorImpl.setCredentials(credentials);
         
-        IAuthenticator authenticator = authenticatorImpl;
+        IPasswordAuthenticator authenticator = authenticatorImpl;
         
         assertTrue(authenticator.authenticate("testUser","testPass1"));
         assertTrue(authenticator.authenticate("TESTUSER","testPass1"));

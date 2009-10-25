@@ -13,7 +13,7 @@ import com.madalla.service.IDataServiceProvider;
 import com.madalla.service.ISessionDataService;
 import com.madalla.service.ISessionDataServiceProvider;
 import com.madalla.webapp.cms.IContentAdmin;
-import com.madalla.webapp.security.IAuthenticator;
+import com.madalla.webapp.security.IPasswordAuthenticator;
 import com.madalla.webapp.upload.IFileUploadInfo;
 import com.madalla.webapp.upload.IFileUploadStatus;
 
@@ -57,7 +57,7 @@ public class CmsSession  extends WebSession implements IContentAdmin, ISessionDa
     
     public boolean login(String userName, String password) {
     	IDataService service = ((IDataServiceProvider) getApplication()).getRepositoryService();
-        IAuthenticator authenticator = service.getUserAuthenticator();
+        IPasswordAuthenticator authenticator = service.getPasswordAuthenticator(username);
         if (authenticator.authenticate(userName, password)){
         	UserData user = service.getUser(userName);
         	repositoryService.setUser(user);
