@@ -215,6 +215,7 @@ public abstract class LoginPanel extends Panel
 					} else {
 						feedback.error(getLocalizer().getString("signInFailed", this, "Sign in failed"));
 						target.addComponent(feedback);
+						onSignInFailed(getUsername());
 					}
 				
 				}

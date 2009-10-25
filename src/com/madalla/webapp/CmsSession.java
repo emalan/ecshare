@@ -57,13 +57,16 @@ public class CmsSession  extends WebSession implements IContentAdmin, ISessionDa
     
     public boolean login(String userName, String password) {
     	IDataService service = ((IDataServiceProvider) getApplication()).getRepositoryService();
-        IPasswordAuthenticator authenticator = service.getPasswordAuthenticator(username);
+        IPasswordAuthenticator authenticator = service.getPasswordAuthenticator(userName);
         if (authenticator.authenticate(userName, password)){
         	UserData user = service.getUser(userName);
-        	repositoryService.setUser(user);
-            cmsAdminMode = (user.getAdmin()==null) ? false : user.getAdmin() ;
-        	this.username = userName;
-            return true;
+        	if (service.isUserSite(user)){
+            	//store user data in session
+            	repositoryService.setUser(user);
+                cmsAdminMode = (user.getAdmin()==null) ? false : user.getAdmin() ;
+            	this.username = userName;
+                return true;
+        	}
         }
         return false;
     }

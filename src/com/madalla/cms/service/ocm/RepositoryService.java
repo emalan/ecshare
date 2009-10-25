@@ -61,6 +61,7 @@ import com.madalla.service.IDataService;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.webapp.security.IPasswordAuthenticator;
+import com.madalla.webapp.security.PasswordAuthenticator;
 
 /**
  * Content Service Implementation for Jackrabbit JCR Content Repository
@@ -89,6 +90,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 
     private RepositoryTemplate repositoryTemplate;
     private EmailEntryDao emailEntryDao;
+    private PasswordAuthenticator authenticator;
     
     public void init(){
        	Session session;
@@ -517,50 +519,31 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 	}
 	
 	public IPasswordAuthenticator getPasswordAuthenticator(String username){
-		//TODO store authenticators and count attempts
-		//for locking account
-		return new IPasswordAuthenticator() {
-
-			UserData userData = null;
-			
-			public boolean authenticate(String user, char[] password) {
-				return authenticate(user, new String(password));
+		UserData userData = getUser(username);
+		authenticator.addUser(username, userData);
+		return authenticator;
+		
+	}
+	
+	public boolean isUserSite(UserData userData){
+		log.debug("isUserSite - Doing Site validation...");
+		List<UserSiteData> sites = getUserSiteEntries(userData);
+		for (UserSiteData siteData : sites){
+			if (siteData.getName().equals(site)){
+				log.debug("authenticate - site validation success.");
+				return true;
 			}
-
-			public boolean authenticate(String username, String password) {
-				log.debug("authenticate - username="+username);
-				if (isUserExists(username)){
-					log.debug("authenticate - user found.");
-					userData = getUser(username);
-					log.debug("authenticate - password="+password);
-					log.debug("authenticate - compare="+userData.getPassword());
-					
-					//validate password
-					if (StringUtils.isNotEmpty(userData.getPassword()) && userData.getPassword().equals(password)){
-						log.debug("authenticate - password validated. Now doing Site validation...");
-						List<UserSiteData> sites = getUserSiteEntries(userData);
-						for (UserSiteData siteData : sites){
-							if (siteData.getName().equals(site)){
-								log.debug("authenticate - site validation success.");
-								return true;
-							}
-						}
-						if (username.equals("admin") && site.equals("ecadmin")){
-							log.debug("authenticate - site validation success. Special case for admin user.");
-						    return true;
-						}
-						log.debug("authenticate - site validation failed!");
-					}
-				}
-				return false;
-			}
-			
-		};
+		}
+		if (userData.getName().equals("admin") && site.equals("ecadmin")){
+			log.debug("isUserSite - site validation success. Special case for admin user.");
+		    return true;
+		}
+		log.debug("isUserSite - site validation failed!");
+		return false;
 	}
 	
 	public IAuthenticator getUserAuthenticator() {
 		return new IAuthenticator(){
-			
 			
 			public boolean authenticate(String username){
 				return isUserExists(username);
@@ -648,6 +631,14 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 
 	public void setEmailEntryDao(EmailEntryDao emailEntryDao) {
 		this.emailEntryDao = emailEntryDao;
+	}
+
+	public void setAuthenticator(PasswordAuthenticator authenticator) {
+		this.authenticator = authenticator;
+	}
+
+	public PasswordAuthenticator getAuthenticator() {
+		return authenticator;
 	}
 
 }

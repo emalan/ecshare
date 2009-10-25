@@ -94,6 +94,7 @@ public class CmsPage extends WebPage {
             	private static final long serialVersionUID = 1L;
             	private static final int loginMax = 4;
             	private int count = 0;
+            	
             	@Override
 				protected void preSignIn(String username) {
             		if (getApplication().getConfigurationType().equals(Application.DEVELOPMENT)){

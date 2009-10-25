@@ -148,6 +148,8 @@ public interface IDataService {
     
     IPasswordAuthenticator getPasswordAuthenticator(String username);
     
+    boolean isUserSite(UserData userData);
+    
     List<UserData> getUsers();
     
     List<UserSiteData> getUserSiteEntries(UserData user);
