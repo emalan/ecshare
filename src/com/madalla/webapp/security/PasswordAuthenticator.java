@@ -6,7 +6,6 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.WicketRuntimeException;
 import org.joda.time.DateTime;
 
 import com.madalla.bo.security.UserData;
@@ -58,8 +57,12 @@ public class PasswordAuthenticator implements IPasswordAuthenticator{
 				return true;
 			} else {
 				user.count++;
-				if(user.count > 8){
-					throw new WicketRuntimeException("User has exceeded allowed incorrect authenticate attempts.");
+				if(user.count > 5){
+					try {
+						Thread.sleep(10000); //delay 10 sec
+					} catch (InterruptedException e){
+						
+					}
 				}
 			}
 		}
