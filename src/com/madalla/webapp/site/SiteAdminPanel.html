@@ -7,7 +7,7 @@
         }
         form div p {
             padding-left: 15px;
-            padding-top: 15px;
+            padding-top: 5px;
             width: 30em;
             clear:both;
         }
@@ -44,16 +44,17 @@
                     <input style="width:30em;" wicket:id="metaDescription" class="inputText" type="text"/>
                 </div>
                 <div>
-                	<p class="info"><wicket:message key="info.keywords">Label Contents</wicket:message></p>
+                	
                     <label><wicket:message key="label.keywords">Label Contents</wicket:message></label>
                     <input style="width:30em;" wicket:id="metaKeywords" class="inputText" type="text"/>
+                    <p class="info"><wicket:message key="info.keywords">Label Contents</wicket:message></p>
                 </div>
                 <div id="locale">
-                    <p class="info"><wicket:message key="info.locale">Label Contents</wicket:message></p>
                 	<span valign="top" wicket:id="localeList">
         				<input type="checkbox">site 1</input>
         				<input type="checkbox">site 2</input>
     				</span>
+                    <p class="info"><wicket:message key="info.locale">Label Contents</wicket:message></p>
     			</div>
                 <div class="formButtons">
                     <span class="buttonwrapper">

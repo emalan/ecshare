@@ -47,7 +47,7 @@ public class LoggedinBookmarkablePageLink extends BookmarkablePageLink<Page>{
 	 * @param parameters
 	 * @param admin - set true if this is an admin only link
 	 * @param hide - set true if you want to hide the link if not enabled
-	 * @param super - set true if this is a super admin only link - getting cheesy - time for user roles
+	 * @param superAdmin - set true if this is a super admin only link - getting cheesy - time for user roles
 	 */
 	public LoggedinBookmarkablePageLink(String id, Class<? extends Page> pageClass, PageParameters parameters,
             final boolean admin, final boolean hide, final boolean superAdmin){

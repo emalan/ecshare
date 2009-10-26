@@ -36,6 +36,7 @@ public class UserPasswordPanel extends CmsPanel{
         
         private static final long serialVersionUID = 9033980585192727266L;
         private final ValueMap properties = new ValueMap();
+        
         public PasswordForm(String id, String pwd) {
             super(id);
             

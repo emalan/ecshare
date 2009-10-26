@@ -2,7 +2,6 @@
 <wicket:head>
     <style type="text/css">
         form div{width: 100%;}
-        div#password form div label {width: 14em;}
         div#profile form div label {width: 7em;}
         form div .buttonwrapper {margin-left: 10em;}
         form#passwordLink
@@ -12,57 +11,33 @@
     <wicket:panel>
     
         <div>
-            <a href="#" wicket:id="UserAdmin"><wicket:message key="label.user">Page</wicket:message></a>
+            <a href="#" wicket:id="UserAdmin"><wicket:message key="label.user">[label]</wicket:message></a>
         </div>
-    	<div id="password" class="adminSection">
-            <span class="adminHeading"><wicket:message key="heading.password">Label Contents</wicket:message></span>
-            <form id="password" wicket:id="passwordForm">
-                <div>    
-                    <label><wicket:message key="label.existingPassword">Label Contents</wicket:message></label>
-                    <input class="inputText" type="password" wicket:id="existingPassword"/>
-                    <span class="feedbackPanel" wicket:id="existingFeedback"></span>
-                </div>
-                <div>    
-                    <label><wicket:message key="label.newPassword">Label Contents</wicket:message></label>
-                    <input class="inputText" type="password" wicket:id="newPassword"/>
-                    <span class="feedbackPanel" wicket:id="newFeedback"></span>
-                </div>
-                <div>    
-                    <label><wicket:message key="label.confirmPassword">Label Contents</wicket:message></label>
-                    <input class="inputText" type="password" wicket:id="confirmPassword"/>
-                    <span class="feedbackPanel" wicket:id="confirmFeedback"></span>
-                </div>
-                <div class="formButtons">
-                    <input type="submit" style="display: none;">
-                    <span class="buttonwrapper">
-                        <a wicket:id="passwordSubmit" class="orangebutton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
-                    </span>
-                    <span class="feedbackPanel" wicket:id="passwordFeedback"></span>
-                </div>
-            </form>
-               
+        <div>
+            <a href="#" wicket:id="PasswordChange"><wicket:message key="label.password">[label]</wicket:message></a>
+            <p class="info"><wicket:message key="info.password">[label]</wicket:message></p>
         </div>
     	<div id="profile" class="adminSection">
             <hr/>                
     		<span class="adminHeading" wicket:id="profileHeading"></span>
 			<form id="profile" wicket:id="profileForm">
                 <div>
-                    <label for="email"><wicket:message key="label.email">Label Contents</wicket:message></label>
+                    <label for="email"><wicket:message key="label.email">[label]</wicket:message></label>
                     <input id="email" class="inputText" type="text" wicket:id="email"/>
                     <span class="feedbackPanel" wicket:id="emailFeedback"></span>
                 </div>
                	<div>    
-                   	<label><wicket:message key="label.firstName">Label Contents</wicket:message></label>
+                   	<label><wicket:message key="label.firstName">[label]</wicket:message></label>
                    	<input class="inputText" type="text" wicket:id="firstName"/>
                 </div>
                 <div>    
-                   	<label><wicket:message key="label.lastName">Label Contents</wicket:message></label>
+                   	<label><wicket:message key="label.lastName">[label]</wicket:message></label>
                    	<input class="inputText" type="text" wicket:id="lastName"/>
                 </div>
                 <div class="formButtons">
                     <input type="submit" style="display: none;">
                     <span class="buttonwrapper">
-                        <a wicket:id="profileSubmit" class="orangebutton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
+                        <a wicket:id="profileSubmit" class="orangebutton"><span><wicket:message key="label.submit">[label]</wicket:message></span></a>
                     </span>
                     <span class="feedbackPanel" wicket:id="profileFeedback"></span>
                 </div>

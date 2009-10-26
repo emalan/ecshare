@@ -219,7 +219,7 @@ public class Panels {
 	 */	
 	public static Panel userPasswordPanel(String id, PageParameters parameters) {
 		return new UserPasswordPanel(id, getPageParameter("user", parameters, "UserPasswordPanel"),
-				getPageParameter("pwd", parameters, "UserPasswordPanel"));
+				getPageParameter("pwd", parameters, "UserPasswordPanel",""));
 	}
 	
 	/**
@@ -274,12 +274,24 @@ public class Panels {
         }
         return returnPage;
 	}
+	
+	/** throws Exception if param not found */
 	private static String getPageParameter(String paramName, PageParameters parameters, String panel){
 		String paramValue = parameters.getString(paramName);
 		if (StringUtils.isEmpty(paramValue)){
-			error(panel + " - A pageParameter with value '"+ paramName+"' needs to supplied.");
+			error(panel + " - A pageParameter with value '"+ paramName+"' needs to be supplied.");
 		}
 		return paramValue;
+	}
+	
+	/** supply default value if param not found */
+	private static String getPageParameter(String paramName, PageParameters parameters, String panel, String defaultValue){
+		String paramValue = parameters.getString(paramName);
+		if (StringUtils.isEmpty(paramValue)){
+			return defaultValue;
+		} else {
+			return paramValue;
+		}
 	}
 
 }
