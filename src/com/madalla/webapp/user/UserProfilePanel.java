@@ -5,6 +5,7 @@ import static com.madalla.webapp.PageParams.RETURN_PAGE;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Application;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -70,7 +71,7 @@ public class UserProfilePanel extends CmsPanel{
 		
 		//User Change Link - secure or not depending on authenticator
 		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
-		if (authenticator.requiresSecureAuthentication(username)){
+		if (authenticator.requiresSecureAuthentication(username) && getApplication().getConfigurationType().equals(Application.DEPLOYMENT)){
 			add(new LoggedinBookmarkablePageLink("PasswordChange", SecurePasswordPage.class, params, false, false, false).setAutoEnable(true));
 		} else {
 			add(new LoggedinBookmarkablePageLink("PasswordChange", UserPasswordPage.class, params, false, false, false).setAutoEnable(true));
