@@ -409,12 +409,14 @@ public class UserAdminPanel extends CmsPanel {
 		map.put("lastName", StringUtils.defaultString(user.getLastName()));
 		map.put("name", user.getName());
 		map.put("password", resetPassword());
-		map.put("url",  StringUtils.defaultString(site.getUrl()));
+		String url = StringUtils.defaultString(site.getUrl());
+		map.put("url", url  );
 		map.put("description", StringUtils.defaultString(site.getMetaDescription()));
 		
 		MapModel<String, String> model = new MapModel<String,String>(map);
 		String message = getString(key, model);
-		if (StringUtils.isNotEmpty(map.get("url"))) {
+		
+		if (StringUtils.isNotEmpty(url)) {
 			message = message + getString("message.password", model);
 		}
 		log.debug("formatUserMessage - " + message);
