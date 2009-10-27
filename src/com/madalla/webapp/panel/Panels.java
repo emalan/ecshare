@@ -1,11 +1,11 @@
 package com.madalla.webapp.panel;
 
+import static com.madalla.webapp.PageParams.RETURN_PAGE;
 import static com.madalla.webapp.blog.BlogParameters.BLOG_ENTRY_ID;
 import static com.madalla.webapp.blog.BlogParameters.BLOG_NAME;
 import static com.madalla.webapp.cms.ContentParameters.CONTENT_ID;
 import static com.madalla.webapp.cms.ContentParameters.CONTENT_NODE;
 import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
-import static com.madalla.webapp.PageParams.RETURN_PAGE;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Page;
@@ -29,7 +29,6 @@ import com.madalla.webapp.images.exhibit.ExhibitPanel;
 import com.madalla.webapp.site.SiteAdminPanel;
 import com.madalla.webapp.site.SiteDataPanel;
 import com.madalla.webapp.user.UserAdminPanel;
-import com.madalla.webapp.user.UserLoginPanel;
 import com.madalla.webapp.user.UserPasswordPanel;
 import com.madalla.webapp.user.UserProfilePanel;
 
@@ -182,25 +181,6 @@ public class Panels {
         return new ExhibitPanel(id, returnPage);
     }
 	
-	/**
-	 * User Login Panel - with login and lost password functionality
-	 * @param id - wicket id
-	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserLoginPanel}
-	 */	
-	public static Panel userLoginPanel(String id) {
-		return new UserLoginPanel(id);
-	}
-	
-	/**
-	 * User Login Panel - with login and lost password functionality
-	 * @param id - wicket id
-	 * @param username - in case you already have the user name
-	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserLoginPanel}
-	 */	
-	public static Panel userLoginPanel(String id, String username) {
-		return new UserLoginPanel(id, username);
-	}
-
 	/**
 	 * User Profile Panel - change user info, reset password
 	 * @param id - wicket id

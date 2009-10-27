@@ -371,6 +371,7 @@ public class UserAdminPanel extends CmsPanel {
         String password = SecurityUtils.getGeneratedPassword();
         log.debug("resetPassword - username="+user.getName() + "password="+ password);
         user.setPassword(SecurityUtils.encrypt(password));
+        //TODO fix Null pointer
         saveUserData(user, user.getRequiresAuth());
         return password;
 	}
@@ -391,9 +392,10 @@ public class UserAdminPanel extends CmsPanel {
 	private void saveUserData(UserData userData, Boolean auth){
 		UserData dest = getRepositoryService().getUser(userData.getName());
 		BeanUtils.copyProperties(userData, dest);
+		log.debug("saveUserData - " + dest);
 		saveData(dest);
-		//TODO get boolean from form
-		getRepositoryService().saveUserSiteEntries(dest, sites, auth);
+		log.debug("saveUserData - save Site Entries");
+		getRepositoryService().saveUserSiteEntries(dest, sites, auth == null? false : auth.booleanValue());
 	}
 	
 	private void resetUserData(){
@@ -412,6 +414,9 @@ public class UserAdminPanel extends CmsPanel {
 		
 		MapModel<String, String> model = new MapModel<String,String>(map);
 		String message = getString(key, model);
+		if (StringUtils.isNotEmpty(map.get("url"))) {
+			message = message + getString("message.password", model);
+		}
 		log.debug("formatUserMessage - " + message);
 		return message;
 	}
