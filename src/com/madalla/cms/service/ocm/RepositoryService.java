@@ -550,7 +550,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 			}
 			
 			public boolean requiresSecureAuthentication(String username) {
-				if ("admin".equalsIgnoreCase(username) && !site.equals("ecsite")){
+				if ("admin".equalsIgnoreCase(username)){
 					return true;
 				}
 				
@@ -565,7 +565,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 		};
 	}
 	
-	public void saveUserSite(UserSite data){
+	public void saveUserSite(UserSiteData data){
 		saveDataObject(data);
 	}
 	
@@ -589,13 +589,22 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 	
 	public void saveUserSiteEntries(UserData user, List<SiteData> sites, boolean auth){
 		log.debug("saveUserSiteEntries -"+sites);
-		for (UserSiteData userSite : getUserSiteEntries(user)){
-			deleteNode(userSite.getId());
+		
+		List<UserSiteData> existingUserSites = getUserSiteEntries(user);
+		
+		List<SiteData> allSites = getSiteEntries();
+		for (SiteData site : allSites){
+			if (sites.contains(site)){
+				UserSiteData userSite = getUserSite(user, site.getName());
+				userSite.setRequiresAuthentication(auth);
+				saveUserSite(userSite);
+				//remove from existing list so we end up with list of ones to delete
+				existingUserSites.remove(userSite);
+			}
 		}
-		for(SiteData site : sites){
-			UserSite userSite = new UserSite(user.getId(), site.getName());
-			userSite.setRequiresAuthentication(auth);
-			saveUserSite(userSite);
+		//delete the rest
+		for (UserSiteData userSite : existingUserSites){
+			deleteNode(userSite.getId());
 		}
 	}
 

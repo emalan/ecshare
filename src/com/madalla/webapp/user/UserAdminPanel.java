@@ -366,7 +366,7 @@ public class UserAdminPanel extends CmsPanel {
 	}
 	
 	private boolean sendEmail(String subject, String message){
-        return getEmailSender().sendUserEmail("Reset Password", message, user.getEmail(), user.getFirstName());
+        return getEmailSender().sendUserEmail(subject, message, user.getEmail(), user.getFirstName());
 	}
 	
 	private String resetPassword(){
@@ -380,8 +380,12 @@ public class UserAdminPanel extends CmsPanel {
 	private void retrieveUserData(String username){
 		UserData src = getRepositoryService().getUser(username);
 		BeanUtils.copyProperties(src, user);
-		List<UserSiteData> list = getRepositoryService().getUserSiteEntries(src);
-		for(UserSiteData userSite : list){
+		List<UserSiteData> userSites = getRepositoryService().getUserSiteEntries(src);
+		for(UserSiteData userSite : userSites){
+			Boolean requiresAuth = userSite.getRequiresAuthentication();
+			if (requiresAuth != null && requiresAuth.booleanValue()) {
+				user.setRequiresAuth(true);
+			}
 			for(SiteData site : sitesChoices){
 				if (site.getName().equals(userSite.getName())){
 					sites.add(site);

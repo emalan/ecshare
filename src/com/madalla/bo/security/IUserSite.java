@@ -8,4 +8,6 @@ public interface IUserSite {
 	
 	Boolean getRequiresAuthentication();
 	
+	void setRequiresAuthentication(Boolean requiresAuthentication);
+	
 }
