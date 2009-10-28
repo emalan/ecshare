@@ -46,6 +46,7 @@ import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
+import com.madalla.service.IDataService;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.panel.CmsPanel;
@@ -240,8 +241,8 @@ public class UserAdminPanel extends CmsPanel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-            	SiteData site = getRepositoryService().getSiteData();
-          		if(sendEmail("Welcome Email", formatUserMessage("message.new", user, site))){
+            	String message = formatUserMessage("message.new");
+          		if(sendEmail("Welcome Email", message)){
                		welcomeFeedback.setDefaultModelObject(getString("welcome.success"));
            		} else {
            			welcomeFeedback.setDefaultModelObject(getString("welcome.fail"));
@@ -272,7 +273,8 @@ public class UserAdminPanel extends CmsPanel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                if (sendEmail("Reset Password", formatUserMessage("message.reset", user, getRepositoryService().getSiteData()))){
+            	String message = formatUserMessage("message.reset");
+                if (sendEmail("Reset Password", message)){
                 	resetFeedback.setDefaultModelObject(getString("reset.success"));
                 } else {
                 	resetFeedback.setDefaultModelObject(getString("reset.fail"));
@@ -371,7 +373,6 @@ public class UserAdminPanel extends CmsPanel {
         String password = SecurityUtils.getGeneratedPassword();
         log.debug("resetPassword - username="+user.getName() + "password="+ password);
         user.setPassword(SecurityUtils.encrypt(password));
-        //TODO fix Null pointer
         saveUserData(user, user.getRequiresAuth());
         return password;
 	}
@@ -403,23 +404,42 @@ public class UserAdminPanel extends CmsPanel {
 	    sites.clear();
 	}
 	
-	private String formatUserMessage(String key, UserDataView user, SiteData site) {
+	private String formatUserMessage(String key) {
+		IDataService service = getRepositoryService();
+		SiteData site = service.getSiteData();
+    	UserData userData = service.getUser(user.getName());
+    	
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("firstName", StringUtils.defaultString(user.getFirstName()));
 		map.put("lastName", StringUtils.defaultString(user.getLastName()));
 		map.put("name", user.getName());
 		map.put("password", resetPassword());
 		String url = StringUtils.defaultString(site.getUrl());
-		map.put("url", url  );
+		map.put("url", url );
 		map.put("description", StringUtils.defaultString(site.getMetaDescription()));
-		
+
 		MapModel<String, String> model = new MapModel<String,String>(map);
 		String message = getString(key, model);
 		
-		if (StringUtils.isNotEmpty(url)) {
-			message = message + getString("message.password", model);
+    	if (service.isUserSite(userData) && StringUtils.isNotEmpty(url)){
+    		UserSiteData userSite = service.getUserSite(userData, site.getName());
+    		if (userSite !=null && userSite.getRequiresAuthentication()){
+    			map.put("passwordChangePage", "com.madalla.webapp.pages.SecurePasswordPage");
+    		} else {
+    			map.put("passwordChangePage", "com.madalla.webapp.pages.UserPasswordPage");
+    		}
+    		message = message + getString("message.password", model);
+    	}
+    	List<UserSiteData> sites = service.getUserSiteEntries(userData);
+    	if (sites.size() > 0){
+    		message = message + getString("message.sites");
+    	}
+		for (UserSiteData siteData : sites){
+			SiteData accessSite = service.getSite(siteData.getName());
+			message = message + getString("message.site", new Model<SiteData>(accessSite));
 		}
-		log.debug("formatUserMessage - " + message);
+		message = message + getString("message.closing");
+    	log.debug("formatMessage - " + message);
 		return message;
 	}
 	
