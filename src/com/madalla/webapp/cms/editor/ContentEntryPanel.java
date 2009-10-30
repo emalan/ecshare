@@ -1,13 +1,17 @@
 package com.madalla.webapp.cms.editor;
 
+import static com.madalla.webapp.PageParams.RETURN_PAGE;
+import static com.madalla.webapp.cms.ContentParameters.CONTENT_NODE;
+import static com.madalla.webapp.cms.ContentParameters.CONTENT_ID;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
@@ -26,7 +30,11 @@ import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
+import com.madalla.cms.jcr.model.ContentNode;
 import com.madalla.webapp.CmsSession;
+import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
+import com.madalla.webapp.pages.TranslatePage;
+import com.madalla.webapp.pages.UserAdminPage;
 import com.madalla.webapp.panel.CmsPanel;
 
 /**
@@ -63,7 +71,7 @@ public class ContentEntryPanel extends CmsPanel {
 	 *            - used to create return Link
 	 * 
 	 */
-	public ContentEntryPanel(String name, final String nodeName, final String contentId) {
+	public ContentEntryPanel(String name, final String nodeName, final String contentId, final String returnPage) {
 		super(name);
 		add(JavascriptPackageResource.getHeaderContribution(TinyMce.class, "tiny_mce.js"));
 
@@ -75,7 +83,7 @@ public class ContentEntryPanel extends CmsPanel {
 		Locale currentLocale = getSession().getLocale();
 		
 		//setup Javascript template
-		Map<String, Object> vars = setupTemplateVariables((CmsSession) getSession(), locales, currentLocale);
+		Map<String, Object> vars = EditorSetup.setupTemplateVariables((CmsSession) getSession(), locales, currentLocale);
 		add(TextTemplateHeaderContributor.forJavaScript(this.getClass(),"ContentEntryPanel.js", Model.ofMap(vars)));
 		
         PageData page = getRepositoryService().getPage(nodeName);
@@ -143,34 +151,10 @@ public class ContentEntryPanel extends CmsPanel {
 //		};
 		tabPanel.setSelectedTab(selectedTab);
 		add(tabPanel);
-	}
-	
-	private Map<String, Object> setupTemplateVariables(CmsSession session, List<SiteLanguage> locales, Locale currentLocale){
-		Map<String, Object> map = new HashMap<String, Object>();
-		if (session.isSuperAdmin()) {
-			map.put("button1", "newdocument,fullscreen,cleanup,removeformat,code,help,|,undo,redo,|,paste,pastetext,pasteword,|,link,unlink,anchor,image,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,");
-			map.put("button2", "formatselect,fontselect,fontsizeselect|,forecolor,backcolor,|,tablecontrols");
-			map.put("button3", "bold,italic,underline,strikethrough,|,undo,redo,|,cleanup,|,bullist,numlist,|,sub,sup,|,charmap,|,removeformat");
-		} else if (session.isCmsAdminMode()) {
-			map.put("button1", "bold,italic,underline,strikethrough,|,sub,sup,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect");
-			map.put("button2", "bullist,numlist,|,hr,charmap,removeformat,|,outdent,indent,|,undo,redo,|,link,unlink,anchor,cleanup,code");
-			map.put("button3", "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,outdent,indent,blockquote,|,hr,advhr,charmap,emotions,|,insertdate,inserttime");
-		} else {
-			map.put("button1", "bold,italic,underline,strikethrough,|,undo,redo,|,cleanup,|,bullist,numlist,|,sub,sup,|,charmap,|,removeformat");
-			map.put("button2", "");
-			map.put("button3", "");
-		}
 		
-		//Translate source langs
-		StringBuffer sb = new StringBuffer();
-		for (SiteLanguage lang : locales) {
-			sb.append("if (google.language.isTranslatable('"+ lang.getLanguageCode() +"')) {dst.options.add(new Option('" +lang.getDisplayName() + "','" + lang.getLanguageCode() + "'))};");
-		}
-		map.put("dstlangs", sb.toString());
-		
-		//map.put("srclang", "src.options.add(new Option('" + currentLocale.getDisplayLanguage() + "','" + currentLocale.getLanguage()+ "'));");
-		
-		return map;
+		//User admin link
+		PageParameters params = new PageParameters(RETURN_PAGE + "=" + returnPage + "," + CONTENT_ID + "=" + contentId + "," + CONTENT_NODE + "=" + nodeName);
+		add(new LoggedinBookmarkablePageLink("translateLink", TranslatePage.class, params, false, false, false).setAutoEnable(true));
 	}
 
 }

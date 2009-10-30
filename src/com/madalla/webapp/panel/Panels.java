@@ -21,6 +21,7 @@ import com.madalla.webapp.cms.ContentPanel;
 import com.madalla.webapp.cms.InlineContentPanel;
 import com.madalla.webapp.cms.admin.ContentAdminPanel;
 import com.madalla.webapp.cms.editor.ContentEntryPanel;
+import com.madalla.webapp.cms.editor.TranslatePanel;
 import com.madalla.webapp.email.EmailFormPanel;
 import com.madalla.webapp.google.YoutubePlayerPanel;
 import com.madalla.webapp.images.AlbumPanel;
@@ -91,7 +92,15 @@ public class Panels {
 		validate("ContentEntryPanel", id, parameters);
         String nodeName = getPageParameter(CONTENT_NODE, parameters, "ContentEntryPanel");
         String contentId = getPageParameter(CONTENT_ID, parameters,"ContentEntryPanel");
-		return new ContentEntryPanel(id, nodeName, contentId);
+        String returnPageName = getReturnPage(parameters ,"ContentEntryPanel").getName();
+		return new ContentEntryPanel(id, nodeName, contentId, returnPageName);
+	}
+	
+	public static Panel translatePanel(String id, PageParameters parameters){
+		validate("TranslatePanel", id, parameters);
+        String nodeName = getPageParameter(CONTENT_NODE, parameters, "TranslatePanel");
+        String contentId = getPageParameter(CONTENT_ID, parameters,"TranslatePanel");
+		return new TranslatePanel(id, nodeName, contentId);
 	}
 	
 	public static Panel contentAdminPanelForSite(String id){

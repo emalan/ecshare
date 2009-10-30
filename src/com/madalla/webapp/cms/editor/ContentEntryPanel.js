@@ -51,9 +51,9 @@ function addEditors() {
 
 }
 
-google.load("language", "1");
+//google.load("language", "1");
 
-google.setOnLoadCallback(init);
+//google.setOnLoadCallback(init);
 
 function init() {
       var src = document.getElementById('src');
