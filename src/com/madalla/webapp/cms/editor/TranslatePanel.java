@@ -7,9 +7,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.template.TextTemplateHeaderContributor;
 
@@ -17,7 +15,6 @@ import tiny_mce.TinyMce;
 
 import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.ContentData;
-import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.panel.CmsPanel;
@@ -56,6 +53,11 @@ public class TranslatePanel extends CmsPanel {
         PageData page = getRepositoryService().getPage(nodeName);
         final ContentData content = getRepositoryService().getContent(page, contentId);
         log.debug("init - content" + content);
+        
+        String baseContent = getRepositoryService().getContentText(content, Locale.ENGLISH);
+        Label baseContentLabel = new Label("baseContent", new Model<String>(baseContent));
+        baseContentLabel.setEscapeModelStrings(false);
+        add(baseContentLabel);
                 
 		add(new ContentFormPanel("contentEditor", content, Locale.ENGLISH));
 
