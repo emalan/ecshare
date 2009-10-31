@@ -6,8 +6,15 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.template.TextTemplateHeaderContributor;
 
@@ -15,6 +22,7 @@ import tiny_mce.TinyMce;
 
 import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.ContentData;
+import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.panel.CmsPanel;
@@ -42,12 +50,9 @@ public class TranslatePanel extends CmsPanel {
 		
 		add(JavascriptPackageResource.getHeaderContribution(TinyMce.class, "tiny_mce.js"));
 				
-		// Supported Languages
-		List<SiteLanguage> locales = getRepositoryService().getSiteData().getLocaleList();
-		Locale currentLocale = getSession().getLocale();
 		
 		//setup Javascript template
-		Map<String, Object> vars = EditorSetup.setupTemplateVariables((CmsSession) getSession(), locales, currentLocale);
+		Map<String, Object> vars = EditorSetup.setupTemplateVariables((CmsSession) getSession());
 		add(TextTemplateHeaderContributor.forJavaScript(EditorSetup.class,"EditorSetup.js", Model.ofMap(vars)));
 		
         PageData page = getRepositoryService().getPage(nodeName);
@@ -59,7 +64,32 @@ public class TranslatePanel extends CmsPanel {
         baseContentLabel.setEscapeModelStrings(false);
         add(baseContentLabel);
                 
-		add(new ContentFormPanel("contentEditor", content, Locale.ENGLISH));
+        ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, Locale.ENGLISH);
+        IModel<ContentEntryData> destModel = new CompoundPropertyModel<ContentEntryData>(contentEntry);
+        final Panel destPanel = new ContentFormPanel("contentEditor", destModel );
+        destPanel.setOutputMarkupId(true);
+		add(destPanel);
+
+		// Supported Languages
+		List<SiteLanguage> locales = getRepositoryService().getSiteData().getLocaleList();
+		
+		SiteLanguage selectedLanguage = null;
+		final DropDownChoice<SiteLanguage> select = new DropDownChoice<SiteLanguage>("langSelect", 
+				new Model<SiteLanguage>(selectedLanguage), locales);
+
+		select.add(new AjaxEventBehavior("onchange"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				target.addComponent(destPanel);
+				SiteLanguage language = select.getModelObject();
+				log.debug("select changed - " + language);
+				
+			}
+			
+		});
+		add(select);
 
 	}
 

@@ -1,8 +1,8 @@
 package com.madalla.webapp.cms.editor;
 
 import static com.madalla.webapp.PageParams.RETURN_PAGE;
-import static com.madalla.webapp.cms.ContentParameters.CONTENT_NODE;
 import static com.madalla.webapp.cms.ContentParameters.CONTENT_ID;
+import static com.madalla.webapp.cms.ContentParameters.CONTENT_NODE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +20,7 @@ import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.template.TextTemplateHeaderContributor;
@@ -30,11 +31,9 @@ import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
-import com.madalla.cms.jcr.model.ContentNode;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
 import com.madalla.webapp.pages.TranslatePage;
-import com.madalla.webapp.pages.UserAdminPage;
 import com.madalla.webapp.panel.CmsPanel;
 
 /**
@@ -83,8 +82,8 @@ public class ContentEntryPanel extends CmsPanel {
 		Locale currentLocale = getSession().getLocale();
 		
 		//setup Javascript template
-		Map<String, Object> vars = EditorSetup.setupTemplateVariables((CmsSession) getSession(), locales, currentLocale);
-		add(TextTemplateHeaderContributor.forJavaScript(this.getClass(),"ContentEntryPanel.js", Model.ofMap(vars)));
+		Map<String, Object> vars = EditorSetup.setupTemplateVariables((CmsSession) getSession());
+		add(TextTemplateHeaderContributor.forJavaScript(EditorSetup.class,"EditorSetup.js", Model.ofMap(vars)));
 		
         PageData page = getRepositoryService().getPage(nodeName);
         final ContentData content = getRepositoryService().getContent(page, contentId);
@@ -118,7 +117,8 @@ public class ContentEntryPanel extends CmsPanel {
 
 			@Override
 			public Panel getPanel(String panelId) {
-				return new ContentFormPanel(panelId, content, Locale.ENGLISH);
+				ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, Locale.ENGLISH);
+				return new ContentFormPanel(panelId, new CompoundPropertyModel<ContentEntryData>(contentEntry));
 			}
 
 		});
@@ -132,7 +132,8 @@ public class ContentEntryPanel extends CmsPanel {
 
 				@Override
 				public Panel getPanel(String panelId) {
-					return new ContentFormPanel(panelId, content, siteLanguage.locale);
+					ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, siteLanguage.locale);
+					return new ContentFormPanel(panelId, new CompoundPropertyModel<ContentEntryData>(contentEntry));
 				}
 
 			});

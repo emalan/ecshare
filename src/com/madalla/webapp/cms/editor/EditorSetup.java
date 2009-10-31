@@ -1,16 +1,13 @@
 package com.madalla.webapp.cms.editor;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-import com.madalla.bo.SiteLanguage;
 import com.madalla.webapp.CmsSession;
 
 public class EditorSetup {
 
-	public static Map<String, Object> setupTemplateVariables(CmsSession session, List<SiteLanguage> locales, Locale currentLocale){
+	public static Map<String, Object> setupTemplateVariables(CmsSession session){
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (session.isSuperAdmin()) {
 			map.put("button1", "newdocument,fullscreen,cleanup,removeformat,code,help,|,undo,redo,|,paste,pastetext,pasteword,|,link,unlink,anchor,image,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,");
@@ -26,14 +23,14 @@ public class EditorSetup {
 			map.put("button3", "");
 		}
 		
-		//Translate source langs
-		StringBuffer sb = new StringBuffer();
-		for (SiteLanguage lang : locales) {
-			sb.append("if (google.language.isTranslatable('"+ lang.getLanguageCode() +"')) {dst.options.add(new Option('" +lang.getDisplayName() + "','" + lang.getLanguageCode() + "'))};");
-		}
-		map.put("dstlangs", sb.toString());
-		
-		//map.put("srclang", "src.options.add(new Option('" + currentLocale.getDisplayLanguage() + "','" + currentLocale.getLanguage()+ "'));");
+//		//Translate source langs
+//		StringBuffer sb = new StringBuffer();
+//		for (SiteLanguage lang : locales) {
+//			sb.append("if (google.language.isTranslatable('"+ lang.getLanguageCode() +"')) {dst.options.add(new Option('" +lang.getDisplayName() + "','" + lang.getLanguageCode() + "'))};");
+//		}
+//		map.put("dstlangs", sb.toString());
+//		
+//		//map.put("srclang", "src.options.add(new Option('" + currentLocale.getDisplayLanguage() + "','" + currentLocale.getLanguage()+ "'));");
 		
 		return map;
 	}

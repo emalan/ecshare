@@ -1,7 +1,5 @@
 package com.madalla.webapp.cms.editor;
 
-import java.util.Locale;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -9,10 +7,8 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
-import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
@@ -32,15 +28,10 @@ public class ContentFormPanel extends CmsPanel{
         }
     }
     
-	public ContentFormPanel(String name, final ContentData content, final Locale locale){
+	public ContentFormPanel(String name, IModel<ContentEntryData> model){
 		super(name);
 
-
-		
-        contentEntry = getRepositoryService().getContentEntry(content, locale);
-        log.debug("init - "+contentEntry);
-
-        final Form<ContentEntryData> form = new ContentForm("contentForm", new CompoundPropertyModel<ContentEntryData>(contentEntry));
+        final Form<ContentEntryData> form = new ContentForm("contentForm", model);
         
         final FeedbackPanel feedback = new ComponentFeedbackPanel("feedback", form);
         feedback.setOutputMarkupId(true);
