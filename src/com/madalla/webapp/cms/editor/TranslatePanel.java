@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -59,33 +60,37 @@ public class TranslatePanel extends CmsPanel {
         final ContentData content = getRepositoryService().getContent(page, contentId);
         log.debug("init - content" + content);
         
+        //Base Language display
         String baseContent = getRepositoryService().getContentText(content, Locale.ENGLISH);
         Label baseContentLabel = new Label("baseContent", new Model<String>(baseContent));
         baseContentLabel.setEscapeModelStrings(false);
         add(baseContentLabel);
                 
-        ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, Locale.ENGLISH);
-        IModel<ContentEntryData> destModel = new CompoundPropertyModel<ContentEntryData>(contentEntry);
+        //Dynamic destination Language editor
+        final ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, Locale.ENGLISH);
+        final IModel<ContentEntryData> destModel = new Model<ContentEntryData>(contentEntry);
         final Panel destPanel = new ContentFormPanel("contentEditor", destModel );
         destPanel.setOutputMarkupId(true);
 		add(destPanel);
 
 		// Supported Languages
-		List<SiteLanguage> locales = getRepositoryService().getSiteData().getLocaleList();
+		List<SiteLanguage> locales = SiteLanguage.getLanguages();
 		
+		//Language Selector
 		SiteLanguage selectedLanguage = null;
 		final DropDownChoice<SiteLanguage> select = new DropDownChoice<SiteLanguage>("langSelect", 
 				new Model<SiteLanguage>(selectedLanguage), locales);
 
-		select.add(new AjaxEventBehavior("onchange"){
+		select.add(new AjaxFormComponentUpdatingBehavior("onchange"){
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onEvent(AjaxRequestTarget target) {
-				target.addComponent(destPanel);
+			protected void onUpdate(AjaxRequestTarget target) {
 				SiteLanguage language = select.getModelObject();
-				log.debug("select changed - " + language);
-				
+				log.debug("language select changed - " + language);
+				ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, language.locale);
+				destModel.setObject(contentEntry);
+				target.appendJavascript("tinyMCE.activeEditor.setContent('"+contentEntry.getText()+"')");
 			}
 			
 		});

@@ -118,7 +118,7 @@ public class ContentEntryPanel extends CmsPanel {
 			@Override
 			public Panel getPanel(String panelId) {
 				ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, Locale.ENGLISH);
-				return new ContentFormPanel(panelId, new CompoundPropertyModel<ContentEntryData>(contentEntry));
+				return new ContentFormPanel(panelId, new Model<ContentEntryData>(contentEntry));
 			}
 
 		});
@@ -133,7 +133,7 @@ public class ContentEntryPanel extends CmsPanel {
 				@Override
 				public Panel getPanel(String panelId) {
 					ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, siteLanguage.locale);
-					return new ContentFormPanel(panelId, new CompoundPropertyModel<ContentEntryData>(contentEntry));
+					return new ContentFormPanel(panelId, new Model<ContentEntryData>(contentEntry));
 				}
 
 			});

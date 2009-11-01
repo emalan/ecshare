@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.webapp.panel.CmsPanel;
@@ -17,14 +18,13 @@ public class ContentFormPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
 	
 	private Log log = LogFactory.getLog(this.getClass());
-	private ContentEntryData contentEntry;
 	
     final class ContentForm extends Form<ContentEntryData> {
         private static final long serialVersionUID = -3526743712542402160L;
 
         public ContentForm(final String name, IModel<ContentEntryData> model) {
             super(name, model);
-            add(new TextArea<String>("text"));
+            add(new TextArea<String>("text", new PropertyModel<String>(model.getObject(), "text")));
         }
     }
     
@@ -50,9 +50,8 @@ public class ContentFormPanel extends CmsPanel{
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
-				log.debug("Submiting populated Content object to Content service.");
+				log.debug("Submiting populated Content object to Content service. " + form.getModelObject());
                 getRepositoryService().saveContentEntry((ContentEntryData)form.getModelObject());
-                log.debug("Content successfully saved to repository. content=" + contentEntry);
                 target.addComponent(feedback);
                 form.info(getString("message.success"));
 			}
