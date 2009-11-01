@@ -20,7 +20,6 @@ import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.template.TextTemplateHeaderContributor;
@@ -118,7 +117,7 @@ public class ContentEntryPanel extends CmsPanel {
 			@Override
 			public Panel getPanel(String panelId) {
 				ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, Locale.ENGLISH);
-				return new ContentFormPanel(panelId, new Model<ContentEntryData>(contentEntry));
+				return new ContentFormPanel(panelId, contentEntry);
 			}
 
 		});
@@ -133,7 +132,7 @@ public class ContentEntryPanel extends CmsPanel {
 				@Override
 				public Panel getPanel(String panelId) {
 					ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, siteLanguage.locale);
-					return new ContentFormPanel(panelId, new Model<ContentEntryData>(contentEntry));
+					return new ContentFormPanel(panelId, contentEntry);
 				}
 
 			});

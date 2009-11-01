@@ -8,7 +8,6 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.webapp.panel.CmsPanel;
@@ -19,19 +18,55 @@ public class ContentFormPanel extends CmsPanel{
 	
 	private Log log = LogFactory.getLog(this.getClass());
 	
+	private ContentEntryData contentModel;
+	
     final class ContentForm extends Form<ContentEntryData> {
         private static final long serialVersionUID = -3526743712542402160L;
 
         public ContentForm(final String name, IModel<ContentEntryData> model) {
             super(name, model);
-            add(new TextArea<String>("text", new PropertyModel<String>(model.getObject(), "text")));
+            add(new TextArea<String>("text", new IModel<String>(){
+				private static final long serialVersionUID = 1L;
+
+				public String getObject() {
+					return contentModel.getText();
+				}
+
+				public void setObject(String object) {
+					contentModel.setText(object);
+					
+				}
+
+				public void detach() {
+					
+				}
+            	
+            }));
         }
     }
     
-	public ContentFormPanel(String name, IModel<ContentEntryData> model){
+	public ContentFormPanel(String name, ContentEntryData contentEntryData){
 		super(name);
 
-        final Form<ContentEntryData> form = new ContentForm("contentForm", model);
+		this.contentModel = contentEntryData;
+        final Form<ContentEntryData> form = new ContentForm("contentForm", new IModel<ContentEntryData>(){
+
+					private static final long serialVersionUID = 1L;
+
+					public ContentEntryData getObject() {
+						return contentModel ;
+					}
+
+					public void setObject(ContentEntryData object) {
+						contentModel = object;
+						
+					}
+
+					public void detach() {
+						contentModel = null;
+					}
+        	
+        });
         
         final FeedbackPanel feedback = new ComponentFeedbackPanel("feedback", form);
         feedback.setOutputMarkupId(true);
@@ -43,7 +78,6 @@ public class ContentFormPanel extends CmsPanel{
 
             @Override
 			protected void onBeforeRender() {
-            	//setEnabled(false);
 				super.onBeforeRender();
 			}
 
@@ -69,5 +103,9 @@ public class ContentFormPanel extends CmsPanel{
         add(form);
 
 	}	
+	
+	public void changeContentEntry(ContentEntryData contentEntryData){
+		this.contentModel = contentEntryData;
+	}
 
 }

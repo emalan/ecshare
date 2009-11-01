@@ -66,21 +66,22 @@ public class TranslatePanel extends CmsPanel {
         baseContentLabel.setEscapeModelStrings(false);
         add(baseContentLabel);
                 
+		// Supported Languages
+		List<SiteLanguage> locales = SiteLanguage.getLanguages();
+
         //Dynamic destination Language editor
-        final ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, Locale.ENGLISH);
-        final IModel<ContentEntryData> destModel = new Model<ContentEntryData>(contentEntry);
-        final Panel destPanel = new ContentFormPanel("contentEditor", destModel );
+		final Locale selectedLang = getDefaultLocale(locales);
+        final ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, selectedLang);
+        
+        final ContentFormPanel destPanel = new ContentFormPanel("contentEditor", contentEntry );
         destPanel.setOutputMarkupId(true);
 		add(destPanel);
 
-		// Supported Languages
-		List<SiteLanguage> locales = SiteLanguage.getLanguages();
-		
 		//Language Selector
-		SiteLanguage selectedLanguage = null;
+		SiteLanguage selectedLanguage = SiteLanguage.getLanguage(selectedLang.getLanguage());
 		final DropDownChoice<SiteLanguage> select = new DropDownChoice<SiteLanguage>("langSelect", 
 				new Model<SiteLanguage>(selectedLanguage), locales);
-
+		select.setNullValid(false);
 		select.add(new AjaxFormComponentUpdatingBehavior("onchange"){
 			private static final long serialVersionUID = 1L;
 
@@ -88,14 +89,24 @@ public class TranslatePanel extends CmsPanel {
 			protected void onUpdate(AjaxRequestTarget target) {
 				SiteLanguage language = select.getModelObject();
 				log.debug("language select changed - " + language);
-				ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, language.locale);
-				destModel.setObject(contentEntry);
-				target.appendJavascript("tinyMCE.activeEditor.setContent('"+contentEntry.getText()+"')");
+				ContentEntryData newContentEntry = getRepositoryService().getContentEntry(content, language.locale);
+				log.debug("new Content Entry." + newContentEntry);
+				destPanel.changeContentEntry(newContentEntry);
+				target.appendJavascript("tinyMCE.activeEditor.setContent('"+newContentEntry.getText()+"')");
 			}
 			
 		});
 		add(select);
 
+	}
+	
+	private Locale getDefaultLocale(List<SiteLanguage> locales){
+		List<SiteLanguage> configuredLangs = getRepositoryService().getSiteData().getLocaleList();
+		if (configuredLangs.isEmpty()){
+			return locales.get(0).locale;
+		} else {
+			return configuredLangs.get(0).locale;
+		}
 	}
 
 
