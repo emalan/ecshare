@@ -6,16 +6,11 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.template.TextTemplateHeaderContributor;
 
@@ -56,6 +51,7 @@ public class TranslatePanel extends CmsPanel {
 		Map<String, Object> vars = EditorSetup.setupTemplateVariables((CmsSession) getSession());
 		add(TextTemplateHeaderContributor.forJavaScript(EditorSetup.class,"EditorSetup.js", Model.ofMap(vars)));
 		
+		
         PageData page = getRepositoryService().getPage(nodeName);
         final ContentData content = getRepositoryService().getContent(page, contentId);
         log.debug("init - content" + content);
@@ -63,6 +59,7 @@ public class TranslatePanel extends CmsPanel {
         //Base Language display
         String baseContent = getRepositoryService().getContentText(content, Locale.ENGLISH);
         Label baseContentLabel = new Label("baseContent", new Model<String>(baseContent));
+        baseContentLabel.setOutputMarkupId(true);
         baseContentLabel.setEscapeModelStrings(false);
         add(baseContentLabel);
                 
@@ -76,6 +73,11 @@ public class TranslatePanel extends CmsPanel {
         final ContentFormPanel destPanel = new ContentFormPanel("contentEditor", contentEntry );
         destPanel.setOutputMarkupId(true);
 		add(destPanel);
+		
+		//add values to javascript
+		vars.put("sourceDiv", baseContentLabel.getMarkupId());
+		vars.put("destLang", selectedLang);
+		add(TextTemplateHeaderContributor.forJavaScript(this.getClass(),"TranslatePanel.js", Model.ofMap(vars)));
 
 		//Language Selector
 		SiteLanguage selectedLanguage = SiteLanguage.getLanguage(selectedLang.getLanguage());
@@ -92,7 +94,7 @@ public class TranslatePanel extends CmsPanel {
 				ContentEntryData newContentEntry = getRepositoryService().getContentEntry(content, language.locale);
 				log.debug("new Content Entry." + newContentEntry);
 				destPanel.changeContentEntry(newContentEntry);
-				target.appendJavascript("tinyMCE.activeEditor.setContent('"+newContentEntry.getText()+"')");
+				target.appendJavascript("tinyMCE.activeEditor.setContent('"+newContentEntry.getText()+"'); changeLanguage('"+ language.getLanguageCode()+"');");
 			}
 			
 		});

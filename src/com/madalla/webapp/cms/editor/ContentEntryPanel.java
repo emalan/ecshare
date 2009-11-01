@@ -88,24 +88,6 @@ public class ContentEntryPanel extends CmsPanel {
         final ContentData content = getRepositoryService().getContent(page, contentId);
         log.debug("init - content" + content);
         
-//        //Temporary link to test AJAX unload of editor
-//        WebMarkupContainer testLink = new AjaxFallbackLink("testLink")
-//		{
-//
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//			public void onClick(AjaxRequestTarget target)
-//			{
-//				if (target != null)
-//				{
-//					target.appendJavascript("removeEditors();");
-//				}
-//			}
-//
-//		};
-//		add(testLink);
-        
 		//setup tabs
 		int selectedTab = 0;
 		List<ITab> tabs = new ArrayList<ITab>();
@@ -139,16 +121,7 @@ public class ContentEntryPanel extends CmsPanel {
 
 		}
 		TabbedPanel tabPanel = new TabbedPanel("contentEditor", tabs);
-		
-//		TabbedPanel tabPanel = new AjaxTabbedPanel("contentEditor", tabs){
-//
-//			@Override
-//			protected void onAjaxUpdate(AjaxRequestTarget target) {
-//				target.appendJavascript("addEditors();");
-//				
-//			}
-//			
-//		};
+
 		tabPanel.setSelectedTab(selectedTab);
 		add(tabPanel);
 		

@@ -23,15 +23,6 @@ public class EditorSetup {
 			map.put("button3", "");
 		}
 		
-//		//Translate source langs
-//		StringBuffer sb = new StringBuffer();
-//		for (SiteLanguage lang : locales) {
-//			sb.append("if (google.language.isTranslatable('"+ lang.getLanguageCode() +"')) {dst.options.add(new Option('" +lang.getDisplayName() + "','" + lang.getLanguageCode() + "'))};");
-//		}
-//		map.put("dstlangs", sb.toString());
-//		
-//		//map.put("srclang", "src.options.add(new Option('" + currentLocale.getDisplayLanguage() + "','" + currentLocale.getLanguage()+ "'));");
-		
 		return map;
 	}
 

@@ -1,7 +1,10 @@
 <html xmlns:wicket>
 <wicket:head>
        <style type="text/css">
-           div.tab-panel {clear: both;}
+
+		#base {float: left; width:40%;}
+		#dest {float: left;}
+          div.tab-panel {clear: both;}
             #control {float: left; width: 100%;}
 
             form textarea {float:left; clear:both;}
@@ -13,18 +16,23 @@
 </wicket:head>
 <body>
 <wicket:panel>
-
-	<div wicket:id="baseContent">	</div>
+	<div id="base">
+		<div wicket:id="baseContent">	
+		</div>
+		<div id="translate">
+  			<div id="branding"></div>
+  			<input class="button" type="button" onclick="javascript:translateContent();" value="Translate"/>
+		</div>
+	</div>
   
+  <div id="dest">
   	<select wicket:id="langSelect" >
     	<option>[option1]</option>
         <option>[option2]</option>
     </select>
         
-         <div id="dest">
-        	<span wicket:id="contentEditor"/>
-        </div>
-  
+   	<span wicket:id="contentEditor"/>
+  </div>
 </wicket:panel>
 </body>
 </html>
