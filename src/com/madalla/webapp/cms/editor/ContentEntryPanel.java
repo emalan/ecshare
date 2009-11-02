@@ -17,10 +17,7 @@ import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.template.TextTemplateHeaderContributor;
 
@@ -49,16 +46,6 @@ public class ContentEntryPanel extends CmsPanel {
 	private static final long serialVersionUID = 1L;
 
 	private Log log = LogFactory.getLog(this.getClass());
-
-	final class ContentForm extends Form<ContentEntryData> {
-		private static final long serialVersionUID = -3526743712542402160L;
-
-		public ContentForm(final String name, IModel<ContentEntryData> model) {
-			super(name, model);
-			add(new TextArea<String>("text").setOutputMarkupId(true));
-		}
-	}
-
 	
 	/**
 	 * @param name
@@ -99,6 +86,7 @@ public class ContentEntryPanel extends CmsPanel {
 			@Override
 			public Panel getPanel(String panelId) {
 				ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, Locale.ENGLISH);
+				log.debug(contentEntry);
 				return new ContentFormPanel(panelId, contentEntry);
 			}
 

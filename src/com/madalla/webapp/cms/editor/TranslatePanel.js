@@ -17,7 +17,6 @@ function changeLanguage(lang){
 function translateContent(result) {
 	var source = document.getElementById('${sourceDiv}');
     var value = source.innerHTML;
-    console.log(value);
     var srcLang = 'en';
     google.language.translate(value, srcLang, destLang, translateResult);
     return false;

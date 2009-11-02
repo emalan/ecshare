@@ -69,7 +69,7 @@ public class TranslatePanel extends CmsPanel {
         //Dynamic destination Language editor
 		final Locale selectedLang = getDefaultLocale(locales);
         final ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, selectedLang);
-        
+        log.debug(contentEntry);
         final ContentFormPanel destPanel = new ContentFormPanel("contentEditor", contentEntry );
         destPanel.setOutputMarkupId(true);
 		add(destPanel);
@@ -91,7 +91,7 @@ public class TranslatePanel extends CmsPanel {
 			protected void onUpdate(AjaxRequestTarget target) {
 				SiteLanguage language = select.getModelObject();
 				log.debug("language select changed - " + language);
-				ContentEntryData newContentEntry = getRepositoryService().getContentEntry(content, language.locale);
+				ContentEntryData newContentEntry = getRepositoryService().getContentEntry(content, language.locale.getDisplayName(), "");
 				log.debug("new Content Entry." + newContentEntry);
 				destPanel.changeContentEntry(newContentEntry);
 				target.appendJavascript("tinyMCE.activeEditor.setContent('"+newContentEntry.getText()+"'); changeLanguage('"+ language.getLanguageCode()+"');");

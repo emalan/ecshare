@@ -336,24 +336,12 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 
     public ContentEntryData getInlineContentEntry(final ContentData parent, final Locale locale){
     	SiteLanguage language = getSiteLanguage(locale);
-    	String defaultText;
-    	if ("en".equals(locale.getLanguage()) && StringUtils.isNotEmpty(parent.getText()) ){
-    		defaultText = parent.getText();
-    	} else {
-    		defaultText = language.defaultInlineContent;
-    	}
-    	return getContentEntry(parent, language.getDisplayName(), defaultText);
+    	return getContentEntry(parent, language.getDisplayName(), language.defaultInlineContent);
     }
     
     public ContentEntryData getContentEntry(final ContentData parent, final Locale locale){
     	SiteLanguage language = getSiteLanguage(locale);
-    	String defaultText;
-    	if ("en".equals(locale.getLanguage()) && StringUtils.isNotEmpty(parent.getText()) ){
-    		defaultText = parent.getText();
-    	} else {
-    		defaultText = language.defaultContent;
-    	}
-    	return getContentEntry(parent, language.getDisplayName(), defaultText);
+    	return getContentEntry(parent, language.getDisplayName(), language.defaultContent);
     }
     
     public ContentEntryData getContentEntry(final ContentData parent, String name, final String defaultText){

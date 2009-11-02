@@ -84,6 +84,8 @@ public interface IDataService {
     ContentEntryData getInlineContentEntry(final ContentData parent, final Locale locale);
     
     ContentEntryData getContentEntry(final ContentData parent, final Locale locale);
+    
+    ContentEntryData getContentEntry(final ContentData parent, String name, final String defaultText);
 
     ResourceData getContentResource(final PageData page, final String name);
     

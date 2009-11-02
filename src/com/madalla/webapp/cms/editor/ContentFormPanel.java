@@ -2,6 +2,7 @@ package com.madalla.webapp.cms.editor;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -47,7 +48,9 @@ public class ContentFormPanel extends CmsPanel{
     
 	public ContentFormPanel(String name, ContentEntryData contentEntryData){
 		super(name);
-
+		if (contentEntryData == null){
+			throw new WicketRuntimeException("Constructor Exception - contentEntry data must have a value.");
+		}
 		this.contentModel = contentEntryData;
         final Form<ContentEntryData> form = new ContentForm("contentForm", new IModel<ContentEntryData>(){
 
@@ -63,7 +66,7 @@ public class ContentFormPanel extends CmsPanel{
 					}
 
 					public void detach() {
-						contentModel = null;
+						//contentModel = null;
 					}
         	
         });
@@ -105,6 +108,9 @@ public class ContentFormPanel extends CmsPanel{
 	}	
 	
 	public void changeContentEntry(ContentEntryData contentEntryData){
+		if (contentEntryData == null) {
+			throw new WicketRuntimeException("Construction error");
+		}
 		this.contentModel = contentEntryData;
 	}
 
