@@ -2,12 +2,20 @@
 <wicket:head>
        <style type="text/css">
 
-		#base {float: left; width:40%;}
-		#dest {float: left;}
-          div.tab-panel {clear: both;}
-            #control {float: left; width: 100%;}
-
-            form textarea {float:left; clear:both;}
+		#base {
+			float: left; 
+			width:40%;
+			padding:4px;
+		}
+		#dest {
+			float: left; 
+			margin-left:0.4em;
+		}
+		.baseContent {
+			border-color: #CCCCCC;
+			border-style: solid;
+			border-width: 1px;
+		}
             
     	</style>
     	<script type="text/javascript" src="http://www.google.com/jsapi">
@@ -17,11 +25,13 @@
 <body>
 <wicket:panel>
 	<div id="base">
-		<div wicket:id="baseContent">	
-		</div>
 		<div id="translate">
-  			<div id="branding"></div>
+			<p class="info"><wicket:message key="translate.info">[message]</wicket:message></p>
   			<input class="button" type="button" onclick="javascript:translateContent();" value="Translate"/>
+  			<div id="branding"></div>
+		</div>
+
+		<div class="baseContent" wicket:id="baseContent">	
 		</div>
 	</div>
   

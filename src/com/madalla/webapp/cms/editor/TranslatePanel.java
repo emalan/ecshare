@@ -10,6 +10,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.template.TextTemplateHeaderContributor;
@@ -82,7 +83,7 @@ public class TranslatePanel extends CmsPanel {
 		//Language Selector
 		SiteLanguage selectedLanguage = SiteLanguage.getLanguage(selectedLang.getLanguage());
 		final DropDownChoice<SiteLanguage> select = new DropDownChoice<SiteLanguage>("langSelect", 
-				new Model<SiteLanguage>(selectedLanguage), locales);
+				new Model<SiteLanguage>(selectedLanguage), locales, new ChoiceRenderer<SiteLanguage>("locale.displayLanguage"));
 		select.setNullValid(false);
 		select.add(new AjaxFormComponentUpdatingBehavior("onchange"){
 			private static final long serialVersionUID = 1L;
@@ -94,7 +95,7 @@ public class TranslatePanel extends CmsPanel {
 				ContentEntryData newContentEntry = getRepositoryService().getContentEntry(content, language.locale.getDisplayName(), "");
 				log.debug("new Content Entry." + newContentEntry);
 				destPanel.changeContentEntry(newContentEntry);
-				target.appendJavascript("tinyMCE.activeEditor.setContent('"+newContentEntry.getText()+"'); changeLanguage('"+ language.getLanguageCode()+"');");
+				target.appendJavascript("tinyMCE.activeEditor.setContent(\""+newContentEntry.getText()+"\"); changeLanguage('"+ language.getLanguageCode()+"');");
 			}
 			
 		});

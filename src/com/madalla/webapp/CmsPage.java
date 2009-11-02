@@ -15,6 +15,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -176,7 +177,7 @@ public class CmsPage extends WebPage {
         	
         	final IModel<SiteLanguage> langModel = new Model<SiteLanguage>();
         	langModel.setObject(SiteLanguage.getLanguage(getSession().getLocale().getLanguage()));
-        	DropDownChoice<SiteLanguage> choice = new DropDownChoice<SiteLanguage>("langSelect", langModel, langs);
+        	DropDownChoice<SiteLanguage> choice = new DropDownChoice<SiteLanguage>("langSelect", langModel, langs, new ChoiceRenderer<SiteLanguage>("locale.displayLanguage"));
         	
         	choice.setNullValid(false);
         	choice.add(new OnChangeAjaxBehavior(){

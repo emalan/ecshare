@@ -28,9 +28,9 @@ Dragdrop.load = function() {
     	    accept: 'draggable',
     	    hoverclass: 'hover',
     	    onDrop: function(dragged, dropped, event){
-    		    console.log(dragged);
-    		    console.log(dropped);
-    		    console.log(event);
+    		    //console.log(dragged);
+    		    //console.log(dropped);
+    		    //console.log(event);
     		    //Event.trigger(dropped,"drop");
     		    var wicketUrl = "'?wicket:interface=:8:albumAdminPanel:albumDisplay:albumForm:albumTreeTable:i:0:sideColumns:0:nodeLink::IBehaviorListener:0:"
     	        //var wicketUrl = "?wicket:interface=:1:albumAdminPanel:albumDisplay:albumForm::IActivePageBehaviorListener:0:&amp;wicket:ignoreIfNotActive=true";
