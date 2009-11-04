@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -95,7 +96,9 @@ public class TranslatePanel extends CmsPanel {
 				ContentEntryData newContentEntry = getRepositoryService().getContentEntry(content, language.locale.getDisplayName(), "");
 				log.debug("new Content Entry." + newContentEntry);
 				destPanel.changeContentEntry(newContentEntry);
-				target.appendJavascript("tinyMCE.activeEditor.setContent(\""+newContentEntry.getText()+"\"); changeLanguage('"+ language.getLanguageCode()+"');");
+				
+				target.appendJavascript("changeLanguage('"+ language.getLanguageCode()+"', '"+
+						StringEscapeUtils.escapeJavaScript(newContentEntry.getText()) + "');");
 			}
 			
 		});

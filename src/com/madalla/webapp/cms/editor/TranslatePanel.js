@@ -10,8 +10,9 @@ function init() {
       google.language.getBranding('branding', { type : 'vertical' });
 }
 
-function changeLanguage(lang){
+function changeLanguage(lang, text){
 	destLang = lang;
+	tinyMCE.get('text').setContent(text);
 }
 
 function translateContent(result) {
@@ -26,6 +27,11 @@ function translateResult(result) {
     if (result.translation) {
     	tinyMCE.get('text').setContent(result.translation);
     } else {
-    	tinyMCE.get('text').setContent('<span style="color:red">Error Translating</span>');
+    	if (result.error){
+    		tinyMCE.get('text').setContent('<span style="color:red">Error Translating - ' + result.error.message + '</span>');
+    	} else {
+    		tinyMCE.get('text').setContent('<span style="color:red">Error Translating</span>');
+    	}
     }
 }
+

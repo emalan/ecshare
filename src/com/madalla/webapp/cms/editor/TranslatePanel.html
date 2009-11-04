@@ -7,9 +7,16 @@
 			width:40%;
 			padding:4px;
 		}
+		div#translateButton {
+			text-align: center;
+		}
 		#dest {
 			float: left; 
 			margin-left:0.4em;
+			width:50%;
+		}
+		#dest select {
+			margin-bottom: 5px;
 		}
 		.baseContent {
 			border-color: #CCCCCC;
@@ -27,7 +34,9 @@
 	<div id="base">
 		<div id="translate">
 			<p class="info"><wicket:message key="translate.info">[message]</wicket:message></p>
-  			<input class="button" type="button" onclick="javascript:translateContent();" value="Translate"/>
+			<div id="translateButton">
+  				<input class="button" type="button" onclick="javascript:translateContent();" value="Translate"/>
+  			</div>
   			<div id="branding"></div>
 		</div>
 
