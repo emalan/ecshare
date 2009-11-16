@@ -3,6 +3,7 @@
 target/
 repository/
 database/
+bin/
 # ignored files
 derby.log
 #ignore backup files left from editors
