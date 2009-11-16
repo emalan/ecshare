@@ -5,3 +5,5 @@ repository/
 database/
 # ignored files
 derby.log
+#ignore backup files left from editors
+*~
