@@ -1,5 +1,6 @@
 package com.madalla.webapp.user;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -46,6 +47,10 @@ public class UserPasswordPanel extends CmsPanel{
             add(existingFeedback);
             PasswordTextField existingPassword = new ValidationStylePasswordField("existingPassword", 
             		new PropertyModel<String>(properties,"existingPassword"), existingFeedback);
+            if (StringUtils.isNotEmpty(pwd)) {
+            	existingPassword.setEnabled(false);
+            	existingPassword.info("Prepopulated with existing password.");
+            }
             add(existingPassword);
             existingPassword.add(new AbstractValidator<String>(){
                 private static final long serialVersionUID = 1L;

@@ -44,10 +44,11 @@ public class SiteAdminPanel extends CmsPanel{
            
             add(new TextField<String>("metaKeywords"));
             
-            FeedbackPanel urlFeedback = new FeedbackPanel("urlFeedback");
+            TextField<String> url = new TextField<String>("url");
+            FeedbackPanel urlFeedback = new ComponentFeedbackPanel("urlFeedback", url);
             urlFeedback.setOutputMarkupId(true);
             add(urlFeedback);
-            TextField<String> url = new TextField<String>("url");
+            
             url.add(new AjaxValidationBehaviour(urlFeedback));
             url.add(new UrlValidator(UrlValidator.NO_FRAGMENTS));
             add(url);

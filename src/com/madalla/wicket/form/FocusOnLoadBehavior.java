@@ -21,9 +21,9 @@ public class FocusOnLoadBehavior extends AbstractBehavior{
 				public void renderAfter(Component component) {
 					final Response response = component.getResponse();
 					response.write(
-							"<script type=\"text/javascript\" language=\"javascript\">document.getElementById(\"" +
+							"<script type=\"text/javascript\" language=\"javascript\">var elem = document.getElementById(\"" +
 							component.getMarkupId() +
-							"\").focus()</script>");
+							"\"); if (elem.offsetWidth) elem.focus();</script>");
 				}
 			});
 		}
