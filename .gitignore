@@ -2,3 +2,6 @@
 # Ignore these directories
 target/
 repository/
+database/
+# ignored files
+derby.log
