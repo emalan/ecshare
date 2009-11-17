@@ -18,7 +18,19 @@
 
 	<property name="src.share.dir" value="${share.dir}/src" />
 	<property name="src.share.resources" value="${share.dir}/resources" />
+	
+	<property name="version.num" value="0.01" />
 
+    <target name="tag" description="Increment build and tag version control">
+        <echo>Tagging git repository : ${version.num}-b${build.number}</echo>
+    	<!--
+       	<exec executable="/usr/local/git/bin/git" dir="${share.dir}">
+   	       <arg value="tag"/>
+   	       <arg value="${version.num}-b${build.number}"/>
+	   	 </exec>
+	   	 -->
+    </target>
+	
 	<target name="clean" description="o Cleans up the build artifacts">
 		<delete dir="${build.dir}" failonerror="false" />
 		<delete file="${final.name}.war" failonerror="false" />

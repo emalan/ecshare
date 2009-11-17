@@ -15,6 +15,7 @@ import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.protocol.https.HttpsRequestCycleProcessor;
 import org.apache.wicket.request.IRequestCycleProcessor;
 
+import com.madalla.BuildInformation;
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
 import com.madalla.service.IDataService;
@@ -39,9 +40,15 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
     private IRepositoryAdminService repositoryAdminService;
     private IEmailSender emailSender;
     private IDataService dataService;
+    private BuildInformation buildInformation;
     
     protected void init() {
     	//initialization checks
+    	if (buildInformation == null) {
+    		log.fatal("Build Information not configured Correctly.");
+    		throw new WicketRuntimeException("Build Information not configured Correctly.");
+    	}
+    	log.info("Build Information. version:" + buildInformation.getVersion());
     	if (repositoryAdminService == null){
     		log.fatal("Content Admin Service is not configured Correctly.");
     		throw new WicketRuntimeException("Repository Admin Service is not configured Correctly.");
@@ -131,6 +138,10 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
 	
 	public void setRepositoryService(IDataService dataService){
 		this.dataService = dataService;
+	}
+
+	public void setBuildInformation(BuildInformation buildInformation) {
+		this.buildInformation = buildInformation;
 	}
 
 }
