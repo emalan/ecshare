@@ -6,5 +6,6 @@ database/
 bin/
 # ignored files
 derby.log
+src/build.properties
 #ignore backup files left from editors
 *~
