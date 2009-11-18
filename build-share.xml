@@ -23,12 +23,10 @@
 
     <target name="tag" description="Increment build and tag version control">
         <echo>Tagging git repository : ${version.num}-b${build.number}</echo>
-    	<!--
        	<exec executable="/usr/local/git/bin/git" dir="${share.dir}">
    	       <arg value="tag"/>
    	       <arg value="${version.num}-b${build.number}"/>
 	   	 </exec>
-	   	 -->
     </target>
 	
 	<target name="clean" description="o Cleans up the build artifacts">
@@ -69,6 +67,48 @@
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
+	</target>
+	
+	<target name="war-common" depends="compile" description="o Creates a WAR file for this package">
+		<buildnumber file="${share.dir}/src/build.properties" />
+		<antcall target="tag"></antcall>
+		<war destfile="${build.dir}/${final.name}.war" 
+			webxml="${src.web.dir}/WEB-INF/prodweb.xml"
+			excludes="**/package.html">
+			<manifest>
+	        	<attribute name="Built-By" value="${user.name}"/>
+	        	<attribute name="Implementation-Version" 
+	                 value="${version.num}-b${build.number}"/>         
+	    	</manifest>
+			<classes dir="${build.main.classes}"/>
+			<fileset dir="${src.web.dir}">
+				<include name="**/*"/>
+				<exclude name="**/web.xml" />
+				<exclude name="**/prodweb.xml" />
+			</fileset>
+			<lib dir="${share.dir}/wicket"/>
+			<lib dir="${share.dir}/spring">
+				<include name="**/*.jar"></include>
+			</lib>
+			<lib dir="${share.dir}/common">
+				<include name="**/*.jar"></include>
+			</lib>
+    	    <lib dir="${share.dir}/ddlutils">
+    	           <include name="**/*.jar"></include>
+    	    </lib>
+            <lib dir="${share.dir}/jackrabbit">
+                <include name="jcr-1.0.jar"></include>
+                <include name="jackrabbit-*.jar"></include>
+                <include name="lucene-core*.jar"></include>
+                <include name="slf4j*.jar"></include>
+                <include name="concurrent*.jar"></include>
+                <include name="mysql*.jar"></include>
+            </lib>
+			<lib dir="${share.dir}/container">
+			   <include name="cglib*.jar"></include>
+			</lib>
+		</war>
+		<copy file="${build.dir}/${final.name}.war" tofile="${build.dir}/ROOT.war"/>
 	</target>
 	
 	<target name="deploy-war">
