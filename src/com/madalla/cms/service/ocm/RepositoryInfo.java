@@ -92,6 +92,7 @@ public class RepositoryInfo {
 		EMAIL(Email.class, true, true, EC_NODE_DATA),
 		EMAILENTRY(EmailEntry.class, true, false, EC_NODE_DATA);
 		
+		
 		/**
 		 * This is the class that is to be registered for persistence
 		 */

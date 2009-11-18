@@ -81,6 +81,18 @@ public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester 
             
         });
     }
+    
+    protected String getApplicationNode(){
+    	return (String) jcrTemplate.execute(new JcrCallback(){
+    		
+    		public Object doInJcr(Session session) throws IOException,
+            RepositoryException {
+    			Node node = RepositoryInfo.getApplicationNode(session);
+    			session.save();
+    			return node.getPath();
+    		}
+    	});
+    }
 
 
 
