@@ -56,6 +56,12 @@ public class CmsPage extends WebPage {
 		    if (StringUtils.isNotEmpty(siteData.getMetaKeywords())){
 		        add(new KeywordHeaderContributor(siteData.getMetaKeywords()));
 		    }
+		    if (StringUtils.isNotEmpty(siteData.getGoogleVerification())){
+		        add(new StringHeaderContributor("<meta name=\"google-site-verification\" content=\"" + siteData.getGoogleVerification() + "\" />"));
+		    }
+		    if (StringUtils.isNotEmpty(siteData.getYahooVerification())){
+		        add(new StringHeaderContributor("<meta name=\"y_key\" content=\"" + siteData.getYahooVerification() + "\" />"));
+		    }
 		}
 		
         if (hasPopupLogin()) {

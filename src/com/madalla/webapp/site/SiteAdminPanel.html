@@ -27,38 +27,47 @@
     <wicket:panel>
     
         <div id="siteadmin" class="adminSection">
-            <span class="adminHeading"><wicket:message key="heading.site">Label Contents</wicket:message></span>
+            <span class="adminHeading"><wicket:message key="heading.site">[label]</wicket:message></span>
             <form wicket:id="siteForm">
                 <div>
-                    <label><wicket:message key="label.email">Label Contents</wicket:message></label>
+                    <label><wicket:message key="label.email">[label]</wicket:message></label>
                     <input style="width:20em;" wicket:id="adminEmail" class="inputText" type="text"/>
                     <span class="feedbackPanel" wicket:id="emailFeedback"></span>
                 </div>
                 <div>
-                    <label><wicket:message key="label.url">Label Contents</wicket:message></label>
+                    <label><wicket:message key="label.url">[label]</wicket:message></label>
                     <input style="width:20em;" wicket:id="url" class="inputText" type="text"/>
                     <span class="feedbackPanel" wicket:id="urlFeedback"></span>
                 </div>
                 <div>
-                    <label><wicket:message key="label.description">Label Contents</wicket:message></label>
+                    <label><wicket:message key="label.description">[label]</wicket:message></label>
                     <input style="width:30em;" wicket:id="metaDescription" class="inputText" type="text"/>
                 </div>
                 <div>
-                	
-                    <label><wicket:message key="label.keywords">Label Contents</wicket:message></label>
+                    <label><wicket:message key="label.keywords">[label]</wicket:message></label>
                     <input style="width:30em;" wicket:id="metaKeywords" class="inputText" type="text"/>
-                    <p class="info"><wicket:message key="info.keywords">Label Contents</wicket:message></p>
+                    <p class="info"><wicket:message key="info.keywords">[label]</wicket:message></p>
+                </div>
+                <div>
+                    <label><wicket:message key="label.google">[label]</wicket:message></label>
+                    <input style="width:20em;" wicket:id="googleVerification" class="inputText" type="text"/>
+                    <span class="feedbackPanel" wicket:id="googleFeedback"></span>
+                </div>
+                <div>
+                    <label><wicket:message key="label.yahoo">[label]</wicket:message></label>
+                    <input style="width:20em;" wicket:id="yahooVerification" class="inputText" type="text"/>
+                    <span class="feedbackPanel" wicket:id="yahooFeedback"></span>
                 </div>
                 <div id="locale">
                 	<span valign="top" wicket:id="localeList">
         				<input type="checkbox">site 1</input>
         				<input type="checkbox">site 2</input>
     				</span>
-                    <p class="info"><wicket:message key="info.locale">Label Contents</wicket:message></p>
+                    <p class="info"><wicket:message key="info.locale">[label]</wicket:message></p>
     			</div>
                 <div class="formButtons">
                     <span class="buttonwrapper">
-                        <a wicket:id="submitLink" class="orangebutton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
+                        <a wicket:id="submitLink" class="orangebutton"><span><wicket:message key="label.submit">[label]</wicket:message></span></a>
                     </span>
                     <span wicket:id="siteFeedback" class="feedbackPanel"></span>
                 </div>
