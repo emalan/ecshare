@@ -35,158 +35,152 @@ import com.madalla.wicket.KeywordHeaderContributor;
 
 public class CmsPage extends WebPage {
 
-    private static final String PAGE_TITLE = "page.title";
+	private static final String PAGE_TITLE = "page.title";
 
-    private String pageTitle = "(no title)";
-    
-	public CmsPage(){
-	    super();
-	    setPageTitle(getString(PAGE_TITLE));
-        add(new Label("title", new PropertyModel<String>(this,"pageTitle")));
+	private String pageTitle = "(no title)";
+
+	public CmsPage() {
+		super();
+		setPageTitle(getString(PAGE_TITLE));
+		add(new Label("title", new PropertyModel<String>(this, "pageTitle")));
 
 		add(Css.YUI_CORE);
 		add(Css.BASE);
-		
+
 		add(new StringHeaderContributor("<meta name=\"AUTHOR\" content=\"Eugene Malan\" />"));
-		if (!isMetadataOveridden()){
-		    SiteData siteData = getRepositoryService().getSiteData();
-		    if (StringUtils.isNotEmpty(siteData.getMetaDescription())){
-		        add(new StringHeaderContributor("<meta name=\"description\" content=\"" + siteData.getMetaDescription() + "\"/>" ));
-		    }
-		    if (StringUtils.isNotEmpty(siteData.getMetaKeywords())){
-		        add(new KeywordHeaderContributor(siteData.getMetaKeywords()));
-		    }
-		    if (StringUtils.isNotEmpty(siteData.getGoogleVerification())){
-		        add(new StringHeaderContributor("<meta name=\"google-site-verification\" content=\"" + siteData.getGoogleVerification() + "\" />"));
-		    }
-		    if (StringUtils.isNotEmpty(siteData.getYahooVerification())){
-		        add(new StringHeaderContributor("<meta name=\"y_key\" content=\"" + siteData.getYahooVerification() + "\" />"));
-		    }
+
+		if (isHomePage()) {
+			setupHomePage();
 		}
-		
-        if (hasPopupLogin()) {
 
-            //Login feedback
-//            FeedbackPanel feedback = new FeedbackPanel("feedback");
-//            feedback.setOutputMarkupId(true);
-//            add(feedback);
+		if (hasPopupLogin()) {
 
-            //Logon link
-            add(new AjaxFallbackLink<Object>("logon") {
-                private static final long serialVersionUID = 1L;
-                CmsSession session = (CmsSession) getSession();
-                
-                public void onClick(AjaxRequestTarget target) {
-                    if (session.isLoggedIn()){
-                        session.logout();
-                        setResponsePage(getPage());
-                    } else {
-                        if (target != null){
-                            target.appendJavascript("var elm = wicketGet('loginPopup'); wicketShow(elm); elm.focus();");
-                        } else {
-                            error(getString("label.javascript.error"));
-                        }
-                    } 
-                }
-                protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-                    if(session.isLoggedIn()){
-                        replaceComponentTagBody(markupStream, openTag, getString("label.logout"));
-                    } else {
-                        replaceComponentTagBody(markupStream, openTag, getString("label.login"));
-                    }
-                }
-            });
+			// Login feedback
+			// FeedbackPanel feedback = new FeedbackPanel("feedback");
+			// feedback.setOutputMarkupId(true);
+			// add(feedback);
 
-            add(new LoginPanel("signInPanel", new SecureCredentials(), false){
-            	private static final long serialVersionUID = 1L;
-            	private static final int loginMax = 4;
-            	private int count = 0;
-            	
-            	@Override
-				protected void preSignIn(String username) {
-            		if (getApplication().getConfigurationType().equals(Application.DEVELOPMENT)){
-            			return;
-            		}
-            		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
-            		if (authenticator.requiresSecureAuthentication(username)){
-            			redirectToInterceptPage(new SecureLoginPage(new PageParameters(RETURN_PAGE + "=" + getPage().getClass().getName()), username));
-            		}
+			// Logon link
+			add(new AjaxFallbackLink<Object>("logon") {
+				private static final long serialVersionUID = 1L;
+				CmsSession session = (CmsSession) getSession();
+
+				public void onClick(AjaxRequestTarget target) {
+					if (session.isLoggedIn()) {
+						session.logout();
+						setResponsePage(getPage());
+					} else {
+						if (target != null) {
+							target.appendJavascript("var elm = wicketGet('loginPopup'); wicketShow(elm); elm.focus();");
+						} else {
+							error(getString("label.javascript.error"));
+						}
+					}
 				}
-                
-				@Override
-                public boolean signIn(String username, String password) {
-                    CmsSession session = (CmsSession) getSession();
-                    if (session.login(username, password)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
 
-                @Override
-                protected void onSignInSucceeded() {
-                    // If login has been called because the user was not yet
-                    // logged in, then continue to the original destination,
-                    // otherwise to the Home page
-                    if (!continueToOriginalDestination())   {
-                        setResponsePage(getPage());
-                    }
-                }
+				protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+					if (session.isLoggedIn()) {
+						replaceComponentTagBody(markupStream, openTag, getString("label.logout"));
+					} else {
+						replaceComponentTagBody(markupStream, openTag, getString("label.login"));
+					}
+				}
+			});
+
+			add(new LoginPanel("signInPanel", new SecureCredentials(), false) {
+				private static final long serialVersionUID = 1L;
+				private static final int loginMax = 4;
+				private int count = 0;
+
+				@Override
+				protected void preSignIn(String username) {
+					if (getApplication().getConfigurationType().equals(Application.DEVELOPMENT)) {
+						return;
+					}
+					IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
+					if (authenticator.requiresSecureAuthentication(username)) {
+						redirectToInterceptPage(new SecureLoginPage(new PageParameters(RETURN_PAGE + "="
+								+ getPage().getClass().getName()), username));
+					}
+				}
+
+				@Override
+				public boolean signIn(String username, String password) {
+					CmsSession session = (CmsSession) getSession();
+					if (session.login(username, password)) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+
+				@Override
+				protected void onSignInSucceeded() {
+					// If login has been called because the user was not yet
+					// logged in, then continue to the original destination,
+					// otherwise to the Home page
+					if (!continueToOriginalDestination()) {
+						setResponsePage(getPage());
+					}
+				}
 
 				@Override
 				protected void onSignInFailed(String username) {
 					super.onSignInFailed(username);
 					count++;
 					if (count >= loginMax) {
-						redirectToInterceptPage(new UserLoginPage(new PageParameters(RETURN_PAGE + "=" + getPage().getClass().getName()), username));
+						redirectToInterceptPage(new UserLoginPage(new PageParameters(RETURN_PAGE + "="
+								+ getPage().getClass().getName()), username));
 					}
 				}
-                
-                
-            });
 
-        } else {
-            //dummy label that will end up hidden on page
-            add(new Label("signInPanel"));
-        }
-        
-        if (hasLoginLink()){
-            add(new AjaxFallbackLink<Object>("logon") {
-                private static final long serialVersionUID = 1L;
-                CmsSession session = (CmsSession) getSession();
-                
-                public void onClick(AjaxRequestTarget target) {
-                    if (session.isLoggedIn()){
-                        session.logout();
-                        setResponsePage(getPage());
-                    } else {
-                        if (target != null){
-                            setResponsePage(new UserLoginPage(new PageParameters(RETURN_PAGE + "=" + getPage().getClass().getName())));
-                        } else {
-                            error(getString("label.javascript.error"));
-                        }
-                    } 
-                }
-                protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-                    if(session.isLoggedIn()){
-                        replaceComponentTagBody(markupStream, openTag, getString("label.logout"));
-                    } else {
-                        replaceComponentTagBody(markupStream, openTag, getString("label.login"));
-                    }
-                }
-            });
-        }
-        
-        if (hasLangDropDown()) {
-        	List<SiteLanguage> langs = getRepositoryService().getSiteData().getLocaleList();
-        	langs.add(SiteLanguage.ENGLISH);
-        	
-        	final IModel<SiteLanguage> langModel = new Model<SiteLanguage>();
-        	langModel.setObject(SiteLanguage.getLanguage(getSession().getLocale().getLanguage()));
-        	DropDownChoice<SiteLanguage> choice = new DropDownChoice<SiteLanguage>("langSelect", langModel, langs, new ChoiceRenderer<SiteLanguage>("locale.displayLanguage"));
-        	
-        	choice.setNullValid(false);
-        	choice.add(new OnChangeAjaxBehavior(){
+			});
+
+		} else {
+			// dummy label that will end up hidden on page
+			add(new Label("signInPanel"));
+		}
+
+		if (hasLoginLink()) {
+			add(new AjaxFallbackLink<Object>("logon") {
+				private static final long serialVersionUID = 1L;
+				CmsSession session = (CmsSession) getSession();
+
+				public void onClick(AjaxRequestTarget target) {
+					if (session.isLoggedIn()) {
+						session.logout();
+						setResponsePage(getPage());
+					} else {
+						if (target != null) {
+							setResponsePage(new UserLoginPage(new PageParameters(RETURN_PAGE + "="
+									+ getPage().getClass().getName())));
+						} else {
+							error(getString("label.javascript.error"));
+						}
+					}
+				}
+
+				protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+					if (session.isLoggedIn()) {
+						replaceComponentTagBody(markupStream, openTag, getString("label.logout"));
+					} else {
+						replaceComponentTagBody(markupStream, openTag, getString("label.login"));
+					}
+				}
+			});
+		}
+
+		if (hasLangDropDown()) {
+			List<SiteLanguage> langs = getRepositoryService().getSiteData().getLocaleList();
+			langs.add(SiteLanguage.ENGLISH);
+
+			final IModel<SiteLanguage> langModel = new Model<SiteLanguage>();
+			langModel.setObject(SiteLanguage.getLanguage(getSession().getLocale().getLanguage()));
+			DropDownChoice<SiteLanguage> choice = new DropDownChoice<SiteLanguage>("langSelect", langModel, langs,
+					new ChoiceRenderer<SiteLanguage>("locale.displayLanguage"));
+
+			choice.setNullValid(false);
+			choice.add(new OnChangeAjaxBehavior() {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -194,53 +188,79 @@ public class CmsPage extends WebPage {
 					getSession().setLocale(langModel.getObject().locale);
 					setResponsePage(getPage());
 				}
-        		
-        	});
-        	add(choice);
-        	
-        }
+
+			});
+			add(choice);
+
+		}
 
 	}
 	
-	
-	/**
-	 * @return true if you want to set your own metadata, otherwise the metadata will be set from the CMS values
-	 */
-	protected boolean isMetadataOveridden(){
-	    return false;
+	private void setupHomePage(){
+		SiteData siteData = getRepositoryService().getSiteData();
+		setLocaleFromUrl(getRequest().getURL());
+		if (!isMetadataOveridden()) {
+			if (StringUtils.isNotEmpty(siteData.getMetaDescription())) {
+				add(new StringHeaderContributor("<meta name=\"description\" content=\""
+						+ siteData.getMetaDescription() + "\"/>"));
+			}
+			if (StringUtils.isNotEmpty(siteData.getMetaKeywords())) {
+				add(new KeywordHeaderContributor(siteData.getMetaKeywords()));
+			}
+		}
 	}
 	
+	private void setLocaleFromUrl(String url){
+		String[] urlfrags = url.split("/");
+		String s = urlfrags[urlfrags.length - 1];
+		if (s.length() == 2){
+			getSession().setLocale(SiteLanguage.getLanguage(s).locale);
+		}
+	}
+
+	/**
+	 * @return true if you want to set your own metadata, otherwise the metadata
+	 *         will be set from the CMS values
+	 */
+	protected boolean isMetadataOveridden() {
+		return false;
+	}
+
 	/**
 	 * @return true if you want to use the built in popup login
 	 */
-	protected boolean hasPopupLogin(){
-	    return false;
+	protected boolean hasPopupLogin() {
+		return false;
 	}
-	
-    /**
-     * @return true if you want to use the built in popup login
-     */
-    protected boolean hasLoginLink(){
-        return false;
-    }
-    
-    /**
-     * 
-     * @return true if you want a lang dropdown for dynamic languae switching
-     */
-    protected boolean hasLangDropDown(){
-    	return false;
-    }
 
-    protected void setPageTitle(String pageTitle) {
-        this.pageTitle = pageTitle;
-    }
+	/**
+	 * @return true if you want to use the built in popup login
+	 */
+	protected boolean hasLoginLink() {
+		return false;
+	}
 
-    protected String getPageTitle() {
-        return pageTitle;
-    }
-    
-    protected IDataService getRepositoryService(){
-    	return ((IDataServiceProvider)getApplication()).getRepositoryService();
-    }
+	/**
+	 * 
+	 * @return true if you want a lang dropdown for dynamic languae switching
+	 */
+	protected boolean hasLangDropDown() {
+		return false;
+	}
+
+	protected void setPageTitle(String pageTitle) {
+		this.pageTitle = pageTitle;
+	}
+
+	protected String getPageTitle() {
+		return pageTitle;
+	}
+
+	protected IDataService getRepositoryService() {
+		return ((IDataServiceProvider) getApplication()).getRepositoryService();
+	}
+
+	protected boolean isHomePage() {
+		return getApplication().getHomePage().equals(this.getPageClass());
+	}
 }

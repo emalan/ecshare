@@ -21,13 +21,5 @@ public interface ISiteData {
 	String getLocales();
 	
 	void setLocales(String locales);
-	
-	String getGoogleVerification() ;
-
-	void setGoogleVerification(String googleVerification);
-
-	String getYahooVerification();
-
-	void setYahooVerification(String yahooVerification);
 
 }

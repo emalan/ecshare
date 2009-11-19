@@ -16,9 +16,6 @@ public class Site extends SiteData{
 	@Field private String adminEmail;
 	@Field private String locales;
 	@Field private String url;
-	@Field private String googleVerification;
-	@Field private String yahooVerification;
-
 	
 	public Site(){
 		
@@ -80,22 +77,5 @@ public class Site extends SiteData{
 	public void setUrl(String url){
 		this.url = url;
 	}
-
-	public String getGoogleVerification() {
-		return googleVerification;
-	}
-
-	public void setGoogleVerification(String googleVerification) {
-		this.googleVerification = googleVerification;
-	}
-
-	public String getYahooVerification() {
-		return yahooVerification;
-	}
-
-	public void setYahooVerification(String yahooVerification) {
-		this.yahooVerification = yahooVerification;
-	}
-
 
 }

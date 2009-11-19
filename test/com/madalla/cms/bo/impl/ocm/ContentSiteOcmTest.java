@@ -13,7 +13,6 @@ public class ContentSiteOcmTest extends AbstractContentOcmTest{
 		Site site = new Site(parentPath, name);
 		
 		site.setMetaKeywords(keywords);
-		site.setGoogleVerification("sdfb");
 		
 		ocm.insert(site);
 		ocm.save();

@@ -1,8 +1,5 @@
 package com.madalla.webapp.site;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
@@ -14,9 +11,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.util.parse.metapattern.MetaPattern;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
-import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.UrlValidator;
 
 import com.madalla.bo.SiteData;
@@ -30,8 +25,6 @@ import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
 public class SiteAdminPanel extends CmsPanel{
 
     private static final long serialVersionUID = 1L;
-    private static final Log log = LogFactory.getLog(SiteAdminPanel.class);
-    private static final String PATTERN_KEY = "[^\"\'<> ]*";
     
     public class SiteForm extends Form<SiteData> {
 
@@ -47,20 +40,6 @@ public class SiteAdminPanel extends CmsPanel{
             add(new TextField<String>("metaDescription"));
            
             add(new TextField<String>("metaKeywords"));
-            
-            Component google = new TextField<String>("googleVerification").add(new PatternValidator(PATTERN_KEY));
-            FeedbackPanel googleFeedback = new ComponentFeedbackPanel("googleFeedback",google);
-            googleFeedback.setOutputMarkupId(true);
-            google.add(new AjaxValidationBehaviour(googleFeedback));
-            add(google);
-            add(googleFeedback);
-            
-            Component yahoo = new TextField<String>("yahooVerification").add(new PatternValidator(PATTERN_KEY));
-            FeedbackPanel yahooFeedback = new ComponentFeedbackPanel("yahooFeedback", yahoo);
-            yahooFeedback.setOutputMarkupId(true);
-            yahoo.add(new AjaxValidationBehaviour(yahooFeedback));
-            add(yahoo);
-            add(yahooFeedback);
             
             TextField<String> url = new TextField<String>("url");
             FeedbackPanel urlFeedback = new ComponentFeedbackPanel("urlFeedback", url);
@@ -103,7 +82,7 @@ public class SiteAdminPanel extends CmsPanel{
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 super.onSubmit(target, form);
-                saveSiteData((SiteData)form.getModelObject());
+                saveData((SiteData)form.getModelObject());
                 form.info(getString("message.success"));
             }
             
@@ -115,11 +94,6 @@ public class SiteAdminPanel extends CmsPanel{
     
     private SiteData getSiteData(){
     	return getRepositoryService().getSiteData();
-    }
-    
-    private void saveSiteData(SiteData data){
-        log.debug("saveSiteData - + " + data);
-        saveData(data);
     }
 
     

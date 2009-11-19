@@ -16,6 +16,7 @@ import org.apache.wicket.protocol.https.HttpsRequestCycleProcessor;
 import org.apache.wicket.request.IRequestCycleProcessor;
 
 import com.madalla.BuildInformation;
+import com.madalla.bo.SiteLanguage;
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
 import com.madalla.service.IDataService;
@@ -25,6 +26,7 @@ import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.webapp.authorization.AppAuthorizationStrategy;
 import com.madalla.webapp.authorization.PageAuthorization;
 import com.madalla.webapp.panel.Panels;
+import com.madalla.wicket.I18NBookmarkablePageRequestTargetUrlCodingStrategy;
 
 /**
  * Abstract Wicket Application class that needs to extended to enable usage 
@@ -53,6 +55,10 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
     		log.fatal("Content Admin Service is not configured Correctly.");
     		throw new WicketRuntimeException("Repository Admin Service is not configured Correctly.");
     	}
+    	if (dataService == null){
+    		log.fatal("Repository Data Service is not configured Correctly.");
+    		throw new WicketRuntimeException("Repository Data Service is not configured Correctly.");
+    	}
     	if (emailSender == null){
     		log.fatal("Email Sender is not configured Correctly.");
     		throw new WicketRuntimeException("Email Service is not configured Correctly.");
@@ -67,6 +73,13 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
     private void setupApplicationSpecificConfiguration(){
     	//getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
     	setupSecurity();
+    	setupLanguageHomePages();
+    }
+    
+    public void setupLanguageHomePages(){
+    	for (SiteLanguage lang : SiteLanguage.getLanguages()){
+    		mount(new I18NBookmarkablePageRequestTargetUrlCodingStrategy(lang.locale, lang.getLanguageCode(), getHomePage()));
+    	}
     }
     
     protected void setupSecurity(){
