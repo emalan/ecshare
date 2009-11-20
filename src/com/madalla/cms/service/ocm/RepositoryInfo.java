@@ -20,13 +20,15 @@ import com.madalla.cms.bo.impl.ocm.image.Image;
 import com.madalla.cms.bo.impl.ocm.page.Content;
 import com.madalla.cms.bo.impl.ocm.page.ContentEntry;
 import com.madalla.cms.bo.impl.ocm.page.Page;
+import com.madalla.cms.bo.impl.ocm.page.PageMeta;
+import com.madalla.cms.bo.impl.ocm.page.PageMetaLang;
 import com.madalla.cms.bo.impl.ocm.page.Resource;
 import com.madalla.cms.bo.impl.ocm.security.User;
 import com.madalla.cms.bo.impl.ocm.security.UserSite;
 import com.madalla.cms.bo.impl.ocm.video.VideoPlayer;
 import com.madalla.cms.jcr.JcrUtils;
 /**
- * Information regarding the Schema in the Content respository System
+ * Information regarding the Schema in the Content repository System.
  * <p>
  * The schema is depicted below. The data regarding the parent nodes and 
  * the classes that are children is all stored here. The RepositoryType
@@ -83,6 +85,8 @@ public class RepositoryInfo {
 		ALBUM(Album.class, true, true, EC_NODE_IMAGES),
 		IMAGE(Image.class, true, false, EC_NODE_IMAGES),
 		PAGE(Page.class, true, true, EC_NODE_PAGES),
+		PAGEMETA(PageMeta.class, true, false, EC_NODE_PAGES),
+		PAGEMETALANG(PageMetaLang.class, true, false, EC_NODE_PAGES),
 		CONTENT(Content.class, true, false, EC_NODE_PAGES),
 		CONTENTENTRY(ContentEntry.class, true, false, EC_NODE_PAGES),
 		RESOURCE(Resource.class, true, false, EC_NODE_PAGES),

@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * @author emalan
+ *
+ */
 public enum SiteLanguage{
 	ENGLISH(Locale.ENGLISH, "Editable content", "Hover&Click to edit"),
 	AFRIKAANS(new Locale("af"), "Afrikaans editable content", "Klik om te redigeer"),
@@ -29,7 +33,7 @@ public enum SiteLanguage{
 	}
 	
 	public String getDisplayName(){
-		return locale.getDisplayName();
+		return locale.getDisplayName(Locale.ENGLISH);
 	}
 	
 	public String getLanguageCode(){
