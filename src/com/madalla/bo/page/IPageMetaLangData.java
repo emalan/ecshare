@@ -5,6 +5,10 @@ public interface IPageMetaLangData {
     String getName();
 
 	  String getId();
+	  
+	  String getDisplayName();
+	  
+	  void setDisplayName(String displayName);
 
 	  String getTitle();
 

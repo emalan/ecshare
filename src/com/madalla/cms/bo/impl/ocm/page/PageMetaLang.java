@@ -12,8 +12,9 @@ public class PageMetaLang extends PageMetaLangData {
 	private static final long serialVersionUID = 1L;
 	
 	@Field(path=true) private String id;
-	@Field private String title;
 	@Field private String lang;
+	@Field private String displayName;
+	@Field private String title;
 	@Field private String description;
 	@Field private String keywords;
 	@Field private String author;
@@ -41,6 +42,12 @@ public class PageMetaLang extends PageMetaLangData {
 	 */
 	public String getId() {
 		return id;
+	}
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+	public String getDisplayName() {
+		return displayName;
 	}
 	/* (non-Javadoc)
 	 * @see com.madalla.cms.bo.impl.ocm.page.IPageMetaLangData#getTitle()
