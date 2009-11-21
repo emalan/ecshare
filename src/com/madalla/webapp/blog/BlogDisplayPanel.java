@@ -4,6 +4,7 @@ import static com.madalla.webapp.blog.BlogParameters.BLOG_ENTRY_ID;
 import static com.madalla.webapp.blog.BlogParameters.BLOG_NAME;
 import static com.madalla.webapp.blog.BlogParameters.RETURN_PAGE;
 
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.behavior.StringHeaderContributor;
 import org.apache.wicket.datetime.StyleDateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.markup.html.basic.Label;
@@ -32,10 +34,10 @@ import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.BlogEntryPage;
-import com.madalla.wicket.KeywordHeaderContributor;
 
 public class BlogDisplayPanel extends Panel {
 	private static final long serialVersionUID = 1L;
+	private static final String META_NAME = "<meta name=\"{0}\" content=\"{1}\"/>";
 
 	private final Log log = LogFactory.getLog(this.getClass());
 	private int displayCount = 5;
@@ -46,7 +48,7 @@ public class BlogDisplayPanel extends Panel {
 		init(id, blog, returnPage );
 		changeModel(blogEntryId);
 		add(new SimpleAttributeModifier("class","showBlog"));
-		add(new KeywordHeaderContributor(blogEntry.getKeywords()));
+		add(new StringHeaderContributor(MessageFormat.format(META_NAME, "keywords", blogEntry.getKeywords())));
 	}
 	BlogDisplayPanel(final String id, final BlogData blog, final Class<? extends Page> returnPage) {
 		super(id);
@@ -54,7 +56,7 @@ public class BlogDisplayPanel extends Panel {
 		//TODO Store the Blog Home Meatadata keywords in CMS
 		//TODO Change the Content Entry to a Blog intro and keywords
 		blogEntry.setKeywords("Eugene Malan, Eugene, Malan, Blog, CMS, Wicket, Java,"+blogEntry.getBlog());
-		add(new KeywordHeaderContributor(blogEntry.getKeywords()));
+		add(new StringHeaderContributor(MessageFormat.format(META_NAME, "keywords", blogEntry.getKeywords())));
 	}
 	
 	private void init(final String id, final BlogData blog, final Class<? extends Page> returnPage) {

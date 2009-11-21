@@ -2,6 +2,7 @@ package com.madalla.webapp;
 
 import static com.madalla.webapp.PageParams.RETURN_PAGE;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -24,6 +25,8 @@ import org.apache.wicket.model.PropertyModel;
 import com.madalla.bo.SiteData;
 import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.PageData;
+import com.madalla.bo.page.PageMetaLangData;
+import com.madalla.cms.bo.impl.ocm.Site;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.util.security.SecureCredentials;
@@ -32,7 +35,6 @@ import com.madalla.webapp.login.LoginPanel;
 import com.madalla.webapp.pages.SecureLoginPage;
 import com.madalla.webapp.pages.UserLoginPage;
 import com.madalla.webapp.security.IAuthenticator;
-import com.madalla.wicket.KeywordHeaderContributor;
 
 /**
  * Base class for Application Pages that supplies Content and other functionality.
@@ -51,6 +53,8 @@ import com.madalla.wicket.KeywordHeaderContributor;
 public abstract class CmsPage extends WebPage {
 
 	private static final String PAGE_TITLE = "page.title";
+	private static final String META_NAME = "<meta name=\"{0}\" content=\"{1}\"/>";
+	private static final String META_HTTP = "<meta http-equiv=\"{0}\" content=\"{1}\"/>";
 
 	private String pageTitle = "(no title)";
 	
@@ -99,11 +103,12 @@ public abstract class CmsPage extends WebPage {
 		add(Css.YUI_CORE);
 		add(Css.BASE);
 		
-		PageData page = getRepositoryService().getPage(getPageName());
-
 		if (isHomePage()) {
-			setupHomePage();
+			setLocaleFromUrl(getRequest().getURL());
 		}
+		PageData page = getRepositoryService().getPage(getPageName());
+		PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(getLocale(), page);
+		processPageMetaInformation(pageInfo);
 
 		if (hasPopupLogin()) {
 			setupPopupLogin();
@@ -122,16 +127,41 @@ public abstract class CmsPage extends WebPage {
 
 	}
 	
-	private void setupHomePage(){
-		SiteData siteData = getRepositoryService().getSiteData();
-		setLocaleFromUrl(getRequest().getURL());
-		if (!isMetadataOveridden()) {
-			if (StringUtils.isNotEmpty(siteData.getMetaDescription())) {
-				add(new StringHeaderContributor("<meta name=\"description\" content=\""
-						+ siteData.getMetaDescription() + "\"/>"));
+	private void processPageMetaInformation(PageMetaLangData pageInfo){
+		//TODO remove the following block
+		if (isHomePage()) {
+			SiteData siteData = getRepositoryService().getSiteData();
+			if (StringUtils.isNotEmpty(siteData.getMetaDescription())){
+				if (StringUtils.isEmpty(pageInfo.getDescription())){
+					pageInfo.setDescription(siteData.getMetaDescription());
+					getRepositoryService().saveDataObject(pageInfo);
+				}
+				((Site) siteData).setMetaDescription("");
 			}
-			if (StringUtils.isNotEmpty(siteData.getMetaKeywords())) {
-				add(new KeywordHeaderContributor(siteData.getMetaKeywords()));
+			if(StringUtils.isNotEmpty(siteData.getMetaKeywords())){
+				if (StringUtils.isEmpty(pageInfo.getKeywords())){
+					pageInfo.setKeywords(siteData.getMetaKeywords());
+					getRepositoryService().saveDataObject(pageInfo);
+				}
+				((Site) siteData).setMetaKeywords("");
+			}
+		}
+		//remove to here
+		
+		add(new StringHeaderContributor(MessageFormat.format(META_HTTP, "lang", pageInfo.getLang())));
+		
+		if (!isMetadataOveridden()) {
+			if (StringUtils.isNotEmpty(pageInfo.getTitle())){
+				add(new StringHeaderContributor("<title>" + pageInfo.getTitle() + "</title>"));
+			}
+			if (StringUtils.isNotEmpty(pageInfo.getAuthor())){
+				add(new StringHeaderContributor(MessageFormat.format(META_NAME, "author", pageInfo.getAuthor())));
+			}
+			if (StringUtils.isNotEmpty(pageInfo.getDescription())) {
+				add(new StringHeaderContributor(MessageFormat.format(META_NAME, "description", pageInfo.getDescription())));
+			}
+			if (StringUtils.isNotEmpty(pageInfo.getKeywords())) {
+				add(new StringHeaderContributor(MessageFormat.format(META_NAME, "keywords", pageInfo.getKeywords())));
 			}
 		}
 	}

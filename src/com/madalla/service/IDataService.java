@@ -21,6 +21,7 @@ import com.madalla.bo.image.ImageData;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
+import com.madalla.bo.page.PageMetaLangData;
 import com.madalla.bo.page.ResourceData;
 import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
@@ -65,6 +66,8 @@ public interface IDataService {
 
 	// Content
 	PageData getPage(final String name);
+	
+	PageMetaLangData getPageMetaLang(final Locale locale, final PageData page);
 
 	String getContentText(final ContentData parent, Locale locale); 
 

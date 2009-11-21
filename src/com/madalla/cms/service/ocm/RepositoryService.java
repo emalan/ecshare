@@ -32,6 +32,8 @@ import com.madalla.bo.image.ImageData;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
+import com.madalla.bo.page.PageMetaData;
+import com.madalla.bo.page.PageMetaLangData;
 import com.madalla.bo.page.ResourceData;
 import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
@@ -45,6 +47,8 @@ import com.madalla.cms.bo.impl.ocm.image.ImageHelper;
 import com.madalla.cms.bo.impl.ocm.page.Content;
 import com.madalla.cms.bo.impl.ocm.page.ContentEntry;
 import com.madalla.cms.bo.impl.ocm.page.Page;
+import com.madalla.cms.bo.impl.ocm.page.PageMeta;
+import com.madalla.cms.bo.impl.ocm.page.PageMetaLang;
 import com.madalla.cms.bo.impl.ocm.page.Resource;
 import com.madalla.cms.bo.impl.ocm.security.User;
 import com.madalla.cms.bo.impl.ocm.security.UserSite;
@@ -302,6 +306,32 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
             @Override
             public AbstractData createNew(String parentPath, String name) {
                 return new Page(parentPath, name);
+            }
+
+        });
+    }
+    
+    private PageMetaData getPageMeta(final PageData page) {
+    	return (PageMetaData) repositoryTemplate.getOcmObject(RepositoryType.PAGEMETA, page, PageMeta.NAME, new RepositoryTemplateCallback(){
+
+            @Override
+            public AbstractData createNew(String parentPath, String name) {
+                return new PageMeta(page);
+            }
+
+        });
+    }
+    
+    public PageMetaLangData getPageMetaLang(final Locale locale, final PageData page) {
+    	final PageMetaData pageMeta = getPageMeta(page);
+    	SiteLanguage siteLang = getSiteLanguage(locale);
+    	return (PageMetaLangData) repositoryTemplate.getOcmObject(RepositoryType.PAGEMETALANG, pageMeta, siteLang.getDisplayName(), new RepositoryTemplateCallback(){
+
+            @Override
+            public AbstractData createNew(String parentPath, String name) {
+                PageMetaLang lang =  new PageMetaLang(pageMeta, name);
+                lang.setLang(locale.getLanguage());
+                return lang;
             }
 
         });

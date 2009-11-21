@@ -12,7 +12,7 @@ public class PageMeta  extends PageMetaData {
 	private static final long serialVersionUID = 1L;
 	
 	//There is only one per Page so name is hardcoded
-	private static final String NAME = "MetaInfo";
+	public static final String NAME = "MetaInfo";
 	
     @Field(path=true) private String id;
     
