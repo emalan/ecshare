@@ -28,6 +28,8 @@ public class SiteAdminPanel extends CmsPanel{
     
     public class SiteForm extends Form<SiteData> {
 
+        private static final long serialVersionUID = 1L;
+
         public SiteForm(String id, IModel<SiteData> model) {
             super(id, model);
             
@@ -55,8 +57,6 @@ public class SiteAdminPanel extends CmsPanel{
             
         }
 
-        private static final long serialVersionUID = 1L;
-        
     }
     
     public SiteAdminPanel(String id) {

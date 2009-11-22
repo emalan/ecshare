@@ -20,7 +20,6 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.bo.SiteData;
 import com.madalla.bo.SiteLanguage;
@@ -34,6 +33,7 @@ import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.LoginPanel;
 import com.madalla.webapp.pages.SecureLoginPage;
 import com.madalla.webapp.pages.UserLoginPage;
+import com.madalla.webapp.panel.Panels;
 import com.madalla.webapp.security.IAuthenticator;
 
 /**
@@ -52,11 +52,11 @@ import com.madalla.webapp.security.IAuthenticator;
  */
 public abstract class CmsPage extends WebPage {
 
-	private static final String PAGE_TITLE = "page.title";
 	private static final String META_NAME = "<meta name=\"{0}\" content=\"{1}\"/>";
 	private static final String META_HTTP = "<meta http-equiv=\"{0}\" content=\"{1}\"/>";
 
 	private String pageTitle = "(no title)";
+	private PageData pageData;
 	
 	public abstract class LoginLink extends AjaxFallbackLink<Object> {
 		
@@ -97,8 +97,6 @@ public abstract class CmsPage extends WebPage {
 
 	public CmsPage() {
 		super();
-		setPageTitle(getString(PAGE_TITLE));
-		add(new Label("title", new PropertyModel<String>(this, "pageTitle")));
 
 		add(Css.YUI_CORE);
 		add(Css.BASE);
@@ -106,8 +104,8 @@ public abstract class CmsPage extends WebPage {
 		if (isHomePage()) {
 			setLocaleFromUrl(getRequest().getURL());
 		}
-		PageData page = getRepositoryService().getPage(getPageName());
-		PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(getLocale(), page);
+		pageData = getRepositoryService().getPage(getPageName());
+		PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(getLocale(), pageData);
 		processPageMetaInformation(pageInfo);
 
 		if (hasPopupLogin()) {
@@ -322,5 +320,30 @@ public abstract class CmsPage extends WebPage {
 		return getApplication().getHomePage().equals(this.getPageClass());
 	}
 	
-	abstract protected String getPageName();
+	
+	/**
+	 * Add a Text Content Panel to this page. NOTE: be careful to not use this method
+	 * from a parent class whose Page Class can change
+	 * 
+	 * @param name
+	 */
+	protected void addContentPanel(String name){
+		add(Panels.contentPanel(name, getPageName(), this.getPageClass()));
+	}
+	
+	protected void addContentInlinePanel(String name){
+		add(Panels.contentInlinePanel(name, getPageName()));
+	}
+	
+	protected void addContentLinkPanel(String name){
+		add(Panels.contentLinkPanel(name, getPageName()));
+	}
+	
+	protected String getPageName(){
+		return getPageClass().getSimpleName();
+	}
+	
+	protected PageData getPageData(){
+		return pageData;
+	}
 }

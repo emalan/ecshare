@@ -2,7 +2,6 @@ package com.madalla.webapp;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.behavior.StringHeaderContributor;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -28,7 +27,6 @@ public abstract class AdminPage extends WebPage {
 	    
 	    setPageTitle(getString("page.title"));
         add(new Label("title", new PropertyModel<String>(this,"pageTitle")));
-        add(new StringHeaderContributor("<meta name=\"AUTHOR\" content=\"Eugene Malan\" />"));
 
         add(Css.YUI_CORE);
         add(Css.BASE);
