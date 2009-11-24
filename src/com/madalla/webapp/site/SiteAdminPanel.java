@@ -12,13 +12,14 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.UrlValidator;
 
 import com.madalla.bo.SiteData;
 import com.madalla.bo.SiteLanguage;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.login.aware.LinkLoginAware;
+import com.madalla.webapp.pages.PageAdminPage;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationBehaviour;
 import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
@@ -66,6 +67,8 @@ public class SiteAdminPanel extends CmsPanel{
     public SiteAdminPanel(String id) {
         super(id);
         add(Css.CSS_FORM);
+        
+        add(new LinkLoginAware("pageAdminLink", PageAdminPage.class, true));
         
         final Form<SiteData> form = new SiteForm("siteForm", new CompoundPropertyModel<SiteData>(getSiteData()));
         add(form);

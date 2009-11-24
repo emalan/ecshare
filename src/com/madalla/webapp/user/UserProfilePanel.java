@@ -78,7 +78,7 @@ public class UserProfilePanel extends CmsPanel{
 				@Override
 				public void onClick() {
 					AdminPage page = new SecurePasswordPage(username,"");
-					page.setReturnPage(returnPage);
+					page.setReturnPage(((AdminPage)getPage()).getReturnPage());
 					setResponsePage(page);
 				}
 				
@@ -91,7 +91,7 @@ public class UserProfilePanel extends CmsPanel{
 				@Override
 				public void onClick() {
 					AdminPage page = new UserPasswordPage(username,"");
-					page.setReturnPage(returnPage);
+					page.setReturnPage(((AdminPage)getPage()).getReturnPage());
 					setResponsePage(page);
 				}
 				

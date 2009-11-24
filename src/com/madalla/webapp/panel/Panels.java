@@ -15,7 +15,6 @@ import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.blog.BlogHomePanel;
 import com.madalla.webapp.blog.admin.BlogEntryPanel;
 import com.madalla.webapp.email.EmailFormPanel;
-import com.madalla.webapp.google.YoutubePlayerPanel;
 import com.madalla.webapp.images.AlbumPanel;
 import com.madalla.webapp.images.admin.AlbumAdminPanel;
 import com.madalla.webapp.images.exhibit.ExhibitPanel;
@@ -34,17 +33,6 @@ import com.madalla.webapp.images.exhibit.ExhibitPanel;
 public class Panels {
 	
 	private Panels(){}
-	
-	/**
-	 * @param id wicket id
-	 * @param node Content Parent Node, normally Page Name
-	 * @return Instantiated Panel of type YoutubePlayerPanel
-	 */
-	public static Panel videoPlayerPanel(String id, String node){
-		validate("YoutubePlayerPanel", id, node);
-		return new YoutubePlayerPanel(id, node);
-	}
-	
 	
 	/**
 	 * @param id - wicket id
@@ -73,16 +61,6 @@ public class Panels {
 		} else {
 			return new BlogEntryPanel(id, blogName, blogEntryId, getReturnPage(parameters, "BlogEntryPanel"));
 		}
-	}
-	
-	/**
-	 * @param id - wicket id
-	 * @param subject - this will end up as subject in the email
-	 * @return Instantiated Panel of Type {@link com.madalla.webapp.email.EmailFormPanel}
-	 */
-	public static Panel emailPanel(String id, String subject){
-		validate("EmailFormPanel", id, subject);
-		return new EmailFormPanel(id, subject);
 	}
 	
 	/**

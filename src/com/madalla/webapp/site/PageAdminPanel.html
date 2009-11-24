@@ -1,0 +1,54 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+        form div label {
+            width:7em;
+            clear: both;
+        }
+        form div p {
+            padding-left: 15px;
+            padding-top: 5px;
+            width: 30em;
+            clear:both;
+        }
+
+    </style>
+</wicket:head>
+<body>
+    <wicket:panel>
+    
+        <div class="adminSection">
+            <span class="adminHeading"><wicket:message key="heading.site">[label]</wicket:message></span>
+            <form wicket:id="homeBaseForm">
+                <div>
+                    <label><wicket:message key="label.title">[label]</wicket:message></label>
+                    <input style="width:20em;" wicket:id="title" class="inputText" type="text"/>
+                    <span class="feedbackPanel" wicket:id="titleFeedback"></span>
+                </div>
+                <div>
+                    <label><wicket:message key="label.author">[label]</wicket:message></label>
+                    <input style="width:20em;" wicket:id="author" class="inputText" type="text"/>
+                </div>
+                <div>
+                    <label><wicket:message key="label.description">[label]</wicket:message></label>
+                    <input style="width:30em;" wicket:id="metaDescription" class="inputText" type="text"/>
+                </div>
+                <div>
+                    <label><wicket:message key="label.keywords">[label]</wicket:message></label>
+                    <input style="width:30em;" wicket:id="metaKeywords" class="inputText" type="text"/>
+                    <p class="info"><wicket:message key="info.keywords">[label]</wicket:message></p>
+                </div>
+                <div class="formButtons">
+                    <span class="buttonwrapper">
+                        <a wicket:id="submitLink" class="orangebutton"><span><wicket:message key="label.submit">[label]</wicket:message></span></a>
+                    </span>
+                    <span wicket:id="homeBaseFeedback" class="feedbackPanel"></span>
+                </div>
+                
+            </form>
+        </div>
+               
+        
+    </wicket:panel>
+</body>
+</html>

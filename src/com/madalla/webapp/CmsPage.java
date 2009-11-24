@@ -33,6 +33,7 @@ import com.madalla.webapp.cms.ContentLinkPanel;
 import com.madalla.webapp.cms.ContentPanel;
 import com.madalla.webapp.cms.InlineContentPanel;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.email.EmailFormPanel;
 import com.madalla.webapp.login.LoginPanel;
 import com.madalla.webapp.pages.SecureLoginPage;
 import com.madalla.webapp.pages.UserLoginPage;
@@ -335,6 +336,10 @@ public abstract class CmsPage extends WebPage {
 	
 	protected void addContentLinkPanel(String id){
 		add(new ContentLinkPanel(id, getPageName()));
+	}
+	
+	protected void addEmailPanel(String id, String subject){
+		add(new EmailFormPanel(id, subject));
 	}
 	
 	protected String getPageName(){
