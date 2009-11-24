@@ -21,5 +21,9 @@ public interface ISiteData {
 	String getLocales();
 	
 	void setLocales(String locales);
+	
+	Boolean getSecurityCertificate();
+	
+	void setSecurityCertificate(Boolean requiresAuthentication);
 
 }

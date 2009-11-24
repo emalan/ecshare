@@ -25,6 +25,8 @@ import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.webapp.authorization.AppAuthorizationStrategy;
 import com.madalla.webapp.authorization.PageAuthorization;
+import com.madalla.webapp.pages.SecurePasswordPage;
+import com.madalla.webapp.pages.UserPasswordPage;
 import com.madalla.webapp.panel.Panels;
 import com.madalla.wicket.I18NBookmarkablePageRequestTargetUrlCodingStrategy;
 
@@ -73,13 +75,15 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
     private void setupApplicationSpecificConfiguration(){
     	//getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
     	setupSecurity();
-    	setupLanguageHomePages();
+    	setupPageMounts();
     }
     
-    public void setupLanguageHomePages(){
+    public void setupPageMounts(){
     	for (SiteLanguage lang : SiteLanguage.getLanguages()){
     		mount(new I18NBookmarkablePageRequestTargetUrlCodingStrategy(lang.locale, lang.getLanguageCode(), getHomePage()));
     	}
+    	mountBookmarkablePage("password", UserPasswordPage.class);
+    	mountBookmarkablePage("securePassword", SecurePasswordPage.class);
     }
     
     protected void setupSecurity(){

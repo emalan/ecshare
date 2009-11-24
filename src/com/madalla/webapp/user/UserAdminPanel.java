@@ -427,10 +427,10 @@ public class UserAdminPanel extends CmsPanel {
 		
     	if (service.isUserSite(userData) && StringUtils.isNotEmpty(url)){
     		UserSiteData userSite = service.getUserSite(userData, site.getName());
-    		if (userSite !=null && userSite.getRequiresAuthentication()){
-    			map.put("passwordChangePage", "com.madalla.webapp.pages.SecurePasswordPage");
+    		if (site.getSecurityCertificate() && userSite != null && userSite.getRequiresAuthentication()){
+    			map.put("passwordChangePage", "password");
     		} else {
-    			map.put("passwordChangePage", "com.madalla.webapp.pages.UserPasswordPage");
+    			map.put("passwordChangePage", "securePassword");
     		}
     		message = message + getString("message.password", model);
     	}

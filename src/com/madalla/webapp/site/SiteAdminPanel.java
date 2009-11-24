@@ -2,6 +2,7 @@ package com.madalla.webapp.site;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
@@ -11,6 +12,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.UrlValidator;
 
@@ -51,6 +53,8 @@ public class SiteAdminPanel extends CmsPanel{
             url.add(new AjaxValidationBehaviour(urlFeedback));
             url.add(new UrlValidator(UrlValidator.NO_FRAGMENTS));
             add(url);
+            
+            add(new CheckBox("securityCertificate"));
             
             add(new CheckBoxMultipleChoice<SiteLanguage>("localeList", Model.ofList(SiteData.getAvailableLocales()), 
             		new ChoiceRenderer<SiteLanguage>("displayName")));

@@ -36,7 +36,6 @@ import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.LoginPanel;
 import com.madalla.webapp.pages.SecureLoginPage;
 import com.madalla.webapp.pages.UserLoginPage;
-import com.madalla.webapp.panel.Panels;
 import com.madalla.webapp.security.IAuthenticator;
 
 /**

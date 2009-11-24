@@ -16,6 +16,7 @@ public class Site extends SiteData{
 	@Field private String adminEmail;
 	@Field private String locales;
 	@Field private String url;
+	@Field private Boolean securityCertificate;
 	
 	public Site(){
 		
@@ -76,6 +77,14 @@ public class Site extends SiteData{
 	
 	public void setUrl(String url){
 		this.url = url;
+	}
+
+	public Boolean getSecurityCertificate() {
+		return securityCertificate;
+	}
+
+	public void setSecurityCertificate(Boolean securityCertificate) {
+		this.securityCertificate = securityCertificate;
 	}
 
 }
