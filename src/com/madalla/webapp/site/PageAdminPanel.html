@@ -20,6 +20,11 @@
         <div class="adminSection">
             <span class="adminHeading"><wicket:message key="heading.site">[label]</wicket:message></span>
             <form wicket:id="homeBaseForm">
+            	<div>
+                    <label><wicket:message key="label.displayname">[label]</wicket:message></label>
+                    <input style="width:20em;" wicket:id="displayName" class="inputText" type="text"/>
+                    <span class="feedbackPanel" wicket:id="nameFeedback"></span>
+                </div>
                 <div>
                     <label><wicket:message key="label.title">[label]</wicket:message></label>
                     <input style="width:20em;" wicket:id="title" class="inputText" type="text"/>
@@ -31,18 +36,53 @@
                 </div>
                 <div>
                     <label><wicket:message key="label.description">[label]</wicket:message></label>
-                    <input style="width:30em;" wicket:id="metaDescription" class="inputText" type="text"/>
+                    <input style="width:30em;" wicket:id="description" class="inputText" type="text"/>
                 </div>
                 <div>
                     <label><wicket:message key="label.keywords">[label]</wicket:message></label>
-                    <input style="width:30em;" wicket:id="metaKeywords" class="inputText" type="text"/>
+                    <input style="width:30em;" wicket:id="keywords" class="inputText" type="text"/>
                     <p class="info"><wicket:message key="info.keywords">[label]</wicket:message></p>
                 </div>
                 <div class="formButtons">
                     <span class="buttonwrapper">
                         <a wicket:id="submitLink" class="orangebutton"><span><wicket:message key="label.submit">[label]</wicket:message></span></a>
                     </span>
-                    <span wicket:id="homeBaseFeedback" class="feedbackPanel"></span>
+                    <span wicket:id="formFeedback" class="feedbackPanel"></span>
+                </div>
+                
+            </form>
+            <select wicket:id="langSelect" >
+    			<option>[option1]</option>
+        		<option>[option2]</option>
+    		</select>
+            <form wicket:id="homeOtherForm">
+            	<div>
+                    <input style="width:20em;" wicket:id="displayName" class="inputText" type="text"/>
+                    <span class="feedbackPanel" wicket:id="nameFeedback"></span>
+                </div>
+                <div>
+                    <label><wicket:message key="label.title">[label]</wicket:message></label>
+                    <input style="width:20em;" wicket:id="title" class="inputText" type="text"/>
+                    <span class="feedbackPanel" wicket:id="titleFeedback"></span>
+                </div>
+                <div>
+                    <label><wicket:message key="label.author">[label]</wicket:message></label>
+                    <input style="width:20em;" wicket:id="author" class="inputText" type="text"/>
+                </div>
+                <div>
+                    <label><wicket:message key="label.description">[label]</wicket:message></label>
+                    <input style="width:30em;" wicket:id="description" class="inputText" type="text"/>
+                </div>
+                <div>
+                    <label><wicket:message key="label.keywords">[label]</wicket:message></label>
+                    <input style="width:30em;" wicket:id="keywords" class="inputText" type="text"/>
+                    <p class="info"><wicket:message key="info.keywords">[label]</wicket:message></p>
+                </div>
+                <div class="formButtons">
+                    <span class="buttonwrapper">
+                        <a wicket:id="submitLink" class="orangebutton"><span><wicket:message key="label.submit">[label]</wicket:message></span></a>
+                    </span>
+                    <span wicket:id="formFeedback" class="feedbackPanel"></span>
                 </div>
                 
             </form>
