@@ -3,6 +3,7 @@ package com.madalla.webapp;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.protocol.http.WebSession;
 
@@ -23,6 +24,7 @@ public class CmsSession  extends WebSession implements IContentAdmin, ISessionDa
 	private boolean cmsAdminMode = false;
 	private String username = null;
 	private ISessionDataService repositoryService;
+	private Class<? extends Page> adminReturnPage;
 
 	private volatile Map<String, IFileUploadStatus> fileUploadInfo;
     
@@ -90,6 +92,14 @@ public class CmsSession  extends WebSession implements IContentAdmin, ISessionDa
 
 	public void setFileUploadComplete(String id) {
 		fileUploadInfo.remove(id);
+	}
+
+	public void setAdminReturnPage(Class<? extends Page> adminReturnPage) {
+		this.adminReturnPage = adminReturnPage;
+	}
+
+	public Class<? extends Page> getAdminReturnPage() {
+		return adminReturnPage;
 	}
 
 

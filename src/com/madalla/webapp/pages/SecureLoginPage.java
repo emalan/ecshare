@@ -14,7 +14,6 @@ public class SecureLoginPage extends AdminPage{
 	}
 
 	public SecureLoginPage(PageParameters params, String username) {
-		super(params);
 		add(new UserLoginPanel("adminPanel", username));
 	}
 

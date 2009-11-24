@@ -14,10 +14,10 @@ public class ExhibitPanel extends Panel {
 
     public ExhibitPanel(String id, Class<? extends Page> returnPage) {
         super(id);
-        add(new ContentPanel(CONTENT + "1", id+"first", NODE, returnPage));
+        add(new ContentPanel(CONTENT + "1", id+"first", NODE));
         
         Panel album = Panels.albumPanel("nested", id, returnPage);
-        Panel para2 = new ContentPanel(CONTENT + "2", id+"next", NODE, returnPage, album);
+        Panel para2 = new ContentPanel(CONTENT + "2", id+"next", NODE, album);
         add(para2);
     }
 

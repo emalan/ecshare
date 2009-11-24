@@ -3,8 +3,6 @@ package com.madalla.webapp.panel;
 import static com.madalla.webapp.PageParams.RETURN_PAGE;
 import static com.madalla.webapp.blog.BlogParameters.BLOG_ENTRY_ID;
 import static com.madalla.webapp.blog.BlogParameters.BLOG_NAME;
-import static com.madalla.webapp.cms.ContentParameters.CONTENT_ID;
-import static com.madalla.webapp.cms.ContentParameters.CONTENT_NODE;
 import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
 
 import org.apache.commons.lang.StringUtils;
@@ -16,22 +14,11 @@ import org.apache.wicket.markup.html.panel.Panel;
 import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.blog.BlogHomePanel;
 import com.madalla.webapp.blog.admin.BlogEntryPanel;
-import com.madalla.webapp.cms.ContentLinkPanel;
-import com.madalla.webapp.cms.ContentPanel;
-import com.madalla.webapp.cms.InlineContentPanel;
-import com.madalla.webapp.cms.admin.ContentAdminPanel;
-import com.madalla.webapp.cms.editor.ContentEntryPanel;
-import com.madalla.webapp.cms.editor.TranslatePanel;
 import com.madalla.webapp.email.EmailFormPanel;
 import com.madalla.webapp.google.YoutubePlayerPanel;
 import com.madalla.webapp.images.AlbumPanel;
 import com.madalla.webapp.images.admin.AlbumAdminPanel;
 import com.madalla.webapp.images.exhibit.ExhibitPanel;
-import com.madalla.webapp.site.SiteAdminPanel;
-import com.madalla.webapp.site.SiteDataPanel;
-import com.madalla.webapp.user.UserAdminPanel;
-import com.madalla.webapp.user.UserPasswordPanel;
-import com.madalla.webapp.user.UserProfilePanel;
 
 /**
  * Utility static instantiation methods to create Wicket Panels
@@ -57,68 +44,7 @@ public class Panels {
 		return new YoutubePlayerPanel(id, node);
 	}
 	
-	/**
-	 * @param id wicket id
-	 * @param node Content Parent Node, normally Page Node
-	 * @return Instantiated Panel
-	 */
-	public static Panel contentLinkPanel(String id, String node){
-		validate("ContentLinkPanel", id, node);
-		return new ContentLinkPanel(id, node);
-	}
 	
-	/**
-	 * @param id - wicket id
-	 * @param node - Content Parent Node, normally Page Name
-	 * @return Instantiated Panel of Type {@link com.madalla.webapp.cms.InlineContentPanel}
-	 */
-	public static Panel contentInlinePanel(String id, String node){
-		validate("InlineContentPanel", id, node);
-		return new InlineContentPanel(id, node);
-	}
-	
-	/**
-	 * @param id - wicket id
-	 * @param node - Content Parent Node, normally Page Name
-	 * @param returnPage - used to return back from editing Content
-	 * @return Instantiated Panel of Type {@link com.madalla.webapp.cms.ContentPanel}
-	 */
-	public static Panel contentPanel(String id, String node, Class<? extends Page> returnPage){
-		validate("ContentPanel", id, node, returnPage);
-		return new ContentPanel(id, node, returnPage);
-	}
-	
-	public static Panel contentEntryPanel(String id, PageParameters parameters){
-		validate("ContentEntryPanel", id, parameters);
-        String nodeName = getPageParameter(CONTENT_NODE, parameters, "ContentEntryPanel");
-        String contentId = getPageParameter(CONTENT_ID, parameters,"ContentEntryPanel");
-        String returnPageName = getReturnPage(parameters ,"ContentEntryPanel").getName();
-		return new ContentEntryPanel(id, nodeName, contentId, returnPageName);
-	}
-	
-	public static Panel translatePanel(String id, PageParameters parameters){
-		validate("TranslatePanel", id, parameters);
-        String nodeName = getPageParameter(CONTENT_NODE, parameters, "TranslatePanel");
-        String contentId = getPageParameter(CONTENT_ID, parameters,"TranslatePanel");
-		return new TranslatePanel(id, nodeName, contentId);
-	}
-	
-	public static Panel contentAdminPanelForSite(String id){
-		return ContentAdminPanel.newInstance(id);
-	}
-	
-	public static Panel contentAdminPanelForAdmin(String id){
-		return ContentAdminPanel.newAdminInstance(id);
-	}
-	
-	public static Panel siteAdminPanel(String id){
-	    return new SiteAdminPanel(id);
-	}
-
-	public static Panel siteDataPanel(String id){
-	    return new SiteDataPanel(id);
-	}
-
 	/**
 	 * @param id - wicket id
 	 * @param blog - Name of this Blog
@@ -130,7 +56,6 @@ public class Panels {
 		validate("BlogHomePanel", id, blog, returnPage, parameters);
 		String blogEntryId = parameters.getString(BLOG_ENTRY_ID);
    		return new BlogHomePanel(id, blog, blogEntryId, returnPage);
-		
 	}
 	
 	/**
@@ -190,37 +115,6 @@ public class Panels {
         return new ExhibitPanel(id, returnPage);
     }
 	
-	/**
-	 * User Profile Panel - change user info, reset password
-	 * @param id - wicket id
-	 * @param parameters - including return Page
-	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserProfilePanel}
-	 */	
-	public static Panel userProfilePanel(String id, PageParameters parameters) {
-		return new UserProfilePanel(id, getReturnPage(parameters ,"UserProfilePanel").getName());
-	}
-	
-	/**
-	 * User Password Panel - change user info, reset password
-	 * @param id - wicket id
-	 * @param parameters - User name
-	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserProfilePanel}
-	 */	
-	public static Panel userPasswordPanel(String id, PageParameters parameters) {
-		return new UserPasswordPanel(id, getPageParameter("user", parameters, "UserPasswordPanel"),
-				getPageParameter("pwd", parameters, "UserPasswordPanel",""));
-	}
-	
-	/**
-	 * User Admin Panel - create new user, edit existing user, reset password, send welcome email
-	 * @param id - wicket id
-	 * @param parameters - including return Page
-	 * @return Instantiated Panel of Type {@link com.madalla.webapp.user.UserAdminPanel}
-	 */	
-	public static Panel userAdminPanel(String id) {
-		return new UserAdminPanel(id);
-	}
-	
 	/*  Utility methods */
 	private static void validate(String panelName, String param1, String param2){
 		if (StringUtils.isEmpty(param1) || StringUtils.isEmpty(param2)){
@@ -265,7 +159,7 @@ public class Panels {
 	}
 	
 	/** throws Exception if param not found */
-	private static String getPageParameter(String paramName, PageParameters parameters, String panel){
+	public static String getPageParameter(String paramName, PageParameters parameters, String panel){
 		String paramValue = parameters.getString(paramName);
 		if (StringUtils.isEmpty(paramValue)){
 			error(panel + " - A pageParameter with value '"+ paramName+"' needs to be supplied.");
@@ -274,7 +168,7 @@ public class Panels {
 	}
 	
 	/** supply default value if param not found */
-	private static String getPageParameter(String paramName, PageParameters parameters, String panel, String defaultValue){
+	public static String getPageParameter(String paramName, PageParameters parameters, String panel, String defaultValue){
 		String paramValue = parameters.getString(paramName);
 		if (StringUtils.isEmpty(paramValue)){
 			return defaultValue;

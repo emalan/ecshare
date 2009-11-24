@@ -1,9 +1,5 @@
 package com.madalla.webapp.cms.editor;
 
-import static com.madalla.webapp.PageParams.RETURN_PAGE;
-import static com.madalla.webapp.cms.ContentParameters.CONTENT_ID;
-import static com.madalla.webapp.cms.ContentParameters.CONTENT_NODE;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -11,7 +7,6 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
@@ -27,8 +22,9 @@ import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
+import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.CmsSession;
-import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
+import com.madalla.webapp.login.aware.LinkLoginAware;
 import com.madalla.webapp.pages.TranslatePage;
 import com.madalla.webapp.panel.CmsPanel;
 
@@ -52,12 +48,10 @@ public class ContentEntryPanel extends CmsPanel {
 	 *            - wicket id
 	 * @param nodeName
 	 * @param contentId
-	 * @param returnPage
-	 *            - used to create return Link
 	 * 
 	 */
-	public ContentEntryPanel(String name, final String nodeName, final String contentId, final String returnPage) {
-		super(name);
+	public ContentEntryPanel(String id, final String nodeName, final String contentId) {
+		super(id);
 		add(JavascriptPackageResource.getHeaderContribution(TinyMce.class, "tiny_mce.js"));
 
 		//tabs style sheet
@@ -114,8 +108,16 @@ public class ContentEntryPanel extends CmsPanel {
 		add(tabPanel);
 		
 		//User admin link
-		PageParameters params = new PageParameters(RETURN_PAGE + "=" + returnPage + "," + CONTENT_ID + "=" + contentId + "," + CONTENT_NODE + "=" + nodeName);
-		add(new LoggedinBookmarkablePageLink("translateLink", TranslatePage.class, params, false, false, false).setAutoEnable(true));
+		// add link to edit it
+        add(new LinkLoginAware("translateLink", TranslatePage.class, false){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected AdminPage constructAdminPage(Class<? extends AdminPage> clazz) {
+				return new TranslatePage(contentId, nodeName);
+			}
+
+        });
 	}
 
 }

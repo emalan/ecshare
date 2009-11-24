@@ -1,21 +1,18 @@
 package com.madalla.webapp.pages;
 
-import org.apache.wicket.PageParameters;
-
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.ISecureAdminPage;
-import com.madalla.webapp.panel.Panels;
+import com.madalla.webapp.cms.admin.ContentAdminPanel;
 
 public class ContentAdminPage extends AdminPage implements ISecureAdminPage  {
     
-    public ContentAdminPage(final PageParameters parameters){
-    	super(parameters);
+    public ContentAdminPage(){
     	
     	if (((IDataServiceProvider)getApplication()).getRepositoryService().isAdminApp()){
-    		add(Panels.contentAdminPanelForAdmin("adminPanel"));
+    		add(ContentAdminPanel.newAdminInstance("adminPanel"));
     	} else {
-    		add(Panels.contentAdminPanelForSite("adminPanel"));
+    		add(ContentAdminPanel.newInstance("adminPanel"));
     	}
     }
 

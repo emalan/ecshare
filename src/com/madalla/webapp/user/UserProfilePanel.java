@@ -1,18 +1,17 @@
 package com.madalla.webapp.user;
 
 
-import static com.madalla.webapp.PageParams.RETURN_PAGE;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Application;
-import org.apache.wicket.PageParameters;
+import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
@@ -20,9 +19,10 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import com.madalla.bo.security.UserData;
+import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
+import com.madalla.webapp.login.aware.LinkLoginAware;
 import com.madalla.webapp.pages.SecurePasswordPage;
 import com.madalla.webapp.pages.UserAdminPage;
 import com.madalla.webapp.pages.UserPasswordPage;
@@ -56,25 +56,46 @@ public class UserProfilePanel extends CmsPanel{
         }
     }
 
-	public UserProfilePanel(String id, String returnPage){
+	public UserProfilePanel(String id, final Class<? extends Page> returnPage){
 		
 		super(id);
 		
-		String username = ((CmsSession)getSession()).getUsername();
+		final String username = ((CmsSession)getSession()).getUsername();
 		log.debug("Retrieved User name from Session. username="+username);
         user = getRepositoryService().getUser(username);
         log.debug(user);
 		
 		//User admin link
-		PageParameters params = new PageParameters(RETURN_PAGE + "=" + returnPage+", user=" + username);
-		add(new LoggedinBookmarkablePageLink("UserAdmin", UserAdminPage.class, params, true, true, true).setAutoEnable(true));
-		
+        add(new LinkLoginAware("UserAdmin", UserAdminPage.class, true, true, true));
+        
 		//User Change Link - secure or not depending on authenticator
 		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
 		if (authenticator.requiresSecureAuthentication(username) && getApplication().getConfigurationType().equals(Application.DEPLOYMENT)){
-			add(new LoggedinBookmarkablePageLink("PasswordChange", SecurePasswordPage.class, params, false, false, false).setAutoEnable(true));
+			
+			add(new Link<Object>("PasswordChange"){
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick() {
+					AdminPage page = new SecurePasswordPage(username,"");
+					page.setReturnPage(returnPage);
+					setResponsePage(page);
+				}
+				
+			});
+			
 		} else {
-			add(new LoggedinBookmarkablePageLink("PasswordChange", UserPasswordPage.class, params, false, false, false).setAutoEnable(true));
+			add(new Link<Object>("PasswordChange"){
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick() {
+					AdminPage page = new UserPasswordPage(username,"");
+					page.setReturnPage(returnPage);
+					setResponsePage(page);
+				}
+				
+			});
 		}
 		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
 		add(Css.CSS_FORM);

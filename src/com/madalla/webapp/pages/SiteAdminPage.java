@@ -1,15 +1,12 @@
 package com.madalla.webapp.pages;
 
-import org.apache.wicket.PageParameters;
-
 import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.ISecureAdminPage;
-import com.madalla.webapp.panel.Panels;
+import com.madalla.webapp.site.SiteAdminPanel;
 
 public class SiteAdminPage extends AdminPage implements ISecureAdminPage{
 
-    public SiteAdminPage(final PageParameters parameters){
-    	super(parameters);
-   		add(Panels.siteAdminPanel("adminPanel"));
+    public SiteAdminPage(){
+   		add(new SiteAdminPanel("adminPanel"));
     }
 }

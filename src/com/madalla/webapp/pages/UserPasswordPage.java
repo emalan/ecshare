@@ -1,26 +1,26 @@
 package com.madalla.webapp.pages;
 
-import static com.madalla.webapp.PageParams.RETURN_PAGE;
-
 import org.apache.wicket.PageParameters;
 
 import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.panel.Panels;
+import com.madalla.webapp.user.UserPasswordPanel;
 
-//@RequireHttps
 public class UserPasswordPage extends AdminPage {
 
-	public UserPasswordPage(PageParameters params) {
-		super(params);
-		add(Panels.userPasswordPanel("adminPanel",params));
+	public UserPasswordPage(String username, String pwd){
+		super();
+		init(username, pwd);
 	}
-
-	@Override
-	protected void setupMenu(PageParameters params) {
-		params.add(RETURN_PAGE, getApplication().getHomePage().getName());
-		super.setupMenu(params);
+	public UserPasswordPage(PageParameters parameters) {
+		super();
+		String user = Panels.getPageParameter("user", parameters, "SecurePasswordPage");
+		String pwd =  Panels.getPageParameter("pwd", parameters, "UserPasswordPanel","");
+		init(user, pwd);
 	}
 	
-	
+	private void init(String username, String pwd){
+		add(new UserPasswordPanel("adminPanel",username, pwd));
+	}
 
 }

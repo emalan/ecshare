@@ -1,15 +1,13 @@
 package com.madalla.webapp.pages;
 
-import org.apache.wicket.PageParameters;
-
 import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.ISecureWebPage;
-import com.madalla.webapp.panel.Panels;
+import com.madalla.webapp.user.UserProfilePanel;
 
 public class UserProfilePage extends AdminPage implements ISecureWebPage  {
 
-	public UserProfilePage(final PageParameters params){
-		super(params);
-		add(Panels.userProfilePanel("adminPanel",params));
+	public UserProfilePage(){
+		super();
+		add(new UserProfilePanel("adminPanel", getReturnPage()));
 	}
 }

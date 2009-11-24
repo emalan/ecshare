@@ -29,6 +29,9 @@ import com.madalla.cms.bo.impl.ocm.Site;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.util.security.SecureCredentials;
+import com.madalla.webapp.cms.ContentLinkPanel;
+import com.madalla.webapp.cms.ContentPanel;
+import com.madalla.webapp.cms.InlineContentPanel;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.LoginPanel;
 import com.madalla.webapp.pages.SecureLoginPage;
@@ -56,7 +59,6 @@ public abstract class CmsPage extends WebPage {
 	private static final String META_HTTP = "<meta http-equiv=\"{0}\" content=\"{1}\"/>";
 
 	private String pageTitle = "(no title)";
-	private PageData pageData;
 	
 	public abstract class LoginLink extends AjaxFallbackLink<Object> {
 		
@@ -104,7 +106,7 @@ public abstract class CmsPage extends WebPage {
 		if (isHomePage()) {
 			setLocaleFromUrl(getRequest().getURL());
 		}
-		pageData = getRepositoryService().getPage(getPageName());
+		PageData pageData = getRepositoryService().getPage(getPageName());
 		PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(getLocale(), pageData);
 		processPageMetaInformation(pageInfo);
 
@@ -219,8 +221,7 @@ public abstract class CmsPage extends WebPage {
 				super.onSignInFailed(username);
 				count++;
 				if (count >= loginMax) {
-					redirectToInterceptPage(new UserLoginPage(new PageParameters(RETURN_PAGE + "="
-							+ getPage().getClass().getName()), username));
+					redirectToInterceptPage(new UserLoginPage(getPageClass(), username));
 				}
 			}
 
@@ -236,8 +237,7 @@ public abstract class CmsPage extends WebPage {
 
 			@Override
 			protected void onClickAction(AjaxRequestTarget target) {
-				setResponsePage(new UserLoginPage(new PageParameters(RETURN_PAGE + "="
-						+ getPage().getClass().getName())));
+				setResponsePage(new UserLoginPage());
 			}
 			
 		});
@@ -320,30 +320,26 @@ public abstract class CmsPage extends WebPage {
 		return getApplication().getHomePage().equals(this.getPageClass());
 	}
 	
-	
 	/**
 	 * Add a Text Content Panel to this page. NOTE: be careful to not use this method
 	 * from a parent class whose Page Class can change
 	 * 
-	 * @param name
+	 * @param id
 	 */
-	protected void addContentPanel(String name){
-		add(Panels.contentPanel(name, getPageName(), this.getPageClass()));
+	protected void addContentPanel(String id){
+		add(new ContentPanel(id, getPageName()));
 	}
 	
-	protected void addContentInlinePanel(String name){
-		add(Panels.contentInlinePanel(name, getPageName()));
+	protected void addContentInlinePanel(String id){
+		add(new InlineContentPanel(id, getPageName()));
 	}
 	
-	protected void addContentLinkPanel(String name){
-		add(Panels.contentLinkPanel(name, getPageName()));
+	protected void addContentLinkPanel(String id){
+		add(new ContentLinkPanel(id, getPageName()));
 	}
 	
 	protected String getPageName(){
 		return getPageClass().getSimpleName();
 	}
 	
-	protected PageData getPageData(){
-		return pageData;
-	}
 }
