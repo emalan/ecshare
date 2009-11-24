@@ -39,7 +39,7 @@ public class CmsSession  extends WebSession implements IContentAdmin, ISessionDa
     }
     
     public boolean isSuperAdmin() {
-    	return username.equalsIgnoreCase("admin");
+    	return username != null && username.equalsIgnoreCase("admin");
     }
     
     public boolean isLoggedIn() {

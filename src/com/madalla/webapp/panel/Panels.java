@@ -27,6 +27,7 @@ import com.madalla.webapp.images.exhibit.ExhibitPanel;
  * 
  * NOTE: Your Wicket Application needs to extend {@link CmsApplication} before you can use these Panels
  * 
+ * TODO restyle class to a Page Utils
  * @author Eugene Malan
  *
  */
