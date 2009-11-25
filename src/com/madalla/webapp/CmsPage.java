@@ -3,11 +3,14 @@ package com.madalla.webapp;
 import static com.madalla.webapp.PageParams.RETURN_PAGE;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
+import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
@@ -57,9 +60,7 @@ public abstract class CmsPage extends WebPage {
 
 	private static final String META_NAME = "<meta name=\"{0}\" content=\"{1}\"/>";
 	private static final String META_HTTP = "<meta http-equiv=\"{0}\" content=\"{1}\"/>";
-
-	private String pageTitle = "(no title)";
-	
+		
 	public abstract class LoginLink extends AjaxFallbackLink<Object> {
 		
 		private static final long serialVersionUID = 1L;
@@ -92,8 +93,6 @@ public abstract class CmsPage extends WebPage {
 		}
 		
 		protected abstract void onClickAction(AjaxRequestTarget target);
-			
-		
 		
 	}
 
@@ -274,6 +273,18 @@ public abstract class CmsPage extends WebPage {
 		}
 	}
 
+	private IDataService getRepositoryService() {
+		return ((IDataServiceProvider) getApplication()).getRepositoryService();
+	}
+
+	private boolean isHomePage() {
+		return getApplication().getHomePage().equals(this.getPageClass());
+	}
+
+	private String getPageName(){
+		return getPageClass().getSimpleName();
+	}
+
 	/**
 	 * @return true if you want to set your own metadata, otherwise the metadata
 	 *         will be set from the CMS values
@@ -304,25 +315,9 @@ public abstract class CmsPage extends WebPage {
 		return false;
 	}
 
-	protected void setPageTitle(String pageTitle) {
-		this.pageTitle = pageTitle;
-	}
-
-	protected String getPageTitle() {
-		return pageTitle;
-	}
-
-	protected IDataService getRepositoryService() {
-		return ((IDataServiceProvider) getApplication()).getRepositoryService();
-	}
-
-	protected boolean isHomePage() {
-		return getApplication().getHomePage().equals(this.getPageClass());
-	}
-	
 	/**
-	 * Add a Text Content Panel to this page. NOTE: be careful to not use this method
-	 * from a parent class whose Page Class can change
+	 * Add a Text Content Panel to this page. NOTE: be careful when using this method
+	 * from an abstract class as new Panels will be created for each implementation.
 	 * 
 	 * @param id
 	 */
@@ -342,8 +337,29 @@ public abstract class CmsPage extends WebPage {
 		add(new EmailFormPanel(id, subject));
 	}
 	
-	protected String getPageName(){
-		return getPageClass().getSimpleName();
+	protected List<IMenuItem> getPageMetaData(final List<Class<? extends Page>> pages){
+		final List<IMenuItem> items = new ArrayList<IMenuItem>();
+		for(final Class<? extends Page> page: pages){
+
+			final PageData pageData = getRepositoryService().getPage(page.getSimpleName());
+
+			items.add(new IMenuItem(){
+
+				private static final long serialVersionUID = 1L;
+
+				public Class<? extends Page> getItemClass() {
+					return page;
+				}
+
+				public String getItemName() {
+					PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(getSession().getLocale(), pageData);
+					return StringUtils.defaultIfEmpty(pageInfo.getDisplayName(), page.getSimpleName());
+				}
+				
+			});
+		}
+		return items;
 	}
+	
 	
 }

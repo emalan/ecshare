@@ -94,6 +94,7 @@ public class ContentPanel extends CmsPanel {
             Component label = new Label("contentBody", contentModel){
 				private static final long serialVersionUID = 6930776696843471636L;
 
+				@Override
 				protected void onBeforeRender(){
                     PageData page = getRepositoryService().getPage(nodeName);
                     ContentData content = getRepositoryService().getContent(page, nodeId);

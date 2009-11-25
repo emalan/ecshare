@@ -3,6 +3,7 @@ package com.madalla.webapp;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.protocol.http.WebSession;
@@ -55,6 +56,18 @@ public class CmsSession  extends WebSession implements IContentAdmin, ISessionDa
     	username = null;
     	repositoryService.setUser(null);
     	fileUploadInfo.clear();
+    }
+    
+    public void login(){
+    	if (getApplication().getConfigurationType().equals(Application.DEPLOYMENT)){
+    		throw new RuntimeException("this Login method only available for DEVELOPMENT environment.");
+    	}
+    	IDataService service = ((IDataServiceProvider) getApplication()).getRepositoryService();
+    	UserData user = service.getUser("admin");
+    	repositoryService.setUser(user);
+    	cmsAdminMode = true;
+    	this.username = "admin";
+    	
     }
     
     public boolean login(String userName, String password) {

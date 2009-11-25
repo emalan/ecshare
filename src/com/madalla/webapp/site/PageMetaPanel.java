@@ -23,8 +23,8 @@ import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.PageMetaLangData;
 import com.madalla.webapp.panel.CmsPanel;
-import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
 import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
+import com.madalla.wicket.form.ValidationStyleRequiredTextField;
 
 public class PageMetaPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
@@ -38,9 +38,9 @@ public class PageMetaPanel extends CmsPanel{
     	public MetaDataForm(String id, IModel<PageMetaLangData> model) {
             super(id, model);
             
-            add(new AjaxValidationStyleRequiredTextField("displayName"));
+            add(new ValidationStyleRequiredTextField("displayName"));
             
-            add(new AjaxValidationStyleRequiredTextField("title"));
+            add(new TextField<String>("title"));
            
             add(new TextField<String>("author"));
             
@@ -62,9 +62,9 @@ public class PageMetaPanel extends CmsPanel{
 		final Form<PageMetaLangData> homeBaseForm = new MetaDataForm("homeBaseForm", new CompoundPropertyModel<PageMetaLangData>(pageMetaLang));
 	    add(homeBaseForm);
 	    
-		final FeedbackPanel homeBaseFeedback = new ComponentFeedbackPanel("formFeedback", homeBaseForm);
-		homeBaseFeedback.setOutputMarkupId(true);
-		homeBaseForm.add(homeBaseFeedback);
+	    FeedbackPanel formFeedback = new ComponentFeedbackPanel("formFeedback", homeBaseForm);
+		formFeedback.setOutputMarkupId(true);
+		homeBaseForm.add(formFeedback);
 	        
 	    AjaxButton submitLink = new AjaxValidationStyleSubmitButton("submitLink", homeBaseForm) {
 
@@ -83,7 +83,7 @@ public class PageMetaPanel extends CmsPanel{
 			}
 
 		};
-		submitLink.setOutputMarkupId(true);
+		//submitLink.setOutputMarkupId(true);
 		homeBaseForm.add(submitLink);
 		
 	    //*************************
