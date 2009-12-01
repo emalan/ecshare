@@ -30,7 +30,9 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 	}
 	public AjaxValidationBehaviour(FeedbackPanel feedbackPanel, String validClass, String invalidClass) {
 		super("onblur");
-		feedbackPanel.setOutputMarkupId(true);
+		if (feedbackPanel != null){
+			feedbackPanel.setOutputMarkupId(true);
+		}
 		this.feedbackPanel = feedbackPanel;
 		this.validClass = validClass;
 		this.invalidClass = invalidClass;

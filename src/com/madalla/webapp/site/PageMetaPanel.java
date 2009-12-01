@@ -65,15 +65,10 @@ public class PageMetaPanel extends CmsPanel{
 		final Form<PageMetaLangData> homeBaseForm = new MetaDataForm("homeBaseForm", new CompoundPropertyModel<PageMetaLangData>(pageMetaLang));
 	    add(homeBaseForm);
 	    
-		
 	    //*************************
 		//Home Page - other Langs
 		//*************************
-        
-        
-        
 		final CompoundPropertyModel<PageMetaLangData> homeOtherModel = new CompoundPropertyModel<PageMetaLangData>(getRepositoryService().getPageMetaLang(defaultLocale, pageData));
-		
 	    final Form<PageMetaLangData> homeOtherForm = new MetaDataForm("homeOtherForm", homeOtherModel);
 		add(homeOtherForm);
 		    
