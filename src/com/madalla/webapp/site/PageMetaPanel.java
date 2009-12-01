@@ -7,14 +7,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -23,22 +20,22 @@ import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.PageMetaLangData;
 import com.madalla.webapp.panel.CmsPanel;
-import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
-import com.madalla.wicket.form.ValidationStyleRequiredTextField;
+import com.madalla.wicket.form.AjaxValidationForm;
+import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 
 public class PageMetaPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
 	
 	private Log log = LogFactory.getLog(this.getClass());
 
-    public class MetaDataForm extends Form<PageMetaLangData> {
+    public class MetaDataForm extends AjaxValidationForm<PageMetaLangData> {
     	
     	private static final long serialVersionUID = 1L;
         
     	public MetaDataForm(String id, IModel<PageMetaLangData> model) {
             super(id, model);
             
-            add(new ValidationStyleRequiredTextField("displayName"));
+            add(new AjaxValidationRequiredTextField("displayName"));
             
             add(new TextField<String>("title"));
            
@@ -49,6 +46,12 @@ public class PageMetaPanel extends CmsPanel{
             add(new TextArea<String>("keywords")); 
             
         }
+
+		@Override
+		protected void onSubmit(AjaxRequestTarget target) {
+			saveData(getModelObject());
+			info(getString("message.success"));
+		}
         
     }
 
@@ -62,29 +65,6 @@ public class PageMetaPanel extends CmsPanel{
 		final Form<PageMetaLangData> homeBaseForm = new MetaDataForm("homeBaseForm", new CompoundPropertyModel<PageMetaLangData>(pageMetaLang));
 	    add(homeBaseForm);
 	    
-	    FeedbackPanel formFeedback = new ComponentFeedbackPanel("formFeedback", homeBaseForm);
-		formFeedback.setOutputMarkupId(true);
-		homeBaseForm.add(formFeedback);
-	        
-	    AjaxButton submitLink = new AjaxValidationStyleSubmitButton("submitLink", homeBaseForm) {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				super.onError(target, form);
-			}
-
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				super.onSubmit(target, form);
-				saveData((PageMetaLangData) form.getModelObject());
-				form.info(getString("message.success"));
-			}
-
-		};
-		//submitLink.setOutputMarkupId(true);
-		homeBaseForm.add(submitLink);
 		
 	    //*************************
 		//Home Page - other Langs
@@ -97,30 +77,6 @@ public class PageMetaPanel extends CmsPanel{
 	    final Form<PageMetaLangData> homeOtherForm = new MetaDataForm("homeOtherForm", homeOtherModel);
 		add(homeOtherForm);
 		    
-		final FeedbackPanel homeOtherFeedback = new ComponentFeedbackPanel("formFeedback", homeOtherForm);
-		homeOtherFeedback.setOutputMarkupId(true);
-		homeOtherForm.add(homeOtherFeedback);
-		        
-		AjaxButton submitOtherLink = new AjaxValidationStyleSubmitButton("submitLink", homeOtherForm) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				super.onError(target, form);
-			}
-
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				super.onSubmit(target, form);
-				saveData((PageMetaLangData) form.getModelObject());
-				form.info(getString("message.success"));
-			}
-
-		};
-		submitLink.setOutputMarkupId(true);
-		homeOtherForm.add(submitOtherLink);
-	        
-
 		SiteLanguage selectedLanguage = SiteLanguage.getLanguage(defaultLocale.getLanguage());
 		final DropDownChoice<SiteLanguage> select = new DropDownChoice<SiteLanguage>("langSelect",
 				new Model<SiteLanguage>(selectedLanguage), siteLanguages, new ChoiceRenderer<SiteLanguage>(

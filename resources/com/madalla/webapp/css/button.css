@@ -31,7 +31,7 @@ a.orangebutton{
     font: normal 12px Arial; /* Change 12px as desired */
     line-height: 15px; /* This value + 4px + 4px (top and bottom padding of SPAN) must equal height of button background (default is 23px) */
     height: 23px; /* Height of button background height */
-    padding-left: 9px; /* Width of left menu image */
+    padding-left: 8px; /* Width of left menu image */
     text-decoration: none;
 }
 
@@ -47,6 +47,7 @@ a.orangebutton span{
 
 a.orangebutton:hover{ /* Hover state CSS */
     background-position: bottom left;
+    cursor:pointer;
 }
 
 a.orangebutton:hover span{ /* Hover state CSS */
@@ -78,6 +79,7 @@ a.bluebutton span{
 
 a.bluebutton:hover{ /* Hover state CSS */
     background-position: bottom left;
+    cursor:pointer;
 }
 
 a.bluebutton:hover span{ /* Hover state CSS */

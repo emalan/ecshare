@@ -14,7 +14,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.blog.BlogHomePanel;
 import com.madalla.webapp.blog.admin.BlogEntryPanel;
-import com.madalla.webapp.email.EmailFormPanel;
 import com.madalla.webapp.images.AlbumPanel;
 import com.madalla.webapp.images.admin.AlbumAdminPanel;
 import com.madalla.webapp.images.exhibit.ExhibitPanel;

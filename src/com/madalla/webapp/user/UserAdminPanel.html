@@ -42,12 +42,12 @@
             <form id="user" wicket:id="userForm">
                 <div>    
                     <label><wicket:message key="label.username">Label Contents</wicket:message></label>
-                    <input class="inputText" type="text" wicket:id="username"/>
+                    <input class="inputText" type="text" wicket:id="name"/>
                     <input type="submit" style="display: none;">
                     <span id="createNew" class="buttonwrapper">
                         <a wicket:id="userSubmit" class="orangebutton"><span><wicket:message key="label.create">Label Contents</wicket:message></span></a>
                     </span>
-                    <span class="feedbackPanel" wicket:id="userFeedback"></span>
+                    <span class="feedbackPanel" wicket:id="formFeedback"></span>
                 </div>
             </form>
 
@@ -67,7 +67,7 @@
                 </div>
                 <div>    
                    	<label><wicket:message key="label.admin">Label Contents</wicket:message></label>
-                   	<input class="checkbox" type="checkbox" wicket:id="adminMode"/>
+                   	<input class="checkbox" type="checkbox" wicket:id="admin"/>
                 </div>
                 <div>    
                    	<label><wicket:message key="label.auth">Label Contents</wicket:message></label>

@@ -12,7 +12,7 @@ import org.apache.wicket.model.IModel;
 
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.webapp.panel.CmsPanel;
-import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
+import com.madalla.wicket.form.AjaxValidationSubmitButton;
 
 public class ContentFormPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
@@ -75,7 +75,7 @@ public class ContentFormPanel extends CmsPanel{
         feedback.setOutputMarkupId(true);
         form.add(feedback);
         
-        final AjaxValidationStyleSubmitButton submitLink = new AjaxValidationStyleSubmitButton("submitButton", form, feedback) {
+        final AjaxValidationSubmitButton submitLink = new AjaxValidationSubmitButton("submitButton", form, feedback) {
 
 			private static final long serialVersionUID = 1L;
 
@@ -87,6 +87,7 @@ public class ContentFormPanel extends CmsPanel{
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
+				
 				log.debug("Submiting populated Content object to Content service. " + form.getModelObject());
                 getRepositoryService().saveContentEntry((ContentEntryData)form.getModelObject());
                 target.addComponent(feedback);

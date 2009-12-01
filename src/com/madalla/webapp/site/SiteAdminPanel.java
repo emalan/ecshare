@@ -1,13 +1,11 @@
 package com.madalla.webapp.site;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -22,14 +20,15 @@ import com.madalla.webapp.login.aware.LinkLoginAware;
 import com.madalla.webapp.pages.PageAdminPage;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationBehaviour;
-import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
-import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
+import com.madalla.wicket.form.AjaxValidationForm;
+import com.madalla.wicket.form.AjaxValidationRequiredTextField;
+import com.madalla.wicket.form.ValidationStyleBehaviour;
 
 public class SiteAdminPanel extends CmsPanel{
 
     private static final long serialVersionUID = 1L;
     
-    public class SiteForm extends Form<SiteData> {
+    public class SiteForm extends AjaxValidationForm<SiteData> {
 
         private static final long serialVersionUID = 1L;
 
@@ -38,20 +37,15 @@ public class SiteAdminPanel extends CmsPanel{
             
             FeedbackPanel emailFeedback = new FeedbackPanel("emailFeedback");
             add(emailFeedback);
-            TextField<String> email = new AjaxValidationStyleRequiredTextField("adminEmail",emailFeedback);
+            TextField<String> email = new AjaxValidationRequiredTextField("adminEmail",emailFeedback);
             email.add(EmailAddressValidator.getInstance());
             add(email);
-
-            add(new TextField<String>("metaDescription"));
-           
-            add(new TextField<String>("metaKeywords"));
             
-            TextField<String> url = new TextField<String>("url");
-            FeedbackPanel urlFeedback = new ComponentFeedbackPanel("urlFeedback", url);
-            urlFeedback.setOutputMarkupId(true);
+            FeedbackPanel urlFeedback = new FeedbackPanel("urlFeedback");
             add(urlFeedback);
-            
+            TextField<String> url = new TextField<String>("url");
             url.add(new AjaxValidationBehaviour(urlFeedback));
+            url.add(new ValidationStyleBehaviour());
             url.add(new UrlValidator(UrlValidator.NO_FRAGMENTS));
             add(url);
             
@@ -61,6 +55,12 @@ public class SiteAdminPanel extends CmsPanel{
             		new ChoiceRenderer<SiteLanguage>("displayName")));
             
         }
+
+		@Override
+		protected void onSubmit(AjaxRequestTarget target) {
+			saveData(getModelObject());
+            info(getString("message.success"));
+		}
 
     }
     
@@ -72,31 +72,7 @@ public class SiteAdminPanel extends CmsPanel{
         
         final Form<SiteData> form = new SiteForm("siteForm", new CompoundPropertyModel<SiteData>(getSiteData()));
         add(form);
-        
-        final FeedbackPanel siteFeedback = new ComponentFeedbackPanel("siteFeedback", form);
-        siteFeedback.setOutputMarkupId(true);
-        form.add(siteFeedback);
-        
-        AjaxButton submitLink = new AjaxValidationStyleSubmitButton("submitLink", form) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
-                super.onError(target, form);
-            }
-
-            @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                super.onSubmit(target, form);
-                saveData((SiteData)form.getModelObject());
-                form.info(getString("message.success"));
-            }
-            
-        };
-        submitLink.setOutputMarkupId(true);
-        form.add(submitLink);
-        
+         
     }
     
     private SiteData getSiteData(){

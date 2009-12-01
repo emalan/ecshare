@@ -38,7 +38,7 @@ import com.madalla.webapp.blog.BlogEntryView;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationBehaviour;
-import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
+import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 import com.madalla.wicket.form.ValidationStyleBehaviour;
 
 public class BlogEntryPanel extends CmsPanel {
@@ -146,7 +146,7 @@ public class BlogEntryPanel extends CmsPanel {
             //Title
             FeedbackPanel titleFeedback = new FeedbackPanel("titleFeedback");
             add(titleFeedback);
-            TextField<String> title = new AjaxValidationStyleRequiredTextField("title",new PropertyModel<String>(blogEntry,"title"), titleFeedback);
+            TextField<String> title = new AjaxValidationRequiredTextField("title",new PropertyModel<String>(blogEntry,"title"), titleFeedback);
             title.setLabel(new Model<String>(BlogEntryPanel.this.getString("label.title")));
             add(title);
             

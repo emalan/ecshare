@@ -7,13 +7,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.ClientProperties;
@@ -35,8 +32,8 @@ import com.madalla.service.IDataServiceProvider;
 import com.madalla.util.captcha.CaptchaUtils;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.panel.CmsPanel;
-import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
-import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
+import com.madalla.wicket.form.AjaxValidationForm;
+import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 
 public class EmailFormPanel extends CmsPanel {
     private static final long serialVersionUID = -1643728343421366820L;
@@ -50,7 +47,7 @@ public class EmailFormPanel extends CmsPanel {
     String subject ;
 
     
-    public class EmailForm extends Form<Object> {
+    public class EmailForm extends AjaxValidationForm<Object> {
         private static final long serialVersionUID = -2684823497770522924L;
         
         //private final CaptchaImageResource captchaImageResource;
@@ -62,11 +59,11 @@ public class EmailFormPanel extends CmsPanel {
     
             FeedbackPanel nameFeedback = new FeedbackPanel("nameFeedback");
             add(nameFeedback);
-            add(new AjaxValidationStyleRequiredTextField("name",new PropertyModel<String>(properties,"name"), nameFeedback));
+            add(new AjaxValidationRequiredTextField("name",new PropertyModel<String>(properties,"name"), nameFeedback));
             
             FeedbackPanel emailFeedback = new FeedbackPanel("emailFeedback");
             add(emailFeedback);
-            TextField<String> email = new AjaxValidationStyleRequiredTextField("email",new PropertyModel<String>(properties,"email"), emailFeedback);
+            TextField<String> email = new AjaxValidationRequiredTextField("email",new PropertyModel<String>(properties,"email"), emailFeedback);
             email.add(EmailAddressValidator.getInstance());
             add(email);
             
@@ -77,14 +74,7 @@ public class EmailFormPanel extends CmsPanel {
             
             FeedbackPanel passwordFeedback = new FeedbackPanel("passwordFeedback");
             add(passwordFeedback);
-            RequiredTextField<String> password = new AjaxValidationStyleRequiredTextField("password", new PropertyModel<String>(properties, "password"), passwordFeedback){
-				private static final long serialVersionUID = -108228073455105029L;
-				protected final void onComponentTag(final ComponentTag tag) {
-                        super.onComponentTag(tag);
-                        // clear the field after each render
-                        //tag.put("value", "");
-                }
-            };
+            RequiredTextField<String> password = new AjaxValidationRequiredTextField("password", new PropertyModel<String>(properties, "password"), passwordFeedback);
             password.add(new AbstractValidator<String>(){
 				private static final long serialVersionUID = 2572094991300700912L;
 				protected void onValidate(IValidatable<String> validatable) {
@@ -125,6 +115,16 @@ public class EmailFormPanel extends CmsPanel {
 				}
 			}
 		}
+
+		@Override
+		protected void onSubmit(AjaxRequestTarget target) {
+			if (sendEmail(properties.getString("name"),properties.getString("email"),properties.getString("comment"))){
+                info(getString("message.success"));
+            } else {
+                error(getString("message.fail"));
+            }
+			
+		}
     }
     
     public EmailFormPanel(final String id, final String subject) {
@@ -133,30 +133,7 @@ public class EmailFormPanel extends CmsPanel {
         
         add(Css.CSS_FORM);
         
-        Form<Object> form = new EmailForm("emailForm");
-        form.setOutputMarkupId(true);
-
-        final FeedbackPanel feedbackPanel = new ComponentFeedbackPanel("feedback",form);
-        feedbackPanel.setOutputMarkupId(true);
-        form.add(feedbackPanel);
-        
-        form.add(new AjaxValidationStyleSubmitButton("submit", form, feedbackPanel){
-            private static final long serialVersionUID = 1L;
-
-          @Override
-          protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                super.onSubmit(target, form);
-                if (sendEmail(properties.getString("name"),properties.getString("email"),properties.getString("comment"))){
-                    form.info(getString("message.success"));
-                } else {
-                    form.error(getString("message.fail"));
-                }
-            }
-
-            
-        });
-        
-        add(form);
+        add(new EmailForm("emailForm"));
         
     }
     
@@ -177,8 +154,6 @@ public class EmailFormPanel extends CmsPanel {
     	IDataService service = ((IDataServiceProvider)getApplication()).getRepositoryService();
     	service.createEmailEntry(new DateTime(), name, email, comment);
     }
-    
-
     
     private String getEmailBody(String from, String email, String comment){
         Object[] args = {from,email,(comment == null)?"":comment};

@@ -6,16 +6,14 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import com.madalla.bo.security.UserData;
@@ -29,31 +27,35 @@ import com.madalla.webapp.pages.UserPasswordPage;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.webapp.security.IAuthenticator;
-import com.madalla.wicket.form.AjaxValidationStyleRequiredTextField;
-import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
+import com.madalla.wicket.form.AjaxValidationForm;
+import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 
 public class UserProfilePanel extends CmsPanel{
 
 	private static final long serialVersionUID = 9027719184960390850L;
 	private static final Log log = LogFactory.getLog(UserProfilePanel.class);
 	
-	private UserData user;
-	
-    public class ProfileForm extends Form<Object> {
+    public class ProfileForm extends AjaxValidationForm<UserData> {
         private static final long serialVersionUID = -2684823497770522924L;
         
-        public ProfileForm(String id) {
-            super(id);
+        public ProfileForm(String id, IModel<UserData> model) {
+            super(id, model);
             
             FeedbackPanel emailFeedback = new FeedbackPanel("emailFeedback");
             add(emailFeedback);
-            TextField<String> email = new AjaxValidationStyleRequiredTextField("email",new PropertyModel<String>(user,"email"), emailFeedback);
+            TextField<String> email = new AjaxValidationRequiredTextField("email", emailFeedback);
             email.add(EmailAddressValidator.getInstance());
             add(email);
             
-            add(new TextField<String>("firstName", new PropertyModel<String>(user,"firstName")));
-            add(new TextField<String>("lastName", new PropertyModel<String>(user,"lastName")));
+            add(new TextField<String>("firstName"));
+            add(new TextField<String>("lastName"));
         }
+
+		@Override
+		protected void onSubmit(AjaxRequestTarget target) {
+			saveData(getModelObject());
+			info(getString("message.success"));
+		}
     }
 
 	public UserProfilePanel(String id, final Class<? extends Page> returnPage){
@@ -62,7 +64,7 @@ public class UserProfilePanel extends CmsPanel{
 		
 		final String username = ((CmsSession)getSession()).getUsername();
 		log.debug("Retrieved User name from Session. username="+username);
-        user = getRepositoryService().getUser(username);
+        UserData user = getRepositoryService().getUser(username);
         log.debug(user);
 		
 		//User admin link
@@ -107,36 +109,7 @@ public class UserProfilePanel extends CmsPanel{
 		add(new Label("profileHeading",getString("heading.profile", new Model<UserData>(user) )));
 		
 		//Form
-		Form<Object> profileForm = new ProfileForm("profileForm");
-		profileForm.setOutputMarkupId(true);
-		add(profileForm);
-		
-		final FeedbackPanel profileFeedback = new ComponentFeedbackPanel("profileFeedback",profileForm);
-		profileFeedback.setOutputMarkupId(true);
-		profileForm.add(profileFeedback);
-		
-        AjaxButton submitButton = new AjaxValidationStyleSubmitButton("profileSubmit", profileForm){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				super.onSubmit(target, form);
-				target.addComponent(profileFeedback);
-
-				saveData(user);
-				form.info(getString("message.success"));
-				//setResponsePage(this.findPage());
-			}
-			
-			@Override
-			protected void onError(final AjaxRequestTarget target, Form<?> form) {
-				super.onError(target, form);
-				target.addComponent(profileFeedback);
-
-			}
-        };
-        profileForm.add(submitButton);
-		
+		add(new ProfileForm("profileForm", new CompoundPropertyModel<UserData>(user)));
 		
 	}
 	

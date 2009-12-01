@@ -54,6 +54,8 @@ form div .buttonwrapper {
     margin-top:15px;
 }
 
+
+
 form select {
 	float: left;
 	margin:10px 0 0;
@@ -66,6 +68,11 @@ form select {
 form div .feedbackPanel {
 	float: left;
 	margin-top: 0.4em;
+}
+
+form div.formButtons .feedbackPanel {
+	float: left;
+	margin-top: 0.7em;
 }
 ul.feedbackPanel{
     margin:0;

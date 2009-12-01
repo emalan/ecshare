@@ -32,7 +32,7 @@ import com.madalla.bo.image.ImageData;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.DraggableAjaxBehaviour;
 import com.madalla.wicket.DroppableAjaxBehaviour;
-import com.madalla.wicket.form.AjaxValidationStyleSubmitButton;
+import com.madalla.wicket.form.AjaxValidationSubmitButton;
 
 class AlbumDisplayPanel extends CmsPanel {
 	
@@ -68,7 +68,7 @@ class AlbumDisplayPanel extends CmsPanel {
 		
 		final Form<AlbumData> albumForm = new AlbumForm("albumForm", new CompoundPropertyModel<AlbumData>(getAlbum(albumName)));
 		add(albumForm);
-		AjaxButton submitLink = new AjaxValidationStyleSubmitButton("submitLink", albumForm) {
+		AjaxButton submitLink = new AjaxValidationSubmitButton("submitLink", albumForm) {
 
 			private static final long serialVersionUID = 1L;
 

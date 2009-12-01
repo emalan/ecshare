@@ -1,5 +1,6 @@
 package com.madalla.webapp.scripts;
 
+import org.apache.wicket.ResourceReference;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
@@ -27,5 +28,7 @@ public class JavascriptResources {
 	
 	public static final HeaderContributor ANIMATOR = JavascriptPackageResource.getHeaderContribution(
 	        new CompressedResourceReference(JavascriptResources.class, "animator.js"));
+	
+	public static final ResourceReference ANIMATOR_RESOURCE = new CompressedResourceReference(JavascriptResources.class, "animator.js");
 
 }
