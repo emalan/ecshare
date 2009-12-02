@@ -32,25 +32,26 @@ import com.madalla.cms.jcr.JcrUtils;
  * <p>
  * The schema is depicted below. The data regarding the parent nodes and 
  * the classes that are children is all stored here. The RepositoryType
- * Enum holds all the required data.
+ * Enum holds all the required schema data for each object that needs
+ * to be stored in the repository.
  * <p>
  * <pre>
  *            ec:apps 
  *         -----|------------------------------                 
  *        |                                    |
- *     [ec:site1]                          [ec:site2]                               
+ *     [site1]                              [site2]                               
  *        |                                    |
- *                       -------------------------------------------------------
- *                      |                         |                             |
- *                    ec:pages                 ec:blogs                      ec:images
- *                      |                         |                             |
- *               Pages and Content         Blogs and Blog Entries       Albums and Images   
+ *                       --------------------------------------------------------------------------------
+ *                      |                         |                             |                        |
+ *                    ec:pages                 ec:data                      ec:images                 ec:blogs
+ *                      |                         |                             |                        |
+ *               Pages and Content              Email                   Albums and Images        Blogs and Blog Entries
  *               
  *           ec:users
  *              |
  *            Users
  *              |
- *         UserRole | UserSite | questions | UserBlog | UserPage | UserAlbum
+ *           UserData (encrypted passwords)
  *            
  * </pre>
  * 

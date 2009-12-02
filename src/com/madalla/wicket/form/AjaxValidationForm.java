@@ -13,6 +13,21 @@ import org.apache.wicket.markup.html.form.IFormVisitorParticipant;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 
+/**
+ * Extend this to add Ajax submit behaviour to your form.
+ * <p>
+ * NOTE : You will need to add a <em>formSubmit</em> and a <em>formFeedback</em> to
+ * your markup for the form.
+ * </p>
+ * <p>
+ * The Form will give you an Ajax submit button as well as enabling inputs and feedbacks
+ * to work better with Ajax. 
+ * </p>
+ * 
+ * @author Eugene Malan
+ *
+ * @param <T>
+ */
 public abstract class AjaxValidationForm<T> extends Form<T>  {
 
 

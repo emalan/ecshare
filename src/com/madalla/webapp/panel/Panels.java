@@ -19,6 +19,9 @@ import com.madalla.webapp.images.admin.AlbumAdminPanel;
 import com.madalla.webapp.images.exhibit.ExhibitPanel;
 
 /**
+ * @deprecated Panels used by Admin Pages are only used in one place, while application
+ * panels are now instanciated from CmsPage which should be extended by all Application Pages.
+ * <p>
  * Utility static instantiation methods to create Wicket Panels
  * for your Pages. Provided to simplify the API by providing one
  * place for getting Panels.
@@ -26,6 +29,7 @@ import com.madalla.webapp.images.exhibit.ExhibitPanel;
  * NOTE: Your Wicket Application needs to extend {@link CmsApplication} before you can use these Panels
  * 
  * TODO restyle class to a Page Utils
+ * </p>
  * @author Eugene Malan
  *
  */
