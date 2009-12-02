@@ -15,7 +15,7 @@
 	
 	<path id="build.main.classes">
 		<fileset dir="wicket">
-			<include name="**/*1.4-rc2.jar"></include>
+			<include name="**/*.jar"></include>
 		</fileset>
 		<fileset dir="jackrabbit">
 			<include name="**/*.jar"></include>

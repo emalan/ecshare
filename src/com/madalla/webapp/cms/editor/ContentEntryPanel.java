@@ -44,10 +44,9 @@ public class ContentEntryPanel extends CmsPanel {
 	private Log log = LogFactory.getLog(this.getClass());
 	
 	/**
-	 * @param name
-	 *            - wicket id
-	 * @param nodeName
-	 * @param contentId
+	 * @param id - wicket id
+	 * @param nodeName - Node/Group/Page Name
+	 * @param contentId - Actual Content Id
 	 * 
 	 */
 	public ContentEntryPanel(String id, final String nodeName, final String contentId) {

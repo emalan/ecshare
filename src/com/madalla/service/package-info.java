@@ -1,8 +1,8 @@
 /**
- * Defines the Persistant Data functionality 
+ * API for the Persistant Data functionality 
  * <p>
- * ISessionDataService and IApplicationDataService act as Session and Application data temp storage and 
- * define the interactions with the persistant data as well as acting as Factories to supply DAO's.
+ * This API completely decouples the webapp functionality from the back end Repository code.
+ * ISessionDataService and IDataService define the interactions with the persistant data. 
  * </p>
  * 
  * @author Eugene Malan

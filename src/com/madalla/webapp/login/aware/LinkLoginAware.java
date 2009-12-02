@@ -6,6 +6,7 @@ import com.madalla.webapp.pages.LinkAdmin;
 
 /**
  * Page Link that will enable/disable based on your wether you are logged in.
+ * 
  * @author Eugene Malan
  *
  */
@@ -17,27 +18,34 @@ public class LinkLoginAware extends LinkAdmin {
 	final private boolean hide;
 	final private boolean superAdmin;
 	
-	public LinkLoginAware(String name, Class<? extends AdminPage> adminPageClass,
+	/**
+	 * Calls main constructor
+	 */
+	public LinkLoginAware(String id, Class<? extends AdminPage> adminPageClass,
 			final boolean admin) {
-		this(name, adminPageClass, admin, false);
-	}
-	
-	public LinkLoginAware(String name, Class<? extends AdminPage> adminPageClass,
-			final boolean admin, final boolean hide){
-		this(name, adminPageClass, admin, hide, false);
+		this(id, adminPageClass, admin, false);
 	}
 	
 	/**
-	 * @param name
-	 * @param pageClass
-	 * @param parameters
+	 * Calls main constructor
+	 */
+	public LinkLoginAware(String id, Class<? extends AdminPage> adminPageClass,
+			final boolean admin, final boolean hide){
+		this(id, adminPageClass, admin, hide, false);
+	}
+	
+	/**
+	 * Main Constructor
+	 * 
+	 * @param id - wicket id
+	 * @param adminPageClass - Admin Page Class
 	 * @param admin - set true if this is an admin only link
 	 * @param hide - set true if you want to hide the link if not enabled
 	 * @param superAdmin - set true if this is a super admin only link - getting cheesy - time for user roles
 	 */
-	public LinkLoginAware(String name, Class<? extends AdminPage> adminPageClass,
+	public LinkLoginAware(String id, Class<? extends AdminPage> adminPageClass,
 			final boolean admin, final boolean hide, final boolean superAdmin){
-		super(name, adminPageClass);
+		super(id, adminPageClass);
 		this.admin = admin;
 		this.hide = hide;
 		this.superAdmin = superAdmin;

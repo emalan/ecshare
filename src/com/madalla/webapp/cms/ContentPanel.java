@@ -35,7 +35,6 @@ public class ContentPanel extends CmsPanel {
      * @param id - wicket id
      * @param name - storage name
      * @param node - parent node of Content
-     * @param returnPage
      */
     public ContentPanel(String id, String name, String node){
     	this(id, name, node, new Label("nested","stub").setVisible(false));
@@ -45,7 +44,6 @@ public class ContentPanel extends CmsPanel {
      * @param id - wicket id
      * @param name - storage name
      * @param node - parent node of Content
-     * @param returnPage
      */
     public ContentPanel(String id, String name, String node, Component nested){
         super(id);

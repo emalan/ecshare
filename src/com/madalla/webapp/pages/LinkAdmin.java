@@ -5,13 +5,23 @@ import org.apache.wicket.markup.html.link.Link;
 
 import com.madalla.webapp.AdminPage;
 
+/**
+ * Link to Admin Page
+ * 
+ * @author Eugene Malan
+ *
+ */
 public class LinkAdmin extends Link<Object>{
 
 	private static final long serialVersionUID = 1L;
 	private final Class<? extends AdminPage> adminPageClass;
 
-	public LinkAdmin(String name, Class<? extends AdminPage> adminPageClass){
-		super(name);
+	/**
+	 * @param id - wicket id
+	 * @param adminPageClass - The Admin Page Class 
+	 */
+	public LinkAdmin(String id, Class<? extends AdminPage> adminPageClass){
+		super(id);
 		this.adminPageClass = adminPageClass;
 		
 	}
