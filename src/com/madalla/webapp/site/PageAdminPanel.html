@@ -1,11 +1,23 @@
 <html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+        
+        div.pageDiv {
+        	border-top: medium solid blue;
+        	float: left;
+        	margin-top: 10px;
+        }
 
+    </style>
+</wicket:head>
 <body>
     <wicket:panel>
     
         <div class="adminSection">
             <span class="adminHeading"><wicket:message key="heading.site">[label]</wicket:message></span>
-            <div wicket:id="metaPanel"></div>
+            <div wicket:id="metaPanels">
+            	<div wicket:id="metaPanel" class="pageDiv"></div>
+            </div>
         </div>
                
         

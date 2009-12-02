@@ -11,12 +11,17 @@
             width: 30em;
             clear:both;
         }
-        div#homeDiv {
+        div.nameDiv {
         	float: left;
         	clear: both;
         	padding-top: 22px;
         }
-        div#otherDiv {
+        div.homeDiv {
+        	float: left;
+        	clear: both;
+        	padding-top: 22px;
+        }
+        div.otherDiv {
         	float: left;
         	margin-left: 10px;
         }
@@ -26,7 +31,10 @@
 </wicket:head>
 <body>
     <wicket:panel>
-        <div id="homeDiv">
+        <div class="nameDiv">
+            <span class="adminHeading" wicket:id="pageName">[label]</span>
+        </div>
+        <div class="homeDiv">
             <form wicket:id="homeBaseForm">
             	<div>
                     <label><wicket:message key="label.displayname">[label]</wicket:message></label>
@@ -58,7 +66,7 @@
                 
             </form>
         </div>
-        <div id="otherDiv">
+        <div class="otherDiv">
             <select wicket:id="langSelect" >
     			<option>[option1]</option>
         		<option>[option2]</option>

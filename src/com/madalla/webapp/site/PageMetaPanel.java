@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -58,16 +59,14 @@ public class PageMetaPanel extends CmsPanel{
 	public PageMetaPanel(String id, final PageData pageData, List<SiteLanguage> siteLanguages, Locale defaultLocale) {
 		super(id);
 
-		//********************
-		//Home Page Base Lang
-		//********************
+		add(new Label("pageName", pageData.getName()));
+		
+		// Base Lang
 		PageMetaLangData pageMetaLang = getRepositoryService().getPageMetaLang(Locale.ENGLISH, pageData);
 		final Form<PageMetaLangData> homeBaseForm = new MetaDataForm("homeBaseForm", new CompoundPropertyModel<PageMetaLangData>(pageMetaLang));
 	    add(homeBaseForm);
 	    
-	    //*************************
-		//Home Page - other Langs
-		//*************************
+		// Other Langs
 		final CompoundPropertyModel<PageMetaLangData> homeOtherModel = new CompoundPropertyModel<PageMetaLangData>(getRepositoryService().getPageMetaLang(defaultLocale, pageData));
 	    final Form<PageMetaLangData> homeOtherForm = new MetaDataForm("homeOtherForm", homeOtherModel);
 		add(homeOtherForm);

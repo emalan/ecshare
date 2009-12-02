@@ -6,6 +6,8 @@ import java.util.Locale;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 
 import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.PageData;
@@ -21,28 +23,36 @@ public class PageAdminPanel extends CmsPanel {
     public PageAdminPanel(String id){
 		super(id);
 		add(Css.CSS_FORM);
-		final PageData pageData = getRepositoryService().getPage(getHomePageName());
 		
-		List<SiteLanguage> locales = SiteLanguage.getLanguages();
+		final List<SiteLanguage> locales = SiteLanguage.getLanguages();
 		final Locale defaultLocale = getDefaultLocale(locales);
 		
-		add(new PageMetaPanel("metaPanel", pageData, locales, defaultLocale));
+		add(new ListView<PageData>("metaPanels", getPages()){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<PageData> item) {
+				item.add(new PageMetaPanel("metaPanel", item.getModelObject(), locales, defaultLocale));
+				
+			}
+			
+		});
 		
 	}
 	
-	private String getHomePageName(){
-		Class<? extends Page> page = getApplication().getHomePage();
+	private String getPageName(Class<? extends Page> page){
 		if (!CmsPage.class.isAssignableFrom(page)){
 			throw new WicketRuntimeException("Home page does not extends CmsPage class. Home Page is " + page);
 		}
 		return page.getSimpleName();
 	}
 	
-	private List<String> getPages(){
+	private List<PageData> getPages(){
 		List<Class<? extends Page>> pages = ((CmsApplication)getApplication()).getPageMenuList();
-		List<String> rt = new ArrayList<String>();
+		List<PageData> rt = new ArrayList<PageData>();
 		for (Class<? extends Page> page : pages){
-			rt.add(page.getSimpleName());
+			PageData pageData = getRepositoryService().getPage(getPageName(page));
+			rt.add(pageData);
 		}
 		return rt;
 	}
