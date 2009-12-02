@@ -24,7 +24,7 @@ import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
 import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.CmsSession;
-import com.madalla.webapp.login.aware.AdminLink;
+import com.madalla.webapp.login.aware.LoginAwareAdminLink;
 import com.madalla.webapp.pages.TranslatePage;
 import com.madalla.webapp.panel.CmsPanel;
 
@@ -108,7 +108,7 @@ public class ContentEntryPanel extends CmsPanel {
 		
 		//User admin link
 		// add link to edit it
-        add(new AdminLink("translateLink", TranslatePage.class, false){
+        add(new LoginAwareAdminLink("translateLink", TranslatePage.class, false){
 			private static final long serialVersionUID = 1L;
 
 			@Override

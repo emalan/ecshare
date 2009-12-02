@@ -13,7 +13,7 @@ import org.apache.wicket.model.Model;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.PageData;
 import com.madalla.webapp.AdminPage;
-import com.madalla.webapp.login.aware.AdminLink;
+import com.madalla.webapp.login.aware.LoginAwareAdminLink;
 import com.madalla.webapp.pages.ContentEditPage;
 import com.madalla.webapp.panel.CmsPanel;
 
@@ -106,7 +106,7 @@ public class ContentPanel extends CmsPanel {
             add(label);
 
             // add link to edit it
-            Link<Object> link = new AdminLink("contentLink", ContentEditPage.class, false){
+            Link<Object> link = new LoginAwareAdminLink("contentLink", ContentEditPage.class, false){
 				private static final long serialVersionUID = 1L;
 
 				@Override

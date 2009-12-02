@@ -66,16 +66,7 @@ public class Panels {
 		}
 	}
 	
-	/**
-	 * @param id - wicket id
-	 * @param parameters - pageParameters - passed on to Panel
-	 * @return Instantiated Panel of Type {@link com.madalla.webapp.images.admin.AlbumAdminPanel}
-	 */
-	public static Panel albumAdminPanel(String id, PageParameters parameters){
-		String album = getPageParameter(ALBUM, parameters,"AlbumAdminPanel");
-		return new AlbumAdminPanel(id, album);
-	}
-	
+
 	/**
 	 * @param id - wicket id
 	 * @param album

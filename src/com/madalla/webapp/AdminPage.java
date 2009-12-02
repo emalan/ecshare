@@ -9,7 +9,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.login.aware.AdminLink;
+import com.madalla.webapp.login.aware.LoginAwareAdminLink;
 import com.madalla.webapp.pages.ContentAdminPage;
 import com.madalla.webapp.pages.SiteAdminPage;
 import com.madalla.webapp.pages.SiteDataPage;
@@ -35,10 +35,10 @@ public abstract class AdminPage extends WebPage {
 	}
 	
 	protected void setupMenu(){
-		add(new AdminLink("UserProfile", UserProfilePage.class, false).setAutoEnable(true));
-		add(new AdminLink("SiteAdmin", SiteAdminPage.class, true).setAutoEnable(true));
-		add(new AdminLink("Data", SiteDataPage.class, true).setAutoEnable(true));
-		add(new AdminLink("Content", ContentAdminPage.class, true).setAutoEnable(true));
+		add(new LoginAwareAdminLink("UserProfile", UserProfilePage.class, false).setAutoEnable(true));
+		add(new LoginAwareAdminLink("SiteAdmin", SiteAdminPage.class, true).setAutoEnable(true));
+		add(new LoginAwareAdminLink("Data", SiteDataPage.class, true).setAutoEnable(true));
+		add(new LoginAwareAdminLink("Content", ContentAdminPage.class, true).setAutoEnable(true));
 		
 		add(new Link<Object>("returnLink"){
 

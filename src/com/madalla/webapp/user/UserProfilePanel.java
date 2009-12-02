@@ -20,7 +20,7 @@ import com.madalla.bo.security.UserData;
 import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.login.aware.AdminLink;
+import com.madalla.webapp.login.aware.LoginAwareAdminLink;
 import com.madalla.webapp.pages.SecurePasswordPage;
 import com.madalla.webapp.pages.UserAdminPage;
 import com.madalla.webapp.pages.UserPasswordPage;
@@ -68,7 +68,7 @@ public class UserProfilePanel extends CmsPanel{
         log.debug(user);
 		
 		//User admin link
-        add(new AdminLink("UserAdmin", UserAdminPage.class, true, true, true));
+        add(new LoginAwareAdminLink("UserAdmin", UserAdminPage.class, true, true, true));
         
 		//User Change Link - secure or not depending on authenticator
 		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();

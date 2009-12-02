@@ -22,14 +22,17 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.ImageData;
+import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
+import com.madalla.webapp.login.aware.LoginAwareAdminLink;
 import com.madalla.webapp.pages.AlbumAdminPage;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.JavascriptResources;
@@ -48,7 +51,7 @@ public class AlbumPanel extends CmsPanel implements IHeaderContributor {
     	this(id, albumName, returnPage, false);
     }
 
-	public AlbumPanel(String id, String albumName, Class<? extends Page> returnPage, boolean navigation) {
+	public AlbumPanel(String id, final String albumName, Class<? extends Page> returnPage, boolean navigation) {
 		super(id);
 
 		this.navigation = navigation;
@@ -68,6 +71,17 @@ public class AlbumPanel extends CmsPanel implements IHeaderContributor {
         }
         
         album = getRepositoryService().getAlbum(albumName);
+        
+        Link<Object> link = new LoginAwareAdminLink("adminLink", AlbumAdminPage.class, true, true){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected AdminPage constructAdminPage(Class<? extends AdminPage> clazz) {
+				return new AlbumAdminPage(albumName);
+			}
+        	
+        };
+        add(link);
         
         add(new LoggedinBookmarkablePageLink("adminLink", AlbumAdminPage.class, 
                 new PageParameters(ALBUM +"="+albumName+","+RETURN_PAGE+"="+returnPage.getName()), false, true));

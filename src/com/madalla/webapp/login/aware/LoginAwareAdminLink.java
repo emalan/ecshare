@@ -10,7 +10,7 @@ import com.madalla.webapp.pages.LinkAdmin;
  * @author Eugene Malan
  *
  */
-public class AdminLink extends LinkAdmin {
+public class LoginAwareAdminLink extends LinkAdmin {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -21,7 +21,7 @@ public class AdminLink extends LinkAdmin {
 	/**
 	 * Calls main constructor
 	 */
-	public AdminLink(String id, Class<? extends AdminPage> adminPageClass,
+	public LoginAwareAdminLink(String id, Class<? extends AdminPage> adminPageClass,
 			final boolean admin) {
 		this(id, adminPageClass, admin, false);
 	}
@@ -29,7 +29,7 @@ public class AdminLink extends LinkAdmin {
 	/**
 	 * Calls main constructor
 	 */
-	public AdminLink(String id, Class<? extends AdminPage> adminPageClass,
+	public LoginAwareAdminLink(String id, Class<? extends AdminPage> adminPageClass,
 			final boolean admin, final boolean hide){
 		this(id, adminPageClass, admin, hide, false);
 	}
@@ -43,7 +43,7 @@ public class AdminLink extends LinkAdmin {
 	 * @param hide - set true if you want to hide the link if not enabled
 	 * @param superAdmin - set true if this is a super admin only link - getting cheesy - time for user roles
 	 */
-	public AdminLink(String id, Class<? extends AdminPage> adminPageClass,
+	public LoginAwareAdminLink(String id, Class<? extends AdminPage> adminPageClass,
 			final boolean admin, final boolean hide, final boolean superAdmin){
 		super(id, adminPageClass);
 		this.admin = admin;
