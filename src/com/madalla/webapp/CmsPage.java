@@ -65,8 +65,7 @@ public abstract class CmsPage extends WebPage {
 	private static final String META_HTTP = "<meta http-equiv=\"{0}\" content=\"{1}\"/>";
 		
 	public abstract class LoginLink extends AjaxFallbackLink<Object> {
-		
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 858485459938698866L;
 
 		final CmsSession session ;
 		public LoginLink(String name, CmsSession session){

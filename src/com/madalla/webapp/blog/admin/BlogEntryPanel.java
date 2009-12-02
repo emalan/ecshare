@@ -49,7 +49,6 @@ public class BlogEntryPanel extends CmsPanel {
      * Constructor for creating a new Blog Entry
      * @param id
      * @param blogName
-     * @param returnPage
      */
     public BlogEntryPanel(String id, String blogName){
     	this(id);
@@ -63,7 +62,6 @@ public class BlogEntryPanel extends CmsPanel {
      * @param id
      * @param blogName
      * @param blogEntryId
-     * @param returnPage
      */
     public BlogEntryPanel(String id, String blogName, String blogEntryId) {
     	this(id);

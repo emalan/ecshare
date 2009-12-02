@@ -33,7 +33,7 @@ import com.madalla.wicket.I18NBookmarkablePageRequestTargetUrlCodingStrategy;
 
 /**
  * Abstract Wicket Application class that needs to extended to enable usage 
- * of the Wicket {@link Panels} provided by the Panels class.
+ * of the Content Panels.
  *  
  * @author Eugene Malan
  *
