@@ -1,6 +1,7 @@
 package com.madalla.webapp;
 
 import static com.madalla.webapp.PageParams.RETURN_PAGE;
+import static com.madalla.webapp.blog.BlogParameters.BLOG_ENTRY_ID;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -31,16 +33,18 @@ import com.madalla.cms.bo.impl.ocm.Site;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.util.security.SecureCredentials;
+import com.madalla.webapp.blog.BlogHomePanel;
 import com.madalla.webapp.cms.ContentLinkPanel;
 import com.madalla.webapp.cms.ContentPanel;
 import com.madalla.webapp.cms.InlineContentPanel;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.email.EmailFormPanel;
+import com.madalla.webapp.images.AlbumPanel;
+import com.madalla.webapp.images.exhibit.ExhibitPanel;
 import com.madalla.webapp.login.LoginPanel;
 import com.madalla.webapp.pages.SecureLoginPage;
 import com.madalla.webapp.pages.UserLoginPage;
 import com.madalla.webapp.security.IAuthenticator;
-
 /**
  * Base class for Application Pages that supplies Content and other functionality.
  * <p>
@@ -320,20 +324,47 @@ public abstract class CmsPage extends WebPage {
 	 * 
 	 * @param id
 	 */
-	protected void addContentPanel(String id){
-		add(new ContentPanel(id, getPageName()));
+	protected Panel addContentPanel(String id){
+		Panel panel = new ContentPanel(id, getPageName());
+		add(panel);
+		return panel;
 	}
 	
-	protected void addContentInlinePanel(String id){
-		add(new InlineContentPanel(id, getPageName()));
+	protected Panel addContentInlinePanel(String id){
+		Panel panel = new InlineContentPanel(id, getPageName());
+		add(panel);
+		return panel;
 	}
 	
-	protected void addContentLinkPanel(String id){
-		add(new ContentLinkPanel(id, getPageName()));
+	protected Panel addContentLinkPanel(String id){
+		Panel panel = new ContentLinkPanel(id, getPageName());
+		add(panel);
+		return panel;
 	}
 	
-	protected void addEmailPanel(String id, String subject){
-		add(new EmailFormPanel(id, subject));
+	protected Panel addEmailPanel(String id, String subject){
+		Panel panel = new EmailFormPanel(id, subject);
+		add(panel);
+		return panel;
+	}
+	
+	protected Panel addImagePanel(String id, String albumName){
+		Panel panel = new AlbumPanel(id, albumName);
+		add(panel);
+		return panel;
+	}
+	
+	protected Panel addExhibitPanel(String id) {
+		Panel panel = new ExhibitPanel(id);
+		add(panel);
+		return panel;
+	}
+	
+	protected Panel addBlogPanel(String id, String blogName, PageParameters parameters){
+		String blogEntryId = parameters.getString(BLOG_ENTRY_ID);
+    	Panel panel = new BlogHomePanel("blogPanel", "mainBlog", blogEntryId);
+    	add(panel);
+    	return panel;
 	}
 	
 	protected List<IMenuItem> getPageMetaData(){

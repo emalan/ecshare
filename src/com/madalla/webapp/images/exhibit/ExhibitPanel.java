@@ -1,10 +1,9 @@
 package com.madalla.webapp.images.exhibit;
 
-import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import com.madalla.webapp.cms.ContentPanel;
-import com.madalla.webapp.panel.Panels;
+import com.madalla.webapp.images.AlbumPanel;
 
 public class ExhibitPanel extends Panel {
 
@@ -12,11 +11,12 @@ public class ExhibitPanel extends Panel {
     private static final String CONTENT = "content";
     private static final String NODE = "Exhibit";
 
-    public ExhibitPanel(String id, Class<? extends Page> returnPage) {
+    public ExhibitPanel(String id) {
         super(id);
         add(new ContentPanel(CONTENT + "1", id+"first", NODE));
         
-        Panel album = Panels.albumPanel("nested", id, returnPage);
+        
+        Panel album =  new AlbumPanel("nested", id);
         Panel para2 = new ContentPanel(CONTENT + "2", id+"next", NODE, album);
         add(para2);
     }

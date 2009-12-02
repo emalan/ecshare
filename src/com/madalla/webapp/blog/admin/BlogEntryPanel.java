@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.datetime.StyleDateConverter;
@@ -20,7 +19,6 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -46,7 +44,6 @@ public class BlogEntryPanel extends CmsPanel {
     private static final CompressedResourceReference JAVASCRIPT = new CompressedResourceReference(BlogEntryPanel.class, "BlogEntryPanel.js");
     private Log log = LogFactory.getLog(this.getClass());
     private final BlogEntryView blogEntry = new BlogEntryView();
-    private Class<? extends Page> returnPage;
     
     /**
      * Constructor for creating a new Blog Entry
@@ -54,8 +51,8 @@ public class BlogEntryPanel extends CmsPanel {
      * @param blogName
      * @param returnPage
      */
-    public BlogEntryPanel(String id, String blogName, Class<? extends Page> returnPage){
-    	this(id, returnPage);
+    public BlogEntryPanel(String id, String blogName){
+    	this(id);
         blogEntry.setBlog(blogName);
         log.debug("Created new Blog Entry");
         init();
@@ -68,8 +65,8 @@ public class BlogEntryPanel extends CmsPanel {
      * @param blogEntryId
      * @param returnPage
      */
-    public BlogEntryPanel(String id, String blogName, String blogEntryId, Class<? extends Page> returnPage) {
-    	this(id, returnPage);
+    public BlogEntryPanel(String id, String blogName, String blogEntryId) {
+    	this(id);
         log.debug("Constructing Blog Entry. id="+blogEntryId);
         blogEntry.init(getRepositoryService().getBlogEntry(blogEntryId));
         log.debug("Retrieved Blog Entry from Service."+blogEntry);
@@ -77,7 +74,6 @@ public class BlogEntryPanel extends CmsPanel {
     }
     
     private void init(){
-    	add(new BookmarkablePageLink<Page>("returnLink", returnPage));
     	Form<Object> form = new BlogEntryForm("blogForm");
         final FeedbackPanel feedbackPanel = new ComponentFeedbackPanel("feedback",form);
         feedbackPanel.setOutputMarkupId(true);
@@ -85,9 +81,8 @@ public class BlogEntryPanel extends CmsPanel {
         add(form);
     }
     
-    private BlogEntryPanel(String id, Class<? extends Page> returnPage){
+    private BlogEntryPanel(String id){
     	super(id);
-    	this.returnPage = returnPage;
     	add(JavascriptPackageResource.getHeaderContribution(TinyMce.class,"tiny_mce.js"));
         add(JavascriptPackageResource.getHeaderContribution(JAVASCRIPT));
         add(Css.CSS_FORM);
@@ -162,7 +157,7 @@ public class BlogEntryPanel extends CmsPanel {
 
 				@Override
 				public void onClick() {
-					setResponsePage(returnPage);
+					//setResponsePage(returnPage);
 				}
             });
         }
@@ -173,7 +168,7 @@ public class BlogEntryPanel extends CmsPanel {
                 saveBlogEntry(blogEntry);
                 info("Success");
                 log.info("Blog Entry successfully saved. " + blogEntry);
-                setResponsePage(returnPage);
+                
             } catch (Exception e) {
                 error("There was a problem saving Entry.");
                 error(e.getMessage());

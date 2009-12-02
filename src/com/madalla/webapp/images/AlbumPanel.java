@@ -10,7 +10,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
@@ -42,11 +41,11 @@ public class AlbumPanel extends CmsPanel implements IHeaderContributor {
     private AlbumData album;
     private boolean navigation = false;
     
-    public AlbumPanel(String id, String albumName, Class<? extends Page> returnPage) {
-    	this(id, albumName, returnPage, false);
+    public AlbumPanel(String id, String albumName) {
+    	this(id, albumName, false);
     }
 
-	public AlbumPanel(String id, final String albumName, Class<? extends Page> returnPage, boolean navigation) {
+	public AlbumPanel(String id, final String albumName, boolean navigation) {
 		super(id);
 
 		this.navigation = navigation;
