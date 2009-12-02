@@ -3,7 +3,6 @@ package com.madalla.webapp.panel;
 import static com.madalla.webapp.PageParams.RETURN_PAGE;
 import static com.madalla.webapp.blog.BlogParameters.BLOG_ENTRY_ID;
 import static com.madalla.webapp.blog.BlogParameters.BLOG_NAME;
-import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Page;
@@ -15,7 +14,6 @@ import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.blog.BlogHomePanel;
 import com.madalla.webapp.blog.admin.BlogEntryPanel;
 import com.madalla.webapp.images.AlbumPanel;
-import com.madalla.webapp.images.admin.AlbumAdminPanel;
 import com.madalla.webapp.images.exhibit.ExhibitPanel;
 
 /**

@@ -1,7 +1,5 @@
 package com.madalla.webapp.images;
 
-import static com.madalla.webapp.PageParams.RETURN_PAGE;
-import static com.madalla.webapp.images.admin.AlbumParams.ALBUM;
 import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.CROSSFADE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.FAST_INIT;
@@ -13,7 +11,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
@@ -22,7 +19,6 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.target.basic.RedirectRequestTarget;
@@ -31,7 +27,6 @@ import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.login.aware.LoggedinBookmarkablePageLink;
 import com.madalla.webapp.login.aware.LoginAwareAdminLink;
 import com.madalla.webapp.pages.AlbumAdminPage;
 import com.madalla.webapp.panel.CmsPanel;
@@ -72,7 +67,7 @@ public class AlbumPanel extends CmsPanel implements IHeaderContributor {
         
         album = getRepositoryService().getAlbum(albumName);
         
-        Link<Object> link = new LoginAwareAdminLink("adminLink", AlbumAdminPage.class, true, true){
+        add(new LoginAwareAdminLink("adminLink", AlbumAdminPage.class, true, true){
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -80,11 +75,7 @@ public class AlbumPanel extends CmsPanel implements IHeaderContributor {
 				return new AlbumAdminPage(albumName);
 			}
         	
-        };
-        add(link);
-        
-        add(new LoggedinBookmarkablePageLink("adminLink", AlbumAdminPage.class, 
-                new PageParameters(ALBUM +"="+albumName+","+RETURN_PAGE+"="+returnPage.getName()), false, true));
+        });
         
         List<ImageData> images = getAlbumImages(album);
         
