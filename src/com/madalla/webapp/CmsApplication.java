@@ -3,9 +3,11 @@ package com.madalla.webapp;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
@@ -131,6 +133,8 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
     	HttpsConfig config = new HttpsConfig(80,443);
             return new HttpsRequestCycleProcessor(config);
     }
+    
+    public abstract List<Class<? extends Page>> getPageMenuList();
 
     public IEmailSender getEmailSender() {
         return emailSender;

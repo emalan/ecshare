@@ -336,7 +336,8 @@ public abstract class CmsPage extends WebPage {
 		add(new EmailFormPanel(id, subject));
 	}
 	
-	protected List<IMenuItem> getPageMetaData(final List<Class<? extends Page>> pages){
+	protected List<IMenuItem> getPageMetaData(){
+		List<Class<? extends Page>> pages = ((CmsApplication)getApplication()).getPageMenuList();
 		final List<IMenuItem> items = new ArrayList<IMenuItem>();
 		for(final Class<? extends Page> page: pages){
 
@@ -359,6 +360,5 @@ public abstract class CmsPage extends WebPage {
 		}
 		return items;
 	}
-	
 	
 }
