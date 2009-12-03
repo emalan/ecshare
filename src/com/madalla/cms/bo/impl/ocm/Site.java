@@ -80,7 +80,7 @@ public class Site extends SiteData{
 	}
 
 	public Boolean getSecurityCertificate() {
-		return securityCertificate;
+		return securityCertificate == null? Boolean.FALSE : securityCertificate;
 	}
 
 	public void setSecurityCertificate(Boolean securityCertificate) {

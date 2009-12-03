@@ -24,6 +24,7 @@ public class SecurePasswordPage extends AdminPage {
 		String user = PageUtils.getPageParameter("user", parameters, "SecurePasswordPage");
 		String pwd =  PageUtils.getPageParameter("pwd", parameters, "UserPasswordPanel","");
 		init(user,pwd);
+		setReturnPage(getApplication().getHomePage());
 	}
 	
 	private void init(String username, String pwd){

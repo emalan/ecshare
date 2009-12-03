@@ -51,6 +51,7 @@ import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
+import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 import com.madalla.wicket.form.AjaxValidationSubmitButton;
 import com.madalla.wicket.form.ValidationStyleBehaviour;
@@ -426,11 +427,11 @@ public class UserAdminPanel extends CmsPanel {
 		String message = getString(key, model);
 		
     	if (service.isUserSite(userData) && StringUtils.isNotEmpty(url)){
-    		UserSiteData userSite = service.getUserSite(userData, site.getName());
-    		if (site.getSecurityCertificate() && userSite != null && userSite.getRequiresAuthentication()){
-    			map.put("passwordChangePage", "password");
-    		} else {
+    		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
+    		if (site.getSecurityCertificate() && authenticator.requiresSecureAuthentication(userData.getName())){
     			map.put("passwordChangePage", "securePassword");
+    		} else {
+    			map.put("passwordChangePage", "password");
     		}
     		message = message + getString("message.password", model);
     	}

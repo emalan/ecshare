@@ -133,13 +133,6 @@ public abstract class CmsPage extends WebPage {
 		//TODO remove the following block
 		if (isHomePage()) {
 			SiteData siteData = getRepositoryService().getSiteData();
-			if (StringUtils.isNotEmpty(siteData.getMetaDescription())){
-				if (StringUtils.isEmpty(pageInfo.getDescription())){
-					pageInfo.setDescription(siteData.getMetaDescription());
-					getRepositoryService().saveDataObject(pageInfo);
-				}
-				((Site) siteData).setMetaDescription("");
-			}
 			if(StringUtils.isNotEmpty(siteData.getMetaKeywords())){
 				if (StringUtils.isEmpty(pageInfo.getKeywords())){
 					pageInfo.setKeywords(siteData.getMetaKeywords());

@@ -49,6 +49,8 @@ public class SiteAdminPanel extends CmsPanel{
             url.add(new UrlValidator(UrlValidator.NO_FRAGMENTS));
             add(url);
             
+            add(new TextField<String>("metaDescription"));
+            
             add(new CheckBox("securityCertificate"));
             
             add(new CheckBoxMultipleChoice<SiteLanguage>("localeList", Model.ofList(SiteData.getAvailableLocales()), 

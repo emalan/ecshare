@@ -16,6 +16,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
+import com.madalla.bo.SiteData;
 import com.madalla.bo.security.UserData;
 import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.CmsSession;
@@ -72,7 +73,8 @@ public class UserProfilePanel extends CmsPanel{
         
 		//User Change Link - secure or not depending on authenticator
 		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
-		if (authenticator.requiresSecureAuthentication(username) && getApplication().getConfigurationType().equals(Application.DEPLOYMENT)){
+		SiteData siteData = getRepositoryService().getSiteData();
+		if (siteData.getSecurityCertificate() && authenticator.requiresSecureAuthentication(username) && getApplication().getConfigurationType().equals(Application.DEPLOYMENT)){
 			
 			add(new Link<Object>("PasswordChange"){
 				private static final long serialVersionUID = 1L;
