@@ -158,13 +158,13 @@ public class UserAdminPanel extends CmsPanel {
 			email.add(EmailAddressValidator.getInstance());
 			add(email);
 
-			add(new TextField<String>("firstName"));
-			add(new TextField<String>("lastName"));
-			add(new CheckBox("admin"));
-			add(new CheckBox("requiresAuth"));
+			add(new TextField<String>("firstName").setOutputMarkupId(true));
+			add(new TextField<String>("lastName").setOutputMarkupId(true));
+			add(new CheckBox("admin").setOutputMarkupId(true));
+			add(new CheckBox("requiresAuth").setOutputMarkupId(true));
 			sitesChoices = getRepositoryService().getSiteEntries();
 			add(new CheckBoxMultipleChoice<SiteData>("site", getSitesModel() ,
-					sitesChoices, new ChoiceRenderer<SiteData>("name")));
+					sitesChoices, new ChoiceRenderer<SiteData>("name")).setOutputMarkupId(true));
 		}
 
 	}
