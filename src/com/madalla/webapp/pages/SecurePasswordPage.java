@@ -4,7 +4,6 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.protocol.https.RequireHttps;
 
 import com.madalla.webapp.AdminPage;
-import com.madalla.webapp.panel.Panels;
 import com.madalla.webapp.user.UserPasswordPanel;
 
 @RequireHttps
@@ -22,8 +21,8 @@ public class SecurePasswordPage extends AdminPage {
 	 */
 	public SecurePasswordPage(PageParameters parameters) {
 		super();
-		String user = Panels.getPageParameter("user", parameters, "SecurePasswordPage");
-		String pwd =  Panels.getPageParameter("pwd", parameters, "UserPasswordPanel","");
+		String user = PageUtils.getPageParameter("user", parameters, "SecurePasswordPage");
+		String pwd =  PageUtils.getPageParameter("pwd", parameters, "UserPasswordPanel","");
 		init(user,pwd);
 	}
 	

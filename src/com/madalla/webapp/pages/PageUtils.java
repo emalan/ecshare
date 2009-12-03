@@ -1,4 +1,4 @@
-package com.madalla.webapp.panel;
+package com.madalla.webapp.pages;
 
 import static com.madalla.webapp.PageParams.RETURN_PAGE;
 
@@ -7,28 +7,15 @@ import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.WicketRuntimeException;
 
-import com.madalla.webapp.CmsApplication;
-
 /**
- * @deprecated Panels used by Admin Pages are only used in one place, while application
- * panels are now instanciated from CmsPage which should be extended by all Application Pages.
- * <p>
- * Utility static instantiation methods to create Wicket Panels
- * for your Pages. Provided to simplify the API by providing one
- * place for getting Panels.
+ * Utility functions for Wicket Pages
  * 
- * NOTE: Your Wicket Application needs to extend {@link CmsApplication} before you can use these Panels
- * 
- * TODO restyle class to a Page Utils
- * </p>
  * @author Eugene Malan
  *
  */
-public class Panels {
+public class PageUtils {
 	
-	private Panels(){}
-	
-	
+	private PageUtils(){}
 
 	private static void error(String message){
 		throw new WicketRuntimeException(message);
