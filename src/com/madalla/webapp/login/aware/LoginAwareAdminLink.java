@@ -85,7 +85,5 @@ public class LoginAwareAdminLink extends LinkAdmin {
             return session.isLoggedIn();
         }
 	}
-
-
 	
 }

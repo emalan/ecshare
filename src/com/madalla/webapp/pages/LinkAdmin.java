@@ -1,6 +1,7 @@
 package com.madalla.webapp.pages;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.link.Link;
 
 import com.madalla.webapp.AdminPage;
@@ -45,5 +46,12 @@ public class LinkAdmin extends Link<Object>{
 	protected AdminPage constructAdminPage(Class<? extends AdminPage> clazz){
 		return (AdminPage) getSession().getPageFactory().newPage(clazz);
 	}
+	
+	@Override
+	protected void onComponentTag(ComponentTag tag) {
+		tag.put("rel", "nofollow");
+		super.onComponentTag(tag);
+	}
+	
 
 }

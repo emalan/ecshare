@@ -171,12 +171,18 @@ public abstract class CmsPage extends WebPage {
 	private void setupPopupLogin(){
 		CmsSession session = (CmsSession) getSession();
 		add(new LoginLink("logon", session){
-
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onClickAction(AjaxRequestTarget target) {
 				target.appendJavascript("var elm = wicketGet('loginPopup'); wicketShow(elm); elm.focus();");
+			}
+
+			@Override
+			protected void onComponentTag(ComponentTag tag) {
+				tag.put("rel", "nofollow");
+				super.onComponentTag(tag);
+				
 			}
 			
 		});
