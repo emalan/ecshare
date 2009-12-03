@@ -234,7 +234,6 @@ public class ContentLinkPanel extends CmsPanel{
 //				try {
 //					Thread.sleep(10000);
 //				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
 //					e.printStackTrace();
 //				}
 				log.debug("Done processing...");

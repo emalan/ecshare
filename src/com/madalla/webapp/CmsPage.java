@@ -56,6 +56,7 @@ import com.madalla.webapp.security.IAuthenticator;
  * in your style sheets. Popup login functionality and a Language switcher can be activated by overiding
  * the relevant methods.
  * </p>
+ * 
  * @author Eugene Malan
  *
  */
@@ -151,7 +152,7 @@ public abstract class CmsPage extends WebPage {
 		
 		add(new StringHeaderContributor(MessageFormat.format(META_HTTP, "lang", pageInfo.getLang())));
 		
-		if (!isMetadataOveridden()) {
+		if (!isMetadataOveridden()) { //TODO Store this as field on Page
 			if (StringUtils.isNotEmpty(pageInfo.getTitle())){
 				add(new StringHeaderContributor("<title>" + pageInfo.getTitle() + "</title>"));
 			}

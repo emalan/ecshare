@@ -105,10 +105,7 @@ public class RepositoryServiceFactory implements ISessionDataServiceProvider{
 		this.template = template;
 	}
 
-
-
 	public ISessionDataService getRepositoryService() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
