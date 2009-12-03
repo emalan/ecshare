@@ -3,12 +3,13 @@ package com.madalla.webapp.user;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.Application;
 import org.apache.wicket.Page;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -74,19 +75,11 @@ public class UserProfilePanel extends CmsPanel{
 		//User Change Link - secure or not depending on authenticator
 		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
 		SiteData siteData = getRepositoryService().getSiteData();
-		if (siteData.getSecurityCertificate() && authenticator.requiresSecureAuthentication(username) && getApplication().getConfigurationType().equals(Application.DEPLOYMENT)){
+		
+		if (siteData.getSecurityCertificate() && authenticator.requiresSecureAuthentication(username)){
 			
-			add(new Link<Object>("PasswordChange"){
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void onClick() {
-					AdminPage page = new SecurePasswordPage(username,"");
-					page.setReturnPage(((AdminPage)getPage()).getReturnPage());
-					setResponsePage(page);
-				}
-				
-			});
+			PageParameters parameters = new PageParameters("user=" + username);
+			add(new BookmarkablePageLink<String>("PasswordChange", SecurePasswordPage.class, parameters));
 			
 		} else {
 			add(new Link<Object>("PasswordChange"){
