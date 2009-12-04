@@ -3,7 +3,6 @@ package com.madalla.webapp.user;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
@@ -60,7 +59,7 @@ public class UserProfilePanel extends CmsPanel{
 		}
     }
 
-	public UserProfilePanel(String id, final Class<? extends Page> returnPage){
+	public UserProfilePanel(String id){
 		
 		super(id);
 		

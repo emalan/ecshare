@@ -8,16 +8,18 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.PropertyModel;
 
+import com.madalla.service.IDataServiceProvider;
+import com.madalla.webapp.cms.admin.ContentAdminPanel;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.login.aware.LoginAwareAdminLink;
-import com.madalla.webapp.pages.ContentAdminPage;
-import com.madalla.webapp.pages.SiteAdminPage;
-import com.madalla.webapp.pages.SiteDataPage;
-import com.madalla.webapp.pages.UserProfilePage;
+import com.madalla.webapp.pages.AdminPanelLink;
+import com.madalla.webapp.site.SiteAdminPanel;
+import com.madalla.webapp.site.SiteDataPanel;
+import com.madalla.webapp.user.UserProfilePanel;
 
 public abstract class AdminPage extends WebPage {
 	
 	private static final long serialVersionUID = -2837757448336709448L;
+	private static final String ID = "adminPanel";
 	
 	private String pageTitle = "(no title)";
 	private Class<? extends Page> returnPage;
@@ -35,10 +37,51 @@ public abstract class AdminPage extends WebPage {
 	}
 	
 	protected void setupMenu(){
-		add(new LoginAwareAdminLink("UserProfile", UserProfilePage.class, false).setAutoEnable(true));
-		add(new LoginAwareAdminLink("SiteAdmin", SiteAdminPage.class, true).setAutoEnable(true));
-		add(new LoginAwareAdminLink("Data", SiteDataPage.class, true).setAutoEnable(true));
-		add(new LoginAwareAdminLink("Content", ContentAdminPage.class, true).setAutoEnable(true));
+		//add(new LoginAwareAdminLink("UserProfile", UserProfilePage.class, false).setAutoEnable(true));
+		//add(new LoginAwareAdminLink("SiteAdmin", SiteAdminPage.class, true).setAutoEnable(true));
+		//add(new LoginAwareAdminLink("Data", SiteDataPage.class, true).setAutoEnable(true));
+		//add(new LoginAwareAdminLink("Content", ContentAdminPage.class, true).setAutoEnable(true));
+		
+		add(new AdminPanelLink("UserProfile"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				getParent().replace(new UserProfilePanel(ID));
+			}
+			
+		});
+		add(new AdminPanelLink("SiteAdmin"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				getParent().replace(new SiteAdminPanel(ID));
+			}
+			
+		});
+		add(new AdminPanelLink("Data"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				getParent().replace(new SiteDataPanel(ID));
+			}
+			
+		});
+		add(new AdminPanelLink("Content"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				if (((IDataServiceProvider)getApplication()).getRepositoryService().isAdminApp()){
+					getParent().replace(ContentAdminPanel.newAdminInstance(ID));
+		    	} else {
+		    		getParent().replace(ContentAdminPanel.newInstance(ID));
+		    	}
+			}
+			
+		});
 		
 		add(new Link<Object>("returnLink"){
 

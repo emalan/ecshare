@@ -50,7 +50,7 @@ public class LoginAwareAdminLink extends LinkAdmin {
 		this.hide = hide;
 		this.superAdmin = superAdmin;
 	}
-
+	
 	protected final void onBeforeRender(){
 
 		if (hide){

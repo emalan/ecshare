@@ -41,7 +41,7 @@
             </div>
             <div class="formButtons">
                 <span class="buttonwrapper">
-                    <a wicket:id="submitLink" class="orangebutton"><span><wicket:message key="label.save">Label Contents</wicket:message></span></a>
+                    <a wicket:id="submitLink" class="orangebutton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
                 </span>
  				<span wicket:id="albumFeedback"></span>
             </div>
@@ -49,6 +49,20 @@
 
         <form wicket:id="imagesForm">
             <span wicket:id="formFeedback"></span>
+            <div id="imageTable">
+	            <table cellspacing="0" class="dataview">
+    				<tr>
+        				<th><wicket:message key="label.name">Label Contents</wicket:message></th>
+        				<th><wicket:message key="label.title">Label Contents</wicket:message></th>
+        				<th><wicket:message key="label.url">Label Contents</wicket:message></th>
+    				</tr>
+    				<tr wicket:id="dataview">
+        				<td><span wicket:id="name">[Label]</span></td>
+        				<td><span wicket:id="title">[Label]</span></td>
+        				<td><span wicket:id="url">[Label]</span></td>
+    				</tr>
+				</table>
+            </div>
             <div wicket:id="albumTreeTable" class="treeTable">
             </div>
         </form>

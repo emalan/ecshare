@@ -17,11 +17,12 @@
         
         <ul wicket:id="images" class="banner">
                 <li wicket:id="image-list" style="visibility: visible; list-style: none; list-style-type: none;">
-                    <div class="imageWrapper">
+                    <div wicket:id="imageWrapper" class="imageWrapper">
                         <div>
-                        <img wicket:id="id" class="bannerImage" border="0" />
+                        	<img wicket:id="id" class="bannerImage" border="0" />
                         </div>
                     </div>
+                    <label wicket:id="imageLabel"></label>
                 </li>
         </ul>
     

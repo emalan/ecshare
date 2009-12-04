@@ -17,10 +17,15 @@ import org.apache.wicket.extensions.markup.html.tree.table.IColumn;
 import org.apache.wicket.extensions.markup.html.tree.table.TreeTable;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Alignment;
 import org.apache.wicket.extensions.markup.html.tree.table.ColumnLocation.Unit;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.markup.repeater.data.EmptyDataProvider;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -43,17 +48,20 @@ class AlbumDisplayPanel extends CmsPanel {
 		public AlbumForm(String id, IModel<AlbumData> model) {
 			super(id, model);
 			
-			add(new TextField<String>("title"));
+			add(new TextField<String>("title").setOutputMarkupId(true));
 			
 			Component interval = new RequiredTextField<Integer>("interval").add(new RangeValidator<Integer>(1,30));
+			interval.setOutputMarkupId(true);
 			add(new ComponentFeedbackPanel("intervalFeedback",interval).setOutputMarkupId(true));
 			add(interval);
 			
 			Component height = new RequiredTextField<Integer>("height").add(new RangeValidator<Integer>(50,700));
+			height.setOutputMarkupId(true);
 			add(new ComponentFeedbackPanel("heightFeedback", height).setOutputMarkupId(true));
 			add(height);
 
-			Component width = new RequiredTextField<Integer>("width").add(new RangeValidator<Integer>(100,950)); 
+			Component width = new RequiredTextField<Integer>("width").add(new RangeValidator<Integer>(100,950));
+			width.setOutputMarkupId(true);
 			add(new ComponentFeedbackPanel("widthFeedback", width).setOutputMarkupId(true));
 			add(width);
 			
@@ -92,6 +100,21 @@ class AlbumDisplayPanel extends CmsPanel {
 		final Form<Object> form = new Form<Object>("imagesForm");
 		
 		form.add(new ComponentFeedbackPanel("formFeedback", form).setOutputMarkupId(true));
+		
+		//Album Image Table
+		IDataProvider<ImageData> provider = new EmptyDataProvider<ImageData>();
+		final DataView<ImageData> dataView = new DataView<ImageData>("dataview",provider ){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(Item<ImageData> item) {
+				ImageData data = item.getModelObject();
+				item.add(new Label("name", data.getName()));
+				item.add(new Label("title", data.getTitle()));
+				item.add(new Label("url", data.getUrl()));
+			}
+			
+		};
 		
 		//Setting up Tree Table
 		IColumn column = new AbstractTreeColumn(new ColumnLocation(Alignment.LEFT,20, Unit.EM),"Images"){

@@ -10,6 +10,8 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Component;
+import org.apache.wicket.ResourceReference;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
@@ -37,10 +39,6 @@ public class AlbumPanel extends CmsPanel {
 	
     private static final Log log = LogFactory.getLog(AlbumPanel.class);
     
-//    private WebMarkupContainer container;
-//    private AlbumData album;
-//    private boolean navigation = false;
-    
     public AlbumPanel(String id, String albumName) {
     	this(id, albumName, false);
     }
@@ -64,44 +62,24 @@ public class AlbumPanel extends CmsPanel {
         final AlbumData album = getRepositoryService().getAlbum(albumName);
         final List<ImageData> images = getAlbumImages(album);
 
-        final WebMarkupContainer imageContainer  = new WebMarkupContainer("images");
-        imageContainer.setOutputMarkupId(true);
-        add(imageContainer);
+        final WebMarkupContainer imageListContainer  = new WebMarkupContainer("images");
+        imageListContainer.setOutputMarkupId(true);
+        add(imageListContainer);
 
         if (images.size() <= 1) {
         	//one or less images scenario
+        	
         	WebMarkupContainer list = new WebMarkupContainer("image-list");
-        	imageContainer.add(list);
+        	imageListContainer.add(list);
         	
         	if (images.isEmpty()){
-        		list.add(new Label("id","There are no images"));
+        		ResourceReference emptyImage = new ResourceReference(this.getClass(), "images.png");
+        		list.add(createImageWrapper(album).add(new Image("id", emptyImage )));
+        		list.add(new Label("imageLabel",getString("label.empty")));
         	} else {
         		final ImageData imageData = images.get(0);
-        		Image image = new Image("id", imageData.getImageFull()) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onComponentTag(ComponentTag tag) {
-						super.onComponentTag(tag);
-						album.getHeight();
-						tag.put("height", album.getHeight());
-						tag.put("width", album.getWidth());
-					}
-
-				};
-
-				if (StringUtils.isEmpty(imageData.getUrl())) {
-					// TODO create a link to URL
-					image.add(new AjaxEventBehavior("onclick") {
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						protected void onEvent(AjaxRequestTarget target) {
-							getRequestCycle().setRequestTarget(new RedirectRequestTarget(imageData.getUrl()));
-						}
-					});
-				}
-				list.add(image);
+        		list.add(createImage(album, imageData));
+        		list.add(new Label("imageLabel", imageData.getTitle()));
         	}
         	
         } else {
@@ -118,41 +96,18 @@ public class AlbumPanel extends CmsPanel {
         		add(ScriptUtils.CROSSFADE_CSS);
         	}
         
-        	imageContainer.add(new ListView<ImageData>("image-list", images) {
+        	imageListContainer.add(new ListView<ImageData>("image-list", images) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected void populateItem(ListItem<ImageData> item) {
 					final ImageData imageData = item.getModelObject();
 					if (imageData.getImageFull() != null) {
-						Image image = new Image("id", imageData.getImageFull()) {
-							private static final long serialVersionUID = 1L;
-
-							@Override
-							protected void onComponentTag(ComponentTag tag) {
-								super.onComponentTag(tag);
-								album.getHeight();
-								tag.put("height", album.getHeight());
-								tag.put("width", album.getWidth());
-							}
-
-						};
-
-						if (StringUtils.isEmpty(imageData.getUrl())) {
-							// TODO create a link to URL
-							image.add(new AjaxEventBehavior("onclick") {
-								private static final long serialVersionUID = 1L;
-
-								@Override
-								protected void onEvent(AjaxRequestTarget target) {
-									getRequestCycle().setRequestTarget(new RedirectRequestTarget(imageData.getUrl()));
-								}
-							});
-						}
-						item.add(image);
+						item.add(createImage(album, imageData));
 					} else {
 						log.warn("Could not get Image from ImageData." + imageData);
 					}
+					item.add(new Label("imageLabel", imageData.getTitle()));
 
 				}
 
@@ -169,9 +124,9 @@ public class AlbumPanel extends CmsPanel {
 			        String params = "{interval:"+interval+", height:"+height+", width: "+ width+"}";
 			        
 			        if (navigation) {
-			        	container.getHeaderResponse().renderOnLoadJavascript("new Banner($('"+ imageContainer.getMarkupId() +"')," + params + ")");
+			        	container.getHeaderResponse().renderOnLoadJavascript("new Banner($('"+ imageListContainer.getMarkupId() +"')," + params + ")");
 			        } else {
-			        	container.getHeaderResponse().renderOnLoadJavascript("new Crossfade($('"+ imageContainer.getMarkupId() +"')," + params + ")");
+			        	container.getHeaderResponse().renderOnLoadJavascript("new Crossfade($('"+ imageListContainer.getMarkupId() +"')," + params + ")");
 			        }
 					super.renderHead(container);
 				}
@@ -180,6 +135,48 @@ public class AlbumPanel extends CmsPanel {
 			});
         
         }
+	}
+	
+	private WebMarkupContainer createImageWrapper(final AlbumData album){
+		return new WebMarkupContainer("imageWrapper"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onComponentTag(ComponentTag tag) {
+				super.onComponentTag(tag);
+				tag.put("style", "height: "+ (album.getHeight()+ 20)+"px; width: "+ (album.getWidth()+20)+"px;");
+			}
+    	};
+	}
+
+	private Component createImage(final AlbumData album, final ImageData imageData){
+		WebMarkupContainer imageWrapper = createImageWrapper(album);
+		
+    	Image image = new Image("id", imageData.getImageFull()) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onComponentTag(ComponentTag tag) {
+				super.onComponentTag(tag);
+				tag.put("height", album.getHeight());
+				tag.put("width", album.getWidth());
+			}
+
+		};
+
+		if (StringUtils.isEmpty(imageData.getUrl())) {
+			// TODO create a link to URL
+			image.add(new AjaxEventBehavior("onclick") {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onEvent(AjaxRequestTarget target) {
+					getRequestCycle().setRequestTarget(new RedirectRequestTarget(imageData.getUrl()));
+				}
+			});
+		}
+		imageWrapper.add(image);
+		return imageWrapper;
 	}
 	
 	private List<ImageData> getAlbumImages(AlbumData albumData){
