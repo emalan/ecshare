@@ -22,6 +22,7 @@ import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.aware.LoginAwareAdminLink;
+import com.madalla.webapp.pages.AdminPanelLink;
 import com.madalla.webapp.pages.SecurePasswordPage;
 import com.madalla.webapp.pages.UserAdminPage;
 import com.madalla.webapp.pages.UserPasswordPage;
@@ -68,7 +69,17 @@ public class UserProfilePanel extends CmsPanel{
         UserData user = getRepositoryService().getUser(username);
         log.debug(user);
 		
-		//User admin link
+        //TODO why does this panel switch not work
+		//User admin link 
+//        add(new AdminPanelLink("UserAdmin", true){
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			public void onClick() {
+//				replaceWith(new UserAdminPanel(getId()));
+//			}
+//        	
+//        });
         add(new LoginAwareAdminLink("UserAdmin", UserAdminPage.class, true, true, true));
         
 		//User Change Link - secure or not depending on authenticator

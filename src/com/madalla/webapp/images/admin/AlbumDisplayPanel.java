@@ -1,5 +1,7 @@
 package com.madalla.webapp.images.admin;
 
+import java.util.List;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
@@ -21,18 +23,15 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.markup.repeater.data.EmptyDataProvider;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.validation.validator.RangeValidator;
 
 import com.madalla.bo.image.AlbumData;
-import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.DraggableAjaxBehaviour;
@@ -41,10 +40,9 @@ import com.madalla.wicket.form.AjaxValidationSubmitButton;
 
 class AlbumDisplayPanel extends CmsPanel {
 	
-	private static final long serialVersionUID = 1L;
-	private final static Log log = LogFactory.getLog(AlbumDisplayPanel.class);
-	
 	private class AlbumForm extends Form<AlbumData>{
+		private static final long serialVersionUID = 1L;
+
 		public AlbumForm(String id, IModel<AlbumData> model) {
 			super(id, model);
 			
@@ -66,24 +64,23 @@ class AlbumDisplayPanel extends CmsPanel {
 			add(width);
 			
 		}
-
-		private static final long serialVersionUID = 1L;
 		
 	}
+	private static final long serialVersionUID = 1L;
+	
+	private final static Log log = LogFactory.getLog(AlbumDisplayPanel.class);
 	
 	public AlbumDisplayPanel(String id, final String albumName) {
 		super(id);
 		
-		final Form<AlbumData> albumForm = new AlbumForm("albumForm", new CompoundPropertyModel<AlbumData>(getAlbum(albumName)));
+		final AlbumData album = getRepositoryService().getAlbum(albumName);
+		
+		// Album Form
+		final Form<AlbumData> albumForm = new AlbumForm("albumForm", new CompoundPropertyModel<AlbumData>(album));
 		add(albumForm);
 		AjaxButton submitLink = new AjaxValidationSubmitButton("submitLink", albumForm) {
 
 			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				super.onError(target, form);
-			}
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -97,24 +94,35 @@ class AlbumDisplayPanel extends CmsPanel {
 		albumForm.add(submitLink);
 		albumForm.add(new ComponentFeedbackPanel("albumFeedback", albumForm).setOutputMarkupId(true));
 		
-		final Form<Object> form = new Form<Object>("imagesForm");
-		
-		form.add(new ComponentFeedbackPanel("formFeedback", form).setOutputMarkupId(true));
+		// Images Form
+		final Form<Object> imagesForm = new Form<Object>("imagesForm");
+		imagesForm.setOutputMarkupId(true);
+		add(imagesForm);
+		imagesForm.add(new ComponentFeedbackPanel("formFeedback", imagesForm).setOutputMarkupId(true));
 		
 		//Album Image Table
-		IDataProvider<ImageData> provider = new EmptyDataProvider<ImageData>();
-		final DataView<ImageData> dataView = new DataView<ImageData>("dataview",provider ){
+		IModel<List<ImageData>> viewModel = new LoadableDetachableModel<List<ImageData>>(){
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(Item<ImageData> item) {
+			protected List<ImageData> load() {
+				return getRepositoryService().getAlbumImages(album);
+			}
+
+		};
+		final ListView<ImageData> dataView = new ListView<ImageData>("dataview",viewModel ){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<ImageData> item) {
 				ImageData data = item.getModelObject();
 				item.add(new Label("name", data.getName()));
 				item.add(new Label("title", data.getTitle()));
-				item.add(new Label("url", data.getUrl()));
+				item.add(new Label("url", data.getUrl()));				
 			}
 			
 		};
+		imagesForm.add(dataView);
 		
 		//Setting up Tree Table
 		IColumn column = new AbstractTreeColumn(new ColumnLocation(Alignment.LEFT,20, Unit.EM),"Images"){
@@ -148,33 +156,34 @@ class AlbumDisplayPanel extends CmsPanel {
 		};
 		final TreeTable tree = new TreeTable("albumTreeTable", treeModel, columns);
 		tree.setOutputMarkupId(true);
-		form.add(tree);
+		imagesForm.add(tree);
 		
-		final AbstractDefaultAjaxBehavior onDrop = new AbstractDefaultAjaxBehavior() {
+		// Drop functionality
+		final AbstractDefaultAjaxBehavior dropCallback = new AbstractDefaultAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
 
 			protected void respond(final AjaxRequestTarget target) {
 				String dragId = DraggableAjaxBehaviour.getDraggablesId(getRequest());
 				log.debug("something dropped. arg="+dragId);
-				IAlbumData album = getAlbum(albumName);
 		    	getRepositoryService().addImageToAlbum(album, dragId);
-		    	form.info("Success! Image saved to album.");
+		    	imagesForm.info("Success! Image saved to album.");
 		    	target.addComponent(tree);
-		    	target.addComponent(form);
+		    	target.addComponent(imagesForm);
 		    }
 		};
-		add(new DroppableAjaxBehaviour(onDrop));
-		add(onDrop);
-		form.setOutputMarkupId(true);
+		add(new DroppableAjaxBehaviour(dropCallback));
+		add(dropCallback);
+		
+		
 		
 		tree.getTreeState().expandAll();
 		
-		add(form);
+		
 	}
 	
-	private AlbumData getAlbum(String name){
-		return getRepositoryService().getAlbum(name);
-	}
+//	private AlbumData getAlbum(String name){
+//		return getRepositoryService().getAlbum(name);
+//	}
 	
 	private TreeModel getAlbumImagesTree(AlbumData albumData){
 	        TreeModel tree;
