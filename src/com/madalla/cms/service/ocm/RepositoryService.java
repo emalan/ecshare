@@ -236,12 +236,11 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     }
     
     
-    @SuppressWarnings("unchecked")//TODO maybe we should create new List instead of Casting
+    @SuppressWarnings("unchecked")
 	public List<ImageData> getAlbumImages(AlbumData album){
         log.info("getAlbumImages - " + album);
     	List<ImageData> list = (List<ImageData>) repositoryTemplate.getAll(RepositoryType.IMAGE, album);
     	log.info("getAlbumImages - list items =" + list.size());
-    	Collections.sort(list);
     	return list;
     }
 
@@ -257,7 +256,9 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     
 	public List<ImageData> getAlbumOriginalImages() {
 	    AlbumData album = getOriginalsAlbum();
-	    return getAlbumImages(album);
+	    List<ImageData> list = getAlbumImages(album);
+	    Collections.sort(list);
+	    return list;
 	}
 
     //*****************************
@@ -290,7 +291,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     	saveDataObject(blogEntry);
     }
     
-	@SuppressWarnings("unchecked")//TODO Maybe better to create new List instead of the risky Cast
+	@SuppressWarnings("unchecked")
 	public List<BlogEntryData> getBlogEntries(BlogData blog){
 		List<BlogEntryData> list = (List<BlogEntryData>) repositoryTemplate.getAll(RepositoryType.BLOGENTRY, blog);
 		Collections.sort(list);

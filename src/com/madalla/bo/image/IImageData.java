@@ -26,4 +26,9 @@ public interface IImageData {
 	String getDescription();
 
 	void setDescription(String description);
+	
+	Integer getSortOrder();
+	
+	void setSortOrder(Integer sortOrder);
+	
 }

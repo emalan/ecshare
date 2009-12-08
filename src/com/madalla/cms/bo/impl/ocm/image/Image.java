@@ -29,6 +29,7 @@ public class Image extends ImageData {
 	@Field private String url;
 	@Field private String urlTitle;
 	@Field private String description;
+	@Field private Integer sortOrder;
 	
 	public Image(){
 		
@@ -96,6 +97,14 @@ public class Image extends ImageData {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 
 }

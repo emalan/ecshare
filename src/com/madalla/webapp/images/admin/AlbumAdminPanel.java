@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
@@ -113,7 +114,7 @@ public class AlbumAdminPanel extends CmsPanel{
 			final ImageData imageData = listItem.getModelObject();
 			log.info("ImageListView - populateItem - "+imageData );
 			listItem.add(new Label("file", imageData.getName()));
-            Image image = new Image("thumb",imageData.getImageThumb());
+            Image image = new NonCachingImage("thumb",imageData.getImageThumb());
             image.setOutputMarkupId(true);
             
             if(draggable){
@@ -135,6 +136,7 @@ public class AlbumAdminPanel extends CmsPanel{
             });
 			listItem.setOutputMarkupId(true);
 		}
+		
 	}
 	
 	private class AlbumForm extends Form<AlbumData>{
