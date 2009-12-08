@@ -29,6 +29,7 @@
     <wicket:panel>
     
         <form id="emailForm" wicket:id="emailForm">
+          <fieldset>
             <div>
                 <p class="info"><wicket:message key="label.info">[label]</wicket:message></p>
             </div>
@@ -63,10 +64,11 @@
                 </label>
                 <textarea id="comment" class="inputText" wicket:id="comment" type="textArea" rows="7" cols="40">Content goes here</textarea>
             </div>
-            <div class="formButtons">
+          </fieldset>
+          <div class="submit">
                 <input wicket:id="formSubmit" type="submit" value="Submit" wicket:message="value:label.submitemail"/> 
                 <span class="feedbackPanel" wicket:id="formFeedback"/>   
-            </div>
+          </div>
         </form>
     </wicket:panel>
 </body>

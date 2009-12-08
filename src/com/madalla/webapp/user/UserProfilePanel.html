@@ -1,10 +1,10 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
+
         form div{width: 100%;}
         div#profile form div label {width: 7em;}
-        form div .buttonwrapper {margin-left: 10em;}
-        form#passwordLink
+		div.submit span.buttonwrapper { padding-left: 4em; }
     </style>
 </wicket:head>
 <body>
@@ -21,6 +21,7 @@
             <hr/>                
     		<span class="adminHeading" wicket:id="profileHeading"></span>
 			<form id="profile" wicket:id="profileForm">
+              <fieldset>
                 <div>
                     <label for="email"><wicket:message key="label.email">[label]</wicket:message></label>
                     <input id="email" class="inputText" type="text" wicket:id="email"/>
@@ -34,13 +35,14 @@
                    	<label><wicket:message key="label.lastName">[label]</wicket:message></label>
                    	<input class="inputText" type="text" wicket:id="lastName"/>
                 </div>
-                <div class="formButtons">
+              </fieldset>
+              <div class="submit">
                     <input type="submit" style="display: none;">
                     <span class="buttonwrapper">
                         <a wicket:id="formSubmit" class="orangebutton"><span><wicket:message key="label.submit">[label]</wicket:message></span></a>
                     </span>
                     <span class="feedbackPanel" wicket:id="formFeedback"></span>
-                </div>
+              </div>
             </form>        	
 		</div>
         

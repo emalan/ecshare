@@ -5,7 +5,7 @@
     	form.signInForm div label, form.signInForm div a, form.signInForm div span {float: left;}
     	form.signInForm div input {float: left;}
     	form.signInForm div label {width:7em;}
-    	form.signInForm div .buttonwrapper {margin-left: 7em; float: left;}
+    	form.signInForm div .buttonwrapper {margin-left: 6em; float: left;}
     	form.signInForm div .feedbackPanel {float: left;}
     	form.signInForm .info {font-size: medium; padding-left: 15px;}
     	form.signInForm .message {clear: both; padding-left: 15px; }
@@ -14,6 +14,7 @@
 <body>
     <wicket:panel>
         <form class="signInForm" wicket:id="signInForm">
+          <fieldset>
             <div>
                 <label wicket:id="usernameLabel"><wicket:message key="label.name">Label Contents</wicket:message></label>
                 <input class="inputText" wicket:id="username" type="text" />
@@ -31,14 +32,16 @@
                 <label for="rememberMe"><wicket:message key="label.remember">Label Contents</wicket:message></label>
                 <input class="checkbox" id="rememberMe" wicket:id="rememberMe" type="checkbox"/>
             </div>
-            <div class="formButtons">
+          </fieldset>
+          <div class="submit">
                 <input type="submit" style="display: none;">
                 <span class="buttonwrapper">
                     <a class="orangebutton" wicket:id="submitLink"><span><wicket:message key="label.login">Label Contents</wicket:message></span></a>
                 </span>
-            </div>
-            <span class="feedbackPanel" wicket:id="loginFeedback"></span>
-        </form>
+                <span class="feedbackPanel" wicket:id="loginFeedback"></span>
+          </div>
+          
+       </form>
     </wicket:panel>
 </body>
 </html>

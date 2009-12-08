@@ -22,7 +22,6 @@ import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.aware.LoginAwareAdminLink;
-import com.madalla.webapp.pages.AdminPanelLink;
 import com.madalla.webapp.pages.SecurePasswordPage;
 import com.madalla.webapp.pages.UserAdminPage;
 import com.madalla.webapp.pages.UserPasswordPage;

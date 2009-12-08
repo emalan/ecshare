@@ -283,7 +283,7 @@ public abstract class CmsPage extends WebPage {
 		return getApplication().getHomePage().equals(this.getPageClass());
 	}
 
-	private String getPageName(){
+	public String getPageName(){
 		return getPageClass().getSimpleName();
 	}
 
