@@ -72,5 +72,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="wicket/wicket-spring-1.4.1.jar"/>
+	<classpathentry kind="lib" path="common/commons-collections-3.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

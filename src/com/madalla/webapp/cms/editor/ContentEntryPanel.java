@@ -22,10 +22,8 @@ import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
-import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.CmsSession;
-import com.madalla.webapp.login.aware.LoginAwareAdminLink;
-import com.madalla.webapp.pages.TranslatePage;
+import com.madalla.webapp.pages.AdminPanelLink;
 import com.madalla.webapp.panel.CmsPanel;
 
 /**
@@ -106,16 +104,15 @@ public class ContentEntryPanel extends CmsPanel {
 		tabPanel.setSelectedTab(selectedTab);
 		add(tabPanel);
 		
-		//User admin link
-		// add link to edit it
-        add(new LoginAwareAdminLink("translateLink", TranslatePage.class, false){
+		// Link to translate panel
+        add(new AdminPanelLink("translateLink"){
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected AdminPage constructAdminPage(Class<? extends AdminPage> clazz) {
-				return new TranslatePage(contentId, nodeName);
+			public void onClick() {
+				getPage().replace(new TranslatePanel(ID, nodeName, contentId));
 			}
-
+        	
         });
 	}
 

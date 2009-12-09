@@ -21,9 +21,8 @@ import com.madalla.bo.security.UserData;
 import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.login.aware.LoginAwareAdminLink;
+import com.madalla.webapp.pages.AdminPanelLink;
 import com.madalla.webapp.pages.SecurePasswordPage;
-import com.madalla.webapp.pages.UserAdminPage;
 import com.madalla.webapp.pages.UserPasswordPage;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
@@ -68,18 +67,16 @@ public class UserProfilePanel extends CmsPanel{
         UserData user = getRepositoryService().getUser(username);
         log.debug(user);
 		
-        //TODO why does this panel switch not work
 		//User admin link 
-//        add(new AdminPanelLink("UserAdmin", true){
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//			public void onClick() {
-//				replaceWith(new UserAdminPanel(getId()));
-//			}
-//        	
-//        });
-        add(new LoginAwareAdminLink("UserAdmin", UserAdminPage.class, true, true, true));
+        add(new AdminPanelLink("UserAdmin", true){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				getPage().replace(new UserAdminPanel(ID));
+			}
+        	
+        });
         
 		//User Change Link - secure or not depending on authenticator
 		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();

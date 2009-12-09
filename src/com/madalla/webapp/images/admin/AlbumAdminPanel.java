@@ -14,13 +14,13 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
@@ -29,7 +29,6 @@ import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -50,7 +49,7 @@ import com.madalla.wicket.form.AjaxValidationSubmitButton;
 
 public class AlbumAdminPanel extends CmsPanel{
 	
-	private class FileUploadForm extends Form<Object>{
+	private abstract class FileUploadForm extends Form<Object>{
 		private static final long serialVersionUID = 1L;
 		
 		private final Collection<FileUpload> uploads = new ArrayList<FileUpload>();
@@ -61,6 +60,28 @@ public class AlbumAdminPanel extends CmsPanel{
             setMultiPart(true);
             add(new MultiFileUploadField("fileInput", new PropertyModel<Collection<FileUpload>>(this, "uploads"), 5));
             setMaxSize(ImageDefaults.MAX_UPLOAD_SIZE);
+            
+            final Component uploadFeedback = new ComponentFeedbackPanel("uploadFeedback", this);
+            uploadFeedback.setOutputMarkupId(true);
+            add(uploadFeedback);
+            
+            add(new IndicatingAjaxButton("formSubmit", this){
+				private static final long serialVersionUID = 1L;
+
+    			@Override
+    			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+    				onSubmit();
+    				target.addComponent(uploadFeedback);
+    				refreshImageList(target);
+    			}
+    			
+       			@Override
+				protected void onError(AjaxRequestTarget target, Form<?> form) {
+       				target.addComponent(uploadFeedback);
+					super.onError(target, form);
+				}
+            	
+            });
         }
 		
 		@Override
@@ -97,6 +118,8 @@ public class AlbumAdminPanel extends CmsPanel{
 				}
             }
         }
+		
+		protected abstract void refreshImageList(AjaxRequestTarget target);
 	}
 	
 	private class ImageListView extends ListView<ImageData>{
@@ -177,20 +200,16 @@ public class AlbumAdminPanel extends CmsPanel{
 		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.EFFECTS));
 		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.DRAGDROP));
 		
-        final FileUploadForm simpleUploadForm = new FileUploadForm("simpleUpload");
-        final FeedbackPanel uploadFeedback = new ComponentFeedbackPanel("uploadFeedback",simpleUploadForm);
-        simpleUploadForm.add(uploadFeedback);
-        simpleUploadForm.add(new SubmitLink("submitLink"));
-        add(simpleUploadForm);
+ 
         
         final AlbumData album = getRepositoryService().getAlbum(albumName);
         
         // Available Images Display
-        WebMarkupContainer availableContainer = new WebMarkupContainer("availableContainer");
+        final WebMarkupContainer availableContainer = new WebMarkupContainer("availableContainer");
         availableContainer.setOutputMarkupId(true);
         add(availableContainer);
         
-        ImageListView availableDisplay = new ImageListView("availableDisplay", new LoadableDetachableModel<List<ImageData>>() {
+        final ImageListView availableDisplay = new ImageListView("availableDisplay", new LoadableDetachableModel<List<ImageData>>() {
 			private static final long serialVersionUID = 1L;
 
 			protected List<ImageData> load() {
@@ -198,9 +217,20 @@ public class AlbumAdminPanel extends CmsPanel{
                 return getAvailableImages();
             }
 			
-			
         }, true);
         availableContainer.add(availableDisplay);
+        
+        // File upload
+        final FileUploadForm simpleUploadForm = new FileUploadForm("simpleUpload"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void refreshImageList(AjaxRequestTarget target) {
+				target.addComponent(availableContainer);
+			}
+        	
+        };
+        add(simpleUploadForm);
         
         // Album Display
         final WebMarkupContainer albumContainer = new WebMarkupContainer("albumContainer");

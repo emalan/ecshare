@@ -19,6 +19,7 @@ import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.upload.FileUploadStatus;
+import com.madalla.webapp.upload.IFileUploadInfo;
 import com.madalla.webapp.upload.IFileUploadStatus;
 import com.madalla.wicket.resourcelink.EditableResourceLink;
 import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
@@ -160,7 +161,7 @@ public class ContentLinkPanel extends CmsPanel{
 	                    final SubmitThread it = new SubmitThread(getAppSession(), linkData, getRepositoryService());
 						it.start();
 				    } else {
-				    	formSubmit(getAppSession(), linkData, getRepositoryService());
+				    	formSubmit(linkData, getRepositoryService());
 				    }
 				}
 
@@ -210,11 +211,11 @@ public class ContentLinkPanel extends CmsPanel{
 
 	/** This class does the file uploading and form submit */
 	private static class SubmitThread extends Thread {
-		private final CmsSession session;
+		private final IFileUploadInfo session;
 		private final ILinkData data;
 		private final IDataService service;
 
-		public SubmitThread(CmsSession session, ILinkData data, IDataService service) {
+		public SubmitThread(IFileUploadInfo session, ILinkData data, IDataService service) {
 			this.session = session;
 			this.data = data;
 			this.service = service;
@@ -228,14 +229,14 @@ public class ContentLinkPanel extends CmsPanel{
 			
 			try {
 				log.debug("Start processing...");
-				ContentLinkPanel.formSubmit(session, data, service);
+				ContentLinkPanel.formSubmit(data, service);
 
 				// Sleep to simulate time-consuming work
-//				try {
-//					Thread.sleep(10000);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
+				try {
+					Thread.sleep(10000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				log.debug("Done processing...");
 				uploadStatus.setIsUploading(false);
 			//} catch (InterruptedException e) {
@@ -252,7 +253,7 @@ public class ContentLinkPanel extends CmsPanel{
      * @param session
      * @param linkData
      */
-    public static void formSubmit(CmsSession session, ILinkData linkData, IDataService service){
+    public static void formSubmit( ILinkData linkData, IDataService service){
     	log.debug("onSubmit - submit Resource Form Data. " + linkData);
     	ResourceData resourceData = service.getContentResource(linkData.getId());
 		FileUpload upload = linkData.getFileUpload();
@@ -279,6 +280,8 @@ public class ContentLinkPanel extends CmsPanel{
 		log.debug("onSubmit - saving resource. " + resourceData);
 		service.saveContentResource(resourceData);
 
+		upload.closeStreams();
+		
 		log.debug("onSubmit - done..");
     }
 

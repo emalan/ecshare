@@ -27,7 +27,7 @@ public class PageAdminPanel extends CmsPanel {
 		final List<SiteLanguage> locales = SiteLanguage.getLanguages();
 		final Locale defaultLocale = getDefaultLocale(locales);
 		
-		add(new ListView<PageData>("metaPanels", getPages()){
+		add(new ListView<PageData>("pageDiv", getPages()){
 			private static final long serialVersionUID = 1L;
 
 			@Override

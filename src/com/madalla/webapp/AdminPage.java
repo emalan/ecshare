@@ -19,7 +19,6 @@ import com.madalla.webapp.user.UserProfilePanel;
 public abstract class AdminPage extends WebPage {
 	
 	private static final long serialVersionUID = -2837757448336709448L;
-	private static final String ID = "adminPanel";
 	
 	private String pageTitle = "(no title)";
 	private Class<? extends Page> returnPage;
@@ -47,7 +46,7 @@ public abstract class AdminPage extends WebPage {
 
 			@Override
 			public void onClick() {
-				getParent().replace(new UserProfilePanel(ID));
+				getPage().replace(new UserProfilePanel(ID));
 			}
 			
 		});
@@ -56,7 +55,7 @@ public abstract class AdminPage extends WebPage {
 
 			@Override
 			public void onClick() {
-				getParent().replace(new SiteAdminPanel(ID));
+				getPage().replace(new SiteAdminPanel(ID));
 			}
 			
 		});
@@ -65,7 +64,7 @@ public abstract class AdminPage extends WebPage {
 
 			@Override
 			public void onClick() {
-				getParent().replace(new SiteDataPanel(ID));
+				getPage().replace(new SiteDataPanel(ID));
 			}
 			
 		});
@@ -75,9 +74,9 @@ public abstract class AdminPage extends WebPage {
 			@Override
 			public void onClick() {
 				if (((IDataServiceProvider)getApplication()).getRepositoryService().isAdminApp()){
-					getParent().replace(ContentAdminPanel.newAdminInstance(ID));
+					getPage().replace(ContentAdminPanel.newAdminInstance(ID));
 		    	} else {
-		    		getParent().replace(ContentAdminPanel.newInstance(ID));
+		    		getPage().replace(ContentAdminPanel.newInstance(ID));
 		    	}
 			}
 			

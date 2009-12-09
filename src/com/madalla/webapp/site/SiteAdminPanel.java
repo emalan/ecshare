@@ -16,8 +16,7 @@ import org.apache.wicket.validation.validator.UrlValidator;
 import com.madalla.bo.SiteData;
 import com.madalla.bo.SiteLanguage;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.login.aware.LoginAwareAdminLink;
-import com.madalla.webapp.pages.PageAdminPage;
+import com.madalla.webapp.pages.AdminPanelLink;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationBehaviour;
 import com.madalla.wicket.form.AjaxValidationForm;
@@ -70,7 +69,17 @@ public class SiteAdminPanel extends CmsPanel{
         super(id);
         add(Css.CSS_FORM);
         
-        add(new LoginAwareAdminLink("pageAdminLink", PageAdminPage.class, true));
+        // link to Page Admin
+        add(new AdminPanelLink("pageAdminLink"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				getPage().replace(new PageAdminPanel(ID));
+				
+			}
+        	
+        });
         
         final Form<SiteData> form = new SiteForm("siteForm", new CompoundPropertyModel<SiteData>(getSiteData()));
         add(form);

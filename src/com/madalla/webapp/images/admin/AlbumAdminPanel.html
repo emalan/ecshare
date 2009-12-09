@@ -1,9 +1,20 @@
 <html xmlns:wicket>
 <wicket:head>
-    <style type="text/css"><!--
-        #control {float: left; width: 100%;}
-        #fileUpload {float: left; width: 100%;}
-        
+    <style type="text/css">
+       
+       div#fileUpload form{
+           width: 45%;
+           float: left;
+       }
+       div#uploadStatus {
+           width: 45%;
+           float: left;
+       }
+       
+       div#fileUpload form input {
+            float: none;
+            border: none;
+       }
         #fileUpload p {
             color: blue;
         }
@@ -17,15 +28,8 @@
             float: left;
             width: 48%;
         }
-        .feedback {
-            float:left;
-            margin: 5px 0 5px 0;
-        }
         
-        div#fileUpload form input {
-            float: none;
-            border: none;
-       }
+ 
 
         .droppable.hover {
             border: dashed thin dimgrey;
@@ -44,7 +48,7 @@
 		   }
         
     
-    --></style>
+	</style>
 </wicket:head>
 <body>
     <wicket:panel>
@@ -52,26 +56,32 @@
     <div id="fileUpload">
         <form wicket:id="simpleUpload">
             <fieldset>
-            <legend><wicket:message key="label.images.upload">Label Contents</wicket:message></legend>
-            <p><wicket:message key="label.upload.info">Label Contents</wicket:message></p>
-            <p>
-            <div wicket:id="fileInput" class="mfuex"/>
-            </p>
-            <div class="buttonwrapper">
-                <a href="#" class="orangebutton" wicket:id="submitLink"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
-            </div>
-            <span class="feedback" wicket:id="uploadFeedback"/>
+            	<legend><wicket:message key="label.images.upload">[label]</wicket:message></legend>
+            	<p><wicket:message key="label.upload.info">[label]</wicket:message></p>
+            	<p>
+            		<div wicket:id="fileInput" class="mfuex"/>
+            	</p>
             </fieldset>
+            <div class="submit">
+            	<span class="buttonwrapper">
+                	<a class="orangebutton" wicket:id="formSubmit"><span><wicket:message key="label.submit">[label]</wicket:message></span></a>
+                </span>
+                <span class="feedback" wicket:id="uploadFeedback"/>
+            </div>
         </form>
+        <div id="uploadStatus">
+            <label>[label]</label>
+            <label>[label]</label>
+        </div>
     </div>
      
     <div id="availableImages">
-        <h4><wicket:message key="label.images.available">Label Contents</wicket:message></h4>
+        <h4><wicket:message key="label.images.available">[label]</wicket:message></h4>
         <table wicket:id="availableContainer">
             <tr wicket:id="availableDisplay">
                 <td><img wicket:id="thumb" border="0" /></td>
                 <td><span wicket:id="file">(file)</span></td>
-                <td><a href="#" wicket:id="delete"><wicket:message key="label.delete">Label Contents</wicket:message></a></td>
+                <td><a href="#" wicket:id="delete"><wicket:message key="label.delete">[label]</wicket:message></a></td>
             </tr>
         </table>
     </div>
@@ -80,41 +90,41 @@
     	<form wicket:id="albumForm" class="albumForm">
     	  <fieldset>
         	<div>
-        		<label><wicket:message key="label.title">Label Contents</wicket:message></label>
+        		<label><wicket:message key="label.title">[label]</wicket:message></label>
             	<input wicket:id="title" class="inputText" type="text"/>
             </div>
             <div>
-            	<label><wicket:message key="label.interval">Label Contents</wicket:message></label>
+            	<label><wicket:message key="label.interval">[label]</wicket:message></label>
             	<input wicket:id="interval" type="text" size="4"/>
             	<span class="feedbackPanel" wicket:id="intervalFeedback"></span>
             </div>
             <div>
-            	<label><wicket:message key="label.width">Label Contents</wicket:message></label>
+            	<label><wicket:message key="label.width">[label]</wicket:message></label>
             	<input wicket:id="width" type="text" size="4"/>
             	<span class="feedbackPanel" wicket:id="widthFeedback"></span>
             </div>
             <div>
-            	<label><wicket:message key="label.height">Label Contents</wicket:message></label>
+            	<label><wicket:message key="label.height">[label]</wicket:message></label>
             	<input wicket:id="height" type="text" size="4"/>
             	<span class="feedbackPanel" wicket:id="heightFeedback"></span>
             </div>
           </fieldset>
           <div class="submit">
                 <span class="buttonwrapper">
-                    <a wicket:id="submitLink" class="orangebutton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
+                    <a wicket:id="submitLink" class="orangebutton"><span><wicket:message key="label.submit">[label]</wicket:message></span></a>
                 </span>
  				<span wicket:id="albumFeedback"></span>
            </div>
         </form>
     	<form wicket:id="displayForm">
     		
-        	<h4><wicket:message key="label.album">Label Contents</wicket:message></h4>
+        	<h4><wicket:message key="label.album">[label]</wicket:message></h4>
         	<span wicket:id="displayFeedback"></span>
         	<table>
             	<tr wicket:id="albumDisplay">
                 	<td><img wicket:id="thumb" border="0" /></td>
                 	<td><span wicket:id="file">(file)</span></td>
-                	<td><a href="#" wicket:id="delete"><wicket:message key="label.delete">Label Contents</wicket:message></a></td>
+                	<td><a href="#" wicket:id="delete"><wicket:message key="label.delete">[label]</wicket:message></a></td>
             	</tr>
         	</table>
         </form>
