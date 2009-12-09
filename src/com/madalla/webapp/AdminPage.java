@@ -11,6 +11,7 @@ import org.apache.wicket.model.PropertyModel;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.webapp.cms.admin.ContentAdminPanel;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.images.admin.ImageAdminPanel;
 import com.madalla.webapp.pages.AdminPanelLink;
 import com.madalla.webapp.site.SiteAdminPanel;
 import com.madalla.webapp.site.SiteDataPanel;
@@ -36,10 +37,6 @@ public abstract class AdminPage extends WebPage {
 	}
 	
 	protected void setupMenu(){
-		//add(new LoginAwareAdminLink("UserProfile", UserProfilePage.class, false).setAutoEnable(true));
-		//add(new LoginAwareAdminLink("SiteAdmin", SiteAdminPage.class, true).setAutoEnable(true));
-		//add(new LoginAwareAdminLink("Data", SiteDataPage.class, true).setAutoEnable(true));
-		//add(new LoginAwareAdminLink("Content", ContentAdminPage.class, true).setAutoEnable(true));
 		
 		add(new AdminPanelLink("UserProfile"){
 			private static final long serialVersionUID = 1L;
@@ -65,6 +62,15 @@ public abstract class AdminPage extends WebPage {
 			@Override
 			public void onClick() {
 				getPage().replace(new SiteDataPanel(ID));
+			}
+			
+		});
+		add(new AdminPanelLink("Image"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				getPage().replace(new ImageAdminPanel(ID));
 			}
 			
 		});

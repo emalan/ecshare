@@ -34,6 +34,7 @@
         <div id="siteadmin" class="adminSection">
             <span class="adminHeading"><wicket:message key="heading.site">[label]</wicket:message></span>
             <form wicket:id="siteForm">
+              <fieldset>
                 <div>
                     <label><wicket:message key="label.email">[label]</wicket:message></label>
                     <input style="width:20em;" wicket:id="adminEmail" class="inputText" type="text"/>
@@ -59,12 +60,13 @@
     				</span>
                     <p class="info"><wicket:message key="info.locale">[label]</wicket:message></p>
     			</div>
-                <div class="formButtons">
+    	      </fieldset>
+              <div class="submit">
                     <span class="buttonwrapper">
                         <a wicket:id="formSubmit" class="orangebutton"><span><wicket:message key="label.submit">[label]</wicket:message></span></a>
                     </span>
                     <span wicket:id="formFeedback" class="feedbackPanel"></span>
-                </div>
+              </div>
                 
             </form>
         </div>
