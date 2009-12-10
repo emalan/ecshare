@@ -1,13 +1,13 @@
 package com.madalla.webapp.upload;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FileUploadStore implements IFileUploadInfo{
+public class FileUploadStore implements IFileUploadInfo, Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -48,13 +48,19 @@ public class FileUploadStore implements IFileUploadInfo{
 		groupMap.remove(group);
 	}
 	
-	public Collection<IFileUploadStatus> getFileUploadStatus(FileUploadGroup group){
+	public List<String> getFileUploadStatus(FileUploadGroup group){
 		List<String> list = groupMap.get(group);
 		if (list == null) return Collections.emptyList();
-		Map<String, IFileUploadStatus> temp = new HashMap<String, IFileUploadStatus>(statusMap);
-		temp.keySet().retainAll(list);
-		return temp.values();
+		return list ;
+//		Map<String, IFileUploadStatus> temp = new HashMap<String, IFileUploadStatus>(statusMap);
+//		temp.keySet().retainAll(list);
+//		return temp.values();
 		
+	}
+	
+	public void clear(){
+		statusMap.clear();
+		groupMap.clear();
 	}
 
 }

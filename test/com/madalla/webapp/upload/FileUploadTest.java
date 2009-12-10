@@ -1,6 +1,6 @@
 package com.madalla.webapp.upload;
 
-import java.util.Collection;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -15,7 +15,7 @@ public class FileUploadTest extends TestCase {
 			IFileUploadStatus status = store.getFileUploadStatus("none");
 			assertNull(status);
 
-			Collection<IFileUploadStatus> list = store.getFileUploadStatus(new FileUploadGroup(""));
+			List<String> list = store.getFileUploadStatus(new FileUploadGroup(""));
 			assertTrue(list.isEmpty());
 
 			store.setFileUploadComplete("none");
@@ -44,7 +44,7 @@ public class FileUploadTest extends TestCase {
 			assertNotNull(status);
 			assertTrue(status.isUploading());
 			
-			Collection<IFileUploadStatus> list = store.getFileUploadStatus(new FileUploadGroup(group));
+			List<String> list = store.getFileUploadStatus(new FileUploadGroup(group));
 			assertTrue(list.size() == 1);
 			
 			list = store.getFileUploadStatus(new FileUploadGroup("none"));

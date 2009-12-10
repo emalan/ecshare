@@ -1,7 +1,11 @@
 package com.madalla.webapp.upload;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
 
 public class FileUploadThread  extends Thread{
 	
@@ -10,20 +14,38 @@ public class FileUploadThread  extends Thread{
 	private final IFileUploadInfo uploadInfo;
 	private final IFileUploadProcess process;
 	private final String id;
+	private final FileUploadGroup group;
+	private final FileUpload fileUpload;
 
-	public FileUploadThread(IFileUploadInfo uploadInfo, IFileUploadProcess process, final String id) {
+	public FileUploadThread(IFileUploadInfo uploadInfo, FileUpload fileUpload, IFileUploadProcess process, final String id) {
+		this(uploadInfo, fileUpload, process, id, null);
+	}
+	public FileUploadThread(IFileUploadInfo uploadInfo,FileUpload fileUpload, IFileUploadProcess process, final String id, FileUploadGroup group) {
 		this.uploadInfo = uploadInfo;
 		this.process = process;
 		this.id = id;
+		this.group = group;
+		this.fileUpload = fileUpload;
 	}
 
 	public void run() {
 		FileUploadStatus uploadStatus = new FileUploadStatus();
-		uploadInfo.setFileUploadStatus(id, uploadStatus);
+		if (group == null){
+			uploadInfo.setFileUploadStatus(id, uploadStatus);
+		} else {
+			uploadInfo.setFileUploadStatus(id, group, uploadStatus);
+		}
 		
 		try {
-			log.debug("Start processing...");
-			process.execute();
+			String fileName = fileUpload.getClientFileName();
+			log.debug("Start processing: " + fileName);
+			
+        	InputStream inputStream = fileUpload.getInputStream();
+        	if (inputStream == null){
+        		log.error("file upload - Input resource invalid.");
+        	} else {
+        		process.execute(inputStream, fileName);
+        	}
 
 			// Sleep to simulate time-consuming work
 			try {
@@ -31,9 +53,9 @@ public class FileUploadThread  extends Thread{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			log.debug("Done processing...");
+			log.debug("Done processing: " + fileName);
 			uploadStatus.uploading = false;
-		//} catch (InterruptedException e) {
+		} catch (IOException e) {
 		//	session.error(e.getMessage());
 		} finally {
 			//session.setFileUploadComplete(data.getId());

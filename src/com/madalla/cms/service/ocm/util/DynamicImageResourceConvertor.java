@@ -1,5 +1,6 @@
 package com.madalla.cms.service.ocm.util;
 
+import java.awt.image.BufferedImage;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
@@ -43,7 +44,13 @@ public class DynamicImageResourceConvertor implements AtomicTypeConverter {
             BufferedDynamicImageResource webResource = null;
             try {
                 webResource = new BufferedDynamicImageResource();
-                webResource.setImage(ImageIO.read(inputStream));
+                BufferedImage image = ImageIO.read(inputStream);
+                if (image != null) {
+                	webResource.setImage(image);
+                } else {
+                	BufferedImage corrupt = ImageIO.read(this.getClass().getResourceAsStream("file_alert.png"));
+                	webResource.setImage(corrupt);
+                }
                 return webResource;
             } catch (Exception e) {
                 throw new RepositoryException("getObject - Exception creating DynamicImageResource",e);

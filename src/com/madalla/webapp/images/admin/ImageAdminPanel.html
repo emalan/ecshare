@@ -2,6 +2,32 @@
 <wicket:head>
     <style type="text/css">
        
+        div#fileUpload {
+       		float: left;
+       	}
+		div.results{
+		    float: right;
+		    clear: none;
+		    border: thin solid blue;
+		    width: 35%;
+		}
+		
+		div.results ul {
+			
+		}
+		div.results li {
+			list-style-type: none;
+		}
+		
+		div.results span em {
+			padding-left: 5px;
+		}
+
+       div#fileUpload form {
+       	   float: left;
+       	   width: 60%;
+       }
+       
        div#fileUpload form input {
             float: none;
             border: none;
@@ -14,10 +40,6 @@
 		    width: 45%;
 		}
 		
-		div.results{
-		    width: 45%;
-		    clear: none;
-		}
 		        
         #availableImages {
             float: left;
@@ -38,7 +60,6 @@
             	<legend><wicket:message key="label.images.upload">[label]</wicket:message></legend>
             	<p><wicket:message key="label.upload.info">[label]</wicket:message></p>
            		<div wicket:id="fileInput" class="mfuex"/>
-           		<div class="results"> Results go here</div>
             </fieldset>
             <div class="submit">
                 <h3>
@@ -50,11 +71,21 @@
                 <span class="feedback" wicket:id="uploadFeedback"/>
             </div>
         </form>
- 
+        <div class="results">
+            <span><wicket:message key="label.upload.status">[label]</wicket:message></span>
+            <ul>
+                <li wicket:id="results">
+                    <span wicket:id="file"></span>
+                    <em wicket:id="status"></em>
+                </li>
+            </ul>
+        	
+        </div> 
     </div>
      
     <div id="availableImages">
         <h3><wicket:message key="label.images.available">[label]</wicket:message></h3>
+        <span wicket:id="availableFeedback">[feedback]</span>
         <table wicket:id="availableContainer">
             <tr wicket:id="availableDisplay">
                 <td><img wicket:id="thumb" border="0" /></td>

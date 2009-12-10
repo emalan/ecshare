@@ -12,12 +12,16 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
+import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.markup.html.image.Image;
@@ -29,13 +33,19 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.time.Duration;
 
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.ImageData;
+import com.madalla.service.IDataService;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.images.ImageDefaults;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
+import com.madalla.webapp.upload.FileUploadGroup;
+import com.madalla.webapp.upload.FileUploadThread;
+import com.madalla.webapp.upload.IFileUploadInfo;
+import com.madalla.webapp.upload.IFileUploadProcess;
 import com.madalla.wicket.DraggableAjaxBehaviour;
 
 public class ImageAdminPanel extends CmsPanel{
@@ -56,23 +66,26 @@ public class ImageAdminPanel extends CmsPanel{
             uploadFeedback.setOutputMarkupId(true);
             add(uploadFeedback);
             
-            add(new IndicatingAjaxButton("formSubmit", this){
-				private static final long serialVersionUID = 1L;
-
-    			@Override
-				protected void onError(AjaxRequestTarget target, Form<?> form) {
-       				target.addComponent(uploadFeedback);
-					super.onError(target, form);
-				}
-    			
-       			@Override
-    			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-    				onSubmit();
-    				target.addComponent(uploadFeedback);
-    				refreshImageList(target);
-    			}
-            	
-            });
+           
+            
+            add(new SubmitLink("formSubmit"));
+//            add(new IndicatingAjaxButton("formSubmit", this){
+//				private static final long serialVersionUID = 1L;
+//
+//    			@Override
+//				protected void onError(AjaxRequestTarget target, Form<?> form) {
+//       				target.addComponent(uploadFeedback);
+//					super.onError(target, form);
+//				}
+//    			
+//       			@Override
+//    			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+//    				onSubmit();
+//    				target.addComponent(uploadFeedback);
+//    				refreshImageList(target);
+//    			}
+//            	
+//            });
         }
 		
 		@Override
@@ -83,6 +96,7 @@ public class ImageAdminPanel extends CmsPanel{
                 try {
                 	log.info("file upload - uploading file "+ upload.getClientFileName());
                 	
+                	// Start thread
                 	String contentType = upload.getContentType();
                 	log.info("file upload - Content type="+contentType);
                 	if (contentType == null || !(contentType.equalsIgnoreCase("image/png") || contentType.equalsIgnoreCase("image/jpeg"))){
@@ -90,29 +104,111 @@ public class ImageAdminPanel extends CmsPanel{
                 		warn(getString("error.type", new Model<FileUpload>(upload)));
                 		continue;
                 	}
-                	InputStream inputStream = upload.getInputStream();
-                	if (inputStream == null){
-                		log.warn("file upload - Input resource invalid.");
-                		warn(getString("error.resource", new Model<FileUpload>(upload)));
-                		continue;
-                	} 
+                	
+                	//Prepare Thread for uploading
                 	String imageName = StringUtils.deleteWhitespace(upload.getClientFileName());
-                	imageName = StringUtils.substringBefore(imageName, ".");
-                	IAlbumData album = getRepositoryService().getOriginalsAlbum();
-                	getRepositoryService().createImage(album, imageName, inputStream);
+                	IFileUploadInfo uploadInfo = (IFileUploadInfo)getSession();
+                	IFileUploadProcess process = new ImageUploadProcess(getRepositoryService());                	
+                	final Thread submit = new FileUploadThread(uploadInfo, upload, process,imageName, GROUP);
+                	submit.start();
+
                 	log.info("finished processing upload "+ imageName);
-                	info(getString("info.success", new Model<FileUpload>(upload)));
+                	info(getString("message.success", new Model<FileUpload>(upload)));
                 	
 				} catch (Exception e) {
 					log.error("onSubmit - failed to upload File."+e.getLocalizedMessage());
-					error(getString("error.fail"));
+					error(getString("message.fail"));
 				}
             }
         }
 		
 		protected abstract void refreshImageList(AjaxRequestTarget target);
 	}
+	
+	private class ImageUploadProcess implements IFileUploadProcess {
+		
+		final private IDataService service;
+		
+		public ImageUploadProcess(IDataService service){
+			this.service = service;
+		}
+		public void execute(InputStream inputStream, String fileName) {
+ 
+        	String imageName = StringUtils.deleteWhitespace(fileName);
+        	imageName = StringUtils.substringBefore(imageName, ".");
+        	IAlbumData album = service.getOriginalsAlbum();	
+        	service.createImage(album, imageName, inputStream);
+		}
+		
+	}
+	
+	private class FileUploadListView extends ListView<String>{
+		private static final long serialVersionUID = 1L;
+		List<String> files;
+		
+		public FileUploadListView(String id) {
+			super(id);
+			
+		}
 
+		@Override
+		protected void populateItem(ListItem<String> item) {
+			item.add(new AjaxIndicatingStatusLabel("file", item.getModelObject()));
+		}
+		
+		@Override
+		protected void onBeforeRender() {
+			setList(((IFileUploadInfo)getSession()).getFileUploadStatus(GROUP));
+			super.onBeforeRender();
+		}
+		
+	}
+	
+	private class AjaxIndicatingStatusLabel extends Label{
+		private static final long serialVersionUID = 1L;
+		
+		private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
+		private final String uploadId;
+		
+		public AjaxIndicatingStatusLabel(final String id, final String text){
+			super(id, text);
+			this.uploadId = text;
+			add(indicatorAppender);
+			add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)){
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onPostProcessTarget(AjaxRequestTarget target) {
+					if (getStatus(text)){
+						target.appendJavascript("wicketShow('" + indicatorAppender.getMarkupId() +"');");
+					} else {
+						target.appendJavascript("wicketHide('" + indicatorAppender.getMarkupId() +"');");
+					}
+					
+				}
+			});
+		}
+		
+		@Override
+		protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+			String text = getDefaultModelObjectAsString();
+			String status = getStatusText(uploadId);
+			replaceComponentTagBody(markupStream, openTag, text + "<em>" + status + "</em>");
+		}
+		
+		private String getStatusText(String id){
+			if (getStatus(id)){
+	        	return getString("message.uploading");
+	        } else {
+	        	return getString("message.uploadcomplete");
+	        }
+		}
+		
+		private boolean getStatus(String id){
+			return ((IFileUploadInfo)getSession()).getFileUploadStatus(id).isUploading();
+		}
+	}
+	
 	private class ImageListView extends ListView<ImageData>{
 		private static final long serialVersionUID = 1L;
 		
@@ -142,7 +238,6 @@ public class ImageAdminPanel extends CmsPanel{
 
 				@Override
 				public void onClick(AjaxRequestTarget target) {
-                    ImageAdminPanel.this.info("Deleting original image. "+imageData);
                     getRepositoryService().deleteNode(imageData.getId());
                     //repaint the container that contains the list
                     target.addComponent(listItem.getParent().getParent());
@@ -151,11 +246,14 @@ public class ImageAdminPanel extends CmsPanel{
 			listItem.setOutputMarkupId(true);
 		}
 		
+
+		
 	}
 	
 	private static final long serialVersionUID = 981631179962049451L;
-	
 	private static final Log log = LogFactory.getLog(ImageAdminPanel.class);
+	private static final String IMAGE_FILE_UPLOAD_GROUP = "ImageAdmin";
+	private static final FileUploadGroup GROUP = new FileUploadGroup(IMAGE_FILE_UPLOAD_GROUP);
 	
 	public ImageAdminPanel(String id) {
 		super(id);
@@ -170,15 +268,27 @@ public class ImageAdminPanel extends CmsPanel{
         availableContainer.setOutputMarkupId(true);
         add(availableContainer);
         
-        final ImageListView availableDisplay = new ImageListView("availableDisplay", new LoadableDetachableModel<List<ImageData>>() {
-			private static final long serialVersionUID = 1L;
+        add(new ComponentFeedbackPanel("availableFeedback",availableContainer));
+        
+        final ImageListView availableDisplay = new ImageListView("availableDisplay",
+				new LoadableDetachableModel<List<ImageData>>() {
+					private static final long serialVersionUID = 1L;
 
-			protected List<ImageData> load() {
-			    log.info("ImageListView - load images.");
-                return getAvailableImages();
-            }
-			
-        }, true);
+					protected List<ImageData> load() {
+						log.info("ImageListView - load images.");
+						List<ImageData> images;
+						try {
+							images = getRepositoryService().getAlbumOriginalImages();
+						} catch (Exception e) {
+							log.error("Exception while Loading Original Images.", e);
+							images = Collections.emptyList();
+							availableContainer.error(getString("message.display.fail"));
+						}
+						return images;
+
+					}
+
+				}, true);
         availableContainer.add(availableDisplay);
         
         // File upload
@@ -191,18 +301,12 @@ public class ImageAdminPanel extends CmsPanel{
 			}
         	
         };
+
         add(simpleUploadForm);
+        
+        add(new FileUploadListView("results"));
 	}
 	
-	private List<ImageData> getAvailableImages() {
-        List<ImageData> images;
-        try {
-            images = getRepositoryService().getAlbumOriginalImages();
-        } catch (Exception e) {
-            images = Collections.emptyList();
-            error("Images corrupt");
-        }
-        return images;
-    }
+
 	
 }

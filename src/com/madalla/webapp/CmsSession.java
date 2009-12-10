@@ -1,7 +1,6 @@
 package com.madalla.webapp;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
@@ -16,6 +15,8 @@ import com.madalla.service.ISessionDataService;
 import com.madalla.service.ISessionDataServiceProvider;
 import com.madalla.webapp.cms.IContentAdmin;
 import com.madalla.webapp.security.IPasswordAuthenticator;
+import com.madalla.webapp.upload.FileUploadGroup;
+import com.madalla.webapp.upload.FileUploadStore;
 import com.madalla.webapp.upload.IFileUploadInfo;
 import com.madalla.webapp.upload.IFileUploadStatus;
 
@@ -27,12 +28,11 @@ public class CmsSession  extends WebSession implements IContentAdmin, ISessionDa
 	private ISessionDataService repositoryService;
 	private Class<? extends Page> adminReturnPage;
 
-	private volatile Map<String, IFileUploadStatus> fileUploadInfo;
+	private volatile FileUploadStore fileUploadInfo = new FileUploadStore();
     
     public CmsSession(Request request) {
         super(request);
         this.repositoryService = new SessionDataService();
-        fileUploadInfo = new HashMap<String, IFileUploadStatus>();
     }
 
     public boolean isCmsAdminMode() {
@@ -95,16 +95,27 @@ public class CmsSession  extends WebSession implements IContentAdmin, ISessionDa
 	}
 
 	public IFileUploadStatus getFileUploadStatus(String id) {
-		return fileUploadInfo.get(id);
+		return fileUploadInfo.getFileUploadStatus(id);
 	}
 
 	public void setFileUploadStatus(String id, IFileUploadStatus status) {
-		fileUploadInfo.put(id, status);
-		
+		fileUploadInfo.setFileUploadStatus(id, status);
 	}
 
 	public void setFileUploadComplete(String id) {
-		fileUploadInfo.remove(id);
+		fileUploadInfo.setFileUploadComplete(id);
+	}
+	
+	public List<String> getFileUploadStatus(FileUploadGroup group) {
+		return fileUploadInfo.getFileUploadStatus(group);
+	}
+
+	public void setFileUploadStatus(String id, FileUploadGroup group, IFileUploadStatus status) {
+		fileUploadInfo.setFileUploadStatus(id, group, status);
+	}
+
+	public void setGroupUploadComplete(FileUploadGroup group) {
+		fileUploadInfo.setGroupUploadComplete(group);
 	}
 
 	public void setAdminReturnPage(Class<? extends Page> adminReturnPage) {
@@ -114,6 +125,7 @@ public class CmsSession  extends WebSession implements IContentAdmin, ISessionDa
 	public Class<? extends Page> getAdminReturnPage() {
 		return adminReturnPage;
 	}
+
 
 
 }
