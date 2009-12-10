@@ -1,0 +1,60 @@
+package com.madalla.webapp.upload;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class FileUploadStore implements IFileUploadInfo{
+
+	private static final long serialVersionUID = 1L;
+	
+	final private Map<String, IFileUploadStatus> statusMap;
+	final private Map<FileUploadGroup, List<String>> groupMap;
+	
+	public FileUploadStore(){
+		statusMap = new HashMap<String, IFileUploadStatus>();
+		groupMap = new HashMap<FileUploadGroup, List<String>>();
+	}
+	
+	public IFileUploadStatus getFileUploadStatus(String id) {
+		return statusMap.get(id);
+	}
+
+	public void setFileUploadStatus(String id, IFileUploadStatus status) {
+		statusMap.put(id, status);
+	}
+
+	public void setFileUploadStatus(String id, FileUploadGroup group, IFileUploadStatus status) {
+		statusMap.put(id, status);
+		List<String> list = groupMap.get(group);
+		if (list == null){
+			groupMap.put(group, list = new ArrayList<String>());
+		}
+		list.add(id);	
+	}
+
+	public void setFileUploadComplete(String id) {
+		statusMap.remove(id);
+	}
+	
+	public void setGroupUploadComplete(FileUploadGroup group){
+		List<String> list = groupMap.get(group);
+		if (list != null){
+			statusMap.keySet().removeAll(list);
+		}
+		groupMap.remove(group);
+	}
+	
+	public Collection<IFileUploadStatus> getFileUploadStatus(FileUploadGroup group){
+		List<String> list = groupMap.get(group);
+		if (list == null) return Collections.emptyList();
+		Map<String, IFileUploadStatus> temp = new HashMap<String, IFileUploadStatus>(statusMap);
+		temp.keySet().retainAll(list);
+		return temp.values();
+		
+	}
+
+}

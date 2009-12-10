@@ -20,7 +20,6 @@ import com.madalla.webapp.css.Css;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.upload.FileUploadStatus;
 import com.madalla.webapp.upload.IFileUploadInfo;
-import com.madalla.webapp.upload.IFileUploadStatus;
 import com.madalla.wicket.resourcelink.EditableResourceLink;
 import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
 
@@ -222,10 +221,8 @@ public class ContentLinkPanel extends CmsPanel{
 		}
 
 		public void run() {
-			IFileUploadStatus uploadStatus = null;
-			uploadStatus = new FileUploadStatus();
+			FileUploadStatus uploadStatus = new FileUploadStatus();
 			session.setFileUploadStatus(data.getId(), uploadStatus);
-			uploadStatus.setIsUploading(true);
 			
 			try {
 				log.debug("Start processing...");
@@ -238,7 +235,7 @@ public class ContentLinkPanel extends CmsPanel{
 					e.printStackTrace();
 				}
 				log.debug("Done processing...");
-				uploadStatus.setIsUploading(false);
+				uploadStatus.uploading = false;
 			//} catch (InterruptedException e) {
 			//	session.error(e.getMessage());
 			} finally {

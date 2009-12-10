@@ -1,0 +1,69 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+       
+       div#fileUpload form input {
+            float: none;
+            border: none;
+       }
+        #fileUpload p {
+            color: blue;
+        }
+
+		div.mfuex {
+		    width: 45%;
+		}
+		
+		div.results{
+		    width: 45%;
+		    clear: none;
+		}
+		        
+        #availableImages {
+            float: left;
+            clear: both;
+            width: 48%;
+        }
+    
+	</style>
+</wicket:head>
+<body>
+    <wicket:panel>
+    
+    <h2><wicket:message key="heading.site">[label]</wicket:message></h2>
+    
+    <div id="fileUpload">
+        <form wicket:id="simpleUpload">
+            <fieldset>
+            	<legend><wicket:message key="label.images.upload">[label]</wicket:message></legend>
+            	<p><wicket:message key="label.upload.info">[label]</wicket:message></p>
+           		<div wicket:id="fileInput" class="mfuex"/>
+           		<div class="results"> Results go here</div>
+            </fieldset>
+            <div class="submit">
+                <h3>
+                    <wicket:message key="label.images.submit">[label]</wicket:message>
+                </h3>
+            	<span class="buttonwrapper">
+                	<a class="orangebutton" wicket:id="formSubmit"><span><wicket:message key="label.submit">[label]</wicket:message></span></a>
+                </span>
+                <span class="feedback" wicket:id="uploadFeedback"/>
+            </div>
+        </form>
+ 
+    </div>
+     
+    <div id="availableImages">
+        <h3><wicket:message key="label.images.available">[label]</wicket:message></h3>
+        <table wicket:id="availableContainer">
+            <tr wicket:id="availableDisplay">
+                <td><img wicket:id="thumb" border="0" /></td>
+                <td><span wicket:id="file">(file)</span></td>
+                <td><a href="#" wicket:id="delete"><wicket:message key="label.delete">[label]</wicket:message></a></td>
+            </tr>
+        </table>
+    </div>
+         
+    </wicket:panel>
+</body>
+</html>
