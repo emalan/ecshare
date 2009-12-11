@@ -33,6 +33,10 @@ public class FileUploadStore implements IFileUploadInfo, Serializable{
 		if (list == null){
 			groupMap.put(group, list = new ArrayList<String>());
 		}
+		//no duplicates, but we want to replace so order is maintained
+		if (list.contains(id)){
+			list.remove(id);
+		}
 		list.add(id);	
 	}
 

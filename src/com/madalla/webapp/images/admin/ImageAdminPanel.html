@@ -44,7 +44,21 @@
         #availableImages {
             float: left;
             clear: both;
-            width: 48%;
+            width: 98%;
+        }
+        
+        div.availableContainer{
+            float:left;
+        }
+        
+        div.availableDisplay{
+            float:left;
+            width: 150px;
+            padding-top: 15px;
+            text-align: center;
+        }
+        
+        div.availableDisplay div, div.availableDisplay span, div.availableDisplay a{
         }
     
 	</style>
@@ -76,7 +90,6 @@
             <ul>
                 <li wicket:id="results">
                     <span wicket:id="file"></span>
-                    <em wicket:id="status"></em>
                 </li>
             </ul>
         	
@@ -86,13 +99,14 @@
     <div id="availableImages">
         <h3><wicket:message key="label.images.available">[label]</wicket:message></h3>
         <span wicket:id="availableFeedback">[feedback]</span>
-        <table wicket:id="availableContainer">
-            <tr wicket:id="availableDisplay">
-                <td><img wicket:id="thumb" border="0" /></td>
-                <td><span wicket:id="file">(file)</span></td>
-                <td><a href="#" wicket:id="delete"><wicket:message key="label.delete">[label]</wicket:message></a></td>
-            </tr>
-        </table>
+        <a wicket:id="refreshList"><wicket:message key="label.images.refresh">[label]</wicket:message></a>
+        <div wicket:id="availableContainer" class="availableContainer">
+            <div wicket:id="availableDisplay" class="availableDisplay">
+                <div><img wicket:id="thumb" border="0" /></div>
+                <div wicket:id="file">(file)</div>
+                <a href="#" wicket:id="delete"><wicket:message key="label.delete">[label]</wicket:message></a>
+            </div>
+        </div>
     </div>
          
     </wicket:panel>

@@ -15,7 +15,7 @@ public class FileUploadThread  extends Thread{
 	private final IFileUploadProcess process;
 	private final String id;
 	private final FileUploadGroup group;
-	private final FileUpload fileUpload;
+	private transient final FileUpload fileUpload;
 
 	public FileUploadThread(IFileUploadInfo uploadInfo, FileUpload fileUpload, IFileUploadProcess process, final String id) {
 		this(uploadInfo, fileUpload, process, id, null);
@@ -29,16 +29,26 @@ public class FileUploadThread  extends Thread{
 	}
 
 	public void run() {
-		FileUploadStatus uploadStatus = new FileUploadStatus();
-		if (group == null){
-			uploadInfo.setFileUploadStatus(id, uploadStatus);
-		} else {
-			uploadInfo.setFileUploadStatus(id, group, uploadStatus);
-		}
 		
 		try {
+			
 			String fileName = fileUpload.getClientFileName();
+			
+			//Check for existing process
+			IFileUploadStatus status = uploadInfo.getFileUploadStatus(id);
+			if (status != null && status.isUploading()){
+				log.warn("Cannot upload submitted file. There is an existing process with the same name that is uploading. Name: " + fileName);
+				return;
+			}
+			
 			log.debug("Start processing: " + fileName);
+			
+			FileUploadStatus uploadStatus = new FileUploadStatus();
+			if (group == null){
+				uploadInfo.setFileUploadStatus(id, uploadStatus);
+			} else {
+				uploadInfo.setFileUploadStatus(id, group, uploadStatus);
+			}
 			
         	InputStream inputStream = fileUpload.getInputStream();
         	if (inputStream == null){
@@ -46,19 +56,21 @@ public class FileUploadThread  extends Thread{
         	} else {
         		process.execute(inputStream, fileName);
         	}
-
-			// Sleep to simulate time-consuming work
+        	
+        	// Sleep to simulate time-consuming work
 			try {
 				Thread.sleep(10000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			log.debug("Done processing: " + fileName);
+
 			uploadStatus.uploading = false;
+			
+			log.debug("Done processing: " + fileName);
 		} catch (IOException e) {
 		//	session.error(e.getMessage());
 		} finally {
-			//session.setFileUploadComplete(data.getId());
+			fileUpload.closeStreams();
 
 		}
 	}

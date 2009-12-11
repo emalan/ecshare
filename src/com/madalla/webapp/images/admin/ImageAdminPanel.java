@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.ComponentTag;
@@ -46,7 +47,6 @@ import com.madalla.webapp.upload.FileUploadGroup;
 import com.madalla.webapp.upload.FileUploadThread;
 import com.madalla.webapp.upload.IFileUploadInfo;
 import com.madalla.webapp.upload.IFileUploadProcess;
-import com.madalla.wicket.DraggableAjaxBehaviour;
 
 public class ImageAdminPanel extends CmsPanel{
 
@@ -54,66 +54,60 @@ public class ImageAdminPanel extends CmsPanel{
 		private static final long serialVersionUID = 1L;
 		
 		private final Collection<FileUpload> uploads = new ArrayList<FileUpload>();
-		
+
 		public FileUploadForm(String name) {
             super(name);
+            
+            add(new MultiFileUploadField("fileInput", new PropertyModel<Collection<FileUpload>>(this, "uploads"), 5){
+				private static final long serialVersionUID = 1L;
 
-            setMultiPart(true);
-            add(new MultiFileUploadField("fileInput", new PropertyModel<Collection<FileUpload>>(this, "uploads"), 5));
+				//Hack to prevent fileUploads being trashed, we will close them ourselves....
+            	@Override
+            	protected void onDetach()
+            	{
+            		setConvertedInput(null);
+
+            		super.onDetach();
+            	}
+            });
             setMaxSize(ImageDefaults.MAX_UPLOAD_SIZE);
             
             final Component uploadFeedback = new ComponentFeedbackPanel("uploadFeedback", this);
             uploadFeedback.setOutputMarkupId(true);
             add(uploadFeedback);
             
-           
-            
             add(new SubmitLink("formSubmit"));
-//            add(new IndicatingAjaxButton("formSubmit", this){
-//				private static final long serialVersionUID = 1L;
-//
-//    			@Override
-//				protected void onError(AjaxRequestTarget target, Form<?> form) {
-//       				target.addComponent(uploadFeedback);
-//					super.onError(target, form);
-//				}
-//    			
-//       			@Override
-//    			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-//    				onSubmit();
-//    				target.addComponent(uploadFeedback);
-//    				refreshImageList(target);
-//    			}
-//            	
-//            });
+
         }
 		
 		@Override
 		protected void onSubmit() {
             Iterator<FileUpload> it = uploads.iterator();
             while (it.hasNext()) {
-                final FileUpload upload = it.next();
+                final FileUpload fileUpload = it.next();
                 try {
-                	log.info("file upload - uploading file "+ upload.getClientFileName());
+                	log.info("Submit file for uploading: "+ fileUpload.getClientFileName());
                 	
-                	// Start thread
-                	String contentType = upload.getContentType();
+                	String contentType = fileUpload.getContentType();
                 	log.info("file upload - Content type="+contentType);
                 	if (contentType == null || !(contentType.equalsIgnoreCase("image/png") || contentType.equalsIgnoreCase("image/jpeg"))){
                 		log.warn("file upload - Input type not supported. Type="+contentType);
-                		warn(getString("error.type", new Model<FileUpload>(upload)));
+                		warn(getString("error.type", new Model<FileUpload>(fileUpload)));
                 		continue;
                 	}
                 	
+                	//TODO check for existing upload, so we can display message
+                	
                 	//Prepare Thread for uploading
-                	String imageName = StringUtils.deleteWhitespace(upload.getClientFileName());
+                	String imageName = StringUtils.deleteWhitespace(fileUpload.getClientFileName());
                 	IFileUploadInfo uploadInfo = (IFileUploadInfo)getSession();
                 	IFileUploadProcess process = new ImageUploadProcess(getRepositoryService());                	
-                	final Thread submit = new FileUploadThread(uploadInfo, upload, process,imageName, GROUP);
+                	
+                	final Thread submit = new FileUploadThread(uploadInfo, fileUpload, process,imageName, GROUP);
                 	submit.start();
 
-                	log.info("finished processing upload "+ imageName);
-                	info(getString("message.success", new Model<FileUpload>(upload)));
+                	log.info("finished submitting file for uploading: "+ imageName);
+                	info(getString("message.success", new Model<FileUpload>(fileUpload)));
                 	
 				} catch (Exception e) {
 					log.error("onSubmit - failed to upload File."+e.getLocalizedMessage());
@@ -212,11 +206,8 @@ public class ImageAdminPanel extends CmsPanel{
 	private class ImageListView extends ListView<ImageData>{
 		private static final long serialVersionUID = 1L;
 		
-		private boolean draggable;
-		
-		public ImageListView(String id, final IModel<List<ImageData>> files, boolean draggable) {
+		public ImageListView(String id, final IModel<List<ImageData>> files) {
 			super(id, files);
-			this.draggable = draggable;
 		}
 
 		@Override
@@ -226,10 +217,6 @@ public class ImageAdminPanel extends CmsPanel{
 			listItem.add(new Label("file", imageData.getName()));
             Image image = new NonCachingImage("thumb",imageData.getImageThumb());
             image.setOutputMarkupId(true);
-            
-            if(draggable){
-            	image.add(new DraggableAjaxBehaviour(imageData.getName()));
-            }
             
             listItem.add(image);
             
@@ -288,8 +275,19 @@ public class ImageAdminPanel extends CmsPanel{
 
 					}
 
-				}, true);
+				});
+        availableDisplay.setOutputMarkupId(true);
         availableContainer.add(availableDisplay);
+        
+        add(new AjaxLink<String>("refreshList"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				target.addComponent(availableContainer);
+			}
+        	
+        });
         
         // File upload
         final FileUploadForm simpleUploadForm = new FileUploadForm("simpleUpload"){

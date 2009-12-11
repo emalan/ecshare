@@ -26,9 +26,12 @@ import org.apache.commons.logging.LogFactory;
 public class ImageUtilities {
 	
     private static Log log = LogFactory.getLog(ImageUtilities.class);
-    private static final String JPEG = "image/jpeg";
-    private static final String PNG = "image/png";
-    private static final String GIF = "image/gif";
+    @SuppressWarnings("unused")
+	private static final String JPEG = "image/jpeg";
+    @SuppressWarnings("unused")
+	private static final String PNG = "image/png";
+	@SuppressWarnings("unused")
+	private static final String GIF = "image/gif";
     
     public static void validateImageIO(){
         log.info("ImageIO validation. If there is no Success message below, then validation has failed.");
@@ -46,7 +49,8 @@ public class ImageUtilities {
         
     }
     
-    private static void validateImageIO(String type){
+    @SuppressWarnings("unused")
+	private static void validateImageIO(String type){
         boolean found = false;
         log.info("ImageIO Reader validation. checking for MimeType="+ type);
         Iterator<ImageReader> iter = ImageIO.getImageReadersByMIMEType(type);
@@ -112,6 +116,7 @@ public class ImageUtilities {
 	 * @param targetHeight
 	 * @return BufferedImage that has been scaled to the specified height and width.
 	 */
+	@SuppressWarnings("unused")
 	private static BufferedImage getScaledInstance(BufferedImage bufferedImage, 
 			int targetWidth, int targetHeight,ImageObserver imageObserver){
 		return getScaledInstance(bufferedImage, targetWidth, targetHeight, 
@@ -149,6 +154,7 @@ public class ImageUtilities {
 	 * @param targetHeight
 	 * @return BufferedImage that has been scaled down proportionatly to within the specified height and width.
 	 */
+	@SuppressWarnings("unused")
 	private static BufferedImage getScaledProportinalInstance(BufferedImage bufferedImage, 
 			int targetWidth, int targetHeight, ImageObserver imageObserver){
 		double actualWidth = bufferedImage.getWidth();

@@ -38,20 +38,24 @@ public class FileUploadTest extends TestCase {
 		// start a group upload
 		{
 			String upload = "upload2";
-			String group = "group1";
-			store.setFileUploadStatus(upload, new FileUploadGroup(group), new FileUploadStatus());
+			FileUploadGroup group = new FileUploadGroup("group1");
+			store.setFileUploadStatus(upload, group, new FileUploadStatus());
 			IFileUploadStatus status = store.getFileUploadStatus(upload);
 			assertNotNull(status);
 			assertTrue(status.isUploading());
 			
-			List<String> list = store.getFileUploadStatus(new FileUploadGroup(group));
+			List<String> list = store.getFileUploadStatus(group);
 			assertTrue(list.size() == 1);
 			
 			list = store.getFileUploadStatus(new FileUploadGroup("none"));
 			assertTrue(list.isEmpty());
 			
-			store.setFileUploadStatus("upload3", new FileUploadGroup(group), new FileUploadStatus());
-			list = store.getFileUploadStatus(new FileUploadGroup(group));
+			store.setFileUploadStatus("upload3", group, new FileUploadStatus());
+			list = store.getFileUploadStatus(group);
+			assertTrue(list.size() == 2);
+			
+			store.setFileUploadStatus("upload3", group, new FileUploadStatus());
+			list = store.getFileUploadStatus(group);
 			assertTrue(list.size() == 2);
 			
 			store.setFileUploadComplete(upload);

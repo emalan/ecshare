@@ -1,5 +1,7 @@
 package com.madalla.webapp.upload;
 
+import java.io.Serializable;
+
 
 /**
  * Store for File Upload Group information
@@ -7,7 +9,8 @@ package com.madalla.webapp.upload;
  * @author Eugene Malan
  *
  */
-public class FileUploadGroup {
+public class FileUploadGroup implements Serializable{
+	private static final long serialVersionUID = -8817708187066185278L;
 
 	final public String name;
 	

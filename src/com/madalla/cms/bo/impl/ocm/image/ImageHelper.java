@@ -59,6 +59,7 @@ public class ImageHelper {
 	}
 
 	public static void saveImageThumb(JcrTemplate template, final String path){
+		log.info("saveImageThumb - path="+path);
         template.execute(new JcrCallback(){
             public Object doInJcr(Session session) throws RepositoryException {
                 Node node = (Node) session.getItem(path);
