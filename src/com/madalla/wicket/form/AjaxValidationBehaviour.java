@@ -10,6 +10,16 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 
+/**
+ * Self Updating Validation Behaviour.
+ * 
+ * Validation happens onBlur and there is an animation to indicate to user that something is happening.
+ * If feedback is supplied then the enclosing element is set to a valid/invalid class, so that you can style
+ * a response to the validation.
+ * 
+ * @author Eugene Malan
+ *
+ */
 public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 	private static final long serialVersionUID = 1L;
 	
@@ -38,10 +48,15 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 		this.invalidClass = invalidClass;
 	}
 	
+	
+	
 	@Override
 	protected void onUpdate(AjaxRequestTarget target) {
+		animation(target);
 		log.debug("onUpdate - "+getFormComponent());
+		
 		target.addComponent(getFormComponent());
+		
 		getFormComponent().info("Valid");
 		//refreshForm(getFormComponent().getForm(), target);
 		if (feedbackPanel != null){
@@ -49,17 +64,16 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 			target.appendJavascript(
 				"$('"+feedbackPanel.getMarkupId()+"').parentNode.addClassName('"+validClass+"');"+
 				"$('"+feedbackPanel.getMarkupId()+"').parentNode.removeClassName('"+invalidClass+"');");
-				//"$('"+feedbackPanel.getMarkupId()+"').update('Valid')");
 		}
 	}
 
 	@Override
 	protected void onError(AjaxRequestTarget target, RuntimeException e) {
+		animation(target);
 		log.debug("onError -" + getFormComponent());
 
 		target.addComponent(getFormComponent());
-		//target.appendJavascript("anim"+ getComponent().getMarkupId() +".toggle();");
-		//target.appendJavascript("console.log('anim"+ getComponent().getMarkupId() +".toggle();');");
+		
 		if (feedbackPanel != null){
 			target.addComponent(feedbackPanel);
 			target.appendJavascript(
@@ -67,14 +81,19 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
                 "$('"+feedbackPanel.getMarkupId()+"').parentNode.removeClassName('"+validClass+"');");
 		}
 	}
-
+	
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.renderJavascriptReference(Scriptaculous.PROTOTYPE);
 		response.renderJavascriptReference(JavascriptResources.ANIMATOR_RESOURCE);
-		String animator = "var anim"+ getComponent().getMarkupId()+" = new Animator().addSubject(new DiscreteStyleSubject(wicketGet('"+ getComponent().getMarkupId() +"'),'opacity','0','1'));";
-		response.renderJavascript(animator, "animator");
+		response.renderOnDomReadyJavascript("anim"+ getComponent().getMarkupId()+" = new Animator().addSubject(new NumericalStyleSubject(wicketGet('"+ getComponent().getMarkupId() +"'),'opacity', 1, 0.25));");
+	}
+
+	//animation to indicate to user that validation occured
+	private void animation(AjaxRequestTarget target) {
+		String id = getComponent().getMarkupId();
+		target.appendJavascript("anim"+ id +".play(); anim"+ id +".reverse();");	
 	}
 	
 }

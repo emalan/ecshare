@@ -144,7 +144,7 @@ public class AlbumPanel extends CmsPanel {
 			@Override
 			protected void onComponentTag(ComponentTag tag) {
 				super.onComponentTag(tag);
-				tag.put("style", "height: "+ (album.getHeight()+ 20)+"px; width: "+ (album.getWidth()+20)+"px;");
+				tag.put("style", "height: "+ (album.getHeight()+ 15)+"px; width: "+ (album.getWidth()+15)+"px;");
 			}
     	};
 	}

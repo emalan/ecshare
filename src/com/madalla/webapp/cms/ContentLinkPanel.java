@@ -1,6 +1,6 @@
 package com.madalla.webapp.cms;
 
-import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
@@ -15,11 +15,11 @@ import org.apache.wicket.protocol.http.WebApplication;
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.ResourceData;
 import com.madalla.service.IDataService;
-import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.panel.CmsPanel;
-import com.madalla.webapp.upload.FileUploadStatus;
+import com.madalla.webapp.upload.FileUploadThread;
 import com.madalla.webapp.upload.IFileUploadInfo;
+import com.madalla.webapp.upload.IFileUploadProcess;
 import com.madalla.wicket.resourcelink.EditableResourceLink;
 import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
 
@@ -153,14 +153,26 @@ public class ContentLinkPanel extends CmsPanel{
 				@Override
 				protected void onSubmit() {
 				    String mountPath = "";
+				    
+				    IFileUploadProcess process = new ContentLinkUploadProcess(getRepositoryService(), linkData);
+
 				    if (linkData.getFileUpload() !=null){
 	                    mountPath = ContentSharedResource.registerResource((WebApplication)getApplication(), linkData, getRepositoryService());
 	                    linkData.setUrl(mountPath);
+	                    
 	                    //Start seperate thread so upload can continue if user navigates away
-	                    final SubmitThread it = new SubmitThread(getAppSession(), linkData, getRepositoryService());
-						it.start();
+	                    //final SubmitThread it = new SubmitThread(getAppSession(), linkData, getRepositoryService());
+						//it.start();
+						
+	                    IFileUploadInfo uploadInfo = (IFileUploadInfo) getSession();
+	                    
+	                    final Thread submit = new FileUploadThread(uploadInfo, linkData.fileUpload, process, linkData.id);
+	                    submit.start();
+						
+						
 				    } else {
-				    	formSubmit(linkData, getRepositoryService());
+				    	log.debug("onSubmit - setting InputStream to null");
+				    	process.execute(null, "");
 				    }
 				}
 
@@ -203,83 +215,109 @@ public class ContentLinkPanel extends CmsPanel{
     	return linkData;
     }
 
-    
-    private CmsSession getAppSession(){
-    	return (CmsSession) getSession();
-    }
-
 	/** This class does the file uploading and form submit */
-	private static class SubmitThread extends Thread {
-		private final IFileUploadInfo session;
-		private final ILinkData data;
-		private final IDataService service;
-
-		public SubmitThread(IFileUploadInfo session, ILinkData data, IDataService service) {
-			this.session = session;
-			this.data = data;
-			this.service = service;
-		}
-
-		public void run() {
-			FileUploadStatus uploadStatus = new FileUploadStatus();
-			session.setFileUploadStatus(data.getId(), uploadStatus);
-			
-			try {
-				log.debug("Start processing...");
-				ContentLinkPanel.formSubmit(data, service);
-
-				// Sleep to simulate time-consuming work
-				try {
-					Thread.sleep(10000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				log.debug("Done processing...");
-				uploadStatus.uploading = false;
-			//} catch (InterruptedException e) {
-			//	session.error(e.getMessage());
-			} finally {
-				//session.setFileUploadComplete(data.getId());
-
-			}
-		}
-	}
+//	private static class SubmitThread extends Thread {
+//		private final IFileUploadInfo session;
+//		private final ILinkData data;
+//		private final IDataService service;
+//
+//		public SubmitThread(IFileUploadInfo session, ILinkData data, IDataService service) {
+//			this.session = session;
+//			this.data = data;
+//			this.service = service;
+//		}
+//
+//		public void run() {
+//			FileUploadStatus uploadStatus = new FileUploadStatus();
+//			session.setFileUploadStatus(data.getId(), uploadStatus);
+//			
+//			try {
+//				log.debug("Start processing...");
+//				ContentLinkPanel.formSubmit(data, service);
+//
+//				// Sleep to simulate time-consuming work
+//				try {
+//					Thread.sleep(10000);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//				log.debug("Done processing...");
+//				uploadStatus.uploading = false;
+//			//} catch (InterruptedException e) {
+//			//	session.error(e.getMessage());
+//			} finally {
+//				//session.setFileUploadComplete(data.getId());
+//
+//			}
+//		}
+//	}
 	
-    /**
+	private class ContentLinkUploadProcess implements IFileUploadProcess {
+		
+		final private IDataService service;
+		final private LinkData linkData;
+		
+		public ContentLinkUploadProcess(IDataService service, LinkData linkData){
+			this.service = service;
+			this.linkData = linkData;
+		}
+
+		public void execute(InputStream inputStream, String fileName) {
+			
+	    	ResourceData resourceData = service.getContentResource(linkData.getId());
+			resourceData.setUrl(linkData.getUrl());
+
+			resourceData.setInputStream(inputStream);
+			if (StringUtils.isEmpty(linkData.getName())){
+				linkData.setName(fileName);
+			}
+			
+			resourceData.setUrlDisplay(linkData.getName());
+			resourceData.setUrlTitle(linkData.getTitle());
+			resourceData.setType(linkData.getResourceType());
+			resourceData.setHideLink(linkData.getHideLink());
+			
+			service.saveContentResource(resourceData);
+
+		}
+		
+	}
+
+	/**
      * static form submit that can be called from Thread
      * @param session
      * @param linkData
      */
-    public static void formSubmit( ILinkData linkData, IDataService service){
-    	log.debug("onSubmit - submit Resource Form Data. " + linkData);
-    	ResourceData resourceData = service.getContentResource(linkData.getId());
-		FileUpload upload = linkData.getFileUpload();
-		if (upload == null){
-			resourceData.setInputStream(null);
-			log.debug("onSubmit - setting InputStream to null");
-		} else {
-		    resourceData.setUrl(linkData.getUrl());
-			try {
-				log.debug("onSubmit - uploading File...");
-				resourceData.setInputStream(upload.getInputStream());
-				if (StringUtils.isEmpty(linkData.getName())){
-					linkData.setName(upload.getClientFileName());
-				}
-				log.debug("onSubmit - uploading File... done");
-			} catch (IOException e) {
-				log.error("Error while handling File upload.", e);
-			}
-		}
-		resourceData.setUrlDisplay(linkData.getName());
-		resourceData.setUrlTitle(linkData.getTitle());
-		resourceData.setType(linkData.getResourceType());
-		resourceData.setHideLink(linkData.getHideLink());
-		log.debug("onSubmit - saving resource. " + resourceData);
-		service.saveContentResource(resourceData);
-
-		upload.closeStreams();
-		
-		log.debug("onSubmit - done..");
-    }
+//    public static void formSubmit( ILinkData linkData, IDataService service){
+//    	log.debug("onSubmit - submit Resource Form Data. " + linkData);
+//    	ResourceData resourceData = service.getContentResource(linkData.getId());
+//		FileUpload upload = linkData.getFileUpload();
+//		if (upload == null){
+//			resourceData.setInputStream(null);
+//			log.debug("onSubmit - setting InputStream to null");
+//		} else {
+//		    resourceData.setUrl(linkData.getUrl());
+//			try {
+//				log.debug("onSubmit - uploading File...");
+//				resourceData.setInputStream(upload.getInputStream());
+//				if (StringUtils.isEmpty(linkData.getName())){
+//					linkData.setName(upload.getClientFileName());
+//				}
+//				log.debug("onSubmit - uploading File... done");
+//			} catch (IOException e) {
+//				log.error("Error while handling File upload.", e);
+//			}
+//		}
+//		resourceData.setUrlDisplay(linkData.getName());
+//		resourceData.setUrlTitle(linkData.getTitle());
+//		resourceData.setType(linkData.getResourceType());
+//		resourceData.setHideLink(linkData.getHideLink());
+//		log.debug("onSubmit - saving resource. " + resourceData);
+//		service.saveContentResource(resourceData);
+//
+//		upload.closeStreams();
+//		
+//		log.debug("onSubmit - done..");
+//    }
 
 }
