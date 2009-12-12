@@ -1,6 +1,7 @@
 package com.madalla.webapp.user;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
 
 import com.madalla.bo.SiteData;
 import com.madalla.util.security.ICredentialHolder;
@@ -26,7 +27,7 @@ public class UserLoginPanel extends CmsPanel {
 	private UserLoginPanel(String id, ICredentialHolder credentials){
 		super(id);
 
-		add(JavascriptResources.ANIMATOR);
+		add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.ANIMATOR));
 
 		add(new LoginPanel("signInPanel", credentials){
             private static final long serialVersionUID = 1L;

@@ -43,7 +43,7 @@ public class SlideshowPanel extends Panel {
     public SlideshowPanel(String id) {
         super(id);
         add(CSSPackageResource.getHeaderContribution(this.getClass(),"slideshow.css"));
-        add(JavascriptResources.PROTOTYPE);
+        add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.PROTOTYPE));
         add(JavascriptPackageResource.getHeaderContribution(ScriptUtils.SLIDESHOW));
         
         // Add folder view

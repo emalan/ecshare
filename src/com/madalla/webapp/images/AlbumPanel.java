@@ -84,7 +84,7 @@ public class AlbumPanel extends CmsPanel {
         	
         } else {
     		add(JavascriptPackageResource.getHeaderContribution(PROTOTYPE));
-    		add(JavascriptResources.ANIMATOR);
+    		add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.ANIMATOR));
             add(JavascriptPackageResource.getHeaderContribution(FAST_INIT));
             
         	if (navigation) {

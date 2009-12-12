@@ -86,7 +86,7 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.renderJavascriptReference(Scriptaculous.PROTOTYPE);
-		response.renderJavascriptReference(JavascriptResources.ANIMATOR_RESOURCE);
+		response.renderJavascriptReference(JavascriptResources.ANIMATOR);
 		response.renderOnDomReadyJavascript("anim"+ getComponent().getMarkupId()+" = new Animator().addSubject(new NumericalStyleSubject(wicketGet('"+ getComponent().getMarkupId() +"'),'opacity', 1, 0.25));");
 	}
 
