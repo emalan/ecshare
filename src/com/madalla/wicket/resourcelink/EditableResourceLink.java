@@ -251,14 +251,13 @@ public class EditableResourceLink extends Panel {
 	 * @param model The model for the label and editor
 	 */
 	private void initLabelForm(IModel<?> model) {
+
 		// actual displayed Link
 		add(newSharedResourceLink(data, "link"));
 		
 		StatusModel statusModel = new StatusModel(data.getId());
 		AjaxSelfUpdatingLabel statusLabel = newUploadStatusLabel("uploadstatus",statusModel);
 		add(statusLabel);
-		
-		
 		
 		WebMarkupContainer formDiv = new WebMarkupContainer("resource-form-div");
 		formDiv.setOutputMarkupId(true);

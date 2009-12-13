@@ -2,6 +2,7 @@ package com.madalla.wicket.form;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -9,6 +10,8 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
 import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
+import com.madalla.wicket.animation.Animator;
+import com.madalla.wicket.animation.NumericSubject;
 
 /**
  * Self Updating Validation Behaviour.
@@ -26,6 +29,8 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 	private Log log = LogFactory.getLog(this.getClass());
 	private final FeedbackPanel feedbackPanel;
 	
+	private final Animator animator;
+	
 	private String validClass ;
 	private String invalidClass ;
 	
@@ -40,6 +45,7 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 	}
 	public AjaxValidationBehaviour(FeedbackPanel feedbackPanel, String validClass, String invalidClass) {
 		super("onblur");
+		animator = new Animator();
 		if (feedbackPanel != null){
 			feedbackPanel.setOutputMarkupId(true);
 		}
@@ -48,7 +54,9 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 		this.invalidClass = invalidClass;
 	}
 	
-	
+	@Override
+	public void beforeRender(Component component){
+	}
 	
 	@Override
 	protected void onUpdate(AjaxRequestTarget target) {
@@ -85,15 +93,17 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
+		animator.setMarkupId(getComponent().getMarkupId());
+		animator.addSubject(new NumericSubject(getComponent().getMarkupId(),"opacity", 1, 0.25));
+
 		response.renderJavascriptReference(Scriptaculous.PROTOTYPE);
 		response.renderJavascriptReference(JavascriptResources.ANIMATOR);
-		response.renderOnDomReadyJavascript("anim"+ getComponent().getMarkupId()+" = new Animator().addSubject(new NumericalStyleSubject(wicketGet('"+ getComponent().getMarkupId() +"'),'opacity', 1, 0.25));");
+		response.renderOnDomReadyJavascript(animator.render());
 	}
 
 	//animation to indicate to user that validation occured
 	private void animation(AjaxRequestTarget target) {
-		String id = getComponent().getMarkupId();
-		target.appendJavascript("anim"+ id +".play(); anim"+ id +".reverse();");	
+		target.appendJavascript(animator.play()+animator.reverse());
 	}
 	
 }

@@ -3,7 +3,8 @@ package com.madalla.webapp.scripts.scriptaculous;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 
 /**
- * Placeholder for Scriptaculous
+ * References to Scriptaculous resources
+ * 
  * @author Eugene Malan
  *
  */
