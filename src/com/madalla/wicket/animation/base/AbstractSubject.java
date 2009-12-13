@@ -1,4 +1,4 @@
-package com.madalla.wicket.animation;
+package com.madalla.wicket.animation.base;
 
 import java.io.Serializable;
 

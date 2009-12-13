@@ -10,8 +10,9 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
 import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
-import com.madalla.wicket.animation.Animator;
-import com.madalla.wicket.animation.NumericSubject;
+import com.madalla.wicket.animation.AnimationPulsate;
+import com.madalla.wicket.animation.base.Animator;
+import com.madalla.wicket.animation.base.NumericSubject;
 
 /**
  * Self Updating Validation Behaviour.

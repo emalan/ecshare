@@ -1,10 +1,11 @@
-package com.madalla.wicket.animation;
+package com.madalla.wicket.animation.base;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+
 
 public class Animator implements Serializable{
 	private static final long serialVersionUID = 1L;

@@ -1,4 +1,5 @@
-package com.madalla.wicket.animation;
+package com.madalla.wicket.animation.base;
+
 
 public class NumericSubject extends AbstractSubject {
 	private static final long serialVersionUID = 1L;
