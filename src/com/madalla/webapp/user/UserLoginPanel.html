@@ -3,7 +3,7 @@
     <style type="text/css">
         div#navLinks, div#forgotUsername, div#forgotPassword, div#supportEmail{
             clear:both; 
-            float:left;
+             
             margin: 15px 0 0 10px;
         
         }
@@ -27,14 +27,15 @@
     <wicket:panel>
     
     	<div class="adminSection">
+ 
     	    <span class="adminHeading"><wicket:message key="heading.login">Label Contents</wicket:message></span>
             <span wicket:id="signInPanel"></span>
 
             <div id=navLinks>
-                <a href="#" onClick="supportAnim.toggle();"><wicket:message key="label.support">[Label]</wicket:message></a>
+                <a wicket:id="emailLink" href="#" ></a>
             </div>
 	        
-	        <div id=supportEmail style="display: none;">
+	        <div wicket:id="emailDiv" style="overflow:hidden; height: 28em; display:none;">
 	            <hr/>
 	            <span class="divHeadings"><wicket:message key="heading.support">Label Contents</wicket:message></span>
 	            <span wicket:id="supportEmail" />

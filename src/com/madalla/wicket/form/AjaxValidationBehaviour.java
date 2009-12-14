@@ -10,7 +10,6 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
 import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
-import com.madalla.wicket.animation.AnimationPulsate;
 import com.madalla.wicket.animation.base.Animator;
 import com.madalla.wicket.animation.base.NumericSubject;
 

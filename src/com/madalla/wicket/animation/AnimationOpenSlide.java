@@ -11,20 +11,24 @@ import com.madalla.wicket.animation.base.NumericSubject;
  * @author Eugene Malan
  *
  */
-public class AnimationSlide extends AbstractAnimationEventBehavior {
+public class AnimationOpenSlide extends AbstractAnimationEventBehavior {
 	private static final long serialVersionUID = 1L;
 	
 	private final Component subject;
+	private final int height;
 
-	public AnimationSlide(String event, Component subject) {
+	public AnimationOpenSlide(String event, Component subject, int height) {
 		super(event);
 		this.subject = subject;
+		this.height = height;
+		subject.setOutputMarkupId(true);
 	}
 	
 	@Override
 	protected void addAnimatorSubjects(Animator animator) {
-		animator.addSubject(new NumericSubject(subject.getMarkupId(), "height", 150, 5));
-		animator.addSubject(new DiscreteSubject(subject.getMarkupId(), "display", "","none", 0.95));
+		animator.addSubject(new DiscreteSubject(subject.getMarkupId(), "display", "none","", 0.1));
+		animator.addSubject(new NumericSubject(subject.getMarkupId(), "height", 1, height));
+		
 	}
 
 	@Override

@@ -1,7 +1,11 @@
 package com.madalla.webapp.user;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 
 import com.madalla.bo.SiteData;
 import com.madalla.util.security.ICredentialHolder;
@@ -11,6 +15,7 @@ import com.madalla.webapp.email.EmailFormPanel;
 import com.madalla.webapp.login.LoginPanel;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.JavascriptResources;
+import com.madalla.wicket.animation.AnimationOpenSlide;
 
 public class UserLoginPanel extends CmsPanel {
 
@@ -54,8 +59,17 @@ public class UserLoginPanel extends CmsPanel {
             
         });
 		
+		Component emailLink = new Label("emailLink", getString("label.support"));
+		add(emailLink);
+		
+		MarkupContainer emailDiv = new WebMarkupContainer("emailDiv");
+		add(emailDiv);
+		
 		SiteData site = getRepositoryService().getSiteData();
-		add(new EmailFormPanel("supportEmail", "Support email - sent from " + site.getName()));
+		Component emailForm = new EmailFormPanel("supportEmail", "Support email - sent from " + site.getName());
+		emailDiv.add(emailForm);
+		
+		emailLink.add(new AnimationOpenSlide("onclick", emailDiv, 400));
 
 	}
 	
