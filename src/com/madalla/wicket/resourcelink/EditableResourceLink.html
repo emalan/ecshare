@@ -8,15 +8,19 @@
 	       display: inline;
 	    }
 	    
+	    div.editing .displayArea {
+	        display: none;
+	    }
+	    
 	    div.resourceFormDiv {
-	    	border: thin solid darkgray;
-	    	padding: 4px;
-	    	float: left;   
+	    	
 	    }
 	    
 	    form.resourceForm {
 	    	float: left;
 	    	clear: both;
+	    	padding: 4px;  
+	    	border: thin solid darkgray;
 	    }
 	    
 	    div#resourceLink {
@@ -50,39 +54,48 @@
 </wicket:head>
 
 <wicket:panel>
-	<div id="resourceLink">
-		<span wicket:id="configureIcon" class="configure"></span>
-		<a href="#" wicket:id="link">[[label]]</a>
-		<span class="message" wicket:id="uploadstatus">[[importing]]</span>
-	</div>
 	
-	<div class="resourceFormDiv" wicket:id="resource-form-div" style="display:none;" >
-	<form class="resourceForm" wicket:id="resource-form">
-		<p class="info"><wicket:message key="info.upload">[[label]]</wicket:message></p>
+
 		
-		<input type="file" wicket:id="file-upload" /><br/>
-		<div>
-			<label><wicket:message key="label.type">[[label]]</wicket:message></label>
-			<select wicket:id="type-select"></select>
-		</div>
-		<div>
-			<label><wicket:message key="label.name">[[label]]</wicket:message></label>
-			<input type="text" wicket:id="editor"/>
-		</div>
-		<div>
-			<label><wicket:message key="label.title">[[label]]</wicket:message></label>
-			<input type="text" wicket:id="title-editor"/>
-		</div>
-		<div class="checkbox">
-			<label><wicket:message key="label.hide">[[label]]</wicket:message></label>
-			<input type="checkbox" wicket:id="hide-link"/>
-		</div>
-		<div>
-			<span class="buttonwrapper">
-                <a href="#" class="bluebutton" wicket:id="submit"><span><wicket:message key="label.submit">[[label]]</wicket:message></span></a>
-            </span>
-		</div>
-	</form>
-	</div>
+		<span wicket:id="configureIcon" class="configure"></span>
+		
+		<span wicket:id="displayArea" class="displayArea">
+			<a href="#" wicket:id="link">[label]</a>
+			<span class="message" wicket:id="uploadstatus">[[importing]]</span>
+		</span>
+
 	
+		<div class="resourceFormDiv" wicket:id="resource-form-div" style="display:none; overflow: hidden;" >
+	  		<form class="resourceForm" wicket:id="resource-form">
+	  		  <fieldset>
+				<p class="info"><wicket:message key="info.upload">[[label]]</wicket:message></p>
+		
+				<input type="file" wicket:id="file-upload" /><br/>
+				<div>
+					<label><wicket:message key="label.type">[[label]]</wicket:message></label>
+					<select wicket:id="type-select"></select>
+				</div>
+				<div>
+					<label><wicket:message key="label.name">[[label]]</wicket:message></label>
+					<input type="text" wicket:id="editor"/>
+				</div>
+				<div>
+					<label><wicket:message key="label.title">[[label]]</wicket:message></label>
+					<input type="text" wicket:id="title-editor"/>
+				</div>
+				<div class="checkbox">
+					<label><wicket:message key="label.hide">[[label]]</wicket:message></label>
+					<input type="checkbox" wicket:id="hide-link"/>
+				</div>
+			  </fieldset>	
+		      <div id="submit">
+					<span class="buttonwrapper">
+		                <a href="#" class="bluebutton" wicket:id="submit"><span><wicket:message key="label.submit">[[label]]</wicket:message></span></a>
+		            </span>
+			  </div>
+			</form>
+		</div>
+	
+
+  	
 </wicket:panel>

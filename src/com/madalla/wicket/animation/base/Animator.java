@@ -44,6 +44,14 @@ public class Animator implements Serializable{
 		return id + ".toggle();";
 	}
 	
+	public String inspect(){
+		return id + ".inspect();";
+	}
+	
+	public String debug(){
+		return "console.log("+inspect()+");";
+	}
+	
 	private String renderTemplate(){
 		StringBuilder sb = new StringBuilder(TEMPLATE.replace("${duration}", Integer.toString(duration)));
 		for (AbstractSubject s: subjects){

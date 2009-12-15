@@ -252,12 +252,16 @@ public class EditableResourceLink extends Panel {
 	 */
 	private void initLabelForm(IModel<?> model) {
 
+		
+		WebMarkupContainer displayArea = new WebMarkupContainer("displayArea");
+		add(displayArea);
+		
 		// actual displayed Link
-		add(newSharedResourceLink(data, "link"));
+		displayArea.add(newSharedResourceLink(data, "link"));
 		
 		StatusModel statusModel = new StatusModel(data.getId());
-		AjaxSelfUpdatingLabel statusLabel = newUploadStatusLabel("uploadstatus",statusModel);
-		add(statusLabel);
+		Component statusLabel = newUploadStatusLabel("uploadstatus",statusModel);
+		displayArea.add(statusLabel);
 		
 		WebMarkupContainer formDiv = new WebMarkupContainer("resource-form-div");
 		formDiv.setOutputMarkupId(true);
@@ -270,6 +274,7 @@ public class EditableResourceLink extends Panel {
 		resourceForm.add(newEditor("title-editor", new PropertyModel<String>(data, "title")));
 		resourceForm.add(new CheckBox("hide-link", new PropertyModel<Boolean>(data, "hideLink")));
 		final Component upload = newFileUpload(this, "file-upload", new PropertyModel<FileUpload>(data, "fileUpload"));
+		upload.setOutputMarkupId(true);
 		final Component choice = newDropDownChoice(this, "type-select", new PropertyModel<String>(data, "resourceType"), Arrays
 				.asList(ResourceType.values()));
 
@@ -279,7 +284,7 @@ public class EditableResourceLink extends Panel {
 		resourceForm.add(upload);
 		resourceForm.add(choice);
 		
-		add(new AjaxConfigureIcon("configureIcon", formDiv.getMarkupId()));
+		add(new AjaxConfigureIcon("configureIcon", displayArea, formDiv, upload));
 
 	}
 	
@@ -351,7 +356,7 @@ public class EditableResourceLink extends Panel {
         
         link.setVisibilityAllowed(true);
         link.setOutputMarkupId(true);
-        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(5)){
+        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(30)){
 
 			private static final long serialVersionUID = 1L;
 
@@ -503,8 +508,9 @@ public class EditableResourceLink extends Panel {
 		return upload;
 	}
 	
-	protected AjaxSelfUpdatingLabel newUploadStatusLabel(final String componentId, IModel<String> model) {
-		AjaxSelfUpdatingLabel label =  new AjaxSelfUpdatingLabel(componentId, model, 5){
+	protected Component newUploadStatusLabel(final String componentId, IModel<String> model) {
+		
+		AjaxSelfUpdatingLabel label =  new AjaxSelfUpdatingLabel(componentId, model, 30){
 
 			private static final long serialVersionUID = 1L;
 

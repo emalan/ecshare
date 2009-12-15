@@ -16,24 +16,30 @@ public class AnimationOpenSlide extends AbstractAnimationEventBehavior {
 	
 	private final Component subject;
 	private final int height;
+	private final String unit;
+	
+	public AnimationOpenSlide(Component subject, int height, String unit) {
+		this("onclick", subject, height, unit);
+	}
 
-	public AnimationOpenSlide(String event, Component subject, int height) {
+	public AnimationOpenSlide(String event, Component subject, int height, String unit) {
 		super(event);
 		this.subject = subject;
 		this.height = height;
+		this.unit = unit;
 		subject.setOutputMarkupId(true);
 	}
 	
 	@Override
 	protected void addAnimatorSubjects(Animator animator) {
 		animator.addSubject(new DiscreteSubject(subject.getMarkupId(), "display", "none","", 0.1));
-		animator.addSubject(new NumericSubject(subject.getMarkupId(), "height", 1, height));
+		animator.addSubject(new NumericSubject(subject.getMarkupId(), "height", 1, height, unit));
 		
 	}
 
 	@Override
 	protected String onEventAnimatorActions(Animator animator) {
-		return animator.toggle();
+		return animator.debug() + animator.toggle();
 	}
 
 }

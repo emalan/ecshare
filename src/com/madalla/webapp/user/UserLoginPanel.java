@@ -69,7 +69,7 @@ public class UserLoginPanel extends CmsPanel {
 		Component emailForm = new EmailFormPanel("supportEmail", "Support email - sent from " + site.getName());
 		emailDiv.add(emailForm);
 		
-		emailLink.add(new AnimationOpenSlide("onclick", emailDiv, 400));
+		emailLink.add(new AnimationOpenSlide("onclick", emailDiv, 27,"em"));
 
 	}
 	

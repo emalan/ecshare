@@ -38,7 +38,7 @@ public class YoutubePlayerPanel extends Panel {
 		String url = "http://www.youtube.com/v/"+videoData.getVideoId()+"&enablejsapi=1&playerapiid=ytplayer";
 		add(new SwfObject(url,videoData.getWidth(), videoData.getHeight()));
 		if (((CmsSession)getSession()).isLoggedIn()){
-			add(new AjaxConfigureIcon("configureIcon","formDiv"));	
+			//add(new AjaxConfigureIcon("configureIcon","formDiv"));	
 		} else {
 			add(new Label("configureIcon"));
 		}
@@ -52,7 +52,7 @@ public class YoutubePlayerPanel extends Panel {
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
 				target.appendJavascript("playVideo('"+videoData.getVideoId()+"','"+ videoData.getWidth()+"','"+videoData.getHeight()+"');");
 				saveVideo(videoData);
-				AjaxConfigureIcon.hide(target, "formDiv");
+				//AjaxConfigureIcon.hide(target, "formDiv");
 			}
 			
 		});
