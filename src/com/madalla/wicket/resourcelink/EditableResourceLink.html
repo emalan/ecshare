@@ -21,6 +21,7 @@
 	    	clear: both;
 	    	padding: 4px;  
 	    	border: thin solid darkgray;
+	    	background-color: gainsboro;
 	    }
 	    
 	    div#resourceLink {
@@ -49,15 +50,19 @@
 	       margin-left: 5em;
 	    }
 	    
+		div.configure span{
+			visibility: hidden;
+		}
+	    
 	--></style>
 
 </wicket:head>
 
 <wicket:panel>
 	
-
-		
-		<span wicket:id="configureIcon" class="configure"></span>
+		<div wicket:id="configureIcon" class="configure">
+		    <span>Edit</span>
+		</div>  
 		
 		<span wicket:id="displayArea" class="displayArea">
 			<a href="#" wicket:id="link">[label]</a>
@@ -88,7 +93,7 @@
 					<input type="checkbox" wicket:id="hide-link"/>
 				</div>
 			  </fieldset>	
-		      <div id="submit">
+		      <div class="submit">
 					<span class="buttonwrapper">
 		                <a href="#" class="bluebutton" wicket:id="submit"><span><wicket:message key="label.submit">[[label]]</wicket:message></span></a>
 		            </span>

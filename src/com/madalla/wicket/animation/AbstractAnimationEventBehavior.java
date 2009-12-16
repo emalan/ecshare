@@ -12,6 +12,11 @@ public abstract class AbstractAnimationEventBehavior extends AjaxEventBehavior  
 
 	private final Animator animator;
 	
+	public AbstractAnimationEventBehavior(String event, int duration) {
+		super(event);
+		animator = new Animator(duration);
+	}
+	
 	public AbstractAnimationEventBehavior(String event) {
 		super(event);
 		animator = new Animator();

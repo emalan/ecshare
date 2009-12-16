@@ -1,10 +1,28 @@
+span.configure, div.configure{
+	height:1.3em;
+	background-image: url(image/configure.png);
+	background-repeat: no-repeat;
+	width: 18px;
+}
+
+span.configure:hover, div.configure:hover {
+	/*background-image: url(image/configure.png);*/
+	cursor: pointer;
+	
+}
+
+.editing span.configure, .editing div.configure  {
+	background-image: url(image/closepanel.png);
+}
+
+
 div.edit-wrapper, span.edit-wrapper {
 	height:1.3em;
-	overflow:hidden;
-	padding:1px 1px 0 0;
-	right:0;
-	top:0;
-	z-index:300;
+	background-image: url(image/downarrow.png);
+	background-repeat: no-repeat;
+	width: 18px;
+	text-indent: -9000px;
+	float:left;
 }
 
 div.edit-wrapper a.edit-menu, span.edit-wrapper a.edit-menu {

@@ -20,6 +20,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -40,7 +41,6 @@ import org.apache.wicket.util.time.Duration;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.upload.IFileUploadInfo;
 import com.madalla.webapp.upload.IFileUploadStatus;
-import com.madalla.wicket.AjaxSelfUpdatingLabel;
 import com.madalla.wicket.configure.AjaxConfigureIcon;
 
 public class EditableResourceLink extends Panel {
@@ -256,12 +256,12 @@ public class EditableResourceLink extends Panel {
 		WebMarkupContainer displayArea = new WebMarkupContainer("displayArea");
 		add(displayArea);
 		
-		// actual displayed Link
-		displayArea.add(newSharedResourceLink(data, "link"));
-		
+		// display : link and feedback
 		StatusModel statusModel = new StatusModel(data.getId());
-		Component statusLabel = newUploadStatusLabel("uploadstatus",statusModel);
+		Component statusLabel = new Label("uploadstatus",statusModel);
+		statusLabel.setOutputMarkupId(true);
 		displayArea.add(statusLabel);
+		displayArea.add(newSharedResourceLink("link", data, statusLabel));
 		
 		WebMarkupContainer formDiv = new WebMarkupContainer("resource-form-div");
 		formDiv.setOutputMarkupId(true);
@@ -284,11 +284,11 @@ public class EditableResourceLink extends Panel {
 		resourceForm.add(upload);
 		resourceForm.add(choice);
 		
-		add(new AjaxConfigureIcon("configureIcon", displayArea, formDiv, upload));
+		add(new AjaxConfigureIcon("configureIcon", displayArea, formDiv, 17));
 
 	}
 	
-    protected Component newSharedResourceLink(final ILinkData data, final String componentId){
+    protected Component newSharedResourceLink(final String id, final ILinkData data, final Component feedback ){
     	
     	//href Model
     	IModel<String> hrefModel = new Model<String>(){
@@ -320,7 +320,7 @@ public class EditableResourceLink extends Panel {
     		
     	};
 
-        Component link = new IndicatingUploadLink(componentId, data,  hrefModel, labelModel){
+        Component link = new IndicatingUploadLink(id, data,  hrefModel, labelModel){
 			private static final long serialVersionUID = 1L;
 			
             @Override
@@ -356,12 +356,13 @@ public class EditableResourceLink extends Panel {
         
         link.setVisibilityAllowed(true);
         link.setOutputMarkupId(true);
-        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(30)){
+        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(6)){
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onPostProcessTarget(AjaxRequestTarget target) {
+				target.addComponent(feedback);
 				String indicatorId = getIndicator();
 				if (isFileUploading(data.getId()) != null && isFileUploading(data.getId())){
 					target.appendJavascript("wicketShow('" + indicatorId +"');");
@@ -506,25 +507,6 @@ public class EditableResourceLink extends Panel {
 		};
 		upload.setOutputMarkupId(true);
 		return upload;
-	}
-	
-	protected Component newUploadStatusLabel(final String componentId, IModel<String> model) {
-		
-		AjaxSelfUpdatingLabel label =  new AjaxSelfUpdatingLabel(componentId, model, 30){
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onBeforeRender() {
-				if (editMode){
-				    startTimer();
-				} else {
-					stopTimer();
-				}
-				super.onBeforeRender();
-			}
-		};
-		return label;
 	}
 
     /**
