@@ -159,8 +159,7 @@ public abstract class LoginPanel extends Panel
 		this.includeRememberMe = includeRememberMe;
 		
 		final Form<Object> form = new SignInForm("signInForm", credentials);
-        username.setLabel(new Model<String>(getString("label.name")));
-        password.setLabel(new Model<String>(getString("label.password")));
+		
 		add(form);
 		
 		final FeedbackPanel feedback = new FeedbackPanel("loginFeedback");
@@ -231,6 +230,14 @@ public abstract class LoginPanel extends Panel
 		
 	}
 	
+	
+	@Override
+	protected void onBeforeRender() {
+		super.onBeforeRender();
+        username.setLabel(new Model<String>(getString("label.name")));
+        password.setLabel(new Model<String>(getString("label.password")));
+	}
+
 	private void lockUserName(boolean lock){
 		username.setVisible(!lock);
 		usernameLabel.setVisible(!lock);
