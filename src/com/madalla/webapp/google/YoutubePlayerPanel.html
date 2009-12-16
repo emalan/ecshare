@@ -1,12 +1,14 @@
 <wicket:head>
 	<style>
-		div.configureDiv span {
+		
+		form.playerForm {
+		    float: left;
+	    	clear: both;
+	    	padding: 4px;  
+	    	border: thin solid darkgray;
+	    	background-color: gainsboro; 
 		}
-		div#formDiv {
-		    border: thin solid darkgray;
-            padding: 4px;   
-		    
-		}
+		
 		div#playerDiv {
 
 	    }
@@ -20,18 +22,25 @@
         form p.info{
         	width: 20em;
        	}
+       	
+       	div.configure span{
+			visibility: hidden;
+		}
 	    
 	</style>
 </wicket:head>
 <wicket:panel>
-  	<div id="configureDiv">
-		<span wicket:id="configureIcon"></span>
+  	
+  	<div wicket:id="configureIcon" class="configure">
+		<span>Edit</span>
     </div>
-	<div id="formDiv" style="display:none;">
-	  <form wicket:id="videoForm">
+	
+	<div wicket:id="playerDiv" style="display:none; overflow: hidden;" >
+	  <form class="playerForm" wicket:id="videoForm">
+	    <fieldset>
 		<div>
 			<label><wicket:message key="label.videoid">[[label]]</wicket:message></label>
-			<input type="text" wicket:id="videoid"></input>
+			<input type="text" wicket:id="videoId"></input>
 		</div>
 		<div>
 			<label><wicket:message key="label.height">[[label]]</wicket:message></label>
@@ -44,13 +53,15 @@
 		<div>
 			<p class="info"><wicket:message key="info.size">[[label]]</wicket:message></p>
 		</div>
-	    <div>
+		</fieldset>
+	    <div class="submit">
 			<span class="buttonwrapper">
                 <a href="#" class="bluebutton" wicket:id="submit"><span><wicket:message key="label.submit">[[label]]</wicket:message></span></a>
             </span>
 		</div>
 	  </form>	
 	</div>
+	
 	<div id="playerDiv">
         <div id="ytapiplayer">You need Flash player 8+ and JavaScript enabled to view this video.</div>
     </div>

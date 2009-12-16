@@ -49,7 +49,7 @@ public class Animator implements Serializable{
 	}
 	
 	public String debug(){
-		return "console.log("+inspect()+");";
+		return "console.log("+id+".inspect());";
 	}
 	
 	private String renderTemplate(){

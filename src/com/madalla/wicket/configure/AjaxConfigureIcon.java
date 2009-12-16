@@ -20,10 +20,16 @@ public class AjaxConfigureIcon extends WebMarkupContainer{
 	public static final HeaderContributor SCRIPT_UTILS = JavascriptPackageResource.getHeaderContribution(
 			new CompressedResourceReference(AjaxConfigureIcon.class, "resourcelink.js"));
 	
+	public AjaxConfigureIcon(String id, final Component configureArea, final int size){
+		this(id, null, configureArea, size);
+	}
 
 	public AjaxConfigureIcon(String id, final Component displayArea, final Component configureArea, final int size) {
 		super(id);
-		displayArea.setOutputMarkupId(true);
+		if (displayArea != null) {
+			displayArea.setOutputMarkupId(true);
+		}
+		
 		add(Css.CSS_ICON);
 		add(SCRIPT_UTILS);
 		
@@ -32,14 +38,16 @@ public class AjaxConfigureIcon extends WebMarkupContainer{
 
 			@Override
 			protected void addAnimatorSubjects(Animator animator) {
-				animator.addSubject(new DiscreteSubject(displayArea.getMarkupId(),"display", "", "none", 0.05));
+				if (displayArea != null) {
+					animator.addSubject(new DiscreteSubject(displayArea.getMarkupId(),"display", "", "none", 0.05));
+				}
 				animator.addSubject(new DiscreteSubject(configureArea.getMarkupId(), "display", "none","", 0.1));
 				animator.addSubject(new NumericSubject(configureArea.getMarkupId(), "height", 1, size,"em"));				
 			}
 
 			@Override
 			protected String onEventAnimatorActions(Animator animator) {
-				return animator.toggle();
+				return animator.debug() + animator.toggle();
 			}
 
 			@Override
