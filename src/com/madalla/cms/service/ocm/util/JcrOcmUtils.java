@@ -40,7 +40,7 @@ public class JcrOcmUtils {
     
     public static ObjectContentManager getObjectContentManager(Session session){
 
-//TODO remove code 
+//TODO remove code ???  Do we need to setup ocm node type in new Repository ???
 //    	try {
 //			JcrOcmUtils.setupOcmNodeTypes(session);
 //		} catch (RepositoryException e) {
@@ -74,12 +74,6 @@ public class JcrOcmUtils {
 		return new DefaultAtomicTypeConverterProvider(convertors);
     }
     
-    
-    private static void setupOcmNodeTypes(Session session) throws RepositoryException{
-    	createNamespace(session);
-    	registerOcmNodeType(session);
-    }
-	
 	/**
     * Create the ocm namespace
     * 

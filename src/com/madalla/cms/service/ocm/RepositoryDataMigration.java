@@ -5,7 +5,6 @@ import java.util.Iterator;
 
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
-import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
@@ -27,7 +26,7 @@ public class RepositoryDataMigration {
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
 				
-				Node appNode = RepositoryInfo.getApplicationNode(session);
+				//Node appNode = RepositoryInfo.getApplicationNode(session);
 
 				//convert node to OCM 
 				try {

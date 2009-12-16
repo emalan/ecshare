@@ -17,7 +17,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -74,12 +73,21 @@ public class AlbumPanel extends CmsPanel {
         	
         	if (images.isEmpty()){
         		ResourceReference emptyImage = new ResourceReference(this.getClass(), "images.png");
-        		list.add(createImageWrapper(album).add(new Image("id", emptyImage )));
-        		list.add(new Label("imageLabel",getString("label.empty")));
+        		list.add(createImageWrapper(album).add(new Image("id", emptyImage ){
+					private static final long serialVersionUID = 1L;
+
+					@Override
+        			protected void onComponentTag(ComponentTag tag) {
+        				super.onComponentTag(tag);
+        				tag.put("height", album.getHeight());
+        				tag.put("width", album.getWidth());
+        				tag.put("title", getString("label.image.empty"));
+        			}
+					
+        		}));
         	} else {
         		final ImageData imageData = images.get(0);
         		list.add(createImage(album, imageData));
-        		list.add(new Label("imageLabel", imageData.getTitle()));
         	}
         	
         } else {
@@ -107,7 +115,6 @@ public class AlbumPanel extends CmsPanel {
 					} else {
 						log.warn("Could not get Image from ImageData." + imageData);
 					}
-					item.add(new Label("imageLabel", imageData.getTitle()));
 
 				}
 
@@ -160,12 +167,12 @@ public class AlbumPanel extends CmsPanel {
 				super.onComponentTag(tag);
 				tag.put("height", album.getHeight());
 				tag.put("width", album.getWidth());
+				tag.put("title", imageData.getTitle());
 			}
 
 		};
 
-		if (StringUtils.isEmpty(imageData.getUrl())) {
-			// TODO create a link to URL
+		if (StringUtils.isNotEmpty(imageData.getUrl())) {
 			image.add(new AjaxEventBehavior("onclick") {
 				private static final long serialVersionUID = 1L;
 
@@ -176,6 +183,7 @@ public class AlbumPanel extends CmsPanel {
 			});
 		}
 		imageWrapper.add(image);
+		
 		return imageWrapper;
 	}
 	
