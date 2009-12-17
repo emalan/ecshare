@@ -14,9 +14,13 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.StringHeaderContributor;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -25,11 +29,9 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import com.madalla.bo.SiteData;
 import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.PageMetaLangData;
-import com.madalla.cms.bo.impl.ocm.Site;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.util.security.SecureCredentials;
@@ -44,7 +46,11 @@ import com.madalla.webapp.images.exhibit.ExhibitPanel;
 import com.madalla.webapp.login.LoginPanel;
 import com.madalla.webapp.pages.SecureLoginPage;
 import com.madalla.webapp.pages.UserLoginPage;
+import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.webapp.security.IAuthenticator;
+import com.madalla.wicket.animation.base.Animator;
+import com.madalla.wicket.animation.base.DiscreteSubject;
+import com.madalla.wicket.animation.base.NumericSubject;
 /**
  * Base class for Application Pages that supplies Content and other functionality.
  * <p>
@@ -65,7 +71,7 @@ public abstract class CmsPage extends WebPage {
 	private static final String META_NAME = "<meta name=\"{0}\" content=\"{1}\"/>";
 	private static final String META_HTTP = "<meta http-equiv=\"{0}\" content=\"{1}\"/>";
 		
-	public abstract class LoginLink extends AjaxFallbackLink<Object> {
+	public abstract class LoginLink extends AjaxFallbackLink<Object> implements IHeaderContributor {
 		private static final long serialVersionUID = 858485459938698866L;
 
 		final CmsSession session ;
@@ -115,8 +121,8 @@ public abstract class CmsPage extends WebPage {
 		if (hasPopupLogin()) {
 			setupPopupLogin();
 		} else {
-			// dummy label that will end up hidden on page
-			add(new Label("signInPanel"));
+			add(new Label("signInPanel")); //hidden
+			add(new Label("closeLogin"));
 		}
 
 		if (hasLoginLink()) {
@@ -130,18 +136,6 @@ public abstract class CmsPage extends WebPage {
 	}
 	
 	private void processPageMetaInformation(PageMetaLangData pageInfo){
-		//TODO remove the following block
-		if (isHomePage()) {
-			SiteData siteData = getRepositoryService().getSiteData();
-			if(StringUtils.isNotEmpty(siteData.getMetaKeywords())){
-				if (StringUtils.isEmpty(pageInfo.getKeywords())){
-					pageInfo.setKeywords(siteData.getMetaKeywords());
-					getRepositoryService().saveDataObject(pageInfo);
-				}
-				((Site) siteData).setMetaKeywords("");
-			}
-		}
-		//remove to here
 		
 		add(new StringHeaderContributor(MessageFormat.format(META_HTTP, "lang", pageInfo.getLang())));
 		
@@ -162,19 +156,45 @@ public abstract class CmsPage extends WebPage {
 	}
 	
 	private void setupPopupLogin(){
+		
+		add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.ANIMATOR));
+		
+		//Animator to open and close login popup
+		final Animator animator = new Animator(700)
+			.addSubject(new NumericSubject("loginPopup","opacity", 0.0, 1.0))
+			.addSubject(new DiscreteSubject("loginPopup", "display", "none","", 0.1));
+		
 		CmsSession session = (CmsSession) getSession();
 		add(new LoginLink("logon", session){
 			private static final long serialVersionUID = 1L;
 
+			
 			@Override
 			protected void onClickAction(AjaxRequestTarget target) {
-				target.appendJavascript("var elm = wicketGet('loginPopup'); wicketShow(elm); elm.focus();");
+				target.appendJavascript(animator.toggle());
 			}
 
 			@Override
 			protected void onComponentTag(ComponentTag tag) {
 				tag.put("rel", "nofollow");
 				super.onComponentTag(tag);
+			}
+
+			public void renderHead(IHeaderResponse response) {
+				animator.setMarkupId(getMarkupId());
+				response.renderJavascriptReference(JavascriptResources.ANIMATOR);
+				response.renderOnDomReadyJavascript(animator.render());
+			}
+			
+			
+		});
+		
+		add(new AjaxLink<String>("closeLogin"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				target.appendJavascript(animator.toggle());
 				
 			}
 			
@@ -239,6 +259,10 @@ public abstract class CmsPage extends WebPage {
 			@Override
 			protected void onClickAction(AjaxRequestTarget target) {
 				setResponsePage(new UserLoginPage());
+			}
+
+			public void renderHead(IHeaderResponse response) {
+				// no contribution, Sorry!
 			}
 			
 		});

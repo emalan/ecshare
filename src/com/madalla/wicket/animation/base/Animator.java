@@ -48,7 +48,9 @@ public class Animator implements Serializable{
 		return id + ".inspect();";
 	}
 	
-	public String debug(){
+	//console.log() only works in Firefox browser 
+	@SuppressWarnings("unused")
+	private String debug(){
 		return "console.log("+id+".inspect());";
 	}
 	

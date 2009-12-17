@@ -41,13 +41,14 @@ public class AjaxConfigureIcon extends WebMarkupContainer{
 				if (displayArea != null) {
 					animator.addSubject(new DiscreteSubject(displayArea.getMarkupId(),"display", "", "none", 0.05));
 				}
-				animator.addSubject(new DiscreteSubject(configureArea.getMarkupId(), "display", "none","", 0.1));
-				animator.addSubject(new NumericSubject(configureArea.getMarkupId(), "height", 1, size,"em"));				
+				animator.addSubject(new DiscreteSubject(configureArea.getMarkupId(), "display", "none","", 0.1))
+					.addSubject(new NumericSubject(configureArea.getMarkupId(),"opacity", 0.0, 1.0))
+					.addSubject(new NumericSubject(configureArea.getMarkupId(), "height", 1, size,"em"));				
 			}
 
 			@Override
 			protected String onEventAnimatorActions(Animator animator) {
-				return animator.debug() + animator.toggle();
+				return animator.toggle();
 			}
 
 			@Override

@@ -9,7 +9,7 @@
     <div class='popup' id="loginPopup" style='display:none;'>
         <div style='overflow: auto; width: 100%'>
             <div class='popupLinks' style='float: right; padding: 0.2em; padding-right: 1em;'>
-                <a href="#" onclick="wicketHide('loginPopup');" style='color:blue'>close</a>
+                <a wicket:id="closeLogin" href="#" onclick="wicketHide('loginPopup');" style='color:blue'>close</a>
             </div>
             <div class='popupTitle' style='padding: 0.2em; padding-left: 1em; margin-right: 4em;'>
                  <wicket:message key="label.login.popup">[label]</wicket:message>

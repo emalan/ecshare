@@ -39,7 +39,7 @@ public class AnimationOpenSlide extends AbstractAnimationEventBehavior {
 
 	@Override
 	protected String onEventAnimatorActions(Animator animator) {
-		return animator.debug() + animator.toggle();
+		return animator.toggle();
 	}
 
 }
