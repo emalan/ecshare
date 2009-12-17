@@ -21,6 +21,7 @@
     <property name="repositoryAdminService" ref="repositoryAdminService"/>
     <property name="emailSender" ref="emailSender"/>
     <property name="buildInformation" ref="buildInformation"></property>
+    <property name="configType" value="${wicket.configuration}"></property>
 </bean>
 
 </beans>

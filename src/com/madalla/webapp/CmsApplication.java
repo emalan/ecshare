@@ -40,12 +40,13 @@ import com.madalla.wicket.I18NBookmarkablePageRequestTargetUrlCodingStrategy;
  */
 public abstract class CmsApplication extends WebApplication implements IDataServiceProvider, IRepositoryAdminServiceProvider, IEmailServiceProvider {
 
-	private final static Log log = LogFactory.getLog(CmsApplication.class);
+	protected final static Log log = LogFactory.getLog(CmsApplication.class);
 
     private IRepositoryAdminService repositoryAdminService;
     private IEmailSender emailSender;
     private IDataService dataService;
     private BuildInformation buildInformation;
+    private String configType;
     
     protected void init() {
     	//initialization checks
@@ -126,6 +127,18 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
         getSecuritySettings().setAuthorizationStrategy(authorizationStrategy);
     }
     
+    /* (non-Javadoc)
+     * @see org.apache.wicket.protocol.http.WebApplication#getConfigurationType()
+     */
+    @Override
+	public String getConfigurationType() {
+    	if (configType == null){
+    		return super.getConfigurationType();
+    	} else {
+    		return configType;
+    	}
+	}
+    
     @Override
     protected IRequestCycleProcessor newRequestCycleProcessor()
     {
@@ -162,6 +175,10 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
 
 	public void setBuildInformation(BuildInformation buildInformation) {
 		this.buildInformation = buildInformation;
+	}
+
+	public void setConfigType(String configType) {
+		this.configType = configType;
 	}
 
 }
