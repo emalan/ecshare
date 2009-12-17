@@ -62,12 +62,15 @@ public class PageMetaPanel extends CmsPanel{
 		add(new Label("pageName", pageData.getName()));
 		
 		// Base Lang
-		PageMetaLangData pageMetaLang = getRepositoryService().getPageMetaLang(Locale.ENGLISH, pageData);
+		PageMetaLangData pageMetaLang = getRepositoryService().getPageMetaLang(SiteLanguage.BASE_LOCALE, pageData);
+		log.debug("Constructing base lang Form.  " + pageMetaLang );
 		final Form<PageMetaLangData> homeBaseForm = new MetaDataForm("homeBaseForm", new CompoundPropertyModel<PageMetaLangData>(pageMetaLang));
 	    add(homeBaseForm);
 	    
 		// Other Langs
-		final CompoundPropertyModel<PageMetaLangData> homeOtherModel = new CompoundPropertyModel<PageMetaLangData>(getRepositoryService().getPageMetaLang(defaultLocale, pageData));
+	    log.debug("Constructing other langs. default=" + defaultLocale );
+		final CompoundPropertyModel<PageMetaLangData> homeOtherModel = new CompoundPropertyModel<PageMetaLangData>(getRepositoryService().getPageMetaLang(defaultLocale, pageData, false));
+		log.debug("Constructing other lang Form. Model: " + homeOtherModel );
 	    final Form<PageMetaLangData> homeOtherForm = new MetaDataForm("homeOtherForm", homeOtherModel);
 		add(homeOtherForm);
 		    
@@ -83,7 +86,7 @@ public class PageMetaPanel extends CmsPanel{
 			protected void onUpdate(AjaxRequestTarget target) {
 				SiteLanguage language = select.getModelObject();
 				log.debug("language select changed - " + language);
-				PageMetaLangData newMetaLang = getRepositoryService().getPageMetaLang(language.locale, pageData);
+				PageMetaLangData newMetaLang = getRepositoryService().getPageMetaLang(language.locale, pageData, false);
 				log.debug("new Meta Lang. " + newMetaLang);
 				homeOtherModel.setObject(newMetaLang);
 				target.addComponent(homeOtherForm);

@@ -324,8 +324,17 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     }
     
     public PageMetaLangData getPageMetaLang(final Locale locale, final PageData page) {
+    	return getPageMetaLang(locale, page, true);
+    }
+    
+    public PageMetaLangData getPageMetaLang(final Locale locale, final PageData page, boolean display) {
     	final PageMetaData pageMeta = getPageMeta(page);
-    	SiteLanguage siteLang = getSiteLanguage(locale);
+    	SiteLanguage siteLang;
+    	if (display) {
+    		siteLang = getSiteLanguage(locale);
+    	} else {
+    		siteLang = SiteLanguage.getLanguage(locale.getLanguage());
+    	}
     	return (PageMetaLangData) repositoryTemplate.getOcmObject(RepositoryType.PAGEMETALANG, pageMeta, siteLang.getDisplayName(), new RepositoryTemplateCallback(){
 
             @Override
@@ -395,7 +404,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     	if (supported){
     		language = SiteLanguage.getLanguage(locale.getLanguage());
     	} else {
-    		language = SiteLanguage.getLanguage("en");
+    		language = SiteLanguage.getLanguage(SiteLanguage.BASE_LOCALE.getLanguage());
     	}
     	return language;
     }

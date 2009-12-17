@@ -68,6 +68,8 @@ public interface IDataService {
 	PageData getPage(final String name);
 	
 	PageMetaLangData getPageMetaLang(final Locale locale, final PageData page);
+	
+	PageMetaLangData getPageMetaLang(final Locale locale, final PageData page, boolean display);
 
 	String getContentText(final ContentData parent, Locale locale); 
 

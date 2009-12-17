@@ -59,7 +59,7 @@ public class TranslatePanel extends CmsPanel {
         log.debug("init - content" + content);
         
         //Base Language display
-        String baseContent = getRepositoryService().getContentText(content, Locale.ENGLISH);
+        String baseContent = getRepositoryService().getContentText(content, SiteLanguage.BASE_LOCALE);
         Label baseContentLabel = new Label("baseContent", new Model<String>(baseContent));
         baseContentLabel.setOutputMarkupId(true);
         baseContentLabel.setEscapeModelStrings(false);

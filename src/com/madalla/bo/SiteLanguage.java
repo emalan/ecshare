@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * @author emalan
+ * Define Languages that the application supports
+ * 
+ * @author Eugene Malan
  *
  */
 public enum SiteLanguage{
@@ -32,12 +34,22 @@ public enum SiteLanguage{
 		this.defaultInlineContent = defaultInlineContent;
 	}
 	
+	/**
+	 * @return display the locale name in Base Language 
+	 */
 	public String getDisplayName(){
-		return locale.getDisplayName(Locale.ENGLISH);
+		return locale.getDisplayName(BASE_LOCALE);
 	}
 	
 	public String getLanguageCode(){
 		return locale.getLanguage();
+	}
+	
+	// TODO use this as Base Language in application - so if we need to change it we can do it here
+	public static final Locale BASE_LOCALE = Locale.ENGLISH;
+	
+	public static SiteLanguage getBaseLanguage(){
+		return getLanguage(BASE_LOCALE.getLanguage());
 	}
 	
 	public static SiteLanguage getLanguage(String code){
@@ -67,7 +79,7 @@ public enum SiteLanguage{
 	public static List<SiteLanguage> getLanguages(){
 		List<SiteLanguage> ret = new ArrayList<SiteLanguage>(SiteLanguage.values().length -1);
 		for (int i = 0; i < SiteLanguage.values().length; i++) {
-			if (!SiteLanguage.values()[i].equals(SiteLanguage.ENGLISH)){
+			if (!SiteLanguage.values()[i].equals(getBaseLanguage())){
 				ret.add(SiteLanguage.values()[i]);
 			}
 		}

@@ -57,6 +57,7 @@ public class PageAdminPanel extends CmsPanel {
 		return rt;
 	}
 	
+	//get the first configured language
 	private Locale getDefaultLocale(List<SiteLanguage> locales){
 		List<SiteLanguage> configuredLangs = getRepositoryService().getSiteData().getLocaleList();
 		if (configuredLangs.isEmpty()){
