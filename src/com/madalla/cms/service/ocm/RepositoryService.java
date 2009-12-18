@@ -469,6 +469,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     	data.setSenderName(name);
     	data.setSenderEmailAddress(email);
     	data.setSenderComment(comment);
+    	log.debug("creating email entry in data. " + data);
     	emailEntryDao.create(data);
     }
         

@@ -62,7 +62,7 @@ public abstract class AjaxValidationForm<T> extends Form<T>  {
 
 					public Object formComponent(IFormVisitorParticipant component) {
 						FormComponent<?> formComponent = (FormComponent<?>) component;
-						log.debug("onSubmit.formVisiter - " + formComponent);
+						log.debug("onSubmit.formVisiter - " + formComponent + formComponent.getModelObject());
 						
 						if (formComponent.isValid() && formComponent.getOutputMarkupId()){
 							target.addComponent(formComponent);
@@ -71,7 +71,7 @@ public abstract class AjaxValidationForm<T> extends Form<T>  {
 					}
 					
 				});
-				
+
 				target.addComponent(formFeedback);
 				AjaxValidationForm.this.onSubmit(target);
 				

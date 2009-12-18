@@ -12,17 +12,18 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
-import org.apache.wicket.util.value.ValueMap;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.joda.time.DateTime;
+import org.springframework.dao.DataAccessException;
 
 import com.madalla.bo.SiteData;
 import com.madalla.email.IEmailSender;
@@ -43,14 +44,15 @@ public class EmailFormPanel extends CmsPanel {
     private Integer first = CaptchaUtils.randomInteger(1, 20);
     private Integer second = CaptchaUtils.randomInteger(1, 12);
     
-    private final ValueMap properties = new ValueMap();
-    String subject ;
-
+    private final String subject ;
     
     public class EmailForm extends AjaxValidationForm<Object> {
         private static final long serialVersionUID = -2684823497770522924L;
         
-        //private final CaptchaImageResource captchaImageResource;
+        private String name ;
+        private String email ;
+        private String comment ;
+      //private final CaptchaImageResource captchaImageResource;
         
         public EmailForm(String id) {
             super(id);
@@ -59,23 +61,24 @@ public class EmailFormPanel extends CmsPanel {
     
             FeedbackPanel nameFeedback = new FeedbackPanel("nameFeedback");
             add(nameFeedback);
-            add(new AjaxValidationRequiredTextField("name",new PropertyModel<String>(properties,"name"), nameFeedback));
+            add(new AjaxValidationRequiredTextField("name",new PropertyModel<String>(this, "name"), nameFeedback));
             
             FeedbackPanel emailFeedback = new FeedbackPanel("emailFeedback");
             add(emailFeedback);
-            TextField<String> email = new AjaxValidationRequiredTextField("email",new PropertyModel<String>(properties,"email"), emailFeedback);
-            email.add(EmailAddressValidator.getInstance());
-            add(email);
+            TextField<String> emailField = new AjaxValidationRequiredTextField("email", new PropertyModel<String>(this, "email"),emailFeedback);
+            emailField.add(EmailAddressValidator.getInstance());
+            add(emailField);
             
-            TextArea<String> comment = new TextArea<String>("comment",new PropertyModel<String>(properties,"comment"));
-            add(comment);
+            TextArea<String> commentField = new TextArea<String>("comment",new PropertyModel<String>(this,"comment"));
+            add(commentField);
             
             add(new Label("captchaString", first+" + "+second+" = "));
             
             FeedbackPanel passwordFeedback = new FeedbackPanel("passwordFeedback");
             add(passwordFeedback);
-            RequiredTextField<String> password = new AjaxValidationRequiredTextField("password", new PropertyModel<String>(properties, "password"), passwordFeedback);
-            password.add(new AbstractValidator<String>(){
+            RequiredTextField<String> passwordField = new AjaxValidationRequiredTextField("password", new Model<String>(""), passwordFeedback);
+            add(passwordField);
+            passwordField.add(new AbstractValidator<String>(){
 				private static final long serialVersionUID = 2572094991300700912L;
 				protected void onValidate(IValidatable<String> validatable) {
                     String password = validatable.getValue();
@@ -100,7 +103,6 @@ public class EmailFormPanel extends CmsPanel {
 //                    captchaImageResource.invalidate();
                 }
             });
-            add(password);
             
         }
 
@@ -108,7 +110,7 @@ public class EmailFormPanel extends CmsPanel {
 		protected void onSubmit() {
 			if (!isSubmitted()) {
 				log.debug("onSumit called- sending email.");
-				if (sendEmail(properties.getString("name"),properties.getString("email"),properties.getString("comment"))) {
+				if (sendEmail(name,email,comment)) {
 					info("Email sent successfully");
 				} else {
 					error("Failed to send email!");
@@ -118,13 +120,39 @@ public class EmailFormPanel extends CmsPanel {
 
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
-			if (sendEmail(properties.getString("name"),properties.getString("email"),properties.getString("comment"))){
+			
+			if (sendEmail(name, email, comment)){
                 info(getString("message.success"));
             } else {
                 error(getString("message.fail"));
             }
 			
 		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getEmail() {
+			return email;
+		}
+
+		public void setEmail(String email) {
+			this.email = email;
+		}
+
+		public String getComment() {
+			return comment;
+		}
+
+		public void setComment(String comment) {
+			this.comment = comment;
+		}
+
     }
     
     public EmailFormPanel(final String id, final String subject) {
@@ -151,8 +179,12 @@ public class EmailFormPanel extends CmsPanel {
     }
     
     private void logEmail(String name, String email, String comment){
-    	IDataService service = ((IDataServiceProvider)getApplication()).getRepositoryService();
-    	service.createEmailEntry(new DateTime(), name, email, comment);
+    	try {
+    		IDataService service = ((IDataServiceProvider)getApplication()).getRepositoryService();
+    		service.createEmailEntry(new DateTime(), name, email, comment);
+    	} catch (DataAccessException e){
+    		log.error("Data Access Exception while logging email.", e);
+    	}
     }
     
     private String getEmailBody(String from, String email, String comment){
