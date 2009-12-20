@@ -311,7 +311,9 @@ public class EditableResourceLink extends Panel {
 
 			@Override
 			public String getObject() {
-				if (StringUtils.isEmpty(data.getName())) {
+				if (data.getHideLink() != null && data.getHideLink()){
+					return getString("label.hidden");
+				} else if (StringUtils.isEmpty(data.getName())) {
 					return getString("label.notconfigured");
                 } else {
                 	return data.getName();
@@ -351,6 +353,13 @@ public class EditableResourceLink extends Panel {
             	
             	super.onBeforeRender();
             }
+
+			@Override
+			protected boolean callOnBeforeRenderIfNotVisible() {
+				return true;
+			}
+            
+            
 
         };
         
