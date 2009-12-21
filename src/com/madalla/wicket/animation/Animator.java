@@ -1,4 +1,4 @@
-package com.madalla.wicket.animation.base;
+package com.madalla.wicket.animation;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,7 +7,8 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 
-public class Animator implements Serializable{
+
+public class Animator implements IAnimator, Serializable{
 	private static final long serialVersionUID = 1L;
 
 	private final static int DURATION = 400;
@@ -17,7 +18,7 @@ public class Animator implements Serializable{
 	private final int duration;
 	private String id;
 
-	private final List<AbstractSubject> subjects = new ArrayList<AbstractSubject>();
+	private final List<AnimatorSubject> subjectList = new ArrayList<AnimatorSubject>();
 	
 	public Animator(int duration){
 	    this.duration = duration;
@@ -27,8 +28,21 @@ public class Animator implements Serializable{
 		this(DURATION);
 	}
 
-	public Animator addSubject(final AbstractSubject subject){
-		subjects.add(subject);
+	public Animator addSubject(final AnimatorSubject subject){
+		if (subject == null)
+		{
+			throw new AnimationRuntimeException("Argument may not be null");
+		}
+		subjectList.add(subject);
+		return this;
+	}
+	
+	public Animator addSubjects(final List<AnimatorSubject> subjects){
+		if (subjects == null)
+		{
+			throw new AnimationRuntimeException("Argument may not be null");
+		}
+		subjectList.addAll(subjects);
 		return this;
 	}
 	
@@ -56,7 +70,7 @@ public class Animator implements Serializable{
 	
 	private String renderTemplate(){
 		StringBuilder sb = new StringBuilder(TEMPLATE.replace("${duration}", Integer.toString(duration)));
-		for (AbstractSubject s: subjects){
+		for (AnimatorSubject s: subjectList){
 			sb.append(s.toString());
 		}
 		

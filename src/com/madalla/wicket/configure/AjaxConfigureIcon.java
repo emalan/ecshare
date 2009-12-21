@@ -10,9 +10,9 @@ import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 
 import com.madalla.webapp.css.Css;
 import com.madalla.wicket.animation.AbstractAnimationEventBehavior;
-import com.madalla.wicket.animation.base.Animator;
-import com.madalla.wicket.animation.base.DiscreteSubject;
-import com.madalla.wicket.animation.base.NumericSubject;
+import com.madalla.wicket.animation.Animator;
+import com.madalla.wicket.animation.AnimatorSubject;
+import com.madalla.wicket.animation.IAnimator;
 
 public class AjaxConfigureIcon extends WebMarkupContainer{
 	private static final long serialVersionUID = 1L;
@@ -35,15 +35,14 @@ public class AjaxConfigureIcon extends WebMarkupContainer{
 		
 		add(new AbstractAnimationEventBehavior("onclick", 1000){
 			private static final long serialVersionUID = 1L;
-
+			
 			@Override
-			protected void addAnimatorSubjects(Animator animator) {
+			protected void addAnimatorSubjects(IAnimator animator) {
 				if (displayArea != null) {
-					animator.addSubject(new DiscreteSubject(displayArea.getMarkupId(),"display", "", "none", 0.05));
-				}
-				animator.addSubject(new DiscreteSubject(configureArea.getMarkupId(), "display", "none","", 0.1))
-					.addSubject(new NumericSubject(configureArea.getMarkupId(),"opacity", 0.0, 1.0))
-					.addSubject(new NumericSubject(configureArea.getMarkupId(), "height", 1, size,"em"));				
+					animator.addSubject(AnimatorSubject.discrete(displayArea.getMarkupId(),"display", "", "none", 0.05));
+				} 
+				animator.addSubjects(AnimatorSubject.slideOpen(configureArea.getMarkupId(),size));
+				
 			}
 
 			@Override
@@ -76,8 +75,8 @@ public class AjaxConfigureIcon extends WebMarkupContainer{
 				};
 			}
 
-			
 		});
+		
 		setOutputMarkupId(true);
 	}
 	

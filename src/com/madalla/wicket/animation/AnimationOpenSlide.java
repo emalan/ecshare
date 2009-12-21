@@ -2,9 +2,6 @@ package com.madalla.wicket.animation;
 
 import org.apache.wicket.Component;
 
-import com.madalla.wicket.animation.base.Animator;
-import com.madalla.wicket.animation.base.DiscreteSubject;
-import com.madalla.wicket.animation.base.NumericSubject;
 
 
 /**
@@ -31,10 +28,9 @@ public class AnimationOpenSlide extends AbstractAnimationEventBehavior {
 	}
 	
 	@Override
-	protected void addAnimatorSubjects(Animator animator) {
-		animator.addSubject(new DiscreteSubject(subject.getMarkupId(), "display", "none","", 0.1));
-		animator.addSubject(new NumericSubject(subject.getMarkupId(), "height", 1, height, unit));
-		
+	protected void addAnimatorSubjects(IAnimator animator) {
+		animator.addSubject(AnimatorSubject.discrete(subject.getMarkupId(), "display", "none","", 0.1));
+		animator.addSubject(AnimatorSubject.numeric(subject.getMarkupId(), "height", 1, height, unit));
 	}
 
 	@Override

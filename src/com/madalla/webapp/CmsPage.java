@@ -48,9 +48,8 @@ import com.madalla.webapp.pages.SecureLoginPage;
 import com.madalla.webapp.pages.UserLoginPage;
 import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.webapp.security.IAuthenticator;
-import com.madalla.wicket.animation.base.Animator;
-import com.madalla.wicket.animation.base.DiscreteSubject;
-import com.madalla.wicket.animation.base.NumericSubject;
+import com.madalla.wicket.animation.Animator;
+import com.madalla.wicket.animation.AnimatorSubject;
 /**
  * Base class for Application Pages that supplies Content and other functionality.
  * <p>
@@ -161,8 +160,8 @@ public abstract class CmsPage extends WebPage {
 		
 		//Animator to open and close login popup
 		final Animator animator = new Animator(700)
-			.addSubject(new NumericSubject("loginPopup","opacity", 0.0, 1.0))
-			.addSubject(new DiscreteSubject("loginPopup", "display", "none","", 0.1));
+			.addSubject(AnimatorSubject.numeric("loginPopup","opacity", 0.0, 1.0))
+			.addSubject(AnimatorSubject.discrete("loginPopup", "display", "none","", 0.1));
 		
 		CmsSession session = (CmsSession) getSession();
 		add(new LoginLink("logon", session){

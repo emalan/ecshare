@@ -1,4 +1,4 @@
-package com.madalla.wicket.animation.base;
+package com.madalla.wicket.animation;
 
 public class AnimationRuntimeException extends RuntimeException {
 	public AnimationRuntimeException(String message) {

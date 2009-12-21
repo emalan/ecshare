@@ -10,8 +10,8 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
 import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
-import com.madalla.wicket.animation.base.Animator;
-import com.madalla.wicket.animation.base.NumericSubject;
+import com.madalla.wicket.animation.Animator;
+import com.madalla.wicket.animation.AnimatorSubject;
 
 /**
  * Self Updating Validation Behaviour.
@@ -94,8 +94,7 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		animator.setMarkupId(getComponent().getMarkupId());
-		animator.addSubject(new NumericSubject(getComponent().getMarkupId(),"opacity", 1, 0.25));
-
+		animator.addSubject(AnimatorSubject.numeric(getComponent().getMarkupId(),"opacity", 1, 0.25));
 		response.renderJavascriptReference(Scriptaculous.PROTOTYPE);
 		response.renderJavascriptReference(JavascriptResources.ANIMATOR);
 		response.renderOnDomReadyJavascript(animator.render());

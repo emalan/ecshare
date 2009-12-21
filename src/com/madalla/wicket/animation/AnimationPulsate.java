@@ -1,8 +1,5 @@
 package com.madalla.wicket.animation;
 
-import com.madalla.wicket.animation.base.Animator;
-import com.madalla.wicket.animation.base.NumericSubject;
-
 public class AnimationPulsate extends AbstractAnimationEventBehavior{
 	private static final long serialVersionUID = 1L;
 
@@ -11,8 +8,8 @@ public class AnimationPulsate extends AbstractAnimationEventBehavior{
 	}
 
 	@Override
-	protected void addAnimatorSubjects(Animator animator) {
-		animator.addSubject(new NumericSubject(getComponent().getMarkupId(),"opacity", 1, 0.25));		
+	protected void addAnimatorSubjects(IAnimator animator) {
+		animator.addSubject(AnimatorSubject.numeric(getComponent().getMarkupId(),"opacity", 1, 0.25));
 	}
 
 	@Override

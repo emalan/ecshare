@@ -5,7 +5,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 
 import com.madalla.webapp.scripts.JavascriptResources;
-import com.madalla.wicket.animation.base.Animator;
 
 public abstract class AbstractAnimationEventBehavior extends AjaxEventBehavior  {
 	private static final long serialVersionUID = 1L;
@@ -42,6 +41,7 @@ public abstract class AbstractAnimationEventBehavior extends AjaxEventBehavior  
 	}
 	
 	abstract protected String onEventAnimatorActions(final Animator animator);
-	abstract protected void addAnimatorSubjects(final Animator animator) ;
+	
+	abstract protected void addAnimatorSubjects(IAnimator animator);
 
 }
