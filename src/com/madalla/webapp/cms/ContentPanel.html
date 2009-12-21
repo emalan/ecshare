@@ -1,9 +1,10 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
+    /*
         .contentBlock {width:100%; border-style : none;}
         .contentEdit {width:100%; border-style : dashed; border-color : blue; border-width: thin;}
-        
+      */  
 
         .editLink {
                     position: absolute;
@@ -21,7 +22,7 @@
 <body>
     <wicket:panel>
     	<div class="nested" wicket:id="nested"></div>
-        <div class="contentBlock" wicket:id="contentBlock">
+        <div class="contentBlock textBlock" wicket:id="contentBlock">
 	        <a class="editLink" wicket:id="contentLink"> </a>
             <div class="contentBody" wicket:id="contentBody">Contact - paragraph 1 - content block...</div>
         </div>

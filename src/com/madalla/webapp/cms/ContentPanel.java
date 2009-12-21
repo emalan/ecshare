@@ -60,9 +60,9 @@ public class ContentPanel extends CmsPanel {
             public String getObject() {
                 String cssClass;
                 if (((IContentAdmin)getSession()).isLoggedIn()) {
-                    cssClass = "contentEdit";
+                    cssClass = "contentEdit textBlock edit";
                 } else {
-                    cssClass = "contentBlock";
+                    cssClass = "contentBlock textBlock";
                 }
                 return cssClass;
             }
