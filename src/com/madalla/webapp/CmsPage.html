@@ -8,10 +8,10 @@
         
     <div class='popup' id="loginPopup" style='display:none;'>
         <div style='overflow: auto; width: 100%'>
-            <div class='popupLinks' style='float: right; padding: 0.2em; padding-right: 1em;'>
-                <a wicket:id="closeLogin" href="#" onclick="wicketHide('loginPopup');" style='color:blue'>close</a>
+            <div wicket:id="closeLogin" class='popupLinks' style='float: right;'>
+                <span>close</span>
             </div>
-            <div class='popupTitle' style='padding: 0.2em; padding-left: 1em; margin-right: 4em;'>
+            <div class='popupTitle primary' style='padding: 0.2em; padding-left: 1em;'>
                  <wicket:message key="label.login.popup">[label]</wicket:message>
             </div>
             <div id="signInPanel" class='popupContent' style='width: 100%; background-color: white; overflow: auto; white-space: nowrap'>

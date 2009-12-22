@@ -9,7 +9,7 @@ import com.madalla.webapp.cms.IContentAdmin;
  * 
  * Usage - implement onClick() method like such...
  * <pre>
- * 	@Override
+ * 	@ Override
  *	public void onClick() {
  *		getPage().replace(new TranslatePanel(ID, nodeName, contentId));
  *	}

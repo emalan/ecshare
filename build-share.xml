@@ -108,7 +108,6 @@
 			   <include name="cglib*.jar"></include>
 			</lib>
 		</war>
-		<copy file="${build.dir}/${final.name}.war" tofile="${build.dir}/ROOT.war"/>
 	</target>
 	
 	<target name="deploy-war">

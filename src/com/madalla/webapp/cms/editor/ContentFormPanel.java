@@ -26,7 +26,7 @@ public class ContentFormPanel extends CmsPanel{
 
         public ContentForm(final String name, IModel<ContentEntryData> model) {
             super(name, model);
-            add(new TextArea<String>("text", new IModel<String>(){
+            TextArea<String> text = new TextArea<String>("text", new IModel<String>(){
 				private static final long serialVersionUID = 1L;
 
 				public String getObject() {
@@ -42,7 +42,8 @@ public class ContentFormPanel extends CmsPanel{
 					
 				}
             	
-            }));
+            });
+            add(text);
         }
     }
     
@@ -96,7 +97,13 @@ public class ContentFormPanel extends CmsPanel{
 
 			@Override
 			protected String getOnClickScript() {
-				return "tinyMCE.get('text').save();";
+
+				String message = getString("message.editor.fail");
+				String text = "<ul class=\"feedbackPanel\"><li class=\"feedbackPanelINFO\"><span class=\"feedbackPanelWARN\">"+message+"</span></li></ul>";
+				String error = "Wicket.$('"+feedback.getMarkupId()+"').innerHTML = '"+text+"';";
+				
+				return "var ed = tinyMCE.get('text'); if (ed.isDirty()){ ed.save(); ed.isNotDirty = 1;} else {"+error+"return false;}";
+
 			}
             
         };

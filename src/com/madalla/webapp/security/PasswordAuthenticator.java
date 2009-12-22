@@ -10,9 +10,19 @@ import org.joda.time.DateTime;
 
 import com.madalla.bo.security.UserData;
 
+/**
+ * Authenticator with user simple login tracker.
+ * 
+ * Will keep track of failed logins and add a delay after a number of false ones
+ * 
+ * @author Eugene Malan
+ *
+ */
 public class PasswordAuthenticator implements IPasswordAuthenticator{
 	
-	private static final int DELAY = 10;
+	private static final int REFRESH = 10; //refresh user after so many minutes
+	private static final int ATTEMPTS = 5; //after so many attempts implement deplay
+	private static final int DELAY = 10000; // delay in milliseconds
 	
 	private Log log = LogFactory.getLog(this.getClass());
 	
@@ -38,7 +48,7 @@ public class PasswordAuthenticator implements IPasswordAuthenticator{
 	public void addUser(String username, UserData userData){
 		if (!users.containsKey(username) || 
 				(users.containsKey(username) && 
-						users.get(username).dateTimeAdded.plusMinutes(DELAY).isBefore(new DateTime()))){
+						users.get(username).dateTimeAdded.plusMinutes(REFRESH).isBefore(new DateTime()))){
 			users.put(userData.getName(), new UserLoginTracker(userData));
 		}
 	}
@@ -57,9 +67,9 @@ public class PasswordAuthenticator implements IPasswordAuthenticator{
 				return true;
 			} else {
 				user.count++;
-				if(user.count > 5){
+				if(user.count > ATTEMPTS){
 					try {
-						Thread.sleep(10000); //delay 10 sec
+						Thread.sleep(DELAY); //delay 10 sec
 					} catch (InterruptedException e){
 						
 					}
