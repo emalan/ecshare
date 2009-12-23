@@ -1,56 +1,53 @@
 package com.madalla.webapp.user;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.value.ValueMap;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.AbstractValidator;
 
 import com.madalla.bo.security.UserData;
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
-import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.panel.CmsPanel;
+import com.madalla.webapp.security.IPasswordAuthenticator;
 import com.madalla.wicket.form.AjaxValidationSubmitButton;
 import com.madalla.wicket.form.ValidationStyleBehaviour;
 
 public class UserPasswordPanel extends CmsPanel{
 
 	private static final long serialVersionUID = 3207705274626512033L;
+	private static final Log log = LogFactory.getLog(UserPasswordPanel.class);
 
-	private ICredentialHolder credentials = new SecureCredentials();
-	//private UserData user;
+	private final ICredentialHolder credentials = new SecureCredentials();
 	
     public class PasswordForm extends Form<UserData> {
         
         private static final long serialVersionUID = 9033980585192727266L;
-        private final ValueMap properties = new ValueMap();
         
-        public PasswordForm(String id, IModel<UserData> model, String pwd) {
-            super(id, model);
+        public PasswordForm(String id, boolean validated) {
+            super(id);
             
-            properties.add("existingPassword", pwd);
-            
-            PasswordTextField existingPassword = new PasswordTextField("existingPassword", 
-            		new PropertyModel<String>(properties,"existingPassword"));
+            PasswordTextField existingPassword = new PasswordTextField("existingPassword",new Model<String>(""));
             existingPassword.add(new ValidationStyleBehaviour());
             existingPassword.setOutputMarkupId(true);
-            if (StringUtils.isNotEmpty(pwd)) {
+            if (validated) {
             	existingPassword.setEnabled(false);
-            	existingPassword.info("Prepopulated with existing password.");
             }
             add(existingPassword);
             existingPassword.add(new AbstractValidator<String>(){
@@ -58,10 +55,10 @@ public class UserPasswordPanel extends CmsPanel{
 
                 @Override
                 protected void onValidate(IValidatable<String> validatable) {
-                    String value = SecurityUtils.encrypt((String)validatable.getValue());
-                    if (!getModelObject().getPassword().equals(value)){
-                        error(validatable,"error.existing");
-                    }
+                	log.debug("Validating existing password.");
+                	if (!validateUser(new SecureCredentials().setUsername(credentials.getUsername()).setPassword(validatable.getValue()))) {
+                		error(validatable,"error.existing");
+                	}
                 }
                 
             });
@@ -74,8 +71,7 @@ public class UserPasswordPanel extends CmsPanel{
             add(newPassword);
             add(new ComponentFeedbackPanel("newFeedback", newPassword).setOutputMarkupId(true));
             
-            TextField<String> confirmPassword = new PasswordTextField("confirmPassword", 
-            		new PropertyModel<String>(properties,"confirmPassword"));
+            TextField<String> confirmPassword = new PasswordTextField("confirmPassword", new Model<String>(""));
             confirmPassword.add(new ValidationStyleBehaviour());
             confirmPassword.setOutputMarkupId(true);
             add(confirmPassword);
@@ -85,24 +81,39 @@ public class UserPasswordPanel extends CmsPanel{
             add(new EqualPasswordInputValidator(newPassword, confirmPassword));
             
         }
+        
+
 
     }
-    public UserPasswordPanel(String id, String userName){
-    	this(id,userName,"");
+    public UserPasswordPanel(final String id, final String username){
+    	this(id, new SecureCredentials().setUsername(username));
     }
     
-    public UserPasswordPanel(String id, String userName, String existingPassword){
+    public UserPasswordPanel(final String id, final ICredentialHolder existing){
     	super(id);
-    	
-		add(Css.CSS_FORM);
+    	//this.existing = credentials;
+    	this.credentials.setUsername(existing.getUsername());
 
-		UserData user = getRepositoryService().getUser(userName);
-        
-    	//****************
-        //Password Section
-        
-        //Form
-        Form<UserData> form = new PasswordForm("passwordForm", new Model<UserData>(user), existingPassword);
+		add(Css.CSS_FORM);
+		
+		final boolean validated = validateUser(existing);
+		
+		add(new Label("processing"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+				if (validated){
+					replaceComponentTagBody(markupStream, openTag, getString("info.validated"));
+				} else {
+					replaceComponentTagBody(markupStream, openTag, getString("info.existing"));
+				}
+			}
+			
+		});
+
+
+        Form<UserData> form = new PasswordForm("passwordForm", validated);
         add(form);
         
         FeedbackPanel formFeedback = new ComponentFeedbackPanel("formFeedback", form);
@@ -114,7 +125,7 @@ public class UserPasswordPanel extends CmsPanel{
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
-				UserData user = (UserData) form.getModelObject();
+				UserData user = getRepositoryService().getUser(credentials.getUsername());
 				if (((CmsSession)getSession()).login(user.getName(), user.getPassword())){
 	                user.setPassword(credentials.getPassword());
 	                saveData(user);
@@ -129,6 +140,18 @@ public class UserPasswordPanel extends CmsPanel{
         
         form.add(new AttributeModifier("onSubmit", true, new Model<String>("document.getElementById('" + passwordSubmit.getMarkupId() + "').onclick();return false;")));
         
+    }
+    
+    @Override
+	protected void onBeforeRender() {
+		add(new Label("heading", getString("heading.password", new Model<ICredentialHolder>(credentials))));
+		
+		super.onBeforeRender();
+	}
+
+	private boolean validateUser(ICredentialHolder credentials){
+    	IPasswordAuthenticator authenticator = getRepositoryService().getPasswordAuthenticator(credentials.getUsername());
+    	return authenticator.authenticate(credentials.getUsername(), credentials.getPassword());
     }
 
 }

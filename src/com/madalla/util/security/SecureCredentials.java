@@ -1,6 +1,7 @@
 package com.madalla.util.security;
 
 
+
 public class SecureCredentials implements ICredentialHolder{
 
 	private static final long serialVersionUID = 461686839345197059L;
@@ -16,9 +17,10 @@ public class SecureCredentials implements ICredentialHolder{
 		return username;
 	}
 
-	public void setPassword(String password) {
+	public ICredentialHolder setPassword(String password) {
 		//encrypt password
 		this.password = SecurityUtils.encrypt(password);
+		return this;
 	}
 
 	public ICredentialHolder setUsername(String username) {

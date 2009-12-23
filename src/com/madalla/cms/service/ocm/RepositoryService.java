@@ -35,6 +35,7 @@ import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.PageMetaData;
 import com.madalla.bo.page.PageMetaLangData;
 import com.madalla.bo.page.ResourceData;
+import com.madalla.bo.security.IUserValidate;
 import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
 import com.madalla.bo.video.VideoPlayerData;
@@ -547,8 +548,26 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 		return list;
 	}
 	
-	public IPasswordAuthenticator getPasswordAuthenticator(String username){
-		UserData userData = getUser(username);
+	public IPasswordAuthenticator getPasswordAuthenticator(final String username){
+		if (username == null){
+			throw new WicketRuntimeException("Username Argument may not be null");
+		}
+		IUserValidate userData;
+		if (isUserExists(username)){
+			userData = getUser(username);
+		} else {
+			userData = new IUserValidate(){
+
+				public String getName() {
+					return username;
+				}
+
+				public String getPassword() {
+					return null;
+				}
+				
+			};
+		}
 		authenticator.addUser(username, userData);
 		return authenticator;
 		

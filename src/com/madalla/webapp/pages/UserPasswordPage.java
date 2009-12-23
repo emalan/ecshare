@@ -2,6 +2,7 @@ package com.madalla.webapp.pages;
 
 import org.apache.wicket.PageParameters;
 
+import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.user.UserPasswordPanel;
 
@@ -20,7 +21,8 @@ public class UserPasswordPage extends AdminPage {
 	}
 	
 	private void init(String username, String pwd){
-		add(new UserPasswordPanel("adminPanel",username, pwd));
+
+		add(new UserPasswordPanel("adminPanel", new SecureCredentials().setUsername(username).setPassword(pwd)));
 	}
 
 }

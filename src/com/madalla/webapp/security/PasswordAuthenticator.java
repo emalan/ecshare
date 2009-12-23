@@ -8,7 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
 
-import com.madalla.bo.security.UserData;
+import com.madalla.bo.security.IUserValidate;
 
 /**
  * Authenticator with user simple login tracker.
@@ -29,23 +29,23 @@ public class PasswordAuthenticator implements IPasswordAuthenticator{
 	private Map<String, UserLoginTracker> users = new HashMap<String, UserLoginTracker>();
 	
 	/**
-	 * @author emalan
+	 * @author Eugene Malan
 	 *
 	 */
-	private class UserLoginTracker{
+	public class UserLoginTracker{
 
 		private int count = 0;
-		private DateTime dateTimeAdded;
-		private UserData userData;
+		private final DateTime dateTimeAdded;
+		private final IUserValidate userData;
 		
-		public UserLoginTracker(UserData userData){
+		public UserLoginTracker(IUserValidate userData){
 			this.userData = userData;
 			this.dateTimeAdded = new DateTime();
 		}
 
 	}
 
-	public void addUser(String username, UserData userData){
+	public void addUser(String username, IUserValidate userData){
 		if (!users.containsKey(username) || 
 				(users.containsKey(username) && 
 						users.get(username).dateTimeAdded.plusMinutes(REFRESH).isBefore(new DateTime()))){
@@ -53,19 +53,24 @@ public class PasswordAuthenticator implements IPasswordAuthenticator{
 		}
 	}
 	
+	public UserLoginTracker getUserLoginTracker(String user){
+		return users.get(user);
+	}
+	
 	public boolean authenticate(String user, char[] password) {
 		return authenticate(user, new String(password));
 	}
 
 	public boolean authenticate(String username, String password) {
-		log.debug("authenticate - username="+username);
+		log.debug("password authenticate - username="+username);
 		UserLoginTracker user = users.get(username);
 		if (user.userData != null){
-			log.debug("authenticate - user found.");
-			//validate password
+			log.debug("tracking user :" + username);
+			//validate password - non-existant user with Null password will always fail
 			if (StringUtils.isNotEmpty(user.userData.getPassword()) && user.userData.getPassword().equals(password)){
 				return true;
 			} else {
+				log.debug("password authenticate failed :" + username);
 				user.count++;
 				if(user.count > ATTEMPTS){
 					try {
