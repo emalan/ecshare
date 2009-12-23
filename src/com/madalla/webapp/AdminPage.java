@@ -1,7 +1,6 @@
 package com.madalla.webapp;
 
 import org.apache.wicket.Page;
-import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -95,7 +94,7 @@ public abstract class AdminPage extends WebPage {
 			@Override
 			public void onClick() {
 				if (returnPage == null) {
-					throw new WicketRuntimeException("Return Page has not been set.");
+					returnPage = getApplication().getHomePage();
 				}
 				setResponsePage(getSession().getPageFactory().newPage(returnPage));
 			}
