@@ -443,7 +443,7 @@ public class UserAdminPanel extends CmsPanel {
 			SiteData accessSite = service.getSite(siteData.getName());
 			message = message + getString("message.site", new Model<SiteData>(accessSite));
 		}
-		message = message + getString("message.closing");
+		message = message + getString("message.note") + getString("message.closing");
     	log.debug("formatMessage - " + message);
 		return message;
 	}
