@@ -9,7 +9,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 
 import com.madalla.webapp.css.Css;
-import com.madalla.wicket.animation.AbstractAnimationEventBehavior;
+import com.madalla.wicket.animation.AnimationEventBehavior;
 import com.madalla.wicket.animation.Animator;
 import com.madalla.wicket.animation.AnimatorSubject;
 import com.madalla.wicket.animation.IAnimator;
@@ -33,7 +33,7 @@ public class AjaxConfigureIcon extends WebMarkupContainer{
 		add(Css.CSS_ICON);
 		add(SCRIPT_UTILS);
 		
-		add(new AbstractAnimationEventBehavior("onclick", 1000){
+		add(new AnimationEventBehavior("onclick", 1000){
 			private static final long serialVersionUID = 1L;
 			
 			@Override

@@ -8,7 +8,7 @@ import org.apache.wicket.Component;
  * @author Eugene Malan
  *
  */
-public class AnimationOpenSlide extends AbstractAnimationEventBehavior {
+public class AnimationOpenSlide extends AnimationEventBehavior {
 	private static final long serialVersionUID = 1L;
 	
 	private final Component subject;

@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.basic.Label;
@@ -44,10 +45,12 @@ public class UserPasswordPanel extends CmsPanel{
             super(id);
             
             PasswordTextField existingPassword = new PasswordTextField("existingPassword",new Model<String>(""));
+            
             existingPassword.add(new ValidationStyleBehaviour());
             existingPassword.setOutputMarkupId(true);
             if (validated) {
             	existingPassword.setEnabled(false);
+            	existingPassword.add(new AttributeAppender("class", new Model<String>("disabledField"), " "));
             }
             add(existingPassword);
             existingPassword.add(new AbstractValidator<String>(){
@@ -62,6 +65,7 @@ public class UserPasswordPanel extends CmsPanel{
                 }
                 
             });
+
             add(new ComponentFeedbackPanel("existingFeedback", existingPassword).setOutputMarkupId(true));
             
             PasswordTextField newPassword = new PasswordTextField("newPassword",

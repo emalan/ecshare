@@ -6,17 +6,17 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 
 import com.madalla.webapp.scripts.JavascriptResources;
 
-public abstract class AbstractAnimationEventBehavior extends AjaxEventBehavior  {
+public abstract class AnimationEventBehavior extends AjaxEventBehavior  {
 	private static final long serialVersionUID = 1L;
 
 	private final Animator animator;
 	
-	public AbstractAnimationEventBehavior(String event, int duration) {
+	public AnimationEventBehavior(String event, int duration) {
 		super(event);
 		animator = new Animator(duration);
 	}
 	
-	public AbstractAnimationEventBehavior(String event) {
+	public AnimationEventBehavior(String event) {
 		super(event);
 		animator = new Animator();
 	}

@@ -1,6 +1,6 @@
 package com.madalla.wicket.animation;
 
-public class AnimationPulsate extends AbstractAnimationEventBehavior{
+public class AnimationPulsate extends AnimationEventBehavior{
 	private static final long serialVersionUID = 1L;
 
 	public AnimationPulsate(String event) {

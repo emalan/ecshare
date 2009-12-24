@@ -74,6 +74,12 @@ public abstract class AnimatorSubject implements Serializable{
 		return list;
 	}
 	
+	public static final List<AnimatorSubject> fade(String subject, int opacitytarget){
+		List<AnimatorSubject> list = new ArrayList<AnimatorSubject>(1);
+		list.add(AnimatorSubject.numeric(subject, "opacity", 1.0, opacitytarget));
+		return list;
+	}
+	
 	protected final String subject;
 	protected final String property;
 	
