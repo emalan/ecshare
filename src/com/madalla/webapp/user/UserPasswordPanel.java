@@ -50,7 +50,6 @@ public class UserPasswordPanel extends CmsPanel{
             existingPassword.setOutputMarkupId(true);
             if (validated) {
             	existingPassword.setEnabled(false);
-            	existingPassword.add(new AttributeAppender("class", new Model<String>("disabledField"), " "));
             }
             add(existingPassword);
             existingPassword.add(new AbstractValidator<String>(){
@@ -119,6 +118,11 @@ public class UserPasswordPanel extends CmsPanel{
 
         Form<UserData> form = new PasswordForm("passwordForm", validated);
         add(form);
+        
+        //if validated set class of form to validated
+        if (validated) {
+        	form.add(new AttributeAppender("class", new Model<String>("validated"), " "));
+        }
         
         FeedbackPanel formFeedback = new ComponentFeedbackPanel("formFeedback", form);
         form.add(formFeedback);
