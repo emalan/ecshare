@@ -17,6 +17,7 @@ import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.AbstractValidator;
 
@@ -101,6 +102,7 @@ public class UserPasswordPanel extends CmsPanel{
 		add(Css.CSS_FORM);
 		
 		final boolean validated = validateUser(existing);
+		final UserLoginTracker tracker = getUserLoginInfo(existing);
 		
 		add(new Label("processing"){
 			private static final long serialVersionUID = 1L;
@@ -110,22 +112,15 @@ public class UserPasswordPanel extends CmsPanel{
 				if (validated){
 					replaceComponentTagBody(markupStream, openTag, getString("info.validated"));
 				} else {
-					UserLoginTracker tracker = getUserLoginInfo(existing);
 					replaceComponentTagBody(markupStream, openTag, getString("info.existing", new Model<UserLoginTracker>(tracker)));
 				}
 			}
 			
 		});
 		
-		add(new Label("loginCount"){
+		final Label loginCount = new Label("loginCount", new StringResourceModel("info.logincount", this, new Model<UserLoginTracker>(tracker))){
 			private static final long serialVersionUID = 1L;
 			
-			@Override
-			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-				UserLoginTracker tracker = getUserLoginInfo(existing);
-				replaceComponentTagBody(markupStream, openTag, getString("info.logincount", new Model<UserLoginTracker>(tracker)));
-			}
-
 			@Override
 			protected void onBeforeRender() {
 				setVisibilityAllowed(true);
@@ -135,8 +130,9 @@ public class UserPasswordPanel extends CmsPanel{
 				super.onBeforeRender();
 			}
 			
-			
-		});
+		};
+		loginCount.setOutputMarkupId(true);
+		add(loginCount);
 
 
         Form<UserData> form = new PasswordForm("passwordForm", validated);
@@ -163,7 +159,16 @@ public class UserPasswordPanel extends CmsPanel{
 	                info(getString("message.success"));
 	                setResponsePage(getApplication().getHomePage());
 				}			
+				target.addComponent(loginCount);
 			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				target.addComponent(loginCount);
+				super.onError(target, form);
+			}
+			
+			
         	
         };
         

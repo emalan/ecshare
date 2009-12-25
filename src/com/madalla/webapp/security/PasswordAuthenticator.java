@@ -19,7 +19,8 @@ import com.madalla.bo.security.IUserValidate;
  * @author Eugene Malan
  *
  */
-public class PasswordAuthenticator implements IPasswordAuthenticator{
+public class PasswordAuthenticator implements IPasswordAuthenticator, Serializable{
+	private static final long serialVersionUID = 5844968243319652152L;
 	
 	private static final int REFRESH = 10; //refresh user after so many minutes
 	private static final int ATTEMPTS = 5; //after so many attempts implement deplay
@@ -36,7 +37,7 @@ public class PasswordAuthenticator implements IPasswordAuthenticator{
 	public class UserLoginTracker implements Serializable{
 		private static final long serialVersionUID = 1L;
 
-		public int count = 0;
+		public int count = -1; //start with a freebie
 		private final DateTime dateTimeAdded;
 		private final IUserValidate userData;
 		
@@ -63,6 +64,9 @@ public class PasswordAuthenticator implements IPasswordAuthenticator{
 		return authenticate(user, new String(password));
 	}
 
+	/* (non-Javad
+	 * @see com.madalla.webapp.security.IPasswordAuthenticator#authenticate(java.lang.String, java.lang.String)
+	 */
 	public boolean authenticate(String username, String password) {
 		log.debug("password authenticate - username="+username);
 		UserLoginTracker user = users.get(username);
@@ -70,13 +74,14 @@ public class PasswordAuthenticator implements IPasswordAuthenticator{
 			log.debug("tracking user :" + username);
 			//validate password - non-existant user with Null password will always fail
 			if (StringUtils.isNotEmpty(user.userData.getPassword()) && user.userData.getPassword().equals(password)){
+				user.count = -1; //reset on successful login
 				return true;
 			} else {
 				log.debug("password authenticate failed :" + username + ",count:"+user.count);
 				user.count++;
 				if(user.count > ATTEMPTS){
 					try {
-						Thread.sleep(DELAY); //delay 10 sec
+						Thread.sleep(DELAY);
 					} catch (InterruptedException e){
 						
 					}
