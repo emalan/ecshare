@@ -1,5 +1,6 @@
 package com.madalla.webapp.security;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,9 +33,10 @@ public class PasswordAuthenticator implements IPasswordAuthenticator{
 	 * @author Eugene Malan
 	 *
 	 */
-	public class UserLoginTracker{
+	public class UserLoginTracker implements Serializable{
+		private static final long serialVersionUID = 1L;
 
-		private int count = 0;
+		public int count = 0;
 		private final DateTime dateTimeAdded;
 		private final IUserValidate userData;
 		
@@ -70,7 +72,7 @@ public class PasswordAuthenticator implements IPasswordAuthenticator{
 			if (StringUtils.isNotEmpty(user.userData.getPassword()) && user.userData.getPassword().equals(password)){
 				return true;
 			} else {
-				log.debug("password authenticate failed :" + username);
+				log.debug("password authenticate failed :" + username + ",count:"+user.count);
 				user.count++;
 				if(user.count > ATTEMPTS){
 					try {

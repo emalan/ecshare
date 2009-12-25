@@ -27,6 +27,7 @@ import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.security.IPasswordAuthenticator;
+import com.madalla.webapp.security.PasswordAuthenticator.UserLoginTracker;
 import com.madalla.wicket.form.AjaxValidationSubmitButton;
 import com.madalla.wicket.form.ValidationStyleBehaviour;
 
@@ -109,9 +110,31 @@ public class UserPasswordPanel extends CmsPanel{
 				if (validated){
 					replaceComponentTagBody(markupStream, openTag, getString("info.validated"));
 				} else {
-					replaceComponentTagBody(markupStream, openTag, getString("info.existing"));
+					UserLoginTracker tracker = getUserLoginInfo(existing);
+					replaceComponentTagBody(markupStream, openTag, getString("info.existing", new Model<UserLoginTracker>(tracker)));
 				}
 			}
+			
+		});
+		
+		add(new Label("loginCount"){
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+				UserLoginTracker tracker = getUserLoginInfo(existing);
+				replaceComponentTagBody(markupStream, openTag, getString("info.logincount", new Model<UserLoginTracker>(tracker)));
+			}
+
+			@Override
+			protected void onBeforeRender() {
+				setVisibilityAllowed(true);
+				if (validated){
+					setVisible(false);
+				}
+				super.onBeforeRender();
+			}
+			
 			
 		});
 
@@ -152,14 +175,20 @@ public class UserPasswordPanel extends CmsPanel{
     
     @Override
 	protected void onBeforeRender() {
-		add(new Label("heading", getString("heading.password", new Model<ICredentialHolder>(credentials))));
-		
+    	addOrReplace(new Label("heading", getString("heading.password", new Model<ICredentialHolder>(credentials))));
 		super.onBeforeRender();
 	}
+    
+    private UserLoginTracker getUserLoginInfo(ICredentialHolder credentials){
+    	return getAuthenticator(credentials.getUsername()).getUserLoginTracker(credentials.getUsername());
+    }
 
 	private boolean validateUser(ICredentialHolder credentials){
-    	IPasswordAuthenticator authenticator = getRepositoryService().getPasswordAuthenticator(credentials.getUsername());
-    	return authenticator.authenticate(credentials.getUsername(), credentials.getPassword());
+		return getAuthenticator(credentials.getUsername()).authenticate(credentials.getUsername(), credentials.getPassword());
     }
+	
+	private IPasswordAuthenticator getAuthenticator(String username){
+		return getRepositoryService().getPasswordAuthenticator(credentials.getUsername());
+	}
 
 }
