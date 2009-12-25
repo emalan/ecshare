@@ -87,9 +87,8 @@ public class UserPasswordPanel extends CmsPanel{
             
         }
         
-
-
     }
+    
     public UserPasswordPanel(final String id, final String username){
     	this(id, new SecureCredentials().setUsername(username));
     }
@@ -101,7 +100,13 @@ public class UserPasswordPanel extends CmsPanel{
 
 		add(Css.CSS_FORM);
 		
-		final boolean validated = validateUser(existing);
+		final boolean validated;
+		if (((CmsSession)getSession()).isLoggedIn()) {
+			validated = false; 
+		} else {
+			validated = validateUser(existing);
+		}
+		
 		final UserLoginTracker tracker = getUserLoginInfo(existing);
 		
 		add(new Label("processing"){
@@ -159,7 +164,6 @@ public class UserPasswordPanel extends CmsPanel{
 	                info(getString("message.success"));
 	                setResponsePage(getApplication().getHomePage());
 				}			
-				target.addComponent(loginCount);
 			}
 
 			@Override
@@ -168,8 +172,6 @@ public class UserPasswordPanel extends CmsPanel{
 				super.onError(target, form);
 			}
 			
-			
-        	
         };
         
         form.add(passwordSubmit);

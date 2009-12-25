@@ -37,7 +37,7 @@ public class PasswordAuthenticator implements IPasswordAuthenticator, Serializab
 	public class UserLoginTracker implements Serializable{
 		private static final long serialVersionUID = 1L;
 
-		public int count = -1; //start with a freebie
+		public int count = 0;
 		private final DateTime dateTimeAdded;
 		private final IUserValidate userData;
 		
@@ -64,17 +64,17 @@ public class PasswordAuthenticator implements IPasswordAuthenticator, Serializab
 		return authenticate(user, new String(password));
 	}
 
-	/* (non-Javad
-	 * @see com.madalla.webapp.security.IPasswordAuthenticator#authenticate(java.lang.String, java.lang.String)
-	 */
 	public boolean authenticate(String username, String password) {
 		log.debug("password authenticate - username="+username);
 		UserLoginTracker user = users.get(username);
+		if (user == null){
+			throw new RuntimeException("Authenticate failed. User not being tracked - " + username);
+		}
 		if (user.userData != null){
 			log.debug("tracking user :" + username);
 			//validate password - non-existant user with Null password will always fail
 			if (StringUtils.isNotEmpty(user.userData.getPassword()) && user.userData.getPassword().equals(password)){
-				user.count = -1; //reset on successful login
+				user.count = 0; //reset on successful login
 				return true;
 			} else {
 				log.debug("password authenticate failed :" + username + ",count:"+user.count);
