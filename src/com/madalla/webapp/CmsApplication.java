@@ -16,6 +16,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.protocol.https.HttpsRequestCycleProcessor;
 import org.apache.wicket.request.IRequestCycleProcessor;
+import org.apache.wicket.settings.IExceptionSettings;
 
 import com.madalla.BuildInformation;
 import com.madalla.bo.SiteLanguage;
@@ -27,6 +28,7 @@ import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.webapp.authorization.AppAuthorizationStrategy;
 import com.madalla.webapp.authorization.PageAuthorization;
+import com.madalla.webapp.pages.AdminErrorPage;
 import com.madalla.webapp.pages.SecurePasswordPage;
 import com.madalla.webapp.pages.UserPasswordPage;
 import com.madalla.wicket.I18NBookmarkablePageRequestTargetUrlCodingStrategy;
@@ -78,6 +80,7 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
     	//getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
     	setupSecurity();
     	setupPageMounts();
+    	setupErrorHandling();
     }
     
     public void setupPageMounts(){
@@ -86,6 +89,19 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
     	}
     	mountBookmarkablePage("password", UserPasswordPage.class);
     	mountBookmarkablePage("securePassword", SecurePasswordPage.class);
+    }
+    
+    protected void setupErrorHandling(){
+    	
+    	final String configurationType = getConfigurationType();
+    	if (DEPLOYMENT.equalsIgnoreCase(configurationType))
+		{
+        	//TODO
+        	//getApplicationSettings().setPageExpiredErrorPage(MyExpiredPage.class);
+        	//getApplicationSettings().setAccessDeniedPage(MyAccessDeniedPage.class);
+        	getApplicationSettings().setInternalErrorPage(AdminErrorPage.class);
+        	getExceptionSettings().setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
+		}
     }
     
     protected void setupSecurity(){
