@@ -95,13 +95,14 @@ public class UserPasswordPanel extends CmsPanel{
     
     public UserPasswordPanel(final String id, final ICredentialHolder existing){
     	super(id);
-    	//this.existing = credentials;
+
     	this.credentials.setUsername(existing.getUsername());
 
 		add(Css.CSS_FORM);
 		
 		final boolean validated;
-		if (((CmsSession)getSession()).isLoggedIn()) {
+		final boolean loggedIn = ((CmsSession)getSession()).isLoggedIn();
+		if (loggedIn) {
 			validated = false; 
 		} else {
 			validated = validateUser(existing);
@@ -117,7 +118,11 @@ public class UserPasswordPanel extends CmsPanel{
 				if (validated){
 					replaceComponentTagBody(markupStream, openTag, getString("info.validated"));
 				} else {
-					replaceComponentTagBody(markupStream, openTag, getString("info.existing", new Model<UserLoginTracker>(tracker)));
+					if (loggedIn) { //from inside application
+						replaceComponentTagBody(markupStream, openTag, getString("info.existing", new Model<UserLoginTracker>(tracker)));
+					} else { //from URL
+						replaceComponentTagBody(markupStream, openTag, getString("info.validation.failed", new Model<UserLoginTracker>(tracker)));
+					}
 				}
 			}
 			
