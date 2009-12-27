@@ -96,7 +96,8 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
     	final String configurationType = getConfigurationType();
     	if (DEPLOYMENT.equalsIgnoreCase(configurationType))
 		{
-        	//TODO
+        	//TODO create page for access denied exceptions
+    		//TODO figure out why we get unexpected exception instead of access denied for generalAdminPage
         	//getApplicationSettings().setPageExpiredErrorPage(MyExpiredPage.class);
         	//getApplicationSettings().setAccessDeniedPage(MyAccessDeniedPage.class);
         	getApplicationSettings().setInternalErrorPage(AdminErrorPage.class);
