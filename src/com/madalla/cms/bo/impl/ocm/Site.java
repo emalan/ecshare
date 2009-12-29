@@ -17,6 +17,7 @@ public class Site extends SiteData{
 	@Field private String locales;
 	@Field private String url;
 	@Field private Boolean securityCertificate;
+	@Field private String timeZone;
 	
 	public Site(){
 		
@@ -85,6 +86,14 @@ public class Site extends SiteData{
 
 	public void setSecurityCertificate(Boolean securityCertificate) {
 		this.securityCertificate = securityCertificate;
+	}
+
+	public String getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(String timeZone) {
+		this.timeZone = timeZone;
 	}
 
 }

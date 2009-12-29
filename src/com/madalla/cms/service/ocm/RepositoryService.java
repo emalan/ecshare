@@ -17,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.WicketRuntimeException;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import com.madalla.bo.AbstractData;
 import com.madalla.bo.SiteData;
@@ -29,6 +30,7 @@ import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.IImageData;
 import com.madalla.bo.image.ImageData;
+import com.madalla.bo.log.LogData;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
@@ -61,6 +63,8 @@ import com.madalla.cms.service.ocm.template.RepositoryTemplateCallback;
 import com.madalla.cms.service.ocm.util.JcrOcmUtils;
 import com.madalla.db.dao.EmailEntry;
 import com.madalla.db.dao.EmailEntryDao;
+import com.madalla.db.dao.TransactionLog;
+import com.madalla.db.dao.TransactionLogDao;
 import com.madalla.image.ImageUtilities;
 import com.madalla.service.IDataService;
 import com.madalla.util.security.SecurityUtils;
@@ -95,6 +99,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 
     private RepositoryTemplate repositoryTemplate;
     private EmailEntryDao emailEntryDao;
+    private TransactionLogDao transactionLogDao;
     private PasswordAuthenticator authenticator;
     
     public void init(){
@@ -132,6 +137,18 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
         locales = siteData.getLocaleList();
         locales.add(SiteLanguage.ENGLISH); // english is default
     	
+    }
+    
+    public DateTimeZone getDateTimeZone(){
+    	SiteData site = getSiteData();
+    	DateTimeZone dateTimeZone;
+    	try {
+    		dateTimeZone = DateTimeZone.forID(site.getTimeZone());
+    	} catch (IllegalArgumentException e){
+    		log.warn("Time zone not correctly set for site. current value = " + site.getTimeZone());
+    		dateTimeZone = DateTimeZone.UTC;
+    	}
+    	return dateTimeZone;
     }
     
     public boolean isAdminApp(){
@@ -348,10 +365,6 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
         });
     }
     
-    public void saveContent(ContentData content){
-    	saveDataObject(content);
-    }
-    
     public ContentData getContent(final PageData page, final String contentName){
     	return (Content) repositoryTemplate.getOcmObject(RepositoryType.CONTENT, page, contentName, new RepositoryTemplateCallback(){
 
@@ -410,10 +423,6 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     	return language;
     }
     
-    public void saveContentEntry(ContentEntryData data){
-    	saveDataObject(data);
-    }
-    
     //Resources
     public ResourceData getContentResource(final PageData page, final String name){
     	Resource data = (Resource) repositoryTemplate.getOcmObject(RepositoryType.RESOURCE, page, name, new RepositoryTemplateCallback(){
@@ -464,9 +473,33 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     //*********************************
     //******  Data    *****************
     
-    public void createEmailEntry(DateTime dateTime, String name, String email, String comment){
+    private void createTransactionLog(String user, AbstractData data){
+    	TransactionLog logData = new TransactionLog();
+		logData.setUser(user);
+		logData.setType(data.getClass().getSimpleName());
+		logData.setCmsId(data.getId());
+		log.debug("creating log entry. " + logData);
+		try {
+			transactionLogDao.create(logData);
+		} catch (Exception e){
+			log.error("Exception while logging transaction.", e);
+		}
+    }
+    
+    public LogData getTransactionLog(String id){
+    	if (StringUtils.isEmpty(id)) {
+			log.error("getTransactionLog - id is required.");
+			return null;
+		}
+    	return transactionLogDao.find(id);
+    }
+    
+    public List<LogData> getTransactionLogEntries(){
+    	return transactionLogDao.fetch();
+    }
+    
+    public void createEmailEntry(String name, String email, String comment){
     	EmailEntry data = new EmailEntry();
-    	data.setDateTime(dateTime);
     	data.setSenderName(name);
     	data.setSenderEmailAddress(email);
     	data.setSenderComment(comment);
@@ -658,6 +691,11 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 
     //************************************
     // *****  Utility methods
+	
+    public void saveDataObject(AbstractData data, String user){
+    	createTransactionLog(user, data);
+    	saveDataObject(data);
+    }
     
     public void saveDataObject(AbstractData data){
     	if (ocm.objectExists(data.getId())){
@@ -690,6 +728,10 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 		this.emailEntryDao = emailEntryDao;
 	}
 
+	public void setTransactionLogDao(TransactionLogDao transactionLogDao) {
+		this.transactionLogDao = transactionLogDao;
+	}
+
 	public void setAuthenticator(PasswordAuthenticator authenticator) {
 		this.authenticator = authenticator;
 	}
@@ -697,5 +739,6 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 	public PasswordAuthenticator getAuthenticator() {
 		return authenticator;
 	}
+
 
 }

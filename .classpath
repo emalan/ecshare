@@ -36,11 +36,6 @@
 	<classpathentry kind="lib" path="ddlutils/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="ddlutils/wstx-asl-3.0.2.jar"/>
 	<classpathentry kind="lib" path="testing/easymock.jar"/>
-	<classpathentry kind="lib" path="common/joda-time-1.5.2.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://joda-time.sourceforge.net/api-release/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="wicket/wicket-contrib-scriptaculous-0.1.1.jar"/>
 	<classpathentry kind="lib" path="common/commons-beanutils-1.7.0.jar"/>
 	<classpathentry kind="lib" path="jackrabbit/jackrabbit-spi-1.5.0.jar"/>
@@ -73,5 +68,10 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="wicket/wicket-spring-1.4.1.jar"/>
 	<classpathentry kind="lib" path="common/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="common/joda-time-1.6.jar" sourcepath="/Users/emalan/devlib/joda-time-1.6/joda-time-1.6-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/Users/emalan/devlib/joda-time-1.6/joda-time-1.6-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -90,7 +90,7 @@ public class ContentFormPanel extends CmsPanel{
 				super.onSubmit(target, form);
 				
 				log.debug("Submiting populated Content object to Content service. " + form.getModelObject());
-                getRepositoryService().saveContentEntry((ContentEntryData)form.getModelObject());
+				saveData((ContentEntryData)form.getModelObject());
                 target.addComponent(feedback);
                 form.info(getString("message.success"));
 			}

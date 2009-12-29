@@ -89,10 +89,6 @@ public class CmsSession  extends WebSession implements IContentAdmin, ISessionDa
 	public ISessionDataService getRepositoryService() {
 		return repositoryService;
 	}
-	
-	public void setRepositoryService(ISessionDataService repositoryService) {
-		this.repositoryService = repositoryService;
-	}
 
 	public IFileUploadStatus getFileUploadStatus(String id) {
 		return fileUploadInfo.getFileUploadStatus(id);

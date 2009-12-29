@@ -22,7 +22,6 @@ import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
-import org.joda.time.DateTime;
 import org.springframework.dao.DataAccessException;
 
 import com.madalla.bo.SiteData;
@@ -181,7 +180,7 @@ public class EmailFormPanel extends CmsPanel {
     private void logEmail(String name, String email, String comment){
     	try {
     		IDataService service = ((IDataServiceProvider)getApplication()).getRepositoryService();
-    		service.createEmailEntry(new DateTime(), name, email, comment);
+    		service.createEmailEntry(name, email, comment);
     	} catch (DataAccessException e){
     		log.error("Data Access Exception while logging email.", e);
     	}

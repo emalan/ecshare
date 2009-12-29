@@ -45,7 +45,7 @@ public class InlineContentPanel extends CmsPanel {
 				super.onSubmit(target);
 				log.debug("onSubmit - value="+ getDefaultModel());
 	            log.debug("Submiting populated Content object to Content service.");
-	            getRepositoryService().saveContentEntry(contentEntry);
+	            saveData(contentEntry);
 	            info("Content saved to repository");
 			}
 			

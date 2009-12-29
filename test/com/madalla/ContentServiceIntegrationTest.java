@@ -89,30 +89,6 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     private final static String CONTENT_ID = "testContent";
     private final static String CONTENT_PARENT = "testParentNode";
 
-    public void testContentGetSet() throws RepositoryException{
-    	String contentId = RandomStringUtils.randomAlphabetic(5);
-    	String contentText = RandomStringUtils.randomAlphabetic(20);
-    	
-    	//test new
-    	PageData page = contentService.getPage(CONTENT_PARENT);
-    	Content content = new Content(page,contentId );
-    	String text = RandomStringUtils.randomAlphanumeric(20);
-    	content.setText(text);
-    	contentService.saveContent(content);
-    	//String testText = contentService.getContentText(page, contentId);
-    	//assertEquals(text, testText);
-    
-    	//test Update
-    	{
-    		ContentData c = contentService.getContent(page, contentId);
-    		String s = "test1";
-    		c.setText(s);
-    		contentService.saveContent(c);
-    		//String s1 = contentService.getContentText(page, contentId);
-    		//assertEquals(s, s1);
-    	}
-    }
-
     public void testImageGetSet() throws FileNotFoundException{
     	InputStream stream = this.getClass().getResourceAsStream("test1.jpg");
     	assertNotNull(stream);

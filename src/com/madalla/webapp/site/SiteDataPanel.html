@@ -11,7 +11,7 @@
             <h2><wicket:message key="heading.email">Label Contents</wicket:message></h2>
             
             <div id="emailDiv">
-            	<span wicket:id="navigator">[dataview navigator]</span>
+            	<span wicket:id="emailNavigator">[dataview navigator]</span>
 				<table cellspacing="0" class="dataview">
     				<tr>
         				<th wicket:id="orderByDateTime"><wicket:message key="label.date">Label Contents</wicket:message></th>
@@ -20,12 +20,33 @@
         				<th><wicket:message key="label.email">Label Contents</wicket:message></th>
         				<th><wicket:message key="label.comment">Label Contents</wicket:message></th>
     				</tr>
-    				<tr wicket:id="sorting">
-        				<td><span wicket:id="date">[Date]</span></td>
-        				<td><span wicket:id="time">[Time]</span></td>
-        				<td><span wicket:id="name">[Name]</span></td>
-        				<td><span wicket:id="email">[Email]</span></td>
-        				<td><span wicket:id="comment">[Comment]</span></td>
+    				<tr wicket:id="emailSorting">
+        				<td><span wicket:id="date">[Label]</span></td>
+        				<td><span wicket:id="time">[Label]</span></td>
+        				<td><span wicket:id="name">[Label]</span></td>
+        				<td><span wicket:id="email">[Label]</span></td>
+        				<td><span wicket:id="comment">[Label]</span></td>
+    				</tr>
+				</table>
+			</div>
+			
+			<h2><wicket:message key="heading.log">Label Contents</wicket:message></h2>
+			<div id="logDiv">
+            	<span wicket:id="logNavigator">[dataview navigator]</span>
+				<table cellspacing="0" class="dataview">
+    				<tr>
+        				<th wicket:id="orderByDateTime1"><wicket:message key="label.date">Label Contents</wicket:message></th>
+        				<th><wicket:message key="label.time">Label Contents</wicket:message></th>
+        				<th wicket:id="orderByUser"><wicket:message key="label.user">Label Contents</wicket:message></th>
+        				<th><wicket:message key="label.type">Label Contents</wicket:message></th>
+        				<th><wicket:message key="label.id">Label Contents</wicket:message></th>
+    				</tr>
+    				<tr wicket:id="logSorting">
+        				<td><span wicket:id="date">[Label]</span></td>
+        				<td><span wicket:id="time">[Label]</span></td>
+        				<td><span wicket:id="user">[Label]</span></td>
+        				<td><span wicket:id="type">[Label]</span></td>
+        				<td><span wicket:id="cmsId">[Label]</span></td>
     				</tr>
 				</table>
 			</div>

@@ -10,6 +10,8 @@ public interface ISessionDataService {
 	void setUser(IUser user);
 	
 	void validateTransaction(AbstractData data) throws DataAccessException;
+	
+	void logTransaction(AbstractData data);
 
 
 }

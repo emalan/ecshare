@@ -7,6 +7,7 @@ import java.util.Locale;
 import javax.swing.tree.TreeModel;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import com.madalla.bo.AbstractData;
 import com.madalla.bo.SiteData;
@@ -18,6 +19,7 @@ import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.IImageData;
 import com.madalla.bo.image.ImageData;
+import com.madalla.bo.log.LogData;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
@@ -62,6 +64,8 @@ public interface IDataService {
 	
 	void saveDataObject(AbstractData data);
 	
+	void saveDataObject(AbstractData data, String user);
+	
 	InputStream getResourceStream(String path, String property);
 
 	// Content
@@ -73,18 +77,11 @@ public interface IDataService {
 
 	String getContentText(final ContentData parent, Locale locale); 
 
-	//ContentData getContent(final PageData parent, final String name,
-	//		final Locale locale);
-
 	ContentData getContent(final PageData parent, final String name);
 
 	ContentData getContent(final String id);
 
-	void saveContent(ContentData content);
-
 	void pasteContent(String id, ContentData content);
-	
-    void saveContentEntry(ContentEntryData data);
     
     ContentEntryData getInlineContentEntry(final ContentData parent, final Locale locale);
     
@@ -130,17 +127,23 @@ public interface IDataService {
 
 	TreeModel getAlbumImagesAsTree(final AlbumData album);
 	
-	// email
-
-	void createEmailEntry(DateTime dateTime, String name, String email, String comment);
+	// site data
+		
+	void createEmailEntry(String name, String email, String comment);
 	
 	EmailEntryData getEmailEntry(String id);
 	
 	void deleteEmailEntry(EmailEntryData email);
 
 	List<EmailEntryData> getEmailEntries();
+	
+    LogData getTransactionLog(String id);
+    
+    List<LogData> getTransactionLogEntries();
 
-	//User
+	//Site and User
+	DateTimeZone getDateTimeZone();
+	
 	SiteData getSite(String name);
 	
 	SiteData getSiteData();

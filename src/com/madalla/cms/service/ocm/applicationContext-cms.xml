@@ -23,6 +23,7 @@
         <property name="template" ref="jcrTemplate"/>
         <property name="site" value="${site.code}"/>
         <property name="emailEntryDao" ref="emailEntryDao"/>
+        <property name="transactionLogDao" ref="transactionLogDao"/>
         <property name="authenticator" ref="authenticator"/>
     </bean>
 

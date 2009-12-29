@@ -1,9 +1,13 @@
 package com.madalla.webapp.site;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -12,6 +16,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.UrlValidator;
+import org.joda.time.DateTimeZone;
 
 import com.madalla.bo.SiteData;
 import com.madalla.bo.SiteLanguage;
@@ -31,7 +36,7 @@ public class SiteAdminPanel extends CmsPanel{
 
         private static final long serialVersionUID = 1L;
 
-        public SiteForm(String id, IModel<SiteData> model) {
+		public SiteForm(String id, IModel<SiteData> model) {
             super(id, model);
             
             FeedbackPanel emailFeedback = new FeedbackPanel("emailFeedback");
@@ -54,6 +59,8 @@ public class SiteAdminPanel extends CmsPanel{
             
             add(new CheckBoxMultipleChoice<SiteLanguage>("localeList", Model.ofList(SiteData.getAvailableLocales()), 
             		new ChoiceRenderer<SiteLanguage>("displayName")));
+            
+           	add(new DropDownChoice<String>("timeZone",getAvailableTimeZones()));
             
         }
 
@@ -88,6 +95,11 @@ public class SiteAdminPanel extends CmsPanel{
     
     private SiteData getSiteData(){
     	return getRepositoryService().getSiteData();
+    }
+    
+    @SuppressWarnings("unchecked")
+	private List<String> getAvailableTimeZones(){
+    	return new ArrayList(DateTimeZone.getAvailableIDs());
     }
 
     

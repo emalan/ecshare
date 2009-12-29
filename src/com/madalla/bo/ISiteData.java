@@ -6,17 +6,21 @@ public interface ISiteData {
 	
 	String getName();
 
-	String getMetaDescription();
-
+	String getTimeZone();
+	
 	String getAdminEmail();
 
-	String getMetaKeywords();
-	
 	String getUrl();
+
+	String getMetaDescription();
+
+	String getMetaKeywords();
 	
 	void setUrl(String url);
 	
 	void setAdminEmail(String adminEmail);
+	
+	void setTimeZone(String timeZone);
 	
 	String getLocales();
 	

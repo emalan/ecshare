@@ -22,8 +22,9 @@ public abstract class CmsPanel extends Panel {
 	
 	protected void saveData(AbstractData data){
 		getSessionDataService().validateTransaction(data);
+		getSessionDataService().logTransaction(data);
 		IDataService service = ((IDataServiceProvider)getApplication()).getRepositoryService();
-		service.saveDataObject(data);
+		service.saveDataObject(data, getSessionDataService().getUser().getName());
 	}
 	
 	private ISessionDataService getSessionDataService(){

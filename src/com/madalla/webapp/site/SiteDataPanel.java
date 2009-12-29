@@ -17,18 +17,22 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import com.madalla.bo.email.EmailEntryData;
+import com.madalla.bo.log.LogData;
 import com.madalla.webapp.panel.CmsPanel;
 
 public class SiteDataPanel extends CmsPanel {
 
 	private static final long serialVersionUID = 1L;
 	
+	private final DateTimeZone dateTimeZone;
+	
 	private class SortableEmailEntryProvider extends SortableDataProvider<EmailEntryData> {
 
 		private static final long serialVersionUID = 1L;
-		//private List<EmailEntryData> list;
 		
 		SortableEmailEntryProvider(){
 			setSort("id", true);
@@ -106,12 +110,93 @@ public class SiteDataPanel extends CmsPanel {
 		
 	}
 	
+	private class SortableLogProvider extends SortableDataProvider<LogData> {
+
+		private static final long serialVersionUID = 1L;
+		
+		SortableLogProvider(){
+			setSort("id", true);
+		}
+
+		public Iterator<? extends LogData> iterator(int first, int count) {
+			List<LogData> list = getRepositoryService().getTransactionLogEntries();
+			if ("user".equals(getSort().getProperty())){
+				Collections.sort(list, getUserComparator());
+			} else {
+				Collections.sort(list);
+			}
+			if (!getSort().isAscending()){
+				Collections.reverse(list);
+			}
+			return list.listIterator(first);
+		}
+		
+		private Comparator<LogData> getUserComparator(){
+			return new Comparator<LogData>(){
+
+				public int compare(LogData o1, LogData o2) {
+					return o1.getUser().compareTo(o2.getUser());
+				}
+				
+			};
+		}
+
+		public int size() {
+			return getRepositoryService().getTransactionLogEntries().size();
+		}
+
+		public IModel<LogData> model(LogData object) {
+			return new LoadableDetachableLogModel(object);
+		}
+		
+	}
+	
+	private class LoadableDetachableLogModel extends LoadableDetachableModel<LogData>{
+
+		private static final long serialVersionUID = 1L;
+		private String id;
+		
+		public LoadableDetachableLogModel(LogData entry) {
+			this(entry.getId());
+		}
+		
+		public LoadableDetachableLogModel(String id){
+			if (StringUtils.isEmpty(id)){
+				throw new IllegalArgumentException();
+			}
+			this.id = id;
+		}
+
+		@Override
+		protected LogData load() {
+			return getRepositoryService().getTransactionLog(id);
+		}
+		
+	    public int hashCode()	    {
+	        return id.hashCode();
+	    }
+
+	    public boolean equals(final Object obj) {
+	        if (obj == this) {
+	            return true;
+	        } else if (obj == null) {
+	            return false;
+	        } else if (obj instanceof LoadableDetachableLogModel) {
+	        	LoadableDetachableLogModel other = (LoadableDetachableLogModel)obj;
+	            return other.id == this.id;
+	        }
+	        return false;
+	    }
+		
+	}
+	
 	public SiteDataPanel(String id) {
 		super(id);
-		//List<EmailEntryData> list = getRepositoryService().getEmailEntries();
-		//log.debug("Retrieve email data."+ list.size() + "entries");
+		
+		dateTimeZone = getRepositoryService().getDateTimeZone();
+		
 		SortableEmailEntryProvider provider = new SortableEmailEntryProvider();
-		final DataView<EmailEntryData> dataView = new DataView<EmailEntryData>("sorting", provider){
+		final DataView<EmailEntryData> dataView = new DataView<EmailEntryData>("emailSorting", provider){
 
 			private static final long serialVersionUID = 1L;
 
@@ -119,8 +204,9 @@ public class SiteDataPanel extends CmsPanel {
 			protected void populateItem(final Item<EmailEntryData> item) {
 				//item.add(new Label("emailId", item.getId()));
 				EmailEntryData emailEntry = item.getModelObject();
-				item.add(new Label("date", emailEntry.getDateTime().toString("yyyy-MM-dd")));
-				item.add(new Label("time", emailEntry.getDateTime().toString("HH:mm:ss")));
+				DateTime dateTime = emailEntry.getDateTime().toDateTime(dateTimeZone);
+				item.add(new Label("date", dateTime.toString("yyyy-MM-dd")));
+				item.add(new Label("time", dateTime.toString("HH:mm:ss")));
 				item.add(new Label("name", emailEntry.getSenderName()));
 				item.add(new Label("email", emailEntry.getSenderEmailAddress()));
 				item.add(new Label("comment", emailEntry.getSenderComment()));
@@ -157,7 +243,58 @@ public class SiteDataPanel extends CmsPanel {
 		
 		add(dataView);
 		
-		add(new PagingNavigator("navigator", dataView));
+		add(new PagingNavigator("emailNavigator", dataView));
+		
+		//////////////////////
+		// Transaction logs
+		//////////////////////
+		SortableLogProvider logProvider = new SortableLogProvider();
+		final DataView<LogData> logView = new DataView<LogData>("logSorting", logProvider){
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(final Item<LogData> item) {
+				LogData data = item.getModelObject();
+				DateTime dateTime = data.getDateTime().toDateTime(dateTimeZone);
+				item.add(new Label("date", dateTime.toString("yyyy-MM-dd")));
+				item.add(new Label("time", dateTime.toString("HH:mm:ss")));
+				item.add(new Label("user", data.getUser()));
+				item.add(new Label("type", data.getType()));
+				item.add(new Label("cmsId", data.getCmsId()));
+				
+				item.add(new AttributeModifier("class", true, new AbstractReadOnlyModel<Object>() {
+					private static final long serialVersionUID = 1L;
+
+					public Object getObject() {
+                        return (item.getIndex() % 2 == 1) ? "even" : "odd";
+                    }
+                }));
+				
+			}
+			
+		};
+		
+		add(new OrderByBorder("orderByDateTime1", "id", logProvider, NumericCssProvider.instance) {
+			private static final long serialVersionUID = 1L;
+
+			protected void onSortChanged() {
+                logView.setCurrentPage(0);
+            }
+        });
+
+        add(new OrderByBorder("orderByUser", "user", logProvider) {
+			private static final long serialVersionUID = 1L;
+
+			protected void onSortChanged() {
+                logView.setCurrentPage(0);
+            }
+        });
+		
+		logView.setItemsPerPage(10);
+		
+		add(logView);
+		add(new PagingNavigator("logNavigator", logView));
 	}
 	
 	/**
