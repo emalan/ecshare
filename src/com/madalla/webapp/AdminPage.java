@@ -96,7 +96,8 @@ public abstract class AdminPage extends WebPage {
 				if (returnPage == null) {
 					returnPage = getApplication().getHomePage();
 				}
-				setResponsePage(getSession().getPageFactory().newPage(returnPage));
+				setResponsePage(returnPage);
+				//setResponsePage(getSession().getPageFactory().newPage(returnPage));
 			}
 			
 		});

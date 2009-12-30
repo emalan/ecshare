@@ -160,7 +160,7 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
     protected IRequestCycleProcessor newRequestCycleProcessor()
     {
     	HttpsConfig config = new HttpsConfig(80,443);
-            return new HttpsRequestCycleProcessor(config);
+        return new HttpsRequestCycleProcessor(config);
     }
     
     /**
