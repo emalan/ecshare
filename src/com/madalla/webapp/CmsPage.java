@@ -258,6 +258,7 @@ public abstract class CmsPage extends WebPage {
 			@Override
 			protected void onClickAction(AjaxRequestTarget target) {
 				setResponsePage(new UserLoginPage());
+				//redirectToInterceptPage(new UserLoginPage(getPageClass()));
 			}
 
 			public void renderHead(IHeaderResponse response) {

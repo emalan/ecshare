@@ -5,9 +5,7 @@ import com.madalla.webapp.ISecureWebPage;
 import com.madalla.webapp.user.UserProfilePanel;
 
 /**
- * General Admin Page - Common entry point to Admin Panels
- * 
- * Panels are switched using AdminPanelLink
+ * General Admin Page - General entry point to Admin Panels for applications.
  * 
  * @author Eugene Malan
  *

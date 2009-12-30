@@ -163,6 +163,12 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
             return new HttpsRequestCycleProcessor(config);
     }
     
+    /**
+     * This supplies a hook point for the admin application to create data for the pages
+     * of the application (menu name, meta information). It also makes the menu more dynamic.
+     * 
+     * @return List of Pages used in the menu OR Collections.emptyList() if no menu
+     */
     public abstract List<Class<? extends Page>> getPageMenuList();
 
     public IEmailSender getEmailSender() {

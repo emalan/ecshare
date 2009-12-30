@@ -71,13 +71,14 @@ public class PasswordAuthenticator implements IPasswordAuthenticator, Serializab
 			throw new RuntimeException("Authenticate failed. User not being tracked - " + username);
 		}
 		if (user.userData != null){
-			log.debug("tracking user :" + username);
+			log.debug("tracking user: " + username);
+			log.debug("tracked user info: " + user.userData);
 			//validate password - non-existant user with Null password will always fail
 			if (StringUtils.isNotEmpty(user.userData.getPassword()) && user.userData.getPassword().equals(password)){
 				user.count = 0; //reset on successful login
 				return true;
 			} else {
-				log.debug("password authenticate failed :" + username + ",count:"+user.count);
+				log.info("password authenticate failed :" + username + ",count:"+user.count);
 				user.count++;
 				if(user.count > ATTEMPTS){
 					try {

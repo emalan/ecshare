@@ -1,8 +1,8 @@
 /**
- * Admin Pages for Admin back end.
+ * Admin Pages for back end application.
  * <p>
- * The Pages are mostly just holders for Panels that contain the functionality.
- * Look at them as a navigation or display tool.
+ * The Pages are all the starting points for the Admin application. Navigation
+ * between Panels is done with Panel switching and the AdminPanelLink.
  * </p>
  * 
  * @author Eugene Malan
