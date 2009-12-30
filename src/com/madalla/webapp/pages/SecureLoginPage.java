@@ -1,6 +1,5 @@
 package com.madalla.webapp.pages;
 
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.protocol.https.RequireHttps;
 
 import com.madalla.webapp.AdminPage;
@@ -9,11 +8,11 @@ import com.madalla.webapp.user.UserLoginPanel;
 @RequireHttps
 public class SecureLoginPage extends AdminPage{
 	
-	public SecureLoginPage(PageParameters params) {
-		this(params,"");
+	public SecureLoginPage(){
+		this("");
 	}
 
-	public SecureLoginPage(PageParameters params, String username) {
+	public SecureLoginPage(String username) {
 		add(new UserLoginPanel("adminPanel", username));
 	}
 

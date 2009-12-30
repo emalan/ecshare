@@ -1,6 +1,5 @@
 package com.madalla.webapp;
 
-import static com.madalla.webapp.PageParams.RETURN_PAGE;
 import static com.madalla.webapp.blog.BlogParameters.BLOG_ENTRY_ID;
 
 import java.text.MessageFormat;
@@ -211,8 +210,7 @@ public abstract class CmsPage extends WebPage {
 				}
 				IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
 				if (authenticator.requiresSecureAuthentication(username)) {
-					redirectToInterceptPage(new SecureLoginPage(new PageParameters(RETURN_PAGE + "="
-							+ getPage().getClass().getName()), username));
+					redirectToInterceptPage(new SecureLoginPage(username));
 				}
 			}
 
