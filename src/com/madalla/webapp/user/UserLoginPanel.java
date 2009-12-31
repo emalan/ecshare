@@ -3,9 +3,13 @@ package com.madalla.webapp.user;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 
 import com.madalla.bo.SiteData;
 import com.madalla.util.security.ICredentialHolder;
@@ -33,8 +37,26 @@ public class UserLoginPanel extends CmsPanel {
 		super(id);
 
 		add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.ANIMATOR));
+		
+		final CmsSession session = (CmsSession) getSession();
+		
+		final Component loginInfo = new Label("loginInfo", new StringResourceModel("login.info",new Model<CmsSession>(session))){
+			private static final long serialVersionUID = 1L;
 
-		add(new LoginPanel("signInPanel", credentials){
+			@Override
+			protected void onBeforeRender() {
+				setOutputMarkupId(true);
+				setVisibilityAllowed(true);
+				if (!session.isLoggedIn()){
+					setVisible(false);
+				}
+				super.onBeforeRender();
+			}
+
+		};
+		add(loginInfo);
+
+		final Component panel = new LoginPanel("signInPanel", credentials){
             private static final long serialVersionUID = 1L;
             
            	@Override
@@ -56,8 +78,44 @@ public class UserLoginPanel extends CmsPanel {
 
             }
             
+			@Override
+			protected void onBeforeRender() {
+				setOutputMarkupId(true);
+				if (session.isLoggedIn()){
+					setEnabled(false);
+				} else {
+					setEnabled(true);
+				}
+				super.onBeforeRender();
+			}
             
-        });
+            
+        };
+        add(panel);
+		
+		add(new AjaxFallbackLink<Object>("logout"){
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				session.logout();
+				target.addComponent(this);
+				target.addComponent(loginInfo);
+				target.addComponent(panel);
+			}
+
+			@Override
+			protected void onBeforeRender() {
+				setOutputMarkupId(true);
+				setVisibilityAllowed(true);
+				if (!session.isLoggedIn()){
+					setVisible(false);
+				}
+				super.onBeforeRender();
+			}
+			
+		});
 		
 		Component emailLink = new Label("emailLink", getString("label.support"));
 		add(emailLink);
@@ -69,7 +127,7 @@ public class UserLoginPanel extends CmsPanel {
 		Component emailForm = new EmailFormPanel("supportEmail", "Support email - sent from " + site.getName());
 		emailDiv.add(emailForm);
 		
-		emailLink.add(new AnimationOpenSlide("onclick", emailDiv, 27,"em"));
+		emailLink.add(new AnimationOpenSlide("onclick", emailDiv, 28,"em"));
 
 	}
 	

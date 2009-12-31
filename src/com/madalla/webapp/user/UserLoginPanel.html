@@ -12,7 +12,6 @@
         div#navLinks a {margin-right: 10px; }
         
         form div{clear: both; float: left; width: 100%;}
-        form div label {float: left;}
         form div question {float: left;}
         form div input {float: left;}
         form div label {width:7em;}
@@ -28,10 +27,16 @@
     
     	<div class="adminSection">
  
-    	    <h2><wicket:message key="heading.login">Label Contents</wicket:message></h2>
+    	    <h2><wicket:message key="heading.login">[label]</wicket:message></h2>
+    	    <p wicket:id="loginInfo" class=info>[label]</p>
+    	    
+    	    <div id="navLinks">
+                <a wicket:id="logout" href="#"><wicket:message key="label.logout">[label]</wicket:message></a>
+            </div>
+            
             <span wicket:id="signInPanel"></span>
 
-            <div id=navLinks>
+            <div id="navLinks">
                 <a wicket:id="emailLink" href="#" ></a>
             </div>
 	        

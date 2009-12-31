@@ -32,13 +32,13 @@ import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.form.FocusOnLoadBehavior;
 
 
@@ -52,7 +52,7 @@ import com.madalla.wicket.form.FocusOnLoadBehavior;
  * @author Juergen Donnerstag
  * @author Eelco Hillenius
  */
-public abstract class LoginPanel extends Panel
+public abstract class LoginPanel extends CmsPanel
 {
 	private static final long serialVersionUID = 1L;
 	private static final Log log = LogFactory.getLog(LoginPanel.class);
