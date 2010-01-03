@@ -30,5 +30,4 @@ public class AjaxValidationRequiredTextField extends RequiredTextField<String> i
 		add(new AjaxValidationBehaviour(feedback));
 	}
 
-
 }

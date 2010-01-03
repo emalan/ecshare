@@ -62,5 +62,16 @@ public class UserDataView extends UserData {
 	public Boolean getRequiresAuth() {
 		return requiresAuth;
 	}
+	
+	public void clear(){
+		id = "";
+		name = "";
+		email = "";
+		firstName = "";
+		lastName = "";
+		password = "";
+		admin = null;
+		requiresAuth = null;
+	}
 
 }
