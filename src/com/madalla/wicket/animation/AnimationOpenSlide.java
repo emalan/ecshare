@@ -11,30 +11,30 @@ import org.apache.wicket.Component;
 public class AnimationOpenSlide extends AnimationEventBehavior {
 	private static final long serialVersionUID = 1L;
 	
-	private final Component subject;
+	private final Component target;
 	private final int height;
 	private final String unit;
 	
-	public AnimationOpenSlide(Component subject, int height, String unit) {
-		this("onclick", subject, height, unit);
+	public AnimationOpenSlide(Component target, int height, String unit) {
+		this("onclick", target, height, unit);
 	}
 
-	public AnimationOpenSlide(String event, Component subject, int height, String unit) {
+	public AnimationOpenSlide(String event, Component target, int height, String unit) {
 		super(event);
-		this.subject = subject;
+		this.target = target;
 		this.height = height;
 		this.unit = unit;
-		subject.setOutputMarkupId(true);
+		target.setOutputMarkupId(true);
 	}
 	
 	@Override
 	protected void addAnimatorSubjects(IAnimator animator) {
-		animator.addSubject(AnimatorSubject.discrete(subject.getMarkupId(), "display", "none","", 0.1));
-		animator.addSubject(AnimatorSubject.numeric(subject.getMarkupId(), "height", 1, height, unit));
+		animator.addSubject(AnimatorSubject.discrete(target.getMarkupId(), "display", "none","", 0.1));
+		animator.addSubject(AnimatorSubject.numeric(target.getMarkupId(), "height", 1, height, unit));
 	}
 
 	@Override
-	protected String onEventAnimatorActions(Animator animator) {
+	protected String onEventAnimatorActions(IAnimatorActions animator) {
 		return animator.toggle();
 	}
 

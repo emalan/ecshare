@@ -4,11 +4,47 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.markup.html.IHeaderResponse;
 
+import com.madalla.webapp.scripts.JavascriptResources;
 
-
-public class Animator implements IAnimator, Serializable{
+/**
+ * Main class - use this for more flexibility. Add to Page as HeaderContributor.
+ * 
+ * You create an Animator and then add subjects for it to work on. If you only need to activate the
+ * animation from one component, then it is better to use AnimationEventBehavior
+ * 
+ * Here we create an Animator and add a subject to fade something
+ * <pre>
+ *    final Animator fade = new Animator().addSubject(AnimatorSubject.numeric(targetMarkupId,"opacity", 1.0, 0));
+ *    add(fade)
+ *    
+ *    //the animation is typically triggered in some Ajax Event, something like this...
+ *    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+ *        fade.play();
+ *        ....
+ *    
+ * </pre>
+ * 
+ * Take a look at the AnimatorSubject class for more complex pre-done subjects, here is one that
+ * will slide open a block set it to visible and change the opacity to give a visually pleasing effect.
+ * <pre>
+ *    final Animator hideShowSomething = new Animator().addSubjects(AnimatorSubject.slideOpen(targetMarkupId, 15, "em"));
+ *    add(hideShowSomething);
+ *    
+ *    // add this code to Ajax event
+ *    hideShowSomething.toggle();
+ *    
+ * </pre>
+ * 
+ * @author Eugene Malan
+ * @see AnimationEventBehavior
+ */
+public class Animator extends AbstractBehavior implements IAnimator, IAnimatorActions, IHeaderContributor, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private final static int DURATION = 400;
@@ -26,6 +62,11 @@ public class Animator implements IAnimator, Serializable{
 	
 	public Animator() {
 		this(DURATION);
+	}
+	
+	public Animator(String id){
+		this();
+	    setUniqueId(id);
 	}
 
 	public Animator addSubject(final AnimatorSubject subject){
@@ -58,11 +99,26 @@ public class Animator implements IAnimator, Serializable{
 		return id + ".toggle();";
 	}
 	
-	public String inspect(){
+	public String seekTo(double pos){
+		return id + ".seekTo(" + pos + ");";
+	}
+	
+	public String seekToBegin() {
+		return seekTo(0.0);
+	}
+
+	public String seekToEnd() {
+		return seekTo(1.0);
+	}
+
+	/**
+	 * Useful for debugging
+	 */
+	public String javascriptInspect(){
 		return id + ".inspect();";
 	}
 	
-	//console.log() only works in Firefox browser 
+	//console.log() only works in Firefox browser with Firebug open
 	@SuppressWarnings("unused")
 	private String debug(){
 		return "console.log("+id+".inspect());";
@@ -78,9 +134,9 @@ public class Animator implements IAnimator, Serializable{
 		return sb.toString();
 	}
 	
-	public String render(){
+	private String render(){
 		if (id == null || StringUtils.isEmpty(id)){
-			throw new AnimationRuntimeException("Attempting to render animation while id is Null. " + renderTemplate());
+			setUniqueId(RandomStringUtils.randomAlphanumeric(5));
 		}
 		return renderTemplate().replace("${id}", id);
 	}
@@ -90,9 +146,19 @@ public class Animator implements IAnimator, Serializable{
 		return renderTemplate();
 	}
 
-	public void setMarkupId(String id) {
+	/**
+	 * The id will be generated if not set, but this helps identify the animation.
+	 * 
+	 * @param id
+	 */
+	public void setUniqueId(String id) {
 		this.id = PREFIX + id;
 		
+	}
+
+	public void renderHead(IHeaderResponse response) {
+		response.renderJavascriptReference(JavascriptResources.ANIMATOR);
+		response.renderOnDomReadyJavascript(this.render());
 	}
 	
 }

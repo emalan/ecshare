@@ -179,9 +179,8 @@ public abstract class CmsPage extends WebPage {
 			}
 
 			public void renderHead(IHeaderResponse response) {
-				animator.setMarkupId(getMarkupId());
-				response.renderJavascriptReference(JavascriptResources.ANIMATOR);
-				response.renderOnDomReadyJavascript(animator.render());
+				animator.setUniqueId(getMarkupId());
+				animator.renderHead(response);
 			}
 			
 			

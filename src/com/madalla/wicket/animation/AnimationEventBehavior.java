@@ -4,8 +4,12 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 
-import com.madalla.webapp.scripts.JavascriptResources;
-
+/**
+ * Use to attach animation to component event.
+ * 
+ * @author Eugene Malan
+ *
+ */
 public abstract class AnimationEventBehavior extends AjaxEventBehavior  {
 	private static final long serialVersionUID = 1L;
 
@@ -29,10 +33,9 @@ public abstract class AnimationEventBehavior extends AjaxEventBehavior  {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		animator.setMarkupId(getComponent().getMarkupId());
+		animator.setUniqueId(getComponent().getMarkupId());
 		addAnimatorSubjects(animator);
-		response.renderJavascriptReference(JavascriptResources.ANIMATOR);
-		response.renderOnDomReadyJavascript(animator.render());
+		animator.renderHead(response);
 	}
 	
 	@Override
@@ -40,7 +43,7 @@ public abstract class AnimationEventBehavior extends AjaxEventBehavior  {
 		target.appendJavascript(onEventAnimatorActions(animator));	
 	}
 	
-	abstract protected String onEventAnimatorActions(final Animator animator);
+	abstract protected String onEventAnimatorActions(IAnimatorActions animator);
 	
 	abstract protected void addAnimatorSubjects(IAnimator animator);
 

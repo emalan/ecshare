@@ -14,16 +14,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AbstractAutoCompleteTextRenderer;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.IAutoCompleteRenderer;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
@@ -59,6 +60,8 @@ import com.madalla.webapp.css.Css;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.webapp.security.IAuthenticator;
+import com.madalla.wicket.animation.Animator;
+import com.madalla.wicket.animation.AnimatorSubject;
 import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 import com.madalla.wicket.form.AjaxValidationSubmitButton;
 import com.madalla.wicket.form.ValidationStyleBehaviour;
@@ -110,10 +113,13 @@ public class UserAdminPanel extends CmsPanel {
 		///////////////////////
 
 		final UserDataView userView = new UserDataView();
+		
+		final MarkupContainer profileBlock = new WebMarkupContainer("profileBlock");
+		profileBlock.setOutputMarkupId(true);
+		add(profileBlock);
 		final Form<UserDataView> profileForm = new ProfileForm("profileForm", new CompoundPropertyModel<UserDataView>(userView));
 		profileForm.setOutputMarkupId(true);
-		profileForm.add(new SimpleAttributeModifier("class", "formHide"));
-		add(profileForm);
+		profileBlock.add(profileForm);
 
 		////////////////////////////////////
 		// User autocomplete select/new user
@@ -232,6 +238,10 @@ public class UserAdminPanel extends CmsPanel {
 		// User selection actions
 		//////////////////////////
 		
+		// animator to open/close profile form
+		final Animator hideShowProfile = new Animator().addSubjects(AnimatorSubject.slideOpen(profileBlock.getMarkupId(), 25));
+		add(hideShowProfile);
+		
 		Component newUserSubmit = new AjaxButton("createUser"){
 			private static final long serialVersionUID = 1L;
 
@@ -240,12 +250,13 @@ public class UserAdminPanel extends CmsPanel {
 				String userName = (String) usernameField.getDefaultModelObject();
 				log.debug("selected user: "+ userName);
 				populateUserData(userName, userView);
-				profileForm.add(new SimpleAttributeModifier("class","formShow"));
+				
 				target.addComponent(profileForm);
 				lockUsername = true;
 				target.addComponent(usernameField);
 				target.addComponent(userFeedback);
 				target.addComponent(userSelect);
+				target.appendJavascript(hideShowProfile.seekToEnd());	
 				
 			}
 
@@ -276,12 +287,13 @@ public class UserAdminPanel extends CmsPanel {
 				populateUserData(userData, userView);
 				target.appendJavascript("$('" + usernameField.getMarkupId() + "').value='"+userData.getName()+"';");
 				lockUsername = true;
-				profileForm.add(new SimpleAttributeModifier("class","formShow"));
 
 				target.addComponent(profileForm);
 				target.addComponent(usernameField);
 				target.addComponent(getComponent());
 				target.addComponent(userFeedback);
+				
+				target.appendJavascript(hideShowProfile.seekToEnd());
 
 			}
 			
@@ -419,7 +431,7 @@ public class UserAdminPanel extends CmsPanel {
 				target.addComponent(form);
 
 				// Clear usernamefield and reset form
-                target.appendJavascript("$('" + usernameField.getMarkupId() + "').clear();"
+                target.appendJavascript(hideShowProfile.seekToBegin() + "$('" + usernameField.getMarkupId() + "').clear();"
                         + "$('"+form.getMarkupId()+"').reset();");
 				
 			}

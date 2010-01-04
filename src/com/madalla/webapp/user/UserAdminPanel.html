@@ -20,10 +20,12 @@
         	height: 2em;
         }
         
+        div.profileBlock {
+            overflow: hidden;
+            width: 100%;
+        }
+        
         form div.formButtons {margin-left: 6em;}
-
-        form.formShow {display: inline;}
-        form.formHide {display: none;}
         
         form div.email {
         	float: none;
@@ -80,6 +82,7 @@
             	</form>
             </div>
 
+			<div class="profileBlock" wicket:id="profileBlock" style="display: none;">
 			<form class="profileForm" wicket:id="profileForm">
                 <div>
                     <label for="email"><wicket:message key="label.email">Label Contents</wicket:message></label>
@@ -130,7 +133,8 @@
                     </span>
                     <span class="feedbackPanel" wicket:id="resetFeedback"></span>
                 </div>
-            </form>        	
+            </form>
+            </div>        	
 		</div>
         
     </wicket:panel>

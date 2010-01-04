@@ -10,9 +10,9 @@ import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 
 import com.madalla.webapp.css.Css;
 import com.madalla.wicket.animation.AnimationEventBehavior;
-import com.madalla.wicket.animation.Animator;
 import com.madalla.wicket.animation.AnimatorSubject;
 import com.madalla.wicket.animation.IAnimator;
+import com.madalla.wicket.animation.IAnimatorActions;
 
 public class AjaxConfigureIcon extends WebMarkupContainer{
 	private static final long serialVersionUID = 1L;
@@ -46,7 +46,7 @@ public class AjaxConfigureIcon extends WebMarkupContainer{
 			}
 
 			@Override
-			protected String onEventAnimatorActions(Animator animator) {
+			protected String onEventAnimatorActions(final IAnimatorActions animator) {
 				return animator.toggle();
 			}
 

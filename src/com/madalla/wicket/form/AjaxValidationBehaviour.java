@@ -8,7 +8,6 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
-import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.animation.Animator;
 import com.madalla.wicket.animation.AnimatorSubject;
@@ -93,11 +92,10 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		animator.setMarkupId(getComponent().getMarkupId());
-		animator.addSubject(AnimatorSubject.numeric(getComponent().getMarkupId(),"opacity", 1, 0.25));
 		response.renderJavascriptReference(Scriptaculous.PROTOTYPE);
-		response.renderJavascriptReference(JavascriptResources.ANIMATOR);
-		response.renderOnDomReadyJavascript(animator.render());
+		animator.setUniqueId(getComponent().getMarkupId());
+		animator.addSubject(AnimatorSubject.numeric(getComponent().getMarkupId(),"opacity", 1, 0.25));
+		animator.renderHead(response);
 	}
 
 	//animation to indicate to user that validation occured

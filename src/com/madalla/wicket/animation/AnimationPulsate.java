@@ -13,7 +13,7 @@ public class AnimationPulsate extends AnimationEventBehavior{
 	}
 
 	@Override
-	protected String onEventAnimatorActions(Animator animator) {
+	protected String onEventAnimatorActions(final IAnimatorActions animator) {
 		return animator.play() + animator.reverse();
 	}
 
