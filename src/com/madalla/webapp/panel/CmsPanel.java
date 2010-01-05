@@ -3,6 +3,8 @@ package com.madalla.webapp.panel;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import com.madalla.bo.AbstractData;
+import com.madalla.email.IEmailSender;
+import com.madalla.email.IEmailServiceProvider;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.service.ISessionDataService;
@@ -19,6 +21,10 @@ public abstract class CmsPanel extends Panel {
 	protected IDataService getRepositoryService(){
 		return ((IDataServiceProvider)getApplication()).getRepositoryService();
 	}
+	
+    protected IEmailSender getEmailSender(){
+    	return ((IEmailServiceProvider)getApplication()).getEmailSender();
+    }
 	
 	protected void saveData(AbstractData data){
 		getSessionDataService().validateTransaction(data);

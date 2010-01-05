@@ -12,6 +12,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 
 import com.madalla.bo.SiteData;
+import com.madalla.email.IEmailSender;
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.CmsSession;
@@ -124,7 +125,15 @@ public class UserLoginPanel extends CmsPanel {
 		add(emailDiv);
 		
 		SiteData site = getRepositoryService().getSiteData();
-		Component emailForm = new EmailFormPanel("supportEmail", "Support email - sent from " + site.getName());
+		Component emailForm = new EmailFormPanel("supportEmail", "Support email - sent from " + site.getName()){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected boolean sendEmail(IEmailSender emailSender, SiteData site, String body, String subject) {
+				return emailSender.sendEmail(subject, body);
+			}
+			
+		};
 		emailDiv.add(emailForm);
 		
 		emailLink.add(new AnimationOpenSlide("onclick", emailDiv, 28,"em"));

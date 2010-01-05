@@ -162,6 +162,7 @@ public class SiteEmailPanel extends CmsPanel{
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
 				log.debug("onSubmit - sending Emails.");
+				getEmailSender().sendEmail(subject, body);
 				if (selectedUsers != null){
 					for (UserData user : selectedUsers) {
 						if (StringUtils.isEmpty(user.getEmail())){
@@ -169,7 +170,12 @@ public class SiteEmailPanel extends CmsPanel{
 							error(getString("message.noemail", new Model<UserData>(user)));
 						} else {
 							log.debug("onSubmit - email sent. " + user);
-							info(getString("message.email", new Model<UserData>(user)));
+							if (getEmailSender().sendUserEmail(subject, body, user.getEmail(), user.getFirstName())){
+								info(getString("message.email.success", new Model<UserData>(user)));
+							} else {
+								error(getString("message.email.fail", new Model<UserData>(user)));
+							}
+							
 						}
 						
 					}

@@ -27,26 +27,20 @@ public class SimpleEmailSender implements IEmailSender, Serializable {
     }
     
     public boolean sendUserEmail(String subject, String body, String userEmail, String userName){
-    	return sendUserEmail(new SimpleEmail(), subject, body, userEmail, userName);
+    	return sendUserEmail(subject, body, userEmail, userName, false);
+    }
+
+    public boolean sendUserEmail(String subject, String body, String userEmail, String userName, boolean copyEmailAdmin){
+    	return sendUserEmail(new SimpleEmail(), subject, body, userEmail, userName, copyEmailAdmin);
     }
     
     public boolean sendUserHtmlEmail(String subject, String body, String userEmail, String userName){
-    	return sendUserEmail(new HtmlEmail(), subject, body, userEmail, userName);
-    }
-    
-    private boolean sendUserEmail(Email email, String subject, String body, String userEmail, String userName){
-    	log.debug("sendUserEmail - userEmail:"+userEmail+" userName:"+userName+" subject:"+subject );
-    	if (StringUtils.isEmpty(userEmail)){
-    		log.error("sendUserEmail - The parameter userEmail cannot be empty. A valid email needs to be supplied");
-    		return false;
-    	}
-    	sendEmailUsingCommonsMail(email, subject, body, false, "", "");
-    	return sendEmailUsingCommonsMail(email, subject, body, true, userEmail, userName);
+    	return sendUserEmail(new HtmlEmail(), subject, body, userEmail, userName, true);
     }
     
     public boolean sendEmail(String subject, String body){
     	log.debug("sendEmail - subject:"+subject);
-        return sendEmailUsingCommonsMail(new SimpleEmail(), subject, body, false, "", "");
+        return sendEmailUsingCommonsMail(new SimpleEmail(), subject, body, false, "", "",true);
     }
     
     public boolean sendEmail(){
@@ -54,26 +48,41 @@ public class SimpleEmailSender implements IEmailSender, Serializable {
                 "com.emalan.service.email.SimpleEmailSender - no body");
     }
     
-    private void init(Email email) throws EmailException {
-        email.setHostName(emailHost);
-        email.setAuthentication(mailAuthName, mailAuthPassword);
-        email.setFrom(emailFromEmail, emailFromName);
-        email.setDebug(true);
+    private boolean sendUserEmail(Email email, String subject, String body, String userEmail, String userName, boolean copyEmailAdmin){
+    	log.debug("sendUserEmail - userEmail:"+userEmail+" userName:"+userName+" subject:"+subject );
+    	if (StringUtils.isEmpty(userEmail)){
+    		log.error("sendUserEmail - The parameter userEmail cannot be empty. A valid email needs to be supplied");
+    		return false;
+    	}
+    	return sendEmailUsingCommonsMail(email, subject, body, true, userEmail, userName, copyEmailAdmin);
     }
     
-    private boolean sendEmailUsingCommonsMail(Email email, String subject, String body, boolean user, String userEmail, String userName){
-        try {
-        	init(email);
+    private boolean sendEmailUsingCommonsMail(final Email email,final String subject, final String body, final boolean user, 
+    		final String userEmail, final String userName, final boolean copyEmailAdmin){
+        
+    	try {
+        	
+        	email.setHostName(emailHost);
+            email.setAuthentication(mailAuthName, mailAuthPassword);
+            email.setFrom(emailFromEmail, emailFromName);
+            email.setDebug(true);
+            
         	if (user){
         		email.addTo(userEmail, userName);
-        	} else {
+        	} 
+        	
+        	if (copyEmailAdmin){
         		email.addTo(emailToEmail, emailToName);
         	}
+        	
             email.setSubject(subject);
             email.setMsg(body);
+            
             log.debug("Sending email."+this);
+            
             email.send();
-        } catch (EmailException e) {
+        
+    	} catch (EmailException e) {
             log.error("Exception while sending email from emalancom.",e);
             log.warn("Email not sent:" + this);
             return false;

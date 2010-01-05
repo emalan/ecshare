@@ -446,7 +446,7 @@ public class UserAdminPanel extends CmsPanel {
 	}
 	
 	private boolean sendEmail(String subject, String message, UserDataView user){
-        return getEmailSender().sendUserEmail(subject, message, user.getEmail(), user.getFirstName());
+        return getEmailSender().sendUserEmail(subject, message, user.getEmail(), user.getFirstName(), true);
 	}
 	
 	private String resetPassword(UserDataView user){

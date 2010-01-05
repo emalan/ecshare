@@ -26,7 +26,6 @@ import org.springframework.dao.DataAccessException;
 
 import com.madalla.bo.SiteData;
 import com.madalla.email.IEmailSender;
-import com.madalla.email.IEmailServiceProvider;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.util.captcha.CaptchaUtils;
@@ -164,16 +163,18 @@ public class EmailFormPanel extends CmsPanel {
         
     }
     
-    private boolean sendEmail(String name, String email, String comment){
+    private boolean sendEmail(final String name, final String email, final String comment){
     	logEmail(name, email, comment);
-		SiteData site = getSiteData();
-        IEmailSender emailSender = getEmailSender();
         String body = getEmailBody(name, email, comment);
-
+        return sendEmail(getEmailSender(), getSiteData(), body, subject);
+    }
+    
+    //to allow override
+    protected boolean sendEmail(final IEmailSender emailSender, final SiteData site, final String body, final String subject){
         if (StringUtils.isEmpty(site.getAdminEmail())){
             return emailSender.sendEmail(subject, body);
         } else {
-            return emailSender.sendUserEmail(subject, body, site.getAdminEmail(), "Site Admin");
+            return emailSender.sendUserEmail(subject, body, site.getAdminEmail(), "Site Admin", true);
         }
     }
     
@@ -210,10 +211,6 @@ public class EmailFormPanel extends CmsPanel {
         sb.append("From: {0} ({1})").append(System.getProperty("line.separator"));
         sb.append("Comment: {2}").append(System.getProperty("line.separator"));
         return sb.toString();
-    }
-    
-    protected IEmailSender getEmailSender(){
-    	return ((IEmailServiceProvider)getApplication()).getEmailSender();
     }
     
     protected SiteData getSiteData(){
