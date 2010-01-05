@@ -13,7 +13,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -242,7 +241,7 @@ public class UserAdminPanel extends CmsPanel {
 		final Animator hideShowProfile = new Animator().addSubjects(AnimatorSubject.slideOpen(profileBlock.getMarkupId(), 25));
 		add(hideShowProfile);
 		
-		Component newUserSubmit = new AjaxButton("createUser"){
+		AjaxButton newUserSubmit = new AjaxButton("createUser"){
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -268,6 +267,7 @@ public class UserAdminPanel extends CmsPanel {
 		};
 		newUserSubmit.setOutputMarkupId(true);
 		userForm.add(newUserSubmit);
+		userForm.setDefaultButton(newUserSubmit);
 		
 		usernameField.add(new AttributeModifier("onchange", true, new Model<String>(
 				"document.getElementById('"+ newUserSubmit.getMarkupId()
