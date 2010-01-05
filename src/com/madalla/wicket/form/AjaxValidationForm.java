@@ -45,12 +45,17 @@ public abstract class AjaxValidationForm<T> extends Form<T>  {
 		init();
 	}
 	
-	private void init(){
+	protected FeedbackPanel addFeedbackPanel(){
 		IFeedbackMessageFilter filter = new ContainerFeedbackMessageFilter(this);
 		final FeedbackPanel formFeedback = new FeedbackPanel("formFeedback", filter);
 		 formFeedback.setMaxMessages(1);
 		add(formFeedback);
+		return formFeedback;
+	}
+	
+	private void init(){
 
+		final FeedbackPanel formFeedback = addFeedbackPanel();
 
 		add(new IndicatingAjaxButton("formSubmit", this){
 			private static final long serialVersionUID = 1L;

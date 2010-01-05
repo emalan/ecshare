@@ -88,6 +88,17 @@ public class SiteAdminPanel extends CmsPanel{
         	
         });
         
+		//User admin link 
+        add(new AdminPanelLink("SiteEmail", true){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				getPage().replace(new SiteEmailPanel(ID));
+			}
+        	
+        });
+        
         final Form<SiteData> form = new SiteForm("siteForm", new CompoundPropertyModel<SiteData>(getSiteData()));
         add(form);
          

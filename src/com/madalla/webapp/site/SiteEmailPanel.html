@@ -1,0 +1,71 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+        
+ 		div#selectUserDiv select {
+ 			min-width: 15em;
+ 		}
+ 		
+ 		form.emailForm div label {
+ 			width: 8em;
+ 		}
+            
+    </style>
+</wicket:head>
+<body>
+    <wicket:panel>
+                   
+    	<div id="profile" class="adminSection">
+    		<h2><wicket:message key="heading.email">Label Contents</wicket:message></h2>
+            <p class="info"><wicket:message key="label.email.info">Label Contents</wicket:message></p>
+            
+			<form class="siteForm" >
+                <div id="sites">
+                	<span valign="top" wicket:id="site">
+        				<input type="checkbox">[input]</input>
+        				<input type="checkbox">[input]</input>
+    				</span>
+                </div>
+            </form>
+            
+            <div id="selectUserDiv">
+            	<select wicket:id="userSelect"></select>
+            </div>
+            
+            <div>
+                <a wicket:id="sendEmail" href="#"><wicket:message key="label.email.send">Label Contents</wicket:message></a>
+            </div>
+            
+            <div>
+            
+            	<form class="emailForm" wicket:id="emailForm">
+			        <fieldset>
+			            <div>
+			                <label>
+			                    <wicket:message key="label.subject">[label]</wicket:message>
+			                </label>
+			                <input class="inputText" wicket:id="subject" type="text" />
+			            </div>
+			            <div>
+			                <label>
+			                    <wicket:message key="label.body">[label]</wicket:message>
+			                </label>
+			                <textarea class="inputText" wicket:id="body" type="textArea" rows="7" cols="40">Content goes here</textarea>
+			            </div>
+			        </fieldset>
+					<div class="submit">
+                    	<span class="buttonwrapper">
+                        	<a wicket:id="formSubmit" class="orangebutton"><span><wicket:message key="label.submit">[label]</wicket:message></span></a>
+                    	</span>
+                    	<span wicket:id="formFeedback" class="feedbackPanel"></span>
+              		</div>
+
+			        </form>
+            
+            </div>
+
+		</div>
+        
+    </wicket:panel>
+</body>
+</html>
