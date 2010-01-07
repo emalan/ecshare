@@ -12,6 +12,7 @@ import org.apache.wicket.Request;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
 import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.protocol.https.HttpsRequestCycleProcessor;
@@ -26,11 +27,18 @@ import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
+import com.madalla.webapp.admin.IPanelMenuItem;
+import com.madalla.webapp.admin.PanelMenuItem;
 import com.madalla.webapp.authorization.AppAuthorizationStrategy;
 import com.madalla.webapp.authorization.PageAuthorization;
+import com.madalla.webapp.cms.admin.ContentAdminPanel;
+import com.madalla.webapp.images.admin.ImageAdminPanel;
 import com.madalla.webapp.pages.AdminErrorPage;
 import com.madalla.webapp.pages.SecurePasswordPage;
 import com.madalla.webapp.pages.UserPasswordPage;
+import com.madalla.webapp.site.SiteAdminPanel;
+import com.madalla.webapp.site.SiteDataPanel;
+import com.madalla.webapp.user.UserProfilePanel;
 import com.madalla.wicket.I18NBookmarkablePageRequestTargetUrlCodingStrategy;
 
 /**
@@ -170,6 +178,8 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
      * @return List of Pages used in the menu OR Collections.emptyList() if no menu
      */
     public abstract List<Class<? extends Page>> getPageMenuList();
+    
+
 
     public IEmailSender getEmailSender() {
         return emailSender;

@@ -52,7 +52,6 @@
 		    <src path="${src.share.dir}"/>
 		    <src path="${src.share.resources}"/>
 		</javac>
-		
 		<copy todir="${build.main.classes}">
 			<fileset dir="${src.main.dir}">
 				<include name="**/*.*" />

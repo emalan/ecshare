@@ -1,6 +1,5 @@
 package com.madalla.webapp.admin;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
-import com.madalla.service.IDataServiceProvider;
+import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.cms.admin.ContentAdminPanel;
 import com.madalla.webapp.css.Css;
@@ -28,34 +27,20 @@ public abstract class AdminPage extends WebPage {
 	
 	private static final long serialVersionUID = -2837757448336709448L;
 	
-	private abstract class PanelMenuItem implements Serializable{
-		private static final long serialVersionUID = 1L;
-		
-		final private String key;
-		final private String titleKey;
-		
-		public PanelMenuItem(String key, String titleKey){
-			this.key = key;
-			this.titleKey = titleKey;
-		}
-		
-		abstract Panel getPanel(String id);
-	}
-	
-	private class MenuListView extends ListView<PanelMenuItem>{
+	private class MenuListView extends ListView<IPanelMenuItem>{
 		private static final long serialVersionUID = -8310833021413122278L;
 		
 		private String menuLinkId;
 		
-		public MenuListView(final String id, final String menuLinkId, List<PanelMenuItem> items) {
+		public MenuListView(final String id, final String menuLinkId, List<IPanelMenuItem> items) {
 			super(id, items);
 			this.menuLinkId = menuLinkId;
 		}
 
 		@Override
-		protected void populateItem(ListItem<PanelMenuItem> item) {
-			final PanelMenuItem menu = item.getModelObject();
-			item.add(new AdminPanelLink(menuLinkId, menu.key, menu.titleKey, false){
+		protected void populateItem(ListItem<IPanelMenuItem> item) {
+			final IPanelMenuItem menu = item.getModelObject();
+			item.add(new AdminPanelLink(menuLinkId, menu.getKey(), menu.getTitleKey(), false){
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -85,58 +70,7 @@ public abstract class AdminPage extends WebPage {
 	
 	protected void setupMenu(){
 		
-		List<PanelMenuItem> menuList = new ArrayList<PanelMenuItem>();
-		menuList.add(new PanelMenuItem("label.profile","info.profile"){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			Panel getPanel(String id) {
-				return new UserProfilePanel(id);
-			}
-
-		});
-		menuList.add(new PanelMenuItem("label.site","info.site"){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			Panel getPanel(String id) {
-				return new SiteAdminPanel(id);
-			}
-			
-		});
-		menuList.add(new PanelMenuItem("label.data","info.data"){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			Panel getPanel(String id) {
-				return new SiteDataPanel(id);
-			}
-			
-		});
-		menuList.add(new PanelMenuItem("label.image","info.image"){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			Panel getPanel(String id) {
-				return new ImageAdminPanel(id);
-			}
-			
-		});
-		menuList.add(new PanelMenuItem("label.content","info.content"){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			Panel getPanel(String id) {
-				if (((IDataServiceProvider)getApplication()).getRepositoryService().isAdminApp()){
-					return ContentAdminPanel.newAdminInstance(id);
-		    	} else {
-		    		return ContentAdminPanel.newInstance(id);
-		    	}
-			}
-			
-		});
-
-		add(new MenuListView("menuList","menuLink", menuList));
+		add(new MenuListView("menuList","menuLink", getAdminMenu()));
 
 		add(new Link<Object>("returnLink"){
 
@@ -153,6 +87,65 @@ public abstract class AdminPage extends WebPage {
 			
 		});
 	}
+	
+	//TODO Move this configuration to Application
+    public List<IPanelMenuItem> getAdminMenu(){
+    	
+    	
+		List<IPanelMenuItem> menuList = new ArrayList<IPanelMenuItem>();
+		menuList.add(new PanelMenuItem("label.profile","info.profile"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Panel getPanel(String id) {
+				return new UserProfilePanel(id);
+			}
+
+		});
+		menuList.add(new PanelMenuItem("label.site","info.site"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Panel getPanel(String id) {
+				return new SiteAdminPanel(id);
+			}
+			
+		});
+		menuList.add(new PanelMenuItem("label.data","info.data"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Panel getPanel(String id) {
+				return new SiteDataPanel(id);
+			}
+			
+		});
+		menuList.add(new PanelMenuItem("label.image","info.image"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Panel getPanel(String id) {
+				return new ImageAdminPanel(id);
+			}
+			
+		});
+		menuList.add(new PanelMenuItem("label.content","info.content"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Panel getPanel(String id) {
+				
+				if (((CmsApplication) getApplication()).getRepositoryService().isAdminApp()){
+					return ContentAdminPanel.newAdminInstance(id);
+		    	} else {
+		    		return ContentAdminPanel.newInstance(id);
+		    	}
+			}
+			
+		});
+		
+		return menuList;
+    }
 	
 	public CmsSession getAppSession(){
         return (CmsSession)getSession();
