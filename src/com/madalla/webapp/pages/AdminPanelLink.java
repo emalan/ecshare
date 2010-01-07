@@ -1,5 +1,8 @@
 package com.madalla.webapp.pages;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.link.Link;
 
 import com.madalla.webapp.cms.IContentAdmin;
@@ -22,16 +25,29 @@ public abstract class AdminPanelLink extends Link<Object> {
 	protected static final String ID = "adminPanel";
 	
 	final private boolean admin;
+	final private String key;
+	final private String titleKey;
+	
+	public AdminPanelLink(final String id, final String key, String titleKey, final boolean admin){
+		super(id);
+		this.key = key;
+		this.admin = admin;
+		this.titleKey = titleKey;
+	}
+	
+	public AdminPanelLink(final String id, final String key, final boolean admin){
+		this(id, key, "", admin);
+	}
 	
 	/**
 	 * Main Constructor
+	 * TODO remove this construcot
 	 * 
 	 * @param id - wicket id
 	 * @param admin - set true if this is a super admin only link
 	 */
 	public AdminPanelLink(String id, final boolean admin){
-		super(id);
-		this.admin = admin;
+		this(id, "", admin);
 	}
 	
     public AdminPanelLink(String id) {
@@ -44,7 +60,8 @@ public abstract class AdminPanelLink extends Link<Object> {
 		if (getAutoEnable())
 		{
 			// TODO disable link if Panel already active
-			if (false) return false;
+			boolean linkActive = false;
+			if (linkActive) return false;
 		}
 		IContentAdmin session = (IContentAdmin) getSession();
 		if (admin) {
@@ -52,6 +69,23 @@ public abstract class AdminPanelLink extends Link<Object> {
         } else {
             return session.isLoggedIn();
         }
+	}
+	
+	@Override
+	protected void onComponentTag(ComponentTag tag) {
+		if (StringUtils.isNotEmpty(titleKey)){
+			tag.put("title", getString(titleKey));
+		}
+		super.onComponentTag(tag);
+	}
+
+	@Override
+	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+		if (StringUtils.isNotEmpty(key)){
+			replaceComponentTagBody(markupStream, openTag, getString(key));
+		} else {
+			super.onComponentTagBody(markupStream, openTag);
+		}
 	}
 
 	

@@ -4,7 +4,7 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.protocol.https.RequireHttps;
 
 import com.madalla.util.security.SecureCredentials;
-import com.madalla.webapp.AdminPage;
+import com.madalla.webapp.admin.AdminPage;
 import com.madalla.webapp.user.UserPasswordPanel;
 
 @RequireHttps

@@ -21,11 +21,4 @@ public class MenuListView extends ListView<IMenuItem>{
 		item.add(new AppPageLink(menuLinkId, menu.getItemClass(), menu.getItemName()));
 	}		
 	
-	@Override
-	protected void onBeforeRender(){
-		super.onBeforeRender();
-	}
-	
-	
-	
 }

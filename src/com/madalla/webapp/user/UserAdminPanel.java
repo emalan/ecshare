@@ -238,7 +238,7 @@ public class UserAdminPanel extends CmsPanel {
 		//////////////////////////
 		
 		// animator to open/close profile form
-		final Animator hideShowProfile = new Animator().addSubjects(AnimatorSubject.slideOpen(profileBlock.getMarkupId(), 25));
+		final Animator hideShowProfile = new Animator().addSubjects(AnimatorSubject.slideOpen(profileBlock.getMarkupId(), 37));
 		add(hideShowProfile);
 		
 		AjaxButton newUserSubmit = new AjaxButton("createUser"){

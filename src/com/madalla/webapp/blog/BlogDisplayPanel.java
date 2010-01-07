@@ -25,8 +25,8 @@ import com.madalla.bo.blog.BlogEntryData;
 import com.madalla.bo.blog.IBlogEntryData;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
-import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.CmsSession;
+import com.madalla.webapp.admin.AdminPage;
 import com.madalla.webapp.login.aware.LoginAwareAdminLink;
 import com.madalla.webapp.pages.BlogEntryPage;
 

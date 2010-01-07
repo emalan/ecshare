@@ -4,7 +4,7 @@ import org.apache.wicket.Page;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.link.Link;
 
-import com.madalla.webapp.AdminPage;
+import com.madalla.webapp.admin.AdminPage;
 
 /**
  * Link to Admin Page

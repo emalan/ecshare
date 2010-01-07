@@ -2,7 +2,7 @@ package com.madalla.webapp.pages;
 
 import org.apache.wicket.Page;
 
-import com.madalla.webapp.AdminPage;
+import com.madalla.webapp.admin.AdminPage;
 import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.webapp.user.UserLoginPanel;
 

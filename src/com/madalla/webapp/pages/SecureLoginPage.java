@@ -2,7 +2,7 @@ package com.madalla.webapp.pages;
 
 import org.apache.wicket.protocol.https.RequireHttps;
 
-import com.madalla.webapp.AdminPage;
+import com.madalla.webapp.admin.AdminPage;
 import com.madalla.webapp.user.UserLoginPanel;
 
 @RequireHttps

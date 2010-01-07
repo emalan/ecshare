@@ -2,7 +2,7 @@ package com.madalla.webapp.pages;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.madalla.webapp.AdminPage;
+import com.madalla.webapp.admin.AdminPage;
 
 public class AdminErrorPage extends AdminPage {
 

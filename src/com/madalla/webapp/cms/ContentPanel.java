@@ -12,7 +12,7 @@ import org.apache.wicket.model.Model;
 
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.PageData;
-import com.madalla.webapp.AdminPage;
+import com.madalla.webapp.admin.AdminPage;
 import com.madalla.webapp.login.aware.LoginAwareAdminLink;
 import com.madalla.webapp.pages.ContentEditPage;
 import com.madalla.webapp.panel.CmsPanel;

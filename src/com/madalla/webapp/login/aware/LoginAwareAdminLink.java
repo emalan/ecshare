@@ -1,6 +1,6 @@
 package com.madalla.webapp.login.aware;
 
-import com.madalla.webapp.AdminPage;
+import com.madalla.webapp.admin.AdminPage;
 import com.madalla.webapp.cms.IContentAdmin;
 import com.madalla.webapp.pages.LinkAdmin;
 

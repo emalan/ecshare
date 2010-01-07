@@ -1,13 +1,21 @@
-package com.madalla.webapp;
+package com.madalla.webapp.admin;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
 import com.madalla.service.IDataServiceProvider;
+import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.cms.admin.ContentAdminPanel;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.images.admin.ImageAdminPanel;
@@ -19,6 +27,46 @@ import com.madalla.webapp.user.UserProfilePanel;
 public abstract class AdminPage extends WebPage {
 	
 	private static final long serialVersionUID = -2837757448336709448L;
+	
+	private abstract class PanelMenuItem implements Serializable{
+		private static final long serialVersionUID = 1L;
+		
+		final private String key;
+		final private String titleKey;
+		
+		public PanelMenuItem(String key, String titleKey){
+			this.key = key;
+			this.titleKey = titleKey;
+		}
+		
+		abstract Panel getPanel(String id);
+	}
+	
+	private class MenuListView extends ListView<PanelMenuItem>{
+		private static final long serialVersionUID = -8310833021413122278L;
+		
+		private String menuLinkId;
+		
+		public MenuListView(final String id, final String menuLinkId, List<PanelMenuItem> items) {
+			super(id, items);
+			this.menuLinkId = menuLinkId;
+		}
+
+		@Override
+		protected void populateItem(ListItem<PanelMenuItem> item) {
+			final PanelMenuItem menu = item.getModelObject();
+			item.add(new AdminPanelLink(menuLinkId, menu.key, menu.titleKey, false){
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick() {
+					getPage().replace(menu.getPanel(ID));
+				}
+				
+			});
+		}		
+		
+	}
 	
 	private String pageTitle = "(no title)";
 	private Class<? extends Page> returnPage;
@@ -37,56 +85,59 @@ public abstract class AdminPage extends WebPage {
 	
 	protected void setupMenu(){
 		
-		add(new AdminPanelLink("UserProfile"){
+		List<PanelMenuItem> menuList = new ArrayList<PanelMenuItem>();
+		menuList.add(new PanelMenuItem("label.profile","info.profile"){
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick() {
-				getPage().replace(new UserProfilePanel(ID));
+			Panel getPanel(String id) {
+				return new UserProfilePanel(id);
+			}
+
+		});
+		menuList.add(new PanelMenuItem("label.site","info.site"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			Panel getPanel(String id) {
+				return new SiteAdminPanel(id);
 			}
 			
 		});
-		add(new AdminPanelLink("SiteAdmin"){
+		menuList.add(new PanelMenuItem("label.data","info.data"){
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick() {
-				getPage().replace(new SiteAdminPanel(ID));
+			Panel getPanel(String id) {
+				return new SiteDataPanel(id);
 			}
 			
 		});
-		add(new AdminPanelLink("Data"){
+		menuList.add(new PanelMenuItem("label.image","info.image"){
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick() {
-				getPage().replace(new SiteDataPanel(ID));
+			Panel getPanel(String id) {
+				return new ImageAdminPanel(id);
 			}
 			
 		});
-		add(new AdminPanelLink("Image"){
+		menuList.add(new PanelMenuItem("label.content","info.content"){
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick() {
-				getPage().replace(new ImageAdminPanel(ID));
-			}
-			
-		});
-		add(new AdminPanelLink("Content"){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick() {
+			Panel getPanel(String id) {
 				if (((IDataServiceProvider)getApplication()).getRepositoryService().isAdminApp()){
-					getPage().replace(ContentAdminPanel.newAdminInstance(ID));
+					return ContentAdminPanel.newAdminInstance(id);
 		    	} else {
-		    		getPage().replace(ContentAdminPanel.newInstance(ID));
+		    		return ContentAdminPanel.newInstance(id);
 		    	}
 			}
 			
 		});
-		
+
+		add(new MenuListView("menuList","menuLink", menuList));
+
 		add(new Link<Object>("returnLink"){
 
 			private static final long serialVersionUID = 1L;

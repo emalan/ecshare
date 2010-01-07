@@ -18,8 +18,8 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import com.madalla.bo.SiteData;
 import com.madalla.bo.security.UserData;
-import com.madalla.webapp.AdminPage;
 import com.madalla.webapp.CmsSession;
+import com.madalla.webapp.admin.AdminPage;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.pages.AdminPanelLink;
 import com.madalla.webapp.pages.SecurePasswordPage;
