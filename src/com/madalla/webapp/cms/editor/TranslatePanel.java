@@ -48,11 +48,9 @@ public class TranslatePanel extends CmsPanel {
 		
 		add(JavascriptPackageResource.getHeaderContribution(TinyMce.class, "tiny_mce.js"));
 				
-		
 		//setup Javascript template
 		Map<String, Object> vars = EditorSetup.setupTemplateVariables((CmsSession) getSession());
 		add(TextTemplateHeaderContributor.forJavaScript(EditorSetup.class,"EditorSetup.js", Model.ofMap(vars)));
-		
 		
         PageData page = getRepositoryService().getPage(nodeName);
         final ContentData content = getRepositoryService().getContent(page, contentId);
@@ -70,8 +68,9 @@ public class TranslatePanel extends CmsPanel {
 
         //Dynamic destination Language editor
 		final Locale selectedLang = getDefaultLocale(locales);
-        final ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, selectedLang);
-        log.debug(contentEntry);
+		log.debug("start lang :" + selectedLang);
+        final ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, selectedLang.getDisplayName(), "");
+        log.debug("start content entry. " + contentEntry);
         final ContentFormPanel destPanel = new ContentFormPanel("contentEditor", contentEntry );
         destPanel.setOutputMarkupId(true);
 		add(destPanel);
@@ -83,6 +82,11 @@ public class TranslatePanel extends CmsPanel {
 
 		//Language Selector
 		SiteLanguage selectedLanguage = SiteLanguage.getLanguage(selectedLang.getLanguage());
+		
+		//set dest Panel to startup language
+		ContentEntryData selectedContentEntry = getRepositoryService().getContentEntry(content, selectedLanguage.locale.getDisplayName(), "");
+		
+		
 		final DropDownChoice<SiteLanguage> select = new DropDownChoice<SiteLanguage>("langSelect", 
 				new Model<SiteLanguage>(selectedLanguage), locales, new ChoiceRenderer<SiteLanguage>("locale.displayLanguage"));
 		select.setNullValid(false);
@@ -106,6 +110,24 @@ public class TranslatePanel extends CmsPanel {
 
 	}
 	
+	
+	
+	@Override
+	protected void onBeforeRender() {
+		
+		super.onBeforeRender();
+	}
+
+
+
+	@Override
+	protected void onAfterRender() {
+		// TODO Auto-generated method stub
+		super.onAfterRender();
+	}
+
+
+
 	private Locale getDefaultLocale(List<SiteLanguage> locales){
 		List<SiteLanguage> configuredLangs = getRepositoryService().getSiteData().getLocaleList();
 		if (configuredLangs.isEmpty()){
