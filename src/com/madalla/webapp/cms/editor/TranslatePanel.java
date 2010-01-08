@@ -83,10 +83,6 @@ public class TranslatePanel extends CmsPanel {
 		//Language Selector
 		SiteLanguage selectedLanguage = SiteLanguage.getLanguage(selectedLang.getLanguage());
 		
-		//set dest Panel to startup language
-		ContentEntryData selectedContentEntry = getRepositoryService().getContentEntry(content, selectedLanguage.locale.getDisplayName(), "");
-		
-		
 		final DropDownChoice<SiteLanguage> select = new DropDownChoice<SiteLanguage>("langSelect", 
 				new Model<SiteLanguage>(selectedLanguage), locales, new ChoiceRenderer<SiteLanguage>("locale.displayLanguage"));
 		select.setNullValid(false);
@@ -109,24 +105,6 @@ public class TranslatePanel extends CmsPanel {
 		add(select);
 
 	}
-	
-	
-	
-	@Override
-	protected void onBeforeRender() {
-		
-		super.onBeforeRender();
-	}
-
-
-
-	@Override
-	protected void onAfterRender() {
-		// TODO Auto-generated method stub
-		super.onAfterRender();
-	}
-
-
 
 	private Locale getDefaultLocale(List<SiteLanguage> locales){
 		List<SiteLanguage> configuredLangs = getRepositoryService().getSiteData().getLocaleList();
