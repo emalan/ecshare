@@ -1,6 +1,7 @@
 package com.madalla.webapp.admin;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.Page;
@@ -27,19 +28,19 @@ public abstract class AdminPage extends WebPage {
 	
 	private static final long serialVersionUID = -2837757448336709448L;
 	
-	private class MenuListView extends ListView<IPanelMenuItem>{
+	private class MenuListView extends ListView<PanelMenuItem>{
 		private static final long serialVersionUID = -8310833021413122278L;
 		
 		private String menuLinkId;
 		
-		public MenuListView(final String id, final String menuLinkId, List<IPanelMenuItem> items) {
+		public MenuListView(final String id, final String menuLinkId, List<PanelMenuItem> items) {
 			super(id, items);
 			this.menuLinkId = menuLinkId;
 		}
 
 		@Override
-		protected void populateItem(ListItem<IPanelMenuItem> item) {
-			final IPanelMenuItem menu = item.getModelObject();
+		protected void populateItem(ListItem<PanelMenuItem> item) {
+			final PanelMenuItem menu = item.getModelObject();
 			item.add(new AdminPanelLink(menuLinkId, menu.getKey(), menu.getTitleKey(), false){
 				private static final long serialVersionUID = 1L;
 
@@ -49,7 +50,7 @@ public abstract class AdminPage extends WebPage {
 				}
 				
 			});
-		}		
+		}
 		
 	}
 	
@@ -69,8 +70,8 @@ public abstract class AdminPage extends WebPage {
 	}
 	
 	protected void setupMenu(){
-		
-		add(new MenuListView("menuList","menuLink", getAdminMenu()));
+		List<PanelMenuItem> menuItems = getAdminMenu();
+		add(new MenuListView("menuList","menuLink",menuItems ));
 
 		add(new Link<Object>("returnLink"){
 
@@ -88,11 +89,9 @@ public abstract class AdminPage extends WebPage {
 		});
 	}
 	
-	//TODO Move this configuration to Application
-    public List<IPanelMenuItem> getAdminMenu(){
-    	
-    	
-		List<IPanelMenuItem> menuList = new ArrayList<IPanelMenuItem>();
+	//TODO make Serializable and add to Application
+	public List<PanelMenuItem> getAdminMenu() {
+		List<PanelMenuItem> menuList = new ArrayList<PanelMenuItem>();
 		menuList.add(new PanelMenuItem("label.profile","info.profile"){
 			private static final long serialVersionUID = 1L;
 
@@ -135,7 +134,7 @@ public abstract class AdminPage extends WebPage {
 			@Override
 			public Panel getPanel(String id) {
 				
-				if (((CmsApplication) getApplication()).getRepositoryService().isAdminApp()){
+				if (((CmsApplication)getApplication()).getRepositoryService().isAdminApp()){
 					return ContentAdminPanel.newAdminInstance(id);
 		    	} else {
 		    		return ContentAdminPanel.newInstance(id);
@@ -144,8 +143,10 @@ public abstract class AdminPage extends WebPage {
 			
 		});
 		
-		return menuList;
-    }
+		return Collections.unmodifiableList(menuList);
+
+	}
+
 	
 	public CmsSession getAppSession(){
         return (CmsSession)getSession();

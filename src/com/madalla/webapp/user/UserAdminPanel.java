@@ -94,7 +94,8 @@ public class UserAdminPanel extends CmsPanel {
 			add(new CheckBox("admin").setOutputMarkupId(true));
 			add(new CheckBox("requiresAuth").setOutputMarkupId(true));
 			sitesChoices = getRepositoryService().getSiteEntries();
-			add(new CheckBoxMultipleChoice<SiteData>("site", getSitesModel() ,
+			@SuppressWarnings("unchecked") IModel<Collection<SiteData>> siteModel = new Model((Serializable) sites); 
+			add(new CheckBoxMultipleChoice<SiteData>("site", siteModel ,
 					sitesChoices, new ChoiceRenderer<SiteData>("name")).setOutputMarkupId(true));
 		}
 
@@ -438,11 +439,6 @@ public class UserAdminPanel extends CmsPanel {
 
 		}.setDefaultFormProcessing(false));
 		
-	}
-	
-	@SuppressWarnings("unchecked")
-	private IModel<Collection<SiteData>> getSitesModel(){
-		return new Model((Serializable) sites);
 	}
 	
 	private boolean sendEmail(String subject, String message, UserDataView user){
