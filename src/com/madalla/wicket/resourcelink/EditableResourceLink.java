@@ -43,6 +43,7 @@ import com.madalla.webapp.upload.IFileUploadInfo;
 import com.madalla.webapp.upload.IFileUploadStatus;
 import com.madalla.wicket.configure.AjaxConfigureIcon;
 
+
 public class EditableResourceLink extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(5000);
