@@ -5,13 +5,20 @@
 	<artifactId>ecshare</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0-SNAPSHOT</version>
-	<!-- TODO project name  -->
 	<name>ecshare</name>
 	<description>Wicket Framework code for multi-lingual Content Management system</description>
-	<!--
-		TODO <organization> <name>company name</name> <url>company url</url>
-		</organization>
-	-->
+    <organization> 
+        <name>emalan consulting, inc</name> 
+        <url>http://www.emalan.com</url>
+	</organization>
+	<developers>
+        <developer>
+            <id>emalan</id>
+            <name>Eugene</name>
+            <email>eugene@emalan.com</email>
+            <url>http://www.emalan.com</url>
+        </developer>
+    </developers>
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -43,6 +50,7 @@
             <artifactId>spring</artifactId>
             <version>2.5.6</version>
         </dependency>
+        
 		
 		<!-- JACKRABBIT -->
         <dependency>
@@ -109,15 +117,9 @@
 			<version>1.0</version>
 		</dependency>
 		
-		
-		
-		
-
-		
-
-
 	</dependencies>
 	<build>
+	   <sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>
 				<filtering>false</filtering>
@@ -161,6 +163,25 @@
 			</plugin>
 		</plugins>
 	</build>
+	<reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.0.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.6.1</version>
+                <configuration>
+                    <copyright>Copyright &amp;copy; Eugene Malan. All Rights Reserved.</copyright>
+                    <title>Web application framework API</title>
+                    <overview>src/overview.html</overview>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 	<properties>
 		<wicket.version>1.4.1</wicket.version>
         <jackrabbit.version>1.5.5</jackrabbit.version>
