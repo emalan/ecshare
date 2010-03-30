@@ -163,6 +163,13 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+        <site>
+            <id>local</id>
+            <name>Local Maven Repositor</name>
+            <url>cp://Users/emalan/.m2/repository</url>
+        </site>
+    </distributionManagement>
 	<reporting>
         <plugins>
             <plugin>
