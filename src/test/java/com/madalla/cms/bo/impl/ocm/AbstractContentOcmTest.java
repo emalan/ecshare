@@ -53,6 +53,7 @@ public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester 
 		configLocations
 				.add("classpath:com/madalla/cms/jcr/applicationContext-jcr.xml");
 		configLocations.add("classpath:com/madalla/email/applicationContext-email.xml");
+		configLocations.add("classpath:com/madalla/db/dao/applicationContext-dao.xml");
 		return configLocations;
 	}
 	

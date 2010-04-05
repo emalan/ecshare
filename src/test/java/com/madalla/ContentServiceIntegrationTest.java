@@ -44,6 +44,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 		List<String> configLocations = new ArrayList<String>();
 		configLocations.add("classpath:com/madalla/cms/service/ocm/applicationContext-cms.xml");
         configLocations.add("classpath:com/madalla/cms/jcr/applicationContext-jcr.xml");
+        configLocations.add("classpath:com/madalla/db/dao/applicationContext-dao.xml");
         
 		return configLocations;
 	}
