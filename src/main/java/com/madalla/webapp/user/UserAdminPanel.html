@@ -1,0 +1,150 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+        
+        p.info {clear: both; width: 25em; margin-top: 15px;}
+        
+        form div label { width: 7em;}
+        
+        div#selectUserDiv {width: 100%;}
+        div#selectUserDiv select{
+        	float:left;
+        	margin: 10px 0 0 0;
+        }
+        form.userForm {float:left;}
+        form.userForm div label{text-align: right;}
+        form.userForm .buttonwrapper {margin: 5px 0 0 0;}
+        form.userForm .feedbackPanel {
+        	float: left;
+        	padding-left: 4em;
+        	height: 2em;
+        }
+        div#resetForm {
+        	clear:both;
+        	float: none;
+        	padding: 10px;
+        }
+        
+        div.profileBlock {
+            overflow: hidden;
+            width: 100%;
+        }
+        
+        form div.formButtons {margin-left: 6em;}
+        
+        form div.email {
+        	float: none;
+        	clear: both;
+        	overflow: hidden;
+        	width: 100%;
+        }
+        span#welcome {clear:both;}
+        
+        form div.email .feedbackPanel {margin: 20px 0 0 15px; color: blue;}
+                
+        div.wicket-aa {
+                    font-family: "Lucida Grande","Lucida Sans Unicode",Tahoma,Verdana;
+                    font-size: 12px;
+                    background-color: white;
+                    border-width: 1px;
+                    border-color: #cccccc;
+                    border-style: solid;
+                    padding: 2px;
+                    margin: 1px 0 0 0;
+                    text-align:left;
+                }
+       div.wicket-aa ul { list-style:none; padding: 2px; margin:0; }
+       div.wicket-aa ul li.selected { background-color: grey; padding: 2px; margin:0; }
+       
+       div#sites input, div#sites label {
+           float:none;
+       }
+            
+    </style>
+</wicket:head>
+<body>
+    <wicket:panel>
+                   
+    	<div id="profile" class="adminSection">
+    		<h2><wicket:message key="heading.profile">Label Contents</wicket:message></h2>
+            <p class="info"><wicket:message key="label.user.info">Label Contents</wicket:message></p>
+           
+            <div id="selectUserDiv">
+            	<select wicket:id="userSelect"></select>
+            
+            	<form wicket:id="userForm" class="userForm">
+            		<span class="feedbackPanel" wicket:id="formFeedback">[label]</span>
+                	<div>    
+                    	<label><wicket:message key="label.username">Label Contents</wicket:message></label>
+                    	<input class="inputText" type="text" wicket:id="name"/>
+                    	
+                    	<span class="buttonwrapper">
+                        	<a class="bluebutton" wicket:id="createUser"><span><wicket:message key="label.create">Label Contents</wicket:message></span></a>
+                    	</span>
+                    	<input type="submit" style="display: none;">
+                	</div>
+            	</form>
+            	<div id="resetForm" class="buttonwrapper">
+	           		<a wicket:id="resetForm" class="bluebutton"><span><wicket:message key="label.resetform">Label Contents</wicket:message></span></a>
+      			</div>
+            	
+            </div>
+
+			<div class="profileBlock" wicket:id="profileBlock" style="display: none;">
+			<form class="profileForm" wicket:id="profileForm">
+                <div>
+                    <label for="email"><wicket:message key="label.email">Label Contents</wicket:message></label>
+                    <input id="email" class="inputText" type="text" wicket:id="email"/>
+                    <span class="feedbackPanel" wicket:id="emailFeedback"></span>
+                </div>
+               	<div>    
+                   	<label><wicket:message key="label.firstName">Label Contents</wicket:message></label>
+                   	<input class="inputText" type="text" wicket:id="firstName"/>
+                </div>
+                <div>    
+                   	<label><wicket:message key="label.lastName">Label Contents</wicket:message></label>
+                   	<input class="inputText" type="text" wicket:id="lastName"/>
+                </div>
+                <div>    
+                   	<label><wicket:message key="label.admin">Label Contents</wicket:message></label>
+                   	<input class="checkbox" type="checkbox" wicket:id="admin"/>
+                </div>
+                <div>    
+                   	<label><wicket:message key="label.auth">Label Contents</wicket:message></label>
+                   	<input class="checkbox" type="checkbox" wicket:id="requiresAuth"/>
+                </div>
+                <div id="sites">
+                	<span valign="top" wicket:id="site">
+        				<input type="checkbox">site 1</input>
+        				<input type="checkbox">site 2</input>
+    				</span>
+                </div>
+                <div class="formButtons">
+                    <input type="submit" style="display: none;">
+                    <span class="buttonwrapper">
+                        <a wicket:id="profileSubmit" class="orangebutton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
+                    </span>
+                    <span class="feedbackPanel" wicket:id="profileFeedback"></span>
+                </div>
+                <div class="email">
+                    <p class="info"><wicket:message key="label.welcome.info">Label Contents</wicket:message></p>
+                    <span id="welcome" class="buttonwrapper">
+                        <a class="bluebutton" wicket:id="welcomeLink"><span><wicket:message key="label.welcome">Label Contents</wicket:message></span></a>
+                    </span>
+                    <span class="feedbackPanel" wicket:id="welcomeFeedback"></span>
+                </div>
+                <div class="email">
+                    <p class="info"><wicket:message key="label.reset.info">Label Contents</wicket:message></p>
+                    <input type="submit" style="display: none;" />
+                    <span class="buttonwrapper">
+                        <a class="bluebutton" wicket:id="resetLink"><span><wicket:message key="label.reset">Label Contents</wicket:message></span></a>
+                    </span>
+                    <span class="feedbackPanel" wicket:id="resetFeedback"></span>
+                </div>
+            </form>
+            </div>        	
+		</div>
+        
+    </wicket:panel>
+</body>
+</html>

@@ -1,0 +1,17 @@
+.imageWrapper {
+    background: url('image/shadow.gif') no-repeat right bottom;
+   
+}
+
+.imageWrapper div {
+    background: url('image/mask.png') no-repeat left top !important;
+    background: url('image/mask.gif') no-repeat left top;
+    padding: 0 5px 0 0;
+    float: left;
+}
+
+.imageWrapper img{
+    background-color: #fff;
+    border: 1px solid #a9a9a9;
+    padding: 4px;
+}

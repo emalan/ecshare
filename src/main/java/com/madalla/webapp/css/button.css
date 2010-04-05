@@ -1,0 +1,88 @@
+div.buttonwrapper{ /* Container you can use to surround a CSS button to clear float */
+    overflow: hidden; /*See: http://www.quirksmode.org/css/clearing.html */
+    width: 100%;
+}
+span.buttonwrapper{ /* span to serve as spacer. you should enclose in div to clear float */
+    float: left;
+    padding-left: 2em; 
+}
+/* disabled buttons */
+.buttonwrapper span.orangebutton, .buttonwrapper span.bluebutton{
+    background: transparent url('image/square-gray-left.gif') no-repeat top left;
+    display: block;
+    float: left;
+    font: normal 12px Arial; /* Change 12px as desired */
+    line-height: 15px; /* This value + 4px + 4px (top and bottom padding of SPAN) must equal height of button background (default is 23px) */
+    height: 23px; /* Height of button background height */
+    padding-left: 9px; /* Width of left menu image */
+    text-decoration: none;
+}
+.buttonwrapper span.orangebutton  span, .buttonwrapper span.bluebutton span{
+    background: transparent url('image/square-gray-right.gif') no-repeat top right;
+    display: block;
+    padding: 4px 9px 4px 0; /*Set 9px below to match value of 'padding-left' value above*/
+}
+
+/* Orange */
+a.orangebutton{
+    background: transparent url('image/square-orange-left.gif') no-repeat top left;
+    display: block;
+    float: left;
+    font: normal 12px Arial; /* Change 12px as desired */
+    line-height: 15px; /* This value + 4px + 4px (top and bottom padding of SPAN) must equal height of button background (default is 23px) */
+    height: 23px; /* Height of button background height */
+    padding-left: 8px; /* Width of left menu image */
+    text-decoration: none;
+}
+
+a:link.orangebutton, a:visited.orangebutton{
+    color: #494949; /*button text color*/
+}
+
+a.orangebutton span{
+    background: transparent url('image/square-orange-right.gif') no-repeat top right;
+    display: block;
+    padding: 4px 9px 4px 0; /*Set 9px below to match value of 'padding-left' value above*/
+}
+
+a.orangebutton:hover{ /* Hover state CSS */
+    background-position: bottom left;
+    cursor:pointer;
+}
+
+a.orangebutton:hover span{ /* Hover state CSS */
+    background-position: bottom right;
+    color: black;
+}
+
+/* Blue */
+a.bluebutton{
+    background: transparent url('image/square-blue-left.gif') no-repeat top left;
+    display: block;
+    float: left;
+    font: normal 12px Arial; /* Change 12px as desired */
+    line-height: 15px; /* This value + 4px + 4px (top and bottom padding of SPAN) must equal height of button background (default is 23px) */
+    height: 23px; /* Height of button background height */
+    padding-left: 9px; /* Width of left menu image */
+    text-decoration: none;
+}
+
+a:link.bluebutton, a:visited.bluebutton{
+    color: #494949; /*button text color*/
+}
+
+a.bluebutton span{
+    background: transparent url('image/square-blue-right.gif') no-repeat top right;
+    display: block;
+    padding: 4px 9px 4px 0; /*Set 9px below to match value of 'padding-left' value above*/
+}
+
+a.bluebutton:hover{ /* Hover state CSS */
+    background-position: bottom left;
+    cursor:pointer;
+}
+
+a.bluebutton:hover span{ /* Hover state CSS */
+    background-position: bottom right;
+    color: black;
+}

@@ -1,0 +1,96 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+        #control {float: left; width: 100%;}
+        form { float:left;}
+        form div#textControl {margin-top:20px;}
+        form textarea#text {float:left; clear:both;}
+        form div label { width: 100px;}
+        form span {float:left;}
+        form .feedbackPanel ul li {
+			padding-left:1em;
+			padding-top:7px;
+			text-indent:0pt;
+		}
+        .yui-skin-sam {margin-top: 8px;}
+        
+        div#formButtons { margin: 10px 0 0 5px;}
+        .buttonwrapper {
+            margin: 0 5px 10px 0 ;
+        }
+        
+    </style>
+</wicket:head>
+<body>
+    <wicket:panel>
+ 
+        <form wicket:id="blogForm">
+
+            <div id=dateDiv>
+	            <label for="date">
+                    <wicket:message key="label.date">Label Contents</wicket:message>
+                </label>
+                <input id="date" class="inputText" size="14" type="text" wicket:id="dateTextField" /> 
+                <span class="feedbackPanel" wicket:id="dateFeedback"/>
+            </div>
+
+            <div id="categoryDiv">
+                <label for="category">
+                    <wicket:message key="label.category">Label Contents</wicket:message>
+                </label>
+                <select id="category" wicket:id="category">
+                    <option>category 1</option>
+                    <option>category 2</option>
+                </select>
+                <span class="feedbackPanel" wicket:id="categoryFeedback"/>
+            </div>
+            
+            <div id="title">
+            	<label for="title">
+                    <wicket:message key="label.title">Label Contents</wicket:message>
+                </label>
+            	<input id="title" class="inputText" wicket:id="title" type="text" size="50" />
+            	<span class="feedbackPanel" wicket:id="titleFeedback"/>
+            </div>
+
+            <div id="keywords">
+            	<label for="keywords">
+                    <wicket:message key="label.keywords">Label Contents</wicket:message>
+                </label>
+            	<input id="keywords" class="inputText" wicket:id="keywords" type="text" size="50"/>
+            </div>
+
+            <div id="description">
+            	<label for="description">
+                    <wicket:message key="label.description">Label Contents</wicket:message>
+                </label>
+            	<textarea id="description" wicket:id="description" rows="5" cols="50">Input goes here</textArea>
+            </div>
+
+            <div id="textControl">
+                <a href="javascript:;" onmousedown="tinyMCE.get('text').show();">[Show]</a>
+                <a href="javascript:;" onmousedown="tinyMCE.get('text').hide();">[Hide]</a>
+            </div>
+
+            <div id="textDiv">
+                <textarea style="textarea" id="text" wicket:id="text" rows="25" cols="60">Input comes here</textarea>
+            </div>
+
+
+
+            <div class="formButtons">
+                <span class="buttonwrapper">
+                    <a href="#" class="orangebutton" wicket:id="cancelButton"><span><wicket:message key="label.cancel">Label Contents</wicket:message></span></a>
+                </span>
+                <span class="buttonwrapper">
+                    <a href="#" class="orangebutton" wicket:id="submitButton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
+                </span>
+                <span class="feedbackPanel" wicket:id="feedback"/>
+            </div>
+
+
+        </form>
+        
+    </wicket:panel>
+</body>
+</html>

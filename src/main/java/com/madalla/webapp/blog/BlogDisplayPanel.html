@@ -1,0 +1,87 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+    	div#blogDisplayHeader{float: left; width: 100%;}
+        div.blogEntry{
+            float:left; clear: both;
+            width:100%;
+            margin-top: 10px;
+            border-top: thin solid #444444;
+            padding-top:5px;
+        }
+        .blogTitle {
+			font-size: 1.4em;
+			font-weight: bold;
+			letter-spacing: normal;
+			color: #3366CC;
+		}
+        .blogText {
+        }
+        .blogEntryFooter {
+            clear: both;
+        	margin-top: 20px;
+        	font-size: 0.9em;
+        	color: #999999;
+        }
+        .blogDate, .keywords {
+            color: #6699CC;
+        }
+
+        .showHome .blogEntries {display: inline; }
+        .showHome #blogEntryDiv {display: none;}
+        .showBlog .blogEntries {display: none;}
+        .showBlog #blogEntryDiv {display: inline;}
+        
+        .blogEntry .blogText {display:inline;}
+        .blogEntry .blogTextHide {display:none;} 
+        
+    </style>
+</wicket:head>
+<body>
+    <wicket:panel>
+    
+    	<div id="blogDisplayHeader">
+            <a href="#" wicket:id="createNew"><wicket:message key="label.create">Label Contents</wicket:message></a>
+        </div>
+
+        <div id="blogEntryDiv" class="blogEntry">
+            <h3 class="blogTitle" wicket:id="blogTitle"/>
+            <span class="blogText" wicket:id="text"/>
+            <div class="blogEntryFooter">
+                <div>
+            		<wicket:message key="label.date">Label Contents :</wicket:message>
+            		<span class="blogDate" wicket:id="date"/>
+                </div>
+                <div>	
+            		<wicket:message key="label.keywords">Label Contents :</wicket:message>
+            		<span class="keywords" wicket:id="keywords"/>
+            	</div>
+            </div>
+            <a href="#" wicket:id="editBlogLink"><wicket:message key="label.edit">Label Contents :</wicket:message></a>
+        </div>
+    
+        <span class="blogEntries" wicket:id="comments">
+        <div class="blogEntry">
+            <h3 class="blogTitle" wicket:id="title"/>
+            
+            <span class="blogText" wicket:id="textSummary"/>
+            <span class="blogTextHide" wicket:id="textFull"/>
+            <a class="blogTextLink" href="#" wicket:id="showFullText"><wicket:message key="label.more">Label Contents</wicket:message></a>
+            
+            <div class="blogEntryFooter">
+                <div>
+            		<wicket:message key="label.date">Label Contents :</wicket:message>
+            		<span class="blogDate" wicket:id="date"/>
+                </div>
+                <div>	
+            		<wicket:message key="label.keywords">Label Contents :</wicket:message>
+            		<span class="keywords" wicket:id="keywords"/>
+            	</div>
+            </div>
+            <a href="#" wicket:id="editBlog"><wicket:message key="label.edit">Label Contents :</wicket:message></a>
+        </div>
+        </span>
+    
+    </wicket:panel>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+        div#navLinks, div#forgotUsername, div#forgotPassword, div#supportEmail{
+            clear:both; 
+             
+            margin: 15px 0 0 10px;
+        
+        }
+        span.divHeadings {clear:both; float: left; color: blue; font-size: large;}
+        
+        div#navLinks a {margin-right: 10px; }
+        
+        form div{clear: both; float: left; width: 100%;}
+        form div question {float: left;}
+        form div input {float: left;}
+        form div label {width:7em;}
+        form div .buttonwrapper {margin-left: 10em; float: left;}
+        form div .feedbackPanel {float: left;}
+        
+        
+    </style>
+
+</wicket:head>
+<body>
+    <wicket:panel>
+    
+    	<div class="adminSection">
+ 
+    	    <h2><wicket:message key="heading.login">[label]</wicket:message></h2>
+    	    <p wicket:id="loginInfo" class=info>[label]</p>
+    	    
+    	    <div id="navLinks">
+                <a wicket:id="logout" href="#"><wicket:message key="label.logout">[label]</wicket:message></a>
+            </div>
+            
+            <span wicket:id="signInPanel"></span>
+
+            <div id="navLinks">
+                <a wicket:id="emailLink" href="#" ></a>
+            </div>
+	        
+	        <div wicket:id="emailDiv" style="overflow:hidden; height: 28em; display:none;">
+	            <hr/>
+	            <span class="divHeadings"><wicket:message key="heading.support">Label Contents</wicket:message></span>
+	            <span wicket:id="supportEmail" />
+	        </div>
+	        
+	    </div>
+    	<script type="text/javascript"> 
+        	var supportAnim = new Animator().addSubject(new DiscreteStyleSubject(wicketGet('supportEmail'),'display','none',''));
+    	</script>
+        
+    </wicket:panel>
+</body>
+</html>

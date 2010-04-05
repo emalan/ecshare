@@ -1,0 +1,48 @@
+<html xmlns:wicket>
+<wicket:head>
+       <style type="text/css">
+           div.tab-panel {clear: both;}
+            #control {float: left; width: 100%;}
+
+            form textarea {float:left; clear:both;}
+            
+            
+            
+            div#translate {
+            	clear:both;
+            	margin-top: 20px;
+            }
+            div#translate form select , div#translate form input{
+                float:none;
+            }
+            div#results {
+            	clear: both;
+            }
+            div#results_body {
+            	border: thin solid #CCCCCC;
+            }
+            p.info {margin-bottom: 0;}
+    	</style>
+    	<script type="text/javascript" src="http://www.google.com/jsapi">
+    	</script>
+
+</wicket:head>
+<body>
+    <wicket:panel>
+
+        <div id="translate">
+        	<p class="info"><wicket:message key="translate.info">[message]</wicket:message></p>
+        </div>
+        <div>
+            <a href="#" wicket:id="translateLink"><wicket:message key="label.translate">[label]</wicket:message></a>
+        </div>
+
+        <div>
+        	<span wicket:id="contentEditor"/>
+        </div>
+        
+    </wicket:panel>
+</body>
+</html>    
+    
+    

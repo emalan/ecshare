@@ -1,0 +1,162 @@
+/* =Form
+-----------------------------------------------------------------------------*/
+form {
+    
+}
+	
+form fieldset {
+	float: left;
+	width: 100%;
+	clear: left;
+}
+
+form fieldset legend {
+	margin-left: 1em;
+	font-size: 116%;
+	font-weight: bold;
+	color: blue;
+	padding-left: 5px;
+	padding-top: 10px;
+}
+
+form div {
+	float : left;
+	width : 100%;
+    clear:both;
+}
+
+form div.submit {
+	float: none;
+	width: 100%;
+	clear: left;
+	padding-bottom: 0.5em;
+	overflow: hidden;
+}
+
+form div label {
+    float: left;
+    left: 0;
+    text-align: left;  
+    padding-top: 10px; 
+    padding-right: 10px; 
+    padding-left: 5px;
+}
+
+form div span.question {
+	float: left;
+    margin: 10px 0 0 0;
+}
+
+/* Form input */
+form input {
+	float: left;
+}
+
+form input[type="text"], form input[type="password"] {
+    border: 1px solid #8E8E8E;
+    margin: 10px 0 0 0;
+    color: #444444;
+}
+
+form input[type="radio"]{
+    margin: 10px 0 0 0;
+}
+
+form input[type="checkbox"]{
+    margin: 10px 0 0 0;
+}
+
+form input[type="file"] {
+	
+}
+
+form textarea {
+
+}
+
+textarea {
+    margin: 10px 0 0 0;
+    border: 1px solid #8E8E8E; background-color:#FFFFFF; 
+}
+
+
+
+form select {
+	float: left;
+	margin:10px 0 0;
+    border: 1px solid #8E8E8E; 
+    color: #444444; 
+    background-color:#FFFFFF; 
+}
+
+/* FeedbackPanel style */
+form div .feedbackPanel {
+	float: left;
+	margin-top: 0.4em;
+}
+
+form div.submit .feedbackPanel {
+	margin-top: 0.2em;
+}
+ul.feedbackPanel{
+    margin:0;
+}
+.feedbackPanel li {
+    font-style:normal;
+    list-style-image:none;
+    list-style-position: inside;
+    list-style-type: none;
+    padding-left:1em;
+/*    padding-top:10px; */
+    text-indent:0pt;
+    float: left;
+    clear: both;
+}
+
+.feedbackPanelERROR {
+    color:red;
+}
+.feedbackPanelWARNING {
+    color:orange;
+}
+.feedbackPanelINFO {
+    color:blue;
+}
+
+form .feedbackPanelERROR {
+    color:red;
+    font-style: italic;
+}
+
+form .feedbackPanelINFO {
+    color: blue;
+    font-style: italic;
+}
+
+/* The classes : inputError & inputValid will enable extra visual styling */
+form input.inputError {
+    background-color:#F6BCBC;
+    border:1px solid #990000;
+    color:#990000;
+}
+
+form div.inputValid span.feedbackPanel{
+    background-image: url("image/inputValid.gif");
+    background-position: left bottom;
+    background-repeat: no-repeat;
+}
+form div.inputValid span.feedbackPanel span.feedbackPanelINFO{
+    padding-left: 10px;
+}
+
+form .info {
+	color: blue;
+	font-size: x-small;
+	margin: 0;
+}
+
+form .message {
+	color: orange;
+	font-size: x-small;
+	margin: 0;	
+}

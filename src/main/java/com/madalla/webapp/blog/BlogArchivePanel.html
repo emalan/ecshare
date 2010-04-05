@@ -1,0 +1,25 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+        div#blogDisplayHeader{float: left; width: 100%;}
+        div.blogTree{
+            float:left; clear: both;
+            width:100%;
+        }
+        .blogTree th, .blogTree td {
+            border:none;
+        }
+    </style>
+</wicket:head>
+<body>
+    <wicket:panel>
+        <div id="blogDisplayHeader">
+            <a href="#" wicket:id="home"><wicket:message key="label.home">Label Contents</wicket:message></a>
+        </div>
+    
+        <div wicket:id="BlogTree" class="blogTree">
+        </div>
+
+    </wicket:panel>
+</body>
+</html>

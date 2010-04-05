@@ -1,0 +1,50 @@
+<body>
+Web Application framework used for creating Multi-lingual CMS Wicket Applications.
+<p>
+<p>
+This framework is designed to make it easy to create Content Managed Sites from existing web sites.
+Each web-site would have its own layout and style, but would make use of the framework to embed
+Content Managed Panels into the site. These Content Managed Panels make it easy to configure and
+maintain the Content from the live website. The framework also supplies Admin Pages that allow
+users to configure certain aspects of the site.
+</p>
+<p>
+ Framework Highlights
+<ul>
+<li>Spring Configuration for JCR API to Content Repository and for application specific information</li>
+<li>Decoupled Data Objects for Content Storage and implementations of Data Objects for JCR API</li>
+<li>Abstract Wicket Application Classes for common fuctionality</li>
+<li>Secure Admin Pages for Site Configuration and Repository Management</li>
+<li>User administration including creating users, welcome email, password reset and use of secure ssh pages for login and password</li>
+<li>Ajax Form processing, including Ajax Submit Button and Ajax Self-validating Input fields</li>
+<li>Multi-lingual support : multi lingual text editing, including translate page (with google translate functionality)</li>
+<li>Multi-lingual Search Engine Optimization : separate URL's and Page Meta information for each supported language</li>
+</ul>
+</p>
+<p>
+Site Admin functionality includes
+<ul>
+<li>User Admin : profile changes, password change, creating and editing existing users</li>
+<li>Site Admin : dynamic enable/disable of supported languages for site, site email, site URL</li>
+<li>Page Admin : Maintain Menu names and Page Meta information for all supported languages</li>
+<li>Site Data : View messages sent from Contact Panel, <em>coming soon..</em> view user changes to content.</li>
+<li>Content Admin : View tree structure of Content. Backup and restore of data. Delete/Copy Nodes.</li>
+</ul>
+</p>
+<p>
+List of Panels that can be used in web sites
+<ul>
+<li>One line "hover-click editable" text blocks</li>
+<li>Multiple line text areas - editable using full html online editor includes multi-lingual translate functionality</li>
+<li>Multi image albums with different configurations - fade rotate, table layout</li>
+<li>Editable Link to File - hide/show functionality, currently supports pdf and doc formats</li>
+<li>Blog Panel - multiple Blog functionality</li>
+<li>Email Panel - email and log messages</li>
+</ul>
+</p>
+<p>
+The present configuration of this code base sets up a Jackrabbit Content Repository using a 
+Relational database (derby in development, mysql in production). The Production applications
+are deployed to Amazon's EC2 Cloud using scripts.
+</p>
+</body>

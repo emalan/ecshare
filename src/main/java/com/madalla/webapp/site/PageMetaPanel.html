@@ -1,0 +1,102 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+        form div label {
+            width:8em;
+            clear: both;
+        }
+        form div p {
+            padding-left: 15px;
+            padding-top: 5px;
+            width: 30em;
+            clear:both;
+        }
+        div.nameDiv {
+        	float: left;
+        	clear: both;
+        	padding-top: 22px;
+        }
+        div.homeDiv {
+        	float: left;
+        	clear: both;
+        	padding-top: 22px;
+        }
+        div.otherDiv {
+        	float: left;
+        	margin-left: 10px;
+        }
+        
+
+    </style>
+</wicket:head>
+<body>
+    <wicket:panel>
+        <div class="nameDiv">
+            <h3 wicket:id="pageName">[label]</h3>
+        </div>
+        <div class="homeDiv">
+            <form wicket:id="homeBaseForm">
+            	<div>
+                    <label><wicket:message key="label.displayname">[label]</wicket:message></label>
+                    <input style="width:10em;" wicket:id="displayName" class="inputText" type="text"></input>
+                </div>
+                <div>
+                    <label><wicket:message key="label.title">[label]</wicket:message></label>
+                    <input style="width:15em;" wicket:id="title" class="inputText" type="text"></input>
+                </div>
+                <div>
+                    <label><wicket:message key="label.author">[label]</wicket:message></label>
+                    <input style="width:15em;" wicket:id="author" class="inputText" type="text"></input>
+                </div>
+                <div>
+                    <label><wicket:message key="label.description">[label]</wicket:message></label>
+                    <textarea wicket:id="description" rows="2" cols="30"></textarea>
+                </div>
+                <div>
+                    <label><wicket:message key="label.keywords">[label]</wicket:message></label>
+                    <textarea wicket:id="keywords" rows="1" cols="30"></textarea>
+                    <p class="info"><wicket:message key="info.keywords">[label]</wicket:message></p>
+                </div>
+                <div class="formButtons">
+                    <span class="buttonwrapper">
+                        <a wicket:id="formSubmit" class="orangebutton"><span><wicket:message key="label.submit">[label]</wicket:message></span></a>
+                    </span>
+                    <span wicket:id="formFeedback" class="feedbackPanel"></span>
+                </div>
+                
+            </form>
+        </div>
+        <div class="otherDiv">
+            <select wicket:id="langSelect" >
+    			<option>[option1]</option>
+        		<option>[option2]</option>
+    		</select>
+            <form wicket:id="homeOtherForm">
+            	<div>
+                    <input style="width:10em;" wicket:id="displayName" class="inputText" type="text"/>
+                </div>
+                <div>
+                    <input style="width:15em;" wicket:id="title" class="inputText" type="text"/>
+                </div>
+                <div>
+                    <input style="width:15em;" wicket:id="author" class="inputText" type="text"/>
+                </div>
+                <div>
+                	<textarea wicket:id="description" rows="2" cols="30"></textarea>
+                    
+                </div>
+                <div>
+                    <textarea wicket:id="keywords" rows="1" cols="30"></textarea>
+                </div>
+                <div class="formButtons">
+                    <span class="buttonwrapper">
+                        <a wicket:id="formSubmit" class="orangebutton"><span><wicket:message key="label.submit">[label]</wicket:message></span></a>
+                    </span>
+                    <span wicket:id="formFeedback" class="feedbackPanel"></span>
+                </div>
+                
+            </form>
+        </div>
+    </wicket:panel>
+</body>
+</html>

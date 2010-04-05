@@ -1,0 +1,202 @@
+
+body {
+    font-family:"Trebuchet MS",Verdana,Arial,Sans-serif;
+}
+
+#doc {
+    border-left: 1px solid #AFBFD8;
+    border-right:1px solid #AFBFD8;
+}
+
+/* Header */
+#hd {
+    background:#0022CC none repeat-x scroll left bottom;
+    color:#FFFFFF;
+}
+
+#hd h1{ 
+    padding-left: 50px;
+    padding-top: 10px;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+    font-size: 182%;
+    font-stretch: wider;
+}
+#ft {
+    background-color: #A4B3CA;
+    background-image: none;
+    background-repeat: repeat;
+    background-attachment: scroll;
+    background-position: 0%;
+    color : #808080;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.msg {
+    text-align: center;
+    margin: 0 0 5px 0;
+}
+
+.msg .message_box {
+     border: 1px solid #FFCC35;
+     color:#000000;
+     font-weight: bold;
+     display: inline;
+}
+
+#noscript_box {
+   background-color: #FAD163;
+}
+
+/* =Body
+-----------------------------------------------------------------------------*/
+#bd {
+    padding: 1em;
+}
+
+div.adminSection {
+    margin: 15px 0 0 10px;
+}
+
+h2{
+	color: blue; 
+	font-size: 138.5%;
+}
+
+h3 {
+	color:blue;
+	font-size: 116%;
+	font-weight: bold;
+}
+
+p.info {
+    color: blue;
+}
+
+/* =Tables
+---------------------------------------------------------------------------*/
+td, th {
+    border: none;
+}
+
+/* =Menu
+----------------------------------------------------------------------------*/
+#control {float: left; width: 100%;}
+
+#mainNav ul {
+	background-color:#FAA819;
+	float:left;
+	margin:0;
+	padding:0;
+	text-align:center;
+}
+
+#mainNav ul li {
+	float:left;
+	font-size:116%;
+	font-variant:normal;
+	font-weight:normal;
+	letter-spacing:0.1em;
+	list-style-type:none;
+	width:9.5em;
+}
+
+#mainNav ul span {
+	font-weight:bold;
+}
+
+#mainNav ul a, #mainNav ul span {
+	background:transparent url(divider.gif) repeat-y scroll left top;
+	color:#0022CC;
+	display:block;
+	float:left;
+	line-height:2.1em;
+	text-decoration:none;
+	width:100%;
+}
+
+#mainNav ul a:hover { 
+	color: #0000FF;
+	font-weight: bold;
+}
+#mainNav ul a:active { color: #FF0000;}
+
+#mainNav ul .home a {
+  	background: none;
+}
+
+/* =Table
+----------------------------------------------------------------------------*/
+table.dataview {
+	border-bottom:1px solid #0079D6;
+	font-family:arial;
+	font-size:1em;
+	margin-bottom:10px;
+}
+
+table.dataview caption {
+	text-align:left;
+}
+
+table.dataview tr {
+	padding-bottom:2px;
+	padding-top:2px;
+}
+
+table.dataview tr.even {
+	background-color:#FFEBCD;
+}
+table.dataview tr.odd {
+	background-color:#FFFFFF;
+}
+
+table.dataview tr td {
+	padding-left:8px;
+	padding-right:30px;
+}
+
+table.dataview tr th {
+	background-color:#C1E4FF;
+	border-bottom:1px solid #0079D6;
+	border-top:1px solid #0079D6;
+	color:black;
+	padding:3px 30px 3px 8px;
+	text-align:left;
+	vertical-align:middle;
+	white-space:nowrap;
+}
+table.dataview tr th {
+	background-position:right center;
+	background-repeat:no-repeat;
+}
+table.dataview tr th.wicket_orderDown {
+	background-color:#87CBFF;
+	background-image:url(sort_decrease.png);
+}
+table.dataview tr th.wicket_orderUp {
+	background-color:#87CBFF;
+	background-image:url(sort_incr.png);
+}
+table.dataview tr th.wicket_orderDown_n {
+	background-color:#87CBFF;
+	background-image:url(move_task_down.png);
+}
+table.dataview tr th.wicket_orderUp_n {
+	background-color:#87CBFF;
+	background-image:url(move_task_up.png);
+}
+table.dataview tr th.wicket_orderNone_n {
+	background-image:url(arrow_off.png);
+}
+table.dataview tr th a {
+	font-weight:normal;
+}
+table.dataview #message {
+	padding-left:3px;
+}
+table.dataview caption {
+	padding-bottom:2px;
+}
+

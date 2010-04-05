@@ -1,0 +1,53 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+        #contentName {
+            float: left; 
+            margin: 5px 0 0 0 ;
+        }
+        #contentName span {
+            padding: 10px 0 5px 0;
+            color:#0022CC; 
+            font-size:1.8em; 
+            font-weight: bold;
+        }
+        #contentText {
+            float: left; 
+            clear: both;
+            margin: 10px 0 ;
+            border: 1px solid #AFBFD8;
+            overflow: auto;
+            height: 15em;
+            width: 40em;
+        }
+        #contentActions {float: left; clear: both;}
+        
+    </style>
+</wicket:head>
+<body>
+    <wicket:panel>
+        
+        <div id="contentName">
+            <span>Content Path :</span>
+        	<span style="font-size: smaller; font-weight: normal;" wicket:id="nodeName"/>
+        </div>
+        
+        <div id="contentText">
+            <div class="contentBody" wicket:id="contentText"></div>
+        </div>
+        
+        <div id="contentActions">
+            <span class="buttonwrapper">
+        	   <a href="#" class="orangebutton" wicket:id="deleteNode"><span><wicket:message key="label.delete">Label Contents</wicket:message></span></a>
+        	</span>
+        	<span class="buttonwrapper">
+        	   <a href="#" class="orangebutton" wicket:id="copyNode"><span><wicket:message key="label.copy">Label Contents</wicket:message></span></a>
+        	</span>
+        	<span class="buttonwrapper">
+        	   <a href="#" class="orangebutton" wicket:id="pasteNode"><span><wicket:message key="label.paste">Label Contents</wicket:message></span></a>
+        	</span>
+        </div>
+        
+    </wicket:panel>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<html xmlns:wicket>
+<wicket:head>
+       <style type="text/css">
+            #control {float: left; width: 100%;}
+
+            form textarea {float:left; clear:both;}
+            span.buttonwrapper { padding-top: 15px;}
+            
+            form div.submit ul.feedbackPanel {
+				margin-top: 17px;
+			}
+    	</style>
+</wicket:head>
+<body>
+    <wicket:panel>
+        <form wicket:id="contentForm">
+            <textarea style="textarea" class="mceEditor" wicket:id="text" rows="20" cols="60">Input comes here</textarea>
+            <div class="submit">
+                <span class="buttonwrapper">
+                    <a href="#" class="orangebutton" wicket:id="submitButton"><span><wicket:message key="label.submit">Label Contents</wicket:message></span></a>
+                </span>
+                <span wicket:id="feedback">feedbackmessages will be put here</span>
+            </div>
+            
+        </form>
+
+
+    </wicket:panel>
+</body>
+</html>    
+    

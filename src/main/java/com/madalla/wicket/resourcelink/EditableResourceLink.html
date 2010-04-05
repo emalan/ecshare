@@ -1,0 +1,105 @@
+<wicket:head>
+	<style><!--
+	
+	    .contentLink .configure{
+	       display: none;
+	    }
+	    .contentLinkEdit .configure {
+	       display: inline;
+	    }
+	    
+	    div.editing .displayArea {
+	        display: none;
+	    }
+	    
+	    div.resourceFormDiv {
+	    	
+	    }
+	    
+	    form.resourceForm {
+	    	float: left;
+	    	clear: both;
+	    	padding: 4px;  
+	    	border: thin solid darkgray;
+	    }
+	    
+	    div#resourceLink {
+	    	clear: both;
+	    }
+
+	    div#resourceLink span.message{
+	        clear:left;
+	        font-size: xx-small;
+	        color: orange;
+	    }
+	    	    
+	    form.resourceForm div label{
+	    	width: 3em;
+	    }
+	    
+	    form.resourceForm div.checkbox label{
+	    	width: 5em;
+	    }
+	    
+	    form.resourceForm p.info {
+	    	width: 19em;
+	    }
+	    
+	    form.resourceForm .buttonwrapper {
+	       margin-left: 5em;
+	    }
+	    
+		div.configure span{
+			visibility: hidden;
+		}
+	    
+	--></style>
+
+</wicket:head>
+
+<wicket:panel>
+	
+		<div wicket:id="configureIcon" class="configure">
+		    <span>Edit</span>
+		</div>  
+		
+		<span wicket:id="displayArea" class="displayArea">
+			<a href="#" wicket:id="link">[label]</a>
+			<span class="message" wicket:id="uploadstatus">[[importing]]</span>
+		</span>
+
+	
+		<div class="resourceFormDiv" wicket:id="resource-form-div" style="display:none; overflow: hidden;" >
+	  		<form class="resourceForm textBlock" wicket:id="resource-form">
+	  		  <fieldset>
+				<p class="info"><wicket:message key="info.upload">[[label]]</wicket:message></p>
+		
+				<input type="file" wicket:id="file-upload" /><br/>
+				<div>
+					<label><wicket:message key="label.type">[[label]]</wicket:message></label>
+					<select wicket:id="type-select"></select>
+				</div>
+				<div>
+					<label><wicket:message key="label.name">[[label]]</wicket:message></label>
+					<input type="text" wicket:id="editor"/>
+				</div>
+				<div>
+					<label><wicket:message key="label.title">[[label]]</wicket:message></label>
+					<input type="text" wicket:id="title-editor"/>
+				</div>
+				<div class="checkbox">
+					<label><wicket:message key="label.hide">[[label]]</wicket:message></label>
+					<input type="checkbox" wicket:id="hide-link"/>
+				</div>
+			  </fieldset>	
+		      <div class="submit">
+					<span class="buttonwrapper">
+		                <a href="#" class="bluebutton" wicket:id="submit"><span><wicket:message key="label.submit">[[label]]</wicket:message></span></a>
+		            </span>
+			  </div>
+			</form>
+		</div>
+	
+
+  	
+</wicket:panel>

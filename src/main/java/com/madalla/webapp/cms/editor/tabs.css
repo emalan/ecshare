@@ -1,0 +1,39 @@
+div.tab-row {
+	float:left;
+	line-height:normal;
+	width:100%;
+}
+ div.tab-row ul {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin:0;
+	padding:10px 10px 0;
+}
+ div.tab-row li {
+	background:transparent url(left.gif) no-repeat scroll left top;
+	float:left;
+	margin:0;
+	padding:0 0 0 9px;
+	list-style-type: none;
+}
+ div.tab-row a {
+	background:transparent url(right.gif) no-repeat scroll right top;
+	color:#776655;
+	display:block;
+	font-weight:bold;
+	padding:5px 15px 4px 6px;
+	text-decoration:none;
+	white-space:nowrap;
+}
+ div.tab-row a:hover {
+	color:#333333;
+}
+ div.tab-row li.selected {
+	background-image:url(left_on.gif);
+}
+ div.tab-row li.selected a {
+	background-image:url(right_on.gif);
+	color:#333333;
+	padding-bottom:5px;
+}
