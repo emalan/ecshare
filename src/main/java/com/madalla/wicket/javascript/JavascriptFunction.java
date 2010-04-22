@@ -23,6 +23,10 @@ public class JavascriptFunction {
 		return this;
 	}
 	
+	/**
+	 * @param behavior
+	 * @param args  "'&amp;dragId=' + dragId"
+	 */
 	public void addAjaxCallback(AbstractAjaxBehavior behavior, String args)
 	{
 		addLine("wicketAjaxGet('" + behavior.getCallbackUrl()+"' + " + args +");\n");
