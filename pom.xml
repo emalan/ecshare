@@ -4,7 +4,7 @@
 	<groupId>com.madalla</groupId>
 	<artifactId>ecshare</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>ecshare</name>
 	<description>Wicket Framework code for multi-lingual Content Management system</description>
     <organization> 
@@ -187,6 +187,30 @@
 		
 	</dependencies>
 	<build>
+	   <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <filtering>false</filtering>
+                <directory>src/test/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
 		<plugins>
 			<plugin>
 				<inherited>true</inherited>
@@ -215,7 +239,10 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.5</version>
                 <configuration>
-                    <skipTests>false</skipTests>
+                    <excludes>
+                        <exclude>**/ContentOcmTest.java</exclude>
+                        <exclude>**/TestJcrTreeNode.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
 		</plugins>

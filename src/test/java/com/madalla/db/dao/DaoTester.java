@@ -23,8 +23,6 @@ public class DaoTester extends AbstractDependencyInjectionSpringContextTests{
 	@Override
 	protected String[] getConfigLocations() {
 		List<String> configLocations = new ArrayList<String>();
-		configLocations.add("classpath:com/madalla/cms/service/ocm/applicationContext-cms.xml");
-        configLocations.add("classpath:com/madalla/cms/jcr/applicationContext-jcr.xml");
         configLocations.add("classpath:com/madalla/db/dao/applicationContext-dao.xml");
         configLocations.add("classpath:com/madalla/db/dao/applicationContext-test.xml");
 		return  (String[])configLocations.toArray(new String[configLocations.size()]);
