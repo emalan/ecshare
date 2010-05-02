@@ -65,7 +65,7 @@ public class CalendarUtilsTest extends TestCase{
         list.add(new TreeEntry(dateTime.minusMonths(2),"2 month old", description));
         list.add(new TreeEntry(dateTime.minusMonths(2).withDayOfMonth(5),"another 2 month old", description));
         list.add(new TreeEntry(dateTime.minusMonths(3).withDayOfMonth(1),"3 month old - 1st day of month", description));
-        list.add(new TreeEntry(dateTime.minusMonths(3).withDayOfMonth(31),"3 month old - last day of month", description));
+        list.add(new TreeEntry(dateTime.minusMonths(3).withDayOfMonth(1),"3 month old - last day of month", description));
         list.add(new TreeEntry(dateTime.minusYears(1),"1 year old", description));
         list.add(new TreeEntry(dateTime.minusYears(3),"3 years old", description));
         

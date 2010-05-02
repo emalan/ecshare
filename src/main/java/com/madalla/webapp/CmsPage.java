@@ -15,6 +15,7 @@ import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.StringHeaderContributor;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderContributor;
@@ -43,6 +44,7 @@ import com.madalla.webapp.email.EmailFormPanel;
 import com.madalla.webapp.images.AlbumPanel;
 import com.madalla.webapp.images.exhibit.ExhibitPanel;
 import com.madalla.webapp.login.LoginPanel;
+import com.madalla.webapp.modal.EcModalWindow;
 import com.madalla.webapp.pages.SecureLoginPage;
 import com.madalla.webapp.pages.UserLoginPage;
 import com.madalla.webapp.scripts.JavascriptResources;
@@ -130,6 +132,12 @@ public abstract class CmsPage extends WebPage {
 		if (hasLangDropDown()) {
 			setupLangDropDown();
 		}
+		
+		if (hasInfoDialog()) {
+			setupInfoDialog();
+		} else {
+			add(new Label("infoDialog").setVisible(false));
+		}
 
 	}
 	
@@ -151,6 +159,24 @@ public abstract class CmsPage extends WebPage {
 				add(new StringHeaderContributor(MessageFormat.format(META_NAME, "keywords", pageInfo.getKeywords())));
 			}
 		}
+	}
+	
+	private void setupInfoDialog(){
+		final ModalWindow modal;
+		add(modal = new EcModalWindow("infoDialog"));
+		modal.setInitialHeight(400);
+		modal.setInitialWidth(300);
+		modal.setContent(new InfoPanel("content"));
+		
+		add(new AjaxLink<Void>("infoDialogLink"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				modal.show(target);
+			}
+			
+		});
 	}
 	
 	private void setupPopupLogin(){
@@ -335,6 +361,16 @@ public abstract class CmsPage extends WebPage {
 	 * @return true if you want a lang dropdown for dynamic languae switching
 	 */
 	protected boolean hasLangDropDown() {
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @return true if you want modal popup with site information
+	 * 
+	 * You must add 'infoDialogLink' to page
+	 */
+	protected boolean hasInfoDialog() {
 		return false;
 	}
 

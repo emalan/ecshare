@@ -56,7 +56,7 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
     		log.fatal("Build Information not configured Correctly.");
     		throw new WicketRuntimeException("Build Information not configured Correctly.");
     	}
-    	log.info("Build Information. version:" + buildInformation.getVersion());
+    	log.info("Build Information. ecshare version:" + buildInformation.getVersion());
     	if (repositoryAdminService == null){
     		log.fatal("Content Admin Service is not configured Correctly.");
     		throw new WicketRuntimeException("Repository Admin Service is not configured Correctly.");
@@ -198,6 +198,10 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
 
 	public void setBuildInformation(BuildInformation buildInformation) {
 		this.buildInformation = buildInformation;
+	}
+	
+	public BuildInformation getBuildInformation(){
+		return buildInformation;
 	}
 
 	public void setConfigType(String configType) {
