@@ -72,7 +72,7 @@
             <div id="selectUserDiv">
             	<select wicket:id="userSelect"></select>
             
-            	<form wicket:id="userForm" class="userForm">
+            	<form wicket:id="userForm" class="userForm floatDiv">
             		<span class="feedbackPanel" wicket:id="formFeedback">[label]</span>
                 	<div>    
                     	<label><wicket:message key="label.username">Label Contents</wicket:message></label>
@@ -91,7 +91,7 @@
             </div>
 
 			<div class="profileBlock" wicket:id="profileBlock" style="display: none;">
-			<form class="profileForm" wicket:id="profileForm">
+			<form class="profileForm floatDiv" wicket:id="profileForm">
                 <div>
                     <label for="email"><wicket:message key="label.email">Label Contents</wicket:message></label>
                     <input id="email" class="inputText" type="text" wicket:id="email"/>

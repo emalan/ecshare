@@ -1,16 +1,20 @@
-/* =Form
+/* 
+General  - form specific
 -----------------------------------------------------------------------------*/
 form {
     
 }
+
+/* =float
+Special layout style with floated divs */
 	
-form fieldset {
+form.floatDiv fieldset {
 	float: left;
 	width: 100%;
 	clear: left;
 }
 
-form fieldset legend {
+form.floatDiv fieldset legend {
 	margin-left: 1em;
 	font-size: 116%;
 	font-weight: bold;
@@ -19,13 +23,13 @@ form fieldset legend {
 	padding-top: 10px;
 }
 
-form div {
+form.floatDiv div {
 	float : left;
 	width : 100%;
     clear:both;
 }
 
-form div.submit {
+form.floatDiv div.submit {
 	float: none;
 	width: 100%;
 	clear: left;
@@ -33,7 +37,7 @@ form div.submit {
 	overflow: hidden;
 }
 
-form div label {
+form.floatDiv div label {
     float: left;
     left: 0;
     text-align: left;  
@@ -42,15 +46,26 @@ form div label {
     padding-left: 5px;
 }
 
-form div span.question {
+form.floatDiv div span.question {
 	float: left;
     margin: 10px 0 0 0;
 }
 
-/* Form input */
-form input {
+form.floatDiv input {
 	float: left;
 }
+
+form.floatDiv select {
+    float: left;
+    margin:10px 0 0;
+    border: 1px solid #8E8E8E; 
+    color: #444444; 
+    background-color:#FFFFFF; 
+}
+
+/* =input
+ Input specific
+*/
 
 form input[type="text"], form input[type="password"] {
     border: 1px solid #8E8E8E;
@@ -65,9 +80,8 @@ form input[type="radio"]{
 form input[type="checkbox"]{
     margin: 10px 0 0 0;
 }
-
 form input[type="file"] {
-	
+    
 }
 
 form textarea {
@@ -79,17 +93,8 @@ textarea {
     border: 1px solid #8E8E8E; background-color:#FFFFFF; 
 }
 
-
-
-form select {
-	float: left;
-	margin:10px 0 0;
-    border: 1px solid #8E8E8E; 
-    color: #444444; 
-    background-color:#FFFFFF; 
-}
-
-/* FeedbackPanel style */
+/* =validation
+FeedbackPanel style and validation */
 form div .feedbackPanel {
 	float: left;
 	margin-top: 0.4em;
