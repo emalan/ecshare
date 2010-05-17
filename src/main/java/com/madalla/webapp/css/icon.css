@@ -1,3 +1,8 @@
+.editLink {
+                    background: transparent url(image/pencil_icon.gif) no-repeat scroll center top;
+                    width: 10px; height: 15px;
+}
+
 span.configure, div.configure{
 	height:1.3em;
 	background-image: url(image/configure.png);

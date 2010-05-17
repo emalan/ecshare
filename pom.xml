@@ -4,7 +4,7 @@
 	<groupId>com.madalla</groupId>
 	<artifactId>ecshare</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0</version>
+	<version>1.1</version>
 	<name>ecshare</name>
 	<description>Wicket Framework code for multi-lingual Content Management system</description>
     <organization> 
