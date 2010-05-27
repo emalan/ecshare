@@ -83,7 +83,7 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
     	setupErrorHandling();
     }
     
-    public void setupPageMounts(){
+    protected void setupPageMounts(){
     	for (SiteLanguage lang : SiteLanguage.getLanguages()){
     		mount(new I18NBookmarkablePageRequestTargetUrlCodingStrategy(lang.locale, lang.getLanguageCode(), getHomePage()));
     	}

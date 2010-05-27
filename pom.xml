@@ -7,6 +7,7 @@
 	<version>1.1</version>
 	<name>ecshare</name>
 	<description>Wicket Framework code for multi-lingual Content Management system</description>
+	<url>http://www.emalan.com</url>
     <organization> 
         <name>emalan consulting, inc</name> 
         <url>http://www.emalan.com</url>
@@ -112,6 +113,7 @@
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 			<version>1.1</version> 
+			<scope>provided</scope>
 		</dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -154,6 +156,10 @@
 			<artifactId>spring-modules-jcr</artifactId>
 			<version>0.8a</version>
 			<exclusions>
+			<exclusion>
+                 <groupId>javax.servlet</groupId>
+                 <artifactId>servlet-api</artifactId>
+             </exclusion>
 			 <exclusion>
 			     <groupId>aparzev</groupId>
 			     <artifactId>commons</artifactId>
@@ -196,6 +202,7 @@
                 </includes>
                 <excludes>
                     <exclude>**/*.java</exclude>
+                    <exclude>log4j.properties</exclude>
                 </excludes>
             </resource>
         </resources>
@@ -250,10 +257,11 @@
 	</build>
 	<distributionManagement>
         <site>
-            <id>local</id>
-            <name>Local Maven Repositor</name>
-            <url>cp://Users/emalan/.m2/repository</url>
+            <id>ecprod</id>
+            <name>Amazon ec2 - production</name>
+            <url>scp://:ubuntu@174.129.192.163:/vol/www/htdocs/emalancom/ecshare</url>
         </site>
+        
     </distributionManagement>
 	<reporting>
         <plugins>
