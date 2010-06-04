@@ -1,0 +1,261 @@
+div.wicket-modal div.w_obo {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 1px solid #A6C9E2;
+    background-color: white;
+}
+
+div.wicket-modal div.w_obo div.w_top {
+    height: 0.2em;
+    overflow: hidden;
+    cursor: n-resize;
+    padding: 0px;
+    margin: 0px;
+}
+
+div.wicket-modal div.w_obo .w_topLeft {
+    width: 0.2em;
+    height: 0.2em;
+    float: left;
+    background-position: 0px 0px;
+    overflow: hidden;
+    cursor: nw-resize;
+}
+
+div.wicket-modal div.w_obo div.w_topRight {
+    width: 0.2em;
+    height: 0.2em;
+    float: right;
+    background-position: -16px 0px;
+    overflow: hidden;
+    cursor: ne-resize;
+}
+
+div.wicket-modal div.w_obo div.w_left {
+    background-position: 0px 0px;
+    background-repeat: repeat-y;
+    cursor: w-resize;
+    width: 100%;
+}
+
+div.wicket-modal div.w_obo div.w_right_1 {
+    margin-left: 0.2em;
+}
+
+div.wicket-modal div.w_obo div.w_right {
+    background-position: right;
+    background-repeat: repeat-y;
+    cursor: e-resize;
+    width: 100%;
+}
+
+div.wicket-modal div.w_obo div.w_content_1 {
+    margin-right: 0.2em;
+    cursor: auto;
+}
+
+div.wicket-modal div.w_obo div.w_caption {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    background: #5C9CCC url(ui-bg_gloss-wave_55_5c9ccc_500x100.png) repeat-x scroll 50% 50%;
+    border: 1px solid #4297D7;
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 0.5em 0.3em 0.3em 1em;
+    height: 1.4em;
+    overflow: hidden;
+    cursor: default;
+    position: relative;
+    cursor: default;
+    line-height: 1.4em;
+}
+
+div.wicket-modal div.w_obo a.w_close {
+    height: 16px;
+    width: 16px;
+    overflow: hidden;
+    background-position: -96px -128px;
+    background-image: url(ui-icons_d8e7f3_256x240.png);
+    position: absolute;
+    right: 3px;
+    padding: 0px;
+    margin: 0px;
+}
+
+div.wicket-modal div.w_obo a.w_close:hover {
+    height: 16px;
+    width: 16px;
+    overflow: hidden;
+    background-position: -96px -128px;
+    background-image: url(ui-icons_217bc0_256x240.png);
+    position: absolute;
+    right: 3px;
+    padding: 0px;
+    margin: 0px;
+}
+
+div.wicket-modal div.w_obo span.w_captionText {
+    height: 1.4em;
+    position: absolute;
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 1.2em;
+    left: 0em;
+}
+
+div.wicket-modal div.w_obo div.w_content_2 {
+    width: 100%;
+    background-color: white;
+    padding-top: 0.1em;
+    _overflow: auto;
+}
+
+div.wicket-modal div.w_obo div.w_content_3 {
+    border: none;
+    padding: 0px;
+}
+
+div.wicket-modal div.w_content {
+    width: 100%;
+    background-color: white;
+}
+
+div.wicket-modal iframe {
+    width: 100%;
+    height: 400px;
+    padding: 0px;
+    margin: 0px;
+    border-width: 0px;
+    position: relative;
+}
+
+div.wicket-modal div.w_bottom_1 {
+    width: 100%;
+    overflow: hidden;
+    cursor: n-resize;
+}
+
+div.wicket-modal div.w_bottom {
+    height: 15px;
+    background-position: 0px -32px;
+    overflow: hidden;
+}
+
+div.wicket-modal div.w_bottomRight { /*
+    position: absolute; 
+    bottom: 0px; 
+    right: 0px;
+    */
+    width: 14px;
+    height: 15px;
+    float: right;
+    background-position: -48px 0px;
+    cursor: nw-resize;
+    overflow: hidden;
+}
+
+div.wicket-modal div.w_bottomLeft { /*
+    position: absolute; 
+    bottom: 0px; 
+    left: 0px;
+    */
+    width: 14px;
+    height: 15px;
+    float: left;
+    background-position: -32px 0px;
+    overflow: hidden;
+    cursor: ne-resize;
+}
+
+/* =form */
+div.wicket-modal div.w_obo fieldset div.content {
+    margin: 10px 0 0 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+div.wicket-modal div.w_obo div.submit {
+    border-style: solid;
+    border-color: #A6C9E2;
+    border-width: 1px 0 0 0;
+}
+
+div.wicket-modal div.w_obo button {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    color: #2E6E9E;
+    border: 1px solid #C5DBEC;
+    font-size: 1.1em;
+    font-weight: bold;
+    background-color: #DFEFFC;
+    padding: 0.4em 0.6em 0.2em;
+    line-height: 1.4em;
+    margin: 10px 20px 0 0;
+    cursor: pointer;
+    outline: none;
+}
+
+div.wicket-modal div.w_obo button:hover {
+    color: #1D5987;
+    background-color: #D0E5F5;
+    border-color: #79B7E7;
+}
+
+div.wicket-modal div.w_obo div.content button {
+    font-size: 0.9em;
+    padding: 0.3em 0.4em 0.2em;
+    float: left;
+    clear: both;
+}
+
+/* submit */
+div.wicket-modal div.w_obo div.submit button {
+    float: right;
+}
+div.wicket-modal div.w_obo div.submit div.saveDiv {
+    float: right;
+}
+div.wicket-modal div.w_obo div.submit div.saveDiv button {
+    float: left;
+}
+.wicket-ajax-indicator {
+    float:right;
+}
+
+/* form */
+#dialogContent .info {
+    color: blue;
+    padding-bottom: 10px;
+    display: block;
+}
+
+#dialogContent .head {
+    color: blue;
+    display: block;
+}
+
+#dialogContent a {
+    outline: none;
+}
+
+#dialogContent label {
+    margin-bottom: 0.5em;
+}
+
+#dialogContent input {
+    border:0 none;
+}
+
+
+#dialogContent button {
+    outline: none;
+    margin: 5px 0 15px;
+    font-size: 0.8em;
+}
+
+#dialogContent textarea {
+    border-color: gainsboro;
+    height: 50px;
+    width: 300px;
+    margin-bottom: 0.2em;
+}
