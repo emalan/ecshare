@@ -252,6 +252,14 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <minmemory>128m</minmemory>
+                    <maxmemory>256m</maxmemory>
+                </configuration>
+            </plugin>
 		</plugins>
 		
 	</build>
