@@ -17,8 +17,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import com.madalla.bo.SiteData;
+import com.madalla.bo.security.IUser;
 import com.madalla.bo.security.UserData;
-import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.admin.AdminPage;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.pages.AdminPanelLink;
@@ -62,26 +62,17 @@ public class UserProfilePanel extends CmsPanel{
 		
 		super(id);
 		
-		final String username = ((CmsSession)getSession()).getUsername();
-		log.debug("Retrieved User name from Session. username="+username);
-        UserData user = getRepositoryService().getUser(username);
+		IUser user = getSessionDataService().getUser();
         log.debug(user);
 		
 		//User admin link 
-        add(new AdminPanelLink("UserAdmin", true){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick() {
-				getPage().replace(new UserAdminPanel(ID));
-			}
-        	
-        });
+        add(new AdminPanelLink("UserAdmin", UserAdminPanel.class));
         
 		//User Change Link - secure or not depending on authenticator
 		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
 		SiteData siteData = getRepositoryService().getSiteData();
 		
+		final String username = user.getName();
 		if (siteData.getSecurityCertificate() && authenticator.requiresSecureAuthentication(username)){
 			
 			PageParameters parameters = new PageParameters("user=" + username);
@@ -94,7 +85,6 @@ public class UserProfilePanel extends CmsPanel{
 				@Override
 				public void onClick() {
 					AdminPage page = new UserPasswordPage(username,"");
-					page.setReturnPage(((AdminPage)getPage()).getReturnPage());
 					setResponsePage(page);
 				}
 				
@@ -107,7 +97,7 @@ public class UserProfilePanel extends CmsPanel{
         //Profile Section
         
 		//Heading
-		add(new Label("profileHeading",getString("heading.profile", new Model<UserData>(user) )));
+		add(new Label("profileHeading",getString("heading.profile", new Model<IUser>(user) )));
 		
 		//Form
 		add(new ProfileForm("profileForm", new CompoundPropertyModel<UserData>(user)));

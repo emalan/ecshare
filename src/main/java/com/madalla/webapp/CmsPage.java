@@ -81,8 +81,8 @@ public abstract class CmsPage extends WebPage {
 		}
 		
 		public void onClick(AjaxRequestTarget target) {
-			if (session.isLoggedIn()) {
-				session.logout();
+			if (session.isSignedIn()) {
+				session.signOut();
 				setResponsePage(getPage());
 			} else {
 				if (target != null) {
@@ -117,6 +117,9 @@ public abstract class CmsPage extends WebPage {
 		PageData pageData = getRepositoryService().getPage(getPageName());
 		PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(getLocale(), pageData);
 		processPageMetaInformation(pageInfo);
+		
+		//used to return to Site from Admin Pages
+		getAppSession().setLastSitePage(getPageMapEntry());
 
 		if (hasPopupLogin()) {
 			setupPopupLogin();
@@ -188,8 +191,7 @@ public abstract class CmsPage extends WebPage {
 			.addSubject(AnimatorSubject.numeric("loginPopup","opacity", 0.0, 1.0))
 			.addSubject(AnimatorSubject.discrete("loginPopup", "display", "none","", 0.1));
 		
-		CmsSession session = (CmsSession) getSession();
-		add(new LoginLink("logon", session){
+		add(new LoginLink("logon", getAppSession()){
 			private static final long serialVersionUID = 1L;
 
 			
@@ -241,12 +243,7 @@ public abstract class CmsPage extends WebPage {
 
 			@Override
 			public boolean signIn(String username, String password) {
-				CmsSession session = (CmsSession) getSession();
-				if (session.login(username, password)) {
-					return true;
-				} else {
-					return false;
-				}
+				return getAppSession().signIn(username, password);
 			}
 
 			@Override
@@ -264,7 +261,7 @@ public abstract class CmsPage extends WebPage {
 				super.onSignInFailed(username);
 				count++;
 				if (count >= loginMax) {
-					redirectToInterceptPage(new UserLoginPage(getPageClass(), username));
+					redirectToInterceptPage(new UserLoginPage(username));
 				}
 			}
 
@@ -273,8 +270,7 @@ public abstract class CmsPage extends WebPage {
 	}
 	
 	private void setupLoginLink(){
-		CmsSession session = (CmsSession) getSession();
-		add(new LoginLink("logon", session){
+		add(new LoginLink("logon", getAppSession()){
 
 			private static final long serialVersionUID = 1L;
 
@@ -421,6 +417,10 @@ public abstract class CmsPage extends WebPage {
     	Panel panel = new BlogHomePanel("blogPanel", "mainBlog", blogEntryId);
     	add(panel);
     	return panel;
+	}
+	
+	protected CmsSession getAppSession(){
+		return (CmsSession) getSession();
 	}
 	
 	protected List<IMenuItem> getPageMetaData(){

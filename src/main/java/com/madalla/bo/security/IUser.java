@@ -1,7 +1,9 @@
 package com.madalla.bo.security;
 
+import java.io.Serializable;
 
-public interface IUser {
+
+public interface IUser extends Serializable{
 
 	String getName();
 

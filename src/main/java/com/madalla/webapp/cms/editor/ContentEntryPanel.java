@@ -105,7 +105,7 @@ public class ContentEntryPanel extends CmsPanel {
 		add(tabPanel);
 		
 		// Link to translate panel
-        add(new AdminPanelLink("translateLink"){
+        add(new AdminPanelLink("translateLink", TranslatePanel.class){
 			private static final long serialVersionUID = 1L;
 
 			@Override

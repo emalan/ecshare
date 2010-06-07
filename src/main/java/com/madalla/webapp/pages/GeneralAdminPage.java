@@ -1,6 +1,7 @@
 package com.madalla.webapp.pages;
 
-import com.madalla.webapp.ISecureWebPage;
+import org.apache.wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
+
 import com.madalla.webapp.admin.AdminPage;
 import com.madalla.webapp.user.UserProfilePanel;
 
@@ -10,10 +11,12 @@ import com.madalla.webapp.user.UserProfilePanel;
  * @author Eugene Malan
  *
  */
-public class GeneralAdminPage extends AdminPage implements ISecureWebPage  {
+@AuthorizeInstantiation("USER")
+public class GeneralAdminPage extends AdminPage {
 	protected static final String ID = "adminPanel";
 	
 	public GeneralAdminPage(){
+		super();
 		add(new UserProfilePanel(ID));
 	}
 	

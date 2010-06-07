@@ -32,11 +32,12 @@ public class ContentAdminPanel extends Panel {
 	private ContentDisplayPanel contentDisplayPanel;
 	private ContentExplorerPanel contentExplorerPanel;
 	
-	public static ContentAdminPanel newInstance(String name){
-	    return new ContentAdminPanel(name, false);	
-	}
 	public static ContentAdminPanel newAdminInstance(String name){
 		return new ContentAdminPanel(name, true);
+	}
+	
+	public ContentAdminPanel(String name){
+		this(name, false);
 	}
 
 	private ContentAdminPanel(String name, final Boolean adminApp) {

@@ -163,7 +163,7 @@ public class UserPasswordPanel extends CmsPanel{
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
 				UserData user = getRepositoryService().getUser(credentials.getUsername());
-				if (((CmsSession)getSession()).login(user.getName(), user.getPassword())){
+				if (((CmsSession)getSession()).signIn(user.getName(), user.getPassword())){
 	                user.setPassword(credentials.getPassword());
 	                saveData(user);
 	                info(getString("message.success"));

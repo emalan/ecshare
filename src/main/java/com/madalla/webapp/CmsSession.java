@@ -3,11 +3,13 @@ package com.madalla.webapp;
 import java.util.List;
 
 import org.apache.wicket.Application;
-import org.apache.wicket.Page;
 import org.apache.wicket.Request;
-import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authorization.strategies.role.Roles;
+import org.apache.wicket.session.pagemap.IPageMapEntry;
 
 import com.madalla.bo.security.UserData;
+import com.madalla.bo.security.UserSiteData;
 import com.madalla.cms.service.ocm.SessionDataService;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
@@ -20,13 +22,16 @@ import com.madalla.webapp.upload.FileUploadStore;
 import com.madalla.webapp.upload.IFileUploadInfo;
 import com.madalla.webapp.upload.IFileUploadStatus;
 
-public class CmsSession  extends WebSession implements IContentAdmin, ISessionDataServiceProvider, IFileUploadInfo{
+public class CmsSession  extends AuthenticatedWebSession implements IContentAdmin, ISessionDataServiceProvider, IFileUploadInfo{
 
 	private static final long serialVersionUID = 652426659740076486L;
-	private boolean cmsAdminMode = false;
-	private String username = null;
+	public final static String SUPERADMIN = "SUPERADMIN";
+	public final static String SECURE = "SECURE";
+	public final static String CONTENTADMIN = "CONTENTADMIN";
+	
+	private Roles roles;
 	private ISessionDataService repositoryService;
-	private Class<? extends Page> adminReturnPage;
+	private IPageMapEntry lastSitePage;
 
 	private volatile FileUploadStore fileUploadInfo = new FileUploadStore();
     
@@ -36,60 +41,78 @@ public class CmsSession  extends WebSession implements IContentAdmin, ISessionDa
     }
 
     public boolean isCmsAdminMode() {
-        return cmsAdminMode;
+        return getRoles().hasRole(Roles.ADMIN);
     }
     
     public boolean isSuperAdmin() {
-    	return username != null && username.equalsIgnoreCase("admin");
+    	return getRoles().hasRole(SUPERADMIN);
     }
     
-    public boolean isLoggedIn() {
-		return username != null;
-	}
-
-	public String getUsername(){
-    	return username;
-    }
     
-    public final void logout(){
-    	cmsAdminMode = false;
-    	username = null;
+    
+    @Override
+	public void signOut() {
+		super.signOut();
+		roles.clear();
     	repositoryService.setUser(null);
     	fileUploadInfo.clear();
-    }
-    
-    public void login(){
-    	if (getApplication().getConfigurationType().equals(Application.DEPLOYMENT)){
+	}
+
+	public void authenticate(){
+		if (getApplication().getConfigurationType().equals(Application.DEPLOYMENT)){
     		throw new RuntimeException("this Login method only available for DEVELOPMENT environment.");
     	}
     	IDataService service = ((IDataServiceProvider) getApplication()).getRepositoryService();
     	UserData user = service.getUser("admin");
     	repositoryService.setUser(user);
-    	cmsAdminMode = true;
-    	this.username = "admin";
-    	
-    }
+    	setRoles(user);
+	}
     
-    public boolean login(String userName, String password) {
-    	IDataService service = ((IDataServiceProvider) getApplication()).getRepositoryService();
+	@Override
+	public boolean authenticate(String userName, String password) {
+	   	IDataService service = ((IDataServiceProvider) getApplication()).getRepositoryService();
         IPasswordAuthenticator authenticator = service.getPasswordAuthenticator(userName);
         if (authenticator.authenticate(userName, password)){
         	UserData user = service.getUser(userName);
+        	
         	if (service.isUserSite(user)){
             	//store user data in session
             	repositoryService.setUser(user);
-                cmsAdminMode = (user.getAdmin()==null) ? false : user.getAdmin() ;
-            	this.username = userName;
+            	setRoles(user);
+                
                 return true;
         	}
         }
         return false;
-    }
+	}
+	
+	private void setRoles(UserData user){
+		StringBuilder sb = new StringBuilder(Roles.USER);
+		if ((user.getAdmin()==null) ? false : user.getAdmin()){
+			sb.append(", " + Roles.ADMIN);
+		}
+		if (user.getName().equalsIgnoreCase("admin")){
+			sb.append(", " + SUPERADMIN + ", " + SECURE);
+		}
+		IDataService service = ((IDataServiceProvider) getApplication()).getRepositoryService();
+		UserSiteData userSite = service.getUserSite(user);
+		if (Boolean.TRUE.equals(userSite.getRequiresAuthentication())){
+			sb.append(", " + SECURE);
+		}
+
+		roles = new Roles(sb.toString());
+		
+	}
+
+	@Override
+	public Roles getRoles() {
+		return roles == null? new Roles() : roles;
+	}
     
 	public ISessionDataService getRepositoryService() {
 		return repositoryService;
 	}
-
+	
 	public IFileUploadStatus getFileUploadStatus(String id) {
 		return fileUploadInfo.getFileUploadStatus(id);
 	}
@@ -114,14 +137,18 @@ public class CmsSession  extends WebSession implements IContentAdmin, ISessionDa
 		fileUploadInfo.setGroupUploadComplete(group);
 	}
 
-	public void setAdminReturnPage(Class<? extends Page> adminReturnPage) {
-		this.adminReturnPage = adminReturnPage;
+	public boolean isLoggedIn() {
+		return isSignedIn();
 	}
 
-	public Class<? extends Page> getAdminReturnPage() {
-		return adminReturnPage;
+	public void setLastSitePage(IPageMapEntry lastSitePage) {
+		this.lastSitePage = lastSitePage;
 	}
 
+	public IPageMapEntry getLastSitePage() {
+		return lastSitePage ;
+	}
+	
 
 
 }

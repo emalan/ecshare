@@ -637,7 +637,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 				
 				if (isUserExists(username)){
 					UserData user = getUser(username);
-					UserSiteData userSite= getUserSite(user, site);
+					UserSiteData userSite= getUserSite(user);
 					return Boolean.TRUE.equals(userSite.getRequiresAuthentication());
 				}
 				return false;
@@ -650,8 +650,12 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 		saveDataObject(data);
 	}
 	
-	public UserSiteData getUserSite(UserData user, String name){
-		return (UserSiteData) repositoryTemplate.getOcmObject(RepositoryType.USERSITE, user, name, new RepositoryTemplateCallback(){
+	public UserSiteData getUserSite(UserData user){
+		return getUserSite(user, site);
+	}
+	
+	private UserSiteData getUserSite(UserData user, String site){
+		return (UserSiteData) repositoryTemplate.getOcmObject(RepositoryType.USERSITE, user, site, new RepositoryTemplateCallback(){
 
 			@Override
 			public AbstractData createNew(String parentPath, String name) {

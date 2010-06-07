@@ -1,7 +1,5 @@
 package com.madalla.webapp.pages;
 
-import org.apache.wicket.Page;
-
 import com.madalla.webapp.admin.AdminPage;
 import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.webapp.user.UserLoginPanel;
@@ -29,8 +27,5 @@ public class UserLoginPage extends AdminPage{
 		});
 	}
 	
-	public UserLoginPage(final Class<? extends Page> returnPage, String username){
-		this(username);
-		setReturnPage(returnPage);
-	}
+
 }

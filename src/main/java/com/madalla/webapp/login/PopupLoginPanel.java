@@ -56,11 +56,7 @@ public abstract class PopupLoginPanel extends Panel{
 
             public boolean signIn(String username, String password) {
                 CmsSession session = (CmsSession) getSession();
-                if (session.login(username, password)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return session.signIn(username, password);
             }
 
             @Override

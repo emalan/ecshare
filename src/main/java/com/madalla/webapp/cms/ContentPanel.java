@@ -4,16 +4,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.PageData;
-import com.madalla.webapp.admin.AdminPage;
-import com.madalla.webapp.login.aware.LoginAwareAdminLink;
+import com.madalla.webapp.pages.AdminPageLink;
 import com.madalla.webapp.pages.ContentEditPage;
 import com.madalla.webapp.panel.CmsPanel;
 
@@ -106,18 +105,7 @@ public class ContentPanel extends CmsPanel {
             add(label);
 
             // add link to edit it
-            Link<Object> link = new LoginAwareAdminLink("contentLink", ContentEditPage.class, false){
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected AdminPage constructAdminPage(Class<? extends AdminPage> clazz) {
-					return new ContentEditPage(contentId, contentNode);
-				}
-
-            };
-            link.setBeforeDisabledLink("");
-            link.setAfterDisabledLink("");
-            add(link);
+            add(new AdminPageLink("editLink", ContentEditPage.class, new PageParameters("0="+ contentId + ",1=" + contentNode)));
 
         }
     }

@@ -44,7 +44,12 @@
             <artifactId>wicket-datetime</artifactId>
             <version>${wicket.version}</version> 
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-auth-roles</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
+        
         <!--  Wicket Spring integration -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -198,7 +203,7 @@
                 <filtering>true</filtering>
                 <directory>src/main/java</directory>
                 <includes>
-                    <include>**</include>
+                    <include>build.properties</include>
                 </includes>
                 <excludes>
                     <exclude>**/*.java</exclude>
@@ -291,7 +296,7 @@
         </plugins>
     </reporting>
 	<properties>
-		<wicket.version>1.4.6</wicket.version>
+		<wicket.version>1.4.9</wicket.version>
         <jackrabbit.version>1.5.5</jackrabbit.version>
         <spring.version>2.5.6</spring.version>
 	</properties>

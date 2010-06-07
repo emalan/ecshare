@@ -4,17 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.wicket.Page;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.session.pagemap.IPageMapEntry;
 
-import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.cms.admin.ContentAdminPanel;
 import com.madalla.webapp.css.Css;
@@ -41,23 +40,24 @@ public abstract class AdminPage extends WebPage {
 		@Override
 		protected void populateItem(ListItem<PanelMenuItem> item) {
 			final PanelMenuItem menu = item.getModelObject();
-			item.add(new AdminPanelLink(menuLinkId, menu.getKey(), menu.getTitleKey(), false){
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void onClick() {
-					getPage().replace(menu.getPanel(ID));
-				}
-				
-			});
+			item.add(new AdminPanelLink(menuLinkId, menu.c, menu.key, menu.titleKey));
 		}
 		
 	}
 	
 	private String pageTitle = "(no title)";
-	private Class<? extends Page> returnPage;
+	
+	public AdminPage(PageParameters parameters){
+		super(parameters);
+		commonInit();
+	}
 	
 	public AdminPage(){
+		super();
+	    commonInit();
+	}
+	
+	private void commonInit(){
 	    setPageTitle(getString("page.title"));
         add(new Label("title", new PropertyModel<String>(this,"pageTitle")));
 
@@ -73,81 +73,26 @@ public abstract class AdminPage extends WebPage {
 		List<PanelMenuItem> menuItems = getAdminMenu();
 		add(new MenuListView("menuList","menuLink",menuItems ));
 
-		add(new Link<Object>("returnLink"){
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick() {
-				if (returnPage == null) {
-					returnPage = getApplication().getHomePage();
-				}
-				setResponsePage(returnPage);
-				//setResponsePage(getSession().getPageFactory().newPage(returnPage));
-			}
-			
-		});
+		IPageMapEntry backPage = getAppSession().getLastSitePage();
+		if (backPage == null){
+			add(new BookmarkablePageLink<Void>("returnLink", getApplication().getHomePage()));
+		} else {
+			add(new BookmarkablePageLink<Void>("returnLink", backPage.getPageClass(), backPage.getPage().getPageParameters()));
+		}
+		
 	}
 	
-	//TODO make Serializable and add to Application
 	public List<PanelMenuItem> getAdminMenu() {
 		List<PanelMenuItem> menuList = new ArrayList<PanelMenuItem>();
-		menuList.add(new PanelMenuItem("label.profile","info.profile"){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Panel getPanel(String id) {
-				return new UserProfilePanel(id);
-			}
-
-		});
-		menuList.add(new PanelMenuItem("label.site","info.site"){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Panel getPanel(String id) {
-				return new SiteAdminPanel(id);
-			}
-			
-		});
-		menuList.add(new PanelMenuItem("label.data","info.data"){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Panel getPanel(String id) {
-				return new SiteDataPanel(id);
-			}
-			
-		});
-		menuList.add(new PanelMenuItem("label.image","info.image"){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Panel getPanel(String id) {
-				return new ImageAdminPanel(id);
-			}
-			
-		});
-		menuList.add(new PanelMenuItem("label.content","info.content"){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Panel getPanel(String id) {
-				
-				if (((CmsApplication)getApplication()).getRepositoryService().isAdminApp()){
-					return ContentAdminPanel.newAdminInstance(id);
-		    	} else {
-		    		return ContentAdminPanel.newInstance(id);
-		    	}
-			}
-			
-		});
+		menuList.add(new PanelMenuItem(UserProfilePanel.class, "label.profile","info.profile"));
+		menuList.add(new PanelMenuItem(SiteAdminPanel.class, "label.site","info.site"));
+		menuList.add(new PanelMenuItem(SiteDataPanel.class, "label.data","info.data"));
+		menuList.add(new PanelMenuItem(ImageAdminPanel.class, "label.image","info.image"));
+		menuList.add(new PanelMenuItem(ContentAdminPanel.class, "label.content","info.content"));
 		
 		return Collections.unmodifiableList(menuList);
-
 	}
 
-	
 	public CmsSession getAppSession(){
         return (CmsSession)getSession();
     }
@@ -159,13 +104,5 @@ public abstract class AdminPage extends WebPage {
     public String getPageTitle() {
         return pageTitle;
     }
-
-	public void setReturnPage(Class<? extends Page> returnPage) {
-		this.returnPage = returnPage;
-	}
-	
-	public Class<? extends Page> getReturnPage(){
-		return returnPage;
-	}
 
 }

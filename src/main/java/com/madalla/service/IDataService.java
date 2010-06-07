@@ -166,6 +166,6 @@ public interface IDataService {
     
     void saveUserSiteEntries(UserData user, List<SiteData> sites, boolean auth);
     
-    UserSiteData getUserSite(UserData user, String name);
+    UserSiteData getUserSite(UserData user);
     
 }

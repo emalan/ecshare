@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -28,6 +29,7 @@ import com.madalla.wicket.form.AjaxValidationForm;
 import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 import com.madalla.wicket.form.ValidationStyleBehaviour;
 
+@AuthorizeInstantiation("USER")
 public class SiteAdminPanel extends CmsPanel{
 
     private static final long serialVersionUID = 1L;
@@ -77,27 +79,10 @@ public class SiteAdminPanel extends CmsPanel{
         add(Css.CSS_FORM);
         
         // link to Page Admin
-        add(new AdminPanelLink("pageAdminLink"){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick() {
-				getPage().replace(new PageAdminPanel(ID));
-				
-			}
-        	
-        });
+        add(new AdminPanelLink("pageAdminLink", PageAdminPanel.class));
         
 		//User admin link 
-        add(new AdminPanelLink("SiteEmail", true){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick() {
-				getPage().replace(new SiteEmailPanel(ID));
-			}
-        	
-        });
+        add(new AdminPanelLink("SiteEmail", SiteEmailPanel.class));
         
         final Form<SiteData> form = new SiteForm("siteForm", new CompoundPropertyModel<SiteData>(getSiteData()));
         add(form);

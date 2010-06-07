@@ -1,8 +1,6 @@
 package com.madalla.webapp;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -12,10 +10,14 @@ import org.apache.wicket.Request;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
 import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.protocol.https.HttpsRequestCycleProcessor;
 import org.apache.wicket.request.IRequestCycleProcessor;
+import org.apache.wicket.request.target.coding.IndexedParamUrlCodingStrategy;
 import org.apache.wicket.settings.IExceptionSettings;
 
 import com.madalla.BuildInformation;
@@ -26,11 +28,22 @@ import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
-import com.madalla.webapp.authorization.AppAuthorizationStrategy;
-import com.madalla.webapp.authorization.PageAuthorization;
+import com.madalla.webapp.cms.admin.ContentAdminPanel;
+import com.madalla.webapp.cms.editor.ContentEntryPanel;
+import com.madalla.webapp.cms.editor.TranslatePanel;
+import com.madalla.webapp.images.admin.ImageAdminPanel;
 import com.madalla.webapp.pages.AdminErrorPage;
+import com.madalla.webapp.pages.AlbumAdminPage;
+import com.madalla.webapp.pages.GeneralAdminPage;
 import com.madalla.webapp.pages.SecurePasswordPage;
+import com.madalla.webapp.pages.UserLoginPage;
 import com.madalla.webapp.pages.UserPasswordPage;
+import com.madalla.webapp.site.PageAdminPanel;
+import com.madalla.webapp.site.SiteAdminPanel;
+import com.madalla.webapp.site.SiteDataPanel;
+import com.madalla.webapp.site.SiteEmailPanel;
+import com.madalla.webapp.user.UserAdminPanel;
+import com.madalla.webapp.user.UserProfilePanel;
 import com.madalla.wicket.I18NBookmarkablePageRequestTargetUrlCodingStrategy;
 
 /**
@@ -40,7 +53,7 @@ import com.madalla.wicket.I18NBookmarkablePageRequestTargetUrlCodingStrategy;
  * @author Eugene Malan
  *
  */
-public abstract class CmsApplication extends WebApplication implements IDataServiceProvider, IRepositoryAdminServiceProvider, IEmailServiceProvider {
+public abstract class CmsApplication extends AuthenticatedWebApplication implements IDataServiceProvider, IRepositoryAdminServiceProvider, IEmailServiceProvider {
 
 	protected final static Log log = LogFactory.getLog(CmsApplication.class);
 
@@ -50,7 +63,9 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
     private BuildInformation buildInformation;
     private String configType;
     
+    @Override
     protected void init() {
+    	super.init();
     	//initialization checks
     	if (buildInformation == null) {
     		log.fatal("Build Information not configured Correctly.");
@@ -78,9 +93,9 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
     
     private void setupApplicationSpecificConfiguration(){
     	//getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
-    	setupSecurity();
     	setupPageMounts();
     	setupErrorHandling();
+    	setupSecurity();
     }
     
     protected void setupPageMounts(){
@@ -89,6 +104,10 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
     	}
     	mountBookmarkablePage("password", UserPasswordPage.class);
     	mountBookmarkablePage("securePassword", SecurePasswordPage.class);
+    	
+    	mountBookmarkablePage("admin", GeneralAdminPage.class);
+    	mount(new IndexedParamUrlCodingStrategy("admin/album", AlbumAdminPage.class));
+    	
     }
     
     protected void setupErrorHandling(){
@@ -106,43 +125,29 @@ public abstract class CmsApplication extends WebApplication implements IDataServ
     }
     
     protected void setupSecurity(){
+    	MetaDataRoleAuthorizationStrategy.authorize(UserProfilePanel.class, "USER");
+    	MetaDataRoleAuthorizationStrategy.authorize(SiteAdminPanel.class, "USER");
+    	MetaDataRoleAuthorizationStrategy.authorize(SiteDataPanel.class, "USER");
+    	MetaDataRoleAuthorizationStrategy.authorize(ImageAdminPanel.class, "ADMIN");
+    	MetaDataRoleAuthorizationStrategy.authorize(ContentAdminPanel.class, "ADMIN");
+    	MetaDataRoleAuthorizationStrategy.authorize(PageAdminPanel.class, "USER");
+    	MetaDataRoleAuthorizationStrategy.authorize(SiteEmailPanel.class, "ADMIN");
+    	MetaDataRoleAuthorizationStrategy.authorize(UserAdminPanel.class, "SUPERADMIN");
+    	MetaDataRoleAuthorizationStrategy.authorize(ContentEntryPanel.class, "USER");
+    	MetaDataRoleAuthorizationStrategy.authorize(TranslatePanel.class, "USER");
     	
-    	//List to hold page authorizations
-    	Collection <PageAuthorization> pageAuthorizations = new ArrayList<PageAuthorization>();
-    	
-    	//Admin Page authorization
-    	PageAuthorization adminAuthorization = new PageAuthorization(ISecureAdminPage.class){
-			@Override
-			protected boolean isAuthorized() {
-                return ((CmsSession)Session.get()).isCmsAdminMode();
-            }
-    	};
-    	pageAuthorizations.add(adminAuthorization);
-
-    	//Logged in page authorization
-    	PageAuthorization loggedInAuthorization = new PageAuthorization(ISecureWebPage.class){
-			@Override
-			protected boolean isAuthorized() {
-                return ((CmsSession)Session.get()).isLoggedIn();
-            }
-    	};
-    	pageAuthorizations.add(loggedInAuthorization);
-    	
-    	//Super Admin page authorization
-    	PageAuthorization superAdminAthorization = new PageAuthorization(ISecureSuperPage.class){
-    		@Override
-    		protected boolean isAuthorized() {
-    			return ((CmsSession)Session.get()).isSuperAdmin();
-    		}
-    	};
-    	pageAuthorizations.add(superAdminAthorization);
-    	
-    	//create Authorization strategy
-    	AppAuthorizationStrategy authorizationStrategy = new AppAuthorizationStrategy(
-                getHomePage(), pageAuthorizations);
- 
-        getSecuritySettings().setAuthorizationStrategy(authorizationStrategy);
+    	//MetaDataRoleAuthorizationStrategy.authorize(TranslatePanel.class, "USER");
     }
+    
+	@Override
+	protected Class<? extends WebPage> getSignInPageClass() {
+		return UserLoginPage.class;
+	}
+
+	@Override
+	protected Class<? extends AuthenticatedWebSession> getWebSessionClass() {
+		return CmsSession.class;
+	}
     
     /* (non-Javadoc)
      * @see org.apache.wicket.protocol.http.WebApplication#getConfigurationType()

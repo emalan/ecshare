@@ -71,12 +71,7 @@ public class UserLoginPanel extends CmsPanel {
             @Override
             public boolean signIn(String username, String password) {
             	CmsSession session = (CmsSession) getSession();
-                if (session.login(username, password)) {
-                    return true;
-                } else {
-                    return false;
-                }
-
+            	return session.signIn(username, password);
             }
             
 			@Override
@@ -100,7 +95,7 @@ public class UserLoginPanel extends CmsPanel {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				session.logout();
+				session.signOut();
 				target.addComponent(this);
 				target.addComponent(loginInfo);
 				target.addComponent(panel);

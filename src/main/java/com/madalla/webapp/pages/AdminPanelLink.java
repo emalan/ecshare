@@ -1,11 +1,21 @@
 package com.madalla.webapp.pages;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
+
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Application;
+import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.authorization.strategies.role.Roles;
+import org.apache.wicket.authorization.strategies.role.metadata.InstantiationPermissions;
+import org.apache.wicket.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.link.Link;
-
-import com.madalla.webapp.cms.IContentAdmin;
+import org.apache.wicket.markup.html.panel.Panel;
 
 /**
  * Admin Link that will switch admin Panels
@@ -19,40 +29,49 @@ import com.madalla.webapp.cms.IContentAdmin;
  * @author Eugene Malan
  *
  */
-public abstract class AdminPanelLink extends Link<Object> {
+public class AdminPanelLink extends Link<Object> {
 
 	private static final long serialVersionUID = 1L;
 	protected static final String ID = "adminPanel";
+	private Log log = LogFactory.getLog(this.getClass());
 	
-	final private boolean admin;
 	final private String key;
 	final private String titleKey;
+	final private Class<? extends Panel> panelClass;
 	
-	public AdminPanelLink(final String id, final String key, String titleKey, final boolean admin){
+	public AdminPanelLink(final String id, Class<? extends Panel> panelClass, final String key, String titleKey){
 		super(id);
 		this.key = key;
-		this.admin = admin;
 		this.titleKey = titleKey;
+		this.panelClass = panelClass;
+		setAuthorization();
 	}
 	
-	public AdminPanelLink(final String id, final String key, final boolean admin){
-		this(id, key, "", admin);
+	public AdminPanelLink(final String id, Class<? extends Panel> panelClass, final String key){
+		this(id, panelClass, key, "");
 	}
 	
-	/**
-	 * Main Constructor
-	 * TODO remove this construcot
-	 * 
-	 * @param id - wicket id
-	 * @param admin - set true if this is a super admin only link
-	 */
-	public AdminPanelLink(String id, final boolean admin){
-		this(id, "", admin);
+    public AdminPanelLink(String id, Class<? extends Panel> panelClass) {
+		this(id, panelClass, "");
 	}
-	
-    public AdminPanelLink(String id) {
-		this(id, false);
-	}
+    
+    private void setAuthorization(){
+    	final Application application = Application.get();
+		InstantiationPermissions permissions = application.getMetaData(MetaDataRoleAuthorizationStrategy.INSTANTIATION_PERMISSIONS);
+		if (permissions != null){
+	    	Roles roles = permissions.authorizedRoles(panelClass);
+	    	log.debug("Roles for -->" + panelClass.toString());
+	    	if (roles != null){
+	    		for (Iterator<String> iter = roles.iterator(); iter.hasNext();){
+	    			String role = iter.next();
+	    			log.debug("role - " + role);
+	    			MetaDataRoleAuthorizationStrategy.authorize(this, ENABLE, role);
+	    		}
+	    	}
+			
+		}
+    	    	
+    }
 
 	@Override
 	public boolean isEnabled() {
@@ -63,12 +82,7 @@ public abstract class AdminPanelLink extends Link<Object> {
 			boolean linkActive = false;
 			if (linkActive) return false;
 		}
-		IContentAdmin session = (IContentAdmin) getSession();
-		if (admin) {
-			return session.isSuperAdmin();
-        } else {
-            return session.isLoggedIn();
-        }
+		return true;
 	}
 	
 	@Override
@@ -86,6 +100,22 @@ public abstract class AdminPanelLink extends Link<Object> {
 		} else {
 			super.onComponentTagBody(markupStream, openTag);
 		}
+	}
+
+	@Override
+	public void onClick() {
+		try {
+			Constructor<? extends Panel> constructor = panelClass.getConstructor(String.class);
+			Panel panel = constructor.newInstance(new Object[]{ID});
+			getPage().replace(panel);
+		} catch (InvocationTargetException e){
+			log.error("Invocation Exception while creating admin panel. If this was caused by Authorized Exception, then take a look at why link was enabled???", e);
+			throw new WicketRuntimeException("Error while Creating new Admin Panel.", e);
+		} catch (Exception e) {
+			log.error("Error while creating admin panel.", e);
+			throw new WicketRuntimeException("Error while Creating new Admin Panel.", e);
+		}
+		
 	}
 
 	

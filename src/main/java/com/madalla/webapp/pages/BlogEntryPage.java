@@ -1,19 +1,26 @@
 package com.madalla.webapp.pages;
 
-import com.madalla.webapp.ISecureWebPage;
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
+
 import com.madalla.webapp.admin.AdminPage;
 import com.madalla.webapp.blog.admin.BlogEntryPanel;
 
-public class BlogEntryPage extends AdminPage implements ISecureWebPage {
+@AuthorizeInstantiation("USER")
+public class BlogEntryPage extends AdminPage {
     private static final long serialVersionUID = 1L;
     
-    public BlogEntryPage(String blogName){
-    	super();
-    	add(new BlogEntryPanel("adminPanel", blogName) );
+    public BlogEntryPage(PageParameters parameters){
+    	super(parameters);
+    	String blogName = PageUtils.getPageParameter("0", parameters, "BlogEntryPage");
+    	String blogEntryId = parameters.getString("1");
+    	if (blogEntryId == null){
+    		add(new BlogEntryPanel("adminPanel", blogName) );
+    	} else {
+    		add(new BlogEntryPanel("adminPanel", blogName, blogEntryId));
+    	}
+    	
+    	
     }
     
-    public BlogEntryPage(String blogName, String blogEntryId){
-    	super();
-    	add(new BlogEntryPanel("adminPanel", blogName, blogEntryId));
-    }
 }

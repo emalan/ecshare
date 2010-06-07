@@ -11,9 +11,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -25,9 +27,8 @@ import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.ImageData;
-import com.madalla.webapp.admin.AdminPage;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.login.aware.LoginAwareAdminLink;
+import com.madalla.webapp.pages.AdminPageLink;
 import com.madalla.webapp.pages.AlbumAdminPage;
 import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.JavascriptResources;
@@ -48,15 +49,9 @@ public class AlbumPanel extends CmsPanel {
         add(Css.CSS_IMAGE);
 
         //link to album configure page
-        add(new LoginAwareAdminLink("adminLink", AlbumAdminPage.class, true, true){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected AdminPage constructAdminPage(Class<? extends AdminPage> clazz) {
-				return new AlbumAdminPage(albumName);
-			}
-        	
-        });
+        Component adminPageLink;
+        add(adminPageLink = new AdminPageLink("adminLink", AlbumAdminPage.class, new PageParameters("0="+albumName)));
+        MetaDataRoleAuthorizationStrategy.authorize(adminPageLink, ENABLE, "ADMIN");
         
         final AlbumData album = getRepositoryService().getAlbum(albumName);
         final List<ImageData> images = getAlbumImages(album);

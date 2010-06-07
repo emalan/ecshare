@@ -39,7 +39,7 @@ public abstract class CmsPanel extends Panel {
 		service.saveDataObject(data, getSessionDataService().getUser().getName());
 	}
 	
-	private ISessionDataService getSessionDataService(){
+	protected ISessionDataService getSessionDataService(){
 		return ((ISessionDataServiceProvider) getSession()).getRepositoryService();
 	}
 	

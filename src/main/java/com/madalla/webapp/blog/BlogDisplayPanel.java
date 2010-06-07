@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
@@ -25,9 +26,7 @@ import com.madalla.bo.blog.BlogEntryData;
 import com.madalla.bo.blog.IBlogEntryData;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
-import com.madalla.webapp.CmsSession;
-import com.madalla.webapp.admin.AdminPage;
-import com.madalla.webapp.login.aware.LoginAwareAdminLink;
+import com.madalla.webapp.pages.AdminPageLink;
 import com.madalla.webapp.pages.BlogEntryPage;
 
 public class BlogDisplayPanel extends Panel {
@@ -55,18 +54,9 @@ public class BlogDisplayPanel extends Panel {
 	}
 	
 	private void init(final String id, final BlogData blog) {
-		final boolean adminMode = ((CmsSession)getSession()).isCmsAdminMode();
 		
 		//new Blog link
-		add(new LoginAwareAdminLink("createNew", BlogEntryPage.class, true, true){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected AdminPage constructAdminPage(Class<? extends AdminPage> clazz) {
-				return new BlogEntryPage(blog.getName());
-			}
-			
-		});
+		add(new AdminPageLink("createNew", BlogEntryPage.class, new PageParameters("0="+blog.getName())));
 		
         log.debug("construtor - retrieving blog entries from service.");
         List<BlogEntryData> blogList = getRepositoryService().getBlogEntries(blog);
@@ -112,16 +102,7 @@ public class BlogDisplayPanel extends Panel {
                 //String script = "#";
                 //String htmlLink = "... <a href=\"" + script + "\">"+getString("label.more")+"</a>";
                 //textSummary.setModel(new Model(current.getSummary(htmlLink)));
-                
-                listItem.add(new LoginAwareAdminLink("editBlog", BlogEntryPage.class, true, true){
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected AdminPage constructAdminPage(Class<? extends AdminPage> clazz) {
-						return new BlogEntryPage(blog.getName(), current.getId());
-					}
-                	
-                });
+                listItem.add(new AdminPageLink("editBlog", BlogEntryPage.class, new PageParameters("0="+blog.getName()+",1="+current.getId())));
                 
             }
         };
@@ -135,16 +116,7 @@ public class BlogDisplayPanel extends Panel {
 		add(new DateLabel("date", new PropertyModel<Date>(blogEntry, "date" ), new StyleDateConverter("MS",true)).setOutputMarkupId(true));
 		add(new Label("keywords", new PropertyModel<String>(blogEntry, "keywords")).setOutputMarkupId(true));
 		add(new Label("text", new PropertyModel<String>(blogEntry, "text")).setOutputMarkupId(true).setEscapeModelStrings(false));
-		
-		add(new LoginAwareAdminLink("editBlogLink", BlogEntryPage.class, true, true){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected AdminPage constructAdminPage(Class<? extends AdminPage> clazz) {
-				return new BlogEntryPage(blog.getName(), blogEntry.getId());
-			}
-			
-		});
+		add(new AdminPageLink("editBlogLink", BlogEntryPage.class, new PageParameters("0="+blog.getName()+",1="+blogEntry.getId())));
 
 	}
 	
