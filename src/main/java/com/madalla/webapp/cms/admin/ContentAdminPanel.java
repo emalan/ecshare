@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.IFeedbackMessageFilter;
@@ -20,6 +21,8 @@ import com.madalla.service.BackupFile;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.pages.AdminPanelLink;
+import com.madalla.webapp.user.UserAdminPanel;
 import com.madalla.wicket.IndicatingAjaxSubmitLink;
 
 public class ContentAdminPanel extends Panel {
@@ -45,6 +48,19 @@ public class ContentAdminPanel extends Panel {
 		this.adminApp = adminApp;
 		
 		add(Css.CSS_FORM);
+		
+		Component adminPanelLink;
+		add(adminPanelLink = new AdminPanelLink("AllSitesLink", ContentAdminPanel.class){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				Panel panel = ContentAdminPanel.newAdminInstance(ID);
+				getPage().replace(panel);
+			}
+			
+		});
+		MetaDataRoleAuthorizationStrategy.authorize(adminPanelLink, RENDER, "SUPERADMIN");
         
         setBackupFileList();
         final ListChoice<BackupFile> listChoice = new ListChoice<BackupFile>("backupFiles", new PropertyModel<BackupFile>(this,"file"), 
