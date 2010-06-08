@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Application;
+import org.apache.wicket.Component;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.authorization.strategies.role.Roles;
 import org.apache.wicket.authorization.strategies.role.metadata.InstantiationPermissions;
@@ -60,29 +61,26 @@ public class AdminPanelLink extends Link<Object> {
 		InstantiationPermissions permissions = application.getMetaData(MetaDataRoleAuthorizationStrategy.INSTANTIATION_PERMISSIONS);
 		if (permissions != null){
 	    	Roles roles = permissions.authorizedRoles(panelClass);
-	    	log.debug("Roles for -->" + panelClass.toString());
 	    	if (roles != null){
 	    		for (Iterator<String> iter = roles.iterator(); iter.hasNext();){
-	    			String role = iter.next();
-	    			log.debug("role - " + role);
-	    			MetaDataRoleAuthorizationStrategy.authorize(this, ENABLE, role);
+	    			MetaDataRoleAuthorizationStrategy.authorize(this, ENABLE, iter.next());
 	    		}
 	    	}
-			
 		}
-    	    	
     }
 
 	@Override
 	public boolean isEnabled() {
-		// If we're auto-enabling
-		if (getAutoEnable())
-		{
-			// TODO disable link if Panel already active
-			boolean linkActive = false;
-			if (linkActive) return false;
+		Component currentPanel = getPage().get(ID);
+		if (currentPanel != null){
+			if (currentPanel.getClass().equals(panelClass) ){
+				log.debug(currentPanel);
+				return false;
+			}
+			return true;
+		} else {
+			return true;
 		}
-		return true;
 	}
 	
 	@Override

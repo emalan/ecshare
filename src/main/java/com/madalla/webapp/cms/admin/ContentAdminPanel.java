@@ -22,7 +22,6 @@ import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.pages.AdminPanelLink;
-import com.madalla.webapp.user.UserAdminPanel;
 import com.madalla.wicket.IndicatingAjaxSubmitLink;
 
 public class ContentAdminPanel extends Panel {
