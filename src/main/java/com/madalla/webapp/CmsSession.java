@@ -48,8 +48,6 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
     	return getRoles().hasRole(SUPERADMIN);
     }
     
-    
-    
     @Override
 	public void signOut() {
 		super.signOut();

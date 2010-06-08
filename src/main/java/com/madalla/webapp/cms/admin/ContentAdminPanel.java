@@ -57,9 +57,24 @@ public class ContentAdminPanel extends Panel {
 				Panel panel = ContentAdminPanel.newAdminInstance(ID);
 				getPage().replace(panel);
 			}
-			
+
+			@Override
+			public boolean isEnabled() {
+				return !adminApp;
+			}
 		});
 		MetaDataRoleAuthorizationStrategy.authorize(adminPanelLink, RENDER, "SUPERADMIN");
+		
+		Component adminPanelLinkSingle;
+		add(adminPanelLinkSingle = new AdminPanelLink("SingleSiteLink", ContentAdminPanel.class){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isEnabled() {
+				return adminApp;
+			}
+		});
+		MetaDataRoleAuthorizationStrategy.authorize(adminPanelLinkSingle, RENDER, "SUPERADMIN");
         
         setBackupFileList();
         final ListChoice<BackupFile> listChoice = new ListChoice<BackupFile>("backupFiles", new PropertyModel<BackupFile>(this,"file"), 
