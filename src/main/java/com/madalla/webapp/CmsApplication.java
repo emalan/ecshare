@@ -32,6 +32,7 @@ import com.madalla.webapp.cms.admin.ContentAdminPanel;
 import com.madalla.webapp.cms.editor.ContentEntryPanel;
 import com.madalla.webapp.cms.editor.TranslatePanel;
 import com.madalla.webapp.images.admin.ImageAdminPanel;
+import com.madalla.webapp.openid.RpxTokenCallback;
 import com.madalla.webapp.pages.AdminErrorPage;
 import com.madalla.webapp.pages.AlbumAdminPage;
 import com.madalla.webapp.pages.GeneralAdminPage;
@@ -107,6 +108,8 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     	
     	mountBookmarkablePage("admin", GeneralAdminPage.class);
     	mount(new IndexedParamUrlCodingStrategy("admin/album", AlbumAdminPage.class));
+    	
+    	mountBookmarkablePage("openid", RpxTokenCallback.class);
     	
     }
     

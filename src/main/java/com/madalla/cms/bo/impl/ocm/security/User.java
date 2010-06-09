@@ -17,6 +17,7 @@ public class User extends UserData {
 	@Field private String firstName;
 	@Field private String lastName;
 	@Field private Boolean admin;
+	@Field private String displayName;
 	
 	public User(){
 		
@@ -76,6 +77,14 @@ public class User extends UserData {
 
 	public void setAdmin(Boolean admin) {
 		this.admin = admin;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
+	public String getDisplayName() {
+		return displayName;
 	}
 
 }
