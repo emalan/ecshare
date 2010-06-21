@@ -1,13 +1,18 @@
 package com.madalla.webapp;
 
+import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.Request;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
 import org.apache.wicket.session.pagemap.IPageMapEntry;
 
+import com.madalla.bo.security.IUser;
+import com.madalla.bo.security.ProfileData;
 import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
 import com.madalla.cms.service.ocm.SessionDataService;
@@ -56,20 +61,63 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
     	fileUploadInfo.clear();
 	}
 
+	/**
+	 * Convenience method for automatic login as admin.
+	 * NOTE: Make sure this is not used by the deployed application.
+	 */
 	public void authenticate(){
 		if (getApplication().getConfigurationType().equals(Application.DEPLOYMENT)){
     		throw new RuntimeException("this Login method only available for DEVELOPMENT environment.");
     	}
-    	IDataService service = ((IDataServiceProvider) getApplication()).getRepositoryService();
-    	UserData user = service.getUser("admin");
+    	UserData user = getDataService().getUser("admin");
     	repositoryService.setUser(user);
     	setRoles(user);
 	}
+	
+	public boolean authenticate(HashMap<String, String> profileData){
+		String identifier = profileData.get("identifier");
+		String providerName = profileData.get("providerName");
+		String preferredUsername = profileData.get("preferredUsername");
+		String displayName = profileData.get("displayName");
+		
+		ProfileData profile = getDataService().getProfile(identifier);
+
+		if (profile == null){
+			
+			IUser user = repositoryService.getUser();
+			if (user == null){
+				String username = StringUtils.defaultIfEmpty(StringUtils.defaultIfEmpty(preferredUsername, displayName),RandomStringUtils.randomAlphabetic(6));
+				for ( int i = 0; user == null; i++){
+					String uniqueUsername = (i == 0)? username : username + i;
+					user = getDataService().getNewUser(uniqueUsername, "");
+				}
+			}
+			
+			profile = getDataService().getNewUserProfile(user, providerName, identifier);
+		} 
+		
+		//update profile data
+		profile.setPreferredUsername(preferredUsername);
+		profile.setEmail(profileData.get("email"));
+		profile.setBirthday(profileData.get("birthday"));
+		profile.setUtcOffset(profileData.get("utcOffset"));
+		getDataService().saveDataObject(profile);
+		
+		signIn(true);
+		UserData user = getDataService().getUser(profile);
+		//TODO update user information
+		repositoryService.setUser(user);
+    	setRoles(user);
+		return true;
+	}
     
+	/* (non-Javadoc)
+	 * @see org.apache.wicket.authentication.AuthenticatedWebSession#authenticate(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public boolean authenticate(String userName, String password) {
-	   	IDataService service = ((IDataServiceProvider) getApplication()).getRepositoryService();
-        IPasswordAuthenticator authenticator = service.getPasswordAuthenticator(userName);
+	   	IDataService service = getDataService();
+        IPasswordAuthenticator authenticator = getDataService().getPasswordAuthenticator(userName);
         if (authenticator.authenticate(userName, password)){
         	UserData user = service.getUser(userName);
         	
@@ -92,14 +140,17 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 		if (user.getName().equalsIgnoreCase("admin")){
 			sb.append(", " + SUPERADMIN + ", " + SECURE);
 		}
-		IDataService service = ((IDataServiceProvider) getApplication()).getRepositoryService();
-		UserSiteData userSite = service.getUserSite(user);
+		UserSiteData userSite = getDataService().getUserSite(user);
 		if (Boolean.TRUE.equals(userSite.getRequiresAuthentication())){
 			sb.append(", " + SECURE);
 		}
 
 		roles = new Roles(sb.toString());
 		
+	}
+	
+	private IDataService getDataService(){
+		return ((IDataServiceProvider) getApplication()).getRepositoryService();
 	}
 
 	@Override

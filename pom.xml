@@ -5,7 +5,7 @@
 	<artifactId>ecshare</artifactId>
 	<packaging>jar</packaging>
 	<version>1.1</version>
-	<name>ecshare</name>
+	<name>Control My Site</name>
 	<description>Wicket Framework code for multi-lingual Content Management system</description>
 	<url>http://www.emalan.com</url>
     <organization> 
@@ -257,16 +257,7 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <minmemory>128m</minmemory>
-                    <maxmemory>256m</maxmemory>
-                </configuration>
-            </plugin>
 		</plugins>
-		
 	</build>
 	<distributionManagement>
         <site>
@@ -274,7 +265,6 @@
             <name>Amazon ec2 - production</name>
             <url>scp://:ubuntu@174.129.192.163:/vol/www/htdocs/emalancom/ecshare</url>
         </site>
-        
     </distributionManagement>
 	<reporting>
         <plugins>
@@ -286,11 +276,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.6.1</version>
+                <version>2.7</version>
                 <configuration>
                     <copyright>Copyright &amp;copy; Eugene Malan. All Rights Reserved.</copyright>
                     <title>Web application framework API</title>
-                    <overview>src/overview.html</overview>
+                    <overview>src/main/java/overview.html</overview>
                 </configuration>
             </plugin>
         </plugins>

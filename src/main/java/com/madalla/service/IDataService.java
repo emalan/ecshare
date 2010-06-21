@@ -25,6 +25,8 @@ import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.PageMetaLangData;
 import com.madalla.bo.page.ResourceData;
+import com.madalla.bo.security.IUser;
+import com.madalla.bo.security.ProfileData;
 import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
 import com.madalla.bo.video.VideoPlayerData;
@@ -141,7 +143,7 @@ public interface IDataService {
     
     List<LogData> getTransactionLogEntries();
 
-	//Site and User
+	//Site 
 	DateTimeZone getDateTimeZone();
 	
 	SiteData getSite(String name);
@@ -149,6 +151,13 @@ public interface IDataService {
 	SiteData getSiteData();
 	
 	List<SiteData> getSiteEntries();
+	
+	//User
+	ProfileData getProfile(String identifier);
+	
+	ProfileData getNewUserProfile(IUser user, String providerName, String identifier);
+	
+	UserData getUser(ProfileData profile);
 	
     UserData getNewUser(String username, String password);
     
@@ -167,5 +176,7 @@ public interface IDataService {
     void saveUserSiteEntries(UserData user, List<SiteData> sites, boolean auth);
     
     UserSiteData getUserSite(UserData user);
+
+	
     
 }

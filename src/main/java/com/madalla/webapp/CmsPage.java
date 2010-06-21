@@ -261,7 +261,7 @@ public abstract class CmsPage extends WebPage {
 				super.onSignInFailed(username);
 				count++;
 				if (count >= loginMax) {
-					redirectToInterceptPage(new UserLoginPage(username));
+					redirectToInterceptPage(new UserLoginPage(new PageParameters("username="+username)));
 				}
 			}
 
@@ -276,7 +276,7 @@ public abstract class CmsPage extends WebPage {
 
 			@Override
 			protected void onClickAction(AjaxRequestTarget target) {
-				setResponsePage(new UserLoginPage());
+				setResponsePage(UserLoginPage.class);
 				//redirectToInterceptPage(new UserLoginPage(getPageClass()));
 			}
 

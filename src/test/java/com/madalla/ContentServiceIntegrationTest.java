@@ -6,10 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.jcr.RepositoryException;
 import javax.swing.tree.TreeModel;
 
-import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.tree.LinkTree;
@@ -23,11 +21,9 @@ import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.IImageData;
 import com.madalla.bo.image.ImageData;
-import com.madalla.bo.page.ContentData;
-import com.madalla.bo.page.PageData;
+import com.madalla.bo.security.ProfileData;
 import com.madalla.bo.security.UserData;
 import com.madalla.cms.bo.impl.ocm.image.Image;
-import com.madalla.cms.bo.impl.ocm.page.Content;
 import com.madalla.service.BackupFile;
 import com.madalla.service.IDataService;
 import com.madalla.service.IRepositoryAdminService;
@@ -160,6 +156,15 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
         
         UserData nouser = contentService.getNewUser("nouser","pwd");
         assertNull(nouser);
+        
+        //profile
+        ProfileData profile1 = contentService.getNewUserProfile(test, "Provider", "12345");
+        ProfileData profile2 = contentService.getNewUserProfile(test, "Provider", "123456");
+        contentService.saveDataObject(profile1);
+        contentService.saveDataObject(profile2);
+        
+        ProfileData profile = contentService.getProfile("12345");
+        //assertNotNull(profile);
         
         contentService.deleteNode(test.getId());
     }

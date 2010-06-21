@@ -1,6 +1,7 @@
 package com.madalla.webapp;
 
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -18,6 +19,7 @@ import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.protocol.https.HttpsRequestCycleProcessor;
 import org.apache.wicket.request.IRequestCycleProcessor;
 import org.apache.wicket.request.target.coding.IndexedParamUrlCodingStrategy;
+import org.apache.wicket.request.target.coding.MixedParamHybridUrlCodingStrategy;
 import org.apache.wicket.settings.IExceptionSettings;
 
 import com.madalla.BuildInformation;
@@ -28,11 +30,11 @@ import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
+import com.madalla.webapp.authorization.RpxCallbackUrlHandler;
 import com.madalla.webapp.cms.admin.ContentAdminPanel;
 import com.madalla.webapp.cms.editor.ContentEntryPanel;
 import com.madalla.webapp.cms.editor.TranslatePanel;
 import com.madalla.webapp.images.admin.ImageAdminPanel;
-import com.madalla.webapp.openid.RpxTokenCallback;
 import com.madalla.webapp.pages.AdminErrorPage;
 import com.madalla.webapp.pages.AlbumAdminPage;
 import com.madalla.webapp.pages.GeneralAdminPage;
@@ -109,7 +111,15 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     	mountBookmarkablePage("admin", GeneralAdminPage.class);
     	mount(new IndexedParamUrlCodingStrategy("admin/album", AlbumAdminPage.class));
     	
-    	mountBookmarkablePage("openid", RpxTokenCallback.class);
+    	mount(new RpxCallbackUrlHandler("openid", getHomePage(),getSignInPageClass()){
+
+			@Override
+			protected boolean rpxLogin(HashMap<String, String> personalData) {
+				return ((CmsSession)Session.get()).authenticate(personalData);
+			}
+    		
+    	});
+    	mount(new MixedParamHybridUrlCodingStrategy("login", UserLoginPage.class, UserLoginPage.PARAMETERS));
     	
     }
     

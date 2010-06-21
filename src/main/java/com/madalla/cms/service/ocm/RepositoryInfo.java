@@ -23,6 +23,7 @@ import com.madalla.cms.bo.impl.ocm.page.Page;
 import com.madalla.cms.bo.impl.ocm.page.PageMeta;
 import com.madalla.cms.bo.impl.ocm.page.PageMetaLang;
 import com.madalla.cms.bo.impl.ocm.page.Resource;
+import com.madalla.cms.bo.impl.ocm.security.Profile;
 import com.madalla.cms.bo.impl.ocm.security.User;
 import com.madalla.cms.bo.impl.ocm.security.UserSite;
 import com.madalla.cms.bo.impl.ocm.video.VideoPlayer;
@@ -95,7 +96,8 @@ public class RepositoryInfo {
 		USER(User.class, false, true, EC_NODE_USERS),
 		USERSITE(UserSite.class, false, false, EC_NODE_USERS),
 		EMAIL(Email.class, true, true, EC_NODE_DATA),
-		EMAILENTRY(EmailEntry.class, true, false, EC_NODE_DATA);
+		EMAILENTRY(EmailEntry.class, true, false, EC_NODE_DATA),
+		USERPROFILE(Profile.class, false, false, EC_NODE_USERS);
 		
 		
 		/**
@@ -117,6 +119,10 @@ public class RepositoryInfo {
 		 * This is the group or category Node for this class
 		 */
 		public String groupName;
+		
+		public String getGroupPath(){
+			return "/" + EC_NODE_APP + "/" + groupName;
+		}
 		
 		RepositoryType(Class<? extends AbstractData> typeClass, boolean site, boolean parent, String groupName){
 			this.typeClass = typeClass;

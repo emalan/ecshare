@@ -15,9 +15,11 @@ import javax.swing.tree.TreeModel;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.apache.wicket.WicketRuntimeException;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.bo.AbstractData;
 import com.madalla.bo.SiteData;
@@ -37,7 +39,8 @@ import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.PageMetaData;
 import com.madalla.bo.page.PageMetaLangData;
 import com.madalla.bo.page.ResourceData;
-import com.madalla.bo.security.IUserValidate;
+import com.madalla.bo.security.IUser;
+import com.madalla.bo.security.ProfileData;
 import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
 import com.madalla.bo.video.VideoPlayerData;
@@ -53,24 +56,18 @@ import com.madalla.cms.bo.impl.ocm.page.Page;
 import com.madalla.cms.bo.impl.ocm.page.PageMeta;
 import com.madalla.cms.bo.impl.ocm.page.PageMetaLang;
 import com.madalla.cms.bo.impl.ocm.page.Resource;
-import com.madalla.cms.bo.impl.ocm.security.User;
-import com.madalla.cms.bo.impl.ocm.security.UserSite;
 import com.madalla.cms.bo.impl.ocm.video.VideoPlayer;
-import com.madalla.cms.jcr.JcrUtils;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 import com.madalla.cms.service.ocm.template.RepositoryTemplate;
 import com.madalla.cms.service.ocm.template.RepositoryTemplateCallback;
 import com.madalla.cms.service.ocm.util.JcrOcmUtils;
 import com.madalla.db.dao.EmailEntry;
 import com.madalla.db.dao.EmailEntryDao;
-import com.madalla.db.dao.TransactionLog;
 import com.madalla.db.dao.TransactionLogDao;
 import com.madalla.image.ImageUtilities;
 import com.madalla.service.IDataService;
-import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.webapp.security.IPasswordAuthenticator;
-import com.madalla.webapp.security.PasswordAuthenticator;
 
 /**
  * Content Service Implementation for Jackrabbit JCR Content Repository
@@ -97,10 +94,9 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 	private static final long serialVersionUID = 795763276139305054L;
 	private static final Log log = LogFactory.getLog(RepositoryService.class);
 
-    private RepositoryTemplate repositoryTemplate;
+    
     private EmailEntryDao emailEntryDao;
-    private TransactionLogDao transactionLogDao;
-    private PasswordAuthenticator authenticator;
+    private UserSecurityService userSecurityService;
     
     public void init(){
        	Session session;
@@ -110,7 +106,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 			log.error("Exception while getting Session from JcrTemplate", e);
 			throw new WicketRuntimeException("Exception getting Session from JcrTemplate", e);
 		}
-		ocm =  JcrOcmUtils.getObjectContentManager(session);
+		ObjectContentManager ocm =  JcrOcmUtils.getObjectContentManager(session);
 		
     	repositoryTemplate = new RepositoryTemplate(template, ocm, site);
     	
@@ -122,21 +118,11 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     	//Create site node
     	SiteData siteData = getSite(site);
     	
-    	//Create default Users if they don't exist yet
-    	getNewUser("guest", SecurityUtils.encrypt("password"));
-    	UserData adminUser = getNewUser("admin", SecurityUtils.encrypt("password"));
-    	if (adminUser == null){
-    	    adminUser = getUser("admin");
-    	} else {
-    		saveUserSite(new UserSite(adminUser.getId(), site));
-    	}
-        adminUser.setAdmin(true);
-        saveDataObject(adminUser);
-        
-        //setup locales
+    	userSecurityService.init(getSiteEntries(), repositoryTemplate);
+    	
         locales = siteData.getLocaleList();
         locales.add(SiteLanguage.ENGLISH); // english is default
-    	
+        
     }
     
     public DateTimeZone getDateTimeZone(){
@@ -177,10 +163,6 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     
     public boolean isContentPasteNode(final String path){
     	return RepositoryInfo.isContentPasteNode(template, path);
-    }
-    
-    public void deleteNode(final String path) {
-    	JcrUtils.deleteNode(template, path);
     }
     
     public InputStream getResourceStream(String path, String property){
@@ -237,11 +219,10 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 	
 	public void addImageToAlbum(IAlbumData album, String imageName) {
 	    IAlbumData orginalAlbum = getOriginalsAlbum();
-	    Image original = (Image) ocm.getObject(Image.class, orginalAlbum.getId() + "/" + imageName);
+	    Image original = (Image) repositoryTemplate.getOcmObject(Image.class, orginalAlbum.getId() + "/" + imageName);
 	    
 	    String path = album.getId() + "/" + original.getName();
-	    ocm.copy(original.getId(), path);
-	    ocm.save();
+	    repositoryTemplate.copySave(original.getId(), path);
 	    ImageHelper.resizeAlbumImage(template, path, album.getWidth(), album.getHeight());
 	}
 	
@@ -250,7 +231,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
             log.error("getImage - path is required.");
             return null;
         }
-        return (IImageData) ocm.getObject(Image.class, path);
+        return (IImageData) repositoryTemplate.getOcmObject(Image.class, path);
     }
     
     
@@ -302,7 +283,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
             log.error("getBlogEntry - path is required.");
             return null;
         }
-        return (BlogEntry) ocm.getObject(BlogEntry.class, path);
+        return (BlogEntry) repositoryTemplate.getOcmObject(BlogEntry.class, path);
     }
     
     public void saveBlogEntry(BlogEntryData blogEntry){
@@ -377,11 +358,11 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     }
 
     public Content getContent(final String id) {
-		return (Content) ocm.getObject(Content.class, id);
+		return (Content) repositoryTemplate.getOcmObject(Content.class, id);
 	}
     
     public void pasteContent(final String path, final ContentData content){
-        copyData(path, content);
+        repositoryTemplate.copyData(path, content);
     }
     
     public String getContentText(final ContentData parent, Locale locale) {
@@ -438,7 +419,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     }
     
     public ResourceData getContentResource(final String id){
-    	return (ResourceData) ocm.getObject(Resource.class, id);
+    	return (ResourceData) repositoryTemplate.getOcmObject(Resource.class, id);
     }
     
     public void saveContentResource(final ResourceData data){
@@ -472,32 +453,10 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     
     //*********************************
     //******  Data    *****************
-    
-    private void createTransactionLog(String user, AbstractData data){
-    	TransactionLog logData = new TransactionLog();
-		logData.setUser(user);
-		logData.setType(data.getClass().getSimpleName());
-		logData.setCmsId(data.getId());
-		log.debug("creating log entry. " + logData);
-		try {
-			transactionLogDao.create(logData);
-		} catch (Exception e){
-			log.error("Exception while logging transaction.", e);
-		}
-    }
-    
-    public LogData getTransactionLog(String id){
-    	if (StringUtils.isEmpty(id)) {
-			log.error("getTransactionLog - id is required.");
-			return null;
-		}
-    	return transactionLogDao.find(id);
-    }
-    
-    public List<LogData> getTransactionLogEntries(){
-    	return transactionLogDao.fetch();
-    }
-    
+	public List<LogData> getTransactionLogEntries(){
+		return transactionLogDao.fetch();
+	}
+	   
     public void createEmailEntry(String name, String email, String comment){
     	EmailEntry data = new EmailEntry();
     	data.setSenderName(name);
@@ -522,14 +481,14 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 	public List<EmailEntryData> getEmailEntries(){
 		return emailEntryDao.fetch();
     } 
+	
+	//**********************************
+    // ******   Site              ******
 
-    //**********************************
-    // ******   Site and Users    ******
-    
-    public SiteData getSiteData(){
+	public SiteData getSiteData(){
         return getSite(site);
     }
-    
+	
     public SiteData getSite(String name){
     	return (SiteData) repositoryTemplate.getParentObject(RepositoryType.SITE, name, new RepositoryTemplateCallback(){
 			
@@ -547,179 +506,69 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     	return (List<SiteData>) repositoryTemplate.getAll(RepositoryType.SITE);
     }
     
+    //**********************************
+    // ******   Users    ******
+    
+    public ProfileData getProfile(String identifier){
+    	return userSecurityService.getUserProfile(identifier);
+    }
+    
+    public ProfileData getNewUserProfile(IUser user, String name, String identifier){
+    	return userSecurityService.getNewUserProfile(user, name, identifier);
+    }
+    
+    public UserData getUser(ProfileData profile){
+    	return userSecurityService.getUser(profile);
+    }
+	
+	public IPasswordAuthenticator getPasswordAuthenticator(String username) {
+		return userSecurityService.getPasswordAuthenticator(username);
+	}
+    
     public UserData getNewUser(String username, String password){
-    	username = username.toLowerCase();
-    	if (isUserExists(username)){
-    		return null;
-    	}
-    	UserData user = getUser(username);
-    	user.setPassword(password);
-    	saveDataObject(user);
-    	return user;
+    	return userSecurityService.getNewUser(username, password);
     }
     
     public UserData getUser(String username){
-    	username = username.toLowerCase();
-    	return (User) repositoryTemplate.getParentObject(RepositoryType.USER, username, new RepositoryTemplateCallback(){
-
-			@Override
-			public AbstractData createNew(String parentPath, String name) {
-				return new User(parentPath, name);
-			}
-
-    	});
+    	return userSecurityService.getUser(username);
     }
     
-    private boolean isUserExists(String username){
-    	return repositoryTemplate.checkExists(RepositoryType.USER, username);
-    }
-    
-	@SuppressWarnings("unchecked")
 	public List<UserData> getUsers(){
-		List<UserData> list = (List<UserData>) repositoryTemplate.getAll(RepositoryType.USER);
-		Collections.sort(list);
-		return list;
-	}
-	
-	public IPasswordAuthenticator getPasswordAuthenticator(final String username){
-		if (username == null){
-			throw new WicketRuntimeException("Username Argument may not be null");
-		}
-		IUserValidate userData;
-		if (isUserExists(username)){
-			userData = getUser(username);
-		} else {
-			userData = new IUserValidate(){
-
-				public String getName() {
-					return username;
-				}
-
-				public String getPassword() {
-					return null;
-				}
-				
-			};
-		}
-		authenticator.addUser(username, userData);
-		return authenticator;
-		
+		return userSecurityService.getUsers();
 	}
 	
 	public boolean isUserSite(UserData userData){
-		log.debug("isUserSite - Doing Site validation...");
-		List<UserSiteData> sites = getUserSiteEntries(userData);
-		for (UserSiteData siteData : sites){
-			if (siteData.getName().equals(site)){
-				log.debug("authenticate - site validation success.");
-				return true;
-			}
-		}
-		if (userData.getName().equals("admin") && site.equals("ecadmin")){
-			log.debug("isUserSite - site validation success. Special case for admin user.");
-		    return true;
-		}
-		log.debug("isUserSite - site validation failed!");
-		return false;
+		return userSecurityService.isUserSite(userData);
 	}
 	
 	public IAuthenticator getUserAuthenticator() {
-		return new IAuthenticator(){
-			
-			public boolean authenticate(String username){
-				return isUserExists(username);
-			}
-			
-			public boolean requiresSecureAuthentication(String username) {
-				if ("admin".equalsIgnoreCase(username)){
-					return true;
-				}
-				
-				if (isUserExists(username)){
-					UserData user = getUser(username);
-					UserSiteData userSite= getUserSite(user);
-					return Boolean.TRUE.equals(userSite.getRequiresAuthentication());
-				}
-				return false;
-			}
-
-		};
+		return userSecurityService.getUserAuthenticator();
 	}
 	
 	public void saveUserSite(UserSiteData data){
-		saveDataObject(data);
+		userSecurityService.saveUserSite(data);
 	}
 	
 	public UserSiteData getUserSite(UserData user){
-		return getUserSite(user, site);
+		return userSecurityService.getUserSite(user);
 	}
 	
-	private UserSiteData getUserSite(UserData user, String site){
-		return (UserSiteData) repositoryTemplate.getOcmObject(RepositoryType.USERSITE, user, site, new RepositoryTemplateCallback(){
-
-			@Override
-			public AbstractData createNew(String parentPath, String name) {
-				return new UserSite(parentPath, name) ;
-			}
-			
-		});
-	}
-	
-	@SuppressWarnings("unchecked") //Unsafe cast
 	public List<UserSiteData> getUserSiteEntries(UserData user){
-		List<UserSiteData> list = (List<UserSiteData>) repositoryTemplate.getAll(RepositoryType.USERSITE, user);
-		Collections.sort(list);
-		return list;
+		return userSecurityService.getUserSiteEntries(user);
 	}
 	
 	public void saveUserSiteEntries(UserData user, List<SiteData> sites, boolean auth){
-		log.debug("saveUserSiteEntries -"+sites);
-		
-		List<UserSiteData> existingUserSites = getUserSiteEntries(user);
-		
-		List<SiteData> allSites = getSiteEntries();
-		for (SiteData site : allSites){
-			if (sites.contains(site)){
-				UserSiteData userSite = getUserSite(user, site.getName());
-				userSite.setRequiresAuthentication(auth);
-				saveUserSite(userSite);
-				//remove from existing list so we end up with list of ones to delete
-				existingUserSites.remove(userSite);
-			}
-		}
-		//delete the rest
-		for (UserSiteData userSite : existingUserSites){
-			deleteNode(userSite.getId());
-		}
+		userSecurityService.saveUserSiteEntries(user, sites, auth);
 	}
 
     //************************************
     // *****  Utility methods
 	
-    public void saveDataObject(AbstractData data, String user){
-    	createTransactionLog(user, data);
-    	saveDataObject(data);
-    }
+	public void saveDataObject(AbstractData data) {
+		repositoryTemplate.saveDataObject(data);
+		
+	}
     
-    public void saveDataObject(AbstractData data){
-    	if (ocm.objectExists(data.getId())){
-    		ocm.update(data);
-    	} else {
-    		ocm.insert(data);
-    	}
-    	ocm.save();
-    }
-    
-    private void copyData(final String path, final AbstractData data){
-        String destPath = path+ "/" + data.getName();
-        if (ocm.objectExists(destPath)){
-            ocm.remove(destPath);
-            ocm.save();
-        }
-        ocm.copy(data.getId(), destPath);
-        ocm.save();
-    }
-
 	public void setRepositoryTemplate(RepositoryTemplate repositoryTemplate) {
 		this.repositoryTemplate = repositoryTemplate;
 	}
@@ -728,6 +577,9 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 		return repositoryTemplate;
 	}
 
+    //************************************
+    // *****  Instanciation
+
 	public void setEmailEntryDao(EmailEntryDao emailEntryDao) {
 		this.emailEntryDao = emailEntryDao;
 	}
@@ -735,14 +587,24 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 	public void setTransactionLogDao(TransactionLogDao transactionLogDao) {
 		this.transactionLogDao = transactionLogDao;
 	}
+	
+    public void setTemplate(JcrTemplate template) {
+        this.template = template;
+    }
 
-	public void setAuthenticator(PasswordAuthenticator authenticator) {
-		this.authenticator = authenticator;
+	public void setSite(String site) {
+		this.site = site;
+	}
+	
+	public void setUserSecurityService(UserSecurityService userSecurityService){
+		this.userSecurityService = userSecurityService;
 	}
 
-	public PasswordAuthenticator getAuthenticator() {
-		return authenticator;
-	}
+
+
+
+
+
 
 
 }

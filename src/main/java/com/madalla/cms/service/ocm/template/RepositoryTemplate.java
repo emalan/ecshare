@@ -3,7 +3,6 @@ package com.madalla.cms.service.ocm.template;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.Collections;
 
 import javax.jcr.Node;
 import javax.jcr.Property;
@@ -39,6 +38,15 @@ public class RepositoryTemplate{
 		this.ocm = ocm;
 		this.site = site;
 	}
+	
+    public void saveDataObject(AbstractData data){
+    	if (ocm.objectExists(data.getId())){
+    		ocm.update(data);
+    	} else {
+    		ocm.insert(data);
+    	}
+    	ocm.save();
+    }
 	
 	public boolean checkExists(final RepositoryType type, final String name){
 		return (Boolean)template.execute(new JcrCallback(){
@@ -85,6 +93,10 @@ public class RepositoryTemplate{
 	    });
 	}
 	
+	public Object getOcmObject(Class<? extends AbstractData> o, String id){
+		return ocm.getObject(o , id);
+	}
+	
 	public Object getOcmObject(final RepositoryType type, final AbstractData parent, final String name, 
 			final RepositoryTemplateCallback callback){
 		return getCreateOcmObject(type, parent.getId(), name, callback);
@@ -102,9 +114,29 @@ public class RepositoryTemplate{
 		return getCreateOcmObject(type, parentPath, name, callback);
 	}
 	
+	public Object getParentObject(final RepositoryType type, final AbstractData child){
+		String path = StringUtils.substringBeforeLast(child.getId(), "/");
+		return ocm.getObject(path);
+	}
+	
+	public void copySave(String id, String path){
+		ocm.copy(id, path);
+	    ocm.save();
+	}
+	
+   public void copyData(final String path, final AbstractData data) {
+		String destPath = path + "/" + data.getName();
+		if (ocm.objectExists(destPath)) {
+			ocm.remove(destPath);
+			ocm.save();
+		}
+		ocm.copy(data.getId(), destPath);
+		ocm.save();
+	}
+	
 	public Collection<? extends AbstractData> getAll(final RepositoryType type){
 		if(!type.parent){
-			return Collections.emptyList();
+			return getQueryData(type.typeClass, type.getGroupPath(), false);
 		}
 		String parentPath = (String)template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
@@ -113,8 +145,7 @@ public class RepositoryTemplate{
 	    		return parent.getPath();
 			}
 		});
-		Collection<? extends AbstractData> result = getQueryData(type.typeClass, parentPath, true);
-        return result;
+		return getQueryData(type.typeClass, parentPath, true);
 	}
 	
 	public Collection<? extends AbstractData> getAll(final RepositoryType type, AbstractData parent) {
