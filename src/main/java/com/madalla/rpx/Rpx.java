@@ -32,7 +32,12 @@ public class Rpx {
 	private final Log log = LogFactory.getLog(this.getClass());
 
 	private String apiKey;
-    private String baseUrl;
+	private String baseUrl;
+	private String callback;
+	
+	public Rpx(){
+		
+	}
     
     public Rpx(String apiKey, String baseUrl) {
         while (baseUrl.endsWith("/"))
@@ -40,8 +45,7 @@ public class Rpx {
         this.apiKey = apiKey;
         this.baseUrl = baseUrl;
     }
-    public String getApiKey() { return apiKey; }
-    public String getBaseUrl() { return baseUrl; }
+
     public Element authInfo(String token) {
         Map query = new HashMap();
         query.put("token", token);
@@ -178,4 +182,19 @@ public class Rpx {
             System.out.println(r.allMappings().toString());
         }
     }
+    
+    public void setApiKey(String apiKey) {
+		this.apiKey = apiKey;
+	}
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
+
+	public void setCallback(String callback) {
+		this.callback = callback;
+	}
+
+	public String getCallback() {
+		return callback;
+	}
 }

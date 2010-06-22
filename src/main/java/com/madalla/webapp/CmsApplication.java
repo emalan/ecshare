@@ -26,6 +26,7 @@ import com.madalla.BuildInformation;
 import com.madalla.bo.SiteLanguage;
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
+import com.madalla.rpx.Rpx;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.service.IRepositoryAdminService;
@@ -63,6 +64,7 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     private IRepositoryAdminService repositoryAdminService;
     private IEmailSender emailSender;
     private IDataService dataService;
+    private Rpx rpxService;
     private BuildInformation buildInformation;
     private String configType;
     
@@ -111,7 +113,7 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     	mountBookmarkablePage("admin", GeneralAdminPage.class);
     	mount(new IndexedParamUrlCodingStrategy("admin/album", AlbumAdminPage.class));
     	
-    	mount(new RpxCallbackUrlHandler("openid", getHomePage(),getSignInPageClass()){
+    	mount(new RpxCallbackUrlHandler("openid", getHomePage(),getSignInPageClass(), rpxService){
 
 			@Override
 			protected boolean rpxLogin(HashMap<String, String> personalData) {
@@ -224,6 +226,14 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
 
 	public void setConfigType(String configType) {
 		this.configType = configType;
+	}
+
+	public void setRpxService(Rpx rpxService) {
+		this.rpxService = rpxService;
+	}
+
+	public Rpx getRpxService() {
+		return rpxService;
 	}
 
 }

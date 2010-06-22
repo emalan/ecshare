@@ -11,6 +11,11 @@
 <import resource="classpath:com/madalla/cms/jcr/applicationContext-jcr.xml"/>
 <import resource="classpath:com/madalla/db/dao/applicationContext-dao.xml"/>
 
+<bean id="rpxService" class="com.madalla.rpx.Rpx">
+    <property name="apiKey" value="${apiKey}"></property>
+    <property name="baseUrl" value="${baseUrl}"></property>
+    <property name="callback" value="${openid.callback}"></property>
+</bean>
 
 <bean id="buildInformation" class="com.madalla.BuildInformation">
 	<property name="version" value="${application.version}"></property>
@@ -20,6 +25,7 @@
     <property name="repositoryService" ref="dataService"/>
     <property name="repositoryAdminService" ref="repositoryAdminService"/>
     <property name="emailSender" ref="emailSender"/>
+    <property name="rpxService" ref="rpxService"/>
     <property name="buildInformation" ref="buildInformation"></property>
     <property name="configType" value="${wicket.configuration}"></property>
 </bean>

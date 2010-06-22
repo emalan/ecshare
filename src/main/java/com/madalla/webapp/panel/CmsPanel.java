@@ -11,6 +11,7 @@ import com.madalla.service.IDataServiceProvider;
 import com.madalla.service.ISessionDataService;
 import com.madalla.service.ISessionDataServiceProvider;
 import com.madalla.webapp.CmsApplication;
+import com.madalla.webapp.CmsSession;
 
 public abstract class CmsPanel extends Panel {
 
@@ -42,6 +43,10 @@ public abstract class CmsPanel extends Panel {
 	protected ISessionDataService getSessionDataService(){
 		return ((ISessionDataServiceProvider) getSession()).getRepositoryService();
 	}
+	
+	protected CmsSession getAppSession(){
+        return (CmsSession)getSession();
+    }
 	
 
 

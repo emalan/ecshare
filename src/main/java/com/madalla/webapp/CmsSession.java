@@ -132,6 +132,10 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
         return false;
 	}
 	
+	public void setUser(IUser user){
+		repositoryService.setUser(user);
+	}
+	
 	private void setRoles(UserData user){
 		StringBuilder sb = new StringBuilder(Roles.USER);
 		if ((user.getAdmin()==null) ? false : user.getAdmin()){

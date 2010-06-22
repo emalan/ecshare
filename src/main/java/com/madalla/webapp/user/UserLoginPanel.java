@@ -5,16 +5,20 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
+import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 
 import com.madalla.bo.SiteData;
+import com.madalla.bo.security.IUser;
 import com.madalla.email.IEmailSender;
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
+import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.email.EmailFormPanel;
 import com.madalla.webapp.login.LoginPanel;
@@ -41,7 +45,7 @@ public class UserLoginPanel extends CmsPanel {
 		
 		final CmsSession session = (CmsSession) getSession();
 		
-		final Component loginInfo = new Label("loginInfo", new StringResourceModel("login.info",new Model<CmsSession>(session))){
+		final Component loginInfo = new Label("loginInfo", new StringResourceModel("login.info",new Model<IUser>(getSessionDataService().getUser()))){
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -62,6 +66,11 @@ public class UserLoginPanel extends CmsPanel {
             
            	@Override
 			protected void preSignIn(String username) {
+				// TODO hide password login if user has no password
+				
+				IUser user = getRepositoryService().getUser(username);
+				getAppSession().setUser(user);
+				
         		if (getApplication().getConfigurationType().equals(Application.DEVELOPMENT)){
         			return;
         		}
@@ -132,6 +141,19 @@ public class UserLoginPanel extends CmsPanel {
 		emailDiv.add(emailForm);
 		
 		emailLink.add(new AnimationOpenSlide("onclick", emailDiv, 28,"em"));
+		
+		add(new WebComponent("openidWidget"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onComponentTag(ComponentTag tag) {
+				super.onComponentTag(tag);
+				
+				tag.put("src", ((CmsApplication)getApplication()).getRpxService().getCallback());
+			}
+			
+			
+		});
 
 	}
 	

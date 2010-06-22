@@ -2,6 +2,7 @@ package com.madalla.webapp.pages;
 
 import org.apache.wicket.PageParameters;
 
+import com.madalla.bo.security.IUser;
 import com.madalla.webapp.admin.AdminPage;
 import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.webapp.user.UserLoginPanel;
@@ -23,7 +24,6 @@ public class UserLoginPage extends AdminPage{
 
 			@Override
 			protected void preLogin(String username) {
-				// TODO hide password login if user has no password
         		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
         		if (authenticator.requiresSecureAuthentication(username)){
         			setResponsePage(new SecureLoginPage(username));
