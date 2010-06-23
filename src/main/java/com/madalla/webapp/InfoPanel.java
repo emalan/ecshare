@@ -1,8 +1,10 @@
 package com.madalla.webapp;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.Model;
 
 import com.madalla.webapp.cms.ContentPanel;
+import com.madalla.webapp.cms.InlineContentPanel;
 import com.madalla.webapp.panel.CmsPanel;
 
 public class InfoPanel extends CmsPanel{
@@ -11,9 +13,9 @@ public class InfoPanel extends CmsPanel{
 	public InfoPanel(String id) {
 		super(id);
 		
-		add(new Label("heading", "Heading one"));
-		add(new Label("versionInfo", getBuildInfo().getVersion()));
-		add(new ContentPanel("text", "Border"));
+		add(new InlineContentPanel("heading"));
+		add(new Label("versionInfo", new Model<String>(getString("label.buildinfo") +": " + getBuildInfo().getVersion())));
+		add(new ContentPanel("text"));
 	}
 
 }

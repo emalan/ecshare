@@ -26,14 +26,25 @@ import com.madalla.webapp.panel.CmsPanel;
  */
 public class ContentPanel extends CmsPanel {
     private static final long serialVersionUID = 1L;
+    
     private Log log = LogFactory.getLog(this.getClass());
     private String nodeName;
     private String nodeId;
+    
+    
+    /**
+     * Use this Constructor for Border or Application Level Content.
+     * 
+     * @param id
+     */
+    public ContentPanel(String id){
+    	this(id, id, APPNODE);
+    }
     /**
      * 
      * @param id - wicket id
      * @param name - storage name
-     * @param node - parent node of Content
+     * @param node - parent node of Content, typically Page Name
      */
     public ContentPanel(String id, String name, String node){
     	this(id, name, node, new Label("nested","stub").setVisible(false));

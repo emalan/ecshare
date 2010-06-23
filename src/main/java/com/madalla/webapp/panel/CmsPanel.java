@@ -16,6 +16,8 @@ import com.madalla.webapp.CmsSession;
 public abstract class CmsPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
+	
+	protected static final String APPNODE = "AppPage";
 
 	public CmsPanel(String id) {
 		super(id);

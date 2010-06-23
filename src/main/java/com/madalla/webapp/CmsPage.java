@@ -167,8 +167,9 @@ public abstract class CmsPage extends WebPage {
 	private void setupInfoDialog(){
 		final ModalWindow modal;
 		add(modal = new EcModalWindow("infoDialog"));
-		modal.setInitialHeight(400);
+		modal.setInitialHeight(200);
 		modal.setInitialWidth(300);
+		modal.setTitle(new Model<String>(getString("label.siteinfo")));
 		modal.setContent(new InfoPanel("content"));
 		
 		add(new AjaxLink<Void>("infoDialogLink"){

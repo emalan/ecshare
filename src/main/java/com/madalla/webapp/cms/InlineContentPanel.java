@@ -25,6 +25,14 @@ public class InlineContentPanel extends CmsPanel {
     private Log log = LogFactory.getLog(this.getClass());
     
     /**
+     * Use this constructor for Border or application Level Content
+     * 
+     * @param id
+     */
+    public InlineContentPanel(final String id) {
+    	this(id, APPNODE);
+    }
+    /**
      * 
      * @param id
      * @param nodeName
