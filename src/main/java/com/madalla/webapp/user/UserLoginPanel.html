@@ -18,6 +18,7 @@
         form div .buttonwrapper {margin-left: 10em; float: left;}
         form div .feedbackPanel {float: left;}
         
+        div.rpx {}
         
     </style>
 
@@ -26,34 +27,38 @@
     <wicket:panel>
     
     	<div class="adminSection">
- 
-    	    <h2><wicket:message key="heading.login">[label]</wicket:message></h2>
-    	    <p wicket:id="loginInfo" class=info>[label]</p>
-    	    
-    	    <div id="navLinks">
-                <a wicket:id="logout" href="#"><wicket:message key="label.logout">[label]</wicket:message></a>
-            </div>
-            
-            <span wicket:id="signInPanel"></span>
-
-            <div id="navLinks">
-                <a wicket:id="emailLink" href="#" ></a>
-            </div>
-	        
-	        <div wicket:id="emailDiv" style="overflow:hidden; height: 28em; display:none;">
-	            <hr/>
-	            <span class="divHeadings"><wicket:message key="heading.support">Label Contents</wicket:message></span>
-	            <span wicket:id="supportEmail" />
+    	  <h2><wicket:message key="heading.login">[label]</wicket:message></h2>
+    	  <div class="yui-g">
+            <div class="yui-u first">
+	    	    <p wicket:id="loginInfo" class=info>[label]</p>
+	    	    
+	    	    <div id="navLinks">
+	                <a wicket:id="logout" href="#"><wicket:message key="label.logout">[label]</wicket:message></a>
+	            </div>
+	            
+	            <span wicket:id="signInPanel"></span>
+	
+	            <div id="navLinks">
+	                <a wicket:id="emailLink" href="#" ></a>
+	            </div>
 	        </div>
-	        
+	        <div class="rpx yui-u">
+                <iframe src="http://ecsite.rpxnow.com/openid/embed?token_url=http%3A%2F%2Fecsite.emalan.com%2Fopenid"
+                    scrolling="no" 
+                    frameBorder="no" 
+                    allowtransparency="true" 
+                    style="width:350px;height:240px" wicket:id="openidWidget"></iframe>
+            </div>
+          </div>  
+          <div wicket:id="emailDiv" style="overflow:hidden; height: 28em; display:none;">
+                    <hr/>
+                    <span class="divHeadings"><wicket:message key="heading.support">Label Contents</wicket:message></span>
+                    <span wicket:id="supportEmail" />
+          </div>
+	    
+	    
 	    </div>
-	    <div>
-            <iframe src="http://ecsite.rpxnow.com/openid/embed?token_url=http%3A%2F%2Ftecsite.emalan.com%2Fopenid"
-                scrolling="no" 
-                frameBorder="no" 
-                allowtransparency="true" 
-                style="width:400px;height:240px" wicket:id="openidWidget"></iframe>
-        </div>
+	    
     	<script type="text/javascript"> 
         	var supportAnim = new Animator().addSubject(new DiscreteStyleSubject(wicketGet('supportEmail'),'display','none',''));
     	</script>

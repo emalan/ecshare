@@ -97,6 +97,7 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 		} 
 		
 		//update profile data
+		profile.setDisplayName(displayName);
 		profile.setPreferredUsername(preferredUsername);
 		profile.setEmail(profileData.get("email"));
 		profile.setBirthday(profileData.get("birthday"));
@@ -105,7 +106,14 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 		
 		signIn(true);
 		UserData user = getDataService().getUser(profile);
-		//TODO update user information
+		if (StringUtils.isEmpty(user.getEmail())){
+			user.setEmail(profile.getEmail());
+		}
+		if (StringUtils.isEmpty(user.getDisplayName())){
+			user.setDisplayName(profile.getDisplayName());
+		}
+		getDataService().saveDataObject(user);
+		
 		repositoryService.setUser(user);
     	setRoles(user);
 		return true;

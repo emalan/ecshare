@@ -4,6 +4,7 @@
 
         form div{width: 100%;}
         div#profile form div label {width: 7em;}
+        div#profile form div label.email {width: 8em;}
 		div.submit span.buttonwrapper { padding-left: 4em; }
     </style>
 </wicket:head>
@@ -26,6 +27,10 @@
                     <label for="email"><wicket:message key="label.email">[label]</wicket:message></label>
                     <input id="email" class="inputText" type="text" wicket:id="email"/>
                     <span class="feedbackPanel" wicket:id="emailFeedback"></span>
+                </div>
+                <div>    
+                    <label><wicket:message key="label.displayName">[label]</wicket:message></label>
+                    <input class="inputText" type="text" wicket:id="displayName"/>
                 </div>
                	<div>    
                    	<label><wicket:message key="label.firstName">[label]</wicket:message></label>

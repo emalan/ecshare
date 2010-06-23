@@ -1,5 +1,8 @@
 package com.madalla.webapp.user;
 
+import java.text.MessageFormat;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -148,8 +151,13 @@ public class UserLoginPanel extends CmsPanel {
 			@Override
 			protected void onComponentTag(ComponentTag tag) {
 				super.onComponentTag(tag);
-				
-				tag.put("src", ((CmsApplication)getApplication()).getRpxService().getCallback());
+				final String siteUrl = getRepositoryService().getSiteData().getUrl();
+				final String lang = getSession().getLocale().getLanguage();
+				final String hideHeading = "flags=hide_sign_in_with";
+				if (StringUtils.isNotEmpty(siteUrl)){
+					String callback = ((CmsApplication)getApplication()).getRpxService().getCallback();
+					tag.put("src", MessageFormat.format(callback, new Object[]{siteUrl, lang}) + "&" + hideHeading);
+				}
 			}
 			
 			

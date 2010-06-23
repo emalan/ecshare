@@ -46,7 +46,7 @@ public class UserProfilePanel extends CmsPanel{
             TextField<String> email = new AjaxValidationRequiredTextField("email", emailFeedback);
             email.add(EmailAddressValidator.getInstance());
             add(email);
-            
+            add(new TextField<String>("displayName"));
             add(new TextField<String>("firstName"));
             add(new TextField<String>("lastName"));
         }

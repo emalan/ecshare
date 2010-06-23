@@ -12,8 +12,8 @@
 <import resource="classpath:com/madalla/db/dao/applicationContext-dao.xml"/>
 
 <bean id="rpxService" class="com.madalla.rpx.Rpx">
-    <property name="apiKey" value="${apiKey}"></property>
-    <property name="baseUrl" value="${baseUrl}"></property>
+    <property name="apiKey" value="${openid.apiKey}"></property>
+    <property name="baseUrl" value="${openid.baseUrl}"></property>
     <property name="callback" value="${openid.callback}"></property>
 </bean>
 
