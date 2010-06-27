@@ -12,8 +12,8 @@ public class ContentEditPage extends AdminPage {
 	
 	public ContentEditPage(PageParameters parameters){
 		super(parameters);
-		String nodeName = PageUtils.getPageParameter("0", parameters, "ContentEditPage");
-		String contentId = PageUtils.getPageParameter("1", parameters, "ContentEditPage");
+		String contentId = PageUtils.getPageParameter("0", parameters, "ContentEditPage");
+		String nodeName = PageUtils.getPageParameter("1", parameters, "ContentEditPage");
 		add(new ContentEntryPanel("adminPanel", nodeName, contentId));
 	}
 

@@ -190,6 +190,8 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
      * @return List of Pages used in the menu OR Collections.emptyList() if no menu
      */
     public abstract List<Class<? extends Page>> getPageMenuList();
+    
+    public abstract List<Class <? extends Page>> getAppPages();
 
     public IEmailSender getEmailSender() {
         return emailSender;

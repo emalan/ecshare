@@ -145,6 +145,7 @@ public class UserLoginPanel extends CmsPanel {
 		
 		emailLink.add(new AnimationOpenSlide("onclick", emailDiv, 28,"em"));
 		
+		add(new Label("rpxHeading", new Model<String>(getString("label.rpx"))));
 		add(new WebComponent("openidWidget"){
 			private static final long serialVersionUID = 1L;
 

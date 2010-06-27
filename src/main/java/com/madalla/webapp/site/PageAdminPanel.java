@@ -48,7 +48,7 @@ public class PageAdminPanel extends CmsPanel {
 	}
 	
 	private List<PageData> getPages(){
-		List<Class<? extends Page>> pages = ((CmsApplication)getApplication()).getPageMenuList();
+		List<Class<? extends Page>> pages = ((CmsApplication)getApplication()).getAppPages();
 		List<PageData> rt = new ArrayList<PageData>();
 		for (Class<? extends Page> page : pages){
 			PageData pageData = getRepositoryService().getPage(getPageName(page));

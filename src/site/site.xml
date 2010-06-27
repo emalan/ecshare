@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="OxfordBibliographiesOnline">
+  <body>
+    <links>
+      <item name="Production" href="http://www.oxfordbibliographiesonline.com/" />
+      <item name="Stage" href="http://oxfordbibliographiesonline.oup.com/"/>
+      <item name="Test" href="http://obo.contentdsi.com/" />
+    </links>
+
+    <menu name="OBO">
+      <item name="Introduction" href="index.html"/>
+
+    </menu>
+
+    <menu ref="reports"/>
+
+    
+  </body>
+</project>
