@@ -12,6 +12,7 @@ import org.apache.wicket.model.Model;
 
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.PageData;
+import com.madalla.webapp.css.Css;
 import com.madalla.webapp.pages.AdminPageLink;
 import com.madalla.webapp.pages.ContentEditPage;
 import com.madalla.webapp.panel.CmsPanel;
@@ -59,6 +60,7 @@ public class ContentPanel extends CmsPanel {
         super(id);
         this.nodeName = node;
         this.nodeId = name;
+        add(Css.CSS_ICON);
         log.debug("Content Panel being created for node=" + node + " id=" + id);
         PageData page = getRepositoryService().getPage(node);
         ContentData content = getRepositoryService().getContent(page, nodeId);

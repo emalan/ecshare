@@ -1,86 +1,19 @@
-About Oxford Bibliographies Online
+About Control My Site
 
-    Project Management, incuding the generation and deployment of this site, is done using 
-    Maven {{http://maven.apache.org/}}
+    A Java base framework to create multi-lingual Content Managed web sites.
     
-    See Project Information - Source Repository for information on checking out this project.
+    The framework makes it easy to extend a java Wicket application by adding various
+    CMS enabled components.
     
-    This site is generated from the Source Code with the following commands
+Present Technology Stack
 
----------------
-mvn site
-
-mvn site:deploy
----------------    
+    * Applications deployed on Ubuntu server on Amazon's ec2 service.
     
-Run the application
-
-    To run the application locally, just run the following command and point your browser to 
-    http://localhost:8080. The application includes its own Jetty server.
-
---------------------------------
-mvn jetty:run
---------------------------------
-        
-Architecture
-
-    * Wicket has been used as the framework for the web application.
+    * Jackrabbit CMS with a MySql database for persistance.
     
-    * Wicket and other application Services are configured using Spring.
+    * All repository interactions use the Java JCR API.
     
-    * There is a local derby database that is started up by the application.
-        
-Deployment
+    * Jackrabbits OCM is used for Object to JCR conversion.
     
-    Deployment is done by Maven using profiles for the various environments. The deployment process
-    will deploy the built war to a repository on the server. To complete the deployment you need to copy
-    the war from the repository to the relevant server webapp directory.
+    * Wicket for the Application and Front End
     
-    Most environment specific settings are found in property files located at src/main/resources .
-    
-    NOTE: To deploy using Maven you need to configure access information for the various servers -- see
-    the section below for more information.
-
-    * Production
-    
-------
-mvn -Pprod clean deploy
-------
-       
-    * Staging
-    
-------
-mvn -Pstage clean deploy
-------
-
-    * Test
-    
-------
-mvn -Ptest clean deploy
-------
-        
-    * Add the following servers to your Maven settings.xml file. Fill in your own values for user-name and password.
-        
--------------------------------    
-    <server>
-        <id>cdsi-test</id>
-        <username>{user-name}</username>
-        <password>{password}</password>
-        <directoryPermissions>775</directoryPermissions>
-        <filePermissions>664</filePermissions>
-    </server>    
-    <server>
-        <id>cdsi-stage</id>
-        <username>root</username>
-        <password>{password}</password>
-        <directoryPermissions>775</directoryPermissions>
-        <filePermissions>664</filePermissions>
-    </server>    
-    <server>
-        <id>cdsi-prod</id>
-        <username>oxfor001</username>
-        <password>{password}</password>
-        <directoryPermissions>775</directoryPermissions>
-        <filePermissions>664</filePermissions>
-    </server>  
---------------------------------

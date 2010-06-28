@@ -370,7 +370,7 @@ public abstract class CmsPage extends WebPage {
 	protected boolean hasInfoDialog() {
 		return false;
 	}
-
+	
 	/**
 	 * Add a Text Content Panel to this page. NOTE: be careful when using this method
 	 * from an abstract class as new Panels will be created for each implementation.

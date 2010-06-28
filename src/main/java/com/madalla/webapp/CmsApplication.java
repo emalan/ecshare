@@ -89,6 +89,10 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     		log.fatal("Email Sender is not configured Correctly.");
     		throw new WicketRuntimeException("Email Service is not configured Correctly.");
     	}
+    	if (hasRpxService() && (rpxService == null || rpxService.getCallback() == null)){
+    		log.fatal("Rpx service is not configured Correctly.");
+    		throw new WicketRuntimeException("Rpx service is not configured Correctly. Configure using the 'override.properties' file.");
+    	}
         setupApplicationSpecificConfiguration();
     }
     
@@ -192,6 +196,10 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     public abstract List<Class<? extends Page>> getPageMenuList();
     
     public abstract List<Class <? extends Page>> getAppPages();
+    
+    public boolean hasRpxService(){
+    	return false;
+    }
 
     public IEmailSender getEmailSender() {
         return emailSender;

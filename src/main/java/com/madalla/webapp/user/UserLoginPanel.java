@@ -1,16 +1,11 @@
 package com.madalla.webapp.user;
 
-import java.text.MessageFormat;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
-import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
@@ -145,25 +140,12 @@ public class UserLoginPanel extends CmsPanel {
 		
 		emailLink.add(new AnimationOpenSlide("onclick", emailDiv, 28,"em"));
 		
-		add(new Label("rpxHeading", new Model<String>(getString("label.rpx"))));
-		add(new WebComponent("openidWidget"){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onComponentTag(ComponentTag tag) {
-				super.onComponentTag(tag);
-				final String siteUrl = getRepositoryService().getSiteData().getUrl();
-				final String lang = getSession().getLocale().getLanguage();
-				final String hideHeading = "flags=hide_sign_in_with";
-				if (StringUtils.isNotEmpty(siteUrl)){
-					String callback = ((CmsApplication)getApplication()).getRpxService().getCallback();
-					tag.put("src", MessageFormat.format(callback, new Object[]{siteUrl, lang}) + "&" + hideHeading);
-				}
-			}
-			
-			
-		});
-
+		if (((CmsApplication)getApplication()).hasRpxService()){
+			add(new RpxPanel("rpxPanel"));
+		} else {
+			add(new Label("rpxPanel").setVisible(false));
+		}
+		
 	}
 	
 	protected void preLogin(String username){

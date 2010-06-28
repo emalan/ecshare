@@ -22,10 +22,17 @@
     </property>
 </bean>
 
+<bean id="overrideConfigurer"  class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
+    <property name="location">
+        <value>classpath:override.properties</value>
+    </property>
+    <property name="ignoreResourceNotFound" value="true"/>
+</bean>
+
 <bean id="rpxService" class="com.madalla.rpx.Rpx">
-    <property name="apiKey" value="${openid.apiKey}"></property>
-    <property name="baseUrl" value="${openid.baseUrl}"></property>
-    <property name="callback" value="${openid.callback}"></property>
+    <property name='apiKey'><null/></property>
+    <property name='baseUrl'><null/></property>
+    <property name='callback'><null/></property>
 </bean>
 
 <bean id="buildInformation" class="com.madalla.BuildInformation">

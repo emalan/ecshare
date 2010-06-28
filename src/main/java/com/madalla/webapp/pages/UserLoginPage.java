@@ -2,7 +2,6 @@ package com.madalla.webapp.pages;
 
 import org.apache.wicket.PageParameters;
 
-import com.madalla.bo.security.IUser;
 import com.madalla.webapp.admin.AdminPage;
 import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.webapp.user.UserLoginPanel;
@@ -34,8 +33,6 @@ public class UserLoginPage extends AdminPage{
 			
 		});
 		
-		// TODO add panel with RPX widget
-		// TODO if user has Profile then set default provider
 	}
 	
 
