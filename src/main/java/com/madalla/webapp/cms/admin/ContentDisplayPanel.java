@@ -78,7 +78,7 @@ class ContentDisplayPanel extends Panel {
             	getContentService().deleteNode(path);
             	refresh("");
             	target.addComponent(getParent());
-            	parentPanel.refreshExplorerPanel();
+            	parentPanel.deleteNode(target);
             	target.addComponent(parentPanel.getExplorerPanel());
 			}
         };
@@ -104,7 +104,7 @@ class ContentDisplayPanel extends Panel {
 				getContentService().pasteContent(path, copiedContent);
             	refresh("");
             	target.addComponent(getParent());
-            	parentPanel.refreshExplorerPanel();
+            	parentPanel.refreshExplorerPanel(target);
             	target.addComponent(parentPanel.getExplorerPanel());
             }
         };

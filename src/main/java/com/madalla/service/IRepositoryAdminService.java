@@ -3,7 +3,7 @@ package com.madalla.service;
 import java.io.File;
 import java.util.List;
 
-import javax.swing.tree.TreeModel;
+import javax.swing.tree.DefaultTreeModel;
 
 import com.madalla.cms.jcr.NodeDisplay;
 
@@ -21,13 +21,13 @@ public interface IRepositoryAdminService {
 	 * All Content Data for a site/application
 	 * @return CMS data as a Tree for display
 	 */
-	TreeModel getSiteContent();
+	DefaultTreeModel getSiteContent();
 
 	/**
 	 * All Content Data in repository
 	 * @return CMS data as a Tree for display
 	 */
-	TreeModel getRepositoryContent();
+	DefaultTreeModel getRepositoryContent();
 
 	/**
 	 * Will backup all Data.

@@ -30,9 +30,9 @@
 </bean>
 
 <bean id="rpxService" class="com.madalla.rpx.Rpx">
-    <property name='apiKey'><null/></property>
-    <property name='baseUrl'><null/></property>
-    <property name='callback'><null/></property>
+    <property name='apiKey' value=""></property>
+    <property name='baseUrl' value=""></property>
+    <property name='callback' value=""></property>
 </bean>
 
 <bean id="buildInformation" class="com.madalla.BuildInformation">

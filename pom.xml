@@ -202,13 +202,18 @@
             <resource>
                 <filtering>true</filtering>
                 <directory>src/main/java</directory>
-                <includes>
-                    <include>build.properties</include>
-                </includes>
                 <excludes>
                     <exclude>**/*.java</exclude>
                     <exclude>log4j.properties</exclude>
+                    <exclude>build.properties</exclude>
                 </excludes>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>build.properties</include>
+                </includes>
             </resource>
         </resources>
         <testResources>

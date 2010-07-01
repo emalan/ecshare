@@ -6,6 +6,7 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -32,7 +33,7 @@ public class JcrTreeNode extends AbstractTreeNode{
     
     //Do in session
     public void init(Node node) throws RepositoryException{
-    	List children = loadChildren(node);
+    	List<JcrTreeNode> children = loadChildren(node);
     	super.setChildren(children);
     }
 
@@ -41,8 +42,8 @@ public class JcrTreeNode extends AbstractTreeNode{
     }
 
     //init code
-    private List loadChildren(Node node) throws RepositoryException {
-        List newChildren = new ArrayList();
+    private List<JcrTreeNode> loadChildren(Node node) throws RepositoryException {
+        List<JcrTreeNode> newChildren = new ArrayList<JcrTreeNode>();
         for (NodeIterator jcrChildren = node.getNodes();jcrChildren.hasNext();) {
             Node jcrChild = jcrChildren.nextNode();
             if (jcrChild != null) {
@@ -79,4 +80,24 @@ public class JcrTreeNode extends AbstractTreeNode{
     public int hashCode() {
         return new HashCodeBuilder(87, 335).append(nodeModel).toHashCode();
     }
+    
+	public void insert(MutableTreeNode arg0, int arg1) {
+	}
+
+	public void remove(int arg0) {
+	}
+
+	public void remove(MutableTreeNode arg0) {
+	}
+
+	public void removeFromParent() {
+	}
+
+	public void setParent(MutableTreeNode arg0) {
+	}
+
+	public void setUserObject(Object arg0) {
+	}
+
+
 }

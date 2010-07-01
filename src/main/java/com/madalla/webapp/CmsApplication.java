@@ -4,6 +4,7 @@ package com.madalla.webapp;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
@@ -89,9 +90,9 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     		log.fatal("Email Sender is not configured Correctly.");
     		throw new WicketRuntimeException("Email Service is not configured Correctly.");
     	}
-    	if (hasRpxService() && (rpxService == null || rpxService.getCallback() == null)){
+    	if (hasRpxService() && (rpxService == null || StringUtils.isEmpty(rpxService.getCallback()))){
     		log.fatal("Rpx service is not configured Correctly.");
-    		throw new WicketRuntimeException("Rpx service is not configured Correctly. Configure using the 'override.properties' file.");
+    		throw new WicketRuntimeException("Rpx service is not configured Correctly. Configure values using the 'override.properties' file.");
     	}
         setupApplicationSpecificConfiguration();
     }

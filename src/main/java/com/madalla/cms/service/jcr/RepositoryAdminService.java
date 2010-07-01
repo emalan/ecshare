@@ -12,7 +12,7 @@ import javax.jcr.Item;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.swing.tree.TreeModel;
+import javax.swing.tree.DefaultTreeModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,8 +46,8 @@ public class RepositoryAdminService extends AbstractJcrRepositoryService impleme
     	});
     }
 
-    public TreeModel getRepositoryContent(){
-        return (TreeModel) template.execute(new JcrCallback(){
+    public DefaultTreeModel getRepositoryContent(){
+        return (DefaultTreeModel) template.execute(new JcrCallback(){
             
             public Object doInJcr(Session session) throws IOException, RepositoryException {
                 Node rootNode = getApplicationNode(session);
@@ -61,8 +61,8 @@ public class RepositoryAdminService extends AbstractJcrRepositoryService impleme
         });
     }
     
-    public TreeModel getSiteContent(){
-        return (TreeModel) template.execute(new JcrCallback(){
+    public DefaultTreeModel getSiteContent(){
+        return (DefaultTreeModel) template.execute(new JcrCallback(){
             
             public Object doInJcr(Session session) throws IOException, RepositoryException {
                 Node siteNode = getSiteNode(session);

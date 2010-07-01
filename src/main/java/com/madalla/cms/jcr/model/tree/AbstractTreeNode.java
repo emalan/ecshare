@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import org.apache.commons.logging.Log;
@@ -13,11 +14,13 @@ import org.apache.commons.logging.LogFactory;
 import com.madalla.cms.jcr.model.JcrNodeModel;
 import com.madalla.cms.jcr.model.NodeModelWrapper;
 
-public abstract class AbstractTreeNode extends NodeModelWrapper implements TreeNode {
-    static final Log log = LogFactory.getLog(AbstractTreeNode.class);
+public abstract class AbstractTreeNode extends NodeModelWrapper implements MutableTreeNode {
+	private static final long serialVersionUID = 1L;
+
+	static final Log log = LogFactory.getLog(AbstractTreeNode.class);
 
     private JcrTreeModel treeModel;
-    private List children = new ArrayList();
+    private List<JcrTreeNode> children = new ArrayList<JcrTreeNode>();
     private int childcount = 0;
 
     public AbstractTreeNode(JcrNodeModel nodeModel) {
@@ -34,7 +37,7 @@ public abstract class AbstractTreeNode extends NodeModelWrapper implements TreeN
         return treeModel;
     }
 
-    public Enumeration children() {
+    public Enumeration<JcrTreeNode> children() {
         return Collections.enumeration(children);
     }
 
@@ -60,8 +63,10 @@ public abstract class AbstractTreeNode extends NodeModelWrapper implements TreeN
 
     public abstract String renderNode();
 
-	public void setChildren(List children) {
+	public void setChildren(List<JcrTreeNode> children) {
 		this.children = children;
 		this.childcount = children.size();
 	}
+	
+
 }

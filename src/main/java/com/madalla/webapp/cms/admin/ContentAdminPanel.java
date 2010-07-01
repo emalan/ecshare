@@ -270,8 +270,12 @@ public class ContentAdminPanel extends Panel {
 		return get("contentExplorerPanel");
 	}
 	
-	public void refreshExplorerPanel(){
-		contentExplorerPanel.refresh();
+	public void deleteNode(AjaxRequestTarget target){
+		contentExplorerPanel.deleteCurrentNode(target);
+	}
+	
+	public void refreshExplorerPanel(AjaxRequestTarget target){
+		contentExplorerPanel.refresh(target);
 	}
 	
 	public void refreshDisplayPanel(String path){

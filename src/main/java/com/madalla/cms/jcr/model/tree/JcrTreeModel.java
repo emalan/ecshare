@@ -9,13 +9,13 @@ import javax.swing.tree.DefaultTreeModel;
 public class JcrTreeModel extends DefaultTreeModel{
 
     private static final long serialVersionUID = 3495335448944545206L;
-    private Map registry;
+    private Map<String, AbstractTreeNode> registry;
 	
     public JcrTreeModel(AbstractTreeNode rootModel) {
         super(rootModel);
         rootModel.setTreeModel(this);
 
-        registry = new HashMap();
+        registry = new HashMap<String, AbstractTreeNode>();
         register(rootModel);
     }
     
