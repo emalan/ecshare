@@ -84,13 +84,12 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 
 		if (profile == null){
 			
-			IUser user = repositoryService.getUser();
-			if (user == null){
-				String username = StringUtils.defaultIfEmpty(StringUtils.defaultIfEmpty(preferredUsername, displayName),RandomStringUtils.randomAlphabetic(6));
-				for ( int i = 0; user == null; i++){
-					String uniqueUsername = (i == 0)? username : username + i;
-					user = getDataService().getNewUser(uniqueUsername, "");
-				}
+			IUser user = null;
+			String username = StringUtils.defaultIfEmpty(StringUtils.defaultIfEmpty(preferredUsername, displayName),
+					RandomStringUtils.randomAlphabetic(6));
+			for (int i = 0; user == null; i++) {
+				String uniqueUsername = (i == 0) ? username : username + i;
+				user = getDataService().getNewUser(uniqueUsername, "");
 			}
 			
 			profile = getDataService().getNewUserProfile(user, providerName, identifier);

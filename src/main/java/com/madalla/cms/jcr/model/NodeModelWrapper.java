@@ -5,7 +5,7 @@ import java.util.Map;
 import org.apache.wicket.model.IChainingModel;
 import org.apache.wicket.model.IModel;
 
-public class NodeModelWrapper implements IChainingModel, IPluginModel {
+public class NodeModelWrapper implements IChainingModel<ContentNode>, IPluginModel {
 	private static final long serialVersionUID = 1L;
 
     protected JcrNodeModel nodeModel;
@@ -18,23 +18,19 @@ public class NodeModelWrapper implements IChainingModel, IPluginModel {
         return nodeModel;
     }
 
-    // Implement IChainingModel
-
-    public IModel getChainedModel() {
+    public IModel<ContentNode> getChainedModel() {
         return nodeModel;
     }
 
-    public void setChainedModel(IModel model) {
-        if (model instanceof JcrNodeModel) {
-            nodeModel = (JcrNodeModel) model;
-        }
-    }
+	public void setChainedModel(IModel<?> model) {
+        nodeModel = (JcrNodeModel) model;
+	}
 
-    public Object getObject() {
+    public ContentNode getObject() {
         return nodeModel.getObject();
     }
 
-    public void setObject(Object object) {
+    public void setObject(ContentNode object) {
         nodeModel.setObject(object);
     }
 
@@ -45,8 +41,9 @@ public class NodeModelWrapper implements IChainingModel, IPluginModel {
     }
     
     // implement IPluginModel
-    
-    public Map getMapRepresentation() {
+    public Map<String, String> getMapRepresentation() {
         return nodeModel.getMapRepresentation();
     }
+
+
 }

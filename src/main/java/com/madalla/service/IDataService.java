@@ -60,6 +60,8 @@ public interface IDataService {
 	boolean isImageNode(final String id);
 
 	boolean isContentPasteNode(final String id);
+	
+	boolean isContentCopyable(final String path);
 
 	// Generic
 	void deleteNode(final String id);

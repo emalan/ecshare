@@ -118,7 +118,7 @@ class ContentDisplayPanel extends Panel {
 			
 			@Override
 			protected final void onBeforeRender(){
-				if (!StringUtils.isEmpty(path) && getContentService().isContentNode(path)){
+				if (!StringUtils.isEmpty(path) && getContentService().isContentCopyable(path)){
 					setEnabled(true);
 				} else {
 					setEnabled(false);

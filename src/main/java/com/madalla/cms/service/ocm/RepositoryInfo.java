@@ -157,6 +157,28 @@ public class RepositoryInfo {
         return isNodeType(path, EC_NODE_DATA);
     }
 	
+	public static boolean isContentCopyable(JcrTemplate template, final String path){
+		Boolean rt = (Boolean) template.execute(new JcrCallback(){
+
+			public Object doInJcr(Session session) throws IOException,
+					RepositoryException {
+				Node node = (Node) session.getItem(path);
+				if (node.hasProperty(OCM_CLASS)){
+					String className = node.getProperty(OCM_CLASS).getString();
+					if (RepositoryType.CONTENTENTRY.typeClass.getName().equals(className)){
+						return Boolean.TRUE;
+					} else {
+						return Boolean.FALSE;
+					}
+				}else {
+					return Boolean.FALSE;
+				}
+			}
+	    	
+	    });
+	    return rt;
+	}
+	
 	public static boolean isContentPasteNode(JcrTemplate template, final String path){
 	    Boolean rt = (Boolean) template.execute(new JcrCallback(){
 

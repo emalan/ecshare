@@ -161,6 +161,10 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     	return RepositoryInfo.isImagesNodeType(path);
     }
     
+    public boolean isContentCopyable(final String path){
+    	return RepositoryInfo.isContentCopyable(template, path);
+    }
+    
     public boolean isContentPasteNode(final String path){
     	return RepositoryInfo.isContentPasteNode(template, path);
     }

@@ -21,8 +21,8 @@ public class JcrNodeModel implements IPluginModel {
     	contentNode = new ContentNode(node);
     }
     
-    public Map getMapRepresentation() {
-        Map map = new HashMap();
+    public Map<String, String> getMapRepresentation() {
+        Map<String, String> map = new HashMap<String, String>();
         map.put("node", contentNode.getPath());
         return map;
     }
@@ -48,11 +48,11 @@ public class JcrNodeModel implements IPluginModel {
         return new HashCodeBuilder(57, 433).append(contentNode).toHashCode();
     }
 
-	public Object getObject() {
+	public ContentNode getObject() {
 		return contentNode;
 	}
 
-	public void setObject(Object obj) {
+	public void setObject(ContentNode obj) {
 		contentNode = (ContentNode) obj;
 	}
 
