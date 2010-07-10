@@ -29,6 +29,10 @@ public class ContentNode extends AbstractReadOnlyModel<String>  implements Seria
 	public String getPath() {
 		return path;
 	}
+	
+	public void setPath(String path){
+		this.path = path;
+	}
 
 	/* (non-Javadoc)
      * @see com.madalla.util.jcr.model.IContentNode#getObject()

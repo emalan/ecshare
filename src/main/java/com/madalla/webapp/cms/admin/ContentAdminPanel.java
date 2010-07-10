@@ -17,6 +17,9 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
+import com.madalla.cms.jcr.model.ContentNode;
+import com.madalla.cms.jcr.model.IContentNode;
+import com.madalla.cms.jcr.model.tree.AbstractTreeNode;
 import com.madalla.service.BackupFile;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
@@ -194,7 +197,21 @@ public class ContentAdminPanel extends Panel {
         contentDisplayPanel.setOutputMarkupId(true);
         add(contentDisplayPanel);
         
-        contentExplorerPanel = new ContentExplorerPanel("contentExplorerPanel", this, adminApp);
+        contentExplorerPanel = new ContentExplorerPanel("contentExplorerPanel", this, adminApp){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onNodeClicked(AbstractTreeNode currentNode, AjaxRequestTarget target) {
+				if (currentNode.getObject() instanceof ContentNode) {
+                    IContentNode contentNode = (IContentNode) currentNode.getObject();
+                    String path = contentNode.getPath();
+                    contentDisplayPanel.refresh(path);
+                    target.addComponent(contentDisplayPanel);
+                }
+				
+			}
+        	
+        };
         contentExplorerPanel.setOutputMarkupId(true);
         add(contentExplorerPanel);
 
@@ -270,15 +287,27 @@ public class ContentAdminPanel extends Panel {
 		return get("contentExplorerPanel");
 	}
 	
-	public void deleteNode(AjaxRequestTarget target){
+	boolean isCopyable(){
+		return contentExplorerPanel.isCopyable();
+	}
+	
+	boolean isPasteable(){
+		return contentExplorerPanel.isPasteable();
+	}
+	
+	void copyNode(){
+		contentExplorerPanel.copyNode();
+	}
+	
+	void pasteNode(AjaxRequestTarget target){
+		contentExplorerPanel.pasteNode(target);
+	}
+	
+	void deleteNode(AjaxRequestTarget target){
 		contentExplorerPanel.deleteCurrentNode(target);
 	}
 	
-	public void refreshExplorerPanel(AjaxRequestTarget target){
-		contentExplorerPanel.refresh(target);
-	}
-	
-	public void refreshDisplayPanel(String path){
+	void refreshDisplayPanel(String path){
 		contentDisplayPanel.refresh(path);
 	}
 }

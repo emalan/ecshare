@@ -18,17 +18,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.GenericBaseModel;
 
-import com.madalla.cms.jcr.model.ContentNode;
-import com.madalla.cms.jcr.model.IContentNode;
 import com.madalla.cms.jcr.model.tree.AbstractTreeNode;
 import com.madalla.cms.jcr.model.tree.JcrTreeModel;
 import com.madalla.cms.jcr.model.tree.JcrTreeNode;
-import com.madalla.service.IDataService;
-import com.madalla.service.IDataServiceProvider;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
 
-class ContentExplorerPanel extends Panel {
+abstract class ContentExplorerPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
 	private Log log = LogFactory.getLog(this.getClass());
@@ -36,6 +32,7 @@ class ContentExplorerPanel extends Panel {
 	private boolean adminMode;
 	private final BaseTree tree;
 	private AbstractTreeNode currentNode;
+	private AbstractTreeNode copiedNode;
 
 	public ContentExplorerPanel(String name, final ContentAdminPanel parentPanel) {
 		this(name, parentPanel, false);
@@ -52,7 +49,7 @@ class ContentExplorerPanel extends Panel {
 			@Override
 			public TreeModel getObject() {
 				if (treeModel == null){
-					getTreeData();
+					loadTreeData();
 				}
 				return treeModel;
 			}
@@ -60,7 +57,7 @@ class ContentExplorerPanel extends Panel {
             @Override
             protected TreeModel createSerializableVersionOf(TreeModel object) {
             	if (treeModel == null){
-            		getTreeData();
+            		loadTreeData();
             	}
                 return treeModel;
             }
@@ -87,14 +84,7 @@ class ContentExplorerPanel extends Panel {
                         log.debug("onNodeLinkClicked - " + node);
                         
                         currentNode = (AbstractTreeNode) node;
-                        if (currentNode.getObject() instanceof ContentNode) {
-                            IContentNode contentNode = (IContentNode) currentNode.getObject();
-                            String path = contentNode.getPath();
-                            log.debug("onNodeLinkClicked - path=" + path);
-                            
-                            parentPanel.refreshDisplayPanel(path);
-                            target.addComponent(parentPanel.getDisplayPanel());
-                        }
+                        onNodeClicked(currentNode, target);
 				    }
 					
 					@Override
@@ -107,53 +97,72 @@ class ContentExplorerPanel extends Panel {
 			@Override
 			protected ITreeState newTreeState() {
 				ITreeState treeState = super.newTreeState();
-				
 				Object root = getModelObject().getRoot();
-				Component rootComponent = getNodeComponent(root);
-				treeState.expandNode(rootComponent);
-				
+				treeState.expandNode(root);
 				return treeState;
 			}
 
 
 		};
-		
 		add(tree);
 		
-		
-		
-		
 	}
 
-
-	protected IDataService getContentService() {
-		return ((IDataServiceProvider) getApplication()).getRepositoryService();
-	}
-    
-    protected IRepositoryAdminService getContentAdminService() {
+    private IRepositoryAdminService getContentAdminService() {
         return ((IRepositoryAdminServiceProvider) getApplication()).getRepositoryAdminService();
     }
 
-	private void getTreeData() {
+	private void loadTreeData() {
 		if (adminMode){
 			treeModel = getContentAdminService().getRepositoryContent();
 		} else {
 			treeModel = getContentAdminService().getSiteContent();
 		}
+	}
+	
+	boolean isCopyable(){
+		return currentNode.isLeaf();
+	}
+	
+	boolean isPasteable(){
+		return copiedNode != null && !currentNode.isLeaf();
+	}
+	
+	void copyNode(){
+		copiedNode = currentNode;
+	}
+	
+	void pasteNode(AjaxRequestTarget target){
+		//move node in actual repository
+		String srcPath = copiedNode.getObject().getPath();
+		String destPath = currentNode.getObject().getPath() + "/" + copiedNode.getObject().getName();
+		getContentAdminService().pasteNode(srcPath, destPath);
+		copiedNode.getObject().setPath(destPath);
 		
+		//update tree
+		JcrTreeModel treeModel = currentNode.getTreeModel();
+		treeModel.removeNodeFromParent(copiedNode);
+		treeModel.insertNodeInto(copiedNode, currentNode, currentNode.getChildCount());
+		
+		tree.updateTree(target);
+		copiedNode = null;
 	}
 	
 	public void deleteCurrentNode(AjaxRequestTarget target){
+		getContentAdminService().deleteNode(currentNode.getObject().getPath());
 		TreeNode parentNode = currentNode.getParent();
 		JcrTreeModel treeModel = currentNode.getTreeModel();
 		treeModel.removeNodeFromParent(currentNode);
 		tree.getTreeState().selectNode(parentNode, true);
-		refresh(target);
-	}
-
-	public void refresh(AjaxRequestTarget target) {
 		tree.updateTree(target);
-		
 	}
+	
+	/**
+	 * Parent will most likely want to handle Node Clicked Event
+	 * 
+	 * @param currentNode
+	 * @param target
+	 */
+	public abstract void onNodeClicked(AbstractTreeNode currentNode, AjaxRequestTarget target);
 
 }

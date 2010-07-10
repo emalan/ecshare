@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
+import com.madalla.cms.jcr.JcrUtils;
 import com.madalla.cms.jcr.NodeDisplay;
 import com.madalla.cms.jcr.model.JcrNodeModel;
 import com.madalla.cms.jcr.model.tree.JcrTreeModel;
@@ -45,7 +46,23 @@ public class RepositoryAdminService extends AbstractJcrRepositoryService impleme
     		
     	});
     }
+    
+    public void deleteNode(String path){
+    	JcrUtils.deleteNode(template, path);
+    }
+    
+    public void pasteNode(final String srcPath, final String destPath){
+    	template.execute(new JcrCallback(){
 
+			public Object doInJcr(Session session) throws IOException, RepositoryException {
+				session.move(srcPath, destPath);
+				session.save();
+				return null;
+			}
+    		
+    	});
+    }
+    
     public DefaultTreeModel getRepositoryContent(){
         return (DefaultTreeModel) template.execute(new JcrCallback(){
             

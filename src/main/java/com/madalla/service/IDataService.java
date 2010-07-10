@@ -59,10 +59,6 @@ public interface IDataService {
 
 	boolean isImageNode(final String id);
 
-	boolean isContentPasteNode(final String id);
-	
-	boolean isContentCopyable(final String path);
-
 	// Generic
 	void deleteNode(final String id);
 	
@@ -71,7 +67,7 @@ public interface IDataService {
 	void saveDataObject(AbstractData data, String user);
 	
 	InputStream getResourceStream(String path, String property);
-
+	
 	// Content
 	PageData getPage(final String name);
 	
@@ -85,8 +81,6 @@ public interface IDataService {
 
 	ContentData getContent(final String id);
 
-	void pasteContent(String id, ContentData content);
-    
     ContentEntryData getInlineContentEntry(final ContentData parent, final Locale locale);
     
     ContentEntryData getContentEntry(final ContentData parent, final Locale locale);

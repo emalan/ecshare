@@ -24,11 +24,11 @@ abstract class AbstractJcrRepositoryService {
     static final String NS = "ec:";
     static final String EC_NODE_APP = NS + "apps";
 
-    public Node getApplicationNode(Session session) throws RepositoryException{
+    protected Node getApplicationNode(Session session) throws RepositoryException{
     	return getCreateNode(EC_NODE_APP, session.getRootNode());
     }
 
-	public Node getSiteNode(Session session) throws RepositoryException {
+	protected Node getSiteNode(Session session) throws RepositoryException {
     	Node appNode = getApplicationNode(session);
     	return getCreateNode(site, appNode);
 	}

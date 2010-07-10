@@ -17,6 +17,10 @@ public interface IRepositoryAdminService {
 
 	NodeDisplay getNodeDisplay(final String path);
 	
+	void deleteNode(String path);
+	
+	void pasteNode(final String srcPath, final String destPath);
+	
 	/**
 	 * All Content Data for a site/application
 	 * @return CMS data as a Tree for display

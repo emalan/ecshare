@@ -177,7 +177,5 @@ public class RepositoryTemplate{
         Query query = queryManager.createQuery(filter);
         return  ocm.getObjects(query);
     }
-	
-	
-	
+
 }

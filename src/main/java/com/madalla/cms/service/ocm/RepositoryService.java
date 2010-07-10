@@ -161,14 +161,6 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     	return RepositoryInfo.isImagesNodeType(path);
     }
     
-    public boolean isContentCopyable(final String path){
-    	return RepositoryInfo.isContentCopyable(template, path);
-    }
-    
-    public boolean isContentPasteNode(final String path){
-    	return RepositoryInfo.isContentPasteNode(template, path);
-    }
-    
     public InputStream getResourceStream(String path, String property){
     	return repositoryTemplate.getNodePropertyStream(path, property);
     }
@@ -364,10 +356,6 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     public Content getContent(final String id) {
 		return (Content) repositoryTemplate.getOcmObject(Content.class, id);
 	}
-    
-    public void pasteContent(final String path, final ContentData content){
-        repositoryTemplate.copyData(path, content);
-    }
     
     public String getContentText(final ContentData parent, Locale locale) {
         return getContentEntry(parent, locale).getText();

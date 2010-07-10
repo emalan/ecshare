@@ -69,19 +69,19 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 
     }
 
-    public void testContentExplorer(){
-    	TreeModel treeModel = repositoryAdminService.getSiteContent();
-    	assertNotNull(treeModel);
-    	
-    	LinkTree tree = new LinkTree("test", treeModel);
-    	
-    	appTester.startComponent(tree);
-    	//tree.render();
-    	//int size = tree.size();
-    	//tree.g
-    	//tree.render();
-    	
-    }
+//    public void testContentExplorer(){
+//    	TreeModel treeModel = repositoryAdminService.getSiteContent();
+//    	assertNotNull(treeModel);
+//    	
+//    	LinkTree tree = new LinkTree("test", treeModel);
+//    	
+//    	appTester.startComponent(tree);
+//    	//tree.render();
+//    	//int size = tree.size();
+//    	//tree.g
+//    	//tree.render();
+//    	
+//    }
     
     private final static String CONTENT_ID = "testContent";
     private final static String CONTENT_PARENT = "testParentNode";

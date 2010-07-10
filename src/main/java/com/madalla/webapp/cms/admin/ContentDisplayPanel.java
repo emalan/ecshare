@@ -12,13 +12,13 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.springframework.dao.DataRetrievalFailureException;
 
-import com.madalla.bo.page.ContentData;
 import com.madalla.cms.jcr.NodeDisplay;
-import com.madalla.service.IRepositoryAdminService;
-import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
+import com.madalla.service.IRepositoryAdminService;
+import com.madalla.service.IRepositoryAdminServiceProvider;
 
 class ContentDisplayPanel extends Panel {
 
@@ -26,10 +26,8 @@ class ContentDisplayPanel extends Panel {
 	private Log log = LogFactory.getLog(this.getClass());
 	private Component nodePath;
 	private Component contentDisplay;
-	private ContentData copiedContent;
-	private String contentText = "" ;
 	private String path = "";
-	Component paste;
+	private Component paste;
 	
 	public ContentDisplayPanel(String name, final ContentAdminPanel parentPanel) {
 		super(name);
@@ -42,6 +40,8 @@ class ContentDisplayPanel extends Panel {
 				return path;
 			}
 		};
+		
+		
 		nodePath = new Label("nodeName", pathModel);
 		nodePath.setOutputMarkupId(true);
 		add(nodePath);
@@ -51,7 +51,17 @@ class ContentDisplayPanel extends Panel {
 
 			@Override
 			public String getObject() {
-				return contentText;
+				if (StringUtils.isEmpty(path)){
+					return "";
+				} else { 
+					try {
+						NodeDisplay display = getAdminService().getNodeDisplay(path);
+						return displayNode(display);
+					} catch (DataRetrievalFailureException e){
+						log.error("Failure retrieving Node. path=" + path);
+						return "Error!";
+					}
+				}
 			}
 			
 		};
@@ -75,11 +85,11 @@ class ContentDisplayPanel extends Panel {
             
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-            	getContentService().deleteNode(path);
+            	//getContentService().deleteNode(path);
             	refresh("");
-            	target.addComponent(getParent());
+            	//target.addComponent(getParent());
             	parentPanel.deleteNode(target);
-            	target.addComponent(parentPanel.getExplorerPanel());
+            	//target.addComponent(parentPanel.getExplorerPanel());
 			}
         };
         delete.setOutputMarkupId(true);
@@ -91,7 +101,8 @@ class ContentDisplayPanel extends Panel {
 
 			@Override
 			protected final void onBeforeRender(){
-				if (!StringUtils.isEmpty(path) && copiedContent != null && getContentService().isContentPasteNode(path)){
+				//setEnabled(enabled)
+				if (!StringUtils.isEmpty(path) && parentPanel.isPasteable()){
 					setEnabled(true);
 				} else {
 					setEnabled(false);
@@ -101,11 +112,8 @@ class ContentDisplayPanel extends Panel {
             
 			@Override
             public void onClick(AjaxRequestTarget target) {
-				getContentService().pasteContent(path, copiedContent);
+				parentPanel.pasteNode(target);
             	refresh("");
-            	target.addComponent(getParent());
-            	parentPanel.refreshExplorerPanel(target);
-            	target.addComponent(parentPanel.getExplorerPanel());
             }
         };
         paste.setOutputMarkupId(true);
@@ -118,7 +126,7 @@ class ContentDisplayPanel extends Panel {
 			
 			@Override
 			protected final void onBeforeRender(){
-				if (!StringUtils.isEmpty(path) && getContentService().isContentCopyable(path)){
+				if (!StringUtils.isEmpty(path) && parentPanel.isCopyable()){
 					setEnabled(true);
 				} else {
 					setEnabled(false);
@@ -128,7 +136,7 @@ class ContentDisplayPanel extends Panel {
             
 			@Override
             public void onClick(AjaxRequestTarget target) {
-			    copiedContent = getContentService().getContent(path);
+				parentPanel.copyNode();
 				target.addComponent(paste);
 			}
         };
@@ -148,12 +156,7 @@ class ContentDisplayPanel extends Panel {
 		nodePath.modelChanged();
 
 		contentDisplay.modelChanging();
-		if (StringUtils.isEmpty(path)){
-			contentText = "";
-		} else { 
-			NodeDisplay display = getAdminService().getNodeDisplay(path);
-			contentText = displayNode(display);
-		}
+		
 //			if (getContentService().isContentNode(path)){
 //			contentText = getContentService().getContent(path).getText();
 //		} else if (getContentService().isBlogNode(path)){
