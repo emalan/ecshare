@@ -3,12 +3,13 @@
   <body>
     <links>
       <item name="Control My Site" href="http://www.controlmysite.net/" />
-      <item name="Project Page" href="http://madalla.com"/>
+      <item name="Project Page" href="http://www.emalan.com/ecshare/"/>
     </links>
 
     <menu name="Overview">
-      <item name="Introduction" href="index.html"/>
-
+        <item name="Introduction" href="index.html"/>
+        <item name="Quickstart" href="quick.html"/>
+        <item name="CMS Components" href="components.html"/>
     </menu>
 
     <menu ref="reports"/>
