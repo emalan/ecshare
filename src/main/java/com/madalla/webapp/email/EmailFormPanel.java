@@ -108,7 +108,7 @@ public class EmailFormPanel extends CmsPanel {
 		protected void onSubmit() {
 			if (!isSubmitted()) {
 				log.debug("onSumit called- sending email.");
-				if (sendEmail(name,email,comment)) {
+				if (sendEmail(getSiteData().getName(), name,email,comment)) {
 					info("Email sent successfully");
 				} else {
 					error("Failed to send email!");
@@ -119,7 +119,7 @@ public class EmailFormPanel extends CmsPanel {
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
 			
-			if (sendEmail(name, email, comment)){
+			if (sendEmail(getSiteData().getName(), name, email, comment)){
                 info(getString("message.success"));
             } else {
                 error(getString("message.fail"));
@@ -163,9 +163,9 @@ public class EmailFormPanel extends CmsPanel {
         
     }
     
-    private boolean sendEmail(final String name, final String email, final String comment){
+    private boolean sendEmail(final String site, final String name, final String email, final String comment){
     	logEmail(name, email, comment);
-        String body = getEmailBody(name, email, comment);
+        String body = getEmailBody(site, name, email, comment);
         return sendEmail(getEmailSender(), getSiteData(), body, subject);
     }
     
@@ -187,8 +187,8 @@ public class EmailFormPanel extends CmsPanel {
     	}
     }
     
-    private String getEmailBody(String from, String email, String comment){
-        Object[] args = {from,email,(comment == null)?"":comment};
+    private String getEmailBody(String site, String from, String email, String comment){
+        Object[] args = {site, from,email,(comment == null)?"":comment};
         String body = MessageFormat.format(getEmailtemplate(),args);
         RequestCycle requestCycle = getRequestCycle();
         if (requestCycle instanceof WebRequestCycle){
@@ -207,9 +207,9 @@ public class EmailFormPanel extends CmsPanel {
     }
     
     private String getEmailtemplate(){
-        StringBuffer sb = new StringBuffer("Email sent from emalan.com website...").append(System.getProperty("line.separator"));
-        sb.append("From: {0} ({1})").append(System.getProperty("line.separator"));
-        sb.append("Comment: {2}").append(System.getProperty("line.separator"));
+        StringBuffer sb = new StringBuffer("Email sent from {0} website...").append(System.getProperty("line.separator"));
+        sb.append("From: {1} (2})").append(System.getProperty("line.separator"));
+        sb.append("Comment: {3}").append(System.getProperty("line.separator"));
         return sb.toString();
     }
     

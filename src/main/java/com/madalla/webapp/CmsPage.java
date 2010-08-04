@@ -395,6 +395,11 @@ public abstract class CmsPage extends WebPage {
 		return panel;
 	}
 	
+	/**
+	 * @param id
+	 * @param subject - this will appear as subject in the email
+	 * @return
+	 */
 	protected Panel addEmailPanel(String id, String subject){
 		Panel panel = new EmailFormPanel(id, subject);
 		add(panel);
