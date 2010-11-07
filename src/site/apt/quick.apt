@@ -1,0 +1,19 @@
+Quick Start
+
+    * Create your own Wicket Web Application.
+    
+    * Include framework code using Maven.
+    
+---------
+<dependency>
+      <groupId>com.madalla</groupId>
+      <artifactId>ecshare</artifactId>
+      <version>1.1</version>
+</dependency>
+-----------
+
+    * Extend CmsApplication and CmsPage
+    
+    * Add your own CSS by creating CmsPage.css
+    
+    * Configure the application using Spring
