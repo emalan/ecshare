@@ -17,9 +17,19 @@ public class SimpleEmailSenderTest extends TestCase {
                 return "Test body";
             }
         };
-        emailSender.setEmailHost("server.madalla.com");
-        emailSender.setEmailFromEmail("webmaster@madalla.com");
+//        emailSender.setEmailHost("smtp1.dnsmadeeasy.com");
+//        emailSender.setMailAuthName("emalan");
+//        emailSender.setMailAuthPassword("madalla");
+//        emailSender.setEmailFromEmail("webmaster@madalla.com");
+//        emailSender.setEmailToEmail("eugene@emalan.com");
+        
+        //usmb02.us.oup.com
+        emailSender.setEmailHost("usmb02.us.oup.com");
+        //emailSender.setMailAuthName("emalan");
+        //emailSender.setMailAuthPassword("madalla");
+        emailSender.setEmailFromEmail("obonline@oup.com");
         emailSender.setEmailToEmail("eugene@emalan.com");
+        
         emailSender.sendEmail();
     }
 

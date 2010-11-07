@@ -18,10 +18,24 @@ body {
     padding-left: 50px;
     padding-top: 10px;
     margin-bottom: 0.5em;
+    margin-top: 0.2em;
     font-weight: bold;
     font-size: 182%;
     font-stretch: wider;
+    float:left;
+    width: 50%;
 }
+
+#hd span.version, #hd span.versionLabel {
+    float: left;
+    margin-top: 1.9em;
+}
+
+#hd span.version { 
+    padding-left: 4px;
+    padding-right: 20px;
+}
+
 #ft {
     background-color: #A4B3CA;
     background-image: none;

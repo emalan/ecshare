@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 /**
- * Supplies common functinality for all Data objects
+ * Supplies common functionality for all Data objects
  * @author Eugene Malan
  *
  */

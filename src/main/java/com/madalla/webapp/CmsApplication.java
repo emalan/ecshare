@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
@@ -25,6 +26,9 @@ import org.apache.wicket.settings.IExceptionSettings;
 
 import com.madalla.BuildInformation;
 import com.madalla.bo.SiteLanguage;
+import com.madalla.bo.image.ImageData;
+import com.madalla.bo.page.PageData;
+import com.madalla.bo.page.PageMetaLangData;
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
 import com.madalla.rpx.Rpx;
@@ -32,6 +36,10 @@ import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
+import com.madalla.webapp.admin.site.PageAdminPanel;
+import com.madalla.webapp.admin.site.SiteAdminPanel;
+import com.madalla.webapp.admin.site.SiteDataPanel;
+import com.madalla.webapp.admin.site.SiteEmailPanel;
 import com.madalla.webapp.authorization.RpxCallbackUrlHandler;
 import com.madalla.webapp.cms.admin.ContentAdminPanel;
 import com.madalla.webapp.cms.editor.ContentEntryPanel;
@@ -43,10 +51,6 @@ import com.madalla.webapp.pages.GeneralAdminPage;
 import com.madalla.webapp.pages.SecurePasswordPage;
 import com.madalla.webapp.pages.UserLoginPage;
 import com.madalla.webapp.pages.UserPasswordPage;
-import com.madalla.webapp.site.PageAdminPanel;
-import com.madalla.webapp.site.SiteAdminPanel;
-import com.madalla.webapp.site.SiteDataPanel;
-import com.madalla.webapp.site.SiteEmailPanel;
 import com.madalla.webapp.user.UserAdminPanel;
 import com.madalla.webapp.user.UserProfilePanel;
 import com.madalla.wicket.I18NBookmarkablePageRequestTargetUrlCodingStrategy;
@@ -95,6 +99,7 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     		throw new WicketRuntimeException("Rpx service is not configured Correctly. Configure values using the 'override.properties' file.");
     	}
         setupApplicationSpecificConfiguration();
+       
     }
     
     public Session newSession(Request request, Response response) {
@@ -128,12 +133,25 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     	});
     	mount(new MixedParamHybridUrlCodingStrategy("login", UserLoginPage.class, UserLoginPage.PARAMETERS));
     	
+		//mount application pages
+    	for (Class<? extends Page> page : getAppPages()){
+			final PageData pageData = getRepositoryService().getPage(page.getSimpleName());
+			PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(SiteLanguage.BASE_LOCALE, pageData);
+			String mountName = StringUtils.defaultIfEmpty(pageInfo.getDisplayName(), page.getSimpleName());
+			mountBookmarkablePage(mountName, page);
+		}
+    	
+    	//mount images
+    	for( ImageData image : getRepositoryService().getAlbumOriginalImages()){
+    		getSharedResources().add("original.full." + image.getName(), image.getImageFull());
+    		mountSharedResource("/resource/original/full/" + image.getName(), Application.class.getName() + "/original.full." + image.getName());
+    	}
+    	
     }
     
     protected void setupErrorHandling(){
     	
-    	final String configurationType = getConfigurationType();
-    	if (DEPLOYMENT.equalsIgnoreCase(configurationType))
+    	if (DEPLOYMENT.equalsIgnoreCase(getConfigurationType()))
 		{
         	//TODO create page for access denied exceptions
     		//TODO figure out why we get unexpected exception instead of access denied for generalAdminPage

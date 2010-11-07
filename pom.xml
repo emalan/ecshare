@@ -4,7 +4,7 @@
 	<groupId>com.madalla</groupId>
 	<artifactId>ecshare</artifactId>
 	<packaging>jar</packaging>
-	<version>1.1</version>
+	<version>1.2</version>
 	<name>Control My Site</name>
 	<description>Wicket Framework code for multi-lingual Content Management system</description>
 	<url>http://www.emalan.com</url>
@@ -291,7 +291,7 @@
         </plugins>
     </reporting>
 	<properties>
-		<wicket.version>1.4.9</wicket.version>
+		<wicket.version>1.4.13</wicket.version>
         <jackrabbit.version>1.5.5</jackrabbit.version>
         <spring.version>2.5.6</spring.version>
 	</properties>

@@ -10,7 +10,7 @@ public interface IImageData {
 	DynamicImageResource getImageFull();
 
 	DynamicImageResource getImageThumb();
-
+	
 	String getTitle();
 
 	void setTitle(String title);

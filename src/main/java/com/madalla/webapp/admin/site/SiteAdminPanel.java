@@ -1,4 +1,4 @@
-package com.madalla.webapp.site;
+package com.madalla.webapp.admin.site;
 
 import java.util.ArrayList;
 import java.util.List;

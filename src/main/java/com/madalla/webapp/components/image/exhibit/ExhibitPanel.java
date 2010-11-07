@@ -1,4 +1,4 @@
-package com.madalla.webapp.images.exhibit;
+package com.madalla.webapp.components.image.exhibit;
 
 import org.apache.wicket.markup.html.panel.Panel;
 

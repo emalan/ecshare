@@ -66,7 +66,7 @@ public class Image extends ImageData {
     public void setImageThumb(DynamicImageResource imageThumb) {
         this.imageThumb = imageThumb;
     }
-
+    
     public String getTitle() {
 		return title;
 	}

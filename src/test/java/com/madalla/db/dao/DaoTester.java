@@ -60,6 +60,8 @@ public class DaoTester extends AbstractDependencyInjectionSpringContextTests{
 		email.setSenderEmailAddress("ee@emalan.com");
 		email.setSenderComment("Cooment goes here");
 		
+		emailEntryDao.fetch();
+		
 		emailEntryDao.create(email);
 		
 		List<EmailEntryData> list = emailEntryDao.fetch();

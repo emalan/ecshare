@@ -14,13 +14,14 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.session.pagemap.IPageMapEntry;
 
+import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsSession;
+import com.madalla.webapp.admin.site.SiteAdminPanel;
+import com.madalla.webapp.admin.site.SiteDataPanel;
 import com.madalla.webapp.cms.admin.ContentAdminPanel;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.images.admin.ImageAdminPanel;
 import com.madalla.webapp.pages.AdminPanelLink;
-import com.madalla.webapp.site.SiteAdminPanel;
-import com.madalla.webapp.site.SiteDataPanel;
 import com.madalla.webapp.user.UserProfilePanel;
 
 public abstract class AdminPage extends WebPage {
@@ -60,7 +61,9 @@ public abstract class AdminPage extends WebPage {
 	private void commonInit(){
 	    setPageTitle(getString("page.title"));
         add(new Label("title", new PropertyModel<String>(this,"pageTitle")));
-
+        add(new Label("version", getCmsApplication().getBuildInformation().getVersion()));
+        add(new Label("webapp", getCmsApplication().getBuildInformation().getWebappVersion()));
+        
         add(Css.YUI_CORE);
         add(Css.BASE);
         add(CSSPackageResource.getHeaderContribution(AdminPage.class,"AdminPage.css"));
@@ -95,6 +98,10 @@ public abstract class AdminPage extends WebPage {
 
 	public CmsSession getAppSession(){
         return (CmsSession)getSession();
+    }
+	
+	public CmsApplication getCmsApplication(){
+        return (CmsApplication) getApplication();
     }
 
     public void setPageTitle(String pageTitle) {

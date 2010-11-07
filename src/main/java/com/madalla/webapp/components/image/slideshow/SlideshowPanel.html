@@ -7,10 +7,10 @@
 <body>
     <wicket:panel>
  
-         <ul id="slideshow" wicket:id="slideshowList">
+         <ul id="slideshow">
             <li wicket:id="slideshowImage">
                 <h3>Testing slideshow</h3>
-                <span>resources/photos/orange-fish.jpg</span>
+                <span wicket:id="fullsize">resources/photos/orange-fish.jpg</span>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut urna. Mauris nulla. Donec nec mauris. Proin nulla dolor, bibendum et, dapibus in, euismod ut, felis.</p>
                 <a href="#"><img wicket:id="thumb" /></a>
             </li>
@@ -36,6 +36,13 @@
             </div>
         </div>
     
+        <script type="text/javascript">
+            T$('slideshow-display').style.display='block';
+            T$('slideshow').style.display='none';
+            var slideshow=new TINY.slideshow("slideshow");
+            TINY.load();
+        </script>
      </wicket:panel>
+     
 </body>
 </html>

@@ -86,7 +86,7 @@ Banner.defaults = {
 
 /* The autoStart is passed on to Crossfade, so the idea is that 
  * crossface won't autostart and we can start Banner. That way we don't have 2
- * timers. Ugly huh! Sorry!!
+ * timers. Ugly? Sorry!!
  */
 Banner.load = function() {
 	Banner.defaults.selectors.each(function(s){

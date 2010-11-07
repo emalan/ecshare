@@ -5,4 +5,4 @@
  * 
  * @author Eugene Malan
  */
-package com.madalla.webapp.images.exhibit;
+package com.madalla.webapp.components.image.exhibit;
