@@ -32,6 +32,7 @@
 <bean id="environmentsetup" class="com.madalla.webapp.EnvironmentSetup" init-method="init">
     <property name="configType" value="${wicket.configuration}"></property>
     <property name="site" value="${site.code}"></property>
+    <property name="logfile" value="${logfile}"></property>
 </bean>
 
 <bean id="rpxService" class="com.madalla.rpx.Rpx">
