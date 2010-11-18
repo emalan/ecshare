@@ -492,7 +492,7 @@ public class UserAdminPanel extends CmsPanel {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("firstName", StringUtils.defaultString(user.getFirstName()));
 		map.put("lastName", StringUtils.defaultString(user.getLastName()));
-		map.put("name", user.getName());
+		map.put("username", user.getName());
 		map.put("password", resetPassword(user));
 		String url = StringUtils.defaultString(site.getUrl());
 		map.put("url", url );
