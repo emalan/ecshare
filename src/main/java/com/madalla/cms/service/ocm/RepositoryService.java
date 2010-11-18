@@ -169,6 +169,11 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     // *** Album and Images ***
     private static final String ORIGINAL_ALBUM_NAME = "Originals";
     
+    @SuppressWarnings("unchecked")
+	public List<AlbumData> getAlbums(){
+    	return (List<AlbumData>) repositoryTemplate.getAll(RepositoryType.ALBUM);
+    }
+    
     /**
      * Creates the album if it does not exist.
      * @param name - album name
@@ -192,14 +197,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
      * @return - the album where we store all uploaded images
      */
     public AlbumData getOriginalsAlbum(){
-		return (Album) repositoryTemplate.getParentObject(RepositoryType.ALBUM,ORIGINAL_ALBUM_NAME , new RepositoryTemplateCallback(){
-
-			@Override
-			public AbstractData createNew(String parentPath, String name) {
-				return new Album(parentPath, name);
-			}
-			
-		});
+    	return getAlbum(ORIGINAL_ALBUM_NAME);
 	}
     
 	public synchronized String createImage(IAlbumData album, String name, InputStream inputStream) {
@@ -235,6 +233,9 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 	public List<ImageData> getAlbumImages(AlbumData album){
         log.info("getAlbumImages - " + album);
     	List<ImageData> list = (List<ImageData>) repositoryTemplate.getAll(RepositoryType.IMAGE, album);
+    	for (ImageData image : list){
+    		image.setAlbumName(album.getName());
+    	}
     	log.info("getAlbumImages - list items =" + list.size());
     	return list;
     }

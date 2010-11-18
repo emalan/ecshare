@@ -1,4 +1,4 @@
-package com.madalla.webapp.cms.admin;
+package com.madalla.webapp.admin.content;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -201,7 +201,9 @@ class ContentDisplayPanel extends Panel {
     private static String displayNodeProperty(Map.Entry<String, NodeDisplay.NodePropertyDisplay> entry){
     	StringBuffer sb = new StringBuffer();
     	sb.append(entry.getKey()+"[" + entry.getValue().type + "] : ");
-		sb.append(entry.getValue().value);
+    	if (!entry.getValue().type.equals("Binary")){
+		    sb.append(entry.getValue().value);
+    	}
 		sb.append("<br/>");
     	return sb.toString();
     }

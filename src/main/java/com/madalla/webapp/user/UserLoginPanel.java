@@ -17,10 +17,10 @@ import com.madalla.email.IEmailSender;
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.CmsApplication;
+import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.email.EmailFormPanel;
 import com.madalla.webapp.login.LoginPanel;
-import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.wicket.animation.AnimationOpenSlide;
 

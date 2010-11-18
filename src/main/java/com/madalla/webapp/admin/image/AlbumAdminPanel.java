@@ -1,4 +1,4 @@
-package com.madalla.webapp.images.admin;
+package com.madalla.webapp.admin.image;
 
 import java.util.Collections;
 import java.util.List;
@@ -28,8 +28,8 @@ import org.apache.wicket.validation.validator.RangeValidator;
 
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.ImageData;
+import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.DraggableAjaxBehaviour;
 import com.madalla.wicket.DroppableAjaxBehaviour;

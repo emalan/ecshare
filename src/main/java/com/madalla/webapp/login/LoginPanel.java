@@ -37,8 +37,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 
 import com.madalla.util.security.ICredentialHolder;
+import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.form.FocusOnLoadBehavior;
 
 

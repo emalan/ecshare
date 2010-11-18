@@ -1,4 +1,4 @@
-package com.madalla.webapp.cms.admin;
+package com.madalla.webapp.admin.content;
 
 import java.util.Collections;
 import java.util.List;

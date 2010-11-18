@@ -11,7 +11,7 @@ import org.apache.wicket.model.PropertyModel;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
-import com.madalla.webapp.panel.CmsPanel;
+import com.madalla.webapp.CmsPanel;
 
 /**
  * In-Line Edit Panel - allows in-line editing of Content when logged in.

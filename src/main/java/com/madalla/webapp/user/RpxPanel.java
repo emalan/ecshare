@@ -9,7 +9,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
 import com.madalla.webapp.CmsApplication;
-import com.madalla.webapp.panel.CmsPanel;
+import com.madalla.webapp.CmsPanel;
 
 public class RpxPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;

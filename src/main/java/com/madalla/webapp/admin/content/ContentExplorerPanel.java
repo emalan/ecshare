@@ -1,4 +1,4 @@
-package com.madalla.webapp.cms.admin;
+package com.madalla.webapp.admin.content;
 
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;

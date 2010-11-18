@@ -22,8 +22,8 @@ import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
+import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.CmsSession;
-import com.madalla.webapp.panel.CmsPanel;
 
 /**
  * Translate Panel - View translate from text and edit the translate text. Also translate functionality.

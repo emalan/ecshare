@@ -11,7 +11,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 
 import com.madalla.bo.page.ContentEntryData;
-import com.madalla.webapp.panel.CmsPanel;
+import com.madalla.webapp.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationSubmitButton;
 
 public class ContentFormPanel extends CmsPanel{

@@ -11,9 +11,9 @@ import org.apache.wicket.validation.validator.RangeValidator;
 
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.video.VideoPlayerData;
+import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.configure.AjaxConfigureIcon;
 
 

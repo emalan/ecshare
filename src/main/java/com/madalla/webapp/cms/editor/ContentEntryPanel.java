@@ -22,9 +22,9 @@ import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
+import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.pages.AdminPanelLink;
-import com.madalla.webapp.panel.CmsPanel;
 
 /**
  * Content Entry Panel - Edit User Content using a WYSWYG HTML editor.

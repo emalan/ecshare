@@ -29,8 +29,8 @@ import com.madalla.email.IEmailSender;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.util.captcha.CaptchaUtils;
+import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationForm;
 import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 

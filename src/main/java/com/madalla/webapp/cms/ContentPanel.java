@@ -12,10 +12,10 @@ import org.apache.wicket.model.Model;
 
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.PageData;
+import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.pages.AdminPageLink;
 import com.madalla.webapp.pages.ContentEditPage;
-import com.madalla.webapp.panel.CmsPanel;
 
 /**
  * Panel to display content from Repository.

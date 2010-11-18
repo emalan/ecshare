@@ -20,7 +20,7 @@ import org.apache.wicket.model.Model;
 import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.PageMetaLangData;
-import com.madalla.webapp.panel.CmsPanel;
+import com.madalla.webapp.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationForm;
 import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 

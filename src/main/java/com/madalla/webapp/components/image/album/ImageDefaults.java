@@ -1,4 +1,4 @@
-package com.madalla.webapp.images;
+package com.madalla.webapp.components.image.album;
 
 import org.apache.wicket.util.lang.Bytes;
 

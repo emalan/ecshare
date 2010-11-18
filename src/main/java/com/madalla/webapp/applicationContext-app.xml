@@ -44,7 +44,6 @@
 <bean id="buildInformation" class="com.madalla.BuildInformation">
     <property name="webappVersion" value="${appversion}"></property>
 	<property name="version" value="#[application.version]"></property>
-	
 </bean>
 
 <bean abstract="true" id="wicketApplicationParent" class="com.madalla.webapp.CmsApplication">

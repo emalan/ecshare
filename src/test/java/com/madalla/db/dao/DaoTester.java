@@ -3,17 +3,20 @@ package com.madalla.db.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
 import com.madalla.bo.email.EmailEntryData;
 import com.madalla.bo.log.LogData;
+import com.madalla.bo.member.MemberData;
 
 public class DaoTester extends AbstractDependencyInjectionSpringContextTests{
 	
 	private EmailEntryDao emailEntryDao;
 	private TransactionLogDao transactionLogDao;
+	private MemberDao memberDao;
 	
 	public DaoTester(){
 		super();
@@ -26,6 +29,39 @@ public class DaoTester extends AbstractDependencyInjectionSpringContextTests{
         configLocations.add("classpath:com/madalla/db/dao/applicationContext-dao.xml");
         configLocations.add("classpath:com/madalla/db/dao/applicationContext-test.xml");
 		return  (String[])configLocations.toArray(new String[configLocations.size()]);
+	}
+	
+	public void testMemberDao(){
+		String firstName = RandomStringUtils.randomAlphabetic(10);
+		String lastName = RandomStringUtils.randomAlphabetic(10);
+		String memberId = RandomStringUtils.randomAlphabetic(12);
+		
+		Member data = new Member();
+		data.setFirstName(firstName);
+		data.setLastName(lastName);
+		data.setMemberId(memberId);
+		data.setEmail("testEmail");
+		memberDao.create(data);
+		
+		List<MemberData> list = memberDao.fetch();
+		for(MemberData item : list){
+			System.out.println(item);
+		}
+		
+		MemberData test = memberDao.find(memberId);
+		assertNotNull(test);
+		assertEquals(firstName, test.getFirstName());
+		
+		String password = "password";
+		test.setPassword(password);
+		memberDao.save(test);
+		MemberData testSave = memberDao.find(memberId);
+		assertNotNull(testSave);
+		assertEquals(password, test.getPassword());
+		
+		memberDao.delete(test);
+
+		
 	}
 	
 	public void testSaveLogDao(){
@@ -90,6 +126,10 @@ public class DaoTester extends AbstractDependencyInjectionSpringContextTests{
 			System.out.println(id);
 		}
 			
+	}
+
+	public void setMemberDao(MemberDao memberDao) {
+		this.memberDao = memberDao;
 	}
 
 }

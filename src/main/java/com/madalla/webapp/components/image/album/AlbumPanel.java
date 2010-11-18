@@ -1,4 +1,4 @@
-package com.madalla.webapp.images;
+package com.madalla.webapp.components.image.album;
 
 import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.CROSSFADE;
@@ -27,10 +27,10 @@ import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.ImageData;
+import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.pages.AdminPageLink;
 import com.madalla.webapp.pages.AlbumAdminPage;
-import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.webapp.scripts.utility.ScriptUtils;
 

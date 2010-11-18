@@ -109,6 +109,8 @@ public interface IDataService {
 	List<BlogEntryData> getBlogEntries(BlogData blog);
 
 	// Image
+	List<AlbumData> getAlbums();
+	
 	AlbumData getOriginalsAlbum();
 
 	AlbumData getAlbum(final String name);

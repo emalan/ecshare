@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
@@ -12,17 +15,18 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 
+import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.ImageData;
-import com.madalla.service.IDataService;
-import com.madalla.service.IDataServiceProvider;
+import com.madalla.webapp.CmsPanel;
+import com.madalla.webapp.pages.AdminPageLink;
+import com.madalla.webapp.pages.AlbumAdminPage;
 import com.madalla.webapp.scripts.utility.ScriptUtils;
 
-public class SlideshowPanel extends Panel implements IHeaderContributor {
+public class SlideshowPanel extends CmsPanel implements IHeaderContributor {
 
     private static final long serialVersionUID = 1L;
     //private WebMarkupContainer listContainer;
@@ -42,23 +46,29 @@ public class SlideshowPanel extends Panel implements IHeaderContributor {
             listItem.add(image);
             image.add(new AttributeModifier("alt", true, new Model<String>(imageData.getTitle())));
             DynamicImageResource fullsize = imageData.getImageFull();
-            //TODO resource references
-            listItem.add(new Label("fullsize", new Model<String>("resource" + "/original/full/" + imageData.getName())));
+            listItem.add(new Label("fullsize", new Model<String>(imageData.getMountUrl())));
         }
         
     }
 
-    public SlideshowPanel(String id) {
+    public SlideshowPanel(String id, final String albumName) {
         super(id);
         add(ScriptUtils.SLIDESHOW_CSS);
         add(JavascriptPackageResource.getHeaderContribution(ScriptUtils.SLIDESHOW));
+        
+        //link to album configure page
+        Component adminPageLink;
+        add(adminPageLink = new AdminPageLink("adminLink", AlbumAdminPage.class, new PageParameters("0="+albumName)));
+        MetaDataRoleAuthorizationStrategy.authorize(adminPageLink, ENABLE, "ADMIN");
+        
+        final AlbumData album = getRepositoryService().getAlbum(albumName);
         
         // Add folder view
         ImageListView imageListView = new ImageListView("slideshowImage", new LoadableDetachableModel<List<ImageData>>() {
             private static final long serialVersionUID = 1L;
 
             protected List<ImageData> load() {
-                return getAlbumImages();
+                return getAlbumImages(album);
             }
             
             
@@ -84,12 +94,18 @@ public class SlideshowPanel extends Panel implements IHeaderContributor {
         }
         return images;
     }
+	
+	private List<ImageData> getAlbumImages(AlbumData albumData){
+	    List<ImageData> images;
+	    try {
+	        images = getRepositoryService().getAlbumImages(albumData);
+	    }catch (Exception e){
+	        images = Collections.emptyList();
+	        error("Images corrupt");
+	    }
+	    return images;
+	}
     
-    private IDataService getRepositoryService(){
-        IDataServiceProvider provider = (IDataServiceProvider)getApplication();
-        return provider.getRepositoryService();
-    }
-
 	public void renderHead(IHeaderResponse response) {
 		//response.renderOnLoadJavascript("var slideshow = new TINY.slideshow('slideshow'); TINY.load();");
 		

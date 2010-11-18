@@ -22,7 +22,7 @@ import org.joda.time.DateTimeZone;
 
 import com.madalla.bo.email.EmailEntryData;
 import com.madalla.bo.log.LogData;
-import com.madalla.webapp.panel.CmsPanel;
+import com.madalla.webapp.CmsPanel;
 
 public class SiteDataPanel extends CmsPanel {
 

@@ -4,7 +4,7 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
 import com.madalla.webapp.admin.AdminPage;
-import com.madalla.webapp.images.admin.AlbumAdminPanel;
+import com.madalla.webapp.admin.image.AlbumAdminPanel;
 
 @AuthorizeInstantiation("ADMIN")
 public class AlbumAdminPage extends AdminPage  {

@@ -6,7 +6,7 @@ import org.apache.wicket.WicketRuntimeException;
 
 import com.madalla.bo.blog.BlogData;
 import com.madalla.service.IDataServiceProvider;
-import com.madalla.webapp.panel.CmsPanel;
+import com.madalla.webapp.CmsPanel;
 
 public class BlogHomePanel extends CmsPanel{
 

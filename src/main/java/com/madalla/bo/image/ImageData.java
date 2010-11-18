@@ -6,6 +6,8 @@ import com.madalla.cms.bo.impl.ocm.image.Image;
 public abstract class ImageData extends AbstractData implements IImageData, Comparable<ImageData> {
 
 	private static final long serialVersionUID = -176900396141783576L;
+	
+	private String albumName;
 
 	public int compareTo(ImageData compare) {
 		// TODO implement this, cause we need to support sorting images in album
@@ -22,5 +24,22 @@ public abstract class ImageData extends AbstractData implements IImageData, Comp
 		if (!getDescription().equals(compare.getDescription()))return false;
 		return true;
 	}
+    
+    public String getResourceReference(){
+    	return albumName + ".full." + getName();
+    }
+    
+    public String getMountUrl(){
+    	return "resource/"+albumName+"/full/" + getName();
+    }
+
+	public void setAlbumName(String albumName) {
+		this.albumName = albumName;
+	}
+
+	public String getAlbumName() {
+		return albumName;
+	}
+    
 
 }

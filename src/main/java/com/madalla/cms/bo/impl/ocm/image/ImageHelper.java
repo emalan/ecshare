@@ -30,6 +30,8 @@ public class ImageHelper {
 	
 	private static final String IMAGE_FULL = "imageFull";
 	private static final String IMAGE_THUMB = "imageThumb";
+	private static final String WIDTH = "imageWidth";
+	private static final String HEIGHT = "imageHeight";
 	
 	public static void resizeAlbumImage(JcrTemplate template, final String path, final int width, final int height){
 	    template.execute(new JcrCallback(){
@@ -50,8 +52,11 @@ public class ImageHelper {
 	        template.execute(new JcrCallback(){
 	            public Object doInJcr(Session session) throws RepositoryException {
 	                Node node = (Node) session.getItem(path);
-	                InputStream scaled = scaleOriginalImage(inputStream);
+	                LoggingImageObserver observer = new LoggingImageObserver(log);
+	                InputStream scaled = scaleOriginalImage(inputStream, observer);
 	                node.setProperty(IMAGE_FULL, scaled);
+	                node.setProperty(WIDTH, observer.getWidth());
+	                node.setProperty(HEIGHT, observer.getHeight());
 	                session.save();
 	                return null;
 	            }
@@ -72,8 +77,7 @@ public class ImageHelper {
         });
 	}
 
-   private static InputStream scaleOriginalImage(InputStream inputStream){
-        LoggingImageObserver observer = new LoggingImageObserver(log);
+   private static InputStream scaleOriginalImage(InputStream inputStream, LoggingImageObserver observer){
         return ImageUtilities.scaleImageDownProportionately(inputStream, observer, MAX_WIDTH, MAX_HEIGHT);
     }
     

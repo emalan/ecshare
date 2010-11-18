@@ -1,4 +1,4 @@
-package com.madalla.webapp.images.admin;
+package com.madalla.webapp.admin.image;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -39,9 +39,9 @@ import org.apache.wicket.util.time.Duration;
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.service.IDataService;
+import com.madalla.webapp.CmsPanel;
+import com.madalla.webapp.components.image.album.ImageDefaults;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.images.ImageDefaults;
-import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.webapp.upload.FileUploadGroup;
 import com.madalla.webapp.upload.FileUploadThread;

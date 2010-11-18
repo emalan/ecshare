@@ -6,9 +6,16 @@
 </wicket:head>
 <body>
     <wicket:panel>
-        <div class="heading" wicket:id="heading">[label]</div>
-        <div class="versionInfo" wicket:id="versionInfo">[label]</div>
-        <div class="text" wicket:id="text">[label]</div>
+        <div class="versionHeading" wicket:id="heading">[label]</div>
+        <div class="versionInfo" >
+            <span class="versionLabel"><wicket:message key="label.version.share">[label]</wicket:message></span>
+            <span class="version" wicket:id="versionShare">[label]</span>
+        </div>
+        <div class="versionInfo" >
+            <span class="versionLabel"><wicket:message key="label.version.app">[label]</wicket:message></span>
+            <span class="version" wicket:id="versionApp">[label]</span>
+        </div>
+        <div class="versionText" wicket:id="text">[label]</div>
         
     </wicket:panel>
 </body>

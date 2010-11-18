@@ -12,4 +12,4 @@
  * 
  * @author Eugene Malan
  */
-package com.madalla.webapp.cms.admin;
+package com.madalla.webapp.admin.content;

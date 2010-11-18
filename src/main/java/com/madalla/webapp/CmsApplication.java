@@ -26,6 +26,7 @@ import org.apache.wicket.settings.IExceptionSettings;
 
 import com.madalla.BuildInformation;
 import com.madalla.bo.SiteLanguage;
+import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.PageMetaLangData;
@@ -36,15 +37,15 @@ import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
+import com.madalla.webapp.admin.content.ContentAdminPanel;
+import com.madalla.webapp.admin.image.ImageAdminPanel;
 import com.madalla.webapp.admin.site.PageAdminPanel;
 import com.madalla.webapp.admin.site.SiteAdminPanel;
 import com.madalla.webapp.admin.site.SiteDataPanel;
 import com.madalla.webapp.admin.site.SiteEmailPanel;
 import com.madalla.webapp.authorization.RpxCallbackUrlHandler;
-import com.madalla.webapp.cms.admin.ContentAdminPanel;
 import com.madalla.webapp.cms.editor.ContentEntryPanel;
 import com.madalla.webapp.cms.editor.TranslatePanel;
-import com.madalla.webapp.images.admin.ImageAdminPanel;
 import com.madalla.webapp.pages.AdminErrorPage;
 import com.madalla.webapp.pages.AlbumAdminPage;
 import com.madalla.webapp.pages.GeneralAdminPage;
@@ -142,13 +143,18 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
 		}
     	
     	//mount images
-    	for( ImageData image : getRepositoryService().getAlbumOriginalImages()){
-    		getSharedResources().add("original.full." + image.getName(), image.getImageFull());
-    		mountSharedResource("/resource/original/full/" + image.getName(), Application.class.getName() + "/original.full." + image.getName());
+    	for(AlbumData album : getRepositoryService().getAlbums()){
+    		for (ImageData image : getRepositoryService().getAlbumImages(album)){
+    			mountImage(image);
+    		}
     	}
     	
     }
     
+    protected void mountImage(ImageData image){
+    	getSharedResources().add(image.getResourceReference(), image.getImageFull());
+		mountSharedResource("/" + image.getMountUrl(), Application.class.getName() + "/" +image.getResourceReference());
+    }
     protected void setupErrorHandling(){
     	
     	if (DEPLOYMENT.equalsIgnoreCase(getConfigurationType()))

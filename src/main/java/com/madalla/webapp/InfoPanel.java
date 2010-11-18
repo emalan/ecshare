@@ -5,7 +5,6 @@ import org.apache.wicket.model.Model;
 
 import com.madalla.webapp.cms.ContentPanel;
 import com.madalla.webapp.cms.InlineContentPanel;
-import com.madalla.webapp.panel.CmsPanel;
 
 public class InfoPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
@@ -14,7 +13,8 @@ public class InfoPanel extends CmsPanel{
 		super(id);
 		
 		add(new InlineContentPanel("heading"));
-		add(new Label("versionInfo", new Model<String>(getString("label.buildinfo") +": " + getBuildInfo().getVersion())));
+		add(new Label("versionShare", new Model<String>(getBuildInfo().getVersion())));
+		add(new Label("versionApp", new Model<String>(getBuildInfo().getWebappVersion())));
 		add(new ContentPanel("text"));
 	}
 

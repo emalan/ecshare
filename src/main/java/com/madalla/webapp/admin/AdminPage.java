@@ -16,11 +16,11 @@ import org.apache.wicket.session.pagemap.IPageMapEntry;
 
 import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsSession;
+import com.madalla.webapp.admin.content.ContentAdminPanel;
+import com.madalla.webapp.admin.image.ImageAdminPanel;
 import com.madalla.webapp.admin.site.SiteAdminPanel;
 import com.madalla.webapp.admin.site.SiteDataPanel;
-import com.madalla.webapp.cms.admin.ContentAdminPanel;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.images.admin.ImageAdminPanel;
 import com.madalla.webapp.pages.AdminPanelLink;
 import com.madalla.webapp.user.UserProfilePanel;
 

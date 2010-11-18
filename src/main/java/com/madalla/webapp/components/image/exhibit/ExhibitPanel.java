@@ -3,7 +3,7 @@ package com.madalla.webapp.components.image.exhibit;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import com.madalla.webapp.cms.ContentPanel;
-import com.madalla.webapp.images.AlbumPanel;
+import com.madalla.webapp.components.image.album.AlbumPanel;
 
 public class ExhibitPanel extends Panel {
 

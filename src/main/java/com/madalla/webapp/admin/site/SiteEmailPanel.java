@@ -29,7 +29,7 @@ import org.apache.wicket.model.PropertyModel;
 import com.madalla.bo.SiteData;
 import com.madalla.bo.security.UserData;
 import com.madalla.bo.security.UserSiteData;
-import com.madalla.webapp.panel.CmsPanel;
+import com.madalla.webapp.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationForm;
 import com.madalla.wicket.form.ValidationStyleBehaviour;
 

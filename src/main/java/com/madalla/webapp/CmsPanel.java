@@ -1,4 +1,4 @@
-package com.madalla.webapp.panel;
+package com.madalla.webapp;
 
 import org.apache.wicket.markup.html.panel.Panel;
 
@@ -10,8 +10,6 @@ import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.service.ISessionDataService;
 import com.madalla.service.ISessionDataServiceProvider;
-import com.madalla.webapp.CmsApplication;
-import com.madalla.webapp.CmsSession;
 
 public abstract class CmsPanel extends Panel {
 

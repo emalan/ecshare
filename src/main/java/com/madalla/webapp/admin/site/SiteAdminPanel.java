@@ -21,9 +21,9 @@ import org.joda.time.DateTimeZone;
 
 import com.madalla.bo.SiteData;
 import com.madalla.bo.SiteLanguage;
+import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.pages.AdminPanelLink;
-import com.madalla.webapp.panel.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationBehaviour;
 import com.madalla.wicket.form.AjaxValidationForm;
 import com.madalla.wicket.form.AjaxValidationRequiredTextField;

@@ -31,4 +31,6 @@ public interface IImageData {
 	
 	void setSortOrder(Integer sortOrder);
 	
+	String getAlbumName();
+	
 }

@@ -13,8 +13,8 @@ import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.PageData;
 import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsPage;
+import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.panel.CmsPanel;
 
 public class PageAdminPanel extends CmsPanel {
 	

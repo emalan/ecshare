@@ -1,4 +1,4 @@
-package com.madalla.webapp.images.admin;
+package com.madalla.webapp.admin.image;
 
 import javax.swing.tree.TreeNode;
 

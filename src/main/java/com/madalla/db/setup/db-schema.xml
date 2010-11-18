@@ -24,4 +24,16 @@
       <column name="TYPE" primaryKey="false" required="true" type="VARCHAR" size="25" autoIncrement="false"/>
       <column name="OBJECT_ID" primaryKey="false" required="false" type="VARCHAR" size="256" autoIncrement="false"/>
     </table>
+    <table name="MEMBER">
+      <column name="ID" primaryKey="true" required="true" type="INTEGER" autoIncrement="true"/>
+      <column name="SITE_NAME" primaryKey="false" required="true" type="VARCHAR" size="15" autoIncrement="false"/>
+      <column name="MEMBER_ID" primaryKey="false" required="true" type="VARCHAR" size="25" autoIncrement="false"/>
+      <column name="FIRST_NAME" primaryKey="false" required="true" type="VARCHAR" size="15" autoIncrement="false"/>
+      <column name="LAST_NAME" primaryKey="false" required="true" type="VARCHAR" size="15" autoIncrement="false"/>
+      <column name="COMPANY_NAME" primaryKey="false" required="false" type="VARCHAR" size="15" autoIncrement="false"/>
+      <column name="MEMBER_EMAIL" primaryKey="false" required="true" type="VARCHAR" size="25" autoIncrement="false"/>
+      <column name="SIGNUP_DATE" primaryKey="false" required="true" type="TIMESTAMP" autoIncrement="false"/>
+      <column name="AUTHORIZED_DATE" primaryKey="false" required="false" type="TIMESTAMP" autoIncrement="false"/>
+      <column name="PASSWORD" primaryKey="false" required="false" type="VARCHAR" size="52" autoIncrement="false"/>
+    </table>
   </database>
