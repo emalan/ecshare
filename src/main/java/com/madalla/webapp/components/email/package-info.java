@@ -7,4 +7,4 @@
  * 
  * @author Eugene Malan
  */
-package com.madalla.webapp.email;
+package com.madalla.webapp.components.email;

@@ -6,24 +6,14 @@ public class SimpleEmailSenderTest extends TestCase {
 
     public void testEmailSender() {
 
-        SimpleEmailSender emailSender = new SimpleEmailSender() {
-			private static final long serialVersionUID = 1L;
-
-			protected String getSubject() {
-                return "Test subject";
-            }
-
-            protected String getBody() {
-                return "Test body";
-            }
-        };
+        SimpleEmailSender emailSender = new SimpleEmailSender();
         emailSender.setEmailHost("smtp1.dnsmadeeasy.com");
         emailSender.setMailAuthName("emalan");
         emailSender.setMailAuthPassword("madalla");
         emailSender.setEmailFromEmail("webmaster@madalla.com");
         emailSender.setEmailToEmail("eugene@emalan.com");
                 
-        emailSender.sendEmail();
+        emailSender.sendEmail("Test subject","Test body");
     }
 
 }

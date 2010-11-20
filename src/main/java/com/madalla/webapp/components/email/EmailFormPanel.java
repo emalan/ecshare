@@ -1,4 +1,4 @@
-package com.madalla.webapp.email;
+package com.madalla.webapp.components.email;
 
 import java.text.MessageFormat;
 
@@ -26,8 +26,6 @@ import org.springframework.dao.DataAccessException;
 
 import com.madalla.bo.SiteData;
 import com.madalla.email.IEmailSender;
-import com.madalla.service.IDataService;
-import com.madalla.service.IDataServiceProvider;
 import com.madalla.util.captcha.CaptchaUtils;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.css.Css;
@@ -180,8 +178,7 @@ public class EmailFormPanel extends CmsPanel {
     
     private void logEmail(String name, String email, String comment){
     	try {
-    		IDataService service = ((IDataServiceProvider)getApplication()).getRepositoryService();
-    		service.createEmailEntry(name, email, comment);
+    		getRepositoryService().createEmailEntry(name, email, comment);
     	} catch (DataAccessException e){
     		log.error("Data Access Exception while logging email.", e);
     	}

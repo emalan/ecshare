@@ -17,4 +17,8 @@ public abstract class MemberData extends AbstractData implements IMemberData, Co
 		if (!getId().equals(compare.getId())) return false;
 		return true;
 	}
+    
+    public String getDisplayName(){
+    	return getFirstName() + ", " + getLastName() + " [" + getCompanyName() +"]";
+    }
 }

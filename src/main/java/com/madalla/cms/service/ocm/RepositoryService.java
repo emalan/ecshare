@@ -33,6 +33,7 @@ import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.IImageData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.bo.log.LogData;
+import com.madalla.bo.member.MemberData;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
@@ -63,6 +64,8 @@ import com.madalla.cms.service.ocm.template.RepositoryTemplateCallback;
 import com.madalla.cms.service.ocm.util.JcrOcmUtils;
 import com.madalla.db.dao.EmailEntry;
 import com.madalla.db.dao.EmailEntryDao;
+import com.madalla.db.dao.Member;
+import com.madalla.db.dao.MemberDao;
 import com.madalla.db.dao.TransactionLogDao;
 import com.madalla.image.ImageUtilities;
 import com.madalla.service.IDataService;
@@ -96,6 +99,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 
     
     private EmailEntryDao emailEntryDao;
+    private MemberDao memberDao;
     private UserSecurityService userSecurityService;
     
     public void init(){
@@ -500,7 +504,17 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     }
     
     //**********************************
-    // ******   Users    ******
+    // ******   Member            ******
+    public boolean isMemberExist(String username){
+    	return memberDao.find(username) != null;
+    }
+
+    public boolean createMember(MemberData member){
+    	return memberDao.create(member);
+    }
+    
+    //**********************************
+    // ******   Users             ******
     
     public ProfileData getProfile(String identifier){
     	return userSecurityService.getUserProfile(identifier);
@@ -593,11 +607,9 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 		this.userSecurityService = userSecurityService;
 	}
 
-
-
-
-
-
+	public void setMemberDao(MemberDao memberDao) {
+		this.memberDao = memberDao;
+	}
 
 
 }

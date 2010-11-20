@@ -1,4 +1,4 @@
-package com.madalla.webapp.email;
+package com.madalla.webapp.components.email;
 
 import org.apache.commons.lang.StringUtils;
 

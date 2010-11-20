@@ -35,8 +35,12 @@ public class MemberDao extends AbstractDao {
 		}
 	};
 	
-	public int create(final MemberData data){
-		return template.update(INSERT, new Object[] { site, data.getMemberId(), data.getFirstName(), data.getLastName(), data.getCompanyName(), data.getEmail(), new DateTime(DateTimeZone.UTC).toDate(), data.getPassword() });
+	public boolean create(final MemberData data){
+		int count = 0;
+		if (find(data.getMemberId()) == null){
+			count = template.update(INSERT, new Object[] { site, data.getMemberId(), data.getFirstName(), data.getLastName(), data.getCompanyName(), data.getEmail(), new DateTime(DateTimeZone.UTC).toDate(), data.getPassword() });
+		}
+		return count == 1; 
 	}
 	
 	public MemberData find(String id) {
