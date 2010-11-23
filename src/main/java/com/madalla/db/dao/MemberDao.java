@@ -2,6 +2,7 @@ package com.madalla.db.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -32,7 +33,10 @@ public class MemberDao extends AbstractDao {
 			data.setPassword(rs.getString("PASSWORD"));
 			data.setCompanyName(rs.getString("COMPANY_NAME"));
 			data.setSignupDate(new DateTime(rs.getTimestamp("SIGNUP_DATE"), DateTimeZone.UTC));
-			data.setAuthorizedDate(new DateTime(rs.getTimestamp("AUTHORIZED_DATE"), DateTimeZone.UTC));
+			Timestamp authDate = rs.getTimestamp("AUTHORIZED_DATE");
+			if (authDate != null){
+				data.setAuthorizedDate(new DateTime(authDate, DateTimeZone.UTC));
+			}
 			return data;
 		}
 	};
