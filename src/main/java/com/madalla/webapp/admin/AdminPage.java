@@ -18,10 +18,9 @@ import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.admin.content.ContentAdminPanel;
 import com.madalla.webapp.admin.image.ImageAdminPanel;
+import com.madalla.webapp.admin.pages.AdminPanelLink;
 import com.madalla.webapp.admin.site.SiteAdminPanel;
-import com.madalla.webapp.admin.site.SiteDataPanel;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.pages.AdminPanelLink;
 import com.madalla.webapp.user.UserProfilePanel;
 
 public abstract class AdminPage extends WebPage {
@@ -89,7 +88,6 @@ public abstract class AdminPage extends WebPage {
 		List<PanelMenuItem> menuList = new ArrayList<PanelMenuItem>();
 		menuList.add(new PanelMenuItem(UserProfilePanel.class, "label.profile","info.profile"));
 		menuList.add(new PanelMenuItem(SiteAdminPanel.class, "label.site","info.site"));
-		menuList.add(new PanelMenuItem(SiteDataPanel.class, "label.data","info.data"));
 		menuList.add(new PanelMenuItem(ImageAdminPanel.class, "label.image","info.image"));
 		menuList.add(new PanelMenuItem(ContentAdminPanel.class, "label.content","info.content"));
 		

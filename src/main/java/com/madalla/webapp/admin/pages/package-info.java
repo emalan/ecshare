@@ -7,4 +7,4 @@
  * 
  * @author Eugene Malan
  */
-package com.madalla.webapp.pages;
+package com.madalla.webapp.admin.pages;

@@ -23,8 +23,8 @@ import com.madalla.cms.jcr.model.tree.AbstractTreeNode;
 import com.madalla.service.BackupFile;
 import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
+import com.madalla.webapp.admin.pages.AdminPanelLink;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.pages.AdminPanelLink;
 import com.madalla.wicket.IndicatingAjaxSubmitLink;
 
 public class ContentAdminPanel extends Panel {

@@ -26,8 +26,8 @@ import com.madalla.bo.blog.BlogEntryData;
 import com.madalla.bo.blog.IBlogEntryData;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
-import com.madalla.webapp.pages.AdminPageLink;
-import com.madalla.webapp.pages.BlogEntryPage;
+import com.madalla.webapp.admin.pages.AdminPageLink;
+import com.madalla.webapp.admin.pages.BlogEntryPage;
 
 public class BlogDisplayPanel extends Panel {
 	private static final long serialVersionUID = 1L;

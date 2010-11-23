@@ -1,4 +1,4 @@
-package com.madalla.webapp.pages;
+package com.madalla.webapp.admin.pages;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

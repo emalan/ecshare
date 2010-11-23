@@ -28,9 +28,9 @@ import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.webapp.CmsPanel;
+import com.madalla.webapp.admin.pages.AdminPageLink;
+import com.madalla.webapp.admin.pages.AlbumAdminPage;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.pages.AdminPageLink;
-import com.madalla.webapp.pages.AlbumAdminPage;
 import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.webapp.scripts.utility.ScriptUtils;
 

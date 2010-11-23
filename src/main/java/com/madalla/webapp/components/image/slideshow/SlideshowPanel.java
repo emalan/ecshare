@@ -22,8 +22,8 @@ import org.apache.wicket.model.Model;
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.webapp.CmsPanel;
-import com.madalla.webapp.pages.AdminPageLink;
-import com.madalla.webapp.pages.AlbumAdminPage;
+import com.madalla.webapp.admin.pages.AdminPageLink;
+import com.madalla.webapp.admin.pages.AlbumAdminPage;
 import com.madalla.webapp.scripts.utility.ScriptUtils;
 
 public class SlideshowPanel extends CmsPanel implements IHeaderContributor {

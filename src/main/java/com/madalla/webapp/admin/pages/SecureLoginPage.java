@@ -1,4 +1,4 @@
-package com.madalla.webapp.pages;
+package com.madalla.webapp.admin.pages;
 
 import org.apache.wicket.protocol.https.RequireHttps;
 

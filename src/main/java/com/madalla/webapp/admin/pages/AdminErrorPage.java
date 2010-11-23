@@ -1,4 +1,4 @@
-package com.madalla.webapp.pages;
+package com.madalla.webapp.admin.pages;
 
 import javax.servlet.http.HttpServletResponse;
 
