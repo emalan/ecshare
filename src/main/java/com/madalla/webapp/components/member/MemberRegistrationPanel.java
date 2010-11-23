@@ -109,7 +109,7 @@ public class MemberRegistrationPanel extends CmsPanel{
 	}
 	
 	private boolean checkMemberId(String memberId){
-		if (memberId.equals("exists")){
+		if (getRepositoryService().isMemberExist(memberId)){
 			return false;
 		} else {
 			return true;
@@ -117,7 +117,10 @@ public class MemberRegistrationPanel extends CmsPanel{
 	}
 	
 	private boolean saveMemberData(MemberData member){
-		return checkMemberId(member.getId());
+		if (checkMemberId(member.getId())){
+			return getRepositoryService().createMember(member);
+		}
+		return false;
 	}
 	
     private boolean sendEmail(final MemberData member){

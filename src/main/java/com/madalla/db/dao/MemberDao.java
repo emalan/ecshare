@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 
 import com.madalla.bo.member.MemberData;
@@ -17,6 +18,7 @@ public class MemberDao extends AbstractDao {
 	private static final String UPDATE = "update MEMBER set FIRST_NAME=?, LAST_NAME=?, COMPANY_NAME=?, MEMBER_EMAIL=?, PASSWORD=?,AUTHORIZED_DATE=? where ID = ?";
 	private static final String DELETE = "delete from MEMBER where ID = ?";
 	private static final String FETCH = "select ID,SITE_NAME,MEMBER_ID,FIRST_NAME,LAST_NAME,COMPANY_NAME,MEMBER_EMAIL,SIGNUP_DATE,PASSWORD,AUTHORIZED_DATE from MEMBER where SITE_NAME = ?";
+	private static final String GET = "select ID,SITE_NAME,MEMBER_ID,FIRST_NAME,LAST_NAME,COMPANY_NAME,MEMBER_EMAIL,SIGNUP_DATE,PASSWORD,AUTHORIZED_DATE from MEMBER where ID = ?";
 
 	private ParameterizedRowMapper<MemberData> mapper = new ParameterizedRowMapper<MemberData>() {
 
@@ -44,7 +46,15 @@ public class MemberDao extends AbstractDao {
 	}
 	
 	public MemberData find(String id) {
-		return this.template.queryForObject(FIND, mapper, id);
+		try {
+			return this.template.queryForObject(FIND, mapper, id);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+	
+	public MemberData get(String id) {
+		return this.template.queryForObject(GET, mapper, id);
 	}
 	
 	public int save(final MemberData data){

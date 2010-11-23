@@ -1,5 +1,7 @@
 package com.madalla.cms.service.ocm;
 
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.WicketRuntimeException;
@@ -30,6 +32,14 @@ public class MemberService {
     
     public MemberData getMember(String name){
     	return memberDao.find(name);
+    }
+    
+    public MemberData getMemberById(String id){
+    	return memberDao.get(id);
+    }
+    
+    public List<MemberData> getMembers(){
+    	return memberDao.fetch();
     }
 	
 	public IPasswordAuthenticator getPasswordAuthenticator(final String name){

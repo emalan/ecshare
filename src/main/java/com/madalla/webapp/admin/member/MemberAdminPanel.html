@@ -1,0 +1,42 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+        div#memberDiv { clear : both;}
+    </style>
+</wicket:head>
+<body>
+    <wicket:panel>
+    
+        <div id="siteadmin" class="adminSection">
+            <h2><wicket:message key="heading.member">Label Contents</wicket:message></h2>
+            
+            <div id="memberDiv">
+                <span wicket:id="navigator">[dataview navigator]</span>
+                <table cellspacing="0" class="dataview">
+                    <tr>
+                        <th wicket:id="orderById"><wicket:message key="label.id">Label Contents</wicket:message></th>
+                        <th wicket:id="orderByLoginId"><wicket:message key="label.loginId">Label Contents</wicket:message></th>
+                        <th wicket:id="orderByFirstName"><wicket:message key="label.firstName">Label Contents</wicket:message></th>
+                        <th wicket:id="orderByLastName"><wicket:message key="label.lastName">Label Contents</wicket:message></th>
+                        <th wicket:id="orderByCompanyName"><wicket:message key="label.companyName">Label Contents</wicket:message></th>
+                        <th><wicket:message key="label.signupDate">Label Contents</wicket:message></th>
+                        <th><wicket:message key="label.auth">Label Contents</wicket:message></th>
+                    </tr>
+                    <tr wicket:id="memberSorting">
+                        <td><span wicket:id="id">[Label]</span></td>
+                        <td><span wicket:id="loginId">[Label]</span></td>
+                        <td><span wicket:id="firstName">[Label]</span></td>
+                        <td><span wicket:id="lastName">[Label]</span></td>
+                        <td><span wicket:id="companyName">[Label]</span></td>
+                        <td><span wicket:id="date">[Label]</span></td>
+                        <td><span wicket:id="auth">[Label]</span></td>
+                    </tr>
+                </table>
+            </div>
+            
+        </div>
+               
+        
+    </wicket:panel>
+</body>
+</html>

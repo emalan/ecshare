@@ -22,4 +22,8 @@ public abstract class MemberData extends AbstractData implements IMemberData, IU
     public String getDisplayName(){
     	return getFirstName() + ", " + getLastName() + " [" + getCompanyName() +"]";
     }
+    
+    public boolean isAuthorized(){
+    	return getAuthorizedDate() == null ? false : true;
+    }
 }

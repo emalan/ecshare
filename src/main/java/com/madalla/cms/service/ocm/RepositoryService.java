@@ -515,6 +515,18 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     	return memberService.getPasswordAuthenticator(name);
     }
     
+    public List<MemberData> getMemberEntries(){
+    	return memberService.getMembers();
+    }
+    
+    public MemberData getMember(String memberId){
+    	return memberService.getMember(memberId);
+    }
+    
+    public MemberData getMemberById(String id){
+    	return memberService.getMemberById(id);
+    }
+    
     //**********************************
     // ******   Users             ******
     

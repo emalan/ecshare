@@ -39,6 +39,7 @@ import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.webapp.admin.content.ContentAdminPanel;
 import com.madalla.webapp.admin.image.ImageAdminPanel;
+import com.madalla.webapp.admin.member.MemberAdminPanel;
 import com.madalla.webapp.admin.pages.AdminErrorPage;
 import com.madalla.webapp.admin.pages.AlbumAdminPage;
 import com.madalla.webapp.admin.pages.GeneralAdminPage;
@@ -216,6 +217,7 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     	MetaDataRoleAuthorizationStrategy.authorize(UserProfilePanel.class, "USER");
     	MetaDataRoleAuthorizationStrategy.authorize(SiteAdminPanel.class, "USER");
     	MetaDataRoleAuthorizationStrategy.authorize(SiteDataPanel.class, "USER");
+    	MetaDataRoleAuthorizationStrategy.authorize(MemberAdminPanel.class, "USER");
     	MetaDataRoleAuthorizationStrategy.authorize(ImageAdminPanel.class, "ADMIN");
     	MetaDataRoleAuthorizationStrategy.authorize(ContentAdminPanel.class, "ADMIN");
     	MetaDataRoleAuthorizationStrategy.authorize(PageAdminPanel.class, "USER");

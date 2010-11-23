@@ -157,6 +157,12 @@ public interface IDataService {
     boolean createMember(MemberData member);
     
     IPasswordAuthenticator getMemberAuthenticator(String name);
+    
+    List<MemberData> getMemberEntries();
+    
+    MemberData getMember(String memberId);
+    
+    MemberData getMemberById(String id);
 	
 	//User
 	ProfileData getProfile(String identifier);
