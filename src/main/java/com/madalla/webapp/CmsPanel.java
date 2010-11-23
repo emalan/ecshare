@@ -21,6 +21,10 @@ public abstract class CmsPanel extends Panel {
 		super(id);
 	}
 	
+	protected CmsApplication getCmsApplication(){
+		return (CmsApplication) getApplication();
+	}
+	
 	protected BuildInformation getBuildInfo(){
 		return ((CmsApplication)getApplication()).getBuildInformation();
 	}

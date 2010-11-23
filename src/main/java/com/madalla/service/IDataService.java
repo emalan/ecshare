@@ -20,6 +20,7 @@ import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.IImageData;
 import com.madalla.bo.image.ImageData;
 import com.madalla.bo.log.LogData;
+import com.madalla.bo.member.MemberData;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
@@ -149,6 +150,13 @@ public interface IDataService {
 	SiteData getSiteData();
 	
 	List<SiteData> getSiteEntries();
+	
+	//Member
+    boolean isMemberExist(String name);
+
+    boolean createMember(MemberData member);
+    
+    IPasswordAuthenticator getMemberAuthenticator(String name);
 	
 	//User
 	ProfileData getProfile(String identifier);

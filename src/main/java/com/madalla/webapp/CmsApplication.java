@@ -66,7 +66,13 @@ import com.madalla.wicket.I18NBookmarkablePageRequestTargetUrlCodingStrategy;
 public abstract class CmsApplication extends AuthenticatedWebApplication implements IDataServiceProvider, IRepositoryAdminServiceProvider, IEmailServiceProvider {
 
 	protected final static Log log = LogFactory.getLog(CmsApplication.class);
-
+	public static final String SECURE_PASSWORD = "securePassword";
+	public static final String PASSWORD = "password";
+	public static final String MEMBER_SECURE_REGISTRATION = "memberSecureRegistration";
+	public static final String MEMBER_REGISTRATION = "memberRegistration";
+	public static final String MEMBER_SECURE_PASSWORD = "memberSecurePassword";
+	public static final String MEMBER_PASSWORD = "memberPassword";
+	
     private IRepositoryAdminService repositoryAdminService;
     private IEmailSender emailSender;
     private IDataService dataService;
@@ -118,8 +124,8 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     	for (SiteLanguage lang : SiteLanguage.getLanguages()){
     		mount(new I18NBookmarkablePageRequestTargetUrlCodingStrategy(lang.locale, lang.getLanguageCode(), getHomePage()));
     	}
-    	mountBookmarkablePage("password", UserPasswordPage.class);
-    	mountBookmarkablePage("securePassword", SecurePasswordPage.class);
+    	mountBookmarkablePage(PASSWORD, UserPasswordPage.class);
+    	mountBookmarkablePage(SECURE_PASSWORD, SecurePasswordPage.class);
     	
     	mountBookmarkablePage("admin", GeneralAdminPage.class);
     	mount(new IndexedParamUrlCodingStrategy("admin/album", AlbumAdminPage.class));
@@ -149,16 +155,54 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     		}
     	}
     	
+    	if (hasMemberService()){
+    		if (getMemberPasswordPage() == null) {
+        		log.fatal("Member Service not configured Correctly. Member Service Password Page is null.");
+        		throw new WicketRuntimeException("Member Service not configured Correctly. Member Service Password Page is null.");
+        	}
+    		if (getMemberSecurePasswordPage() == null) {
+        		log.fatal("Member Service not configured Correctly. Member Service Secure Password Page is null.");
+        		throw new WicketRuntimeException("Member Service not configured Correctly. Member Service Secure Password Page is null.");
+        	}
+    		if (getMemberRegistrationPage() == null) {
+        		log.fatal("Member Service not configured Correctly. Member Service Registration Page is null.");
+        		throw new WicketRuntimeException("Member Service not configured Correctly. Member Service Registration Page is null.");
+        	}
+    		if (getMemberSecureRegistrationPage() == null) {
+        		log.fatal("Member Service not configured Correctly. Member Service Secure Registration Page is null.");
+        		throw new WicketRuntimeException("Member Service not configured Correctly. Member Service Secure Registration Page is null.");
+        	}
+    		mountBookmarkablePage(MEMBER_PASSWORD, getMemberPasswordPage());
+    		mountBookmarkablePage(MEMBER_SECURE_PASSWORD, getMemberSecurePasswordPage());
+    		mountBookmarkablePage(MEMBER_REGISTRATION, getMemberRegistrationPage());
+    		mountBookmarkablePage(MEMBER_SECURE_REGISTRATION, getMemberSecureRegistrationPage());
+    	}
+    	
     }
     
-    protected void mountImage(ImageData image){
+    protected Class<? extends Page> getMemberRegistrationPage(){
+    	return null;
+    }
+    
+    protected Class<? extends Page> getMemberSecureRegistrationPage() {
+		return null;
+	}
+
+    protected Class<? extends Page> getMemberSecurePasswordPage() {
+		return null;
+	}
+
+    protected Class<? extends Page> getMemberPasswordPage() {
+		return null;
+	}
+
+	protected void mountImage(ImageData image) {
     	getSharedResources().add(image.getResourceReference(), image.getImageFull());
 		mountSharedResource("/" + image.getMountUrl(), Application.class.getName() + "/" +image.getResourceReference());
     }
     protected void setupErrorHandling(){
     	
-    	if (DEPLOYMENT.equalsIgnoreCase(getConfigurationType()))
-		{
+    	if (DEPLOYMENT.equalsIgnoreCase(getConfigurationType())) {
         	//TODO create page for access denied exceptions
     		//TODO figure out why we get unexpected exception instead of access denied for generalAdminPage
         	//getApplicationSettings().setPageExpiredErrorPage(MyExpiredPage.class);
@@ -225,7 +269,11 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     public boolean hasRpxService(){
     	return false;
     }
-
+    
+    public boolean hasMemberService(){
+    	return false;
+    }
+    
     public IEmailSender getEmailSender() {
         return emailSender;
     }

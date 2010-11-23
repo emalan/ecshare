@@ -104,10 +104,18 @@ public abstract class CmsPage extends WebPage {
 		protected abstract void onClickAction(AjaxRequestTarget target);
 		
 	}
+	
+	public CmsPage(PageParameters parameters){
+		super(parameters);
+		commonInit();
+	}
 
 	public CmsPage() {
 		super();
-
+		commonInit();
+	}
+	
+	private void commonInit(){
 		add(Css.YUI_CORE);
 		add(Css.BASE);
 		
@@ -141,7 +149,7 @@ public abstract class CmsPage extends WebPage {
 		} else {
 			add(new Label("infoDialog").setVisible(false));
 		}
-
+		
 	}
 	
 	private void processPageMetaInformation(PageMetaLangData pageInfo){

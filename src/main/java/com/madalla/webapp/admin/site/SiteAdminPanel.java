@@ -47,6 +47,8 @@ public class SiteAdminPanel extends CmsPanel{
             email.add(EmailAddressValidator.getInstance());
             add(email);
             
+            add(new TextField<String>("siteName"));
+            
             FeedbackPanel urlFeedback = new FeedbackPanel("urlFeedback");
             add(urlFeedback);
             TextField<String> url = new TextField<String>("url");
@@ -95,7 +97,7 @@ public class SiteAdminPanel extends CmsPanel{
     
     @SuppressWarnings("unchecked")
 	private List<String> getAvailableTimeZones(){
-    	return new ArrayList(DateTimeZone.getAvailableIDs());
+    	return new ArrayList<String>(DateTimeZone.getAvailableIDs());
     }
 
     

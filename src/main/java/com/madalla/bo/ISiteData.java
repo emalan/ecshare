@@ -11,12 +11,16 @@ public interface ISiteData {
 	String getAdminEmail();
 
 	String getUrl();
+	
+	String getSiteName();
 
 	String getMetaDescription();
 
 	String getMetaKeywords();
 	
 	void setUrl(String url);
+	
+	void setSiteName(String siteName);
 	
 	void setAdminEmail(String adminEmail);
 	

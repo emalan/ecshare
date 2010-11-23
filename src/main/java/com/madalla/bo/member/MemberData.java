@@ -1,8 +1,9 @@
 package com.madalla.bo.member;
 
 import com.madalla.bo.AbstractData;
+import com.madalla.bo.security.IUserValidate;
 
-public abstract class MemberData extends AbstractData implements IMemberData, Comparable<MemberData>{
+public abstract class MemberData extends AbstractData implements IMemberData, IUserValidate, Comparable<MemberData>{
 	private static final long serialVersionUID = -4830506791264979429L;
 
 	public int compareTo(MemberData compare) {

@@ -64,8 +64,6 @@ import com.madalla.cms.service.ocm.template.RepositoryTemplateCallback;
 import com.madalla.cms.service.ocm.util.JcrOcmUtils;
 import com.madalla.db.dao.EmailEntry;
 import com.madalla.db.dao.EmailEntryDao;
-import com.madalla.db.dao.Member;
-import com.madalla.db.dao.MemberDao;
 import com.madalla.db.dao.TransactionLogDao;
 import com.madalla.image.ImageUtilities;
 import com.madalla.service.IDataService;
@@ -99,7 +97,7 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 
     
     private EmailEntryDao emailEntryDao;
-    private MemberDao memberDao;
+    private MemberService memberService;
     private UserSecurityService userSecurityService;
     
     public void init(){
@@ -505,12 +503,16 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     
     //**********************************
     // ******   Member            ******
-    public boolean isMemberExist(String username){
-    	return memberDao.find(username) != null;
+    public boolean isMemberExist(String name){
+    	return memberService.isMemberExists(name);
     }
 
     public boolean createMember(MemberData member){
-    	return memberDao.create(member);
+    	return memberService.createMember(member);
+    }
+    
+    public IPasswordAuthenticator getMemberAuthenticator(String name){
+    	return memberService.getPasswordAuthenticator(name);
     }
     
     //**********************************
@@ -607,8 +609,8 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 		this.userSecurityService = userSecurityService;
 	}
 
-	public void setMemberDao(MemberDao memberDao) {
-		this.memberDao = memberDao;
+	public void setMemberService(MemberService memberService) {
+		this.memberService = memberService;
 	}
 
 

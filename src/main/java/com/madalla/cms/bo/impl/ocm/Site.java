@@ -15,6 +15,7 @@ public class Site extends SiteData{
 	@Field private String metaDescription;
 	@Field private String adminEmail;
 	@Field private String locales;
+	@Field private String siteName;
 	@Field private String url;
 	@Field private Boolean securityCertificate;
 	@Field private String timeZone;
@@ -94,6 +95,14 @@ public class Site extends SiteData{
 
 	public void setTimeZone(String timeZone) {
 		this.timeZone = timeZone;
+	}
+
+	public String getSiteName() {
+		return siteName;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
 	}
 
 }

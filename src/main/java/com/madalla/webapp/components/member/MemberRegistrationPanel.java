@@ -1,22 +1,30 @@
 package com.madalla.webapp.components.member;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.util.MapModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.springframework.dao.DataAccessException;
 
+import com.madalla.bo.SiteData;
 import com.madalla.bo.member.MemberData;
 import com.madalla.db.dao.Member;
+import com.madalla.util.security.SecurityUtils;
+import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.cms.ContentPanel;
 import com.madalla.wicket.form.AjaxValidationForm;
@@ -89,6 +97,11 @@ public class MemberRegistrationPanel extends CmsPanel{
 	public MemberRegistrationPanel(String id) {
 		super(id);
 		
+		if (!getCmsApplication().hasMemberService()){
+			log.error("Member service not configured Correctly.");
+			throw new WicketRuntimeException("Member service not configured Correctly.");
+		}
+		
 		Form<MemberData> regForm;
 		add(regForm = new MemberRegistrationForm("regForm", new CompoundPropertyModel<MemberData>(new Member())));
 		regForm.add(new ContentPanel("regInfo"));
@@ -109,7 +122,7 @@ public class MemberRegistrationPanel extends CmsPanel{
 	
     private boolean sendEmail(final MemberData member){
     	logEmail(member.getDisplayName(), member.getEmail(), "Registration email sent.");
-        String body = getEmailBody();
+        String body = getEmailBody(member);
         return getEmailSender().sendUserEmail(getEmailSubject(), body, member.getEmail(), member.getFirstName(), true);
     }
     
@@ -124,8 +137,40 @@ public class MemberRegistrationPanel extends CmsPanel{
     	}
     }
     
-    protected String getEmailBody(){
-    	return "registration email";
+	private String resetPassword(MemberData member){
+        String password = SecurityUtils.getGeneratedPassword();
+        log.debug("resetPassword - memeber="+member.getName() + "password="+ password);
+        member.setPassword(SecurityUtils.encrypt(password));
+        saveMemberData(member);
+        return password;
+	}
+    
+    protected String getEmailBody(final MemberData member){
+    	Map<String, String> map = new HashMap<String, String>();
+    	SiteData site = getRepositoryService().getSiteData();
+    	map.put("siteName", site.getSiteName());
+    	map.put("firstName", StringUtils.defaultString(member.getFirstName()));
+		map.put("lastName", StringUtils.defaultString(member.getLastName()));
+		map.put("companyName", StringUtils.defaultString(member.getCompanyName()));
+		map.put("memberId", member.getMemberId());
+		map.put("password", resetPassword(member));
+		String url = StringUtils.defaultString(site.getUrl());
+		map.put("url", url );
+        if (site.getSecurityCertificate()){
+    		map.put("passwordChangePage", CmsApplication.MEMBER_SECURE_PASSWORD);
+    	} else {
+    		map.put("passwordChangePage", CmsApplication.MEMBER_PASSWORD);
+    	}
+		
+		MapModel<String, String> values = new MapModel<String, String>(map);
+		String message = getString("email.registration", values);
+		
+		message = message + getString("message.password", values);
+
+		message = message + getString("message.note") + getString("message.closing");
+		
+		log.debug("formatMessage - " + message);
+    	return message;
     }
     
     protected String getEmailSubject(){

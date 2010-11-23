@@ -55,6 +55,7 @@ import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
 import com.madalla.service.IDataService;
 import com.madalla.util.security.SecurityUtils;
+import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
@@ -93,8 +94,10 @@ public class UserAdminPanel extends CmsPanel {
 			add(new TextField<String>("lastName").setOutputMarkupId(true));
 			add(new CheckBox("admin").setOutputMarkupId(true));
 			add(new CheckBox("requiresAuth").setOutputMarkupId(true));
+			
 			sitesChoices = getRepositoryService().getSiteEntries();
-			@SuppressWarnings("unchecked") IModel<Collection<SiteData>> siteModel = new Model((Serializable) sites); 
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			IModel<Collection<SiteData>> siteModel = new Model((Serializable) sites); 
 			add(new CheckBoxMultipleChoice<SiteData>("site", siteModel ,
 					sitesChoices, new ChoiceRenderer<SiteData>("name")).setOutputMarkupId(true));
 		}
@@ -494,6 +497,7 @@ public class UserAdminPanel extends CmsPanel {
 		map.put("lastName", StringUtils.defaultString(user.getLastName()));
 		map.put("username", user.getName());
 		map.put("password", resetPassword(user));
+		map.put("siteName", StringUtils.defaultString(site.getSiteName()));
 		String url = StringUtils.defaultString(site.getUrl());
 		map.put("url", url );
 		map.put("description", StringUtils.defaultString(site.getMetaDescription()));
@@ -504,9 +508,9 @@ public class UserAdminPanel extends CmsPanel {
     	if (service.isUserSite(userData) && StringUtils.isNotEmpty(url)){
     		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
     		if (site.getSecurityCertificate() && authenticator.requiresSecureAuthentication(userData.getName())){
-    			map.put("passwordChangePage", "securePassword");
+    			map.put("passwordChangePage", CmsApplication.SECURE_PASSWORD);
     		} else {
-    			map.put("passwordChangePage", "password");
+    			map.put("passwordChangePage", CmsApplication.PASSWORD);
     		}
     		message = message + getString("message.password", model);
     	}

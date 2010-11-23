@@ -23,16 +23,22 @@
         <property name="template" ref="jcrTemplate"/>
         <property name="site" value="${site.code}"/>
         <property name="emailEntryDao" ref="emailEntryDao"/>
-        <property name="memberDao" ref="memberDao"/>
         <property name="transactionLogDao" ref="transactionLogDao"/>
         <property name="userSecurityService" ref="userSecurityService"/>
-        
+        <property name="memberService" ref="memberService"></property>
     </bean>
     
     <bean id="userSecurityService" class="com.madalla.cms.service.ocm.UserSecurityService"
         scope="singleton">
         <property name="template" ref="jcrTemplate"/>
         <property name="site" value="${site.code}"/>
+        <property name="transactionLogDao" ref="transactionLogDao"/>
+        <property name="authenticator" ref="authenticator"/>
+    </bean>    
+    
+    <bean id="memberService" class="com.madalla.cms.service.ocm.MemberService"
+        scope="singleton">
+        <property name="memberDao" ref="memberDao"/>
         <property name="transactionLogDao" ref="transactionLogDao"/>
         <property name="authenticator" ref="authenticator"/>
     </bean>    
