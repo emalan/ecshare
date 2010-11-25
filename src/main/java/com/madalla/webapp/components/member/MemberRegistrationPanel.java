@@ -67,7 +67,7 @@ public class MemberRegistrationPanel extends CmsPanel{
 				@Override
 				protected void onValidate(IValidatable<String> validatable) {
 					String memberId = validatable.getValue();
-					if (!checkMemberId(memberId)) {
+					if (memberExists(memberId)) {
 						validatable.error(new ValidationError().addMessageKey("message.invalidMemberID"));
 					}
 				}
@@ -82,12 +82,15 @@ public class MemberRegistrationPanel extends CmsPanel{
 			
 			MemberData member = getModelObject();
 			
-			saveMemberData(member);
+			if (!saveMemberData(member)){
+				error(getString("message.fail.save"));
+				return;
+			}
 			
 			if (sendEmail( member)){
                 info(getString("message.success"));
             } else {
-                error(getString("message.fail"));
+                error(getString("message.fail.email"));
             }
 			
 		}
@@ -108,19 +111,12 @@ public class MemberRegistrationPanel extends CmsPanel{
 		
 	}
 	
-	private boolean checkMemberId(String memberId){
-		if (getRepositoryService().isMemberExist(memberId)){
-			return false;
-		} else {
-			return true;
-		}
+	private boolean memberExists(String memberId){
+		return getRepositoryService().isMemberExist(memberId);
 	}
 	
 	private boolean saveMemberData(MemberData member){
-		if (checkMemberId(member.getId())){
-			return getRepositoryService().createMember(member);
-		}
-		return false;
+		return getRepositoryService().saveMember(member);
 	}
 	
     private boolean sendEmail(final MemberData member){

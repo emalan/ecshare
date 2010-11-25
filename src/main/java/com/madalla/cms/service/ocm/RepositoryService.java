@@ -64,6 +64,7 @@ import com.madalla.cms.service.ocm.template.RepositoryTemplateCallback;
 import com.madalla.cms.service.ocm.util.JcrOcmUtils;
 import com.madalla.db.dao.EmailEntry;
 import com.madalla.db.dao.EmailEntryDao;
+import com.madalla.db.dao.Member;
 import com.madalla.db.dao.TransactionLogDao;
 import com.madalla.image.ImageUtilities;
 import com.madalla.service.IDataService;
@@ -507,15 +508,15 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     	return memberService.isMemberExists(name);
     }
 
-    public boolean createMember(MemberData member){
-    	return memberService.createMember(member);
+    public boolean saveMember(MemberData member){
+    	return memberService.saveMember(member);
     }
     
     public IPasswordAuthenticator getMemberAuthenticator(String name){
     	return memberService.getPasswordAuthenticator(name);
     }
     
-    public List<MemberData> getMemberEntries(){
+    public List<? extends MemberData> getMemberEntries(){
     	return memberService.getMembers();
     }
     
@@ -624,6 +625,6 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
-
+	
 
 }

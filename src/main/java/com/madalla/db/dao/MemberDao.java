@@ -21,9 +21,9 @@ public class MemberDao extends AbstractDao {
 	private static final String FETCH = "select ID,SITE_NAME,MEMBER_ID,FIRST_NAME,LAST_NAME,COMPANY_NAME,MEMBER_EMAIL,SIGNUP_DATE,PASSWORD,AUTHORIZED_DATE from MEMBER where SITE_NAME = ?";
 	private static final String GET = "select ID,SITE_NAME,MEMBER_ID,FIRST_NAME,LAST_NAME,COMPANY_NAME,MEMBER_EMAIL,SIGNUP_DATE,PASSWORD,AUTHORIZED_DATE from MEMBER where ID = ?";
 
-	private ParameterizedRowMapper<MemberData> mapper = new ParameterizedRowMapper<MemberData>() {
+	private ParameterizedRowMapper<Member> mapper = new ParameterizedRowMapper<Member>() {
 
-		public MemberData mapRow(ResultSet rs, int rowNum) throws SQLException {
+		public Member mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Member data = new Member();
 			data.setId(rs.getInt("ID"));
 			data.setMemberId(rs.getString("MEMBER_ID"));
@@ -41,15 +41,42 @@ public class MemberDao extends AbstractDao {
 		}
 	};
 	
-	public boolean create(final MemberData data){
+	/**
+	 * Designed to enforce memberId as unique. If member exists with that memberId, we do update.
+	 * @param data
+	 * @return
+	 */
+	public boolean save(final MemberData data){
 		int count = 0;
-		if (find(data.getMemberId()) == null){
-			count = template.update(INSERT, new Object[] { site, data.getMemberId(), data.getFirstName(), data.getLastName(), data.getCompanyName(), data.getEmail(), new DateTime(DateTimeZone.UTC).toDate(), data.getPassword() });
+		if (exists(data.getMemberId())){
+			count = template.update(UPDATE, new Object[] { data.getFirstName(), data.getLastName(), data.getCompanyName(), 
+					data.getEmail(), data.getPassword(), data.getAuthorizedDate() == null? null:data.getAuthorizedDate().toDate(), data.getId()});
+		} else {
+			count = template.update(INSERT, new Object[] { site, data.getMemberId(), data.getFirstName(), data.getLastName(), data.getCompanyName(), 
+					data.getEmail(), new DateTime(DateTimeZone.UTC).toDate(), data.getPassword() });
+			//update member with id
+			if (data instanceof Member){
+				Member existing = (Member) data;
+				MemberData newOne = findbyMemberId(data.getMemberId());
+				existing.setId(Integer.valueOf(newOne.getId()));
+			}
+			
+			
 		}
-		return count == 1; 
+		return count == 1;
+	}
+
+	
+	/**
+	 * Exists using memberId
+	 * @param id
+	 * @return
+	 */
+	public boolean exists(String memberId){
+		return !(findbyMemberId(memberId) == null);
 	}
 	
-	public MemberData find(String id) {
+	public Member findbyMemberId(String id) {
 		try {
 			return this.template.queryForObject(FIND, mapper, id);
 		} catch (EmptyResultDataAccessException e) {
@@ -57,19 +84,17 @@ public class MemberDao extends AbstractDao {
 		}
 	}
 	
+	
 	public MemberData get(String id) {
 		return this.template.queryForObject(GET, mapper, id);
 	}
 	
-	public int save(final MemberData data){
-		return template.update(UPDATE, new Object[] { data.getFirstName(), data.getLastName(), data.getCompanyName(), data.getEmail(), data.getPassword(), data.getAuthorizedDate().toDate(), data.getId()});
-	}
 
 	public int delete(MemberData data){
 		return template.update(DELETE, new Object[]{data.getId()});
 	}
 	
-	public List<MemberData> fetch(){
+	public List<Member> fetch(){
 		return template.query(FETCH, mapper, new Object[]{site});
 	}
 }

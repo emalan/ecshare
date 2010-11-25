@@ -36,7 +36,7 @@ public class MemberAdminPanel extends CmsPanel {
 		}
 
 		public Iterator<? extends MemberData> iterator(int first, int count) {
-			List<MemberData> list = getRepositoryService().getMemberEntries();
+			List<? extends MemberData> list = getRepositoryService().getMemberEntries();
 			if("firstName".equals(getSort().getProperty())){
 				Collections.sort(list, getFirstNameComparator());
 			} else if ("loginId".equals(getSort().getProperty())){

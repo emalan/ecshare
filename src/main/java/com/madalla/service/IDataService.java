@@ -154,11 +154,11 @@ public interface IDataService {
 	//Member
     boolean isMemberExist(String name);
 
-    boolean createMember(MemberData member);
+    boolean saveMember(MemberData member);
     
     IPasswordAuthenticator getMemberAuthenticator(String name);
     
-    List<MemberData> getMemberEntries();
+    List<? extends MemberData> getMemberEntries();
     
     MemberData getMember(String memberId);
     

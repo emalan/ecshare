@@ -8,8 +8,8 @@ import org.apache.wicket.WicketRuntimeException;
 
 import com.madalla.bo.member.MemberData;
 import com.madalla.bo.security.IUserValidate;
+import com.madalla.db.dao.Member;
 import com.madalla.db.dao.MemberDao;
-import com.madalla.db.dao.TransactionLogDao;
 import com.madalla.webapp.security.IPasswordAuthenticator;
 import com.madalla.webapp.security.PasswordAuthenticator;
 
@@ -20,25 +20,25 @@ public class MemberService {
 	
 	private PasswordAuthenticator authenticator;
 	private MemberDao memberDao;
-    private TransactionLogDao transactionLogDao;
 	
 	public boolean isMemberExists(String name){
-		return memberDao.find(name) != null;
+		return memberDao.exists(name);
 	}
 	
-    public boolean createMember(MemberData member){
-    	return memberDao.create(member);
+    public boolean saveMember(MemberData member){
+    	log.debug("saveMember - "+ member);
+    	return memberDao.save(member);
     }
     
     public MemberData getMember(String name){
-    	return memberDao.find(name);
+    	return memberDao.findbyMemberId(name);
     }
     
     public MemberData getMemberById(String id){
     	return memberDao.get(id);
     }
     
-    public List<MemberData> getMembers(){
+    public List<Member> getMembers(){
     	return memberDao.fetch();
     }
 	
@@ -73,10 +73,6 @@ public class MemberService {
 	
 	public void setMemberDao(MemberDao memberDao){
 		this.memberDao = memberDao;
-	}
-
-	public void setTransactionLogDao(TransactionLogDao transactionLogDao) {
-		this.transactionLogDao = transactionLogDao;
 	}
 
 }

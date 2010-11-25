@@ -20,6 +20,7 @@ import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.service.ISessionDataService;
 import com.madalla.service.ISessionDataServiceProvider;
+import com.madalla.webapp.admin.member.MemberSession;
 import com.madalla.webapp.cms.IContentAdmin;
 import com.madalla.webapp.security.IPasswordAuthenticator;
 import com.madalla.webapp.upload.FileUploadGroup;
@@ -37,6 +38,21 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 	private Roles roles;
 	private ISessionDataService repositoryService;
 	private IPageMapEntry lastSitePage;
+	private MemberSession memberSession = new MemberSession() {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected boolean authenticateMember(String memberName, String password) {
+			IPasswordAuthenticator authenticator = getDataService().getMemberAuthenticator(memberName);
+			if (authenticator.authenticate(memberName, password)){
+				setMember(getDataService().getMember(memberName));
+				return true;
+			}
+			return false;
+		}
+
+	};
 
 	private volatile FileUploadStore fileUploadInfo = new FileUploadStore();
     
@@ -160,13 +176,19 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 		
 	}
 	
-	private IDataService getDataService(){
-		return ((IDataServiceProvider) getApplication()).getRepositoryService();
-	}
-
 	@Override
 	public Roles getRoles() {
 		return roles == null? new Roles() : roles;
+	}
+	
+	// Member
+	
+	public MemberSession getMemberSession(){
+		return memberSession;
+	}
+	
+	private IDataService getDataService(){
+		return ((IDataServiceProvider) getApplication()).getRepositoryService();
 	}
     
 	public ISessionDataService getRepositoryService() {

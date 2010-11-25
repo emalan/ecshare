@@ -39,7 +39,6 @@
     <bean id="memberService" class="com.madalla.cms.service.ocm.MemberService"
         scope="singleton">
         <property name="memberDao" ref="memberDao"/>
-        <property name="transactionLogDao" ref="transactionLogDao"/>
         <property name="authenticator" ref="authenticator"/>
     </bean>    
 

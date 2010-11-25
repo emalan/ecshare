@@ -157,7 +157,7 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     	}
     	
     	if (hasMemberService()){
-    		if (getMemberPasswordPage() == null) {
+    		if (getMemberNonsecurePasswordPage() == null) {
         		log.fatal("Member Service not configured Correctly. Member Service Password Page is null.");
         		throw new WicketRuntimeException("Member Service not configured Correctly. Member Service Password Page is null.");
         	}
@@ -165,7 +165,7 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
         		log.fatal("Member Service not configured Correctly. Member Service Secure Password Page is null.");
         		throw new WicketRuntimeException("Member Service not configured Correctly. Member Service Secure Password Page is null.");
         	}
-    		if (getMemberRegistrationPage() == null) {
+    		if (getMemberNonsecureRegistrationPage() == null) {
         		log.fatal("Member Service not configured Correctly. Member Service Registration Page is null.");
         		throw new WicketRuntimeException("Member Service not configured Correctly. Member Service Registration Page is null.");
         	}
@@ -173,15 +173,31 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
         		log.fatal("Member Service not configured Correctly. Member Service Secure Registration Page is null.");
         		throw new WicketRuntimeException("Member Service not configured Correctly. Member Service Secure Registration Page is null.");
         	}
-    		mountBookmarkablePage(MEMBER_PASSWORD, getMemberPasswordPage());
+    		mountBookmarkablePage(MEMBER_PASSWORD, getMemberNonsecurePasswordPage());
     		mountBookmarkablePage(MEMBER_SECURE_PASSWORD, getMemberSecurePasswordPage());
-    		mountBookmarkablePage(MEMBER_REGISTRATION, getMemberRegistrationPage());
+    		mountBookmarkablePage(MEMBER_REGISTRATION, getMemberNonsecureRegistrationPage());
     		mountBookmarkablePage(MEMBER_SECURE_REGISTRATION, getMemberSecureRegistrationPage());
     	}
     	
     }
     
-    protected Class<? extends Page> getMemberRegistrationPage(){
+    public Class<? extends Page> getMemberRegistrationPage(){
+    	if (getRepositoryService().getSiteData().getSecurityCertificate()){
+    		return getMemberSecureRegistrationPage();
+    	} else {
+    		return getMemberNonsecureRegistrationPage();
+    	}
+    }
+    
+    public Class<? extends Page> getMemberPasswordPage(){
+    	if (getRepositoryService().getSiteData().getSecurityCertificate()){
+    		return getMemberSecurePasswordPage();
+    	} else {
+    		return getMemberNonsecurePasswordPage();
+    	}
+    }
+    
+    protected Class<? extends Page> getMemberNonsecureRegistrationPage(){
     	return null;
     }
     
@@ -193,7 +209,7 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
 		return null;
 	}
 
-    protected Class<? extends Page> getMemberPasswordPage() {
+    protected Class<? extends Page> getMemberNonsecurePasswordPage() {
 		return null;
 	}
 
