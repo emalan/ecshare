@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -31,7 +32,7 @@ public class MemberDao extends AbstractDao {
 			data.setLastName(rs.getString("LAST_NAME"));
 			data.setEmail(rs.getString("MEMBER_EMAIL"));
 			data.setPassword(rs.getString("PASSWORD"));
-			data.setCompanyName(rs.getString("COMPANY_NAME"));
+			data.setCompanyName(StringUtils.defaultString(rs.getString("COMPANY_NAME")));
 			data.setSignupDate(new DateTime(rs.getTimestamp("SIGNUP_DATE"), DateTimeZone.UTC));
 			Timestamp authDate = rs.getTimestamp("AUTHORIZED_DATE");
 			if (authDate != null){

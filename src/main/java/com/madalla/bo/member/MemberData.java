@@ -5,9 +5,11 @@ import com.madalla.bo.security.IUserValidate;
 
 public abstract class MemberData extends AbstractData implements IMemberData, IUserValidate, Comparable<MemberData>{
 	private static final long serialVersionUID = -4830506791264979429L;
+	
+	abstract public int getKey();
 
 	public int compareTo(MemberData compare) {
-		return compare.getId().compareTo(getId());
+		return new Integer(compare.getKey()).compareTo(getKey());
 	}
 	
     @Override

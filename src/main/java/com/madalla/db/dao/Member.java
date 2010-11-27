@@ -17,6 +17,9 @@ public class Member extends MemberData {
 	private DateTime signupDate;
 	private DateTime authorizedDate;
 
+	public int getKey(){
+		return id;
+	}
 	public String getId() {
 		return String.valueOf(id);
 	}

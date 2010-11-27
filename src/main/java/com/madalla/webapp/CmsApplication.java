@@ -15,6 +15,7 @@ import org.apache.wicket.Session;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authorization.strategies.page.SimplePageAuthorizationStrategy;
 import org.apache.wicket.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.https.HttpsConfig;
@@ -39,6 +40,7 @@ import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.webapp.admin.content.ContentAdminPanel;
 import com.madalla.webapp.admin.image.ImageAdminPanel;
+import com.madalla.webapp.admin.member.IMemberAuthPage;
 import com.madalla.webapp.admin.member.MemberAdminPanel;
 import com.madalla.webapp.admin.pages.AdminErrorPage;
 import com.madalla.webapp.admin.pages.AlbumAdminPage;
@@ -242,7 +244,15 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     	MetaDataRoleAuthorizationStrategy.authorize(ContentEntryPanel.class, "USER");
     	MetaDataRoleAuthorizationStrategy.authorize(TranslatePanel.class, "USER");
     	
-    	//MetaDataRoleAuthorizationStrategy.authorize(TranslatePanel.class, "USER");
+    	SimplePageAuthorizationStrategy authorizationStrategy = new SimplePageAuthorizationStrategy(
+    			IMemberAuthPage.class,getMemberRegistrationPage()) {
+			
+			@Override
+			protected boolean isAuthorized() {
+				return ((CmsSession)Session.get()).getMemberSession().isSignedIn();
+			}
+		};
+		getSecuritySettings().setAuthorizationStrategy(authorizationStrategy);
     }
     
 	@Override
