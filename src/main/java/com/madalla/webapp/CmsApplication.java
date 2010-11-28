@@ -13,9 +13,7 @@ import org.apache.wicket.Request;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
 import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
-import org.apache.wicket.authorization.strategies.page.SimplePageAuthorizationStrategy;
 import org.apache.wicket.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.https.HttpsConfig;
@@ -40,7 +38,6 @@ import com.madalla.service.IRepositoryAdminService;
 import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.webapp.admin.content.ContentAdminPanel;
 import com.madalla.webapp.admin.image.ImageAdminPanel;
-import com.madalla.webapp.admin.member.IMemberAuthPage;
 import com.madalla.webapp.admin.member.MemberAdminPanel;
 import com.madalla.webapp.admin.pages.AdminErrorPage;
 import com.madalla.webapp.admin.pages.AlbumAdminPage;
@@ -52,6 +49,7 @@ import com.madalla.webapp.admin.site.PageAdminPanel;
 import com.madalla.webapp.admin.site.SiteAdminPanel;
 import com.madalla.webapp.admin.site.SiteDataPanel;
 import com.madalla.webapp.admin.site.SiteEmailPanel;
+import com.madalla.webapp.authorization.AuthenticatedCmsApplication;
 import com.madalla.webapp.authorization.RpxCallbackUrlHandler;
 import com.madalla.webapp.cms.editor.ContentEntryPanel;
 import com.madalla.webapp.cms.editor.TranslatePanel;
@@ -66,7 +64,7 @@ import com.madalla.wicket.I18NBookmarkablePageRequestTargetUrlCodingStrategy;
  * @author Eugene Malan
  *
  */
-public abstract class CmsApplication extends AuthenticatedWebApplication implements IDataServiceProvider, IRepositoryAdminServiceProvider, IEmailServiceProvider {
+public abstract class CmsApplication extends AuthenticatedCmsApplication implements IDataServiceProvider, IRepositoryAdminServiceProvider, IEmailServiceProvider {
 
 	protected final static Log log = LogFactory.getLog(CmsApplication.class);
 	public static final String SECURE_PASSWORD = "securePassword";
@@ -183,7 +181,7 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     	
     }
     
-    public Class<? extends Page> getMemberRegistrationPage(){
+    public Class<? extends WebPage> getMemberRegistrationPage(){
     	if (getRepositoryService().getSiteData().getSecurityCertificate()){
     		return getMemberSecureRegistrationPage();
     	} else {
@@ -191,7 +189,7 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     	}
     }
     
-    public Class<? extends Page> getMemberPasswordPage(){
+    public Class<? extends WebPage> getMemberPasswordPage(){
     	if (getRepositoryService().getSiteData().getSecurityCertificate()){
     		return getMemberSecurePasswordPage();
     	} else {
@@ -199,19 +197,19 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     	}
     }
     
-    protected Class<? extends Page> getMemberNonsecureRegistrationPage(){
+    protected Class<? extends WebPage> getMemberNonsecureRegistrationPage(){
     	return null;
     }
     
-    protected Class<? extends Page> getMemberSecureRegistrationPage() {
+    protected Class<? extends WebPage> getMemberSecureRegistrationPage() {
 		return null;
 	}
 
-    protected Class<? extends Page> getMemberSecurePasswordPage() {
+    protected Class<? extends WebPage> getMemberSecurePasswordPage() {
 		return null;
 	}
 
-    protected Class<? extends Page> getMemberNonsecurePasswordPage() {
+    protected Class<? extends WebPage> getMemberNonsecurePasswordPage() {
 		return null;
 	}
 
@@ -239,20 +237,11 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
     	MetaDataRoleAuthorizationStrategy.authorize(ImageAdminPanel.class, "ADMIN");
     	MetaDataRoleAuthorizationStrategy.authorize(ContentAdminPanel.class, "ADMIN");
     	MetaDataRoleAuthorizationStrategy.authorize(PageAdminPanel.class, "USER");
-    	MetaDataRoleAuthorizationStrategy.authorize(SiteEmailPanel.class, "ADMIN");
+    	MetaDataRoleAuthorizationStrategy.authorize(SiteEmailPanel.class, "SUPERADMIN");
     	MetaDataRoleAuthorizationStrategy.authorize(UserAdminPanel.class, "SUPERADMIN");
     	MetaDataRoleAuthorizationStrategy.authorize(ContentEntryPanel.class, "USER");
     	MetaDataRoleAuthorizationStrategy.authorize(TranslatePanel.class, "USER");
     	
-    	SimplePageAuthorizationStrategy authorizationStrategy = new SimplePageAuthorizationStrategy(
-    			IMemberAuthPage.class,getMemberRegistrationPage()) {
-			
-			@Override
-			protected boolean isAuthorized() {
-				return ((CmsSession)Session.get()).getMemberSession().isSignedIn();
-			}
-		};
-		getSecuritySettings().setAuthorizationStrategy(authorizationStrategy);
     }
     
 	@Override
@@ -264,8 +253,13 @@ public abstract class CmsApplication extends AuthenticatedWebApplication impleme
 	protected Class<? extends AuthenticatedWebSession> getWebSessionClass() {
 		return CmsSession.class;
 	}
-    
-    /* (non-Javadoc)
+	
+    @Override
+	public boolean isMemberAuthorized() {
+		return CmsSession.get().getMemberSession().isSignedIn();
+	}
+
+	/* (non-Javadoc)
      * @see org.apache.wicket.protocol.http.WebApplication#getConfigurationType()
      */
     @Override

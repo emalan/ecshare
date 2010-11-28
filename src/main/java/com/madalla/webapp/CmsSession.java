@@ -7,6 +7,7 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.Request;
+import org.apache.wicket.Session;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
 import org.apache.wicket.session.pagemap.IPageMapEntry;
@@ -35,6 +36,11 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 	public final static String SECURE = "SECURE";
 	public final static String CONTENTADMIN = "CONTENTADMIN";
 	
+	public static CmsSession get()
+	{
+		return (CmsSession)Session.get();
+	}
+	
 	private Roles roles;
 	private ISessionDataService repositoryService;
 	private IPageMapEntry lastSitePage;
@@ -60,6 +66,8 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
         super(request);
         this.repositoryService = new SessionDataService();
     }
+    
+    
 
     public boolean isCmsAdminMode() {
         return getRoles().hasRole(Roles.ADMIN);
