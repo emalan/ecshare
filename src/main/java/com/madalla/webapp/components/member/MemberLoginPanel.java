@@ -1,6 +1,7 @@
 package com.madalla.webapp.components.member;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
@@ -16,11 +17,13 @@ import com.madalla.webapp.login.LoginPanel;
 
 public class MemberLoginPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
+	
+	public MemberLoginPanel(String id){
+		this(id, new SecureCredentials(), null);
+	}
 
-	public MemberLoginPanel(String id) {
+	public MemberLoginPanel(String id, final ICredentialHolder credentials, final Class<? extends Page> destination) {
 		super(id);
-		
-		ICredentialHolder credentials = new SecureCredentials();
 		
 		final MemberSession session = getAppSession().getMemberSession();
 		
@@ -40,7 +43,7 @@ public class MemberLoginPanel extends CmsPanel{
 		};
 		add(loginInfo);
 		
-		final Component panel = new LoginPanel("signInPanel", credentials){
+		final Component panel = new LoginPanel("signInPanel", credentials, true, destination){
             private static final long serialVersionUID = 1L;
             
             @Override

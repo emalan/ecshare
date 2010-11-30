@@ -20,6 +20,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Page;
+import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -59,6 +61,8 @@ public abstract class LoginPanel extends CmsPanel
 
 	/** True if the panel should display a remember-me checkbox */
 	private boolean includeRememberMe = true;
+	
+	private final Class<? extends Page> destination;
 
 	/** Field for password. */
 	private PasswordTextField password;
@@ -143,6 +147,9 @@ public abstract class LoginPanel extends CmsPanel
         this(id, credentials, true);
     }	
     
+    public LoginPanel(final String id, final ICredentialHolder credentials, final boolean includeRememberMe){
+    	this(id, credentials, includeRememberMe, null);
+    }
 	/**
 	 * @param id
 	 *            See Component constructor
@@ -150,9 +157,24 @@ public abstract class LoginPanel extends CmsPanel
 	 *            True if form should include a remember-me checkbox
 	 * @see org.apache.wicket.Component#Component(String)
 	 */
-	public LoginPanel(final String id, final ICredentialHolder credentials, final boolean includeRememberMe)
+	public LoginPanel(final String id, final ICredentialHolder credentials, final boolean includeRememberMe,
+			Class<? extends Page> destination)
 	{
 		super(id);
+		
+		if (destination == null){
+			this.destination = getApplication().getHomePage();
+		} else {
+			this.destination = destination;
+		}
+		
+		//if we have a valid populated credential then validate
+		if (StringUtils.isNotEmpty(credentials.getUsername()) && StringUtils.isNotEmpty(credentials.getPassword()) &&
+				signIn(credentials.getUsername(), credentials.getPassword())){
+			
+			throw new RestartResponseAtInterceptPageException(destination);
+			
+		}
 		
 		add(Css.CSS_FORM);
 
@@ -347,7 +369,7 @@ public abstract class LoginPanel extends CmsPanel
         // logged in, then continue to the original destination,
         // otherwise to the Home page
         if (!continueToOriginalDestination())   {
-            setResponsePage(getApplication().getHomePage());
+            setResponsePage(destination);
         }
 	}
 

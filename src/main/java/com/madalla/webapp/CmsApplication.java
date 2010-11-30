@@ -286,6 +286,9 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
      */
     public abstract List<Class<? extends Page>> getPageMenuList();
     
+    /**
+     * @return all application pages
+     */
     public abstract List<Class <? extends Page>> getAppPages();
     
     public boolean hasRpxService(){

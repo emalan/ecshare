@@ -437,8 +437,12 @@ public abstract class CmsPage extends WebPage {
 		return (CmsSession) getSession();
 	}
 	
-	protected List<IMenuItem> getPageMetaData(){
+	protected List<IMenuItem>getPageMetaData(){
 		List<Class<? extends Page>> pages = ((CmsApplication)getApplication()).getPageMenuList();
+		return getPageMetaData(pages);
+	}
+	
+	protected List<IMenuItem> getPageMetaData(List<Class<? extends Page>> pages){
 		final List<IMenuItem> items = new ArrayList<IMenuItem>();
 		for(final Class<? extends Page> page: pages){
 
