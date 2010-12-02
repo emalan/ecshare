@@ -140,21 +140,6 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     	});
     	mount(new MixedParamHybridUrlCodingStrategy("login", UserLoginPage.class, UserLoginPage.PARAMETERS));
     	
-		//mount application pages
-    	for (Class<? extends Page> page : getAppPages()){
-			final PageData pageData = getRepositoryService().getPage(page.getSimpleName());
-			PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(SiteLanguage.BASE_LOCALE, pageData);
-			String mountName = StringUtils.defaultIfEmpty(pageInfo.getDisplayName(), page.getSimpleName());
-			mountBookmarkablePage(mountName, page);
-		}
-    	
-    	//mount images
-    	for(AlbumData album : getRepositoryService().getAlbums()){
-    		for (ImageData image : getRepositoryService().getAlbumImages(album)){
-    			mountImage(image);
-    		}
-    	}
-    	
     	if (hasMemberService()){
     		if (getMemberPasswordPage() == null) {
         		log.fatal("Member Service not configured Correctly. Member Service Password Page is null.");
@@ -166,6 +151,25 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
         	}
     		mountBookmarkablePage(MEMBER_PASSWORD, getMemberPasswordPage());
     		mountBookmarkablePage(MEMBER_REGISTRATION, getMemberRegistrationPage());
+    	}
+    	
+		//mount application pages
+    	for (Class<? extends Page> page : getAppPages()){
+			final PageData pageData = getRepositoryService().getPage(page.getSimpleName());
+			PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(SiteLanguage.BASE_LOCALE, pageData);
+			String mountName = StringUtils.defaultIfEmpty(pageInfo.getMountName(), page.getSimpleName());
+			try {
+				mountBookmarkablePage(mountName, page);
+			} catch (WicketRuntimeException e){
+				log.error("Error while mounting Application Page.", e);
+			}
+		}
+    	
+    	//mount images
+    	for(AlbumData album : getRepositoryService().getAlbums()){
+    		for (ImageData image : getRepositoryService().getAlbumImages(album)){
+    			mountImage(image);
+    		}
     	}
     	
     }

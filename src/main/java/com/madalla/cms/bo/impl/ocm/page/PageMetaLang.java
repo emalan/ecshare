@@ -49,6 +49,9 @@ public class PageMetaLang extends PageMetaLangData {
 	public String getDisplayName() {
 		return displayName;
 	}
+	public String getMountName(){
+		return StringUtils.deleteWhitespace(displayName);
+	}
 	/* (non-Javadoc)
 	 * @see com.madalla.cms.bo.impl.ocm.page.IPageMetaLangData#getTitle()
 	 */
