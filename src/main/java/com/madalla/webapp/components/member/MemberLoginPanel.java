@@ -76,6 +76,7 @@ public class MemberLoginPanel extends CmsPanel{
 				target.addComponent(this);
 				target.addComponent(loginInfo);
 				target.addComponent(panel);
+				processSignOut();
 			}
 
 			@Override
@@ -89,6 +90,10 @@ public class MemberLoginPanel extends CmsPanel{
 			}
 			
 		});
+	}
+	
+	protected void processSignOut(){
+		
 	}
 
 }

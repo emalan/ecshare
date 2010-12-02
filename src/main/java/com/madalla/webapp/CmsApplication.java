@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Application;
+import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
@@ -69,9 +70,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 	protected final static Log log = LogFactory.getLog(CmsApplication.class);
 	public static final String SECURE_PASSWORD = "securePassword";
 	public static final String PASSWORD = "password";
-	public static final String MEMBER_SECURE_REGISTRATION = "memberSecureRegistration";
 	public static final String MEMBER_REGISTRATION = "memberRegistration";
-	public static final String MEMBER_SECURE_PASSWORD = "memberSecurePassword";
 	public static final String MEMBER_PASSWORD = "memberPassword";
 	
     private IRepositoryAdminService repositoryAdminService;
@@ -157,62 +156,57 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     	}
     	
     	if (hasMemberService()){
-    		if (getMemberNonsecurePasswordPage() == null) {
+    		if (getMemberPasswordPage() == null) {
         		log.fatal("Member Service not configured Correctly. Member Service Password Page is null.");
         		throw new WicketRuntimeException("Member Service not configured Correctly. Member Service Password Page is null.");
         	}
-    		if (getMemberSecurePasswordPage() == null) {
-        		log.fatal("Member Service not configured Correctly. Member Service Secure Password Page is null.");
-        		throw new WicketRuntimeException("Member Service not configured Correctly. Member Service Secure Password Page is null.");
-        	}
-    		if (getMemberNonsecureRegistrationPage() == null) {
+    		if (getMemberRegistrationPage() == null) {
         		log.fatal("Member Service not configured Correctly. Member Service Registration Page is null.");
         		throw new WicketRuntimeException("Member Service not configured Correctly. Member Service Registration Page is null.");
         	}
-    		if (getMemberSecureRegistrationPage() == null) {
-        		log.fatal("Member Service not configured Correctly. Member Service Secure Registration Page is null.");
-        		throw new WicketRuntimeException("Member Service not configured Correctly. Member Service Secure Registration Page is null.");
-        	}
-    		mountBookmarkablePage(MEMBER_PASSWORD, getMemberNonsecurePasswordPage());
-    		mountBookmarkablePage(MEMBER_SECURE_PASSWORD, getMemberSecurePasswordPage());
-    		mountBookmarkablePage(MEMBER_REGISTRATION, getMemberNonsecureRegistrationPage());
-    		mountBookmarkablePage(MEMBER_SECURE_REGISTRATION, getMemberSecureRegistrationPage());
+    		mountBookmarkablePage(MEMBER_PASSWORD, getMemberPasswordPage());
+    		mountBookmarkablePage(MEMBER_REGISTRATION, getMemberRegistrationPage());
     	}
     	
     }
     
+    @Override
+    protected IRequestCycleProcessor newRequestCycleProcessor()
+    {
+    	HttpsConfig config = new HttpsConfig(80,443);
+        return new HttpsRequestCycleProcessor(config){
+
+			@Override
+			protected IRequestTarget checkSecureIncoming(IRequestTarget target) {
+				if (getConfigurationType().equals(Application.DEVELOPMENT) || !getRepositoryService().getSiteData().getSecurityCertificate()){
+					return target;
+				} else {
+					return super.checkSecureIncoming(target);
+				}
+			}
+
+			@Override
+			protected IRequestTarget checkSecureOutgoing(IRequestTarget target) {
+				if (getConfigurationType().equals(Application.DEVELOPMENT) || !getRepositoryService().getSiteData().getSecurityCertificate()){
+					return target;
+				} else {
+					return super.checkSecureOutgoing(target);
+				}
+			}
+			
+			
+        	
+        };
+    }
+    
     public Class<? extends WebPage> getMemberRegistrationPage(){
-    	if (getRepositoryService().getSiteData().getSecurityCertificate()){
-    		return getMemberSecureRegistrationPage();
-    	} else {
-    		return getMemberNonsecureRegistrationPage();
-    	}
-    }
-    
-    public Class<? extends WebPage> getMemberPasswordPage(){
-    	if (getRepositoryService().getSiteData().getSecurityCertificate()){
-    		return getMemberSecurePasswordPage();
-    	} else {
-    		return getMemberNonsecurePasswordPage();
-    	}
-    }
-    
-    protected Class<? extends WebPage> getMemberNonsecureRegistrationPage(){
     	return null;
     }
     
-    protected Class<? extends WebPage> getMemberSecureRegistrationPage() {
-		return null;
-	}
-
-    protected Class<? extends WebPage> getMemberSecurePasswordPage() {
-		return null;
-	}
-
-    protected Class<? extends WebPage> getMemberNonsecurePasswordPage() {
-		return null;
-	}
-
+    public Class<? extends WebPage> getMemberPasswordPage(){
+    	return null;
+    }
+    
 	protected void mountImage(ImageData image) {
     	getSharedResources().add(image.getResourceReference(), image.getImageFull());
 		mountSharedResource("/" + image.getMountUrl(), Application.class.getName() + "/" +image.getResourceReference());
@@ -270,13 +264,6 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     		return configType;
     	}
 	}
-    
-    @Override
-    protected IRequestCycleProcessor newRequestCycleProcessor()
-    {
-    	HttpsConfig config = new HttpsConfig(80,443);
-        return new HttpsRequestCycleProcessor(config);
-    }
     
     /**
      * This supplies a hook point for the admin application to create data for the pages

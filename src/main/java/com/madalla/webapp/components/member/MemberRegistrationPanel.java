@@ -155,11 +155,7 @@ public class MemberRegistrationPanel extends CmsPanel{
 		map.put("password", resetPassword(member));
 		String url = StringUtils.defaultString(site.getUrl());
 		map.put("url", url );
-        if (site.getSecurityCertificate()){
-    		map.put("passwordChangePage", CmsApplication.MEMBER_SECURE_PASSWORD);
-    	} else {
-    		map.put("passwordChangePage", CmsApplication.MEMBER_PASSWORD);
-    	}
+    	map.put("passwordChangePage", CmsApplication.MEMBER_PASSWORD);
 		
 		MapModel<String, String> values = new MapModel<String, String>(map);
 		String message = getString("email.registration", values);
