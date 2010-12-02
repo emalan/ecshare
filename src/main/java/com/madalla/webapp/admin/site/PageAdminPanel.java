@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -20,6 +22,8 @@ public class PageAdminPanel extends CmsPanel {
 	
 	private static final long serialVersionUID = 1L;
 	
+	private static final Log log = LogFactory.getLog(PageAdminPanel.class);
+	
     public PageAdminPanel(String id){
 		super(id);
 		add(Css.CSS_FORM);
@@ -31,14 +35,40 @@ public class PageAdminPanel extends CmsPanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<PageData> item) {
-				item.add(new PageMetaPanel("metaPanel", item.getModelObject(), locales, defaultLocale));
+			protected void populateItem(final ListItem<PageData> item) {
+				item.add(new PageMetaPanel("metaPanel", item.getModelObject(), locales, defaultLocale){
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					void preSaveProcessing(String existingMount, String newMount) {
+						getCmsApplication().unmount(existingMount);
+						Class <? extends Page> page = getPageClass(item.getModelObject().getName());
+						if (page != null){
+							try {
+								getCmsApplication().mountBookmarkablePage(newMount, page);
+							} catch (WicketRuntimeException e){
+								log.error("Error while mounting Application Page.", e);
+							}
+						}
+					}
+					
+				});
 				
 			}
 			
 		});
 		
 	}
+    
+    private Class<? extends Page> getPageClass(String name){
+    	List<Class<? extends Page>> pages = ((CmsApplication)getApplication()).getAppPages();
+		for (Class<? extends Page> page : pages){
+			if (getPageName(page).equals(name)){
+				return page;
+			}
+		}
+		return null;
+    }
 	
 	private String getPageName(Class<? extends Page> page){
 		if (!CmsPage.class.isAssignableFrom(page)){

@@ -24,7 +24,7 @@ import com.madalla.webapp.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationForm;
 import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 
-public class PageMetaPanel extends CmsPanel{
+public abstract class PageMetaPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
 	
 	private Log log = LogFactory.getLog(this.getClass());
@@ -32,9 +32,13 @@ public class PageMetaPanel extends CmsPanel{
     public class MetaDataForm extends AjaxValidationForm<PageMetaLangData> {
     	
     	private static final long serialVersionUID = 1L;
+    	
+    	private String existingMount;
         
     	public MetaDataForm(String id, IModel<PageMetaLangData> model) {
             super(id, model);
+            
+            this.existingMount = model.getObject().getMountName();
             
             add(new AjaxValidationRequiredTextField("displayName"));
             
@@ -50,10 +54,14 @@ public class PageMetaPanel extends CmsPanel{
 
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
-			saveData(getModelObject());
+			PageMetaLangData data = getModelObject();
+			
+			preSaveProcessing(existingMount, data.getMountName());
+			
+			saveData(data);
 			info(getString("message.success"));
 		}
-        
+		
     }
 
 	public PageMetaPanel(String id, final PageData pageData, List<SiteLanguage> siteLanguages, Locale defaultLocale) {
@@ -96,5 +104,7 @@ public class PageMetaPanel extends CmsPanel{
 		add(select);
 
 	}
-
+	
+	abstract void preSaveProcessing(String existingMount, String newMount);
+	
 }
