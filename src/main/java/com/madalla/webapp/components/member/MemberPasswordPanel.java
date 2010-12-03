@@ -98,8 +98,10 @@ public class MemberPasswordPanel extends CmsPanel{
 		final boolean loggedIn = session.isSignedIn();
 		if (loggedIn) {
 			validated = false; 
+			log.debug("Member not validated as they are already logged in. user="+existing.getUsername());
 		} else {
 			validated = validateMember(existing); 
+			log.debug("Validate --> " + validated);
 		}
 		
 		final UserLoginTracker tracker = getLoginTracker(existing);
@@ -156,6 +158,7 @@ public class MemberPasswordPanel extends CmsPanel{
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
 				MemberData member = getRepositoryService().getMember(credentials.getUsername());
+				log.debug("process password change for : " + member);
 				//sign member in - we have already validated old password
 				if (getAppSession().getMemberSession().signIn(member.getMemberId(), member.getPassword())){
 					member.setPassword(credentials.getPassword());

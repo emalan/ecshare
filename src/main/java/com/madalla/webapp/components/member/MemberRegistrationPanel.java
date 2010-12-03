@@ -6,7 +6,6 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -18,19 +17,16 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
-import org.springframework.dao.DataAccessException;
 
 import com.madalla.bo.SiteData;
 import com.madalla.bo.member.MemberData;
 import com.madalla.db.dao.Member;
-import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.CmsApplication;
-import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.cms.ContentPanel;
 import com.madalla.wicket.form.AjaxValidationForm;
 import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 
-public class MemberRegistrationPanel extends CmsPanel{
+public class MemberRegistrationPanel extends AbstractMemberPanel{
 	private static final long serialVersionUID = 1L;
 
 	private Log log = LogFactory.getLog(this.getClass());
@@ -100,11 +96,6 @@ public class MemberRegistrationPanel extends CmsPanel{
 	public MemberRegistrationPanel(String id) {
 		super(id);
 		
-		if (!getCmsApplication().hasMemberService()){
-			log.error("Member service not configured Correctly.");
-			throw new WicketRuntimeException("Member service not configured Correctly.");
-		}
-		
 		Form<MemberData> regForm;
 		add(regForm = new MemberRegistrationForm("regForm", new CompoundPropertyModel<MemberData>(new Member())));
 		regForm.add(new ContentPanel("regInfo"));
@@ -115,35 +106,7 @@ public class MemberRegistrationPanel extends CmsPanel{
 		return getRepositoryService().isMemberExist(memberId);
 	}
 	
-	private boolean saveMemberData(MemberData member){
-		return getRepositoryService().saveMember(member);
-	}
-	
-    private boolean sendEmail(final MemberData member){
-    	logEmail(member.getDisplayName(), member.getEmail(), "Registration email sent.");
-        String body = getEmailBody(member);
-        return getEmailSender().sendUserEmail(getEmailSubject(), body, member.getEmail(), member.getFirstName(), true);
-    }
-    
-    private void logEmail(String name, String email, String comment){
-    	if (name.length() >= 25){
-    		name = StringUtils.substring(name, 0, 23) + "..";
-    	}
-    	try {
-    		getRepositoryService().createEmailEntry(name, email, comment);
-    	} catch (DataAccessException e){
-    		log.error("Data Access Exception while logging registration email.", e);
-    	}
-    }
-    
-	private String resetPassword(MemberData member){
-        String password = SecurityUtils.getGeneratedPassword();
-        log.debug("resetPassword - memeber="+member.getName() + "password="+ password);
-        member.setPassword(SecurityUtils.encrypt(password));
-        saveMemberData(member);
-        return password;
-	}
-    
+	@Override
     protected String getEmailBody(final MemberData member){
     	Map<String, String> map = new HashMap<String, String>();
     	SiteData site = getRepositoryService().getSiteData();
@@ -168,6 +131,7 @@ public class MemberRegistrationPanel extends CmsPanel{
     	return message;
     }
     
+    @Override
     protected String getEmailSubject(){
     	return "Registration";
     }

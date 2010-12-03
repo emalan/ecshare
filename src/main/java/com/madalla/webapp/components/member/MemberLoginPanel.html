@@ -14,6 +14,24 @@
                 </div>
                 
                 <span wicket:id="signInPanel"></span>
+                
+                <form class="resetForm floatDiv" wicket:id="resetForm">
+                    <fieldset>
+                        <div>
+                            <label for="memberId">
+                                <wicket:message key="label.memberId">[label]</wicket:message>
+                            </label>
+                            <input id="memberId" class="inputText" wicket:id="memberId" type="text" />
+                        </div>
+                    </fieldset>
+                    <div class="submit">
+                        <input type="submit" style="display: none;">
+                        <span class="buttonwrapper">
+                            <a class="orangebutton" wicket:id="submitLink"><span><wicket:message key="label.verify">Label Contents</wicket:message></span></a>
+                        </span>
+                        <span class="feedbackPanel" wicket:id="resetFeedback"></span>
+                    </div>
+                </form>
     
         </div>
 

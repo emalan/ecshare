@@ -11,7 +11,9 @@ public class SimpleEmailSenderTest extends TestCase {
         emailSender.setMailAuthName("emalan");
         emailSender.setMailAuthPassword("madalla");
         emailSender.setEmailFromEmail("webmaster@madalla.com");
+        emailSender.setEmailFromName("test case");
         emailSender.setEmailToEmail("eugene@emalan.com");
+        emailSender.setEmailToName("Eugene");
                 
         emailSender.sendEmail("Test subject","Test body");
     }
