@@ -5,7 +5,8 @@
     	form.signInForm div label, form.signInForm div a, form.signInForm div span {float: left;}
     	form.signInForm div input {float: left;}
     	form.signInForm div label {width:8em;}
-    	form.signInForm div .buttonwrapper {margin-left: 6em; float: left;}
+    	form.signInForm div.submit input {margin-left: 6em; float: left;}
+    	form.signInForm div.submit .feedbackPanel { margin-top: 0.1em;}
     	form.signInForm div .feedbackPanel {float: left;}
     	form.signInForm .info {font-size: medium; padding-left: 15px;}
     	form.signInForm .message {clear: both; padding-left: 15px; }
@@ -34,10 +35,7 @@
             </div>
           </fieldset>
           <div class="submit">
-                <input type="submit" style="display: none;">
-                <span class="buttonwrapper">
-                    <a class="orangebutton" wicket:id="submitLink"><span><wicket:message key="label.verify">Label Contents</wicket:message></span></a>
-                </span>
+                <input type="submit" class="button" wicket:id="submitLink">
                 <span class="feedbackPanel" wicket:id="loginFeedback"></span>
           </div>
           
