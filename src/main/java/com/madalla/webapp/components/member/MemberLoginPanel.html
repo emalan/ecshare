@@ -1,7 +1,9 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
-        
+        form.resetForm div.submit {
+            float: left;
+        }
     </style>
 </wicket:head>
 <body>
@@ -13,7 +15,29 @@
                     <a wicket:id="logout" href="#"><wicket:message key="label.logout">[label]</wicket:message></a>
                 </div>
                 
-                <span wicket:id="signInPanel"></span>
+                <form class="signInForm floatDiv" wicket:id="signInForm">
+                
+                  <fieldset>
+                    <div>
+                        <label><wicket:message key="label.username">Label Contents</wicket:message></label>
+                        <input class="inputText" wicket:id="username" type="text" />
+                    </div>
+                    <div>
+                        <label><wicket:message key="label.password">Label Contents</wicket:message></label>
+                        <input class="inputText" wicket:id="password" type="password" value="password" />
+                    </div>
+                    <div>
+                        <label for="rememberMe"><wicket:message key="label.remember">Label Contents</wicket:message></label>
+                        <input class="checkbox" id="rememberMe" type="checkbox"/>
+                    </div>
+                  </fieldset>
+                    <div class="submit">
+                        <input type="submit" class="button" wicket:id="submitLink">
+                        <span class="feedbackPanel" wicket:id="loginFeedback"></span>
+                    </div>
+                
+                
+                </form>
                 
                 <form class="resetForm floatDiv" wicket:id="resetForm">
                     <fieldset>

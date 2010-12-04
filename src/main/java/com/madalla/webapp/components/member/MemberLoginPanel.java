@@ -10,13 +10,17 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.model.util.MapModel;
 
@@ -26,11 +30,34 @@ import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.admin.member.MemberSession;
-import com.madalla.webapp.login.LoginPanel;
 
 public class MemberLoginPanel extends AbstractMemberPanel{
 	private static final long serialVersionUID = 1L;
 	private final static Log log = LogFactory.getLog(MemberLoginPanel.class);
+	
+	public abstract class SignInform extends Form<Object>{
+		private static final long serialVersionUID = 1L;
+		
+		public SignInform(final String id, final ICredentialHolder credentials) {
+			super(id);
+			
+			final TextField<String> username;
+			add(username = new RequiredTextField<String>("username", new PropertyModel<String>(credentials, "username")));
+			username.setRequired(true);
+			
+			final PasswordTextField password;
+			add(password = new PasswordTextField("password", new PropertyModel<String>(credentials,"password")));
+            password.setRequired(false);
+            
+//			add(new CheckBox("rememberMe", new PropertyModel<Boolean>(LoginPanel.this,
+//					"rememberMe")));
+			
+			username.setPersistent(true);
+		}
+		
+		public abstract boolean signIn(String username, String password);
+		
+	}
 	
 	public MemberLoginPanel(String id){
 		this(id, new SecureCredentials(), null);
@@ -57,29 +84,50 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 		};
 		add(loginInfo);
 		
-		final Component panel = new LoginPanel("signInPanel", credentials, true, destination){
-            private static final long serialVersionUID = 1L;
-            
-            @Override
-            public boolean signIn(String username, String password) {
-            	return session.signIn(username, password);
-            }
-            
+		final Form<Object> signinForm = new SignInform("signInForm", credentials){
+			private static final long serialVersionUID = 1L;
+
 			@Override
-			protected void onBeforeRender() {
-				setOutputMarkupId(true);
-				if (session.isSignedIn()){
-					setEnabled(false);
-				} else {
-					setEnabled(true);
-				}
-				super.onBeforeRender();
+			public boolean signIn(String username, String password) {
+				return session.signIn(username, password);
 			}
-            
-            
-        };
-        add(panel);
-        
+			
+		};
+		add(signinForm);
+		
+		final FeedbackPanel feedback = new FeedbackPanel("loginFeedback");
+		feedback.setOutputMarkupId(true);
+		signinForm.add(feedback);
+		
+		signinForm.add(new IndicatingAjaxButton("submitLink", signinForm){
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				log.debug("Ajax onError called");
+				target.addComponent(feedback);
+			}
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				log.debug("Ajax submit called");
+				target.addComponent(feedback);
+				
+//					if (signIn(getUsername(), getPassword())){
+//						feedback.info(getLocalizer().getString("signInFailed", this, "Success"));
+//						onSignInSucceeded(target);
+//					} else {
+//						feedback.error(getLocalizer().getString("signInFailed", this, "Sign in failed"));
+//						target.addComponent(feedback);
+//						onSignInFailed(getUsername());
+//					}
+				
+				
+			}
+			
+		});
+		
 		add(new AjaxFallbackLink<Object>("logout"){
 
 			private static final long serialVersionUID = 1L;
@@ -89,7 +137,6 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 				session.signOut();
 				target.addComponent(this);
 				target.addComponent(loginInfo);
-				target.addComponent(panel);
 				processSignOut();
 			}
 
@@ -112,15 +159,15 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 		final TextField<String> username ;
 		resetForm.add(username = new RequiredTextField<String>("memberId", new Model<String>(credentials.getUsername())));
 
-		final Component feedback;
-		resetForm.add(feedback = new ComponentFeedbackPanel("resetFeedback", username).setOutputMarkupId(true));
+		final Component resetFeedback;
+		resetForm.add(resetFeedback = new ComponentFeedbackPanel("resetFeedback", username).setOutputMarkupId(true));
 		resetForm.add(new IndicatingAjaxButton("submitLink", resetForm) {
 
 			private static final long serialVersionUID = 1L;
 			
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				target.addComponent(feedback);
+				target.addComponent(resetFeedback);
 			}
 
 			@Override
