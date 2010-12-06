@@ -7,7 +7,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -22,7 +21,6 @@ import com.madalla.bo.SiteData;
 import com.madalla.bo.member.MemberData;
 import com.madalla.db.dao.Member;
 import com.madalla.webapp.CmsApplication;
-import com.madalla.webapp.cms.ContentPanel;
 import com.madalla.wicket.form.AjaxValidationForm;
 import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 
@@ -96,9 +94,7 @@ public class MemberRegistrationPanel extends AbstractMemberPanel{
 	public MemberRegistrationPanel(String id) {
 		super(id);
 		
-		Form<MemberData> regForm;
-		add(regForm = new MemberRegistrationForm("regForm", new CompoundPropertyModel<MemberData>(new Member())));
-		regForm.add(new ContentPanel("regInfo"));
+		add(new MemberRegistrationForm("regForm", new CompoundPropertyModel<MemberData>(new Member())));
 		
 	}
 	
