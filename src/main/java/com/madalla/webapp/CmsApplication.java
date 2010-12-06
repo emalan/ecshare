@@ -215,14 +215,14 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     	getSharedResources().add(image.getResourceReference(), image.getImageFull());
 		mountSharedResource("/" + image.getMountUrl(), Application.class.getName() + "/" +image.getResourceReference());
     }
-    protected void setupErrorHandling(){
+    private void setupErrorHandling(){
     	
     	if (DEPLOYMENT.equalsIgnoreCase(getConfigurationType())) {
         	//TODO create page for access denied exceptions
     		//TODO figure out why we get unexpected exception instead of access denied for generalAdminPage
         	//getApplicationSettings().setPageExpiredErrorPage(MyExpiredPage.class);
         	//getApplicationSettings().setAccessDeniedPage(MyAccessDeniedPage.class);
-        	getApplicationSettings().setInternalErrorPage(AdminErrorPage.class);
+        	getApplicationSettings().setInternalErrorPage(getApplicationErrorPage());
         	getExceptionSettings().setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
 		}
     }
@@ -245,6 +245,10 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 	@Override
 	protected Class<? extends WebPage> getSignInPageClass() {
 		return UserLoginPage.class;
+	}
+	
+	protected Class<? extends WebPage> getApplicationErrorPage(){
+		return AdminErrorPage.class;
 	}
 
 	@Override
