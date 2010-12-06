@@ -1,8 +1,14 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
-        form.resetForm div.submit {
-            float: left;
+        
+        
+        form.signInForm  span.feedbackPanel, form.resetForm  span.feedbackPanel{
+            margin-top: 0;
+        }
+        
+        form.signInForm {
+           height: 9em;
         }
     </style>
 </wicket:head>
@@ -26,13 +32,9 @@
                         <label><wicket:message key="label.password">Label Contents</wicket:message></label>
                         <input class="inputText" wicket:id="password" type="password" value="password" />
                     </div>
-                    <div>
-                        <label for="rememberMe"><wicket:message key="label.remember">Label Contents</wicket:message></label>
-                        <input class="checkbox" id="rememberMe" type="checkbox"/>
-                    </div>
                   </fieldset>
                     <div class="submit">
-                        <input type="submit" class="button" wicket:id="submitLink">
+                        <input type="submit" class="button" wicket:id="submitLink" title="Login to Croptrak">
                         <span class="feedbackPanel" wicket:id="loginFeedback"></span>
                     </div>
                 
@@ -49,7 +51,7 @@
                         </div>
                     </fieldset>
                     <div class="submit">
-                        <input type="submit" class="button" wicket:id="submitLink">
+                        <input type="submit" class="button" wicket:id="submitLink" title="Reset password">
                         <span class="feedbackPanel" wicket:id="resetFeedback"></span>
                     </div>
                 </form>

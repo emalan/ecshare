@@ -8,9 +8,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
+import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -47,11 +47,8 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 			
 			final PasswordTextField password;
 			add(password = new PasswordTextField("password", new PropertyModel<String>(credentials,"password")));
-            password.setRequired(false);
+            password.setRequired(true);
             
-//			add(new CheckBox("rememberMe", new PropertyModel<Boolean>(LoginPanel.this,
-//					"rememberMe")));
-			
 			username.setPersistent(true);
 		}
 		
@@ -63,11 +60,22 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 		this(id, new SecureCredentials(), null);
 	}
 
-	public MemberLoginPanel(String id, final ICredentialHolder credentials, final Class<? extends Page> destination) {
+	public MemberLoginPanel(String id, final ICredentialHolder credentials, Class<? extends Page> destinationParam) {
 		super(id);
+		
+		final Class<? extends Page> destination = destinationParam == null? getApplication().getHomePage(): destinationParam;
 		
 		final MemberSession session = getAppSession().getMemberSession();
 		
+		//if we have a valid populated credential then validate
+		if (StringUtils.isNotEmpty(credentials.getUsername()) && StringUtils.isNotEmpty(credentials.getPassword()) &&
+				session.signIn(credentials.getUsername(), credentials.getPassword())){
+			
+			throw new RestartResponseAtInterceptPageException(destination);
+			
+		}
+		
+		// logged in message
 		final Component loginInfo = new Label("loginInfo", new StringResourceModel("login.info",new Model<MemberData>(session.getMember()))){
 			private static final long serialVersionUID = 1L;
 
@@ -95,34 +103,33 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 		};
 		add(signinForm);
 		
-		final FeedbackPanel feedback = new FeedbackPanel("loginFeedback");
-		feedback.setOutputMarkupId(true);
-		signinForm.add(feedback);
+		final FeedbackPanel signinFeedback = new FeedbackPanel("loginFeedback");
+		signinFeedback.setOutputMarkupId(true);
+		signinForm.add(signinFeedback);
 		
-		signinForm.add(new IndicatingAjaxButton("submitLink", signinForm){
+		signinForm.add(new IndicatingAjaxButton("submitLink", new Model<String>(getString("label.login")), signinForm){
 
             private static final long serialVersionUID = 1L;
 
             @Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax onError called");
-				target.addComponent(feedback);
+				target.addComponent(signinFeedback);
 			}
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax submit called");
-				target.addComponent(feedback);
+				target.addComponent(signinFeedback);
 				
-//					if (signIn(getUsername(), getPassword())){
-//						feedback.info(getLocalizer().getString("signInFailed", this, "Success"));
-//						onSignInSucceeded(target);
-//					} else {
-//						feedback.error(getLocalizer().getString("signInFailed", this, "Sign in failed"));
-//						target.addComponent(feedback);
-//						onSignInFailed(getUsername());
-//					}
-				
+				if (session.signIn(credentials.getUsername(), credentials.getPassword())){
+					signinFeedback.info(getLocalizer().getString("signInFailed", this, "Success"));
+					setResponsePage(destination);
+				} else {
+					signinFeedback.error(getLocalizer().getString("signInFailed", this, "Sign in failed"));
+					target.addComponent(signinFeedback);
+					processSignOut();
+				}
 				
 			}
 			
@@ -135,7 +142,6 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				session.signOut();
-				target.addComponent(this);
 				target.addComponent(loginInfo);
 				processSignOut();
 			}
@@ -152,7 +158,7 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 			
 		});
 		
-		
+		// Reset Form
 		final Form<String> resetForm;
 		add(resetForm = new Form<String>("resetForm"));
 		
@@ -161,7 +167,7 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 
 		final Component resetFeedback;
 		resetForm.add(resetFeedback = new ComponentFeedbackPanel("resetFeedback", username).setOutputMarkupId(true));
-		resetForm.add(new IndicatingAjaxButton("submitLink", resetForm) {
+		resetForm.add(new IndicatingAjaxButton("submitLink", new Model<String>(getString("label.reset")), resetForm) {
 
 			private static final long serialVersionUID = 1L;
 			
@@ -172,6 +178,8 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				target.addComponent(resetFeedback);
+				
 				final String memberId = username.getModelObject();
 				
 				if (memberExists(memberId)) {
@@ -179,7 +187,7 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 					final String email = member.getEmail();
 					if (StringUtils.isNotEmpty(email)){
 						if (sendEmail(member)){
-							username.info(getString("message.success"));
+							username.info(getString("message.reset.success"));
 						} else {
 							log.error("password reset - Send failure! " + member);
 							username.error(getString("error.reset"));
@@ -191,7 +199,7 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 				} else {
 					username.error(getString("error.reset"));
 				}
-				target.addComponent(feedback);
+				target.addComponent(resetFeedback);
 			}	
 		});
 	}
@@ -233,7 +241,6 @@ public class MemberLoginPanel extends AbstractMemberPanel{
     protected String getEmailSubject(){
     	return "Registration";
     }
-	
-
+    
 
 }
