@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Page;
@@ -41,7 +42,9 @@ public class PageAdminPanel extends CmsPanel {
 
 					@Override
 					void preSaveProcessing(String existingMount, String newMount) {
-						getCmsApplication().unmount(existingMount);
+						if (StringUtils.isNotEmpty(existingMount)){
+							getCmsApplication().unmount(existingMount);
+						}
 						Class <? extends Page> page = getPageClass(item.getModelObject().getName());
 						if (page != null){
 							try {
