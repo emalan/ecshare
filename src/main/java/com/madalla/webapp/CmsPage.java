@@ -1,6 +1,9 @@
 package com.madalla.webapp;
 
 import static com.madalla.webapp.blog.BlogParameters.BLOG_ENTRY_ID;
+import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
+import static com.madalla.webapp.scripts.utility.ScriptUtils.CROSSFADE;
+import static com.madalla.webapp.scripts.utility.ScriptUtils.FAST_INIT;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -48,6 +51,7 @@ import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.LoginPanel;
 import com.madalla.webapp.modal.EcModalWindow;
 import com.madalla.webapp.scripts.JavascriptResources;
+import com.madalla.webapp.scripts.utility.ScriptUtils;
 import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.wicket.animation.Animator;
 import com.madalla.wicket.animation.AnimatorSubject;
@@ -148,6 +152,15 @@ public abstract class CmsPage extends WebPage {
 			setupInfoDialog();
 		} else {
 			add(new Label("infoDialog").setVisible(false));
+		}
+		
+		if (hasCrossfadeSupport()){
+	    	add(JavascriptPackageResource.getHeaderContribution(PROTOTYPE));
+			add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.ANIMATOR));
+	        add(JavascriptPackageResource.getHeaderContribution(FAST_INIT));
+	        
+	        add(JavascriptPackageResource.getHeaderContribution(CROSSFADE));
+			add(ScriptUtils.CROSSFADE_CSS);
 		}
 		
 	}
@@ -378,6 +391,17 @@ public abstract class CmsPage extends WebPage {
 	protected boolean hasInfoDialog() {
 		return false;
 	}
+	
+	/**
+	 * Crossfade support allows you to identify a Rotating list by adding a class
+	 * of .crossfade
+	 * 
+	 * @return true if you want support for Crossfade
+	 */
+	protected boolean hasCrossfadeSupport() {
+		return false;
+	}
+
 	
 	/**
 	 * Add a Text Content Panel to this page. NOTE: be careful when using this method

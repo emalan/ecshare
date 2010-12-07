@@ -30,7 +30,6 @@ import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.admin.member.MemberSession;
-import com.madalla.webapp.cms.ContentPanel;
 
 public class MemberLoginPanel extends AbstractMemberPanel{
 	private static final long serialVersionUID = 1L;

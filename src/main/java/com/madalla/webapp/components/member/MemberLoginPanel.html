@@ -10,6 +10,7 @@
         form.signInForm {
            height: 9em;
         }
+        
     </style>
 </wicket:head>
 <body>
@@ -43,6 +44,9 @@
                 
                 <form class="resetForm floatDiv" wicket:id="resetForm">
                     <fieldset>
+                        <div>
+                            <p class="info"><wicket:message key="info.reset"></wicket:message></p>
+                        </div>
                         <div>
                             <label for="memberId">
                                 <wicket:message key="label.memberId">[label]</wicket:message>
