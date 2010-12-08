@@ -7,11 +7,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -30,6 +32,7 @@ import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.admin.member.MemberSession;
+import com.madalla.wicket.animation.AnimationOpenSlide;
 
 public class MemberLoginPanel extends AbstractMemberPanel{
 	private static final long serialVersionUID = 1L;
@@ -158,9 +161,17 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 			
 		});
 		
+		Component resetLink = new Label("resetLink", getString("label.forgot"));
+		add(resetLink);
+		
+		MarkupContainer resetDiv = new WebMarkupContainer("resetDiv");
+		add(resetDiv);
+		
+		resetLink.add(new AnimationOpenSlide("onclick", resetDiv, 10,"em"));
+		
 		// Reset Form
 		final Form<String> resetForm;
-		add(resetForm = new Form<String>("resetForm"));
+		resetDiv.add(resetForm = new Form<String>("resetForm"));
 		
 		final TextField<String> username ;
 		resetForm.add(username = new RequiredTextField<String>("memberId", new Model<String>(credentials.getUsername())));

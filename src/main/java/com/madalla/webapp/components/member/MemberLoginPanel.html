@@ -11,6 +11,13 @@
            height: 9em;
         }
         
+        .resetLink { 
+            margin-left: 1em;
+            outline: none;
+        }
+        .resetLink:hover, .resetLink:active {outline : none;}
+        .links {height: 2em;}    
+        
     </style>
 </wicket:head>
 <body>
@@ -41,7 +48,10 @@
                 
                 
                 </form>
-                
+                <div class="links">
+                    <a class="resetLink" wicket:id="resetLink" href="#" ></a>
+                </div>
+                <div style="overflow:hidden; height: 10em; display:none;" wicket:id="resetDiv">
                 <form class="resetForm floatDiv" wicket:id="resetForm">
                     <fieldset>
                         <div>
@@ -59,7 +69,7 @@
                         <span class="feedbackPanel" wicket:id="resetFeedback"></span>
                     </div>
                 </form>
-    
+                </div>
         </div>
 
     </wicket:panel>
