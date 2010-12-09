@@ -85,6 +85,9 @@ public class MemberRegistrationPanel extends AbstractMemberPanel{
 			
 			if (sendEmail( member)){
                 info(getString("message.success"));
+                this.reset(target);
+                setModelObject(new Member());
+                
             } else {
                 error(getString("message.fail.email"));
             }

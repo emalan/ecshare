@@ -32,12 +32,11 @@ public class ValidationStyleBehaviour extends AbstractBehavior {
 		this.invalidClass = invalidClass;
 	}
 
-
-	@SuppressWarnings("unchecked")
 	@Override
 	public void onComponentTag(final Component component, final ComponentTag tag) {
 		log.debug("onComponentTag - "+component);
 		if (component instanceof FormComponent) {
+			@SuppressWarnings("rawtypes")
 			FormComponent formComponent = (FormComponent) component;
 			processFormComponent(formComponent, tag);
 		}
@@ -46,7 +45,7 @@ public class ValidationStyleBehaviour extends AbstractBehavior {
 	private void processFormComponent(FormComponent<?> comp, ComponentTag tag) {
 		if (comp.isValid() && comp.getConvertedInput() != null) {
 			log.debug("onComponentTag - Valid, setting class to " + validClass
-					+ ". component=" + comp.getId());
+					+ ". component=" + comp.getId() + ", value=" + comp.getConvertedInput());
 			tag.getAttributes().put("class", validClass);
 		} else if (!comp.isValid()) {
 			log.debug("onComponentTag - Invalid, setting class to "

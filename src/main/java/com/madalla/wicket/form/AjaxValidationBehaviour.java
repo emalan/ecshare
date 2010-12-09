@@ -2,7 +2,6 @@ package com.madalla.wicket.form;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -53,8 +52,8 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 		this.invalidClass = invalidClass;
 	}
 	
-	@Override
-	public void beforeRender(Component component){
+	public void reset(AjaxRequestTarget target){
+		log.debug("reset - "+getFormComponent());
 	}
 	
 	@Override
@@ -92,7 +91,7 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.renderJavascriptReference(Scriptaculous.PROTOTYPE);
+		response.renderJavascriptReference(Scriptaculous.PROTOTYPE);//TODO make sure this needs prototype ???
 		animator.setUniqueId(getComponent().getMarkupId());
 		animator.addSubject(AnimatorSubject.numeric(getComponent().getMarkupId(),"opacity", 1, 0.25));
 		animator.renderHead(response);
