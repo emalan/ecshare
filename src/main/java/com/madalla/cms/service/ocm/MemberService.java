@@ -27,6 +27,7 @@ public class MemberService {
 	
     public boolean saveMember(MemberData member){
     	log.debug("saveMember - "+ member);
+    	authenticator.clearUser(member.getName());
     	return memberDao.save(member);
     }
     
@@ -40,6 +41,10 @@ public class MemberService {
     
     public List<Member> getMembers(){
     	return memberDao.fetch();
+    }
+    
+    public void deleteMember(MemberData data){
+    	memberDao.delete(data);
     }
 	
 	public IPasswordAuthenticator getPasswordAuthenticator(final String name){

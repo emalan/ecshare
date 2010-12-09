@@ -105,6 +105,7 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 			
 		};
 		add(signinForm);
+		signinForm.setEnabled(!session.isSignedIn());
 		
 		final FeedbackPanel signinFeedback = new FeedbackPanel("loginFeedback");
 		signinFeedback.setOutputMarkupId(true);
@@ -131,7 +132,6 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 				} else {
 					signinFeedback.error(getLocalizer().getString("signInFailed", this, "Sign in failed"));
 					target.addComponent(signinFeedback);
-					processSignOut();
 				}
 				
 			}
@@ -163,6 +163,7 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 		
 		Component resetLink = new Label("resetLink", getString("label.forgot"));
 		add(resetLink);
+		resetLink.setVisible(!session.isSignedIn());
 		
 		MarkupContainer resetDiv = new WebMarkupContainer("resetDiv");
 		add(resetDiv);

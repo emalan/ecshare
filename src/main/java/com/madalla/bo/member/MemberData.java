@@ -1,5 +1,8 @@
 package com.madalla.bo.member;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+
 import com.madalla.bo.AbstractData;
 import com.madalla.bo.security.IUserValidate;
 
@@ -27,5 +30,13 @@ public abstract class MemberData extends AbstractData implements IMemberData, IU
     
     public boolean isAuthorized(){
     	return getAuthorizedDate() == null ? false : true;
+    }
+    
+    public void setAuthorized(final boolean authorized){
+    	if (authorized && !isAuthorized()){
+    		setAuthorizedDate(new DateTime(DateTimeZone.UTC));
+    	} else if (!authorized && isAuthorized()){
+    		setAuthorizedDate(null);
+    	}
     }
 }

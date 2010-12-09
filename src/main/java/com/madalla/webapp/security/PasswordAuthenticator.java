@@ -47,6 +47,10 @@ public class PasswordAuthenticator implements IPasswordAuthenticator, Serializab
 		}
 
 	}
+	
+	public void clearUser(String username){
+		users.remove(username);
+	}
 
 	public void addUser(String username, IUserValidate userData){
 		if (!users.containsKey(username) || 

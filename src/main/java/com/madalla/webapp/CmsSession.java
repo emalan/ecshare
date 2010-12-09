@@ -12,6 +12,7 @@ import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
 import org.apache.wicket.session.pagemap.IPageMapEntry;
 
+import com.madalla.bo.member.MemberData;
 import com.madalla.bo.security.IUser;
 import com.madalla.bo.security.ProfileData;
 import com.madalla.bo.security.UserData;
@@ -52,7 +53,12 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 		protected boolean authenticateMember(String memberName, String password) {
 			IPasswordAuthenticator authenticator = getDataService().getMemberAuthenticator(memberName);
 			if (authenticator.authenticate(memberName, password)){
-				setMember(getDataService().getMember(memberName));
+				MemberData member = getDataService().getMember(memberName);
+				if (!member.isAuthorized()){
+					member.setAuthorized(true);
+					getDataService().saveMember(member);
+				}
+				setMember(member);
 				return true;
 			}
 			return false;

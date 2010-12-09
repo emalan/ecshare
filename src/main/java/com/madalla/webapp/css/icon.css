@@ -1,6 +1,12 @@
+.deleteLink {
+    background: transparent url(image/delete.png) no-repeat scroll center top;
+    width: 16px; height: 16px;
+    position: absolute;
+}
+
 .editLink {
-                    background: transparent url(image/pencil_icon.gif) no-repeat scroll center top;
-                    width: 10px; height: 15px;
+    background: transparent url(image/pencil_icon.gif) no-repeat scroll center top;
+    width: 10px; height: 15px;
 }
 
 span.configure, div.configure{

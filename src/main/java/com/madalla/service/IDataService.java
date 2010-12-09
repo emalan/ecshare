@@ -163,6 +163,8 @@ public interface IDataService {
     MemberData getMember(String memberId);
     
     MemberData getMemberById(String id);
+    
+    void deleteMember(MemberData data);
 	
 	//User
 	ProfileData getProfile(String identifier);

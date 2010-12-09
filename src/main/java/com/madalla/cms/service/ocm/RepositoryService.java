@@ -64,7 +64,6 @@ import com.madalla.cms.service.ocm.template.RepositoryTemplateCallback;
 import com.madalla.cms.service.ocm.util.JcrOcmUtils;
 import com.madalla.db.dao.EmailEntry;
 import com.madalla.db.dao.EmailEntryDao;
-import com.madalla.db.dao.Member;
 import com.madalla.db.dao.TransactionLogDao;
 import com.madalla.image.ImageUtilities;
 import com.madalla.service.IDataService;
@@ -526,6 +525,10 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     
     public MemberData getMemberById(String id){
     	return memberService.getMemberById(id);
+    }
+    
+    public void deleteMember(MemberData data){
+    	memberService.deleteMember(data);
     }
     
     //**********************************

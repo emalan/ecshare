@@ -7,20 +7,27 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import com.madalla.bo.member.MemberData;
 import com.madalla.webapp.CmsPanel;
+import com.madalla.webapp.css.Css;
 
 public class MemberAdminPanel extends CmsPanel {
 	private static final long serialVersionUID = 1L;
@@ -141,7 +148,14 @@ public class MemberAdminPanel extends CmsPanel {
 	public MemberAdminPanel(String id) {
 		super(id);
 		
+		add(Css.CSS_ICON);
+		
+		
 		dateTimeZone = getRepositoryService().getDateTimeZone();
+		
+		final MarkupContainer container ;
+		add(container = new WebMarkupContainer("memberContainer"));
+		container.setOutputMarkupId(true);
 		
 		final SortableMemberProvider provider = new SortableMemberProvider();
 		final DataView<MemberData> dataView = new DataView<MemberData>("memberSorting", provider){
@@ -150,7 +164,7 @@ public class MemberAdminPanel extends CmsPanel {
 
 			@Override
 			protected void populateItem(final Item<MemberData> item) {
-				MemberData entry = item.getModelObject();
+				final MemberData entry = item.getModelObject();
 				item.add(new Label("id", entry.getId()));
 				item.add(new Label("loginId", entry.getMemberId()));
 				item.add(new Label("firstName", entry.getFirstName()));
@@ -159,6 +173,27 @@ public class MemberAdminPanel extends CmsPanel {
 				DateTime dateTime = entry.getSignupDate().toDateTime(dateTimeZone);
 				item.add(new Label("date", dateTime.toString("yyyy-MM-dd")));
 				item.add(new Label("auth", entry.isAuthorized()? "Yes":"No"));
+				item.add(new IndicatingAjaxLink<String>("delete", new Model<String>("")){
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						getRepositoryService().deleteMember(entry);
+						target.addComponent(container);
+					}
+					
+				});
+				item.add(new Link<Void>("memberEdit"){
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick() {
+						getPage().replace(new MemberProfilePanel("adminPanel", entry));
+						
+					}
+					
+				});
 				
 				item.add(new AttributeModifier("class", true, new AbstractReadOnlyModel<Object>() {
 					private static final long serialVersionUID = 1L;
@@ -172,9 +207,11 @@ public class MemberAdminPanel extends CmsPanel {
 
 		};
 		
+		container.add(dataView);
+		
 		dataView.setItemsPerPage(10);
 		
-		add(new OrderByBorder("orderById", "id", provider) {
+		container.add(new OrderByBorder("orderById", "id", provider) {
 			private static final long serialVersionUID = 1L;
 
 			protected void onSortChanged() {
@@ -182,7 +219,7 @@ public class MemberAdminPanel extends CmsPanel {
             }
         });
 		
-		add(new OrderByBorder("orderByLoginId", "loginId", provider) {
+		container.add(new OrderByBorder("orderByLoginId", "loginId", provider) {
 			private static final long serialVersionUID = 1L;
 
 			protected void onSortChanged() {
@@ -190,7 +227,7 @@ public class MemberAdminPanel extends CmsPanel {
             }
         });
 		
-		add(new OrderByBorder("orderByCompanyName", "companyName", provider) {
+		container.add(new OrderByBorder("orderByCompanyName", "companyName", provider) {
 			private static final long serialVersionUID = 1L;
 
 			protected void onSortChanged() {
@@ -198,7 +235,7 @@ public class MemberAdminPanel extends CmsPanel {
             }
         });
 		
-		add(new OrderByBorder("orderByFirstName", "firstName", provider) {
+		container.add(new OrderByBorder("orderByFirstName", "firstName", provider) {
 			private static final long serialVersionUID = 1L;
 
 			protected void onSortChanged() {
@@ -206,7 +243,7 @@ public class MemberAdminPanel extends CmsPanel {
             }
         });
 
-		add(new OrderByBorder("orderByLastName", "lastName", provider) {
+		container.add(new OrderByBorder("orderByLastName", "lastName", provider) {
 			private static final long serialVersionUID = 1L;
 
 			protected void onSortChanged() {
@@ -214,7 +251,7 @@ public class MemberAdminPanel extends CmsPanel {
             }
         });
 
-		add(dataView);
+		
 		
 		add(new PagingNavigator("navigator", dataView));
 		

@@ -12,7 +12,7 @@
             
             <div id="memberDiv">
                 <span wicket:id="navigator">[dataview navigator]</span>
-                <table cellspacing="0" class="dataview">
+                <table cellspacing="0" class="dataview" wicket:id="memberContainer">
                     <tr>
                         <th wicket:id="orderById"><wicket:message key="label.id">Label Contents</wicket:message></th>
                         <th wicket:id="orderByLoginId"><wicket:message key="label.loginId">Label Contents</wicket:message></th>
@@ -21,6 +21,8 @@
                         <th wicket:id="orderByCompanyName"><wicket:message key="label.companyName">Label Contents</wicket:message></th>
                         <th><wicket:message key="label.signupDate">Label Contents</wicket:message></th>
                         <th><wicket:message key="label.auth">Label Contents</wicket:message></th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     <tr wicket:id="memberSorting">
                         <td><span wicket:id="id">[Label]</span></td>
@@ -30,6 +32,8 @@
                         <td><span wicket:id="companyName">[Label]</span></td>
                         <td><span wicket:id="date">[Label]</span></td>
                         <td><span wicket:id="auth">[Label]</span></td>
+                        <td><a class="deleteLink" wicket:id="delete"></a></td>
+                        <td><a class="memberEdit" wicket:id="memberEdit"><wicket:message key="label.edit"></wicket:message></a></td>
                     </tr>
                 </table>
             </div>
