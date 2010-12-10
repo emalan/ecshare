@@ -1,7 +1,9 @@
 <html xmlns:wicket>
 <wicket:head>
     <style type="text/css">
-
+        #siteadmin form label {
+            width: 16em;
+        }
     </style>
 </wicket:head>
 <body>
@@ -10,7 +12,7 @@
         <div id="siteadmin" class="adminSection">
             
             <a wicket:id="memberAdminLink"><wicket:message key="label.member.back">[label]</wicket:message></a>
-            <h2><wicket:message key="heading.member">Label Contents</wicket:message></h2>
+            <h2 wicket:id="memberHeading">[label]</h2>
             
         
         <form class="textBlock floatDiv" wicket:id="memberForm">
@@ -48,6 +50,12 @@
                 </label>
                 <input class="checkbox" type="checkbox" wicket:id="authorized"/>
             </div>
+            <div>
+                <label for="subscriptionEnd">
+                    <wicket:message key="label.subscription">[label]</wicket:message>
+                </label>
+                <input id="subscriptionEnd" class="inputText" type="text" wicket:id="subscriptionEnd"/>
+            </div>            
           </fieldset>
           <div class="submit">
                 <input class="button" type="submit" value="Submit" wicket:id="formSubmit" wicket:message="value:label.submit.registration"/> 

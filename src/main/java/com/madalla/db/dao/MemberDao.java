@@ -16,11 +16,11 @@ import com.madalla.bo.member.MemberData;
 public class MemberDao extends AbstractDao {
 
 	private static final String INSERT = "insert into MEMBER (SITE_NAME,MEMBER_ID,FIRST_NAME,LAST_NAME,COMPANY_NAME,MEMBER_EMAIL,SIGNUP_DATE,PASSWORD) values (?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String FIND = "select ID,SITE_NAME,MEMBER_ID,FIRST_NAME,LAST_NAME,COMPANY_NAME,MEMBER_EMAIL,SIGNUP_DATE,PASSWORD,AUTHORIZED_DATE from MEMBER where MEMBER_ID = ?";
-	private static final String UPDATE = "update MEMBER set FIRST_NAME=?, LAST_NAME=?, COMPANY_NAME=?, MEMBER_EMAIL=?, PASSWORD=?,AUTHORIZED_DATE=? where ID = ?";
+	private static final String FIND = "select ID,SITE_NAME,MEMBER_ID,FIRST_NAME,LAST_NAME,COMPANY_NAME,MEMBER_EMAIL,SIGNUP_DATE,PASSWORD,AUTHORIZED_DATE,SUBSCRIPTION_END_DATE from MEMBER where MEMBER_ID = ?";
+	private static final String UPDATE = "update MEMBER set FIRST_NAME=?, LAST_NAME=?, COMPANY_NAME=?, MEMBER_EMAIL=?, PASSWORD=?,AUTHORIZED_DATE=?,SUBSCRIPTION_END_DATE=? where ID = ?";
 	private static final String DELETE = "delete from MEMBER where ID = ?";
-	private static final String FETCH = "select ID,SITE_NAME,MEMBER_ID,FIRST_NAME,LAST_NAME,COMPANY_NAME,MEMBER_EMAIL,SIGNUP_DATE,PASSWORD,AUTHORIZED_DATE from MEMBER where SITE_NAME = ?";
-	private static final String GET = "select ID,SITE_NAME,MEMBER_ID,FIRST_NAME,LAST_NAME,COMPANY_NAME,MEMBER_EMAIL,SIGNUP_DATE,PASSWORD,AUTHORIZED_DATE from MEMBER where ID = ?";
+	private static final String FETCH = "select ID,SITE_NAME,MEMBER_ID,FIRST_NAME,LAST_NAME,COMPANY_NAME,MEMBER_EMAIL,SIGNUP_DATE,PASSWORD,AUTHORIZED_DATE,SUBSCRIPTION_END_DATE from MEMBER where SITE_NAME = ?";
+	private static final String GET = "select ID,SITE_NAME,MEMBER_ID,FIRST_NAME,LAST_NAME,COMPANY_NAME,MEMBER_EMAIL,SIGNUP_DATE,PASSWORD,AUTHORIZED_DATE,SUBSCRIPTION_END_DATE from MEMBER where ID = ?";
 
 	private ParameterizedRowMapper<Member> mapper = new ParameterizedRowMapper<Member>() {
 
@@ -38,6 +38,7 @@ public class MemberDao extends AbstractDao {
 			if (authDate != null){
 				data.setAuthorizedDate(new DateTime(authDate, DateTimeZone.UTC));
 			}
+			data.setSubscriptionEnd(rs.getDate("SUBSCRIPTION_END_DATE"));
 			return data;
 		}
 	};
@@ -51,7 +52,8 @@ public class MemberDao extends AbstractDao {
 		int count = 0;
 		if (exists(data.getMemberId())){
 			count = template.update(UPDATE, new Object[] { data.getFirstName(), data.getLastName(), data.getCompanyName(), 
-					data.getEmail(), data.getPassword(), data.getAuthorizedDate() == null? null:data.getAuthorizedDate().toDate(), data.getId()});
+					data.getEmail(), data.getPassword(), data.getAuthorizedDate() == null? null:data.getAuthorizedDate().toDate(), 
+							data.getSubscriptionEnd(), data.getId()});
 		} else {
 			count = template.update(INSERT, new Object[] { site, data.getMemberId(), data.getFirstName(), data.getLastName(), data.getCompanyName(), 
 					data.getEmail(), new DateTime(DateTimeZone.UTC).toDate(), data.getPassword() });

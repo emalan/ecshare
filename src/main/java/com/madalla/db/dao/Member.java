@@ -1,5 +1,7 @@
 package com.madalla.db.dao;
 
+import java.util.Date;
+
 import org.joda.time.DateTime;
 
 import com.madalla.bo.member.MemberData;
@@ -16,6 +18,7 @@ public class Member extends MemberData {
 	private String email;
 	private DateTime signupDate;
 	private DateTime authorizedDate;
+	private Date subscriptionEnd;
 
 	public int getKey(){
 		return id;
@@ -76,6 +79,12 @@ public class Member extends MemberData {
 	}
 	public void setAuthorizedDate(DateTime authorizedDate) {
 		this.authorizedDate = authorizedDate;
+	}
+	public void setSubscriptionEnd(Date subscriptionEnd) {
+		this.subscriptionEnd = subscriptionEnd;
+	}
+	public Date getSubscriptionEnd() {
+		return subscriptionEnd;
 	}
 
 }

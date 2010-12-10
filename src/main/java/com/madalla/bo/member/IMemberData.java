@@ -1,5 +1,7 @@
 package com.madalla.bo.member;
 
+import java.util.Date;
+
 import org.joda.time.DateTime;
 
 public interface IMemberData {
@@ -35,5 +37,9 @@ public interface IMemberData {
 	DateTime getAuthorizedDate();
 
 	void setAuthorizedDate(DateTime authorizedDate);
+	
+	Date getSubscriptionEnd();
+	
+	void setSubscriptionEnd(Date subscriptionEnd);
 
 }

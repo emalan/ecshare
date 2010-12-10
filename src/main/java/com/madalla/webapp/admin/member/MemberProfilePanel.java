@@ -1,11 +1,18 @@
 package com.madalla.webapp.admin.member;
 
+import java.util.Map;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.datetime.markup.html.form.DateTextField;
+import org.apache.wicket.extensions.yui.calendar.DatePicker;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import com.madalla.bo.member.MemberData;
@@ -41,6 +48,20 @@ public class MemberProfilePanel extends CmsPanel{
 			
 			add(new CheckBox("authorized"));
 			
+			final DateTextField subscriptionEnd;
+			add(subscriptionEnd = DateTextField.forDateStyle("subscriptionEnd", "S-"));
+			subscriptionEnd.add(new DatePicker(){
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void configure(Map<String, Object> widgetProperties) {
+					super.configure(widgetProperties);
+					widgetProperties.put("title", Boolean.FALSE);
+					widgetProperties.put("close", Boolean.FALSE);
+				}
+			});
+			
+			
 		}
 
 		@Override
@@ -52,6 +73,7 @@ public class MemberProfilePanel extends CmsPanel{
 	public MemberProfilePanel(final String id, final MemberData entry) {
 		super(id);
 		
+		add(new Label("memberHeading", new StringResourceModel("heading.member", this, new Model<MemberData>(entry))));
 		add(new AdminPanelLink("memberAdminLink", MemberAdminPanel.class));
 		
 		add(new MemberForm("memberForm", new CompoundPropertyModel<MemberData>(entry)));
