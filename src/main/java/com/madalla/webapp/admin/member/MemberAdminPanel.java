@@ -22,8 +22,6 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 import com.madalla.bo.member.MemberData;
 import com.madalla.webapp.CmsPanel;
@@ -32,8 +30,6 @@ import com.madalla.webapp.css.Css;
 public class MemberAdminPanel extends CmsPanel {
 	private static final long serialVersionUID = 1L;
 
-	private final DateTimeZone dateTimeZone;
-	
 	private class SortableMemberProvider extends SortableDataProvider<MemberData>{
 		
 		private static final long serialVersionUID = 1L;
@@ -150,9 +146,6 @@ public class MemberAdminPanel extends CmsPanel {
 		
 		add(Css.CSS_ICON);
 		
-		
-		dateTimeZone = getRepositoryService().getDateTimeZone();
-		
 		final MarkupContainer container ;
 		add(container = new WebMarkupContainer("memberContainer"));
 		container.setOutputMarkupId(true);
@@ -165,14 +158,13 @@ public class MemberAdminPanel extends CmsPanel {
 			@Override
 			protected void populateItem(final Item<MemberData> item) {
 				final MemberData entry = item.getModelObject();
-				item.add(new Label("id", entry.getId()));
+				//item.add(new Label("id", entry.getId()));
 				item.add(new Label("loginId", entry.getMemberId()));
 				item.add(new Label("firstName", entry.getFirstName()));
 				item.add(new Label("lastName", entry.getLastName()));
 				item.add(new Label("companyName", entry.getCompanyName()));
-				DateTime dateTime = entry.getSignupDate().toDateTime(dateTimeZone);
-				item.add(new Label("date", dateTime.toString("yyyy-MM-dd")));
 				item.add(new Label("auth", entry.isAuthorized()? "Yes":"No"));
+				item.add(new Label("subscribed", entry.isMemberSubscribed()? "Yes":"No"));
 				item.add(new IndicatingAjaxLink<String>("delete", new Model<String>("")){
 					private static final long serialVersionUID = 1L;
 
@@ -211,13 +203,13 @@ public class MemberAdminPanel extends CmsPanel {
 		
 		dataView.setItemsPerPage(10);
 		
-		container.add(new OrderByBorder("orderById", "id", provider) {
-			private static final long serialVersionUID = 1L;
-
-			protected void onSortChanged() {
-				dataView.setCurrentPage(0);
-            }
-        });
+//		container.add(new OrderByBorder("orderById", "id", provider) {
+//			private static final long serialVersionUID = 1L;
+//
+//			protected void onSortChanged() {
+//				dataView.setCurrentPage(0);
+//            }
+//        });
 		
 		container.add(new OrderByBorder("orderByLoginId", "loginId", provider) {
 			private static final long serialVersionUID = 1L;

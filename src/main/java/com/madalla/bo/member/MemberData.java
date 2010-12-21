@@ -39,4 +39,11 @@ public abstract class MemberData extends AbstractData implements IMemberData, IU
     		setAuthorizedDate(null);
     	}
     }
+    
+    public boolean isMemberSubscribed(){
+    	if (getSubscriptionEnd() != null){
+    		return new DateTime(getSubscriptionEnd()).isAfter(new DateTime(DateTimeZone.UTC));
+    	}
+    	return false;
+    }
 }

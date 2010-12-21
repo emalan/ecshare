@@ -2,6 +2,7 @@ package com.madalla.webapp.admin.member;
 
 import java.util.Map;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
@@ -14,6 +15,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import com.madalla.bo.member.MemberData;
 import com.madalla.webapp.CmsPanel;
@@ -23,12 +26,23 @@ import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 
 public class MemberProfilePanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
+	
+	private DateTimeZone dateTimeZone;
 
 	public class MemberForm extends AjaxValidationForm<MemberData> {
 		private static final long serialVersionUID = 1L;
 		
+		Component authDateLabel;
+		
 		public MemberForm(String id, IModel<MemberData> model){
 			super(id, model);
+			
+			DateTime signupDate = model.getObject().getSignupDate() == null? null : model.getObject().getSignupDate().toDateTime(dateTimeZone);
+			add(new Label("signupDate", signupDate == null? "" : signupDate.toString("yyyy-MM-dd HH:mm")));
+			
+			DateTime authorizedDate = model.getObject().getAuthorizedDate() == null ? null : model.getObject().getAuthorizedDate().toDateTime(dateTimeZone);
+			add(authDateLabel = new Label("authorizedDate", authorizedDate == null? "" : authorizedDate.toString("yyyy-MM-dd HH:mm")));
+			authDateLabel.setOutputMarkupId(true);
 			
 			FeedbackPanel emailFeedback;
 			add(emailFeedback = new FeedbackPanel("emailFeedback"));
@@ -49,7 +63,7 @@ public class MemberProfilePanel extends CmsPanel{
 			add(new CheckBox("authorized"));
 			
 			final DateTextField subscriptionEnd;
-			add(subscriptionEnd = DateTextField.forDateStyle("subscriptionEnd", "S-"));
+			add(subscriptionEnd = DateTextField.forDatePattern("subscriptionEnd", "yyyy-MM-dd"));
 			subscriptionEnd.add(new DatePicker(){
 				private static final long serialVersionUID = 1L;
 
@@ -61,17 +75,19 @@ public class MemberProfilePanel extends CmsPanel{
 				}
 			});
 			
-			
 		}
 
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
 			getRepositoryService().saveMember(getModelObject());
 			info(getString("message.success"));
+			target.addComponent(authDateLabel);
 		}
 	}
 	public MemberProfilePanel(final String id, final MemberData entry) {
 		super(id);
+		
+		dateTimeZone = getRepositoryService().getDateTimeZone();
 		
 		add(new Label("memberHeading", new StringResourceModel("heading.member", this, new Model<MemberData>(entry))));
 		add(new AdminPanelLink("memberAdminLink", MemberAdminPanel.class));

@@ -18,6 +18,20 @@
         <form class="textBlock floatDiv" wicket:id="memberForm">
           <fieldset>
             <div>
+                <label><wicket:message key="label.date.signup">Label Contents</wicket:message></label>
+                <span wicket:id="signupDate"></span>
+            </div>
+            <div>
+                <label><wicket:message key="label.date.authorized">Label Contents</wicket:message></label>
+                <span wicket:id="authorizedDate"></span>
+            </div>
+            <div>
+                <label for="authorize">
+                    <wicket:message key="label.authorize">[label]</wicket:message>
+                </label>
+                <input class="checkbox" type="checkbox" wicket:id="authorized"/>
+            </div>
+            <div>
                 <label for="email">
                     <wicket:message key="label.email">[label]</wicket:message>
                 </label>
@@ -43,12 +57,6 @@
                     <wicket:message key="label.company">[label]</wicket:message>
                 </label>
                 <input id="companyName" class="inputText" wicket:id="companyName" type="text" />
-            </div>
-            <div>
-                <label for="authorize">
-                    <wicket:message key="label.authorize">[label]</wicket:message>
-                </label>
-                <input class="checkbox" type="checkbox" wicket:id="authorized"/>
             </div>
             <div>
                 <label for="subscriptionEnd">

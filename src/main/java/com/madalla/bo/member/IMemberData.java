@@ -42,4 +42,5 @@ public interface IMemberData {
 	
 	void setSubscriptionEnd(Date subscriptionEnd);
 
+	boolean isMemberSubscribed();
 }
