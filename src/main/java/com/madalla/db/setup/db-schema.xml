@@ -14,6 +14,7 @@
       <column name="SITE_NAME" primaryKey="false" required="true" type="VARCHAR" size="15" autoIncrement="false"/>
       <column name="SENDER_NAME" primaryKey="false" required="true" type="VARCHAR" size="25" autoIncrement="false"/>
       <column name="SENDER_EMAIL" primaryKey="false" required="true" type="VARCHAR" size="25" autoIncrement="false"/>
+      <column name="COMMENT" primaryKey="false" required="false" type="VARCHAR" size="256" autoIncrement="false"/>
     </table>
     <table name="TRANSACTION_LOG">
       <column name="ID" primaryKey="true" required="true" type="INTEGER" autoIncrement="true"/>

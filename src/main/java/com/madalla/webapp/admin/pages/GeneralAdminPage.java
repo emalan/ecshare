@@ -13,7 +13,6 @@ import com.madalla.webapp.user.UserProfilePanel;
  */
 @AuthorizeInstantiation("USER")
 public class GeneralAdminPage extends AdminPage {
-	protected static final String ID = "adminPanel";
 	
 	public GeneralAdminPage(){
 		super();

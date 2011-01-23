@@ -9,8 +9,6 @@ import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.session.pagemap.IPageMapEntry;
 
@@ -19,32 +17,16 @@ import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.admin.content.ContentAdminPanel;
 import com.madalla.webapp.admin.image.ImageAdminPanel;
 import com.madalla.webapp.admin.member.MemberAdminPanel;
-import com.madalla.webapp.admin.pages.AdminPanelLink;
 import com.madalla.webapp.admin.site.SiteAdminPanel;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.panelmenu.PanelListView;
+import com.madalla.webapp.panelmenu.PanelMenuItem;
 import com.madalla.webapp.user.UserProfilePanel;
 
 public abstract class AdminPage extends WebPage {
 	
 	private static final long serialVersionUID = -2837757448336709448L;
-	
-	private class MenuListView extends ListView<PanelMenuItem>{
-		private static final long serialVersionUID = -8310833021413122278L;
-		
-		private String menuLinkId;
-		
-		public MenuListView(final String id, final String menuLinkId, List<PanelMenuItem> items) {
-			super(id, items);
-			this.menuLinkId = menuLinkId;
-		}
-
-		@Override
-		protected void populateItem(ListItem<PanelMenuItem> item) {
-			final PanelMenuItem menu = item.getModelObject();
-			item.add(new AdminPanelLink(menuLinkId, menu.c, menu.key, menu.titleKey));
-		}
-		
-	}
+	protected static final String ID = "adminPanel";
 	
 	private String pageTitle = "(no title)";
 	
@@ -74,7 +56,7 @@ public abstract class AdminPage extends WebPage {
 	
 	protected void setupMenu(){
 		List<PanelMenuItem> menuItems = getAdminMenu();
-		add(new MenuListView("menuList","menuLink",menuItems ));
+		add(new PanelListView("menuList",ID,"menuLink",menuItems ));
 
 		IPageMapEntry backPage = getAppSession().getLastSitePage();
 		if (backPage == null){

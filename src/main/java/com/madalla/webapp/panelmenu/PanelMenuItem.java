@@ -1,10 +1,10 @@
-package com.madalla.webapp.admin;
+package com.madalla.webapp.panelmenu;
 
 import java.io.Serializable;
 
 import org.apache.wicket.markup.html.panel.Panel;
 
-public class PanelMenuItem  implements Serializable {
+public class PanelMenuItem implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	public final String key;
@@ -16,5 +16,4 @@ public class PanelMenuItem  implements Serializable {
 		this.titleKey = titleKey;
 		this.c = c;
 	}
-	
 }
