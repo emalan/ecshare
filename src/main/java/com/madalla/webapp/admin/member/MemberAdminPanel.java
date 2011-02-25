@@ -4,32 +4,47 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
+import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import com.madalla.bo.member.MemberData;
+import com.madalla.db.dao.Member;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.wicket.animation.Animator;
 import com.madalla.wicket.animation.AnimatorSubject;
+import com.madalla.wicket.form.AjaxValidationForm;
+import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 
 public class MemberAdminPanel extends CmsPanel {
 	private static final long serialVersionUID = 1L;
@@ -141,15 +156,91 @@ public class MemberAdminPanel extends CmsPanel {
 	        }
 	        return false;
 	    }
-		
-		
 	}
+	
+	public class MemberForm extends AjaxValidationForm<MemberData> {
+		private static final long serialVersionUID = 1L;
+		
+		Component authDateLabel;
+		
+		public MemberForm(String id, final IModel<MemberData> model){
+			super(id, model);
+			
+			add(new Label("signupDate", new AbstractReadOnlyModel<String>(){
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public String getObject() {
+					DateTime signupDate = model.getObject().getSignupDate() == null? null : model.getObject().getSignupDate().toDateTime(dateTimeZone);
+					return signupDate == null? "" : signupDate.toString("yyyy-MM-dd HH:mm");
+				}
+				
+			}));
+			
+			add(new Label("authorizedDate", new AbstractReadOnlyModel<String>() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public String getObject() {
+					DateTime authorizedDate = model.getObject().getAuthorizedDate() == null ? null : model.getObject().getAuthorizedDate().toDateTime(dateTimeZone);
+					return authorizedDate == null? "" : authorizedDate.toString("yyyy-MM-dd HH:mm");
+				}
+				
+			}));
+			
+			FeedbackPanel emailFeedback;
+			add(emailFeedback = new FeedbackPanel("emailFeedback"));
+			TextField<String> emailField = new AjaxValidationRequiredTextField("email", emailFeedback);
+            emailField.add(EmailAddressValidator.getInstance());
+            add(emailField);
+
+			FeedbackPanel firstNameFeedback;
+			add(firstNameFeedback = new FeedbackPanel("firstNameFeedback"));
+			add(new AjaxValidationRequiredTextField("firstName", firstNameFeedback));
+			
+			FeedbackPanel lastNameFeedback;
+			add(lastNameFeedback = new FeedbackPanel("lastNameFeedback"));
+			add(new AjaxValidationRequiredTextField("lastName", lastNameFeedback));
+			
+			add(new TextField<String>("companyName"));
+			
+			add(new CheckBox("authorized"));
+			
+			final DateTextField subscriptionEnd;
+			add(subscriptionEnd = DateTextField.forDatePattern("subscriptionEnd", "yyyy-MM-dd"));
+			subscriptionEnd.add(new DatePicker(){
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void configure(Map<String, Object> widgetProperties) {
+					super.configure(widgetProperties);
+					widgetProperties.put("title", Boolean.FALSE);
+					widgetProperties.put("close", Boolean.FALSE);
+				}
+			});
+			
+		}
+
+		@Override
+		protected void onSubmit(AjaxRequestTarget target) {
+			getRepositoryService().saveMember(getModelObject());
+			info(getString("message.success"));
+			target.addComponent(authDateLabel);
+		}
+	}
+	
+	private DateTimeZone dateTimeZone;
+	private final IModel<MemberData> current;
 	
 	public MemberAdminPanel(String id) {
 		super(id);
 		
+		dateTimeZone = getRepositoryService().getDateTimeZone();
+		
 		add(Css.CSS_ICON);
 		add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.PROTOTYPE));
+		
+		current = new CompoundPropertyModel<MemberData>(new Member());
 		
 		final MarkupContainer editFormDiv;
 		add(editFormDiv = new WebMarkupContainer("editFormDiv"));
@@ -158,6 +249,10 @@ public class MemberAdminPanel extends CmsPanel {
 		// animator to open/close profile form
 		final Animator hideShowForm = new Animator().addSubjects(AnimatorSubject.slideOpen(editFormDiv.getMarkupId(), 42));
 		add(hideShowForm);
+		
+		final Form<MemberData> editForm;
+		editFormDiv.add(editForm = new MemberForm("editForm", current));
+		editForm.setOutputMarkupId(true);
 		
 		final MarkupContainer container ;
 		add(container = new WebMarkupContainer("memberContainer"));
@@ -184,8 +279,8 @@ public class MemberAdminPanel extends CmsPanel {
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-						//current.setObject(entry);
-						//target.addComponent(editForm);
+						current.setObject(entry);
+						target.addComponent(editForm);
 						target.appendJavascript("var e = $('"+ item.getMarkupId() + "'); e.adjacent('tr').each(function(s){ s.removeClassName('selected')}); e.addClassName(\"selected\");" + hideShowForm.seekToEnd());
 						target.addComponent(item);
 					}

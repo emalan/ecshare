@@ -5,6 +5,9 @@
         #memberDiv table.dataview tr td {
             padding-right: 10px;
         }
+        #siteadmin form label {
+            width: 16em;
+        }
     </style>
 </wicket:head>
 <body>
@@ -39,7 +42,61 @@
                 </table>
             </div>
             <div wicket:id="editFormDiv" style="display: none;">
-              Hallo
+                <form class="textBlock floatDiv" wicket:id="editForm">
+                <fieldset>
+		            <div>
+		                <label><wicket:message key="label.date.signup">Label Contents</wicket:message></label>
+		                <span wicket:id="signupDate"></span>
+		            </div>
+		            <div>
+		                <label><wicket:message key="label.date.authorized">Label Contents</wicket:message></label>
+		                <span wicket:id="authorizedDate"></span>
+		            </div>
+		            <div>
+		                <label for="authorize">
+		                    <wicket:message key="label.authorize">[label]</wicket:message>
+		                </label>
+		                <input class="checkbox" type="checkbox" wicket:id="authorized"/>
+		            </div>
+		            <div>
+		                <label for="email">
+		                    <wicket:message key="label.email">[label]</wicket:message>
+		                </label>
+		                <input id="email" class="inputText" wicket:id="email" type="text" />
+		                <span class="feedbackPanel" wicket:id="emailFeedback"/>
+		            </div>
+		            <div>
+		                <label for="firstName">
+		                    <wicket:message key="label.firstName">[label]</wicket:message>
+		                </label>
+		                <input id="firstName" class="inputText" wicket:id="firstName" type="text" />
+		                <span class="feedbackPanel" wicket:id="firstNameFeedback"/>
+		            </div>
+		            <div>
+		                <label for="lastName">
+		                    <wicket:message key="label.lastName">[label]</wicket:message>
+		                </label>
+		                <input id="lastName" class="inputText" wicket:id="lastName" type="text" />
+		                <span class="feedbackPanel" wicket:id="lastNameFeedback"/>
+		            </div>
+		            <div>
+		                <label for="companyName">
+		                    <wicket:message key="label.company">[label]</wicket:message>
+		                </label>
+		                <input id="companyName" class="inputText" wicket:id="companyName" type="text" />
+		            </div>
+		            <div>
+		                <label for="subscriptionEnd">
+		                    <wicket:message key="label.subscription">[label]</wicket:message>
+		                </label>
+		                <input id="subscriptionEnd" class="inputText" type="text" wicket:id="subscriptionEnd"/>
+		            </div>            
+                </fieldset>
+                <div class="submit">
+                    <input class="button" type="submit" value="Submit" wicket:id="formSubmit" wicket:message="value:label.submit.registration"/> 
+                    <span class="feedbackPanel" wicket:id="formFeedback"/>   
+                </div>
+                </form>   
             </div>
             
         </div>
