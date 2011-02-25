@@ -9,12 +9,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -26,6 +27,9 @@ import org.apache.wicket.model.Model;
 import com.madalla.bo.member.MemberData;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.scripts.JavascriptResources;
+import com.madalla.wicket.animation.Animator;
+import com.madalla.wicket.animation.AnimatorSubject;
 
 public class MemberAdminPanel extends CmsPanel {
 	private static final long serialVersionUID = 1L;
@@ -145,6 +149,15 @@ public class MemberAdminPanel extends CmsPanel {
 		super(id);
 		
 		add(Css.CSS_ICON);
+		add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.PROTOTYPE));
+		
+		final MarkupContainer editFormDiv;
+		add(editFormDiv = new WebMarkupContainer("editFormDiv"));
+		editFormDiv.setOutputMarkupId(true);
+
+		// animator to open/close profile form
+		final Animator hideShowForm = new Animator().addSubjects(AnimatorSubject.slideOpen(editFormDiv.getMarkupId(), 42));
+		add(hideShowForm);
 		
 		final MarkupContainer container ;
 		add(container = new WebMarkupContainer("memberContainer"));
@@ -165,6 +178,19 @@ public class MemberAdminPanel extends CmsPanel {
 				item.add(new Label("companyName", entry.getCompanyName()));
 				item.add(new Label("auth", entry.isAuthorized()? "Yes":"No"));
 				item.add(new Label("subscribed", entry.isMemberSubscribed()? "Yes":"No"));
+				
+				item.add(new AjaxLink<Void>("selectRow") {
+                    private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						//current.setObject(entry);
+						//target.addComponent(editForm);
+						target.appendJavascript("var e = $('"+ item.getMarkupId() + "'); e.adjacent('tr').each(function(s){ s.removeClassName('selected')}); e.addClassName(\"selected\");" + hideShowForm.seekToEnd());
+						target.addComponent(item);
+					}
+                });
+				
 				item.add(new IndicatingAjaxLink<String>("delete", new Model<String>("")){
 					private static final long serialVersionUID = 1L;
 
@@ -172,17 +198,6 @@ public class MemberAdminPanel extends CmsPanel {
 					public void onClick(AjaxRequestTarget target) {
 						getRepositoryService().deleteMember(entry);
 						target.addComponent(container);
-					}
-					
-				});
-				item.add(new Link<Void>("memberEdit"){
-
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClick() {
-						getPage().replace(new MemberProfilePanel("adminPanel", entry));
-						
 					}
 					
 				});
@@ -195,6 +210,7 @@ public class MemberAdminPanel extends CmsPanel {
                     }
                 }));
 				
+				item.setOutputMarkupId(true);
 			}
 
 		};

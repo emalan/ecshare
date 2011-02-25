@@ -10,14 +10,15 @@ body {
 
 /* Header */
 #hd {
-    background:#0022CC none repeat-x scroll left bottom;
-    color:#FFFFFF;
+    background-color: #FFFFFF;
+    color:#444444;
+    border-bottom: 1px solid #AACCEE;
 }
 
 #hd h1{ 
-    padding-left: 50px;
+    padding-left: 20px;
     padding-top: 10px;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.2em;
     margin-top: 0.2em;
     font-weight: bold;
     font-size: 182%;
@@ -29,6 +30,7 @@ body {
 #hd span.version, #hd span.versionLabel {
     float: left;
     margin-top: 1.9em;
+    color: blue;
 }
 
 #hd span.version { 
@@ -37,12 +39,9 @@ body {
 }
 
 #ft {
-    background-color: #A4B3CA;
-    background-image: none;
-    background-repeat: repeat;
-    background-attachment: scroll;
-    background-position: 0%;
-    color : #808080;
+    background-color: #FFFFFF;
+    border-top: thin dotted grey;
+    color : #AAAAAA;
     text-align: center;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -89,15 +88,13 @@ p.info {
     color: blue;
 }
 
-/* =Tables
----------------------------------------------------------------------------*/
-td, th {
-    border: none;
-}
-
 /* =Menu
 ----------------------------------------------------------------------------*/
-#control {float: left; width: 100%;}
+#control {
+    float: left; 
+    width: 100%;
+    padding-bottom: 0.5em;
+}
 
 #mainNav ul {
 	background-color:#FAA819;
@@ -141,8 +138,75 @@ td, th {
   	background: none;
 }
 
+/* =menu
+-----------------------------------------------------------------------------*/
+ul.menu li {
+    list-style: none;
+    margin-right: 3em;
+}
+
+ul.menu li span {
+}
+
+ul.menu li a {
+    color: #777777;
+    text-decoration: none;
+    outline: medium none;
+}
+    
+ul.menu li a:hover {
+    text-decoration: underline;
+}
+
+ul.menu li a, ul.menu li span{
+    padding-top: 5px;
+    display: block;
+}
+
+ul.menu li span {
+    color: #777777;
+}
+
+ul.menu li a {
+    color: #1F75CC;
+}
+
+/* =box
+-----------------------------------------------------------------------------*/
+div.box {
+    background-color: #E9F4FF;
+    border: 1px solid #AACCEE;
+    -moz-border-radius: 5px; 
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+div.box-topright {
+    -moz-border-radius-topright: 5px;
+    -webkit-border-top-right-radius: 5px;
+    border-top-right-radius: 5px;
+}
+div.box-topleft{
+    -moz-border-radius-topleft: 5px;
+    -webkit-border-top-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+div.box-bottomright {
+    -moz-border-radius-bottomright: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+div.box-bottomleft{
+    -moz-border-radius-bottomleft: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
 /* =Table
 ----------------------------------------------------------------------------*/
+td, th {
+    border: none;
+}
+
 table.dataview {
 	border-bottom:1px solid #0079D6;
 	font-family:arial;
@@ -164,6 +228,10 @@ table.dataview tr.even {
 }
 table.dataview tr.odd {
 	background-color:#FFFFFF;
+}
+
+table.dataview tr.selected {
+    background-color:#80b6ed;
 }
 
 table.dataview tr td {

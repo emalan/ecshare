@@ -5,18 +5,18 @@ import org.apache.wicket.authorization.strategies.role.annotations.AuthorizeActi
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 
-import com.madalla.webapp.admin.AdminPage;
+import com.madalla.webapp.admin.AbstractAdminPage;
 
 @AuthorizeAction(action = "RENDER", roles = { "ADMIN", "USER" })
 public class AdminPageLink extends BookmarkablePageLink<Object>{
 
 	private static final long serialVersionUID = 1L;
 	
-	public AdminPageLink(String id, final Class<? extends AdminPage> adminPageClass) {
+	public AdminPageLink(String id, final Class<? extends AbstractAdminPage> adminPageClass) {
 		super(id, adminPageClass);
 	}
 	
-	public AdminPageLink(final String id, final Class<? extends AdminPage> adminPageClass,
+	public AdminPageLink(final String id, final Class<? extends AbstractAdminPage> adminPageClass,
 			final PageParameters parameters){
 		super(id, adminPageClass, parameters);
 	}

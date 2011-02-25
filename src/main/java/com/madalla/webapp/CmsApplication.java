@@ -43,6 +43,7 @@ import com.madalla.webapp.admin.member.MemberAdminPanel;
 import com.madalla.webapp.admin.pages.AdminErrorPage;
 import com.madalla.webapp.admin.pages.AlbumAdminPage;
 import com.madalla.webapp.admin.pages.GeneralAdminPage;
+import com.madalla.webapp.admin.pages.MainAdminPage;
 import com.madalla.webapp.admin.pages.SecurePasswordPage;
 import com.madalla.webapp.admin.pages.UserLoginPage;
 import com.madalla.webapp.admin.pages.UserPasswordPage;
@@ -128,6 +129,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     	mountBookmarkablePage(SECURE_PASSWORD, SecurePasswordPage.class);
     	
     	mountBookmarkablePage("admin", GeneralAdminPage.class);
+    	mountBookmarkablePage("control", MainAdminPage.class);
     	mount(new IndexedParamUrlCodingStrategy("admin/album", AlbumAdminPage.class));
     	
     	mount(new RpxCallbackUrlHandler("openid", getHomePage(),getSignInPageClass(), rpxService){
@@ -239,7 +241,6 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     	MetaDataRoleAuthorizationStrategy.authorize(UserAdminPanel.class, "SUPERADMIN");
     	MetaDataRoleAuthorizationStrategy.authorize(ContentEntryPanel.class, "USER");
     	MetaDataRoleAuthorizationStrategy.authorize(TranslatePanel.class, "USER");
-    	
     }
     
 	@Override

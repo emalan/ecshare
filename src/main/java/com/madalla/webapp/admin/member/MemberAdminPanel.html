@@ -17,6 +17,7 @@
                 <span wicket:id="navigator">[dataview navigator]</span>
                 <table cellspacing="0" class="dataview" wicket:id="memberContainer">
                     <tr>
+                        <th></th>
                         <th wicket:id="orderByLoginId"><wicket:message key="label.loginId">Label Contents</wicket:message></th>
                         <th wicket:id="orderByFirstName"><wicket:message key="label.firstName">Label Contents</wicket:message></th>
                         <th wicket:id="orderByLastName"><wicket:message key="label.lastName">Label Contents</wicket:message></th>
@@ -24,19 +25,21 @@
                         <th><wicket:message key="label.auth">Label Contents</wicket:message></th>
                         <th><wicket:message key="label.subscription">Label Contents</wicket:message></th>
                         <th></th>
-                        <th></th>
                     </tr>
                     <tr wicket:id="memberSorting">
+                        <td><a wicket:id="selectRow"><wicket:message key="label.select">[label]</wicket:message></a></td>
                         <td><span wicket:id="loginId">[Label]</span></td>
                         <td><span wicket:id="firstName">[Label]</span></td>
                         <td><span wicket:id="lastName">[Label]</span></td>
                         <td><span wicket:id="companyName">[Label]</span></td>
                         <td><span wicket:id="auth">[Label]</span></td>
                         <td><span wicket:id="subscribed">[Label]</span></td>
-                        <td><a class="deleteLink" wicket:id="delete"></a></td>
-                        <td><a class="memberEdit" wicket:id="memberEdit"><wicket:message key="label.edit"></wicket:message></a></td>
+                        <td><a wicket:id="delete"><wicket:message key="label.delete">[label]</wicket:message></a></td>
                     </tr>
                 </table>
+            </div>
+            <div wicket:id="editFormDiv" style="display: none;">
+              Hallo
             </div>
             
         </div>

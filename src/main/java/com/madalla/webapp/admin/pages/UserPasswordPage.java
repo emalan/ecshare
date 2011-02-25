@@ -3,10 +3,10 @@ package com.madalla.webapp.admin.pages;
 import org.apache.wicket.PageParameters;
 
 import com.madalla.util.security.SecureCredentials;
-import com.madalla.webapp.admin.AdminPage;
+import com.madalla.webapp.admin.AbstractAdminPage;
 import com.madalla.webapp.user.UserPasswordPanel;
 
-public class UserPasswordPage extends AdminPage {
+public class UserPasswordPage extends AbstractAdminPage {
 
 	public UserPasswordPage(String username, String pwd){
 		super();

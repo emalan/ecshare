@@ -2,9 +2,9 @@ package com.madalla.webapp.admin.pages;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.madalla.webapp.admin.AdminPage;
+import com.madalla.webapp.admin.AbstractAdminPage;
 
-public class AdminErrorPage extends AdminPage {
+public class AdminErrorPage extends AbstractAdminPage {
 
 	private static final long serialVersionUID = 1L;
 

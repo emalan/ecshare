@@ -22,7 +22,6 @@ import org.joda.time.DateTimeZone;
 import com.madalla.bo.SiteData;
 import com.madalla.bo.SiteLanguage;
 import com.madalla.webapp.CmsPanel;
-import com.madalla.webapp.admin.pages.AdminPanelLink;
 import com.madalla.webapp.css.Css;
 import com.madalla.wicket.form.AjaxValidationBehaviour;
 import com.madalla.wicket.form.AjaxValidationForm;
@@ -79,15 +78,6 @@ public class SiteAdminPanel extends CmsPanel{
     public SiteAdminPanel(String id) {
         super(id);
         add(Css.CSS_FORM);
-        
-        // link to Page Admin
-        add(new AdminPanelLink("pageAdminLink", PageAdminPanel.class));
-        
-		//Site Email link 
-        add(new AdminPanelLink("SiteEmail", SiteEmailPanel.class));
-        
-        // Site Data Link
-        add(new AdminPanelLink("SiteData", SiteDataPanel.class));
         
         final Form<SiteData> form = new SiteForm("siteForm", new CompoundPropertyModel<SiteData>(getSiteData()));
         add(form);

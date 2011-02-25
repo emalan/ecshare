@@ -20,8 +20,6 @@ import com.madalla.bo.SiteData;
 import com.madalla.bo.security.IUser;
 import com.madalla.bo.security.UserData;
 import com.madalla.webapp.CmsPanel;
-import com.madalla.webapp.admin.AdminPage;
-import com.madalla.webapp.admin.pages.AdminPanelLink;
 import com.madalla.webapp.admin.pages.SecurePasswordPage;
 import com.madalla.webapp.admin.pages.UserPasswordPage;
 import com.madalla.webapp.css.Css;
@@ -65,9 +63,6 @@ public class UserProfilePanel extends CmsPanel{
 		IUser user = getSessionDataService().getUser();
         log.debug(user);
 		
-		//User admin link 
-        add(new AdminPanelLink("UserAdmin", UserAdminPanel.class));
-        
 		//User Change Link - secure or not depending on authenticator
 		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
 		SiteData siteData = getRepositoryService().getSiteData();
@@ -84,8 +79,7 @@ public class UserProfilePanel extends CmsPanel{
 
 				@Override
 				public void onClick() {
-					AdminPage page = new UserPasswordPage(username,"");
-					setResponsePage(page);
+					setResponsePage(new UserPasswordPage(username,""));
 				}
 				
 			});

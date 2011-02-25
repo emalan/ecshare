@@ -3,11 +3,11 @@ package com.madalla.webapp.admin.pages;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
-import com.madalla.webapp.admin.AdminPage;
+import com.madalla.webapp.admin.AbstractAdminPage;
 import com.madalla.webapp.blog.admin.BlogEntryPanel;
 
 @AuthorizeInstantiation("USER")
-public class BlogEntryPage extends AdminPage {
+public class BlogEntryPage extends AbstractAdminPage {
     private static final long serialVersionUID = 1L;
     
     public BlogEntryPage(PageParameters parameters){

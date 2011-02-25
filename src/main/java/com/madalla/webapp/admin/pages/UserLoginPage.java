@@ -2,11 +2,11 @@ package com.madalla.webapp.admin.pages;
 
 import org.apache.wicket.PageParameters;
 
-import com.madalla.webapp.admin.AdminPage;
+import com.madalla.webapp.admin.AbstractAdminPage;
 import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.webapp.user.UserLoginPanel;
 
-public class UserLoginPage extends AdminPage{
+public class UserLoginPage extends AbstractAdminPage{
 	
 	public static final String[] PARAMETERS = {"username"};
 

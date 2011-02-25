@@ -4,11 +4,11 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.protocol.https.RequireHttps;
 
 import com.madalla.util.security.SecureCredentials;
-import com.madalla.webapp.admin.AdminPage;
+import com.madalla.webapp.admin.AbstractAdminPage;
 import com.madalla.webapp.user.UserPasswordPanel;
 
 @RequireHttps
-public class SecurePasswordPage extends AdminPage {
+public class SecurePasswordPage extends AbstractAdminPage {
 
 	public SecurePasswordPage(String username, String pwd){
 		super();
