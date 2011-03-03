@@ -213,6 +213,7 @@ public abstract class CmsPage extends WebPage {
 			.addSubject(AnimatorSubject.numeric("loginPopup","opacity", 0.0, 1.0))
 			.addSubject(AnimatorSubject.discrete("loginPopup", "display", "none","", 0.1));
 		
+		//Link that opens login popup
 		add(new LoginLink("logon", getAppSession()){
 			private static final long serialVersionUID = 1L;
 
@@ -236,6 +237,7 @@ public abstract class CmsPage extends WebPage {
 			
 		});
 		
+		//link that closes the popup
 		add(new AjaxLink<String>("closeLogin"){
 			private static final long serialVersionUID = 1L;
 

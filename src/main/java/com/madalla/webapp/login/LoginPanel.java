@@ -126,8 +126,6 @@ public abstract class LoginPanel extends CmsPanel
 			// Make form values persistent
 			setPersistent(rememberMe);
 
-			
-			//add(new SubmitLink("submitLink"));
 		}
 
 		/**
@@ -218,6 +216,7 @@ public abstract class LoginPanel extends CmsPanel
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax onError called");
 				target.addComponent(feedback);
+				target.addComponent(form);
 				onSignInFailed(getUsername());
 			}
 
