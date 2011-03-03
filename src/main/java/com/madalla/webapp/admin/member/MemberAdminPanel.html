@@ -8,6 +8,10 @@
         #siteadmin form label {
             width: 16em;
         }
+        #siteadmin form fieldset span {
+            float: left;
+            padding-top: 10px;
+        }
     </style>
 </wicket:head>
 <body>
@@ -41,6 +45,14 @@
                     </tr>
                 </table>
             </div>
+            <div>
+                <span class="buttonwrapper">
+                    <a wicket:id="newItem" class="orangebutton"><span><wicket:message key="label.new">[label]</wicket:message></span></a>
+                </span> 
+                <span class="buttonwrapper">
+                    <a wicket:id="resetForm" class="orangebutton"><span><wicket:message key="label.reset">[label]</wicket:message></span></a>
+                </span>                
+            </div>            
             <div wicket:id="editFormDiv" style="display: none;">
                 <form class="textBlock floatDiv" wicket:id="editForm">
                 <fieldset>
@@ -93,7 +105,9 @@
 		            </div>            
                 </fieldset>
                 <div class="submit">
-                    <input class="button" type="submit" value="Submit" wicket:id="formSubmit" wicket:message="value:label.submit.registration"/> 
+                    <span class="buttonwrapper">
+                        <a wicket:id="formSubmit" class="orangebutton"><span><wicket:message key="label.submit">[label]</wicket:message></span></a>
+                    </span> 
                     <span class="feedbackPanel" wicket:id="formFeedback"/>   
                 </div>
                 </form>   

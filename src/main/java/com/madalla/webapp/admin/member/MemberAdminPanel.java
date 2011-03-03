@@ -8,11 +8,11 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
@@ -161,8 +161,6 @@ public class MemberAdminPanel extends CmsPanel {
 	public class MemberForm extends AjaxValidationForm<MemberData> {
 		private static final long serialVersionUID = 1L;
 		
-		Component authDateLabel;
-		
 		public MemberForm(String id, final IModel<MemberData> model){
 			super(id, model);
 			
@@ -225,7 +223,6 @@ public class MemberAdminPanel extends CmsPanel {
 		protected void onSubmit(AjaxRequestTarget target) {
 			getRepositoryService().saveMember(getModelObject());
 			info(getString("message.success"));
-			target.addComponent(authDateLabel);
 		}
 	}
 	
@@ -257,6 +254,37 @@ public class MemberAdminPanel extends CmsPanel {
 		final MarkupContainer container ;
 		add(container = new WebMarkupContainer("memberContainer"));
 		container.setOutputMarkupId(true);
+		
+		add(new IndicatingAjaxButton("resetForm", editForm){
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				form.modelChanged();
+				
+				target.appendJavascript(hideShowForm.seekToBegin() );
+				//+ "$('" + usernameField.getMarkupId() + "').clear();"
+                //+ "$('"+form.getMarkupId()+"').reset();"
+			}
+			
+		}.setDefaultFormProcessing(false));
+		
+		add(new IndicatingAjaxButton("newItem", editForm){
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				current.setObject(new Member());
+				target.appendJavascript("var e = $('"+ container.getMarkupId() + "'); e.select('tr').each(function(s){ s.removeClassName('selected')});");
+				form.modelChanged();
+				form.clearInput();
+				target.appendJavascript(hideShowForm.seekToEnd());
+				target.addComponent(editForm);
+			}
+			
+		}.setDefaultFormProcessing(false));
 		
 		final SortableMemberProvider provider = new SortableMemberProvider();
 		final DataView<MemberData> dataView = new DataView<MemberData>("memberSorting", provider){
