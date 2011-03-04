@@ -18,7 +18,17 @@
         form div .buttonwrapper {margin-left: 10em; float: left;}
         form div .feedbackPanel {float: left;}
         
-        div.rpx {}
+        div.loginDiv{
+            float: left;
+            width: 46%;
+        }
+        div.rpxDiv {
+            float: right;
+            width: 52%;
+        }
+        div.emailDiv{
+            clear:both;
+        }
         
     </style>
 
@@ -26,10 +36,9 @@
 <body>
     <wicket:panel>
     
-    	<div class="adminSection">
     	  <h2><wicket:message key="heading.login">[label]</wicket:message></h2>
-    	  <div class="yui-g">
-            <div class="yui-u first">
+    	  <div>
+            <div class="loginDiv">
 	    	    <p wicket:id="loginInfo" class=info>[label]</p>
 	    	    
 	    	    <div id="navLinks">
@@ -42,17 +51,16 @@
 	                <a wicket:id="emailLink" href="#" ></a>
 	            </div>
 	        </div>
-	        <div class="rpx yui-u" wicket:id="rpxPanel">
+	        <div class="rpxDiv" wicket:id="rpxPanel">
             </div>
           </div>  
-          <div wicket:id="emailDiv" style="overflow:hidden; height: 28em; display:none;">
+          <div class="emailDiv" wicket:id="emailDiv" style="overflow:hidden; height: 28em; display:none;">
                     <hr/>
                     <span class="divHeadings"><wicket:message key="heading.support">Label Contents</wicket:message></span>
                     <span wicket:id="supportEmail" />
           </div>
 	    
 	    
-	    </div>
 	    
     	<script type="text/javascript"> 
         	var supportAnim = new Animator().addSubject(new DiscreteStyleSubject(wicketGet('supportEmail'),'display','none',''));

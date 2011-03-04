@@ -12,7 +12,6 @@ body {
 #hd {
     background-color: #FFFFFF;
     color:#444444;
-    border-bottom: 1px solid #AACCEE;
 }
 
 #hd h1{ 
@@ -67,6 +66,10 @@ body {
 -----------------------------------------------------------------------------*/
 #bd {
     padding: 1em;
+}
+
+div#main {
+    border-top: 1px solid #AACCEE;    
 }
 
 div.adminSection {
@@ -179,6 +182,13 @@ div.box {
     -moz-border-radius: 5px; 
     -webkit-border-radius: 5px;
     border-radius: 5px 5px 5px 5px;
+}
+div.box-plain {
+    background-color: #E9F4FF;
+    border-left: 1px solid #AACCEE;
+    border-right: 1px solid #AACCEE;
+    border-bottom: 1px solid #AACCEE;
+    height: 30em;
 }
 div.box-topright {
     -moz-border-radius-topright: 5px;
