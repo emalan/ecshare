@@ -239,7 +239,7 @@ public class MemberLoginPanel extends AbstractMemberPanel{
     	map.put("passwordChangePage", CmsApplication.MEMBER_PASSWORD);
 		
 		MapModel<String, String> values = new MapModel<String, String>(map);
-		String message = getString("email.registration", values);
+		String message = getString("email.reset", values);
 		
 		message = message + getString("message.password", values);
 
@@ -251,7 +251,7 @@ public class MemberLoginPanel extends AbstractMemberPanel{
     
     @Override
     protected String getEmailSubject(){
-    	return "Registration";
+    	return "Reset password";
     }
     
 
