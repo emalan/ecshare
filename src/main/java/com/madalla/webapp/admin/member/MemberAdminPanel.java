@@ -158,7 +158,7 @@ public class MemberAdminPanel extends CmsPanel {
 	    }
 	}
 	
-	public class MemberForm extends AjaxValidationForm<MemberData> {
+	public abstract class MemberForm extends AjaxValidationForm<MemberData> {
 		private static final long serialVersionUID = 1L;
 		
 		public MemberForm(String id, final IModel<MemberData> model){
@@ -223,7 +223,11 @@ public class MemberAdminPanel extends CmsPanel {
 		protected void onSubmit(AjaxRequestTarget target) {
 			getRepositoryService().saveMember(getModelObject());
 			info(getString("message.success"));
+			processSubmit(target);
 		}
+		
+		protected abstract void processSubmit(AjaxRequestTarget target);
+		
 	}
 	
 	private DateTimeZone dateTimeZone;
@@ -247,13 +251,21 @@ public class MemberAdminPanel extends CmsPanel {
 		final Animator hideShowForm = new Animator().addSubjects(AnimatorSubject.slideOpen(editFormDiv.getMarkupId(), 42));
 		add(hideShowForm);
 		
-		final Form<MemberData> editForm;
-		editFormDiv.add(editForm = new MemberForm("editForm", current));
-		editForm.setOutputMarkupId(true);
-		
 		final MarkupContainer container ;
 		add(container = new WebMarkupContainer("memberContainer"));
 		container.setOutputMarkupId(true);
+
+		final Form<MemberData> editForm;
+		editFormDiv.add(editForm = new MemberForm("editForm", current){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void processSubmit(AjaxRequestTarget target) {
+				target.addComponent(container);
+			}
+			
+		});
+		editForm.setOutputMarkupId(true);
 		
 		add(new IndicatingAjaxButton("resetForm", editForm){
 

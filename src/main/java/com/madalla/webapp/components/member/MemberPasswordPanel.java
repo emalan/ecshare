@@ -100,7 +100,8 @@ public class MemberPasswordPanel extends CmsPanel{
 			validated = false; 
 			log.debug("Member not validated as they are already logged in. user="+existing.getUsername());
 		} else {
-			validated = validateMember(existing); 
+			//validated = validateMember(existing);
+			validated = session.signIn(existing.getUsername(), existing.getPassword());
 			log.debug("Validate --> " + validated);
 		}
 		
