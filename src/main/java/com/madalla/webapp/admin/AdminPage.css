@@ -65,11 +65,8 @@ body {
 /* =Body
 -----------------------------------------------------------------------------*/
 #bd {
-    padding: 1em;
-}
-
-div#main {
-    border-top: 1px solid #AACCEE;    
+    border-top: 1px solid #AACCEE;
+    margin-top: 0.5em;
 }
 
 div.adminSection {

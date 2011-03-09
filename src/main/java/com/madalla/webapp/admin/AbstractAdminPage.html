@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
-    <div id="doc4">
+    <div id="doc4" class="yui-t1">
         <div id="hd">
             <h1><wicket:message key="label.heading">[label]</wicket:message></h1>
             <span class="versionLabel"><wicket:message key="label.version">[label]</wicket:message></span>
@@ -24,14 +24,16 @@
         	</div>
 
         </div>
-        <div id="bd">
-            <div id="main" class="yui-gf">
-                <div class="yui-u first box-plain box-bottomright box-bottomleft">
-                    <ul class="menu">
-                        <li wicket:id="menuList"><a class="formImage" href="#" wicket:id="menuLink">Page</a></li>
-                    </ul>
-                </div>
-                <div class="yui-u">
+        <div id="bd" >
+
+            <div class="yui-b box-plain box-bottomright box-bottomleft">
+                <ul class="menu">
+                    <li wicket:id="menuList"><a class="formImage" href="#" wicket:id="menuLink">Page</a></li>
+                </ul>
+            </div>
+        
+            <div id="yui-main">
+                <div class="yui-b">
                     <wicket:child />
                 </div>
             </div>
