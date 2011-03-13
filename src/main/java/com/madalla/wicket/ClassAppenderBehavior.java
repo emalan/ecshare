@@ -6,20 +6,25 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
-public abstract class ShowHideBehavior extends AbstractBehavior {
+public abstract class ClassAppenderBehavior extends AbstractBehavior {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final boolean show;
+	private final boolean display;
+	private final String className;
 	
 	/**
 	 * @param show 
 	 */
-	public ShowHideBehavior(final boolean show){
-		this.show = show;
+	public ClassAppenderBehavior(final boolean show){
+		this(show,"no");
 	}
 	
-	abstract protected boolean isLoggedIn();
+	public ClassAppenderBehavior(final boolean display, final String className){
+		this.display = display;
+		this.className = className;
+	}
+	abstract protected boolean setClass();
 
 	protected IModel<String> getClassAtributeModel(){
 	    return new AbstractReadOnlyModel<String>(){
@@ -27,10 +32,10 @@ public abstract class ShowHideBehavior extends AbstractBehavior {
 
 			@Override
 			public String getObject() {
-				if (isLoggedIn()){
-					return show ? "" : "no";
+				if (setClass()){
+					return display ? "" : className;
 				} 
-				return show ? "no" : "";
+				return display ? className : "";
 			}
 	    	
 	    };

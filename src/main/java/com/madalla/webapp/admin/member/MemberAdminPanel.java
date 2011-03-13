@@ -11,6 +11,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.IBehavior;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
@@ -32,21 +33,25 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.ValidationError;
+import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import com.madalla.bo.member.MemberData;
 import com.madalla.db.dao.Member;
-import com.madalla.webapp.CmsPanel;
+import com.madalla.webapp.components.member.AbstractMemberPanel;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.JavascriptResources;
+import com.madalla.wicket.ClassAppenderBehavior;
 import com.madalla.wicket.animation.Animator;
 import com.madalla.wicket.animation.AnimatorSubject;
 import com.madalla.wicket.form.AjaxValidationForm;
 import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 
-public class MemberAdminPanel extends CmsPanel {
+public class MemberAdminPanel extends AbstractMemberPanel {
 	private static final long serialVersionUID = 1L;
 
 	private class SortableMemberProvider extends SortableDataProvider<MemberData>{
@@ -164,7 +169,30 @@ public class MemberAdminPanel extends CmsPanel {
 		public MemberForm(String id, final IModel<MemberData> model){
 			super(id, model);
 			
-			add(new Label("signupDate", new AbstractReadOnlyModel<String>(){
+			MarkupContainer memberDiv;
+			add(memberDiv = new WebMarkupContainer("memberDiv"));
+			FeedbackPanel memberIdFeedback;
+			memberDiv.add(memberIdFeedback = new FeedbackPanel("memberIdFeedback"));
+			TextField<String> memberIdField;
+			memberDiv.add(memberIdField = new AjaxValidationRequiredTextField("memberId", memberIdFeedback));
+			memberIdField.add(new AbstractValidator<String>(){
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onValidate(IValidatable<String> validatable) {
+					String memberId = validatable.getValue();
+					if (getRepositoryService().isMemberExist(memberId)) {
+						validatable.error(new ValidationError().addMessageKey("message.invalidMemberID"));
+					}
+				}
+				
+			});
+			memberDiv.add(getHideShowBehavior(true));
+			
+			MarkupContainer signupDiv;
+			add(signupDiv = new WebMarkupContainer("signupDiv"));
+			signupDiv.add(getHideShowBehavior(false));
+			signupDiv.add(new Label("signupDate", new AbstractReadOnlyModel<String>(){
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -175,7 +203,10 @@ public class MemberAdminPanel extends CmsPanel {
 				
 			}));
 			
-			add(new Label("authorizedDate", new AbstractReadOnlyModel<String>() {
+			MarkupContainer authDateDiv;
+			add(authDateDiv = new WebMarkupContainer("authDateDiv"));
+			authDateDiv.add(getHideShowBehavior(false));
+			authDateDiv.add(new Label("authorizedDate", new AbstractReadOnlyModel<String>() {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -185,6 +216,11 @@ public class MemberAdminPanel extends CmsPanel {
 				}
 				
 			}));
+			
+			MarkupContainer authDiv;
+			add(authDiv = new WebMarkupContainer("authDiv"));
+			authDiv.add(getHideShowBehavior(false));
+			authDiv.add(new CheckBox("authorized"));
 			
 			FeedbackPanel emailFeedback;
 			add(emailFeedback = new FeedbackPanel("emailFeedback"));
@@ -202,8 +238,6 @@ public class MemberAdminPanel extends CmsPanel {
 			
 			add(new TextField<String>("companyName"));
 			
-			add(new CheckBox("authorized"));
-			
 			final DateTextField subscriptionEnd;
 			add(subscriptionEnd = DateTextField.forDatePattern("subscriptionEnd", "yyyy-MM-dd"));
 			subscriptionEnd.add(new DatePicker(){
@@ -218,11 +252,24 @@ public class MemberAdminPanel extends CmsPanel {
 			});
 			
 		}
+		
+		private IBehavior getHideShowBehavior(boolean show){
+			return new ClassAppenderBehavior(show){
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected boolean setClass() {
+					return getModelObject().getKey() == 0;
+				}
+				
+			};
+		}
 
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
 			getRepositoryService().saveMember(getModelObject());
 			info(getString("message.success"));
+			target.addComponent(MemberForm.this);
 			processSubmit(target);
 		}
 		
@@ -262,25 +309,11 @@ public class MemberAdminPanel extends CmsPanel {
 			@Override
 			protected void processSubmit(AjaxRequestTarget target) {
 				target.addComponent(container);
+				
 			}
 			
 		});
 		editForm.setOutputMarkupId(true);
-		
-		add(new IndicatingAjaxButton("resetForm", editForm){
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				form.modelChanged();
-				
-				target.appendJavascript(hideShowForm.seekToBegin() );
-				//+ "$('" + usernameField.getMarkupId() + "').clear();"
-                //+ "$('"+form.getMarkupId()+"').reset();"
-			}
-			
-		}.setDefaultFormProcessing(false));
 		
 		add(new IndicatingAjaxButton("newItem", editForm){
 
@@ -341,7 +374,11 @@ public class MemberAdminPanel extends CmsPanel {
 					private static final long serialVersionUID = 1L;
 
 					public Object getObject() {
-                        return (item.getIndex() % 2 == 1) ? "even" : "odd";
+                        String rt =  (item.getIndex() % 2 == 1) ? "even" : "odd";
+                        if (entry.equals(current.getObject())){
+                        	rt = rt + " selected";
+                        }
+                        return rt;
                     }
                 }));
 				

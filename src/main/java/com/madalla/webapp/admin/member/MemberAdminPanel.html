@@ -8,7 +8,7 @@
         #siteadmin form label {
             width: 16em;
         }
-        #siteadmin form fieldset span {
+        #siteadmin form fieldset span.yui-skin-sam {
             float: left;
             padding-top: 10px;
         }
@@ -49,22 +49,26 @@
                 <span class="buttonwrapper">
                     <a wicket:id="newItem" class="orangebutton"><span><wicket:message key="label.new">[label]</wicket:message></span></a>
                 </span> 
-                <span class="buttonwrapper">
-                    <a wicket:id="resetForm" class="orangebutton"><span><wicket:message key="label.reset">[label]</wicket:message></span></a>
-                </span>                
             </div>            
             <div wicket:id="editFormDiv" style="display: none;">
                 <form class="textBlock floatDiv" wicket:id="editForm">
                 <fieldset>
-		            <div>
+                    <div wicket:id="memberDiv">
+                        <label for="memberId">
+                            <wicket:message key="label.memberId">[label]</wicket:message>
+                        </label>    
+                        <input id="memberId" class="inputText" wicket:id="memberId" type="text" />
+                        <span class="feedbackPanel" wicket:id="memberIdFeedback"/>
+                    </div>
+		            <div wicket:id="signupDiv">
 		                <label><wicket:message key="label.date.signup">Label Contents</wicket:message></label>
 		                <span wicket:id="signupDate"></span>
 		            </div>
-		            <div>
+		            <div wicket:id="authDateDiv">
 		                <label><wicket:message key="label.date.authorized">Label Contents</wicket:message></label>
 		                <span wicket:id="authorizedDate"></span>
 		            </div>
-		            <div>
+		            <div wicket:id="authDiv">
 		                <label for="authorize">
 		                    <wicket:message key="label.authorize">[label]</wicket:message>
 		                </label>

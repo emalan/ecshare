@@ -1,8 +1,5 @@
 package com.madalla.webapp.components.member;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,13 +21,10 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
-import org.apache.wicket.model.util.MapModel;
 
-import com.madalla.bo.SiteData;
 import com.madalla.bo.member.MemberData;
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
-import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.admin.member.MemberSession;
 import com.madalla.wicket.animation.AnimationOpenSlide;
 
@@ -198,7 +192,7 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 					final MemberData member = getRepositoryService().getMember(memberId);
 					final String email = member.getEmail();
 					if (StringUtils.isNotEmpty(email)){
-						if (sendEmail(member)){
+						if (sendResetPasswordEmail(member)){
 							username.info(getString("message.reset.success"));
 						} else {
 							log.error("password reset - Send failure! " + member);
@@ -224,35 +218,4 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 		
 	}
 	
-	@Override
-    protected String getEmailBody(final MemberData member){
-    	Map<String, String> map = new HashMap<String, String>();
-    	SiteData site = getRepositoryService().getSiteData();
-    	map.put("siteName", site.getSiteName());
-    	map.put("firstName", StringUtils.defaultString(member.getFirstName()));
-		map.put("lastName", StringUtils.defaultString(member.getLastName()));
-		map.put("companyName", StringUtils.defaultString(member.getCompanyName()));
-		map.put("memberId", member.getMemberId());
-		map.put("password", resetPassword(member));
-		String url = StringUtils.defaultString(site.getUrl());
-		map.put("url", url );
-    	map.put("passwordChangePage", CmsApplication.MEMBER_PASSWORD);
-		
-		MapModel<String, String> values = new MapModel<String, String>(map);
-		String message = getString("email.reset", values);
-		
-		message = message + getString("message.password", values);
-
-		message = message + getString("message.note") + getString("message.closing");
-		
-		log.debug("formatMessage - " + message);
-    	return message;
-    }
-    
-    @Override
-    protected String getEmailSubject(){
-    	return "Reset password";
-    }
-    
-
 }

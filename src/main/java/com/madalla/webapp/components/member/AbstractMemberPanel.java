@@ -1,13 +1,19 @@
 package com.madalla.webapp.components.member;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.model.util.MapModel;
 import org.springframework.dao.DataAccessException;
 
+import com.madalla.bo.SiteData;
 import com.madalla.bo.member.MemberData;
 import com.madalla.util.security.SecurityUtils;
+import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsPanel;
 
 public abstract class AbstractMemberPanel extends CmsPanel{
@@ -34,10 +40,16 @@ public abstract class AbstractMemberPanel extends CmsPanel{
 		return getRepositoryService().saveMember(member);
 	}
 	
-    protected boolean sendEmail(final MemberData member){
-    	logEmail(member.getDisplayName(), member.getEmail(), getEmailSubject());
-        String body = getEmailBody(member);
-        return getEmailSender().sendUserEmail(getEmailSubject(), body, member.getEmail(), member.getFirstName(), true);
+    final protected boolean sendRegistrationEmail(final MemberData member){
+    	logEmail(member.getDisplayName(), member.getEmail(), getString("email.subject"));
+        String body = getRegistrationEmail(member);
+        return getEmailSender().sendUserEmail(getString("email.subject"), body, member.getEmail(), member.getFirstName(), true);
+    }
+    
+    protected boolean sendResetPasswordEmail(final MemberData member){
+    	logEmail(member.getDisplayName(), member.getEmail(), getString("email.subject"));
+        String body = getResetPasswordEmail(member);
+        return getEmailSender().sendUserEmail(getString("email.subject"), body, member.getEmail(), member.getFirstName(), true);
     }
     
     private void logEmail(String name, String email, String comment){
@@ -51,12 +63,53 @@ public abstract class AbstractMemberPanel extends CmsPanel{
     	}
     }
     
-    protected String getEmailBody(final MemberData member){
-    	return "Email body";
+    protected String getRegistrationEmail(final MemberData member){
+    	Map<String, String> map = new HashMap<String, String>();
+    	SiteData site = getRepositoryService().getSiteData();
+    	map.put("siteName", site.getSiteName());
+    	map.put("firstName", StringUtils.defaultString(member.getFirstName()));
+		map.put("lastName", StringUtils.defaultString(member.getLastName()));
+		map.put("companyName", StringUtils.defaultString(member.getCompanyName()));
+		map.put("memberId", member.getMemberId());
+		map.put("password", resetPassword(member));
+		String url = StringUtils.defaultString(site.getUrl());
+		map.put("url", url );
+    	map.put("passwordChangePage", CmsApplication.MEMBER_PASSWORD);
+		
+		MapModel<String, String> values = new MapModel<String, String>(map);
+		String message = getString("email.registration", values);
+		
+		message = message + getString("message.password", values);
+
+		message = message + getString("message.note") + getString("message.closing");
+		
+		log.debug("formatMessage - " + message);
+    	return message;
     }
     
-    protected String getEmailSubject(){
-    	return "Member email";
+    protected String getResetPasswordEmail(final MemberData member){
+    	Map<String, String> map = new HashMap<String, String>();
+    	SiteData site = getRepositoryService().getSiteData();
+    	map.put("siteName", site.getSiteName());
+    	map.put("firstName", StringUtils.defaultString(member.getFirstName()));
+		map.put("lastName", StringUtils.defaultString(member.getLastName()));
+		map.put("companyName", StringUtils.defaultString(member.getCompanyName()));
+		map.put("memberId", member.getMemberId());
+		map.put("password", resetPassword(member));
+		String url = StringUtils.defaultString(site.getUrl());
+		map.put("url", url );
+    	map.put("passwordChangePage", CmsApplication.MEMBER_PASSWORD);
+		
+		MapModel<String, String> values = new MapModel<String, String>(map);
+		String message = getString("email.reset", values);
+		
+		message = message + getString("message.password", values);
+
+		message = message + getString("message.note") + getString("message.closing");
+		
+		log.debug("formatMessage - " + message);
+    	return message;
+
     }
 
 }

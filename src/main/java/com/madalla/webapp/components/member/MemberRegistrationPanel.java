@@ -83,11 +83,10 @@ public class MemberRegistrationPanel extends AbstractMemberPanel{
 				return;
 			}
 			
-			if (sendEmail( member)){
+			if (sendRegistrationEmail( member)){
                 info(getString("message.success"));
                 this.reset(target);
                 setModelObject(new Member());
-                
             } else {
                 error(getString("message.fail.email"));
             }
@@ -108,7 +107,6 @@ public class MemberRegistrationPanel extends AbstractMemberPanel{
 		return getRepositoryService().isMemberExist(memberId);
 	}
 	
-	@Override
     protected String getEmailBody(final MemberData member){
     	Map<String, String> map = new HashMap<String, String>();
     	SiteData site = getRepositoryService().getSiteData();
@@ -132,12 +130,6 @@ public class MemberRegistrationPanel extends AbstractMemberPanel{
 		log.debug("formatMessage - " + message);
     	return message;
     }
-    
-    @Override
-    protected String getEmailSubject(){
-    	return "Registration";
-    }
-    
     
 
 }
