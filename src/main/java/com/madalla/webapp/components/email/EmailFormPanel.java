@@ -7,10 +7,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -36,7 +37,7 @@ public class EmailFormPanel extends CmsPanel {
     private static final long serialVersionUID = -1643728343421366820L;
 
     private Log log = LogFactory.getLog(this.getClass());
-    //private String imagePass = CaptchaUtils.randomString(4, 6);
+    private String imagePass = CaptchaUtils.randomString(4, 6);
     private Integer first = CaptchaUtils.randomInteger(1, 20);
     private Integer second = CaptchaUtils.randomInteger(1, 12);
     
@@ -48,12 +49,12 @@ public class EmailFormPanel extends CmsPanel {
         private String name ;
         private String email ;
         private String comment ;
-      //private final CaptchaImageResource captchaImageResource;
+        private final CaptchaImageResource captchaImageResource;
         
         public EmailForm(String id) {
             super(id);
             
-            //captchaImageResource = new CaptchaImageResource(imagePass);
+            captchaImageResource = new CaptchaImageResource(imagePass);
     
             FeedbackPanel nameFeedback = new FeedbackPanel("nameFeedback");
             add(nameFeedback);
@@ -68,7 +69,8 @@ public class EmailFormPanel extends CmsPanel {
             TextArea<String> commentField = new TextArea<String>("comment",new PropertyModel<String>(this,"comment"));
             add(commentField);
             
-            add(new Label("captchaString", first+" + "+second+" = "));
+            //add(new Label("captchaString", first+" + "+second+" = "));
+            add(new Image("captchaImage", captchaImageResource));
             
             FeedbackPanel passwordFeedback = new FeedbackPanel("passwordFeedback");
             add(passwordFeedback);
@@ -78,25 +80,25 @@ public class EmailFormPanel extends CmsPanel {
 				private static final long serialVersionUID = 2572094991300700912L;
 				protected void onValidate(IValidatable<String> validatable) {
                     String password = validatable.getValue();
-                    try {
-                        int answer = Integer.parseInt(password);
-                        if (answer != first.intValue() + second.intValue()){
-                        	log.debug("onValidate - entered:"+password+" should be:"+first+"+"+second);
-                            IValidationError error = new ValidationError().addMessageKey("message.captcha");
-                            validatable.error(error);
-                        }
-                    } catch (Exception e){
-                    	IValidationError error = new ValidationError().addMessageKey("message.captcha.error");
-                    	validatable.error(error);
-                    	log.debug("password validate Exception.",e);
-                    }
-//                    if (!imagePass.equals(password)) {
-//                    	log.debug("onValidate - entered:"+password+" should be:"+imagePass);
-//                        IValidationError error = new ValidationError().addMessageKey("message.captcha");
-//                        validatable.error(error);
-//                        //"You entered '" + password + "' You should have entered '" + imagePass + "'"
+//                    try {
+//                        int answer = Integer.parseInt(password);
+//                        if (answer != first.intValue() + second.intValue()){
+//                        	log.debug("onValidate - entered:"+password+" should be:"+first+"+"+second);
+//                            IValidationError error = new ValidationError().addMessageKey("message.captcha");
+//                            validatable.error(error);
+//                        }
+//                    } catch (Exception e){
+//                    	IValidationError error = new ValidationError().addMessageKey("message.captcha.error");
+//                    	validatable.error(error);
+//                    	log.debug("password validate Exception.",e);
 //                    }
-//                    captchaImageResource.invalidate();
+                    if (!imagePass.equals(password)) {
+                    	log.debug("onValidate - entered:"+password+" should be:"+imagePass);
+                        IValidationError error = new ValidationError().addMessageKey("message.captcha");
+                        validatable.error(error);
+                        //"You entered '" + password + "' You should have entered '" + imagePass + "'"
+                    }
+                    captchaImageResource.invalidate();
                 }
             });
             
@@ -205,7 +207,7 @@ public class EmailFormPanel extends CmsPanel {
     
     private String getEmailtemplate(){
         StringBuffer sb = new StringBuffer("Email sent from {0} website...").append(System.getProperty("line.separator"));
-        sb.append("From: {1} (2})").append(System.getProperty("line.separator"));
+        sb.append("From: {1} ({2})").append(System.getProperty("line.separator"));
         sb.append("Comment: {3}").append(System.getProperty("line.separator"));
         return sb.toString();
     }

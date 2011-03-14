@@ -9,12 +9,8 @@
 
         form div label {width:12em;}
         form div textarea {width:30em; height:10em;}
-        form div#captcha {float:left; width:15em; padding-top:10px;}
-        form #captcha {clear:both; width:17em; text-align:right;}
-        img#captcha {
-            float:left;
-            margin-left: 20px;
-        }
+        form div#captcha {float:left; width:27em; padding-top:10px; text-align: right;}
+        form div#captcha img{width: 14em; height: 5em;}
 
         div.formButtons input {
         	margin-bottom: 1em;
@@ -49,13 +45,17 @@
                 <span class="feedbackPanel" wicket:id="emailFeedback"/>
                 
             </div>
+            <div id="captcha">
+                <a href="javascript:location.reload(true)">try another one</a>
+                <img wicket:id="captchaImage" />
+            </div>
             <div id="captchaDiv">
                 <label for="password">
                     <wicket:message key="label.captcha">[label]</wicket:message>
                 </label>
                 <input id="password" class="inputText" wicket:id="password" type="text" />
                 <span class="feedbackPanel" wicket:id="passwordFeedback"/>
-                <label id="captcha" wicket:id="captchaString"  />
+                <!-- <label id="captcha" wicket:id="captchaString"  />  -->
   
             </div>
             <div id="commentDiv">

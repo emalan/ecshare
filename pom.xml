@@ -4,7 +4,7 @@
 	<groupId>com.madalla</groupId>
 	<artifactId>ecshare</artifactId>
 	<packaging>jar</packaging>
-	<version>1.3</version>
+	<version>1.4</version>
 	<name>Control My Site</name>
 	<description>Wicket Framework code for multi-lingual Content Management system</description>
 	<url>http://www.emalan.com</url>
