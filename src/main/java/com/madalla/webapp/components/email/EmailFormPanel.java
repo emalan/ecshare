@@ -8,10 +8,10 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -69,8 +69,8 @@ public class EmailFormPanel extends CmsPanel {
             TextArea<String> commentField = new TextArea<String>("comment",new PropertyModel<String>(this,"comment"));
             add(commentField);
             
-            //add(new Label("captchaString", first+" + "+second+" = "));
-            add(new Image("captchaImage", captchaImageResource));
+            add(new Label("captchaString", first+" + "+second+" = "));
+            //add(new Image("captchaImage", captchaImageResource));
             
             FeedbackPanel passwordFeedback = new FeedbackPanel("passwordFeedback");
             add(passwordFeedback);
@@ -80,24 +80,24 @@ public class EmailFormPanel extends CmsPanel {
 				private static final long serialVersionUID = 2572094991300700912L;
 				protected void onValidate(IValidatable<String> validatable) {
                     String password = validatable.getValue();
-//                    try {
-//                        int answer = Integer.parseInt(password);
-//                        if (answer != first.intValue() + second.intValue()){
-//                        	log.debug("onValidate - entered:"+password+" should be:"+first+"+"+second);
-//                            IValidationError error = new ValidationError().addMessageKey("message.captcha");
-//                            validatable.error(error);
-//                        }
-//                    } catch (Exception e){
-//                    	IValidationError error = new ValidationError().addMessageKey("message.captcha.error");
-//                    	validatable.error(error);
-//                    	log.debug("password validate Exception.",e);
-//                    }
-                    if (!imagePass.equals(password)) {
-                    	log.debug("onValidate - entered:"+password+" should be:"+imagePass);
-                        IValidationError error = new ValidationError().addMessageKey("message.captcha");
-                        validatable.error(error);
-                        //"You entered '" + password + "' You should have entered '" + imagePass + "'"
+                    try {
+                        int answer = Integer.parseInt(password);
+                        if (answer != first.intValue() + second.intValue()){
+                        	log.debug("onValidate - entered:"+password+" should be:"+first+"+"+second);
+                            IValidationError error = new ValidationError().addMessageKey("message.captcha");
+                            validatable.error(error);
+                        }
+                    } catch (Exception e){
+                    	IValidationError error = new ValidationError().addMessageKey("message.captcha.error");
+                    	validatable.error(error);
+                    	log.debug("password validate Exception.",e);
                     }
+//                    if (!imagePass.equals(password)) {
+//                    	log.debug("onValidate - entered:"+password+" should be:"+imagePass);
+//                        IValidationError error = new ValidationError().addMessageKey("message.captcha");
+//                        validatable.error(error);
+//                        //"You entered '" + password + "' You should have entered '" + imagePass + "'"
+//                    }
                     captchaImageResource.invalidate();
                 }
             });
