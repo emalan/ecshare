@@ -180,9 +180,11 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 
 				@Override
 				protected void onValidate(IValidatable<String> validatable) {
-					String memberId = validatable.getValue();
-					if (getRepositoryService().isMemberExist(memberId)) {
-						validatable.error(new ValidationError().addMessageKey("message.invalidMemberID"));
+					if (model.getObject().getKey() <= 0) {
+						String memberId = validatable.getValue();
+						if (getRepositoryService().isMemberExist(memberId)) {
+							validatable.error(new ValidationError().addMessageKey("message.invalidMemberID"));
+						}
 					}
 				}
 				
@@ -267,8 +269,17 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
+			boolean newUser = (getModelObject().getKey() <= 0);
 			getRepositoryService().saveMember(getModelObject());
-			info(getString("message.success"));
+			if (newUser){
+				if (sendRegistrationEmail(getModelObject())){
+					info(getString("message.success.new"));
+				} else {
+					error(getString("message.fail.email"));
+				}
+			} else {
+				info(getString("message.success"));
+			}
 			target.addComponent(MemberForm.this);
 			processSubmit(target);
 		}
