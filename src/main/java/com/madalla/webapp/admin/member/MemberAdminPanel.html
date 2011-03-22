@@ -8,6 +8,10 @@
         #siteadmin form label {
             width: 16em;
         }
+        #siteadmin form fieldset span.display {
+            padding-top: 10px;
+            float: left;
+        }
         #siteadmin form fieldset span.yui-skin-sam {
             float: left;
             padding-top: 10px;
@@ -62,11 +66,11 @@
                     </div>
 		            <div wicket:id="signupDiv">
 		                <label><wicket:message key="label.date.signup">Label Contents</wicket:message></label>
-		                <span wicket:id="signupDate"></span>
+		                <span class="display" wicket:id="signupDate"></span>
 		            </div>
 		            <div wicket:id="authDateDiv">
 		                <label><wicket:message key="label.date.authorized">Label Contents</wicket:message></label>
-		                <span wicket:id="authorizedDate"></span>
+		                <span class="display" wicket:id="authorizedDate"></span>
 		            </div>
 		            <div wicket:id="authDiv">
 		                <label for="authorize">
