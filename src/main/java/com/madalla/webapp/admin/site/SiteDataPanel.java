@@ -11,7 +11,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByLink.CssProvider;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -23,6 +22,7 @@ import org.joda.time.DateTimeZone;
 import com.madalla.bo.email.EmailEntryData;
 import com.madalla.bo.log.LogData;
 import com.madalla.webapp.CmsPanel;
+import com.madalla.wicket.LabelPagingNavigator;
 
 public class SiteDataPanel extends CmsPanel {
 
@@ -243,7 +243,7 @@ public class SiteDataPanel extends CmsPanel {
 		
 		add(dataView);
 		
-		add(new PagingNavigator("emailNavigator", dataView));
+		add(new LabelPagingNavigator("emailNavigator", dataView));
 		
 		//////////////////////
 		// Transaction logs
@@ -294,7 +294,7 @@ public class SiteDataPanel extends CmsPanel {
 		logView.setItemsPerPage(10);
 		
 		add(logView);
-		add(new PagingNavigator("logNavigator", logView));
+		add(new LabelPagingNavigator("logNavigator", logView));
 	}
 	
 	/**

@@ -1,6 +1,6 @@
 
 body {
-    font-family:"Trebuchet MS",Verdana,Arial,Sans-serif;
+    font-family:"lucida grande",tahoma,verdana,arial,sans-serif;
 }
 
 #doc {
@@ -15,12 +15,13 @@ body {
 }
 
 #hd h1{ 
+    
     padding-left: 20px;
     padding-top: 10px;
     margin-bottom: 0.2em;
     margin-top: 0.2em;
     font-weight: bold;
-    font-size: 182%;
+    font-size: 189%;
     font-stretch: wider;
     float:left;
     width: 40%;
@@ -88,58 +89,25 @@ p.info {
     color: blue;
 }
 
-/* =Menu
+/* =Links
 ----------------------------------------------------------------------------*/
+a {
+    font-family:"lucida grande",tahoma,verdana,arial,sans-serif;
+    color: #1F75CC;
+    text-decoration: none;
+    outline: medium none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* =menu
+-----------------------------------------------------------------------------*/
 #control {
     float: left; 
     width: 100%;
     padding-bottom: 0.5em;
 }
-
-#mainNav ul {
-	background-color:#FAA819;
-	float:left;
-	margin:0;
-	padding:0;
-	text-align:center;
-}
-
-#mainNav ul li {
-	float:left;
-	font-size:116%;
-	font-variant:normal;
-	font-weight:normal;
-	letter-spacing:0.1em;
-	list-style-type:none;
-	width:9.5em;
-}
-
-#mainNav ul span {
-	font-weight:bold;
-}
-
-#mainNav ul a, #mainNav ul span {
-	background:transparent url(divider.gif) repeat-y scroll left top;
-	color:#0022CC;
-	display:block;
-	float:left;
-	line-height:2.1em;
-	text-decoration:none;
-	width:100%;
-}
-
-#mainNav ul a:hover { 
-	color: #0000FF;
-	font-weight: bold;
-}
-#mainNav ul a:active { color: #FF0000;}
-
-#mainNav ul .home a {
-  	background: none;
-}
-
-/* =menu
------------------------------------------------------------------------------*/
 ul.menu {
 }
 
@@ -151,7 +119,6 @@ ul.menu li span {
 }
 
 ul.menu li a {
-    color: #777777;
     text-decoration: none;
     outline: medium none;
 }
@@ -209,6 +176,12 @@ div.box-bottomleft{
     -webkit-border-bottom-left-radius: 5px;
     border-bottom-left-radius: 5px;
 }
+
+/* =Navigator
+----------------------------------------------------------------------------*/
+.navigator span {color: #777777;}
+.navigator a span {color: #1F75CC;}
+.navigator a:hover {text-decoration: none;}
 
 /* =Table
 ----------------------------------------------------------------------------*/

@@ -24,7 +24,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -46,6 +45,7 @@ import com.madalla.webapp.components.member.AbstractMemberPanel;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.wicket.ClassAppenderBehavior;
+import com.madalla.wicket.LabelPagingNavigator;
 import com.madalla.wicket.animation.Animator;
 import com.madalla.wicket.animation.AnimatorSubject;
 import com.madalla.wicket.form.AjaxValidationForm;
@@ -400,7 +400,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 		
 		container.add(dataView);
 		
-		dataView.setItemsPerPage(10);
+		dataView.setItemsPerPage(5);
 		
 //		container.add(new OrderByBorder("orderById", "id", provider) {
 //			private static final long serialVersionUID = 1L;
@@ -415,6 +415,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 
 			protected void onSortChanged() {
 				dataView.setCurrentPage(0);
+				current.setObject(new Member());
             }
         });
 		
@@ -431,6 +432,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 
 			protected void onSortChanged() {
 				dataView.setCurrentPage(0);
+				current.setObject(new Member());
             }
         });
 
@@ -439,12 +441,15 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 
 			protected void onSortChanged() {
 				dataView.setCurrentPage(0);
+				current.setObject(new Member());
             }
         });
 
 		
 		
-		add(new PagingNavigator("navigator", dataView));
+		//add(new PagingNavigator("navigator", dataView));
+		add(new LabelPagingNavigator("navigator", dataView));
+		
 		
 	}
 
