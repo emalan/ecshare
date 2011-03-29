@@ -12,9 +12,9 @@ About Control My Site
     
     * Secure Admin Pages for Site Configuration and Repository Management
     
-    * User administration including creating users, welcome email, password reset and use of secure ssh pages for login and password
+    * User administration including creating users, welcome email, password reset and configurable use of secure ssh pages for login and password
     
-    * Ajax Form processing, including Ajax Submit Button and Ajax Self-validating Input fields
+    * Ajax Form processing, including Ajax Submit Button and Ajax self-validating Input fields
     
     * Multi-lingual support : multi lingual text editing, including translate page (with google translate functionality)
     
@@ -48,13 +48,13 @@ About Control My Site
     
 Technology Stack
 
-    * Applications deployed on Ubuntu server on Amazon's ec2 service.
+    * Applications deployed on Linux Ubuntu server on Amazon's ec2 service.
     
     * Jackrabbit CMS with a MySql database for persistence.
     
-    * All repository interactions use the Java JCR API.
+    * All repository interactions are decoupled from the UI layer by using the Java JCR API.
     
     * Jackrabbit's OCM is used for Object to JCR conversion.
     
-    * Wicket for the Application and Front End
+    * The Java Wicket framework is used to create the web application and UI.
     

@@ -1,7 +1,7 @@
 /**
  * Tiny Mce version 3.0
  * 
- * <a href="http://tinymce.moxiecode.com/">Tiny Mce</a> javascript library used as HTML editer for Content. 
+ * <a href="http://tinymce.moxiecode.com/" target="_blank">Tiny Mce</a> javascript library used as HTML editer for Content. 
  * <p>
  * I, Eugene Malan, herby disclaim any copyright interest in the below
  * mentioned code.
