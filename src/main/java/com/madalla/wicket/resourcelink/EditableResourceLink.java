@@ -366,33 +366,33 @@ public class EditableResourceLink extends Panel {
         
         link.setVisibilityAllowed(true);
         link.setOutputMarkupId(true);
-        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(6)){
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onPostProcessTarget(AjaxRequestTarget target) {
-				target.addComponent(feedback);
-				String indicatorId = getIndicator();
-				if (isFileUploading(data.getId()) != null && isFileUploading(data.getId())){
-					target.appendJavascript("wicketShow('" + indicatorId +"');");
-				} else {
-					target.appendJavascript("wicketHide('" + indicatorId +"');");
-				}
-				
-			}
-			
-			protected String getIndicator()
-			{
-				if (getComponent() instanceof IndicatingUploadLink)
-				{
-					return ((IndicatingUploadLink)getComponent()).getAjaxIndicatorMarkupId();
-				}
-				return null;
-			}
-
-        	
-        });
+//        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(6)){
+//
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			protected void onPostProcessTarget(AjaxRequestTarget target) {
+//				target.addComponent(feedback);
+//				String indicatorId = getIndicator();
+//				if (isFileUploading(data.getId()) != null && isFileUploading(data.getId())){
+//					target.appendJavascript("wicketShow('" + indicatorId +"');");
+//				} else {
+//					target.appendJavascript("wicketHide('" + indicatorId +"');");
+//				}
+//				
+//			}
+//			
+//			protected String getIndicator()
+//			{
+//				if (getComponent() instanceof IndicatingUploadLink)
+//				{
+//					return ((IndicatingUploadLink)getComponent()).getAjaxIndicatorMarkupId();
+//				}
+//				return null;
+//			}
+//
+//        	
+//        });
         return link;
 	}
 
