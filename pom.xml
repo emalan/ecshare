@@ -7,7 +7,7 @@
 	<version>1.4</version>
 	<name>Control My Site</name>
 	<description>Wicket Framework code for multi-lingual Content Management system</description>
-	<url>http://www.emalan.com</url>
+	<url>http://www.controlmysite.net</url>
     <organization> 
         <name>emalan consulting, inc</name> 
         <url>http://www.emalan.com</url>
@@ -76,12 +76,6 @@
             <artifactId>wicket-spring</artifactId>
             <version>${wicket.version}</version>
         </dependency>
-        <dependency>
-            <groupId>springframework</groupId>
-            <artifactId>spring-mock</artifactId>
-            <version>1.2.6</version>
-        </dependency>
-        
 		
 		<!-- JACKRABBIT -->
         <dependency>

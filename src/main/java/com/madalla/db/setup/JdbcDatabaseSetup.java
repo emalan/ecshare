@@ -18,6 +18,7 @@ import org.xml.sax.InputSource;
 public class JdbcDatabaseSetup {
 	private DataSource dataSource;
 	private InputStream schema;
+	private boolean alterDb = true;
 	
 	public void setSchema(InputStream schema) {
 		this.schema = schema;
@@ -30,12 +31,10 @@ public class JdbcDatabaseSetup {
 	public void setupDatabase(DataSource dataSource) {
         try {
         	Database database = new DatabaseIO().read(new InputSource(schema));
-            changeDatabase(dataSource, database, true);
-            
+            changeDatabase(dataSource, database, alterDb);
         } catch (Exception e) {
             System.out.println("Could not populate database with schema." + e);
         }
-
     }
 
     private static void changeDatabase(DataSource dataSource,
@@ -53,4 +52,9 @@ public class JdbcDatabaseSetup {
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
+
+	public void setAlterDb(boolean alterDb) {
+		this.alterDb = alterDb;
+	}
+
 }
