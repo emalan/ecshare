@@ -16,6 +16,20 @@
             float: left;
             padding-top: 10px;
         }
+        div.email {
+            float: none;
+            clear: both;
+            overflow: hidden;
+            width: 100%;
+        }
+        div.email .feedbackPanel {
+            float : left;
+            margin-top: 0.15em;
+        }
+        div.email .feedbackPanelINFO {
+            color: blue;
+            font-style: italic;
+        }
     </style>
 </wicket:head>
 <body>
@@ -118,7 +132,14 @@
                     </span> 
                     <span class="feedbackPanel" wicket:id="formFeedback"/>   
                 </div>
-                </form>   
+                </form> 
+                <div class="email" wicket:id="reset">
+                    <p class="info"><wicket:message key="label.reset.info">Label Contents</wicket:message></p>
+                    <span id="welcome" class="buttonwrapper">
+                        <a class="bluebutton" wicket:id="resetLink"><span><wicket:message key="label.resetPassword">Label Contents</wicket:message></span></a>
+                    </span>
+                    <span class="feedbackPanel" wicket:id="resetFeedback"></span>
+                </div>  
             </div>
             
         </div>

@@ -155,7 +155,7 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 			
 		});
 		
-		Component resetLink = new Label("resetLink", getString("label.forgot"));
+		Component resetLink = new Label("resetLink", new Model<String>(getString("label.forgot")));
 		add(resetLink);
 		resetLink.setVisible(!session.isSignedIn());
 		

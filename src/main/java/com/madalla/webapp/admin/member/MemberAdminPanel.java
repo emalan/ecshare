@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -24,6 +27,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -53,6 +57,7 @@ import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 
 public class MemberAdminPanel extends AbstractMemberPanel {
 	private static final long serialVersionUID = 1L;
+	private static final Log log = LogFactory.getLog(MemberAdminPanel.class);
 
 	private class SortableMemberProvider extends SortableDataProvider<MemberData>{
 		
@@ -450,7 +455,41 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 		//add(new PagingNavigator("navigator", dataView));
 		add(new LabelPagingNavigator("navigator", dataView));
 		
+		////////////////////////
+		// Reset Password Button
+		////////////////////////
+		final MarkupContainer reset;
+		editFormDiv.add(reset = new WebMarkupContainer("reset"));
+		
+		final Component resetFeedback = new ComponentFeedbackPanel("resetFeedback", reset).setOutputMarkupId(true);
+		reset.add(resetFeedback);
+		
+		final AjaxLink<String> resetLink = new IndicatingAjaxLink<String>("resetLink"){
+			private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+            	final MemberData member = current.getObject();
+        		final String email = member.getEmail();
+        		if (StringUtils.isNotEmpty(email)){
+        			if (sendResetPasswordEmail(member)){
+        				reset.info(getString("message.reset.success"));
+        			} else {
+        				log.error("password reset - Send failure! " + member);
+        				reset.error(getString("message.reset.fail"));
+        			}
+        		}
+         		target.addComponent(resetFeedback);
+            }
+
+            @Override
+			protected void onBeforeRender() {
+				super.onBeforeRender();
+			}
+
+		};
+		reset.add(resetLink);
 		
 	}
-
+	
 }

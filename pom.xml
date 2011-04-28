@@ -309,7 +309,7 @@
         <site>
             <id>ecprod</id>
             <name>Amazon ec2 - production</name>
-            <url>scp://:ubuntu@174.129.192.163:/vol/www/htdocs/controlmysite/ecshare</url>
+            <url>scp://:ubuntu@174.129.192.163:/vol/www/htdocs/controlmysite/project</url>
         </site>
     </distributionManagement>
 	

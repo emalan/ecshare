@@ -20,7 +20,7 @@ About Control My Site
     
     * Multi-lingual Search Engine Optimization : separate URL's and Page Meta information for each supported language.
 
-    Site Admin functionality includes:
+  Site Admin functionality includes:
 
     * User Admin : profile changes, password change, creating and editing existing users.
     
@@ -32,7 +32,7 @@ About Control My Site
     
     * Content Admin : View tree structure of Content. Backup and restore of data. Delete/Copy Nodes..
 
-    List of Panels that can be used in web sites
+  List of Panels that can be used in web sites
 
     * One line "hover-click editable" text blocks.
     

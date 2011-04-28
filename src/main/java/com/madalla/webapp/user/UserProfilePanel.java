@@ -59,10 +59,17 @@ public class UserProfilePanel extends CmsPanel{
 	public UserProfilePanel(String id){
 		
 		super(id);
-		
+
+		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
+		add(Css.CSS_FORM);
+
+	}
+
+	@Override
+	protected void onBeforeRender() {
 		IUser user = getSessionDataService().getUser();
         log.debug(user);
-		
+        
 		//User Change Link - secure or not depending on authenticator
 		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
 		SiteData siteData = getRepositoryService().getSiteData();
@@ -84,18 +91,14 @@ public class UserProfilePanel extends CmsPanel{
 				
 			});
 		}
-		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
-		add(Css.CSS_FORM);
-
-        //****************
-        //Profile Section
         
-		//Heading
-		add(new Label("profileHeading",getString("heading.profile", new Model<IUser>(user) )));
+		add(new Label("profileHeading", getString("heading.profile", new Model<IUser>(user))));
 		
-		//Form
 		add(new ProfileForm("profileForm", new CompoundPropertyModel<UserData>(user)));
 		
+		super.onBeforeRender();
 	}
+	
+	
 	
 }
