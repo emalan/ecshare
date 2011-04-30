@@ -20,6 +20,7 @@ import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 
 import com.madalla.bo.member.MemberData;
@@ -105,7 +106,7 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 		signinFeedback.setOutputMarkupId(true);
 		signinForm.add(signinFeedback);
 		
-		signinForm.add(new IndicatingAjaxButton("submitLink", new Model<String>(getString("label.login")), signinForm){
+		signinForm.add(new IndicatingAjaxButton("submitLink", new ResourceModel("label.login"), signinForm){
 
             private static final long serialVersionUID = 1L;
 
@@ -155,7 +156,7 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 			
 		});
 		
-		Component resetLink = new Label("resetLink", new Model<String>(getString("label.forgot")));
+		Component resetLink = new Label("resetLink", new ResourceModel("label.forgot"));
 		add(resetLink);
 		resetLink.setVisible(!session.isSignedIn());
 		
@@ -173,7 +174,7 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 
 		final Component resetFeedback;
 		resetForm.add(resetFeedback = new ComponentFeedbackPanel("resetFeedback", username).setOutputMarkupId(true));
-		resetForm.add(new IndicatingAjaxButton("submitLink", new Model<String>(getString("label.reset")), resetForm) {
+		resetForm.add(new IndicatingAjaxButton("submitLink", new ResourceModel("label.reset"), resetForm) {
 
 			private static final long serialVersionUID = 1L;
 			

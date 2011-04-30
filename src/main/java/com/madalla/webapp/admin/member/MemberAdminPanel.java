@@ -58,6 +58,7 @@ import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 public class MemberAdminPanel extends AbstractMemberPanel {
 	private static final long serialVersionUID = 1L;
 	private static final Log log = LogFactory.getLog(MemberAdminPanel.class);
+	private static final int ITEMS_PAGE = 10;
 
 	private class SortableMemberProvider extends SortableDataProvider<MemberData>{
 		
@@ -405,7 +406,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 		
 		container.add(dataView);
 		
-		dataView.setItemsPerPage(5);
+		dataView.setItemsPerPage(ITEMS_PAGE);
 		
 //		container.add(new OrderByBorder("orderById", "id", provider) {
 //			private static final long serialVersionUID = 1L;

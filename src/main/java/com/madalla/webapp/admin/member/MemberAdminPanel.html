@@ -21,6 +21,11 @@
             clear: both;
             overflow: hidden;
             width: 100%;
+            padding-top: 1em;
+        }
+        div.email p {
+            float: left;
+            clear: both;
         }
         div.email .feedbackPanel {
             float : left;
@@ -133,12 +138,12 @@
                     <span class="feedbackPanel" wicket:id="formFeedback"/>   
                 </div>
                 </form> 
-                <div class="email" wicket:id="reset">
-                    <p class="info"><wicket:message key="label.reset.info">Label Contents</wicket:message></p>
+                <div class="email section" wicket:id="reset">
                     <span id="welcome" class="buttonwrapper">
                         <a class="bluebutton" wicket:id="resetLink"><span><wicket:message key="label.resetPassword">Label Contents</wicket:message></span></a>
                     </span>
                     <span class="feedbackPanel" wicket:id="resetFeedback"></span>
+                    <p class="info"><wicket:message key="label.reset.info">Label Contents</wicket:message></p>
                 </div>  
             </div>
             

@@ -86,7 +86,8 @@ h3 {
 }
 
 p.info {
-    color: blue;
+    color: #1F75CC;
+    font-style: italic;
 }
 
 /* =Links
@@ -175,6 +176,10 @@ div.box-bottomleft{
     -moz-border-radius-bottomleft: 5px;
     -webkit-border-bottom-left-radius: 5px;
     border-bottom-left-radius: 5px;
+}
+
+div.section {
+    border-top: 1px solid #AACCEE;
 }
 
 /* =Navigator
