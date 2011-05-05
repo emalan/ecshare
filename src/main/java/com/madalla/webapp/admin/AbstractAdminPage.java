@@ -78,7 +78,9 @@ public abstract class AbstractAdminPage extends WebPage{
 		menuList.add(new PanelMenuItem(PageAdminPanel.class, "label.page","info.page"));
 		menuList.add(new PanelMenuItem(SiteEmailPanel.class, "label.email","info.email"));
 		menuList.add(new PanelMenuItem(SiteDataPanel.class, "label.siteData","info.siteData"));
-		menuList.add(new PanelMenuItem(MemberAdminPanel.class, "label.member", "info.member"));
+		if (getCmsApplication().hasMemberService()){
+			menuList.add(new PanelMenuItem(MemberAdminPanel.class, "label.member", "info.member"));
+		}
 		menuList.add(new PanelMenuItem(ImageAdminPanel.class, "label.image","info.image"));
 		menuList.add(new PanelMenuItem(ContentAdminPanel.class, "label.content","info.content"));
 		

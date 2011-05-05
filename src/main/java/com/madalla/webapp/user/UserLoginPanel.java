@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 
 import com.madalla.bo.SiteData;
@@ -120,7 +121,7 @@ public class UserLoginPanel extends CmsPanel {
 			
 		});
 		
-		Component emailLink = new Label("emailLink", getString("label.support"));
+		Component emailLink = new Label("emailLink", new ResourceModel("label.support"));
 		add(emailLink);
 		
 		MarkupContainer emailDiv = new WebMarkupContainer("emailDiv");

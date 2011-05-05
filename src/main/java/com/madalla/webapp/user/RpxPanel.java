@@ -6,7 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 
 import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsPanel;
@@ -16,7 +16,7 @@ public class RpxPanel extends CmsPanel{
 
 	public RpxPanel(String id) {
 		super(id);
-		add(new Label("rpxHeading", new Model<String>(getString("label.rpx"))));
+		add(new Label("rpxHeading", new ResourceModel("label.rpx")));
 		add(new WebComponent("openidWidget"){
 			private static final long serialVersionUID = 1L;
 
