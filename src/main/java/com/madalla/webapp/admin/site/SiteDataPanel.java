@@ -7,9 +7,11 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByLink.CssProvider;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -43,7 +45,7 @@ public class SiteDataPanel extends CmsPanel {
 			if ("senderName".equals(getSort().getProperty())){
 				Collections.sort(list, getNameComparator());
 			} else {
-				Collections.sort(list);
+				Collections.sort(list, getDateTimeComparator());
 			}
 			if (!getSort().isAscending()){
 				Collections.reverse(list);
@@ -56,6 +58,16 @@ public class SiteDataPanel extends CmsPanel {
 
 				public int compare(EmailEntryData o1, EmailEntryData o2) {
 					return o1.getSenderName().compareTo(o2.getSenderName());
+				}
+				
+			};
+		}
+		
+		private Comparator<EmailEntryData> getDateTimeComparator(){
+			return new Comparator<EmailEntryData>() {
+
+				public int compare(EmailEntryData o1, EmailEntryData o2) {
+					return o1.getDateTime().compareTo(o2.getDateTime());
 				}
 				
 			};
@@ -123,7 +135,7 @@ public class SiteDataPanel extends CmsPanel {
 			if ("user".equals(getSort().getProperty())){
 				Collections.sort(list, getUserComparator());
 			} else {
-				Collections.sort(list);
+				Collections.sort(list, getDateTimeComparator());
 			}
 			if (!getSort().isAscending()){
 				Collections.reverse(list);
@@ -136,6 +148,16 @@ public class SiteDataPanel extends CmsPanel {
 
 				public int compare(LogData o1, LogData o2) {
 					return o1.getUser().compareTo(o2.getUser());
+				}
+				
+			};
+		}
+		
+		private Comparator<LogData> getDateTimeComparator(){
+			return new Comparator<LogData>() {
+
+				public int compare(LogData o1, LogData o2) {
+					return o1.getDateTime().compareTo(o2.getDateTime());
 				}
 				
 			};
@@ -195,8 +217,12 @@ public class SiteDataPanel extends CmsPanel {
 		
 		dateTimeZone = getRepositoryService().getDateTimeZone();
 		
+		final MarkupContainer emailContainer;
+		add(emailContainer = new WebMarkupContainer("emailContainer"));
+		
 		SortableEmailEntryProvider provider = new SortableEmailEntryProvider();
-		final DataView<EmailEntryData> dataView = new DataView<EmailEntryData>("emailSorting", provider){
+		final DataView<EmailEntryData> dataView;
+		emailContainer.add(dataView = new DataView<EmailEntryData>("emailSorting", provider){
 
 			private static final long serialVersionUID = 1L;
 
@@ -221,11 +247,11 @@ public class SiteDataPanel extends CmsPanel {
 				
 			}
 			
-		};
+		});
 		
 		dataView.setItemsPerPage(10);
 		
-		add(new OrderByBorder("orderByDateTime", "id", provider, NumericCssProvider.instance) {
+		emailContainer.add(new OrderByBorder("orderByDateTime", "dateTime", provider, NumericCssProvider.instance) {
 			private static final long serialVersionUID = 1L;
 
 			protected void onSortChanged() {
@@ -233,23 +259,26 @@ public class SiteDataPanel extends CmsPanel {
             }
         });
 
-        add(new OrderByBorder("orderByName", "senderName", provider) {
+		emailContainer.add(new OrderByBorder("orderByName", "senderName", provider) {
 			private static final long serialVersionUID = 1L;
 
 			protected void onSortChanged() {
                 dataView.setCurrentPage(0);
             }
         });
-		
-		add(dataView);
 		
 		add(new LabelPagingNavigator("emailNavigator", dataView));
 		
 		//////////////////////
 		// Transaction logs
 		//////////////////////
+		final MarkupContainer logContainer;
+		add(logContainer = new WebMarkupContainer("logContainer"));
+		logContainer.setOutputMarkupId(true);
+		
 		SortableLogProvider logProvider = new SortableLogProvider();
-		final DataView<LogData> logView = new DataView<LogData>("logSorting", logProvider){
+		final DataView<LogData> logView;
+		logContainer.add(logView = new DataView<LogData>("logSorting", logProvider){
 
 			private static final long serialVersionUID = 1L;
 
@@ -273,9 +302,9 @@ public class SiteDataPanel extends CmsPanel {
 				
 			}
 			
-		};
+		});
 		
-		add(new OrderByBorder("orderByDateTime1", "id", logProvider, NumericCssProvider.instance) {
+		logContainer.add(new OrderByBorder("orderByDateTime", "dateTime", logProvider, NumericCssProvider.instance) {
 			private static final long serialVersionUID = 1L;
 
 			protected void onSortChanged() {
@@ -283,7 +312,7 @@ public class SiteDataPanel extends CmsPanel {
             }
         });
 
-        add(new OrderByBorder("orderByUser", "user", logProvider) {
+		logContainer.add(new OrderByBorder("orderByUser", "user", logProvider) {
 			private static final long serialVersionUID = 1L;
 
 			protected void onSortChanged() {
@@ -293,7 +322,6 @@ public class SiteDataPanel extends CmsPanel {
 		
 		logView.setItemsPerPage(10);
 		
-		add(logView);
 		add(new LabelPagingNavigator("logNavigator", logView));
 	}
 	

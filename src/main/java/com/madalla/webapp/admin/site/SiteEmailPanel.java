@@ -100,7 +100,6 @@ public class SiteEmailPanel extends CmsPanel{
 		add(userSelect);
 		
 		//Actions
-
 		userSelect.add(new AjaxFormComponentUpdatingBehavior("onclick"){
 			private static final long serialVersionUID = 1L;
 
@@ -209,7 +208,7 @@ public class SiteEmailPanel extends CmsPanel{
 		return false;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private IModel<Collection<SiteData>> getSitesModel(){
 		return new Model((Serializable) new ArrayList<SiteData>());
 	}

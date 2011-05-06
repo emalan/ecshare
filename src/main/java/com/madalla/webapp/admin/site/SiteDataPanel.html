@@ -12,7 +12,7 @@
             
             <div id="emailDiv">
             	<span wicket:id="emailNavigator">[dataview navigator]</span>
-				<table cellspacing="0" class="dataview">
+				<table cellspacing="0" class="dataview" wicket:id="emailContainer">
     				<tr>
         				<th wicket:id="orderByDateTime"><wicket:message key="label.date">Label Contents</wicket:message></th>
         				<th><wicket:message key="label.time">Label Contents</wicket:message></th>
@@ -33,9 +33,9 @@
 			<h2><wicket:message key="heading.log">Label Contents</wicket:message></h2>
 			<div id="logDiv">
             	<span wicket:id="logNavigator">[dataview navigator]</span>
-				<table cellspacing="0" class="dataview">
+				<table cellspacing="0" class="dataview" wicket:id="logContainer">
     				<tr>
-        				<th wicket:id="orderByDateTime1"><wicket:message key="label.date">Label Contents</wicket:message></th>
+        				<th wicket:id="orderByDateTime"><wicket:message key="label.date">Label Contents</wicket:message></th>
         				<th><wicket:message key="label.time">Label Contents</wicket:message></th>
         				<th wicket:id="orderByUser"><wicket:message key="label.user">Label Contents</wicket:message></th>
         				<th><wicket:message key="label.type">Label Contents</wicket:message></th>
