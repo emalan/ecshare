@@ -310,8 +310,32 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 		final MarkupContainer editFormDiv;
 		add(editFormDiv = new WebMarkupContainer("editFormDiv"));
 		editFormDiv.setOutputMarkupId(true);
+		
+		////////////////////////
+		// Reset Password Button
+		////////////////////////
+		final MarkupContainer reset;
+		editFormDiv.add(reset = new WebMarkupContainer("reset"));
+		reset.setOutputMarkupId(true);
+		
+		final Component resetFeedback = new ComponentFeedbackPanel("resetFeedback", reset).setOutputMarkupId(true);
+		reset.add(resetFeedback);
+		resetFeedback.setOutputMarkupId(true);
+		
+		
+		reset.add(new ClassAppenderBehavior(true){
+			private static final long serialVersionUID = 1L;
 
+			@Override
+			protected boolean setClass() {
+				return current.getObject().getKey() == 0? false : true;
+			}
+			
+		});
+		
+		//////////////////////////////////////
 		// animator to open/close profile form
+		//////////////////////////////////////
 		final Animator hideShowForm = new Animator().addSubjects(AnimatorSubject.slideOpen(editFormDiv.getMarkupId(), 42));
 		add(hideShowForm);
 		
@@ -344,6 +368,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 				form.clearInput();
 				target.appendJavascript(hideShowForm.seekToEnd());
 				target.addComponent(editForm);
+				target.addComponent(reset);
 			}
 			
 		}.setDefaultFormProcessing(false));
@@ -373,6 +398,8 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 						target.addComponent(editForm);
 						target.appendJavascript("var e = $('"+ item.getMarkupId() + "'); e.adjacent('tr').each(function(s){ s.removeClassName('selected')}); e.addClassName(\"selected\");" + hideShowForm.seekToEnd());
 						target.addComponent(item);
+						target.addComponent(reset);
+						target.addComponent(resetFeedback);
 					}
                 });
 				
@@ -451,19 +478,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
             }
         });
 
-		
-		
-		//add(new PagingNavigator("navigator", dataView));
 		add(new LabelPagingNavigator("navigator", dataView));
-		
-		////////////////////////
-		// Reset Password Button
-		////////////////////////
-		final MarkupContainer reset;
-		editFormDiv.add(reset = new WebMarkupContainer("reset"));
-		
-		final Component resetFeedback = new ComponentFeedbackPanel("resetFeedback", reset).setOutputMarkupId(true);
-		reset.add(resetFeedback);
 		
 		final AjaxLink<String> resetLink = new IndicatingAjaxLink<String>("resetLink"){
 			private static final long serialVersionUID = 1L;
@@ -492,5 +507,13 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 		reset.add(resetLink);
 		
 	}
+
+	@Override
+	protected void onBeforeRender() {
+		current.setObject(new Member());
+		super.onBeforeRender();
+	}
+	
+	
 	
 }

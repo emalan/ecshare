@@ -253,7 +253,6 @@ public class EditableResourceLink extends Panel {
 	 */
 	private void initLabelForm(IModel<?> model) {
 
-		
 		WebMarkupContainer displayArea = new WebMarkupContainer("displayArea");
 		add(displayArea);
 		
@@ -359,8 +358,6 @@ public class EditableResourceLink extends Panel {
 			protected boolean callOnBeforeRenderIfNotVisible() {
 				return true;
 			}
-            
-            
 
         };
         
