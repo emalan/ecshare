@@ -106,7 +106,7 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 		signinFeedback.setOutputMarkupId(true);
 		signinForm.add(signinFeedback);
 		
-		signinForm.add(new IndicatingAjaxButton("submitLink", new ResourceModel("label.login"), signinForm){
+		signinForm.add(new IndicatingAjaxButton("submitLink", new ResourceModel("label.memberLogin"), signinForm){
 
             private static final long serialVersionUID = 1L;
 
