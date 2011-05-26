@@ -1,0 +1,38 @@
+CMS enabled components
+
+    There are a number of CMS enabled components that can be added to pages. Once a user is logged in, the 
+    content for these components can be entered or configured either directly from the web page or by clicking
+    on the supplied link.
+
+* One-line text
+
+    The one-line text component is easy to edit and is recommended for titles and other one line text fields. 
+    The field changes color when the user's mouse hovers over the field to indicate that the field can be edited. 
+    When clicked, the field changes to an input field and the user can type in the new text value. The value is 
+    saved when the user navigates away from the field via Ajax.  
+    
+* Text
+
+    Paragraphs and other html elements on a page can be inserted via this Text Block component. the user can edit 
+    the block by clicking on the pencil icon, which will take the user to the html editor in the Admin application.
+    Text can be easily entered or changed using the main editor panel which supports normally text editor functionality.
+    There is an html editor that can be used to edit the actual html that will display on the screen. Multi-lingual 
+    content is supported by the editor as all languages supported by the web site can be edited by picking the relevant
+    tab. There is also a link to a translate editor that allows the user to use "Google translate" to translate the base
+    site language to anther language so that they then have a starting point for the new language.
+    
+* Resource links
+
+    The resource link component allows the user to upload a pdf or doc file as well as configure the actual link. The
+    resource link can be hidden when not required. Multi-lingualism is not supported here and the intention is that the 
+    document itself will be multi-lingual if needed.
+
+* Image Albums
+
+    Images can be uploaded using the Admin Images page so that they can be used in the application. To edit an album component,
+    the user will click on the link and drag and drop available images onto the album. There are various album configurations that 
+    are set at design time including, a rotating banner, exhibit (includes text and image).
+
+* Video
+
+    The video component takes a you-tube video id and will then create a you-tube video player on the page. 

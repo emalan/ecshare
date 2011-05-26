@@ -1,0 +1,14 @@
+JCR Implementation
+
+    The JCR persistent layer is supported using the open-source Apache Jackrabbit project code.
+    
+Jackrabbit configuration
+
+    This project uses different persistent databases in development and production. In development Jackrabbit
+    uses a derby database that is configured and created on application startup. This approach makes it easy to 
+    get a development environment started as no database needs to be setup.
+    
+    In production Jackrabbit is setup so that each application uses its own cluster and the data is then synched between 
+    clusters. This approach makes each application performant as it has its own set of data. The data is synched in the 
+    background and does not slow the application down. This approach will not scale to a large number of applications
+    and a web service to support the CMS data is being developed. 

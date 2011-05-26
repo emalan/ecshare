@@ -174,6 +174,10 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     	
     }
     
+    /* (non-Javadoc)
+     * @see org.apache.wicket.protocol.http.WebApplication#newRequestCycleProcessor()
+     * Disable https when in development mode or when the application has no security certificate
+     */
     @Override
     protected IRequestCycleProcessor newRequestCycleProcessor()
     {

@@ -1,0 +1,8 @@
+Search Engine Optimization in multi-languages
+
+    The home page of the application is mounted on a seperate URL for each language supported by the application.
+    This effectively creates multiple landing pages for the application, one in each language. Multi-lingual
+    Search Engine optimization can then be done by using the relevant URL for each language appropriately.
+    This approach allows one to have one page supporting multiple languages on different URL's, which minimizes
+    maintenance on the actual application. The content is managed using the relevant multi-lingual editors supplied
+    by the admin application.
