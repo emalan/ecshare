@@ -7,6 +7,7 @@ import static com.madalla.webapp.scripts.utility.ScriptUtils.FAST_INIT;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -464,11 +465,11 @@ public abstract class CmsPage extends WebPage {
 	}
 	
 	protected List<IMenuItem>getPageMetaData(){
-		List<Class<? extends Page>> pages = ((CmsApplication)getApplication()).getPageMenuList();
+		Collection<Class<? extends Page>> pages = ((CmsApplication)getApplication()).getPageMenuList();
 		return getPageMetaData(pages);
 	}
 	
-	protected List<IMenuItem> getPageMetaData(List<Class<? extends Page>> pages){
+	protected List<IMenuItem> getPageMetaData(Collection<Class<? extends Page>> pages){
 		final List<IMenuItem> items = new ArrayList<IMenuItem>();
 		for(final Class<? extends Page> page: pages){
 

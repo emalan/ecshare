@@ -1,6 +1,7 @@
 package com.madalla.webapp.admin.site;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,6 +43,7 @@ public class PageAdminPanel extends CmsPanel {
 
 					@Override
 					void preSaveProcessing(String existingMount, String newMount) {
+						log.debug("changing mount. existing:" + existingMount + " new:" + newMount);
 						if (StringUtils.isNotEmpty(existingMount)){
 							getCmsApplication().unmount(existingMount);
 						}
@@ -64,7 +66,7 @@ public class PageAdminPanel extends CmsPanel {
 	}
     
     private Class<? extends Page> getPageClass(String name){
-    	List<Class<? extends Page>> pages = ((CmsApplication)getApplication()).getAppPages();
+    	Collection<Class<? extends Page>> pages = ((CmsApplication)getApplication()).getAppPages();
 		for (Class<? extends Page> page : pages){
 			if (getPageName(page).equals(name)){
 				return page;
@@ -81,7 +83,7 @@ public class PageAdminPanel extends CmsPanel {
 	}
 	
 	private List<PageData> getPages(){
-		List<Class<? extends Page>> pages = ((CmsApplication)getApplication()).getAppPages();
+		Collection<Class<? extends Page>> pages = ((CmsApplication)getApplication()).getAppPages();
 		List<PageData> rt = new ArrayList<PageData>();
 		for (Class<? extends Page> page : pages){
 			PageData pageData = getRepositoryService().getPage(getPageName(page));

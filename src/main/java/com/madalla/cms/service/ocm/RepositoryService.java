@@ -117,14 +117,8 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     	
     	ImageUtilities.validateImageIO();
 
-    	//Create site node
-    	SiteData siteData = getSite(site);
-    	
     	userSecurityService.init(getSiteEntries(), repositoryTemplate);
     	
-        locales = siteData.getLocaleList();
-        locales.add(SiteLanguage.ENGLISH); // english is default
-        
     }
     
     public DateTimeZone getDateTimeZone(){

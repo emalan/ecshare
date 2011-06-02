@@ -1,7 +1,9 @@
 package com.madalla.webapp;
 
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -121,9 +123,35 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     }
     
     protected void setupPageMounts(){
-    	for (SiteLanguage lang : SiteLanguage.getLanguages()){
-    		mount(new I18NBookmarkablePageRequestTargetUrlCodingStrategy(lang.locale, lang.getLanguageCode(), getHomePage()));
+    	
+    	final List<SiteLanguage> langs = SiteLanguage.getAllLanguages();
+		
+		//mount pages for all supported language
+		for (SiteLanguage lang : langs){
+			try {
+				mount(new I18NBookmarkablePageRequestTargetUrlCodingStrategy(lang.locale, lang.getLanguageCode(), getHomePage()));
+			} catch (WicketRuntimeException e) {
+				log.error("Error while mounting home landing page for language:" + lang, e);
+			}
     	}
+		
+		//mount application pages
+		for (Class<? extends Page> page : getAppPages()) {
+			final PageData pageData = getRepositoryService().getPage(page.getSimpleName());
+			
+			//mount rest of application pages
+			for (SiteLanguage lang : langs) {
+				PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(lang.locale, pageData, false);
+				final String mountName = pageInfo.getMountName(pageData.getName());
+				try {
+					mount(new I18NBookmarkablePageRequestTargetUrlCodingStrategy(lang.locale, mountName, page));
+				} catch (WicketRuntimeException e) {
+					log.error("Error while mounting Application Page with name:" + mountName, e);
+				}
+			}
+
+		}
+    	
     	mountBookmarkablePage(PASSWORD, UserPasswordPage.class);
     	mountBookmarkablePage(SECURE_PASSWORD, SecurePasswordPage.class);
     	
@@ -152,18 +180,6 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     		mountBookmarkablePage(MEMBER_PASSWORD, getMemberPasswordPage());
     		mountBookmarkablePage(MEMBER_REGISTRATION, getMemberRegistrationPage());
     	}
-    	
-		//mount application pages
-    	for (Class<? extends Page> page : getAppPages()){
-			final PageData pageData = getRepositoryService().getPage(page.getSimpleName());
-			PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(SiteLanguage.BASE_LOCALE, pageData);
-			String mountName = StringUtils.defaultIfEmpty(pageInfo.getMountName(), page.getSimpleName());
-			try {
-				mountBookmarkablePage(mountName, page);
-			} catch (WicketRuntimeException e){
-				log.error("Error while mounting Application Page.", e);
-			}
-		}
     	
     	//mount images
     	for(AlbumData album : getRepositoryService().getAlbums()){
@@ -277,17 +293,33 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 	}
     
     /**
-     * This supplies a hook point for the admin application to create data for the pages
-     * of the application (menu name, meta information). It also makes the menu more dynamic.
+     * Supplies a Collection with Pages for the menu
      * 
      * @return List of Pages used in the menu OR Collections.emptyList() if no menu
      */
-    public abstract List<Class<? extends Page>> getPageMenuList();
+    final public Collection<Class<? extends Page>> getPageMenuList(){
+    	Collection<Class<? extends Page>> pages = new LinkedHashSet<Class<? extends Page>>();
+    	addPagesForMenu(pages);
+    	return pages;
+    }
     
     /**
-     * @return all application pages
+     * Implementing classes should add the menu pages to the supplied Collection so that they
+     * can be displayed on the menu
      */
-    public abstract List<Class <? extends Page>> getAppPages();
+    protected abstract void addPagesForMenu(Collection<Class<? extends Page>> pages);
+    
+    
+    /**
+     * @return all application pages, make sure to include home page
+     */
+    final public Collection<Class <? extends Page>> getAppPages(){
+    	Collection<Class<? extends Page>> pages = new LinkedHashSet<Class<? extends Page>>();
+    	addAppPages(pages);
+    	return pages;
+    }
+    
+    protected abstract void addAppPages(Collection<Class<? extends Page>> pages);
     
     public boolean hasRpxService(){
     	return false;

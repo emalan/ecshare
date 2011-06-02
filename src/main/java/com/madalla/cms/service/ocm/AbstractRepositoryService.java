@@ -24,7 +24,7 @@ abstract class AbstractRepositoryService{
 	
     protected String site ;
 	protected JcrTemplate template;
-    protected List<SiteLanguage> locales;
+    //protected List<SiteLanguage> locales;
     //protected ObjectContentManager ocm;
     protected RepositoryTemplate repositoryTemplate;
     protected TransactionLogDao transactionLogDao;

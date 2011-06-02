@@ -33,12 +33,14 @@ public abstract class PageMetaPanel extends CmsPanel{
     	
     	private static final long serialVersionUID = 1L;
     	
-    	private String existingMount;
+    	final private String existingMount;
+    	final private String pageName;
         
-    	public MetaDataForm(String id, IModel<PageMetaLangData> model) {
+    	public MetaDataForm(String id, IModel<PageMetaLangData> model, final String pageName) {
             super(id, model);
             
-            this.existingMount = model.getObject().getMountName();
+            this.existingMount = model.getObject().getMountName(pageName);
+            this.pageName = pageName;
             
             add(new AjaxValidationRequiredTextField("displayName"));
             
@@ -56,7 +58,7 @@ public abstract class PageMetaPanel extends CmsPanel{
 		protected void onSubmit(AjaxRequestTarget target) {
 			PageMetaLangData data = getModelObject();
 			
-			preSaveProcessing(existingMount, data.getMountName());
+			preSaveProcessing(existingMount, data.getMountName(pageName));
 			
 			saveData(data);
 			info(getString("message.success"));
@@ -72,14 +74,15 @@ public abstract class PageMetaPanel extends CmsPanel{
 		// Base Lang
 		PageMetaLangData pageMetaLang = getRepositoryService().getPageMetaLang(SiteLanguage.BASE_LOCALE, pageData);
 		log.debug("Constructing base lang Form.  " + pageMetaLang );
-		final Form<PageMetaLangData> homeBaseForm = new MetaDataForm("homeBaseForm", new CompoundPropertyModel<PageMetaLangData>(pageMetaLang));
+		
+		final Form<PageMetaLangData> homeBaseForm = new MetaDataForm("homeBaseForm", new CompoundPropertyModel<PageMetaLangData>(pageMetaLang), pageData.getName());
 	    add(homeBaseForm);
 	    
 		// Other Langs
 	    log.debug("Constructing other langs. default=" + defaultLocale );
 		final CompoundPropertyModel<PageMetaLangData> homeOtherModel = new CompoundPropertyModel<PageMetaLangData>(getRepositoryService().getPageMetaLang(defaultLocale, pageData, false));
 		log.debug("Constructing other lang Form. Model: " + homeOtherModel );
-	    final Form<PageMetaLangData> homeOtherForm = new MetaDataForm("homeOtherForm", homeOtherModel);
+	    final Form<PageMetaLangData> homeOtherForm = new MetaDataForm("homeOtherForm", homeOtherModel, pageData.getName());
 		add(homeOtherForm);
 		    
 		SiteLanguage selectedLanguage = SiteLanguage.getLanguage(defaultLocale.getLanguage());

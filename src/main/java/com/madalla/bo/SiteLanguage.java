@@ -76,8 +76,16 @@ public enum SiteLanguage{
 		}
 	}
 	
+	public static List<SiteLanguage> getAllLanguages(){
+		List<SiteLanguage> ret = new ArrayList<SiteLanguage>(SiteLanguage.values().length);
+		for (int i = 0; i < SiteLanguage.values().length; i++) {
+			ret.add(SiteLanguage.values()[i]);
+		}
+		return ret;
+	}
+	
 	public static List<SiteLanguage> getLanguages(){
-		List<SiteLanguage> ret = new ArrayList<SiteLanguage>(SiteLanguage.values().length -1);
+		List<SiteLanguage> ret = new ArrayList<SiteLanguage>(SiteLanguage.values().length);
 		for (int i = 0; i < SiteLanguage.values().length; i++) {
 			if (!SiteLanguage.values()[i].equals(getBaseLanguage())){
 				ret.add(SiteLanguage.values()[i]);
