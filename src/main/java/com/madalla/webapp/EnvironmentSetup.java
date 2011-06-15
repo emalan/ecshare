@@ -14,30 +14,30 @@ import org.apache.wicket.Application;
 
 /**
  * Sets up environment on startup.
- * 
+ *
  * Spring configured with values from property files.
- * 
+ *
  * @author Eugene Malan
  *
  */
 public class EnvironmentSetup implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final String LAYOUT_TOMCAT = "%d{ISO8601} %-5p - %-26.26c{1} - %m\n";
-	
+
 	private String site;
 	private String configType;
 	private String logfile;
-	
+
 	public void init(){
 		if (Application.DEPLOYMENT.equalsIgnoreCase(configType)){
 			setupLogging(logfile);
 		}
 	}
-	
+
 	public static void setupLogging(String file){
-		
+
      	Logger root = Logger.getRootLogger();
-     	
+
 		Layout layout = new PatternLayout(LAYOUT_TOMCAT);
 		DailyRollingFileAppender tomcat;
 		try {
@@ -47,17 +47,17 @@ public class EnvironmentSetup implements Serializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
  		for (@SuppressWarnings("rawtypes")Enumeration e = root.getAllAppenders(); e.hasMoreElements() ; ){
  			Object appender = e.nextElement();
  			if (appender instanceof ConsoleAppender) {
  				ConsoleAppender console = (ConsoleAppender) appender;
  				console.setThreshold(Level.WARN);
  			}
- 			
+
  		}
-		
-		
+
+
 	}
 
 	public void setSite(String site) {

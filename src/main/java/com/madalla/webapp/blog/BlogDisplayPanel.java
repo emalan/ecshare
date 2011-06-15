@@ -36,7 +36,7 @@ public class BlogDisplayPanel extends Panel {
 	private final Log log = LogFactory.getLog(this.getClass());
 	private int displayCount = 5;
 	private final BlogEntryView blogEntry = new BlogEntryView();
-	
+
 	BlogDisplayPanel(final String id, final BlogData blog, final String blogEntryId){
 		super(id);
 		init(id, blog );
@@ -52,17 +52,17 @@ public class BlogDisplayPanel extends Panel {
 		blogEntry.setKeywords("Eugene Malan, Eugene, Malan, Blog, CMS, Wicket, Java,"+blogEntry.getBlog());
 		add(new StringHeaderContributor(MessageFormat.format(META_NAME, "keywords", blogEntry.getKeywords())));
 	}
-	
+
 	private void init(final String id, final BlogData blog) {
-		
+
 		//new Blog link
 		add(new AdminPageLink("createNew", BlogEntryPage.class, new PageParameters("0="+blog.getName())));
-		
+
         log.debug("construtor - retrieving blog entries from service.");
         List<BlogEntryData> blogList = getRepositoryService().getBlogEntries(blog);
 
         log.debug("construtor - retrieved blog entries. count="+blogList.size());
-        
+
         //ListView repeater
         final ListView<BlogEntryData> listView = new ListView<BlogEntryData>("comments", blogList) {
 			private static final long serialVersionUID = 1L;
@@ -79,9 +79,9 @@ public class BlogDisplayPanel extends Panel {
                 listItem.add(textSummary);
 
                 final Component textFull = new Label("textFull", current.getText())
-                	.setEscapeModelStrings(false).setOutputMarkupId(true);	
+                	.setEscapeModelStrings(false).setOutputMarkupId(true);
                 listItem.add(textFull);
-                
+
                 AjaxFallbackLink<Object> link = new AjaxFallbackLink<Object>("showFullText"){
 					private static final long serialVersionUID = 8535809673244662238L;
 
@@ -94,7 +94,7 @@ public class BlogDisplayPanel extends Panel {
 						add(new SimpleAttributeModifier("class","blogTextHide"));
 						target.addComponent(this);
 					}
-                	
+
                 };
                 link.setOutputMarkupId(true);
                 listItem.add(link);
@@ -103,7 +103,7 @@ public class BlogDisplayPanel extends Panel {
                 //String htmlLink = "... <a href=\"" + script + "\">"+getString("label.more")+"</a>";
                 //textSummary.setModel(new Model(current.getSummary(htmlLink)));
                 listItem.add(new AdminPageLink("editBlog", BlogEntryPage.class, new PageParameters("0="+blog.getName()+",1="+current.getId())));
-                
+
             }
         };
         listView.setViewSize(displayCount);
@@ -119,16 +119,16 @@ public class BlogDisplayPanel extends Panel {
 		add(new AdminPageLink("editBlogLink", BlogEntryPage.class, new PageParameters("0="+blog.getName()+",1="+blogEntry.getId())));
 
 	}
-	
+
 	public void changeModel(String blogEntryId){
 		IBlogEntryData newData = getRepositoryService().getBlogEntry(blogEntryId);
 		blogEntry.init(newData);
 		log.debug("changeModel - "+ blogEntry);
 	}
-	
+
     private IDataService getRepositoryService(){
     	return ((IDataServiceProvider)getApplication()).getRepositoryService();
     }
 
-	
+
 }

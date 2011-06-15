@@ -10,7 +10,7 @@ public interface IImageData {
 	DynamicImageResource getImageFull();
 
 	DynamicImageResource getImageThumb();
-	
+
 	String getTitle();
 
 	void setTitle(String title);
@@ -26,11 +26,11 @@ public interface IImageData {
 	String getDescription();
 
 	void setDescription(String description);
-	
+
 	Integer getSortOrder();
-	
+
 	void setSortOrder(Integer sortOrder);
-	
+
 	String getAlbumName();
-	
+
 }

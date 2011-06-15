@@ -5,5 +5,5 @@ public interface IPageMetaData {
 	String getName();
 
 	String getId();
-	
+
 }

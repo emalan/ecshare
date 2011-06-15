@@ -11,11 +11,11 @@ import com.madalla.webapp.admin.AbstractAdminPage;
 public class AdminPageLink extends BookmarkablePageLink<Object>{
 
 	private static final long serialVersionUID = 1L;
-	
+
 	public AdminPageLink(String id, final Class<? extends AbstractAdminPage> adminPageClass) {
 		super(id, adminPageClass);
 	}
-	
+
 	public AdminPageLink(final String id, final Class<? extends AbstractAdminPage> adminPageClass,
 			final PageParameters parameters){
 		super(id, adminPageClass, parameters);

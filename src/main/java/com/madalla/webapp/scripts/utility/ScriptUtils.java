@@ -20,6 +20,6 @@ public class ScriptUtils {
 	public static final HeaderContributor BANNER_CSS = CSSPackageResource.getHeaderContribution(ScriptUtils.class,"banner/banner.css");
 	public static final CompressedResourceReference SLIDESHOW = new CompressedResourceReference(ScriptUtils.class,"slideshow/slideshow.js");
 	public static final HeaderContributor SLIDESHOW_CSS = CSSPackageResource.getHeaderContribution(ScriptUtils.class,"slideshow/slideshow.css");
-	
+
 	private ScriptUtils(){}
 }

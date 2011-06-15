@@ -40,44 +40,45 @@ public class EmailFormPanel extends CmsPanel {
     private String imagePass = CaptchaUtils.randomString(4, 6);
     private Integer first = CaptchaUtils.randomInteger(1, 20);
     private Integer second = CaptchaUtils.randomInteger(1, 12);
-    
+
     private final String subject ;
-    
+
     public class EmailForm extends AjaxValidationForm<Object> {
         private static final long serialVersionUID = -2684823497770522924L;
-        
+
         private String name ;
         private String email ;
         private String comment ;
         private final CaptchaImageResource captchaImageResource;
-        
+
         public EmailForm(String id) {
             super(id);
-            
+
             captchaImageResource = new CaptchaImageResource(imagePass);
-    
+
             FeedbackPanel nameFeedback = new FeedbackPanel("nameFeedback");
             add(nameFeedback);
             add(new AjaxValidationRequiredTextField("name",new PropertyModel<String>(this, "name"), nameFeedback));
-            
+
             FeedbackPanel emailFeedback = new FeedbackPanel("emailFeedback");
             add(emailFeedback);
             TextField<String> emailField = new AjaxValidationRequiredTextField("email", new PropertyModel<String>(this, "email"),emailFeedback);
             emailField.add(EmailAddressValidator.getInstance());
             add(emailField);
-            
+
             TextArea<String> commentField = new TextArea<String>("comment",new PropertyModel<String>(this,"comment"));
             add(commentField);
-            
+
             add(new Label("captchaString", first+" + "+second+" = "));
             //add(new Image("captchaImage", captchaImageResource));
-            
+
             FeedbackPanel passwordFeedback = new FeedbackPanel("passwordFeedback");
             add(passwordFeedback);
             RequiredTextField<String> passwordField = new AjaxValidationRequiredTextField("password", new Model<String>(""), passwordFeedback);
             add(passwordField);
             passwordField.add(new AbstractValidator<String>(){
 				private static final long serialVersionUID = 2572094991300700912L;
+				@Override
 				protected void onValidate(IValidatable<String> validatable) {
                     String password = validatable.getValue();
                     try {
@@ -101,7 +102,7 @@ public class EmailFormPanel extends CmsPanel {
                     captchaImageResource.invalidate();
                 }
             });
-            
+
         }
 
 		@Override
@@ -118,13 +119,13 @@ public class EmailFormPanel extends CmsPanel {
 
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
-			
+
 			if (sendEmail(getSiteData().getName(), name, email, comment)){
                 info(getString("message.success"));
             } else {
                 error(getString("message.fail"));
             }
-			
+
 		}
 
 		public String getName() {
@@ -152,23 +153,23 @@ public class EmailFormPanel extends CmsPanel {
 		}
 
     }
-    
+
     public EmailFormPanel(final String id, final String subject) {
         super(id);
         this.subject = subject;
-        
+
         add(Css.CSS_FORM);
-        
+
         add(new EmailForm("emailForm"));
-        
+
     }
-    
+
     private boolean sendEmail(final String site, final String name, final String email, final String comment){
     	logEmail(name, email, comment);
         String body = getEmailBody(site, name, email, comment);
         return sendEmail(getEmailSender(), getSiteData(), body, subject);
     }
-    
+
     //to allow override
     protected boolean sendEmail(final IEmailSender emailSender, final SiteData site, final String body, final String subject){
         if (StringUtils.isEmpty(site.getAdminEmail())){
@@ -177,7 +178,7 @@ public class EmailFormPanel extends CmsPanel {
             return emailSender.sendUserEmail(subject, body, site.getAdminEmail(), "Site Admin", true);
         }
     }
-    
+
     private void logEmail(String name, String email, String comment){
     	try {
     		getRepositoryService().createEmailEntry(name, email, comment);
@@ -185,7 +186,7 @@ public class EmailFormPanel extends CmsPanel {
     		log.error("Data Access Exception while logging email.", e);
     	}
     }
-    
+
     private String getEmailBody(String site, String from, String email, String comment){
         Object[] args = {site, from,email,(comment == null)?"":comment};
         String body = MessageFormat.format(getEmailtemplate(),args);
@@ -204,16 +205,16 @@ public class EmailFormPanel extends CmsPanel {
         }
         return body;
     }
-    
+
     private String getEmailtemplate(){
         StringBuffer sb = new StringBuffer("Email sent from {0} website...").append(System.getProperty("line.separator"));
         sb.append("From: {1} ({2})").append(System.getProperty("line.separator"));
         sb.append("Comment: {3}").append(System.getProperty("line.separator"));
         return sb.toString();
     }
-    
+
     protected SiteData getSiteData(){
         return getRepositoryService().getSiteData();
     }
-    
+
 }

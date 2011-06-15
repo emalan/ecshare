@@ -8,15 +8,15 @@ import junit.framework.TestCase;
 
 public class UtilTest extends TestCase{
 
-	
+
 	public void testLocales(){
 		String[] languages = Locale.getISOLanguages();
 		Locale locale = new Locale("EN");
 		System.out.println(languages);
-		
+
 		Locale[] locales = Locale.getAvailableLocales();
 		System.out.println(locales);
-		
+
 		List<Locale> list = new ArrayList<Locale>();
 		list.add(Locale.ENGLISH);
 		list.add(Locale.FRENCH);

@@ -12,13 +12,13 @@ public abstract class UserSiteData extends AbstractData implements IUserSite, Co
 		} else {
 			return new Integer(hashCode()).compareTo(o.hashCode());
 		}
-	}	
-    
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		if (!(obj instanceof UserSiteData)) return false;
-		UserSiteData compare = (UserSiteData)obj; 
+		UserSiteData compare = (UserSiteData)obj;
 		if (!getName().equals(compare.getName()))return false;
 		return true;
 	}

@@ -8,12 +8,12 @@ public abstract class LogData extends AbstractData implements ILogData, Comparab
 	public int compareTo(LogData compare) {
 		return compare.getId().compareTo(getId());
 	}
-	
+
     @Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		if (!(obj instanceof LogData)) return false;
-		LogData compare = (LogData)obj; 
+		LogData compare = (LogData)obj;
 		if (!getId().equals(compare.getId())) return false;
 		return true;
 	}

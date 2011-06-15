@@ -8,9 +8,9 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 
 public class FileUploadThread  extends Thread{
-	
+
 	private static final Log log = LogFactory.getLog(FileUploadThread.class);
-	
+
 	private final IFileUploadInfo uploadInfo;
 	private final IFileUploadProcess process;
 	private final String id;
@@ -28,35 +28,36 @@ public class FileUploadThread  extends Thread{
 		this.fileUpload = fileUpload;
 	}
 
+	@Override
 	public void run() {
-		
+
 		try {
-			
+
 			String fileName = fileUpload.getClientFileName();
-			
+
 			//Check for existing process
 			IFileUploadStatus status = uploadInfo.getFileUploadStatus(id);
 			if (status != null && status.isUploading()){
 				log.warn("Cannot upload submitted file. There is an existing process with the same name that is uploading. Name: " + fileName);
 				return;
 			}
-			
+
 			log.debug("Start processing: " + fileName);
-			
+
 			FileUploadStatus uploadStatus = new FileUploadStatus();
 			if (group == null){
 				uploadInfo.setFileUploadStatus(id, uploadStatus);
 			} else {
 				uploadInfo.setFileUploadStatus(id, group, uploadStatus);
 			}
-			
+
         	InputStream inputStream = fileUpload.getInputStream();
         	if (inputStream == null){
         		log.error("file upload - Input resource invalid.");
         	} else {
         		process.execute(inputStream, fileName);
         	}
-        	
+
         	// Sleep to simulate time-consuming work
 //			try {
 //				Thread.sleep(20000);
@@ -65,7 +66,7 @@ public class FileUploadThread  extends Thread{
 //			}
 
 			uploadStatus.uploading = false;
-			
+
 			log.debug("Done processing: " + fileName);
 		} catch (IOException e) {
 		//	session.error(e.getMessage());

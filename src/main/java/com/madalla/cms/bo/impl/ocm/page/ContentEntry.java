@@ -13,18 +13,20 @@ public class ContentEntry extends ContentEntryData{
 
 	@Field(path=true) private String id;
 	@Field private String text;
-	
+
 	public ContentEntry(){
-		
+
 	}
-	
+
     public ContentEntry(IContentData parent, String name){
         id = parent.getId() + "/" + name;
     }
-    public String getName(){
+    @Override
+	public String getName(){
         return StringUtils.substringAfterLast(getId(), "/");
     }
-    public String getId() {
+    @Override
+	public String getId() {
         return id;
     }
     public void setId(String id) {

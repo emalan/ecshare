@@ -21,12 +21,12 @@ public abstract class BlogEntryData extends AbstractData implements IBlogEntryDa
     	list.add("travel");
         return list;
     }
-	
+
 	public String getSummary(String moreLink){
         return getSummary()+moreLink;
     }
 
-	
+
     public String getSummary(){
     	if (StringUtils.isNotEmpty(getDescription())){
     		return getDescription();
@@ -36,21 +36,22 @@ public abstract class BlogEntryData extends AbstractData implements IBlogEntryDa
         }
         return HTMLParser.parseHTMLText(getText(), summaryLength);
     }
-    
+
+	@Override
 	public String getName() {
 		return StringUtils.deleteWhitespace(getTitle());
 	}
-	
+
 	public int compareTo(BlogEntryData o) {
 		BlogEntryData compare = o;
 		return compare.getDateTime().compareTo(getDateTime());
-	}	
-    
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		if (!(obj instanceof BlogEntryData)) return false;
-		BlogEntryData compare = (BlogEntryData)obj; 
+		BlogEntryData compare = (BlogEntryData)obj;
 		if (!getTitle().equals(compare.getTitle()))return false;
 		if (!getBlog().equals(compare.getBlog()))return false;
 		if (!getCategory().equals(compare.getCategory()))return false;
@@ -65,7 +66,8 @@ public abstract class BlogEntryData extends AbstractData implements IBlogEntryDa
 	public int hashCode() {
 		return getId().hashCode();
 	}
-	
+
+	@Override
 	public String toString() {
         return ReflectionToStringBuilder.toString(this).toString();
     }

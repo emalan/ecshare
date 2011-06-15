@@ -13,25 +13,25 @@ import com.madalla.wicket.animation.AnimatorSubject;
 
 /**
  * Self Updating Validation Behaviour.
- * 
+ *
  * Validation happens onBlur and there is an animation to indicate to user that something is happening.
  * If feedback is supplied then the enclosing element is set to a valid/invalid class, so that you can style
  * a response to the validation.
- * 
+ *
  * @author Eugene Malan
  *
  */
 public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 	private static final long serialVersionUID = 1L;
-	
+
 	private Log log = LogFactory.getLog(this.getClass());
 	private final FeedbackPanel feedbackPanel;
-	
+
 	private final Animator animator;
-	
+
 	private String validClass ;
 	private String invalidClass ;
-	
+
 	public AjaxValidationBehaviour() {
 		this(null);
 	}
@@ -51,18 +51,18 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 		this.validClass = validClass;
 		this.invalidClass = invalidClass;
 	}
-	
+
 	public void reset(AjaxRequestTarget target){
 		log.debug("reset - "+getFormComponent());
 	}
-	
+
 	@Override
 	protected void onUpdate(AjaxRequestTarget target) {
 		animation(target);
 		log.debug("onUpdate - "+getFormComponent());
-		
+
 		target.addComponent(getFormComponent());
-		
+
 		getFormComponent().info("Valid");
 		//refreshForm(getFormComponent().getForm(), target);
 		if (feedbackPanel != null){
@@ -79,7 +79,7 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 		log.debug("onError -" + getFormComponent());
 
 		target.addComponent(getFormComponent());
-		
+
 		if (feedbackPanel != null){
 			target.addComponent(feedbackPanel);
 			target.appendJavascript(
@@ -87,7 +87,7 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
                 "$('"+feedbackPanel.getMarkupId()+"').parentNode.removeClassName('"+validClass+"');");
 		}
 	}
-	
+
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
@@ -101,5 +101,5 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 	private void animation(AjaxRequestTarget target) {
 		target.appendJavascript(animator.play()+animator.reverse());
 	}
-	
+
 }

@@ -1,6 +1,6 @@
 package com.madalla.wicket;
 
-public interface IAjaxIndicatorControl 
+public interface IAjaxIndicatorControl
 
 	{
 		/**

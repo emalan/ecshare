@@ -20,7 +20,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 /**
  * Menu Link that will switch form Panels
- * 
+ *
  * @author Eugene Malan
  *
  */
@@ -28,12 +28,12 @@ public class PanelLink extends Link<Object> {
 
 	private static final long serialVersionUID = 1L;
 	private static final Log log = LogFactory.getLog(PanelLink.class);
-	
+
 	final private String panelId;
 	final private String key;
 	final private String titleKey;
 	final private Class<? extends Panel> panelClass;
-	
+
 	public PanelLink(final String id, final String panelId, Class<? extends Panel> panelClass, final String key, String titleKey){
 		super(id);
 		this.panelId = panelId;
@@ -42,15 +42,15 @@ public class PanelLink extends Link<Object> {
 		this.panelClass = panelClass;
 		setAuthorization();
 	}
-	
+
 	public PanelLink(final String id, final String panelId, Class<? extends Panel> panelClass, final String key){
 		this(id, panelId, panelClass, key, "");
 	}
-	
+
     public PanelLink(final String id, final String panelId, Class<? extends Panel> panelClass) {
 		this(id, panelId, panelClass, "");
 	}
-    
+
     private void setAuthorization(){
     	final Application application = Application.get();
 		InstantiationPermissions permissions = application.getMetaData(MetaDataRoleAuthorizationStrategy.INSTANTIATION_PERMISSIONS);
@@ -77,7 +77,7 @@ public class PanelLink extends Link<Object> {
 			return true;
 		}
 	}
-	
+
 	@Override
 	protected void onComponentTag(ComponentTag tag) {
 		if (StringUtils.isNotEmpty(titleKey)){
@@ -108,8 +108,8 @@ public class PanelLink extends Link<Object> {
 			log.error("Error while creating admin panel.", e);
 			throw new WicketRuntimeException("Error while Creating new Admin Panel.", e);
 		}
-		
+
 	}
 
-	
+
 }

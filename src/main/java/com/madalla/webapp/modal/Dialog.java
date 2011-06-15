@@ -16,16 +16,16 @@ import org.apache.wicket.util.string.AppendingStringBuffer;
 
 public class Dialog extends ModalWindow implements IHeaderContributor{
 	private static final long serialVersionUID = 1L;
-	
+
 	//private final Log log = LogFactory.getLog(this.getClass());
 	private final boolean saveButton;
 	private final boolean closeButton = true;
 	private Component component;
-	private String dataId; 
+	private String dataId;
 	private String cancelButtonLabel = "Done";
 
 	private static final ResourceReference OBO = new CompressedResourceReference(Dialog.class, "modal.css");
-	
+
 	public Dialog(final String id){
 		this(id, false);
 	}
@@ -34,26 +34,27 @@ public class Dialog extends ModalWindow implements IHeaderContributor{
 		this.saveButton = saveButton;
       	add(CSSPackageResource.getHeaderContribution(OBO));
        	setCssClassName("w_obo");
-       	
+
         setInitialWidth(450);
         setInitialHeight(300);
        	setResizable(false);
 	}
-	
+
 
 	@Override
 	public ModalWindow setContent(final Component component) {
 		this.component = component;
-		
+
 		if (component.getId().equals("dialogContent") == false)
 		{
 			throw new WicketRuntimeException("Dialog content id is wrong. Component ID:" +
 				component.getId() + " : should be dialogContent. ");
 		}
-		
+
 		Component panel = new DialogContentPanel(this.getContentId(), component, closeButton, saveButton){
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			void onCancel(AjaxRequestTarget target) {
             	close(target);
             }
@@ -69,10 +70,10 @@ public class Dialog extends ModalWindow implements IHeaderContributor{
 			}
 
         };
-		
+
 		return super.setContent(panel);
 	}
-	
+
 	public void setDataId(String id){
 		this.dataId = id;
 	}
@@ -84,10 +85,10 @@ public class Dialog extends ModalWindow implements IHeaderContributor{
 
 	public void renderHead(IHeaderResponse response) {
 		response.renderOnDomReadyJavascript("Wicket.Window.unloadConfirmation = false;");
-		
-		
+
+
 	}
-	
+
 	@Override
 	protected AppendingStringBuffer postProcessSettings(AppendingStringBuffer settings) {
 		return super.postProcessSettings(settings);
@@ -102,9 +103,9 @@ public class Dialog extends ModalWindow implements IHeaderContributor{
 		}
 		super.onBeforeRender();
 	}
-	
+
 	public void setCancelButtonLabel(String label){
 		this.cancelButtonLabel = label;
 	}
-	
+
 }

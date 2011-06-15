@@ -7,9 +7,9 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
 public class StartUtils {
-	
+
 	private static final String LOCAL_LAYOUT = "%-5p - %-26.26c{1} - %m\n";
-	
+
 	private StartUtils(){}
 
     public static void setLogForLocal(){
@@ -20,7 +20,7 @@ public class StartUtils {
     		Layout layout = new PatternLayout(LOCAL_LAYOUT);
     		appender.setLayout(layout);
     	}
-		
+
 	}
 
 

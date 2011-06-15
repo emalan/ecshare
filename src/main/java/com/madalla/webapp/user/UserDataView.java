@@ -27,12 +27,14 @@ public class UserDataView extends UserData {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	@Override
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
 	}
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -63,7 +65,7 @@ public class UserDataView extends UserData {
 	public Boolean getRequiresAuth() {
 		return requiresAuth;
 	}
-	
+
 	public void clear(){
 		id = "";
 		name = "";
@@ -79,7 +81,7 @@ public class UserDataView extends UserData {
 	}
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
-		
+
 	}
 
 }

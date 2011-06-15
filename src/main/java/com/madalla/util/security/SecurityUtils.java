@@ -11,7 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import sun.misc.BASE64Encoder;
 
 public class SecurityUtils {
-	
+
 	private static final Log log = LogFactory.getLog(SecurityUtils.class);
 
 	public static String encrypt(String string) {
@@ -32,7 +32,7 @@ public class SecurityUtils {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public static String getGeneratedPassword(){
 		return RandomStringUtils.randomAlphanumeric(6);
 	}

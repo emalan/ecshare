@@ -1,9 +1,9 @@
 package com.madalla.util.captcha;
 
 public class CaptchaUtils {
-	
+
 	private CaptchaUtils(){}
-    
+
     public static Integer randomInteger (int min, int max){
         return new Integer(randomInt(min, max));
     }

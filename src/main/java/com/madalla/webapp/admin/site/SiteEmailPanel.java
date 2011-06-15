@@ -35,15 +35,15 @@ import com.madalla.wicket.form.ValidationStyleBehaviour;
 
 public class SiteEmailPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
-	
+
 	private static Log log = LogFactory.getLog(SiteEmailPanel.class);
-	
+
 	private abstract class EmailForm extends AjaxValidationForm<Object> {
 		private static final long serialVersionUID = 1L;
 
 		public EmailForm(String id) {
 			super(id);
-			
+
             Component subject = new RequiredTextField<String>("subject",new PropertyModel<String>(SiteEmailPanel.this, "subject"));
             add(subject);
             subject.add(new ValidationStyleBehaviour());
@@ -59,16 +59,16 @@ public class SiteEmailPanel extends CmsPanel{
 			add(formFeedback);
 			return formFeedback;
 		}
-		
+
 	}
-	
+
 	private Collection<UserData> selectedUsers = new ArrayList<UserData>();
 	private List<UserData> userList = new ArrayList<UserData>();
 	private List<UserData> allUsers = getRepositoryService().getUsers();
-	
+
 	private String subject;
 	private String body;
-	
+
 	public SiteEmailPanel(String id) {
 		super(id);
 
@@ -76,16 +76,16 @@ public class SiteEmailPanel extends CmsPanel{
 		final List<SiteData> sitesChoices = getRepositoryService().getSiteEntries();
 		Component checkbox = new CheckBoxMultipleChoice<SiteData>("site", getSitesModel(),sitesChoices, new ChoiceRenderer<SiteData>("name"));
 		add(checkbox);
-		
+
 		IModel<Collection<UserData>> usersModel = new PropertyModel<Collection<UserData>>(this, "selectedUsers") ;
 		IModel<List<UserData>> userListModel = new PropertyModel<List<UserData>>(this, "userList") ;
-		
+
 		final ListMultipleChoice<UserData> userSelect = new ListMultipleChoice<UserData>("userSelect", usersModel, userListModel, new IChoiceRenderer<UserData>(){
 					private static final long serialVersionUID = 1L;
 
 					public Object getDisplayValue(UserData object) {
-						return object.getName() + " (" 
-							+ StringUtils.defaultIfEmpty(object.getFirstName()," ") 
+						return object.getName() + " ("
+							+ StringUtils.defaultIfEmpty(object.getFirstName()," ")
 							+ " " + StringUtils.defaultIfEmpty(object.getLastName()," ") + ")"
 							+ " " + StringUtils.defaultIfEmpty(object.getEmail(), getString("label.noemail"));
 					}
@@ -93,12 +93,12 @@ public class SiteEmailPanel extends CmsPanel{
 					public String getIdValue(UserData object, int index) {
 						return object.getName();
 					}
-			
+
 		});
 		userSelect.setOutputMarkupId(true);
 		userSelect.setMaxRows(10);
 		add(userSelect);
-		
+
 		//Actions
 		userSelect.add(new AjaxFormComponentUpdatingBehavior("onclick"){
 			private static final long serialVersionUID = 1L;
@@ -106,9 +106,9 @@ public class SiteEmailPanel extends CmsPanel{
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				log.debug("selected User Count: " + selectedUsers.size());
-				
+
 			}
-			
+
 		});
 
 		checkbox.add(new AjaxFormChoiceComponentUpdatingBehavior(){
@@ -118,10 +118,10 @@ public class SiteEmailPanel extends CmsPanel{
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				Collection<SiteData> sites = (Collection<SiteData>) getComponent().getDefaultModelObject();
-				
+
 				//clear selections
 				selectedUsers.clear();
-				
+
 				//mess with actual displayed list
 				userList.clear();
 				userList.addAll(allUsers);
@@ -130,15 +130,15 @@ public class SiteEmailPanel extends CmsPanel{
 						userList.remove(item);
 					}
 				}
-				
+
 				//start with all selected
 				selectedUsers.addAll(userList);
-				
+
 				target.addComponent(userSelect);
 			}
-			
+
 		});
-		
+
 		add(new AjaxLink<String>("sendEmail"){
 			private static final long serialVersionUID = 1L;
 
@@ -149,12 +149,12 @@ public class SiteEmailPanel extends CmsPanel{
 						log.info("Test sending email. user=" + item.getName() + ", email=" + item.getEmail());
 					}
 				}
-				
-				
+
+
 			}
-			
+
 		});
-		
+
 		add(new EmailForm("emailForm"){
 			private static final long serialVersionUID = 1L;
 
@@ -174,18 +174,18 @@ public class SiteEmailPanel extends CmsPanel{
 							} else {
 								error(getString("message.email.fail", new Model<UserData>(user)));
 							}
-							
+
 						}
-						
+
 					}
 				}
-				
+
 			}
 		});
-		
+
 
 	}
-	
+
 	private boolean isUserInSite(UserData user, Collection<SiteData> sites) {
 
 		List<UserSiteData> userSites = getRepositoryService().getUserSiteEntries(user);
@@ -207,10 +207,10 @@ public class SiteEmailPanel extends CmsPanel{
 
 		return false;
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private IModel<Collection<SiteData>> getSitesModel(){
-		return new Model((Serializable) new ArrayList<SiteData>());
+		return new Model(new ArrayList<SiteData>());
 	}
 
 	public void setSelectedUsers(Collection<UserData> userData) {
@@ -244,7 +244,7 @@ public class SiteEmailPanel extends CmsPanel{
 	public String getBody() {
 		return body;
 	}
-	
+
 
 
 }

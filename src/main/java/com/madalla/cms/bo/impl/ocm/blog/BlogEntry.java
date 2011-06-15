@@ -36,6 +36,7 @@ public class BlogEntry extends BlogEntryData {
 		this.id = blog.getId() + "/" + getName();
 	}
 
+	@Override
 	public String getId() {
 		return id;
 	}

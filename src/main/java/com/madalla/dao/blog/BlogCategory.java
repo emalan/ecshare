@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 public class BlogCategory implements Serializable{
-	
+
 	private static final long serialVersionUID = 6591017566642399532L;
 	private int id;
     private String name;
@@ -25,8 +25,9 @@ public class BlogCategory implements Serializable{
     public void setName(String name) {
         this.name = name;
     }
-    
-    public String toString() {
+
+    @Override
+	public String toString() {
         return ReflectionToStringBuilder.toString(this).toString();
     }
 }

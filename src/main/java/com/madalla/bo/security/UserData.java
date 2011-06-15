@@ -12,13 +12,13 @@ public abstract class UserData extends AbstractData implements IUser, IUserValid
 		} else {
 			return new Integer(hashCode()).compareTo(o.hashCode());
 		}
-	}	
-    
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		if (!(obj instanceof UserData)) return false;
-		UserData compare = (UserData)obj; 
+		UserData compare = (UserData)obj;
 		if (!getName().equals(compare.getName()))return false;
 		if (!getEmail().equals(compare.getEmail()))return false;
 		if (!getPassword().equals(compare.getPassword())) return false;

@@ -16,11 +16,11 @@ public class DraggableAjaxBehaviour extends AbstractTransformerBehavior {
 	}
 
 	private String dragId;
-	
+
 	public DraggableAjaxBehaviour(){
-		
+
 	}
-	
+
 	/**
 	 * @param dragId - ID to be passed to droppable
 	 */
@@ -35,7 +35,7 @@ public class DraggableAjaxBehaviour extends AbstractTransformerBehavior {
 	}
 
 	private String getJavascriptTemplate(String id){
-		
+
 		JavascriptBuilder builder = new JavascriptBuilder();
 		builder.addLine("var e = $('"+id+"');");
 		builder.addLine("new Draggable(e,{ghosting: true, revert: true});");
@@ -44,7 +44,7 @@ public class DraggableAjaxBehaviour extends AbstractTransformerBehavior {
 		if (!StringUtils.isEmpty(dragId)){
 		    builder.addLine("e.writeAttribute('dragId', value = '"+ dragId+"');");
 		}
-		
+
 		return builder.buildScriptTagString();
 
 	}

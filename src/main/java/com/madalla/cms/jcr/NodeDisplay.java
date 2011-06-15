@@ -12,7 +12,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.ValueFormatException;
 
 public class NodeDisplay {
-	
+
 	private static final String CLASS_NAME = "ocm_classname";
 	private static final String JCR_PREFIX = "jcr:";
 	private static final String NULL_CLASS_DISPLAY = "Not an OCM Node";
@@ -20,7 +20,7 @@ public class NodeDisplay {
 	private String name;
 	private String className;
 	private Map<String, NodePropertyDisplay> properties = new HashMap<String, NodePropertyDisplay>();
-	
+
 	public class NodePropertyDisplay{
 		public String type;
 		public String value;
@@ -28,7 +28,7 @@ public class NodeDisplay {
 			this.type = type;
 		}
 	}
-	
+
 	public NodeDisplay(Item item) throws RepositoryException{
 		name = item.getName();
 		if (item instanceof Node){
@@ -49,7 +49,7 @@ public class NodeDisplay {
 					value.value = prop.getValue().getString();
 				} catch (ValueFormatException e){
 					value.value = prop.getValues().toString();
-					
+
 				}
 				properties.put(key, value);
 			}

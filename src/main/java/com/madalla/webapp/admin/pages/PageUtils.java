@@ -9,12 +9,12 @@ import org.apache.wicket.WicketRuntimeException;
 
 /**
  * Utility functions for Wicket Pages
- * 
+ *
  * @author Eugene Malan
  *
  */
 public class PageUtils {
-	
+
 	private PageUtils(){}
 
 	private static void error(String message){
@@ -23,7 +23,7 @@ public class PageUtils {
 	private static void error(String message, Exception e){
 		throw new WicketRuntimeException(message, e);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static Class<? extends Page> getReturnPage(PageParameters parameters, String panel){
 		String pageString = getPageParameter(RETURN_PAGE, parameters, panel);
@@ -38,7 +38,7 @@ public class PageUtils {
         }
         return returnPage;
 	}
-	
+
 	/** throws Exception if param not found */
 	public static String getPageParameter(String paramName, PageParameters parameters, String panel){
 		String paramValue = parameters.getString(paramName);
@@ -47,7 +47,7 @@ public class PageUtils {
 		}
 		return paramValue;
 	}
-	
+
 	/** supply default value if param not found */
 	public static String getPageParameter(String paramName, PageParameters parameters, String panel, String defaultValue){
 		String paramValue = parameters.getString(paramName);

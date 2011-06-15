@@ -20,18 +20,20 @@ public class Album extends AlbumData implements Serializable{
 	@Field private Integer width;
 	@Field private Integer height;
 	@Field private Integer interval;
-	
+
 	public Album(){
-		
+
 	}
-	
+
 	public Album(String parentPath, String name){
 		id = parentPath + "/" + name;
 	}
+	@Override
 	public String getName(){
 		return StringUtils.substringAfterLast(getId(), "/");
 	}
 
+	@Override
 	public String getId() {
 		return id;
 	}
@@ -79,5 +81,5 @@ public class Album extends AlbumData implements Serializable{
     public void setInterval(Integer interval) {
         this.interval = interval;
     }
-	
+
 }

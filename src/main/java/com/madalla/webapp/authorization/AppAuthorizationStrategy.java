@@ -28,9 +28,9 @@ import org.apache.wicket.authorization.strategies.page.AbstractPageAuthorization
 
 /**
  * Authorization strategy for Admin and logged in pages.
- * 
+ *
  * Copied and amended SimplePageAuthorizationStrategy
- * 
+ *
  * @author Eugene Malan
  *
  */
@@ -39,15 +39,15 @@ public class AppAuthorizationStrategy extends AbstractPageAuthorizationStrategy{
 	Collection <PageAuthorization> pageAuthorizations;
 	/**
 	 * Construct.
-	 * 
+	 *
 	 * @param signInPageClass
 	 *          The sign in page class
 	 * @param pageAuthorizations
-	 * 			Collection of PageAuthorization that need to be authorized  
+	 * 			Collection of PageAuthorization that need to be authorized
 	 */
 	public AppAuthorizationStrategy(final Class<? extends Page> signInPageClass, Collection <PageAuthorization> pageAuthorizations)
 	{
-		
+
 		this.pageAuthorizations = pageAuthorizations;
 
 		// Handle unauthorized access to pages
@@ -76,7 +76,8 @@ public class AppAuthorizationStrategy extends AbstractPageAuthorizationStrategy{
 	/**
 	 * @see org.apache.wicket.authorization.strategies.page.AbstractPageAuthorizationStrategy#isPageAuthorized(java.lang.Class)
 	 */
-	@SuppressWarnings("unchecked") // need to override method 
+	@Override
+	@SuppressWarnings("unchecked") // need to override method
 	protected boolean isPageAuthorized(final Class pageClass)
 	{
 		for (PageAuthorization pageAuthorization: pageAuthorizations){
@@ -87,7 +88,7 @@ public class AppAuthorizationStrategy extends AbstractPageAuthorizationStrategy{
 				}
 			}
 		}
-		
+
 		return true;
 
 	}

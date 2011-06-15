@@ -18,7 +18,7 @@ public class UserPasswordPage extends AbstractAdminPage {
 		String pwd =  PageUtils.getPageParameter("pwd", parameters, "UserPasswordPanel","");
 		init(user, pwd);
 	}
-	
+
 	private void init(String username, String pwd){
 
 		add(new UserPasswordPanel("adminPanel", new SecureCredentials().setUsername(username).setPassword(pwd)));

@@ -16,10 +16,10 @@ public class IndicatingUploadLink extends ExternalLink {
 		super(id, href, label);
 		add(indicatorAppender);
 	}
-	
+
 	public String getAjaxIndicatorMarkupId() {
 		return indicatorAppender.getMarkupId();
 	}
 
-	
+
 }

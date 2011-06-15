@@ -16,7 +16,7 @@ public class EmailEntryDao  extends AbstractDao{
 	private static final String FIND = "select ID,SENT_DATE,SITE_NAME,SENDER_NAME,SENDER_EMAIL,COMMENT from EMAIL_RECORD where ID = ?";
 	private static final String DELETE = "delete from EMAIL_RECORD where ID = ?";
 	private static final String FETCH = "select ID,SENT_DATE,SITE_NAME,SENDER_NAME,SENDER_EMAIL,COMMENT from EMAIL_RECORD where SITE_NAME = ?";
-	
+
 	private ParameterizedRowMapper<EmailEntryData> mapper = new ParameterizedRowMapper<EmailEntryData>() {
 
 		public EmailEntryData mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -38,11 +38,11 @@ public class EmailEntryDao  extends AbstractDao{
 	public EmailEntryData find(String id) {
 		return this.template.queryForObject(FIND, mapper, id);
 	}
-	
+
 	public int delete(EmailEntryData email){
 		return template.update(DELETE, new Object[]{email.getId()});
 	}
-	
+
 	public List<EmailEntryData> fetch(){
 		return template.query(FETCH, mapper, new Object[]{site});
 	}

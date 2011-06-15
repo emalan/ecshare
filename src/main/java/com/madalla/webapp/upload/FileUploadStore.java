@@ -10,15 +10,15 @@ import java.util.Map;
 public class FileUploadStore implements IFileUploadInfo, Serializable{
 
 	private static final long serialVersionUID = 1L;
-	
+
 	final private Map<String, IFileUploadStatus> statusMap;
 	final private Map<FileUploadGroup, List<String>> groupMap;
-	
+
 	public FileUploadStore(){
 		statusMap = new HashMap<String, IFileUploadStatus>();
 		groupMap = new HashMap<FileUploadGroup, List<String>>();
 	}
-	
+
 	public IFileUploadStatus getFileUploadStatus(String id) {
 		return statusMap.get(id);
 	}
@@ -37,13 +37,13 @@ public class FileUploadStore implements IFileUploadInfo, Serializable{
 		if (list.contains(id)){
 			list.remove(id);
 		}
-		list.add(id);	
+		list.add(id);
 	}
 
 	public void setFileUploadComplete(String id) {
 		statusMap.remove(id);
 	}
-	
+
 	public void setGroupUploadComplete(FileUploadGroup group){
 		List<String> list = groupMap.get(group);
 		if (list != null){
@@ -51,7 +51,7 @@ public class FileUploadStore implements IFileUploadInfo, Serializable{
 		}
 		groupMap.remove(group);
 	}
-	
+
 	public List<String> getFileUploadStatus(FileUploadGroup group){
 		List<String> list = groupMap.get(group);
 		if (list == null) return Collections.emptyList();
@@ -59,9 +59,9 @@ public class FileUploadStore implements IFileUploadInfo, Serializable{
 //		Map<String, IFileUploadStatus> temp = new HashMap<String, IFileUploadStatus>(statusMap);
 //		temp.keySet().retainAll(list);
 //		return temp.values();
-		
+
 	}
-	
+
 	public void clear(){
 		statusMap.clear();
 		groupMap.clear();

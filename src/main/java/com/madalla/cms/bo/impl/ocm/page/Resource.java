@@ -21,14 +21,14 @@ public class Resource extends ResourceData {
 	@Field private String type;
 	@Field private Boolean hideLink;
 	@Field private String url;
-	
+
 	public Resource(){
 	}
-	
+
 	public Resource(final IPageData page, final String name){
 		this.setId(page.getId() + "/" + name);
 	}
-	
+
 	public Resource(final IPageData page, final String name, InputStream inputStream){
 		this.setId(page.getId() + "/" + name);
 		this.inputStream = inputStream;

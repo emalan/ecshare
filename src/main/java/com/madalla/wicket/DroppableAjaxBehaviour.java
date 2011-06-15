@@ -15,7 +15,7 @@ public class DroppableAjaxBehaviour extends AbstractTransformerBehavior {
 	private static final long serialVersionUID = 1L;
 
 	private AbstractDefaultAjaxBehavior callBack;
-	
+
 	public DroppableAjaxBehaviour(AbstractDefaultAjaxBehavior callBack) {
 		this.callBack = callBack;
 	}
@@ -30,11 +30,11 @@ public class DroppableAjaxBehaviour extends AbstractTransformerBehavior {
 		JavascriptBuilder builder = new JavascriptBuilder();
 		builder.addLine("var e = $('"+id+"'); ");
 		builder.addLine("e.addClassName('droppable');");
-		
+
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		map.put("accept", "draggable");
 		map.put("hoverclass", "hover");
-		
+
 		JavascriptFunction onDropFunction = new JavascriptFunction("dragged, dropped, event");
 		//onDropFunction.addLine("console.log(dragged);").
 		//addLine("console.log(dragged.readAttribute('dragId'));").
@@ -43,11 +43,11 @@ public class DroppableAjaxBehaviour extends AbstractTransformerBehavior {
 		//addLine("var dragId = dragged.readAttribute('dragId');").
 		onDropFunction.addLine("var dragId = dragged.readAttribute('dragId');").
 		addAjaxCallback(callback,"'&amp;dragId=' + dragId");
-		
+
 		map.put("onDrop", onDropFunction);
-		
+
 		builder.addLine("Droppables.add(e,"+builder.formatAsJavascriptHash(map)).addLine(");");
-		
+
 		return builder.buildScriptTagString();
 
 	}

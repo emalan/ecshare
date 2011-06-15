@@ -16,32 +16,32 @@ import org.springmodules.jcr.JcrTemplate;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 
 public class RepositoryDataMigration {
-	
+
 	private static final Log log = LogFactory.getLog(RepositoryDataMigration.class);
-	
+
 	public static void transformData(JcrTemplate template, final String site){
-		
+
 		template.execute(new JcrCallback(){
 
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
-				
+
 				//Node appNode = RepositoryInfo.getApplicationNode(session);
 
-				//convert node to OCM 
+				//convert node to OCM
 				try {
                     doConversionByType(session, site);
                 } catch (PathNotFoundException e){
                     log.warn("No OCM conversion needed for " + site);
                 }
-                
+
 				return null;
 			}
-			
+
 		});
-		
+
 	}
-	
+
 	private static void doConversionByType(Session session, String site) throws RepositoryException{
         for(RepositoryType type: RepositoryType.values()){
             Node groupNode = RepositoryInfo.getGroupNode(session, site, type);
@@ -49,16 +49,16 @@ public class RepositoryDataMigration {
             session.save();
         }
 	}
-	
+
 	//filter for Repository Types
 	private static void convertDataGroup(Node node, RepositoryType type) throws RepositoryException{
 		log.warn("Checking Data Migration for " + type.name());
 		if (type.equals(RepositoryType.CONTENT)){
 			log.warn("Processing Data Migration for " + type.name());
 			removeOldText(node);
-		} 
+		}
 	}
-	
+
     private static void removeOldText(Node node) throws RepositoryException{
     	log.warn( node);
     	for (Iterator<Node> iterator = node.getNodes(); iterator.hasNext();) {
@@ -72,9 +72,9 @@ public class RepositoryDataMigration {
 					log.warn("Clearing text value...");
 				}
 			}
-			
+
 		}
 
     }
-	 
+
 }

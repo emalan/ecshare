@@ -73,7 +73,7 @@ public class UserAdminPanel extends CmsPanel {
 
 	private boolean lockUsername = false;
 	UserData userData = null;
-	
+
 	private List<SiteData> sites = new ArrayList<SiteData>() ;
 	private List<SiteData> sitesChoices ;
 
@@ -94,10 +94,10 @@ public class UserAdminPanel extends CmsPanel {
 			add(new TextField<String>("lastName").setOutputMarkupId(true));
 			add(new CheckBox("admin").setOutputMarkupId(true));
 			add(new CheckBox("requiresAuth").setOutputMarkupId(true));
-			
+
 			sitesChoices = getRepositoryService().getSiteEntries();
 			@SuppressWarnings({ "unchecked", "rawtypes" })
-			IModel<Collection<SiteData>> siteModel = new Model((Serializable) sites); 
+			IModel<Collection<SiteData>> siteModel = new Model((Serializable) sites);
 			add(new CheckBoxMultipleChoice<SiteData>("site", siteModel ,
 					sitesChoices, new ChoiceRenderer<SiteData>("name")).setOutputMarkupId(true));
 		}
@@ -116,7 +116,7 @@ public class UserAdminPanel extends CmsPanel {
 		///////////////////////
 
 		final UserDataView userView = new UserDataView();
-		
+
 		final MarkupContainer profileBlock = new WebMarkupContainer("profileBlock");
 		profileBlock.setOutputMarkupId(true);
 		add(profileBlock);
@@ -127,10 +127,10 @@ public class UserAdminPanel extends CmsPanel {
 		////////////////////////////////////
 		// User autocomplete select/new user
 		////////////////////////////////////
-		
+
 		Form<Object> userForm = new StatelessForm<Object>("userForm");
 		add(userForm);
-		
+
 		final TextField<String> usernameField = new RequiredTextField<String>("name",new Model<String>("")) {
 			private static final long serialVersionUID = 1L;
 
@@ -154,7 +154,7 @@ public class UserAdminPanel extends CmsPanel {
 			protected String getTextValue(UserData object) {
 				return object.getName();
 			}
-			
+
 		};
 		usernameField.add(new AutoCompleteBehavior<UserData>(autoCompleteRenderer) {
 
@@ -181,13 +181,13 @@ public class UserAdminPanel extends CmsPanel {
 			}
 
 		});
-		
+
 		//Validation
 		usernameField.add(new AbstractValidator<String>(){
 			private static final long serialVersionUID = 1L;
 			@Override
 			protected void onValidate(IValidatable<String> validatable) {
-				String value = (String) validatable.getValue();
+				String value = validatable.getValue();
 				if (StringUtils.isEmpty(value)){
 					error(validatable,"error.required");
 				}else if (!StringUtils.isAlphanumeric(value)){
@@ -198,9 +198,9 @@ public class UserAdminPanel extends CmsPanel {
 					}
 				}
 			}
-			
+
 		});
-		
+
 		final FeedbackPanel userFeedback = new ComponentFeedbackPanel("formFeedback", usernameField);
 		userFeedback.setOutputMarkupId(true);
 		userForm.add(userFeedback);
@@ -215,36 +215,36 @@ public class UserAdminPanel extends CmsPanel {
 			protected List<UserData> load() {
 				return getRepositoryService().getUsers();
 			}
-			
+
 		};
 
-		final ListChoice<UserData> userSelect = new ListChoice<UserData>("userSelect", new PropertyModel<UserData>(this, "userData"), userListModel, 
+		final ListChoice<UserData> userSelect = new ListChoice<UserData>("userSelect", new PropertyModel<UserData>(this, "userData"), userListModel,
 				new IChoiceRenderer<UserData>(){
 					private static final long serialVersionUID = 1L;
 
 					public Object getDisplayValue(UserData object) {
-						return object.getName() + " (" 
-							+ StringUtils.defaultIfEmpty(object.getFirstName(),"...") 
+						return object.getName() + " ("
+							+ StringUtils.defaultIfEmpty(object.getFirstName(),"...")
 							+ " " + StringUtils.defaultIfEmpty(object.getLastName(),"...") + ")";
 					}
 
 					public String getIdValue(UserData object, int index) {
 						return object.getName();
 					}
-			
+
 		});
 		userSelect.setNullValid(false);
 		userSelect.setMaxRows(7);
 		add(userSelect);
-		
+
 		//////////////////////////
 		// User selection actions
 		//////////////////////////
-		
+
 		// animator to open/close profile form
 		final Animator hideShowProfile = new Animator().addSubjects(AnimatorSubject.slideOpen(profileBlock.getMarkupId(), 37));
 		add(hideShowProfile);
-		
+
 		AjaxButton newUserSubmit = new AjaxButton("createUser"){
 			private static final long serialVersionUID = 1L;
 
@@ -253,14 +253,14 @@ public class UserAdminPanel extends CmsPanel {
 				String userName = (String) usernameField.getDefaultModelObject();
 				log.debug("selected user: "+ userName);
 				populateUserData(userName, userView);
-				
+
 				target.addComponent(profileForm);
 				lockUsername = true;
 				target.addComponent(usernameField);
 				target.addComponent(userFeedback);
 				target.addComponent(userSelect);
-				target.appendJavascript(hideShowProfile.seekToEnd());	
-				
+				target.appendJavascript(hideShowProfile.seekToEnd());
+
 			}
 
 			@Override
@@ -272,7 +272,7 @@ public class UserAdminPanel extends CmsPanel {
 		newUserSubmit.setOutputMarkupId(true);
 		userForm.add(newUserSubmit);
 		userForm.setDefaultButton(newUserSubmit);
-		
+
 		usernameField.add(new AttributeModifier("onchange", true, new Model<String>(
 				"document.getElementById('"+ newUserSubmit.getMarkupId()
 				+ "').onclick();return false;")));
@@ -283,10 +283,10 @@ public class UserAdminPanel extends CmsPanel {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				log.debug("selected user=" + userData);
-				
+
 				userView.clear();
 				sites.clear();
-				
+
 				profileForm.clearInput();
 				populateUserData(userData, userView);
 				target.appendJavascript("$('" + usernameField.getMarkupId() + "').value='"+userData.getName()+"';");
@@ -296,21 +296,21 @@ public class UserAdminPanel extends CmsPanel {
 				target.addComponent(usernameField);
 				target.addComponent(getComponent());
 				target.addComponent(userFeedback);
-				
+
 				target.appendJavascript(hideShowProfile.seekToEnd());
 
 			}
-			
+
 		});
 
 		////////////////////////
 		// Welcome Email Button
 		////////////////////////
-		
+
 		final Label welcomeFeedback = new Label("welcomeFeedback", new Model<String>(""));
 		welcomeFeedback.setOutputMarkupId(true);
 		profileForm.add(welcomeFeedback);
-		
+
 		final AjaxLink<String> welcomeLink = new IndicatingAjaxLink<String>("welcomeLink"){
 			private static final long serialVersionUID = 1L;
 
@@ -341,11 +341,11 @@ public class UserAdminPanel extends CmsPanel {
 		////////////////////////
 		// Reset Password Button
 		////////////////////////
-		
+
 		final Label resetFeedback = new Label("resetFeedback", new Model<String>(""));
 		resetFeedback.setOutputMarkupId(true);
 		profileForm.add(resetFeedback);
-		
+
         final AjaxLink<String> resetPasswordLink = new IndicatingAjaxLink<String>("resetLink"){
             private static final long serialVersionUID = 1L;
 
@@ -359,7 +359,7 @@ public class UserAdminPanel extends CmsPanel {
                 }
                 target.addComponent(resetFeedback);
             }
-            
+
             @Override
 			protected void onBeforeRender() {
 				if(StringUtils.isEmpty(userView.getEmail())){
@@ -381,7 +381,7 @@ public class UserAdminPanel extends CmsPanel {
 		////////////////////////////////
 		// Submit Button for just Saving
 		////////////////////////////////
-		
+
 		final AjaxButton submitButton = new AjaxValidationSubmitButton(
 				"profileSubmit", profileForm) {
 			private static final long serialVersionUID = 1L;
@@ -409,7 +409,7 @@ public class UserAdminPanel extends CmsPanel {
 		///////////////////
 		// Reset form data
 		///////////////////
-		
+
 		add(new AjaxButton("resetForm",profileForm) {
 			private static final long serialVersionUID = 1L;
 
@@ -418,17 +418,17 @@ public class UserAdminPanel extends CmsPanel {
 
 				lockUsername = false;
 				userData = null;
-				
+
 				//reset form data
 				form.modelChanging();
 				userView.clear();
 				sites.clear();
 				form.modelChanged();
 				form.clearInput();
-				
+
 				usernameField.setDefaultModelObject("");
 				usernameField.clearInput();
-				
+
 				target.addComponent(usernameField);
 				target.addComponent(userFeedback);
 				target.addComponent(userSelect);
@@ -437,17 +437,17 @@ public class UserAdminPanel extends CmsPanel {
 				// Clear usernamefield and reset form
                 target.appendJavascript(hideShowProfile.seekToBegin() + "$('" + usernameField.getMarkupId() + "').clear();"
                         + "$('"+form.getMarkupId()+"').reset();");
-				
+
 			}
 
 		}.setDefaultFormProcessing(false));
-		
+
 	}
-	
+
 	private boolean sendEmail(String subject, String message, UserDataView user){
         return getEmailSender().sendUserEmail(subject, message, user.getEmail(), user.getFirstName(), true);
 	}
-	
+
 	private String resetPassword(UserDataView user){
         String password = SecurityUtils.getGeneratedPassword();
         log.debug("resetPassword - username="+user.getName() + "password="+ password);
@@ -455,7 +455,7 @@ public class UserAdminPanel extends CmsPanel {
         saveUserData(user, user.getRequiresAuth());
         return password;
 	}
-	
+
 	//User gets created if there is not one
 	private void populateUserData(String username, UserDataView user){
 		userData = getRepositoryService().getUser(username);
@@ -477,7 +477,7 @@ public class UserAdminPanel extends CmsPanel {
 			}
 		}
 	}
-	
+
 	private void saveUserData(UserData userData, Boolean auth){
 		UserData dest = getRepositoryService().getUser(userData.getName());
 		BeanUtils.copyProperties(userData, dest);
@@ -486,12 +486,12 @@ public class UserAdminPanel extends CmsPanel {
 		log.debug("saveUserData - save Site Entries");
 		getRepositoryService().saveUserSiteEntries(dest, sites, auth == null? false : auth.booleanValue());
 	}
-	
+
 	private String formatUserMessage(String key, UserDataView user) {
 		IDataService service = getRepositoryService();
 		SiteData site = service.getSiteData();
     	UserData userData = service.getUser(user.getName());
-    	
+
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("firstName", StringUtils.defaultString(user.getFirstName()));
 		map.put("lastName", StringUtils.defaultString(user.getLastName()));
@@ -504,7 +504,7 @@ public class UserAdminPanel extends CmsPanel {
 
 		MapModel<String, String> model = new MapModel<String,String>(map);
 		String message = getString(key, model);
-		
+
     	if (service.isUserSite(userData) && StringUtils.isNotEmpty(url)){
     		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
     		if (site.getSecurityCertificate() && authenticator.requiresSecureAuthentication(userData.getName())){
@@ -526,7 +526,8 @@ public class UserAdminPanel extends CmsPanel {
     	log.debug("formatMessage - " + message);
 		return message;
 	}
-	
+
+	@Override
 	protected IEmailSender getEmailSender() {
 		return ((IEmailServiceProvider) getApplication()).getEmailSender();
 	}

@@ -7,7 +7,7 @@ import org.apache.wicket.model.IModel;
 
 public class AjaxValidationRequiredTextField extends RequiredTextField<String> implements IAjaxValidationComponent{
 	private static final long serialVersionUID = 1L;
-	
+
     public AjaxValidationRequiredTextField(final String id) {
         super(id);
         add(new AjaxValidationBehaviour());
@@ -23,7 +23,7 @@ public class AjaxValidationRequiredTextField extends RequiredTextField<String> i
 		super(id, model);
 		add(new AjaxValidationBehaviour());
 	}
-	
+
 	public AjaxValidationRequiredTextField(final String id, final IModel<String> model, FeedbackPanel feedback) {
 		super(id, model);
 		feedback.setFilter(new ComponentFeedbackMessageFilter(this));

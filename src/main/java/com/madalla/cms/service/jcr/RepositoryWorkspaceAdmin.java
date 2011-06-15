@@ -13,21 +13,21 @@ public class RepositoryWorkspaceAdmin {
 
     private JcrTemplate template;
     private String workspace;
-    
+
     public void init(){
         createNewWorkspace(workspace);
     }
 
     public String[] getAvailableWorkspaces(){
         return (String[]) template.execute(new JcrCallback(){
-            
+
             public Object doInJcr(Session session) throws IOException, RepositoryException{
                 JackrabbitWorkspace workpace = (JackrabbitWorkspace)session.getWorkspace();
                 return workpace.getAccessibleWorkspaceNames();
             }
         });
     }
-    
+
     public void createNewWorkspace(final String workspaceName) {
         if (!doesWorkspaceExist(workspaceName)) {
             template.execute(new JcrCallback() {
@@ -67,5 +67,5 @@ public class RepositoryWorkspaceAdmin {
         return template;
     }
 
-    
+
 }

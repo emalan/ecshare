@@ -11,7 +11,7 @@ public class InfoPanel extends CmsPanel{
 
 	public InfoPanel(String id) {
 		super(id);
-		
+
 		add(new InlineContentPanel("heading"));
 		add(new Label("versionShare", new Model<String>(getBuildInfo().getVersion())));
 		add(new Label("versionApp", new Model<String>(getBuildInfo().getWebappVersion())));

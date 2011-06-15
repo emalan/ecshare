@@ -33,12 +33,12 @@ public class UserSecurityService extends AbstractRepositoryService{
 
 	private PasswordAuthenticator authenticator;
 	private List<SiteData> siteEntries;
-	
+
 	public void init(List<SiteData> siteEntries, RepositoryTemplate repositoryTemplate){
-		
+
 		this.siteEntries = siteEntries;
 		this.repositoryTemplate = repositoryTemplate;
-	   	
+
 		//Create default Users if they don't exist yet
     	getNewUser("guest", SecurityUtils.encrypt("password"));
     	UserData adminUser = getNewUser("admin", SecurityUtils.encrypt("password"));
@@ -50,7 +50,7 @@ public class UserSecurityService extends AbstractRepositoryService{
         adminUser.setAdmin(true);
         saveDataObject(adminUser);
 	}
-	
+
 	public ProfileData getUserProfile(final String identifier){
 		List<ProfileData> list = getUserProfiles();
 		for(ProfileData profile: list){
@@ -60,11 +60,11 @@ public class UserSecurityService extends AbstractRepositoryService{
 		}
 		return null;
 	}
-	
+
 	public UserData getUser(final ProfileData profile){
 		return (UserData) repositoryTemplate.getParentObject(RepositoryType.USER, profile);
 	}
-	
+
 	public ProfileData getNewUserProfile(IUser user, String name, String identifier){
 		if (user == null){
 			throw new WicketRuntimeException("User may not be null");
@@ -73,7 +73,7 @@ public class UserSecurityService extends AbstractRepositoryService{
 		profile.setIdentifier(identifier);
 		return profile;
 	}
-	
+
 	public UserData getNewUser(String username, String password) {
 	   	username = username.toLowerCase();
     	if (isUserExists(username)){
@@ -84,7 +84,7 @@ public class UserSecurityService extends AbstractRepositoryService{
     	saveDataObject(user);
     	return user;
 	}
-	
+
 	public UserData getUser(String username) {
 		username = username.toLowerCase();
     	return (User) repositoryTemplate.getParentObject(RepositoryType.USER, username, new RepositoryTemplateCallback(){
@@ -96,26 +96,26 @@ public class UserSecurityService extends AbstractRepositoryService{
 
     	});
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<UserData> getUsers(){
 		List<UserData> list = (List<UserData>) repositoryTemplate.getAll(RepositoryType.USER);
 		Collections.sort(list);
 		return list;
 	}
-	
+
 	public IAuthenticator getUserAuthenticator() {
 		return new IAuthenticator(){
-			
+
 			public boolean authenticate(String username){
 				return isUserExists(username);
 			}
-			
+
 			public boolean requiresSecureAuthentication(String username) {
 				if ("admin".equalsIgnoreCase(username)){
 					return true;
 				}
-				
+
 				if (isUserExists(username)){
 					UserData user = getUser(username);
 					UserSiteData userSite= getUserSite(user);
@@ -144,16 +144,16 @@ public class UserSecurityService extends AbstractRepositoryService{
 				public String getPassword() {
 					return null;
 				}
-				
+
 			};
 		}
 		authenticator.addUser(username, userData);
 		return authenticator;
-		
+
 	}
 
 	// User Site
-	
+
 	public UserSiteData getUserSite(UserData user) {
 		return getUserSite(user, site);
 	}
@@ -181,16 +181,16 @@ public class UserSecurityService extends AbstractRepositoryService{
 		log.debug("isUserSite - site validation failed!");
 		return false;
 	}
-	
+
 	public void saveUserSite(UserSiteData data){
 		saveDataObject(data);
 	}
-	
+
 	public void saveUserSiteEntries(UserData user, List<SiteData> sites, boolean auth){
 		log.debug("saveUserSiteEntries -"+sites);
-		
+
 		List<UserSiteData> existingUserSites = getUserSiteEntries(user);
-		
+
 		for (SiteData site : siteEntries){
 			if (sites.contains(site)){
 				UserSiteData userSite = getUserSite(user, site.getName());
@@ -205,13 +205,13 @@ public class UserSecurityService extends AbstractRepositoryService{
 			deleteNode(userSite.getId());
 		}
 	}
-	
+
 	//utlity
 	@SuppressWarnings("unchecked")
 	private List<ProfileData> getUserProfiles(){
 		return (List<ProfileData>) repositoryTemplate.getAll(RepositoryType.USERPROFILE);
 	}
-	
+
     private boolean isUserExists(String username){
     	return repositoryTemplate.checkExists(RepositoryType.USER, username);
     }
@@ -223,19 +223,20 @@ public class UserSecurityService extends AbstractRepositoryService{
 			public AbstractData createNew(String parentPath, String name) {
 				return new UserSite(parentPath, name) ;
 			}
-			
+
 		});
 	}
 
-    public void saveDataObject(AbstractData data, String user){
+    @Override
+	public void saveDataObject(AbstractData data, String user){
     	createTransactionLog(user, data);
     	saveDataObject(data);
     }
-    
+
     public void saveDataObject(AbstractData data){
     	repositoryTemplate.saveDataObject(data);
     }
-    
+
 	public void setAuthenticator(PasswordAuthenticator authenticator) {
 		this.authenticator = authenticator;
 	}
@@ -243,11 +244,11 @@ public class UserSecurityService extends AbstractRepositoryService{
     public void setTemplate(JcrTemplate template) {
         this.template = template;
     }
-    
+
 	public void setSite(String site) {
 		this.site = site;
 	}
-	
+
 	public void setTransactionLogDao(TransactionLogDao transactionLogDao) {
 		this.transactionLogDao = transactionLogDao;
 	}

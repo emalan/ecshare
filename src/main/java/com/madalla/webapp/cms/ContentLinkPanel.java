@@ -26,7 +26,7 @@ import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
 /**
  * Editable Link to a Respository Resource.
  * <p>
- * A link that will display a Repository Resource such as a PDF 
+ * A link that will display a Repository Resource such as a PDF
  * or a Word Doc. The Resource Link is editable when a valid user is logged.
  * The following is configurable:
  * <ul>
@@ -35,7 +35,7 @@ import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
  * <li>Edit hover for link</li>
  * <li>Hide or show the link resource</li>
  * </ul>
- * 
+ *
  * </p>
  * @author Eugene Malan
  *
@@ -43,17 +43,17 @@ import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
 public class ContentLinkPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
 	private static final Log log = LogFactory.getLog(ContentLinkPanel.class);
-	
+
 	/**
 	 * This is used to pass data to {@link com.madalla.wicket.resourcelink.EditableResourceLink}
-	 * 
+	 *
 	 * @author Eugene Malan
 	 *
 	 */
 	public class LinkData implements ILinkData{
 
 		private static final long serialVersionUID = 1L;
-		
+
 		private String id;
 		private String name;
 		private String title;
@@ -62,7 +62,7 @@ public class ContentLinkPanel extends CmsPanel{
 		private String resourceType;
 		private Boolean hideLink;
 		private String url;
-		
+
 		public String getId() {
 			return id;
 		}
@@ -98,7 +98,7 @@ public class ContentLinkPanel extends CmsPanel{
         public void setFileUpload(FileUpload fileUpload){
 			this.fileUpload = fileUpload;
 		}
-		
+
 		public FileUpload getFileUpload(){
 			return fileUpload;
 		}
@@ -118,7 +118,8 @@ public class ContentLinkPanel extends CmsPanel{
 		public void setHideLink(Boolean hideLink) {
 			this.hideLink = hideLink;
 		}
-		
+
+		@Override
 		public String toString() {
 	        return ReflectionToStringBuilder.toString(this).toString();
 	    }
@@ -131,7 +132,7 @@ public class ContentLinkPanel extends CmsPanel{
             this.url = url;
         }
 	}
-	
+
 	public ContentLinkPanel(final String id, final String nodeName) {
 		super(id);
 
@@ -153,23 +154,23 @@ public class ContentLinkPanel extends CmsPanel{
 				@Override
 				protected void onSubmit() {
 				    String mountPath = "";
-				    
+
 				    IFileUploadProcess process = new ContentLinkUploadProcess(getRepositoryService(), linkData);
 
 				    if (linkData.getFileUpload() !=null){
 	                    mountPath = ContentSharedResource.registerResource((WebApplication)getApplication(), linkData, getRepositoryService());
 	                    linkData.setUrl(mountPath);
-	                    
-	                    //Start seperate thread so upload can continue if user navigates away
+
+	                    //Start separate thread so upload can continue if user navigates away
 	                    //final SubmitThread it = new SubmitThread(getAppSession(), linkData, getRepositoryService());
 						//it.start();
-						
+
 	                    IFileUploadInfo uploadInfo = (IFileUploadInfo) getSession();
-	                    
+
 	                    final Thread submit = new FileUploadThread(uploadInfo, linkData.fileUpload, process, linkData.id);
 	                    submit.start();
-						
-						
+
+
 				    } else {
 				    	log.debug("onSubmit - setting InputStream to null");
 				    	process.execute(null, "");
@@ -190,7 +191,8 @@ public class ContentLinkPanel extends CmsPanel{
 			editableLink.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
 			    private static final long serialVersionUID = -3131361470864509715L;
 
-			    public String getObject() {
+			    @Override
+				public String getObject() {
 			        String cssClass;
 			        if (((IContentAdmin)getSession()).isLoggedIn()) {
 			            cssClass = "contentLinkEdit";
@@ -202,7 +204,7 @@ public class ContentLinkPanel extends CmsPanel{
 			}));
 			add(editableLink);
 		}
-	
+
     private LinkData createView(final ResourceData resourceData){
         LinkData linkData = new LinkData();
         linkData.setId(resourceData.getId());
@@ -215,17 +217,17 @@ public class ContentLinkPanel extends CmsPanel{
     }
 
 	private class ContentLinkUploadProcess implements IFileUploadProcess {
-		
+
 		final private IDataService service;
 		final private LinkData linkData;
-		
+
 		public ContentLinkUploadProcess(IDataService service, LinkData linkData){
 			this.service = service;
 			this.linkData = linkData;
 		}
 
 		public void execute(InputStream inputStream, String fileName) {
-			
+
 	    	ResourceData resourceData = service.getContentResource(linkData.getId());
 			resourceData.setUrl(linkData.getUrl());
 
@@ -233,16 +235,16 @@ public class ContentLinkPanel extends CmsPanel{
 			if (StringUtils.isEmpty(linkData.getName())){
 				linkData.setName(fileName);
 			}
-			
+
 			resourceData.setUrlDisplay(linkData.getName());
 			resourceData.setUrlTitle(linkData.getTitle());
 			resourceData.setType(linkData.getResourceType());
 			resourceData.setHideLink(linkData.getHideLink());
-			
+
 			service.saveContentResource(resourceData);
 
 		}
-		
+
 	}
 
 }

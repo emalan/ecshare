@@ -13,17 +13,19 @@ public class Content extends ContentData {
 
     @Field(path=true) private String id;
     @Field private String text;
-    
+
     public Content(){
-        
+
     }
     public Content(IPageData page, String name){
         id = page.getId() + "/" + name;
     }
-    public String getName(){
+    @Override
+	public String getName(){
         return StringUtils.substringAfterLast(getId(), "/");
     }
-    public String getId() {
+    @Override
+	public String getId() {
         return id;
     }
     public void setId(String id) {

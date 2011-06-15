@@ -16,7 +16,7 @@ import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 import com.madalla.bo.member.MemberData;
 
 public class MemberDao extends AbstractDao {
-	
+
 	private static final Log log = LogFactory.getLog(MemberDao.class);
 
 	private static final String INSERT = "insert into MEMBER (SITE_NAME,MEMBER_ID,FIRST_NAME,LAST_NAME,COMPANY_NAME,MEMBER_EMAIL,SIGNUP_DATE,PASSWORD) values (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -46,7 +46,7 @@ public class MemberDao extends AbstractDao {
 			return data;
 		}
 	};
-	
+
 	/**
 	 * Designed to enforce memberId as unique. If member exists with that memberId, we do update.
 	 * @param data
@@ -56,11 +56,11 @@ public class MemberDao extends AbstractDao {
 		log.info("save - " + data);
 		int count = 0;
 		if (exists(data.getMemberId())){
-			count = template.update(UPDATE, new Object[] { data.getFirstName(), data.getLastName(), data.getCompanyName(), 
-					data.getEmail(), data.getPassword(), data.getAuthorizedDate() == null? null:data.getAuthorizedDate().toDate(), 
+			count = template.update(UPDATE, new Object[] { data.getFirstName(), data.getLastName(), data.getCompanyName(),
+					data.getEmail(), data.getPassword(), data.getAuthorizedDate() == null? null:data.getAuthorizedDate().toDate(),
 							data.getSubscriptionEnd(), data.getId()});
 		} else {
-			count = template.update(INSERT, new Object[] { site, data.getMemberId(), data.getFirstName(), data.getLastName(), data.getCompanyName(), 
+			count = template.update(INSERT, new Object[] { site, data.getMemberId(), data.getFirstName(), data.getLastName(), data.getCompanyName(),
 					data.getEmail(), new DateTime(DateTimeZone.UTC).toDate(), data.getPassword() });
 			//update member with id
 			if (data instanceof Member){
@@ -68,12 +68,12 @@ public class MemberDao extends AbstractDao {
 				MemberData newOne = findbyMemberId(data.getMemberId());
 				existing.setId(Integer.valueOf(newOne.getId()));
 			}
-			
+
 		}
 		return count == 1;
 	}
 
-	
+
 	/**
 	 * Exists using memberId
 	 * @param id
@@ -82,7 +82,7 @@ public class MemberDao extends AbstractDao {
 	public boolean exists(String memberId){
 		return !(findbyMemberId(memberId) == null);
 	}
-	
+
 	public Member findbyMemberId(String id) {
 		try {
 			return this.template.queryForObject(FIND, mapper, id);
@@ -90,7 +90,7 @@ public class MemberDao extends AbstractDao {
 			return null;
 		}
 	}
-	
+
 	public MemberData get(String id) {
 		return this.template.queryForObject(GET, mapper, id);
 	}
@@ -98,7 +98,7 @@ public class MemberDao extends AbstractDao {
 	public int delete(MemberData data){
 		return template.update(DELETE, new Object[]{data.getId()});
 	}
-	
+
 	public List<Member> fetch(){
 		return template.query(FETCH, mapper, new Object[]{site});
 	}

@@ -22,7 +22,7 @@ import com.madalla.cms.jcr.model.JcrNodeModel;
 public class JcrTreeNode extends AbstractTreeNode{
 	private static final long serialVersionUID = 1L;
 	private final Log log = LogFactory.getLog(getClass());
-	
+
     private final JcrTreeNode parent;
 
     public JcrTreeNode(JcrNodeModel nodeModel) {
@@ -36,7 +36,7 @@ public class JcrTreeNode extends AbstractTreeNode{
         treeModel.register(this);
         this.parent = parent;
     }
-    
+
     //Do in session
     public void init(Node node) throws RepositoryException{
     	List<JcrTreeNode> children = loadChildren(node);
@@ -61,18 +61,21 @@ public class JcrTreeNode extends AbstractTreeNode{
         }
         return newChildren;
     }
-    
-    public String renderNode() {
+
+    @Override
+	public String renderNode() {
         String result = nodeModel.render();
         return result;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("nodeModel", nodeModel.toString())
                 .toString();
     }
 
-    public boolean equals(Object object) {
+    @Override
+	public boolean equals(Object object) {
         if (object instanceof JcrTreeNode == false) {
             return false;
         }
@@ -83,10 +86,11 @@ public class JcrTreeNode extends AbstractTreeNode{
         return new EqualsBuilder().append(nodeModel, treeNode.nodeModel).isEquals();
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return new HashCodeBuilder(87, 335).append(nodeModel).toHashCode();
     }
-    
+
 	public void insert(MutableTreeNode node, int arg1) {
 		List<JcrTreeNode> newChildren = new ArrayList<JcrTreeNode>();
 		Enumeration<JcrTreeNode> children = children();
@@ -123,6 +127,6 @@ public class JcrTreeNode extends AbstractTreeNode{
 
 	public void setUserObject(Object arg0) {
 	}
-	
+
 
 }

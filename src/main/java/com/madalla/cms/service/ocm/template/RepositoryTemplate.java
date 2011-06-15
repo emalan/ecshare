@@ -23,7 +23,7 @@ import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 
 /**
  * Template for executing common OCM code.
- * 
+ *
  * @author Eugene Malan
  *
  */
@@ -32,13 +32,13 @@ public class RepositoryTemplate{
 	private JcrTemplate template;
 	private ObjectContentManager ocm;
 	private String site;
-	
+
 	public RepositoryTemplate(JcrTemplate template, ObjectContentManager ocm, String site){
 		this.template = template;
 		this.ocm = ocm;
 		this.site = site;
 	}
-	
+
     public void saveDataObject(AbstractData data){
     	if (ocm.objectExists(data.getId())){
     		ocm.update(data);
@@ -47,7 +47,7 @@ public class RepositoryTemplate{
     	}
     	ocm.save();
     }
-	
+
 	public boolean checkExists(final RepositoryType type, final String name){
 		return (Boolean)template.execute(new JcrCallback(){
 
@@ -57,10 +57,10 @@ public class RepositoryTemplate{
 				String nodePath = parent.getPath() + (StringUtils.isEmpty(name)?"" : "/" + name);
 				return ocm.objectExists(nodePath);
 			}
-			
+
 		});
 	}
-	
+
 	public InputStream getNodePropertyStream(final String path, final String property){
 	    return (InputStream) template.execute(new JcrCallback(){
 
@@ -69,10 +69,10 @@ public class RepositoryTemplate{
                 Property prop = node.getProperty(property);
                 return prop.getStream();
             }
-	        
+
 	    });
 	}
-	
+
 	public void saveNodePropertyStream(final String path, final String property, final InputStream stream){
 	    template.execute(new JcrCallback(){
 
@@ -88,20 +88,20 @@ public class RepositoryTemplate{
                 stream.close();
                 return null;
             }
-	       
-	        
+
+
 	    });
 	}
-	
+
 	public Object getOcmObject(Class<? extends AbstractData> o, String id){
 		return ocm.getObject(o , id);
 	}
-	
-	public Object getOcmObject(final RepositoryType type, final AbstractData parent, final String name, 
+
+	public Object getOcmObject(final RepositoryType type, final AbstractData parent, final String name,
 			final RepositoryTemplateCallback callback){
 		return getCreateOcmObject(type, parent.getId(), name, callback);
 	}
-	
+
 	public Object getParentObject(final RepositoryType type, final String name, final RepositoryTemplateCallback callback){
 		String parentPath = (String)template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
@@ -113,17 +113,17 @@ public class RepositoryTemplate{
 		});
 		return getCreateOcmObject(type, parentPath, name, callback);
 	}
-	
+
 	public Object getParentObject(final RepositoryType type, final AbstractData child){
 		String path = StringUtils.substringBeforeLast(child.getId(), "/");
 		return ocm.getObject(path);
 	}
-	
+
 	public void copySave(String id, String path){
 		ocm.copy(id, path);
 	    ocm.save();
 	}
-	
+
    public void copyData(final String path, final AbstractData data) {
 		String destPath = path + "/" + data.getName();
 		if (ocm.objectExists(destPath)) {
@@ -133,7 +133,7 @@ public class RepositoryTemplate{
 		ocm.copy(data.getId(), destPath);
 		ocm.save();
 	}
-	
+
 	public Collection<? extends AbstractData> getAll(final RepositoryType type){
 		if(!type.parent){
 			return getQueryData(type.typeClass, type.getGroupPath(), false);
@@ -147,11 +147,11 @@ public class RepositoryTemplate{
 		});
 		return getQueryData(type.typeClass, parentPath, true);
 	}
-	
+
 	public Collection<? extends AbstractData> getAll(final RepositoryType type, AbstractData parent) {
 		return getQueryData(type.typeClass, parent.getId(), false);
 	}
-	
+
 	private Object getCreateOcmObject(final RepositoryType type, final String parentPath, final String name, final RepositoryTemplateCallback callback){
 		if (type == null || StringUtils.isEmpty(parentPath) || StringUtils.isEmpty(name) || callback == null){
 			throw new RuntimeException("getOcmObject method requires that all parameters are supplied.");
@@ -164,7 +164,7 @@ public class RepositoryTemplate{
 		}
 		return ocm.getObject(type.typeClass, path);
 	}
-	
+
     @SuppressWarnings("unchecked") //filter will guarantee that only 'extends AbstractData' are returned
 	private Collection<? extends AbstractData> getQueryData(Class<? extends AbstractData> data, String path, boolean onlyChildren){
         QueryManager queryManager = ocm.getQueryManager();

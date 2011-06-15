@@ -9,12 +9,12 @@ public abstract class EmailEntryData extends AbstractData implements IEmailEntry
 	public int compareTo(EmailEntryData compare) {
 		return compare.getId().compareTo(getId());
 	}
-	
+
     @Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		if (!(obj instanceof EmailEntryData)) return false;
-		EmailEntryData compare = (EmailEntryData)obj; 
+		EmailEntryData compare = (EmailEntryData)obj;
 		if (!getId().equals(compare.getId())) return false;
 		return true;
 	}

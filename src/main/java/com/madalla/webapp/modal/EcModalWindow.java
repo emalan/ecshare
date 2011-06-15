@@ -11,16 +11,16 @@ public class EcModalWindow extends ModalWindow implements IHeaderContributor{
 	private static final long serialVersionUID = 1L;
 
 	private static final ResourceReference CSS = new CompressedResourceReference(Dialog.class, "modal.css");
-	
+
 	public EcModalWindow(String id) {
 		super(id);
-		
+
 		//add own style
 		add(CSSPackageResource.getHeaderContribution(CSS));
        	setCssClassName("w_obo");
-		
+
 	}
-	
+
 	public void renderHead(IHeaderResponse response) {
 		response.renderOnDomReadyJavascript("Wicket.Window.unloadConfirmation = false;");
 	}

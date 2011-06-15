@@ -9,7 +9,7 @@ import com.madalla.webapp.cms.editor.ContentEntryPanel;
 @AuthorizeInstantiation("USER")
 public class ContentEditPage extends AbstractAdminPage {
 	private static final long serialVersionUID = -264932041802936603L;
-	
+
 	public ContentEditPage(PageParameters parameters){
 		super(parameters);
 		String contentId = PageUtils.getPageParameter("0", parameters, "ContentEditPage");

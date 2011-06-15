@@ -32,22 +32,22 @@ import com.madalla.wicket.form.ValidationStyleBehaviour;
 public class SiteAdminPanel extends CmsPanel{
 
     private static final long serialVersionUID = 1L;
-    
+
     public class SiteForm extends AjaxValidationForm<SiteData> {
 
         private static final long serialVersionUID = 1L;
 
 		public SiteForm(String id, IModel<SiteData> model) {
             super(id, model);
-            
+
             FeedbackPanel emailFeedback = new FeedbackPanel("emailFeedback");
             add(emailFeedback);
             TextField<String> email = new AjaxValidationRequiredTextField("adminEmail",emailFeedback);
             email.add(EmailAddressValidator.getInstance());
             add(email);
-            
+
             add(new TextField<String>("siteName"));
-            
+
             FeedbackPanel urlFeedback = new FeedbackPanel("urlFeedback");
             add(urlFeedback);
             TextField<String> url = new TextField<String>("url");
@@ -55,16 +55,16 @@ public class SiteAdminPanel extends CmsPanel{
             url.add(new ValidationStyleBehaviour());
             url.add(new UrlValidator(UrlValidator.NO_FRAGMENTS));
             add(url);
-            
+
             add(new TextField<String>("metaDescription"));
-            
+
             add(new CheckBox("securityCertificate"));
-            
-            add(new CheckBoxMultipleChoice<SiteLanguage>("localeList", Model.ofList(SiteData.getAvailableLocales()), 
+
+            add(new CheckBoxMultipleChoice<SiteLanguage>("localeList", Model.ofList(SiteData.getAvailableLocales()),
             		new ChoiceRenderer<SiteLanguage>("displayName")));
-            
+
            	add(new DropDownChoice<String>("timeZone",getAvailableTimeZones()));
-            
+
         }
 
 		@Override
@@ -74,24 +74,24 @@ public class SiteAdminPanel extends CmsPanel{
 		}
 
     }
-    
+
     public SiteAdminPanel(String id) {
         super(id);
         add(Css.CSS_FORM);
-        
+
         final Form<SiteData> form = new SiteForm("siteForm", new CompoundPropertyModel<SiteData>(getSiteData()));
         add(form);
-         
+
     }
-    
+
     private SiteData getSiteData(){
     	return getRepositoryService().getSiteData();
     }
-    
+
     @SuppressWarnings("unchecked")
 	private List<String> getAvailableTimeZones(){
     	return new ArrayList<String>(DateTimeZone.getAvailableIDs());
     }
 
-    
+
 }

@@ -31,9 +31,12 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 
 import com.madalla.bo.SiteLanguage;
+import com.madalla.bo.image.AlbumData;
+import com.madalla.bo.image.ImageData;
 import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.PageMetaLangData;
 import com.madalla.service.IDataService;
@@ -67,7 +70,7 @@ import com.madalla.wicket.animation.AnimatorSubject;
  * in your style sheets. Popup login functionality and a Language switcher can be activated by overiding
  * the relevant methods.
  * </p>
- * 
+ *
  * @author Eugene Malan
  *
  */
@@ -75,7 +78,7 @@ public abstract class CmsPage extends WebPage {
 
 	private static final String META_NAME = "<meta name=\"{0}\" content=\"{1}\"/>";
 	private static final String META_HTTP = "<meta http-equiv=\"{0}\" content=\"{1}\"/>";
-		
+
 	public abstract class LoginLink extends AjaxFallbackLink<Object> implements IHeaderContributor {
 		private static final long serialVersionUID = 858485459938698866L;
 
@@ -84,7 +87,8 @@ public abstract class CmsPage extends WebPage {
 			super(name);
 			this.session = session;
 		}
-		
+
+		@Override
 		public void onClick(AjaxRequestTarget target) {
 			if (session.isSignedIn()) {
 				session.signOut();
@@ -98,6 +102,7 @@ public abstract class CmsPage extends WebPage {
 			}
 		}
 
+		@Override
 		protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
 			if (session.isLoggedIn()) {
 				replaceComponentTagBody(markupStream, openTag, getString("label.logout"));
@@ -105,11 +110,11 @@ public abstract class CmsPage extends WebPage {
 				replaceComponentTagBody(markupStream, openTag, getString("label.login"));
 			}
 		}
-		
+
 		protected abstract void onClickAction(AjaxRequestTarget target);
-		
+
 	}
-	
+
 	public CmsPage(PageParameters parameters){
 		super(parameters);
 		commonInit();
@@ -119,18 +124,18 @@ public abstract class CmsPage extends WebPage {
 		super();
 		commonInit();
 	}
-	
+
 	private void commonInit(){
 		add(Css.YUI_CORE);
 		add(Css.BASE);
-		
+
 		if (isHomePage()) {
 			setLocaleFromUrl(getRequest().getURL());
 		}
 		PageData pageData = getRepositoryService().getPage(getPageName());
 		PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(getLocale(), pageData);
 		processPageMetaInformation(pageInfo);
-		
+
 		//used to return to Site from Admin Pages
 		getAppSession().setLastSitePage(getPageMapEntry());
 
@@ -148,28 +153,28 @@ public abstract class CmsPage extends WebPage {
 		if (hasLangDropDown()) {
 			setupLangDropDown();
 		}
-		
+
 		if (hasInfoDialog()) {
 			setupInfoDialog();
 		} else {
 			add(new Label("infoDialog").setVisible(false));
 		}
-		
+
 		if (hasCrossfadeSupport()){
 	    	add(JavascriptPackageResource.getHeaderContribution(PROTOTYPE));
 			add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.ANIMATOR));
 	        add(JavascriptPackageResource.getHeaderContribution(FAST_INIT));
-	        
+
 	        add(JavascriptPackageResource.getHeaderContribution(CROSSFADE));
 			add(ScriptUtils.CROSSFADE_CSS);
 		}
-		
+
 	}
-	
+
 	private void processPageMetaInformation(PageMetaLangData pageInfo){
-		
+
 		add(new StringHeaderContributor(MessageFormat.format(META_HTTP, "lang", pageInfo.getLang())));
-		
+
 		if (!isMetadataOveridden()) { //TODO Store this as field on Page
 			if (StringUtils.isNotEmpty(pageInfo.getTitle())){
 				add(new StringHeaderContributor("<title>" + pageInfo.getTitle() + "</title>"));
@@ -185,7 +190,7 @@ public abstract class CmsPage extends WebPage {
 			}
 		}
 	}
-	
+
 	private void setupInfoDialog(){
 		final ModalWindow modal;
 		add(modal = new EcModalWindow("infoDialog"));
@@ -193,7 +198,7 @@ public abstract class CmsPage extends WebPage {
 		modal.setInitialWidth(300);
 		modal.setTitle(new Model<String>(getString("label.siteinfo")));
 		modal.setContent(new InfoPanel("content"));
-		
+
 		add(new AjaxLink<Void>("infoDialogLink"){
 			private static final long serialVersionUID = 1L;
 
@@ -201,24 +206,24 @@ public abstract class CmsPage extends WebPage {
 			public void onClick(AjaxRequestTarget target) {
 				modal.show(target);
 			}
-			
+
 		});
 	}
-	
+
 	private void setupPopupLogin(){
-		
+
 		add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.ANIMATOR));
-		
+
 		//Animator to open and close login popup
 		final Animator animator = new Animator(700)
 			.addSubject(AnimatorSubject.numeric("loginPopup","opacity", 0.0, 1.0))
 			.addSubject(AnimatorSubject.discrete("loginPopup", "display", "none","", 0.1));
-		
+
 		//Link that opens login popup
 		add(new LoginLink("logon", getAppSession()){
 			private static final long serialVersionUID = 1L;
 
-			
+
 			@Override
 			protected void onClickAction(AjaxRequestTarget target) {
 				target.appendJavascript(animator.toggle());
@@ -234,10 +239,10 @@ public abstract class CmsPage extends WebPage {
 				animator.setUniqueId(getMarkupId());
 				animator.renderHead(response);
 			}
-			
-			
+
+
 		});
-		
+
 		//link that closes the popup
 		add(new AjaxLink<String>("closeLogin"){
 			private static final long serialVersionUID = 1L;
@@ -245,9 +250,9 @@ public abstract class CmsPage extends WebPage {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				target.appendJavascript(animator.toggle());
-				
+
 			}
-			
+
 		});
 
 		add(new LoginPanel("signInPanel", new SecureCredentials(), false) {
@@ -293,7 +298,7 @@ public abstract class CmsPage extends WebPage {
 		});
 
 	}
-	
+
 	private void setupLoginLink(){
 		add(new LoginLink("logon", getAppSession()){
 
@@ -308,10 +313,10 @@ public abstract class CmsPage extends WebPage {
 			public void renderHead(IHeaderResponse response) {
 				// no contribution, Sorry!
 			}
-			
+
 		});
 	}
-	
+
 	private void setupLangDropDown(){
 		List<SiteLanguage> langs = getRepositoryService().getSiteData().getLocaleList();
 		langs.add(SiteLanguage.ENGLISH);
@@ -334,7 +339,7 @@ public abstract class CmsPage extends WebPage {
 		});
 		add(choice);
 	}
-	
+
 	private void setLocaleFromUrl(String url){
 		String[] urlfrags = url.split("/");
 		String s = urlfrags[urlfrags.length - 1];
@@ -378,38 +383,38 @@ public abstract class CmsPage extends WebPage {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return true if you want a lang dropdown for dynamic languae switching
 	 */
 	protected boolean hasLangDropDown() {
 		return false;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return true if you want modal popup with site information
-	 * 
+	 *
 	 * You must add 'infoDialogLink' to page
 	 */
 	protected boolean hasInfoDialog() {
 		return false;
 	}
-	
+
 	/**
 	 * Crossfade support allows you to identify a Rotating list by adding a class
 	 * of .crossfade
-	 * 
+	 *
 	 * @return true if you want support for Crossfade
 	 */
 	protected boolean hasCrossfadeSupport() {
 		return false;
 	}
 
-	
+
 	/**
 	 * Add a Text Content Panel to this page. NOTE: be careful when using this method
 	 * from an abstract class as new Panels will be created for each implementation.
-	 * 
+	 *
 	 * @param id
 	 */
 	protected Panel addContentPanel(String id){
@@ -417,19 +422,19 @@ public abstract class CmsPage extends WebPage {
 		add(panel);
 		return panel;
 	}
-	
+
 	protected Panel addContentInlinePanel(String id){
 		Panel panel = new InlineContentPanel(id, getPageName());
 		add(panel);
 		return panel;
 	}
-	
+
 	protected Panel addContentLinkPanel(String id){
 		Panel panel = new ContentLinkPanel(id, getPageName());
 		add(panel);
 		return panel;
 	}
-	
+
 	/**
 	 * @param id
 	 * @param subject - this will appear as subject in the email
@@ -442,33 +447,59 @@ public abstract class CmsPage extends WebPage {
 	}
 	
 	protected Panel addImagePanel(String id, String albumName){
-		Panel panel = new AlbumPanel(id, albumName);
+		final AlbumData album = getRepositoryService().getAlbum(id);
+		IModel<List<ImageData>> imagesModel = new LoadableDetachableModel<List<ImageData>>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected List<ImageData> load() {
+				return getRepositoryService().getAlbumImages(album);
+			}
+		};
+		Panel panel = new AlbumPanel(id, album, imagesModel);
 		add(panel);
 		return panel;
 	}
-	
+
+	/**
+	 * Add exhibit panel to page. This method shows the new preferred way to construct components so that
+	 * the components do not need to know where the data comes from.
+	 * 
+	 * @param id
+	 * @return Panel
+	 */
 	protected Panel addExhibitPanel(String id) {
-		Panel panel = new ExhibitPanel(id);
+		final AlbumData album = getRepositoryService().getAlbum(id);
+		
+		IModel<List<ImageData>> imagesModel = new LoadableDetachableModel<List<ImageData>>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected List<ImageData> load() {
+				return getRepositoryService().getAlbumImages(album);
+			}
+		};
+		Panel panel = new ExhibitPanel(id, album, imagesModel);
 		add(panel);
 		return panel;
 	}
-	
+
 	protected Panel addBlogPanel(String id, String blogName, PageParameters parameters){
 		String blogEntryId = parameters.getString(BLOG_ENTRY_ID);
     	Panel panel = new BlogHomePanel("blogPanel", "mainBlog", blogEntryId);
     	add(panel);
     	return panel;
 	}
-	
+
 	protected CmsSession getAppSession(){
 		return (CmsSession) getSession();
 	}
-	
+
 	protected List<IMenuItem>getPageMetaData(){
 		Collection<Class<? extends Page>> pages = ((CmsApplication)getApplication()).getPageMenuList();
 		return getPageMetaData(pages);
 	}
-	
+
 	protected List<IMenuItem> getPageMetaData(Collection<Class<? extends Page>> pages){
 		final List<IMenuItem> items = new ArrayList<IMenuItem>();
 		for(final Class<? extends Page> page: pages){
@@ -487,10 +518,10 @@ public abstract class CmsPage extends WebPage {
 					PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(getSession().getLocale(), pageData);
 					return StringUtils.defaultIfEmpty(pageInfo.getDisplayName(), page.getSimpleName());
 				}
-				
+
 			});
 		}
 		return items;
 	}
-	
+
 }

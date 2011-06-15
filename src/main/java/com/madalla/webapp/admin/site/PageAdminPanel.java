@@ -21,18 +21,18 @@ import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.css.Css;
 
 public class PageAdminPanel extends CmsPanel {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final Log log = LogFactory.getLog(PageAdminPanel.class);
-	
+
     public PageAdminPanel(String id){
 		super(id);
 		add(Css.CSS_FORM);
-		
+
 		final List<SiteLanguage> locales = SiteLanguage.getLanguages();
 		final Locale defaultLocale = getDefaultLocale(locales);
-		
+
 		add(new ListView<PageData>("pageDiv", getPages()){
 			private static final long serialVersionUID = 1L;
 
@@ -56,15 +56,15 @@ public class PageAdminPanel extends CmsPanel {
 							}
 						}
 					}
-					
+
 				});
-				
+
 			}
-			
+
 		});
-		
+
 	}
-    
+
     private Class<? extends Page> getPageClass(String name){
     	Collection<Class<? extends Page>> pages = ((CmsApplication)getApplication()).getAppPages();
 		for (Class<? extends Page> page : pages){
@@ -74,14 +74,14 @@ public class PageAdminPanel extends CmsPanel {
 		}
 		return null;
     }
-	
+
 	private String getPageName(Class<? extends Page> page){
 		if (!CmsPage.class.isAssignableFrom(page)){
 			throw new WicketRuntimeException("Home page does not extends CmsPage class. Home Page is " + page);
 		}
 		return page.getSimpleName();
 	}
-	
+
 	private List<PageData> getPages(){
 		Collection<Class<? extends Page>> pages = ((CmsApplication)getApplication()).getAppPages();
 		List<PageData> rt = new ArrayList<PageData>();
@@ -91,7 +91,7 @@ public class PageAdminPanel extends CmsPanel {
 		}
 		return rt;
 	}
-	
+
 	//get the first configured language
 	private Locale getDefaultLocale(List<SiteLanguage> locales){
 		List<SiteLanguage> configuredLangs = getRepositoryService().getSiteData().getLocaleList();

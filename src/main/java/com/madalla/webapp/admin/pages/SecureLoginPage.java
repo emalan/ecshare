@@ -7,7 +7,7 @@ import com.madalla.webapp.user.UserLoginPanel;
 
 @RequireHttps
 public class SecureLoginPage extends AbstractAdminPage{
-	
+
 	public SecureLoginPage(){
 		this("");
 	}

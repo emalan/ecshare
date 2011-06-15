@@ -21,11 +21,11 @@ public class SimpleEmailSender implements IEmailSender, Serializable {
     private String emailToEmail;
     private String mailAuthName;
     private String mailAuthPassword;
-    
-    
+
+
     public SimpleEmailSender(){
     }
-    
+
     public boolean sendUserEmail(String subject, String body, String userEmail, String userName){
     	return sendUserEmail(subject, body, userEmail, userName, false);
     }
@@ -33,21 +33,21 @@ public class SimpleEmailSender implements IEmailSender, Serializable {
     public boolean sendUserEmail(String subject, String body, String userEmail, String userName, boolean copyEmailAdmin){
     	return sendUserEmail(new SimpleEmail(), subject, body, userEmail, userName, copyEmailAdmin);
     }
-    
+
     public boolean sendUserHtmlEmail(String subject, String body, String userEmail, String userName){
     	return sendUserEmail(new HtmlEmail(), subject, body, userEmail, userName, true);
     }
-    
+
     public boolean sendEmail(String subject, String body){
     	log.debug("sendEmail - subject:"+subject);
         return sendEmailUsingCommonsMail(new SimpleEmail(), subject, body, false, "", "",true);
     }
-    
+
     public boolean sendEmail(){
-        return sendEmail("com.emalan.service.email.SimpleEmailSender - no subject", 
+        return sendEmail("com.emalan.service.email.SimpleEmailSender - no subject",
                 "com.emalan.service.email.SimpleEmailSender - no body");
     }
-    
+
     private boolean sendUserEmail(Email email, String subject, String body, String userEmail, String userName, boolean copyEmailAdmin){
     	log.debug("sendUserEmail - userEmail:"+userEmail+" userName:"+userName+" subject:"+subject );
     	if (StringUtils.isEmpty(userEmail)){
@@ -56,32 +56,32 @@ public class SimpleEmailSender implements IEmailSender, Serializable {
     	}
     	return sendEmailUsingCommonsMail(email, subject, body, true, userEmail, userName, copyEmailAdmin);
     }
-    
-    private boolean sendEmailUsingCommonsMail(final Email email,final String subject, final String body, final boolean user, 
+
+    private boolean sendEmailUsingCommonsMail(final Email email,final String subject, final String body, final boolean user,
     		final String userEmail, final String userName, final boolean copyEmailAdmin){
-        
+
     	try {
-        	
+
         	email.setHostName(emailHost);
             email.setAuthentication(mailAuthName, mailAuthPassword);
             email.setFrom(emailFromEmail, emailFromName);
             email.setDebug(true);
-            
+
         	if (user){
         		email.addTo(userEmail, userName);
-        	} 
-        	
+        	}
+
         	if (copyEmailAdmin){
         		email.addTo(emailToEmail, emailToName);
         	}
-        	
+
             email.setSubject(subject);
             email.setMsg(body);
-            
+
             log.debug("Sending email."+this);
-            
+
             email.send();
-        
+
     	} catch (EmailException e) {
             log.error("Exception while sending email from emalancom.",e);
             log.warn("Email not sent:" + this);
@@ -89,7 +89,7 @@ public class SimpleEmailSender implements IEmailSender, Serializable {
         }
         return true;
     }
-    
+
     public void setEmailFromEmail(String emailFromEmail) {
         this.emailFromEmail = emailFromEmail;
     }
@@ -109,8 +109,9 @@ public class SimpleEmailSender implements IEmailSender, Serializable {
     public void setEmailToName(String emailToName) {
         this.emailToName = emailToName;
     }
-    
-    public String toString() {
+
+    @Override
+	public String toString() {
     	return ReflectionToStringBuilder.toString(this);
     }
 

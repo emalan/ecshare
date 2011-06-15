@@ -10,10 +10,10 @@ import com.madalla.bo.image.ImageData;
 
 /**
  * OCM implementation that persists the data to Jackrabbit Repository.
- * 
+ *
  * See {@link com.madalla.cms.service.ocm.util.DynamicImageResourceConvertor} for
  * how DynamicImageResource is persisted to Repository
- * 
+ *
  * @author Eugene Malan
  *
  */
@@ -30,19 +30,21 @@ public class Image extends ImageData {
 	@Field private String urlTitle;
 	@Field private String description;
 	@Field private Integer sortOrder;
-	
+
 	public Image(){
-		
+
 	}
-	
+
 	public Image(final IAlbumData album, final String name){
 		this.id = album.getId() + "/" + name;
 	}
 
+	@Override
 	public String getName(){
 		return StringUtils.substringAfterLast(getId(), "/");
 	}
-	
+
+	@Override
 	public String getId() {
 		return id;
 	}
@@ -66,7 +68,7 @@ public class Image extends ImageData {
     public void setImageThumb(DynamicImageResource imageThumb) {
         this.imageThumb = imageThumb;
     }
-    
+
     public String getTitle() {
 		return title;
 	}

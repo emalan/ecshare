@@ -27,14 +27,14 @@ import com.madalla.webapp.CmsSession;
 
 /**
  * Translate Panel - View translate from text and edit the translate text. Also translate functionality.
- * 
+ *
  * <p>
  * Panel uses the TinyMCE WYSIWYG Editor. Translate functionality is supplied
  * using Googles translate service.
  * </p>
- * 
+ *
  * @author Eugene Malan
- * 
+ *
  */
 public class TranslatePanel extends CmsPanel {
 
@@ -42,27 +42,27 @@ public class TranslatePanel extends CmsPanel {
 
 	private Log log = LogFactory.getLog(this.getClass());
 
-	
+
 	public TranslatePanel(String name, final String nodeName, final String contentId) {
 		super(name);
-		
+
 		add(JavascriptPackageResource.getHeaderContribution(TinyMce.class, "tiny_mce.js"));
-				
+
 		//setup Javascript template
 		Map<String, Object> vars = EditorSetup.setupTemplateVariables((CmsSession) getSession());
 		add(TextTemplateHeaderContributor.forJavaScript(EditorSetup.class,"EditorSetup.js", Model.ofMap(vars)));
-		
+
         PageData page = getRepositoryService().getPage(nodeName);
         final ContentData content = getRepositoryService().getContent(page, contentId);
         log.debug("init - content" + content);
-        
+
         //Base Language display
         String baseContent = getRepositoryService().getContentText(content, SiteLanguage.BASE_LOCALE);
         Label baseContentLabel = new Label("baseContent", new Model<String>(baseContent));
         baseContentLabel.setOutputMarkupId(true);
         baseContentLabel.setEscapeModelStrings(false);
         add(baseContentLabel);
-                
+
 		// Supported Languages
 		List<SiteLanguage> locales = SiteLanguage.getLanguages();
 
@@ -74,7 +74,7 @@ public class TranslatePanel extends CmsPanel {
         final ContentFormPanel destPanel = new ContentFormPanel("contentEditor", contentEntry );
         destPanel.setOutputMarkupId(true);
 		add(destPanel);
-		
+
 		//add values to javascript
 		vars.put("sourceDiv", baseContentLabel.getMarkupId());
 		vars.put("destLang", selectedLang);
@@ -82,8 +82,8 @@ public class TranslatePanel extends CmsPanel {
 
 		//Language Selector
 		SiteLanguage selectedLanguage = SiteLanguage.getLanguage(selectedLang.getLanguage());
-		
-		final DropDownChoice<SiteLanguage> select = new DropDownChoice<SiteLanguage>("langSelect", 
+
+		final DropDownChoice<SiteLanguage> select = new DropDownChoice<SiteLanguage>("langSelect",
 				new Model<SiteLanguage>(selectedLanguage), locales, new ChoiceRenderer<SiteLanguage>("locale.displayLanguage"));
 		select.setNullValid(false);
 		select.add(new AjaxFormComponentUpdatingBehavior("onchange"){
@@ -96,11 +96,11 @@ public class TranslatePanel extends CmsPanel {
 				ContentEntryData newContentEntry = getRepositoryService().getContentEntry(content, language.locale.getDisplayName(), "");
 				log.debug("new Content Entry." + newContentEntry);
 				destPanel.changeContentEntry(newContentEntry);
-				
+
 				target.appendJavascript("changeLanguage('"+ language.getLanguageCode()+"', '"+
 						StringEscapeUtils.escapeJavaScript(newContentEntry.getText()) + "');");
 			}
-			
+
 		});
 		add(select);
 

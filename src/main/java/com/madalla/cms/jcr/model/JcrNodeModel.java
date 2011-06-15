@@ -14,13 +14,13 @@ import org.apache.commons.lang.builder.ToStringStyle;
 public class JcrNodeModel implements IPluginModel {
     private static final long serialVersionUID = 1L;
     //private static final Log log = LogFactory.getLog(JcrNodeModel.class);
-    
+
     private ContentNode contentNode;
 
     public JcrNodeModel(Node node) {
     	contentNode = new ContentNode(node);
     }
-    
+
     public Map<String, String> getMapRepresentation() {
         Map<String, String> map = new HashMap<String, String>();
         map.put("node", contentNode.getPath());
@@ -28,12 +28,14 @@ public class JcrNodeModel implements IPluginModel {
     }
 
     // override Object
-    public String toString() {
+    @Override
+	public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("contentNode", contentNode.toString())
                 .toString();
     }
 
-    public boolean equals(Object object) {
+    @Override
+	public boolean equals(Object object) {
         if (object instanceof JcrNodeModel == false) {
             return false;
         }
@@ -44,7 +46,8 @@ public class JcrNodeModel implements IPluginModel {
         return new EqualsBuilder().append(contentNode, nodeModel.contentNode).isEquals();
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return new HashCodeBuilder(57, 433).append(contentNode).toHashCode();
     }
 
@@ -53,7 +56,7 @@ public class JcrNodeModel implements IPluginModel {
 	}
 
 	public void setObject(ContentNode obj) {
-		contentNode = (ContentNode) obj;
+		contentNode = obj;
 	}
 
 	public void detach() {

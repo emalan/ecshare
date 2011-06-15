@@ -8,8 +8,8 @@ import com.madalla.AbstractSpringWicketTester;
 
 public abstract class AbstractJcrTester extends AbstractSpringWicketTester{
 
-	
-	
+
+
     protected Node getCreateNode(String nodeName, Node root) throws RepositoryException{
     	if (null == nodeName){
     		log.error("getCreateNode - Parameter nodeName cannot be null");
@@ -23,6 +23,6 @@ public abstract class AbstractJcrTester extends AbstractSpringWicketTester{
             node = root.addNode(nodeName);
         }
         return node;
-        
+
     }
 }

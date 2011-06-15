@@ -1,8 +1,8 @@
 /**
- * Implements the Content Repository Service using JCR and 
+ * Implements the Content Repository Service using JCR and
  * JackRabbit's OCM code
  * <p>
- * The Schema information and setup code for the Content Repository is contained in this package. 
+ * The Schema information and setup code for the Content Repository is contained in this package.
  * </p>
  * @author Eugene Malan
  */

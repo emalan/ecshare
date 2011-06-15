@@ -16,7 +16,7 @@ public class TransactionLogDao extends AbstractDao {
 	private static final String FIND = "select ID,SITE_NAME,LOG_DATE,USER_ID,TYPE,OBJECT_ID from TRANSACTION_LOG where ID = ?";
 	private static final String DELETE = "delete from TRANSACTION_LOG where ID = ?";
 	private static final String FETCH = "select ID,SITE_NAME,LOG_DATE,USER_ID,TYPE,OBJECT_ID from TRANSACTION_LOG where SITE_NAME = ?";
-	
+
 	private ParameterizedRowMapper<LogData> mapper = new ParameterizedRowMapper<LogData>() {
 
 		public LogData mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -37,11 +37,11 @@ public class TransactionLogDao extends AbstractDao {
 	public LogData find(String id) {
 		return this.template.queryForObject(FIND, mapper, id);
 	}
-	
+
 	public int delete(LogData data){
 		return template.update(DELETE, new Object[]{data.getId()});
 	}
-	
+
 	public List<LogData> fetch(){
 		return template.query(FETCH, mapper, new Object[]{site});
 	}

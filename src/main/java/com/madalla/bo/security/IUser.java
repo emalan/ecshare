@@ -28,9 +28,9 @@ public interface IUser extends Serializable{
 	Boolean getAdmin();
 
 	void setAdmin(Boolean admin);
-	
+
 	String getDisplayName();
-	
+
 	void setDisplayName(String displayName);
 
 }

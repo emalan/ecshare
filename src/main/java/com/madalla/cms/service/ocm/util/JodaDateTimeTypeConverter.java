@@ -15,9 +15,9 @@ public class JodaDateTimeTypeConverter implements AtomicTypeConverter{
 		if (propValue == null)
 		{
 			return null;
-		}		
+		}
 		DateTime dateTime = (DateTime) propValue;
-		return valueFactory.createValue(dateTime.toString());		
+		return valueFactory.createValue(dateTime.toString());
 	}
 
 
@@ -33,17 +33,17 @@ public class JodaDateTimeTypeConverter implements AtomicTypeConverter{
 		}
 
 	}
-	
+
 	public String getXPathQueryValue(ValueFactory valueFactory, Object object)
 	{
-		try 
+		try
 		{
-			
+
 			String isoDateTimeString = (String) object;
 			return isoDateTimeString;
 
-		} 
-		catch (Exception e) 
+		}
+		catch (Exception e)
 		{
 			throw new IncorrectAtomicTypeException("Impossible to get the sting value ", e);
 		}

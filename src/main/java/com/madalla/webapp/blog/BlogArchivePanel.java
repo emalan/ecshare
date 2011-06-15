@@ -51,7 +51,7 @@ public class BlogArchivePanel extends Panel {
 
 		BaseTree tree = new LinkTree("BlogTree", blogEntries) {
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			protected IModel<Object> getNodeTextModel(IModel<Object> model) {
 				DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) model.getObject();
@@ -74,7 +74,7 @@ public class BlogArchivePanel extends Panel {
 						super.onNodeLinkClicked(node, tree, target);
 						log.debug("onNodeLinkClicked - " + node);
 
-						
+
 						if (node instanceof TreeNode && ((TreeNode)node).isLeaf()) {
 							log.debug("onNodeLinkClicked - "+node);
 							DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) node;
@@ -106,7 +106,7 @@ public class BlogArchivePanel extends Panel {
 		tree.getTreeState().expandAll();
 		tree.setLinkType(LinkType.AJAX_FALLBACK);
 		add(tree);
-		
+
 		Link<Object> home = new AjaxFallbackLink<Object>("home"){
 			private static final long serialVersionUID = 1L;
 
@@ -118,15 +118,15 @@ public class BlogArchivePanel extends Panel {
 					target.addComponent(display);
 					display.add(new SimpleAttributeModifier("class","showHome"));
 				}
-				
+
 			}
-			
+
 		};
 		add(home);
-		
+
 
 	}
-	
+
     private IDataService getRepositoryService(){
     	return ((IDataServiceProvider)getApplication()).getRepositoryService();
     }

@@ -31,8 +31,8 @@ public class RpxPanel extends CmsPanel{
 					tag.put("src", MessageFormat.format(callback, new Object[]{siteUrl, lang}) + "&" + hideHeading);
 				}
 			}
-			
-			
+
+
 		});
 	}
 

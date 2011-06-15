@@ -13,7 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class HTMLParser {
-	
+
 	private final static Log log = LogFactory.getLog(HTMLParser.class);
 
 	private HTMLParser() {} // prevent instantiation
@@ -25,6 +25,7 @@ public class HTMLParser {
 			private int total;
 			private boolean found = false;
 
+			@Override
 			public void handleText(char[] data, int pos) {
 				if (!found) {
 					log.debug("---------handleText---------");

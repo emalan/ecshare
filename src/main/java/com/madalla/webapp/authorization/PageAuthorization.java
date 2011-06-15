@@ -9,7 +9,7 @@ public abstract class PageAuthorization {
 	 */
 	@SuppressWarnings("unchecked")
 	private final WeakReference/* <Class> */securePageSuperTypeRef;
-	
+
 	@SuppressWarnings("unchecked")
 	public PageAuthorization(final Class securePageSuperType){
 		if (securePageSuperType == null)
@@ -20,15 +20,15 @@ public abstract class PageAuthorization {
 		this.securePageSuperTypeRef = new WeakReference(securePageSuperType);
 
 	}
-	
+
 	public Object getPageSuperTypeRef(){
 		return securePageSuperTypeRef.get();
 	}
-	
+
 	/**
 	 * Gets whether the current user/session is authorized to instantiate a page class which extends
 	 * or implements the supertype (base class or tagging interface) passed to the constructor.
-	 * 
+	 *
 	 * @return True if the instantiation should be allowed to proceed. False, if the user should be
 	 *         directed to the application's sign-in page.
 	 */

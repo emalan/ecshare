@@ -20,9 +20,9 @@ import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
 import com.madalla.wicket.resourcelink.EditableResourceLink.ResourceType;
 
 /**
- * Utility methods for managing the mounting of resources, so that they can have URL's that the browser 
+ * Utility methods for managing the mounting of resources, so that they can have URL's that the browser
  * can interepret correctly. For example : pdf's
- * 
+ *
  * @author Eugene Malan
  *
  */
@@ -30,11 +30,11 @@ public class ContentSharedResource {
 
     public static final String RESOURCE_PATH = "resource/";
     Log log = LogFactory.getLog(ContentSharedResource.class);
-    
+
     public static void registerResource(WebApplication application, ILinkData data, String path, IDataService service){
         mountResource(application, data.getId(), data.getResourceType(), path, service);
     }
-    
+
     public static String registerResource(WebApplication application, ILinkData data, IDataService service){
         if (data.getFileUpload() == null){
             return "";
@@ -54,7 +54,7 @@ public class ContentSharedResource {
         resources.add(Application.class, id, null, null, createDynamicResource(id, resourceType, service));
         application.mountSharedResource(path, resourceReference.getSharedResourceKey());
     }
-    
+
     private static Resource createDynamicResource(final String id, final String type, final IDataService service){
         Resource resource = new WebResource() {
             private static final long serialVersionUID = 1L;
@@ -64,7 +64,7 @@ public class ContentSharedResource {
                 return new AbstractResourceStream() {
 
                     private static final long serialVersionUID = 1L;
-                    
+
                     @Override
                     public String getContentType() {
                         ResourceType resourceType = ResourceType.valueOf(type);
@@ -90,6 +90,6 @@ public class ContentSharedResource {
         };
         return resource;
     }
-    
+
 
 }

@@ -6,7 +6,7 @@ import java.util.Locale;
 
 /**
  * Define Languages that the application supports
- * 
+ *
  * @author Eugene Malan
  *
  */
@@ -21,37 +21,37 @@ public enum SiteLanguage{
 	ZULU(new Locale("zu"),"Zulu editable content","Hover&Click - Zulu"),
 	VENDA(new Locale("ve"), "Venda editable content", "Hover&Click - Venda"),
 	XHOSA(new Locale("xh"), "Xhosa editable content", "Hover&Click - Xhosa");
-	
+
 	public Locale locale;
-	
+
 	public String defaultContent;
-	
+
 	public String defaultInlineContent;
-	
+
 	SiteLanguage(Locale locale, String defaultContent, String defaultInlineContent){
 		this.locale = locale;
 		this.defaultContent = defaultContent;
 		this.defaultInlineContent = defaultInlineContent;
 	}
-	
+
 	/**
-	 * @return display the locale name in Base Language 
+	 * @return display the locale name in Base Language
 	 */
 	public String getDisplayName(){
 		return locale.getDisplayName(BASE_LOCALE);
 	}
-	
+
 	public String getLanguageCode(){
 		return locale.getLanguage();
 	}
-	
+
 	// TODO use this as Base Language in application - so if we need to change it we can do it here
 	public static final Locale BASE_LOCALE = Locale.ENGLISH;
-	
+
 	public static SiteLanguage getBaseLanguage(){
 		return getLanguage(BASE_LOCALE.getLanguage());
 	}
-	
+
 	public static SiteLanguage getLanguage(String code){
 		if ("nl".equalsIgnoreCase(code)){
 			return NEDERLANDS;
@@ -75,7 +75,7 @@ public enum SiteLanguage{
 			return SiteLanguage.ENGLISH;
 		}
 	}
-	
+
 	public static List<SiteLanguage> getAllLanguages(){
 		List<SiteLanguage> ret = new ArrayList<SiteLanguage>(SiteLanguage.values().length);
 		for (int i = 0; i < SiteLanguage.values().length; i++) {
@@ -83,7 +83,7 @@ public enum SiteLanguage{
 		}
 		return ret;
 	}
-	
+
 	public static List<SiteLanguage> getLanguages(){
 		List<SiteLanguage> ret = new ArrayList<SiteLanguage>(SiteLanguage.values().length);
 		for (int i = 0; i < SiteLanguage.values().length; i++) {

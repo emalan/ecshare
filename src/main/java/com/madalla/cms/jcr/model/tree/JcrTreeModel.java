@@ -11,7 +11,7 @@ public class JcrTreeModel extends DefaultTreeModel{
 
     private static final long serialVersionUID = 3495335448944545206L;
     private Map<String, AbstractTreeNode> registry;
-	
+
     public JcrTreeModel(AbstractTreeNode rootModel) {
         super(rootModel);
         rootModel.setTreeModel(this);
@@ -19,7 +19,7 @@ public class JcrTreeModel extends DefaultTreeModel{
         registry = new HashMap<String, AbstractTreeNode>();
         register(rootModel);
     }
-    
+
     public void register(AbstractTreeNode treeNodeModel) {
         String key = treeNodeModel.getNodeModel().getContentNode().getPath();
         registry.put(key, treeNodeModel);
@@ -32,7 +32,7 @@ public class JcrTreeModel extends DefaultTreeModel{
 		      children[i] = getChild(parent, childIndices[i]);
 		  fireTreeNodesInserted(this, getPathToRoot(parent), childIndices, children);
 	}
-    
-    
-    
+
+
+
 }

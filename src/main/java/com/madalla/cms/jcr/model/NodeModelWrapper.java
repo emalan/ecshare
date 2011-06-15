@@ -39,7 +39,7 @@ public class NodeModelWrapper implements IChainingModel<ContentNode>, IPluginMod
             nodeModel.detach();
         }
     }
-    
+
     // implement IPluginModel
     public Map<String, String> getMapRepresentation() {
         return nodeModel.getMapRepresentation();

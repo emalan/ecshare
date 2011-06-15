@@ -28,29 +28,29 @@ import com.madalla.service.BackupFile;
 import com.madalla.service.IRepositoryAdminService;
 
 public class RepositoryAdminService extends AbstractJcrRepositoryService implements IRepositoryAdminService {
-	
+
     private static final String APP = "applications";
     private JcrTemplate template;
     private String repositoryHome;
     private final Log log = LogFactory.getLog(this.getClass());
-    
+
     static final String EC_NODE_BACKUP = NS + "backup";
-    
+
     public NodeDisplay getNodeDisplay(final String path){
     	return (NodeDisplay) template.execute(new JcrCallback(){
-       		
+
     		public Object doInJcr(Session session) throws IOException, RepositoryException{
 				Item item = session.getItem(path);
 				return new NodeDisplay(item);
     		}
-    		
+
     	});
     }
-    
+
     public void deleteNode(String path){
     	JcrUtils.deleteNode(template, path);
     }
-    
+
     public void pasteNode(final String srcPath, final String destPath){
     	template.execute(new JcrCallback(){
 
@@ -59,13 +59,13 @@ public class RepositoryAdminService extends AbstractJcrRepositoryService impleme
 				session.save();
 				return null;
 			}
-    		
+
     	});
     }
-    
+
     public DefaultTreeModel getRepositoryContent(){
         return (DefaultTreeModel) template.execute(new JcrCallback(){
-            
+
             public Object doInJcr(Session session) throws IOException, RepositoryException {
                 Node rootNode = getApplicationNode(session);
                 session.save();
@@ -77,10 +77,10 @@ public class RepositoryAdminService extends AbstractJcrRepositoryService impleme
             }
         });
     }
-    
+
     public DefaultTreeModel getSiteContent(){
         return (DefaultTreeModel) template.execute(new JcrCallback(){
-            
+
             public Object doInJcr(Session session) throws IOException, RepositoryException {
                 Node siteNode = getSiteNode(session);
                 session.save();
@@ -92,7 +92,7 @@ public class RepositoryAdminService extends AbstractJcrRepositoryService impleme
             }
         });
     }
-    
+
     public String backupContentRoot(){
     	log.info("backupContentRoot - Backing up Content Repository...");
     	String file = (String) template.execute(new JcrCallback(){
@@ -109,7 +109,7 @@ public class RepositoryAdminService extends AbstractJcrRepositoryService impleme
     	});
     	return file;
     }
-    
+
     public String backupContentSite(){
     	log.info("backupContentSite - Backing up Content Repository for Site. site=" + getSite());
     	String file = (String) template.execute(new JcrCallback(){
@@ -126,29 +126,29 @@ public class RepositoryAdminService extends AbstractJcrRepositoryService impleme
     	});
     	return file;
     }
-    
+
     public List<BackupFile> getApplicationBackupFileList(){
     	return BackupFile.getFileList(APP, repositoryHome);
     }
-    
+
     public List<BackupFile> getBackupFileList() {
     	return BackupFile.getFileList(getSite(),repositoryHome);
     }
-    
+
     //TODO refactor the 2 restore methods
     public void restoreContentApplication(final File backupFile) {
         log.info("restoreContentApplication - Importing data to repository from file. file ="+backupFile.getPath());
     	template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
-				
+
 				InputStream in = new FileInputStream(backupFile);
-				
+
 				Node appnode = getApplicationNode(session);
 				String importPath = appnode.getParent().getPath();
 				Node backupParent = getCreateNode(EC_NODE_BACKUP, session.getRootNode());
 				session.save();
-				
+
 				//remove old backup if exists
 				if (backupParent.hasNode(EC_NODE_APP)){
 					Node oldBackup = backupParent.getNode(EC_NODE_APP);
@@ -162,7 +162,7 @@ public class RepositoryAdminService extends AbstractJcrRepositoryService impleme
 				log.info("Moving site from "+srcPath + " to "+ destPath);
 				session.move(srcPath, destPath);
 				session.save();
-				
+
 				session.importXML(importPath, in, ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW);
                 session.save();
 				return null;
@@ -175,14 +175,14 @@ public class RepositoryAdminService extends AbstractJcrRepositoryService impleme
     	template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
-				
+
 				InputStream in = new FileInputStream(backupFile);
-				
+
 				Node siteNode = getSiteNode(session);
 				String importPath = siteNode.getParent().getPath();
 				Node backupParent = getCreateBackupNode(session);
 				session.save();
-				
+
 				//remove old backup if exists
 				if (backupParent.hasNode(NS+getSite())){
 					Node oldBackup = backupParent.getNode(NS+getSite());
@@ -196,22 +196,22 @@ public class RepositoryAdminService extends AbstractJcrRepositoryService impleme
 				log.info("Moving site from "+srcPath + " to "+ destPath);
 				session.move(srcPath, destPath);
 				session.save();
-				
+
 				session.importXML(importPath, in, ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW);
                 session.save();
 				return null;
 			}
     	});
     }
-    
+
     public Boolean isRollbackSiteAvailable(){
 		return isRollBackAvailable(false);
     }
-    
+
     public Boolean isRollbackApplicationAvailable(){
 		return isRollBackAvailable(true);
     }
-    
+
     private Boolean isRollBackAvailable(final Boolean application){
     	//if there is a backup available then rollback is available
     	Boolean available = (Boolean) template.execute(new JcrCallback(){
@@ -228,7 +228,7 @@ public class RepositoryAdminService extends AbstractJcrRepositoryService impleme
                     return backupParent.hasNode(NS + getSite());
 				}
 			}
-    		
+
     	});
     	return available;
     }
@@ -236,23 +236,23 @@ public class RepositoryAdminService extends AbstractJcrRepositoryService impleme
     public void rollbackApplicationRestore() {
 		rollback(true);
 	}
-    
+
     public void rollbackSiteRestore(){
     	rollback(false);
     }
-    
+
     private Node getCreateBackupNode(Session session) throws RepositoryException{
     	Node appNode = getCreateNode(EC_NODE_APP, session.getRootNode());
     	return getCreateNode(EC_NODE_BACKUP, appNode);
     }
 
-    
+
     private void rollback(final Boolean application){
     	log.info("rollback - Attempting to rollback restore. Site ="+getSite());
     	template.execute(new JcrCallback(){
 			public Object doInJcr(Session session) throws IOException,
 					RepositoryException {
-				
+
 				String backupName;
 				Node backupParent;
 				Node destinationNode;
@@ -267,16 +267,16 @@ public class RepositoryAdminService extends AbstractJcrRepositoryService impleme
 				}
 				session.save();
 
-				//check for backup 
+				//check for backup
 				if (backupParent.hasNode(backupName)){
 					Node backup = backupParent.getNode(backupName);
 					log.info("rollbackSiteRestore - found backup.");
-					
+
 					//remove destination
 					String destPath = destinationNode.getPath();
 					destinationNode.remove();
 					session.save();
-					
+
 					//move backup to site
 					String srcPath = backup.getPath();
 					log.info("rollbackSiteRestore - Moving site from "+srcPath + " to "+ destPath);
@@ -291,7 +291,8 @@ public class RepositoryAdminService extends AbstractJcrRepositoryService impleme
     	});
 
     }
-    
+
+	@Override
 	public void setTemplate(JcrTemplate template) {
 		this.template = template;
 	}

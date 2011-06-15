@@ -10,7 +10,6 @@ import javax.swing.tree.TreeModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.markup.html.tree.LinkTree;
 import org.joda.time.DateTime;
 import org.springmodules.jcr.JcrTemplate;
 
@@ -35,16 +34,17 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     private IRepositoryAdminService repositoryAdminService;
     private JcrTemplate jcrTemplate;
 	private final static String SITE = "test";
-	
+
+	@Override
 	protected List<String> getTestConfigLocations() {
 		List<String> configLocations = new ArrayList<String>();
 		configLocations.add("classpath:com/madalla/cms/service/ocm/applicationContext-cms.xml");
         configLocations.add("classpath:com/madalla/cms/jcr/applicationContext-jcr.xml");
         configLocations.add("classpath:com/madalla/db/dao/applicationContext-dao.xml");
-        
+
 		return configLocations;
 	}
-	
+
 //fails cause ocm: namespace is not set anymore
 //not needed - all migrations done already
 //	public void testDataMigration(){
@@ -72,28 +72,28 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
 //    public void testContentExplorer(){
 //    	TreeModel treeModel = repositoryAdminService.getSiteContent();
 //    	assertNotNull(treeModel);
-//    	
+//
 //    	LinkTree tree = new LinkTree("test", treeModel);
-//    	
+//
 //    	appTester.startComponent(tree);
 //    	//tree.render();
 //    	//int size = tree.size();
 //    	//tree.g
 //    	//tree.render();
-//    	
+//
 //    }
-    
+
     private final static String CONTENT_ID = "testContent";
     private final static String CONTENT_PARENT = "testParentNode";
 
     public void testImageGetSet() throws FileNotFoundException{
     	InputStream stream = this.getClass().getResourceAsStream("test1.jpg");
     	assertNotNull(stream);
-    	
+
     	final String name = "image1";
     	IAlbumData originalAlbum = contentService.getOriginalsAlbum();
     	String imagePath = contentService.createImage(originalAlbum, name, stream);
-    	
+
     	AlbumData album;
     	{
     		album = contentService.getAlbum("testAlbum");
@@ -122,7 +122,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	assertNotNull(treeModel);
     	assertTrue(treeModel.getChildCount(treeModel.getRoot()) >= 1);
     }
-        
+
     private final static String BLOG = "testBlog";
     private final static String BLOGCATEGORY = "testCategory";
     private final static String BLOGDESCRIPTION = "Blog Description Test";
@@ -130,7 +130,7 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     private final static String BLOGTEXT = "test text";
     private final static String BLOGTITLE = "test title";
     private final static DateTime BLOGDATE = new DateTime();
-    
+
     public void testBlogGetSet(){
     	IBlogData blog = contentService.getBlog(BLOG);
     	assertNotNull(blog);
@@ -139,43 +139,43 @@ public class ContentServiceIntegrationTest extends  AbstractSpringWicketTester{
     	blogEntry.setDescription(BLOGDESCRIPTION);
     	String path = blogEntry.getId();
     	contentService.saveBlogEntry(blogEntry);
-    	
+
     	IBlogEntryData testEntry = contentService.getBlogEntry(path);
     	assertNotNull(testEntry);
-    	
+
     	contentService.deleteNode(path);
     }
-    
+
     public void testUserCreate(){
         String username = "test1User";
         String password = "password";
         UserData user = contentService.getNewUser(username, password);
-        
+
         UserData test = contentService.getUser(username);
         assertNotNull(test);
-        
+
         UserData nouser = contentService.getNewUser("nouser","pwd");
         assertNull(nouser);
-        
+
         //profile
         ProfileData profile1 = contentService.getNewUserProfile(test, "Provider", "12345");
         ProfileData profile2 = contentService.getNewUserProfile(test, "Provider", "123456");
         contentService.saveDataObject(profile1);
         contentService.saveDataObject(profile2);
-        
+
         ProfileData profile = contentService.getProfile("12345");
         //assertNotNull(profile);
-        
+
         contentService.deleteNode(test.getId());
     }
-    
+
     public void testUserGetAll(){
     	Collection<UserData> list = contentService.getUsers();
     	for(UserData user : list){
     		System.out.println(user);
     	}
     }
-    
+
     public void setDataService(IDataService contentService) {
 		this.contentService = contentService;
 	}

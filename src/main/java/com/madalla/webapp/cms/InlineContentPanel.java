@@ -15,39 +15,39 @@ import com.madalla.webapp.CmsPanel;
 
 /**
  * In-Line Edit Panel - allows in-line editing of Content when logged in.
- * 
+ *
  * @author Eugene Malan
  *
  */
 public class InlineContentPanel extends CmsPanel {
     private static final long serialVersionUID = 1L;
-    
+
     private Log log = LogFactory.getLog(this.getClass());
-    
+
     /**
      * Use this constructor for Border or application Level Content
-     * 
+     *
      * @param id
      */
     public InlineContentPanel(final String id) {
     	this(id, APPNODE);
     }
     /**
-     * 
+     *
      * @param id
      * @param nodeName
      */
     public InlineContentPanel(final String id, final String nodeName) {
         super(id);
-        
+
         log.debug("Content Panel being created for node=" + nodeName + " id=" + id);
-        
+
         Panel editableLabel = new AjaxEditableLabel<Object>("contentText"){
 
 			private static final long serialVersionUID = 1L;
 
 			private ContentEntryData contentEntry;
-			
+
         	@Override
 			protected void onSubmit(AjaxRequestTarget target) {
 				super.onSubmit(target);
@@ -56,7 +56,7 @@ public class InlineContentPanel extends CmsPanel {
 	            saveData(contentEntry);
 	            info("Content saved to repository");
 			}
-			
+
         	@Override
 			protected void onBeforeRender(){
                 log.debug("onBeforeRender - setting new Content. id="+id);
@@ -72,7 +72,7 @@ public class InlineContentPanel extends CmsPanel {
                 }
                 super.onBeforeRender();
             }
-        	
+
 			@Override
 			protected void onComponentTag(ComponentTag tag) {
 				if (((IContentAdmin)getSession()).isLoggedIn()) {
@@ -84,7 +84,7 @@ public class InlineContentPanel extends CmsPanel {
 
         };
         add(editableLabel);
-        
+
     }
 
 

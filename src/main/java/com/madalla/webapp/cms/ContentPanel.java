@@ -27,22 +27,22 @@ import com.madalla.webapp.css.Css;
  */
 public class ContentPanel extends CmsPanel {
     private static final long serialVersionUID = 1L;
-    
+
     private Log log = LogFactory.getLog(this.getClass());
     private String nodeName;
     private String nodeId;
-    
-    
+
+
     /**
      * Use this Constructor for Border or Application Level Content.
-     * 
+     *
      * @param id
      */
     public ContentPanel(String id){
     	this(id, id, APPNODE);
     }
     /**
-     * 
+     *
      * @param id - wicket id
      * @param name - storage name
      * @param node - parent node of Content, typically Page Name
@@ -51,7 +51,7 @@ public class ContentPanel extends CmsPanel {
     	this(id, name, node, new Label("nested","stub").setVisible(false));
     }
     /**
-     * 
+     *
      * @param id - wicket id
      * @param name - storage name
      * @param node - parent node of Content
@@ -69,7 +69,8 @@ public class ContentPanel extends CmsPanel {
         contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
             private static final long serialVersionUID = -3131361470864509715L;
 
-            public String getObject() {
+            @Override
+			public String getObject() {
                 String cssClass;
                 if (((IContentAdmin)getSession()).isLoggedIn()) {
                     cssClass = "contentEdit textBlock edit";
@@ -84,7 +85,7 @@ public class ContentPanel extends CmsPanel {
 
     }
     /**
-     * 
+     *
      * @param id - wicket id and name
      * @param node - parent node of Content
      */
@@ -99,7 +100,7 @@ public class ContentPanel extends CmsPanel {
             super(id);
 
             final Model<String> contentModel = new Model<String>(contentBody);
-            
+
             // add content
             Component label = new Label("contentBody", contentModel){
 				private static final long serialVersionUID = 6930776696843471636L;

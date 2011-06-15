@@ -13,7 +13,6 @@ import org.apache.wicket.ResourceReference;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.markup.ComponentTag;
@@ -36,7 +35,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
-import org.apache.wicket.util.time.Duration;
 
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.upload.IFileUploadInfo;
@@ -48,8 +46,8 @@ public class EditableResourceLink extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(5000);
 	private static final Log log = LogFactory.getLog(EditableResourceLink.class);
-	public static final HeaderContributor SCRIPT_UTILS = JavascriptPackageResource.getHeaderContribution(new CompressedResourceReference(EditableResourceLink.class, "resourcelink.js")); 
-	
+	public static final HeaderContributor SCRIPT_UTILS = JavascriptPackageResource.getHeaderContribution(new CompressedResourceReference(EditableResourceLink.class, "resourcelink.js"));
+
 	private Form<Object> resourceForm;
 	private boolean editMode;
 
@@ -62,9 +60,9 @@ public class EditableResourceLink extends Panel {
 		String getName();
 
 		String getTitle();
-		
+
 		ResourceReference getResourceReference();
-		
+
 		FileUpload getFileUpload();
 
 		String getResourceType();
@@ -76,20 +74,20 @@ public class EditableResourceLink extends Panel {
 		void setTitle(String title);
 
 		void setFileUpload(FileUpload upload);
-		
+
 		void setResourceType(String type);
 
 		void setHideLink(Boolean hide);
 
         String getUrl();
-        
+
         void setUrl(String url);
 
 	}
 
 	public enum ResourceType {
 
-		TYPE_PDF("application/pdf", "pdf", "Adobe PDF"), 
+		TYPE_PDF("application/pdf", "pdf", "Adobe PDF"),
 		TYPE_DOC("application/msword", "doc", "Word document");
 		//TYPE_ODT("application/vnd.oasis.opendocument.text", "odt", "ODT document");
 
@@ -120,9 +118,9 @@ public class EditableResourceLink extends Panel {
 
 	/**
 	 * Adds Behavior to the File Upload Form
-	 * 
+	 *
 	 * @author Eugene Malan
-	 * 
+	 *
 	 */
 	protected class FileUploadBehavior extends AjaxEventBehavior {
 
@@ -141,7 +139,7 @@ public class EditableResourceLink extends Panel {
 		 * (non-Javadoc) Script that translates the suffix of a selected file to
 		 * the Type value that is persisted in the CMS and used by the Type Drop
 		 * Down.
-		 * 
+		 *
 		 * @see
 		 * org.apache.wicket.ajax.AbstractDefaultAjaxBehavior#renderHead(org
 		 * .apache.wicket.markup.html.IHeaderResponse)
@@ -195,12 +193,12 @@ public class EditableResourceLink extends Panel {
 
 		}
 	}
-	
+
 	protected class StatusModel extends Model<String>{
         private static final long serialVersionUID = 1L;
         private String id;
         private String status;
-	    
+
 	    public void setStatus(String status) {
 			this.status = status;
 		}
@@ -228,10 +226,10 @@ public class EditableResourceLink extends Panel {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param id Wicket Id
 	 * @param data Data Object for Model
-	 * 
+	 *
 	 */
 	public EditableResourceLink(String id, ILinkData data) {
 		super(id);
@@ -248,25 +246,25 @@ public class EditableResourceLink extends Panel {
 	/**
 	 * Lazy initialization of the label and editor components and set tempModel
 	 * to null.
-	 * 
+	 *
 	 * @param model The model for the label and editor
 	 */
 	private void initLabelForm(IModel<?> model) {
 
 		WebMarkupContainer displayArea = new WebMarkupContainer("displayArea");
 		add(displayArea);
-		
+
 		// display : link and feedback
 		StatusModel statusModel = new StatusModel(data.getId());
 		Component statusLabel = new Label("uploadstatus",statusModel);
 		statusLabel.setOutputMarkupId(true);
 		displayArea.add(statusLabel);
 		displayArea.add(newSharedResourceLink("link", data, statusLabel));
-		
+
 		WebMarkupContainer formDiv = new WebMarkupContainer("resource-form-div");
 		formDiv.setOutputMarkupId(true);
 		add(formDiv);
-		
+
 		// hidden configure form
 		resourceForm = newFileUploadForm("resource-form", statusModel);
 		formDiv.add(resourceForm);
@@ -283,13 +281,13 @@ public class EditableResourceLink extends Panel {
 		resourceForm.add(name);
 		resourceForm.add(upload);
 		resourceForm.add(choice);
-		
+
 		add(new AjaxConfigureIcon("configureIcon", displayArea, formDiv, 17));
 
 	}
-	
+
     protected Component newSharedResourceLink(final String id, final ILinkData data, final Component feedback ){
-    	
+
     	//href Model
     	IModel<String> hrefModel = new Model<String>(){
 			private static final long serialVersionUID = 1L;
@@ -302,9 +300,9 @@ public class EditableResourceLink extends Panel {
 					return data.getUrl();
 				}
 			}
-    		
+
     	};
-    	
+
     	//label model
     	IModel<String> labelModel = new Model<String>(){
 			private static final long serialVersionUID = 1L;
@@ -319,12 +317,12 @@ public class EditableResourceLink extends Panel {
                 	return data.getName();
                 }
 			}
-    		
+
     	};
 
         Component link = new IndicatingUploadLink(id, data,  hrefModel, labelModel){
 			private static final long serialVersionUID = 1L;
-			
+
             @Override
             protected void onComponentTag(ComponentTag tag) {
                 tag.put("title", data.getTitle());
@@ -334,23 +332,23 @@ public class EditableResourceLink extends Panel {
             @Override
             protected void onBeforeRender() {
             	//log.debug("sharedresourceLink - checking status for id=" + data.getId());
-   				
+
             	if (data == null){
             		log.error("data is null");
-            	} 
-            	
+            	}
+
             	if(!editMode && data.getHideLink() != null && data.getHideLink().equals(Boolean.TRUE)){
             		setVisible(false);
             	} else {
             		setVisible(true);
             	}
-            	
+
             	if (StringUtils.isEmpty(data.getUrl()) || (isFileUploading(data.getId()) != null && isFileUploading(data.getId()))) {
                     setEnabled(false);
                 } else {
                     setEnabled(true);
                 }
-            	
+
             	super.onBeforeRender();
             }
 
@@ -360,7 +358,7 @@ public class EditableResourceLink extends Panel {
 			}
 
         };
-        
+
         link.setVisibilityAllowed(true);
         link.setOutputMarkupId(true);
 //        link.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(6)){
@@ -376,9 +374,9 @@ public class EditableResourceLink extends Panel {
 //				} else {
 //					target.appendJavascript("wicketHide('" + indicatorId +"');");
 //				}
-//				
+//
 //			}
-//			
+//
 //			protected String getIndicator()
 //			{
 //				if (getComponent() instanceof IndicatingUploadLink)
@@ -388,16 +386,16 @@ public class EditableResourceLink extends Panel {
 //				return null;
 //			}
 //
-//        	
+//
 //        });
         return link;
 	}
 
 	/**
 	 * Create the Form
-	 * 
+	 *
 	 * @param id
-	 * @param statusModel 
+	 * @param statusModel
 	 * @return
 	 */
 	private Form<Object> newFileUploadForm(final String id, final StatusModel statusModel) {
@@ -425,7 +423,7 @@ public class EditableResourceLink extends Panel {
 		form.setMaxSize(MAX_FILE_SIZE);
 		return form;
 	}
-	
+
 	private boolean validateFile(String fileName){
 		for (ResourceType type : ResourceType.values()) {
 			if (StringUtils.endsWith(fileName, type.suffix)){
@@ -437,7 +435,7 @@ public class EditableResourceLink extends Panel {
 
 	/**
 	 * Create a new Text Field for editing
-	 * 
+	 *
 	 * @param parent
 	 *            The parent component
 	 * @param componentId
@@ -454,7 +452,7 @@ public class EditableResourceLink extends Panel {
 
 	/**
 	 * Creates Drop Down for selecting Type
-	 * 
+	 *
 	 * @param parent
 	 * @param componentId
 	 * @param model
@@ -464,8 +462,9 @@ public class EditableResourceLink extends Panel {
 	@SuppressWarnings("unchecked") //this seems safe and the best way to implement
     protected FormComponent<String> newDropDownChoice(MarkupContainer parent, String componentId, IModel<String> model,
 			List<ResourceType> choices) {
-		
-	    IChoiceRenderer renderer = new IChoiceRenderer() {
+
+	    @SuppressWarnings("rawtypes")
+		IChoiceRenderer renderer = new IChoiceRenderer() {
 			private static final long serialVersionUID = 1L;
 
 			public Object getDisplayValue(Object object) {
@@ -495,7 +494,7 @@ public class EditableResourceLink extends Panel {
 
 	/**
 	 * Create File Upload for selecting file from desktop
-	 * 
+	 *
 	 * @param parent
 	 * @param componentId
 	 * @param model
@@ -519,7 +518,7 @@ public class EditableResourceLink extends Panel {
     /**
 	 * By default this returns "onclick" uses can overwrite this on which event
 	 * the label behavior should be triggered
-	 * 
+	 *
 	 * @return The event name
 	 */
 	protected String getLabelAjaxEvent() {
@@ -529,6 +528,7 @@ public class EditableResourceLink extends Panel {
 	/**
 	 * @see org.apache.wicket.Component#onBeforeRender()
 	 */
+	@Override
 	protected void onBeforeRender() {
 		super.onBeforeRender();
 		// lazily add label and form
@@ -537,7 +537,7 @@ public class EditableResourceLink extends Panel {
 		}
 	}
 
-	
+
 	@Override
     public MarkupContainer setDefaultModel(IModel<?> model) {
         String message = "AjaxEditableLink constructs its own model. Do not set it.";
@@ -548,7 +548,7 @@ public class EditableResourceLink extends Panel {
 	/**
 	 * Invoked when the label is in edit mode, received a new input, but that
 	 * input didn't validate
-	 * 
+	 *
 	 * @param target
 	 *            the ajax request target
 	 */
@@ -563,7 +563,7 @@ public class EditableResourceLink extends Panel {
 	/**
 	 * Override this to display a different value when the model object is null.
 	 * Default is <code>...</code>
-	 * 
+	 *
 	 * @return The string which should be displayed when the model object is
 	 *         null.
 	 */
@@ -573,22 +573,24 @@ public class EditableResourceLink extends Panel {
 
 	/**
 	 * Dummy override to fix WICKET-1239
-	 * 
+	 *
 	 * @see org.apache.wicket.Component#onModelChanged()
 	 */
+	@Override
 	protected void onModelChanged() {
 		super.onModelChanged();
 	}
 
 	/**
 	 * Dummy override to fix WICKET-1239
-	 * 
+	 *
 	 * @see org.apache.wicket.Component#onModelChanging()
 	 */
+	@Override
 	protected void onModelChanging() {
 		super.onModelChanging();
 	}
-	
+
 	public Boolean isFileUploading(String id) {
 		if (StringUtils.isEmpty(id)) {
 			return null;
@@ -600,7 +602,7 @@ public class EditableResourceLink extends Panel {
 			return true;
 		} else {
 			return false;
-		} 
+		}
 	}
 
 	public void setEditMode(boolean editMode) {

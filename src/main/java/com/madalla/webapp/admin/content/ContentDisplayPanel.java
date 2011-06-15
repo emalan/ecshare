@@ -28,10 +28,10 @@ class ContentDisplayPanel extends Panel {
 	private Component contentDisplay;
 	private String path = "";
 	private Component paste;
-	
+
 	public ContentDisplayPanel(String name, final ContentAdminPanel parentPanel) {
 		super(name);
-		
+
 		Model<String> pathModel = new Model<String>(){
 			private static final long serialVersionUID = 1L;
 
@@ -40,12 +40,12 @@ class ContentDisplayPanel extends Panel {
 				return path;
 			}
 		};
-		
-		
+
+
 		nodePath = new Label("nodeName", pathModel);
 		nodePath.setOutputMarkupId(true);
 		add(nodePath);
-		
+
 		Model<String> textModel = new Model<String>(){
 			private static final long serialVersionUID = 1L;
 
@@ -53,7 +53,7 @@ class ContentDisplayPanel extends Panel {
 			public String getObject() {
 				if (StringUtils.isEmpty(path)){
 					return "";
-				} else { 
+				} else {
 					try {
 						NodeDisplay display = getAdminService().getNodeDisplay(path);
 						return displayNode(display);
@@ -63,18 +63,19 @@ class ContentDisplayPanel extends Panel {
 					}
 				}
 			}
-			
+
 		};
 		contentDisplay = new Label("contentText", textModel);
 		contentDisplay.setOutputMarkupId(true);
 		contentDisplay.setEscapeModelStrings(false);
 		add(contentDisplay);
-		
+
         //Delete Link
         Component delete = new IndicatingAjaxLink<Object>("deleteNode"){
             private static final long serialVersionUID = 1L;
-            
-            protected final void onBeforeRender(){
+
+            @Override
+			protected final void onBeforeRender(){
                 if (StringUtils.isEmpty(path) || !getContentService().isDeletableNode(path)){
                     setEnabled(false);
                 } else {
@@ -82,7 +83,7 @@ class ContentDisplayPanel extends Panel {
                 }
                 super.onBeforeRender();
             }
-            
+
 			@Override
 			public void onClick(AjaxRequestTarget target) {
             	//getContentService().deleteNode(path);
@@ -109,7 +110,7 @@ class ContentDisplayPanel extends Panel {
 				}
                 super.onBeforeRender();
             }
-            
+
 			@Override
             public void onClick(AjaxRequestTarget target) {
 				parentPanel.pasteNode(target);
@@ -121,9 +122,9 @@ class ContentDisplayPanel extends Panel {
 
         //Copy Link
         final Component copy = new IndicatingAjaxLink<Object>("copyNode"){
-            
+
 			private static final long serialVersionUID = -1062211579369743790L;
-			
+
 			@Override
 			protected final void onBeforeRender(){
 				if (!StringUtils.isEmpty(path) && parentPanel.isCopyable()){
@@ -133,7 +134,7 @@ class ContentDisplayPanel extends Panel {
 				}
                 super.onBeforeRender();
             }
-            
+
 			@Override
             public void onClick(AjaxRequestTarget target) {
 				parentPanel.copyNode();
@@ -144,11 +145,11 @@ class ContentDisplayPanel extends Panel {
         add(copy);
 
 	}
-	
+
 	public Component getComponent(){
 		return nodePath;
 	}
-	
+
 	public void refresh(String path){
 		log.debug("refresh - path="+path);
 		nodePath.modelChanging();
@@ -156,7 +157,7 @@ class ContentDisplayPanel extends Panel {
 		nodePath.modelChanged();
 
 		contentDisplay.modelChanging();
-		
+
 //			if (getContentService().isContentNode(path)){
 //			contentText = getContentService().getContent(path).getText();
 //		} else if (getContentService().isBlogNode(path)){
@@ -173,9 +174,9 @@ class ContentDisplayPanel extends Panel {
 //		}
 		contentDisplay.modelChanged();
 		//paste.
-		
+
 	}
-	
+
     private static String displayNode(NodeDisplay display){
     	StringBuffer sb = new StringBuffer("Node Name : " + display.getName()).append("<br/>");
     	sb.append("Class Name : " + display.getClassName()).append("<br/>");
@@ -193,11 +194,11 @@ class ContentDisplayPanel extends Panel {
     	if (null != text){
     		sb.append(displayNodeProperty(text));
     	}
-		
+
 		return sb.toString();
-    	
+
     }
-    
+
     private static String displayNodeProperty(Map.Entry<String, NodeDisplay.NodePropertyDisplay> entry){
     	StringBuffer sb = new StringBuffer();
     	sb.append(entry.getKey()+"[" + entry.getValue().type + "] : ");
@@ -207,11 +208,11 @@ class ContentDisplayPanel extends Panel {
 		sb.append("<br/>");
     	return sb.toString();
     }
-	
+
 	protected IDataService getContentService() {
 		return ((IDataServiceProvider) getApplication()).getRepositoryService();
 	}
-	
+
 	protected IRepositoryAdminService getAdminService() {
 		return ((IRepositoryAdminServiceProvider) getApplication()).getRepositoryAdminService();
 	}

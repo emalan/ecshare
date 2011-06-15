@@ -16,11 +16,11 @@ import com.madalla.wicket.form.AjaxValidationSubmitButton;
 
 public class ContentFormPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
-	
+
 	private Log log = LogFactory.getLog(this.getClass());
-	
+
 	private ContentEntryData contentModel;
-	
+
     final class ContentForm extends Form<ContentEntryData> {
         private static final long serialVersionUID = -3526743712542402160L;
 
@@ -35,18 +35,18 @@ public class ContentFormPanel extends CmsPanel{
 
 				public void setObject(String object) {
 					contentModel.setText(object);
-					
+
 				}
 
 				public void detach() {
-					
+
 				}
-            	
+
             });
             add(text);
         }
     }
-    
+
 	public ContentFormPanel(String name, ContentEntryData contentEntryData){
 		super(name);
 		if (contentEntryData == null){
@@ -63,19 +63,19 @@ public class ContentFormPanel extends CmsPanel{
 
 					public void setObject(ContentEntryData object) {
 						contentModel = object;
-						
+
 					}
 
 					public void detach() {
 						//contentModel = null;
 					}
-        	
+
         });
-        
+
         final FeedbackPanel feedback = new ComponentFeedbackPanel("feedback", form);
         feedback.setOutputMarkupId(true);
         form.add(feedback);
-        
+
         final AjaxValidationSubmitButton submitLink = new AjaxValidationSubmitButton("submitButton", form, feedback) {
 
 			private static final long serialVersionUID = 1L;
@@ -88,7 +88,7 @@ public class ContentFormPanel extends CmsPanel{
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
-				
+
 				log.debug("Submiting populated Content object to Content service. " + form.getModelObject());
 				saveData((ContentEntryData)form.getModelObject());
                 target.addComponent(feedback);
@@ -101,11 +101,11 @@ public class ContentFormPanel extends CmsPanel{
 				String message = getString("message.editor.fail");
 				String text = "<ul class=\"feedbackPanel\"><li class=\"feedbackPanelINFO\"><span class=\"feedbackPanelWARN\">"+message+"</span></li></ul>";
 				String error = "Wicket.$('"+feedback.getMarkupId()+"').innerHTML = '"+text+"';";
-				
+
 				return "var ed = tinyMCE.get('text'); if (ed.isDirty()){ ed.save(); ed.isNotDirty = 1;} else {"+error+"return false;}";
 
 			}
-            
+
         };
         submitLink.setOutputMarkupId(true);
 
@@ -113,8 +113,8 @@ public class ContentFormPanel extends CmsPanel{
 
         add(form);
 
-	}	
-	
+	}
+
 	public void changeContentEntry(ContentEntryData contentEntryData){
 		if (contentEntryData == null) {
 			throw new WicketRuntimeException("Construction error");

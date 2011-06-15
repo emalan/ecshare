@@ -11,5 +11,5 @@ public class Css {
 	public static final HeaderContributor CSS_IMAGE = CSSPackageResource.getHeaderContribution(Css.class,"image.css");
 	public static final HeaderContributor CSS_FORM = CSSPackageResource.getHeaderContribution(Css.class,"form.css");
 	public static final HeaderContributor CSS_ICON = CSSPackageResource.getHeaderContribution(Css.class,"icon.css");
-	
+
 }

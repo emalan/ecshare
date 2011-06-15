@@ -33,14 +33,14 @@ public class ContentAdminPanel extends Panel {
 	private Boolean adminApp;
 	public BackupFile file ;
 	public List<BackupFile> backupFiles ;
-	
+
 	private ContentDisplayPanel contentDisplayPanel;
 	private ContentExplorerPanel contentExplorerPanel;
-	
+
 	public static ContentAdminPanel newAdminInstance(String name){
 		return new ContentAdminPanel(name, true);
 	}
-	
+
 	public ContentAdminPanel(String name){
 		this(name, false);
 	}
@@ -48,9 +48,9 @@ public class ContentAdminPanel extends Panel {
 	private ContentAdminPanel(String name, final Boolean adminApp) {
 		super(name);
 		this.adminApp = adminApp;
-		
+
 		add(Css.CSS_FORM);
-		
+
 		Component adminPanelLink;
 		add(adminPanelLink = new AdminPanelLink("AllSitesLink", ContentAdminPanel.class){
 			private static final long serialVersionUID = 1L;
@@ -67,7 +67,7 @@ public class ContentAdminPanel extends Panel {
 			}
 		});
 		MetaDataRoleAuthorizationStrategy.authorize(adminPanelLink, RENDER, "SUPERADMIN");
-		
+
 		Component adminPanelLinkSingle;
 		add(adminPanelLinkSingle = new AdminPanelLink("SingleSiteLink", ContentAdminPanel.class){
 			private static final long serialVersionUID = 1L;
@@ -78,10 +78,10 @@ public class ContentAdminPanel extends Panel {
 			}
 		});
 		MetaDataRoleAuthorizationStrategy.authorize(adminPanelLinkSingle, RENDER, "SUPERADMIN");
-        
+
         setBackupFileList();
-        final ListChoice<BackupFile> listChoice = new ListChoice<BackupFile>("backupFiles", new PropertyModel<BackupFile>(this,"file"), 
-        		 new PropertyModel<List<? extends BackupFile>>(this,"backupFiles"),new ChoiceRenderer<BackupFile>("displayName"), 8){ 
+        final ListChoice<BackupFile> listChoice = new ListChoice<BackupFile>("backupFiles", new PropertyModel<BackupFile>(this,"file"),
+        		 new PropertyModel<List<? extends BackupFile>>(this,"backupFiles"),new ChoiceRenderer<BackupFile>("displayName"), 8){
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -97,7 +97,7 @@ public class ContentAdminPanel extends Panel {
         listChoice.setOutputMarkupId(true);
         final Form<Object> form = new RestoreForm("restoreForm", listChoice);
         add(form);
-		
+
         final FeedbackPanel backupMessages = new FeedbackPanel("backupMessages",new IFeedbackMessageFilter(){
 			private static final long serialVersionUID = 1L;
 
@@ -116,6 +116,7 @@ public class ContentAdminPanel extends Panel {
         AjaxLink<Object> backupLink = new IndicatingAjaxLink<Object>("backupLink"){
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void onClick(AjaxRequestTarget target) {
             	target.addComponent(listChoice);
             	try {
@@ -128,12 +129,12 @@ public class ContentAdminPanel extends Panel {
                     info("Content Repository backed up successfully");
                     target.addComponent(backupMessages);
             	} catch (Exception e){
-            	    error("Backup failed. "+ e.getLocalizedMessage());	
+            	    error("Backup failed. "+ e.getLocalizedMessage());
             	}
             }
         };
         add(backupLink);
-		
+
 		final FeedbackPanel restoreMessages = new FeedbackPanel("restoreMessages", new IFeedbackMessageFilter(){
 			private static final long serialVersionUID = 1L;
 
@@ -164,7 +165,7 @@ public class ContentAdminPanel extends Panel {
 				info("Rolled back to before Restore.");
 				target.addComponent(restoreMessages);
 			}
-			
+
 			@Override
 			protected final void onBeforeRender(){
 				IRepositoryAdminService service = getContentAdminService();
@@ -180,7 +181,7 @@ public class ContentAdminPanel extends Panel {
         };
         rollBackLink.setOutputMarkupId(true);
         add(rollBackLink);
-        
+
         add(new IndicatingAjaxSubmitLink("submitLink", form){
 			private static final long serialVersionUID = 1L;
 
@@ -192,42 +193,42 @@ public class ContentAdminPanel extends Panel {
 				target.addComponent(rollBackLink);
 			}
         });
-        
+
         contentDisplayPanel = new ContentDisplayPanel("contentDisplayPanel", this);
         contentDisplayPanel.setOutputMarkupId(true);
         add(contentDisplayPanel);
-        
+
         contentExplorerPanel = new ContentExplorerPanel("contentExplorerPanel", this, adminApp){
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onNodeClicked(AbstractTreeNode currentNode, AjaxRequestTarget target) {
 				if (currentNode.getObject() instanceof ContentNode) {
-                    IContentNode contentNode = (IContentNode) currentNode.getObject();
+                    IContentNode contentNode = currentNode.getObject();
                     String path = contentNode.getPath();
                     contentDisplayPanel.refresh(path);
                     target.addComponent(contentDisplayPanel);
                 }
-				
+
 			}
-        	
+
         };
         contentExplorerPanel.setOutputMarkupId(true);
         add(contentExplorerPanel);
 
 	}
-	
+
 	public class RestoreForm extends Form<Object>{
 
 		private static final long serialVersionUID = 4729370802782788350L;
-		
-		
+
+
 		public RestoreForm(String id, final ListChoice<BackupFile> listChoice){
 			super(id);
 	        add(listChoice);
 		}
-		
-		
+
+
 
 		@Override
 		protected void onSubmit() {
@@ -244,7 +245,7 @@ public class ContentAdminPanel extends Panel {
 		}
 
 	}
-	
+
 	private void restoreContent(){
 		if (file != null ){
 			if (adminApp){
@@ -256,12 +257,12 @@ public class ContentAdminPanel extends Panel {
 			}
 		}
 	}
-	
+
 	public IRepositoryAdminService getContentAdminService(){
 		IRepositoryAdminServiceProvider provider = (IRepositoryAdminServiceProvider)getApplication();
 		return provider.getRepositoryAdminService();
 	}
-	
+
 	public Boolean setBackupFileList(){
 		if (adminApp){
 			backupFiles = getContentAdminService().getApplicationBackupFileList();
@@ -278,35 +279,35 @@ public class ContentAdminPanel extends Panel {
         }
         return false;
 	}
-	
+
 	public Component getDisplayPanel(){
 		return get("contentDisplayPanel");
 	}
-	
+
 	public Component getExplorerPanel(){
 		return get("contentExplorerPanel");
 	}
-	
+
 	boolean isCopyable(){
 		return contentExplorerPanel.isCopyable();
 	}
-	
+
 	boolean isPasteable(){
 		return contentExplorerPanel.isPasteable();
 	}
-	
+
 	void copyNode(){
 		contentExplorerPanel.copyNode();
 	}
-	
+
 	void pasteNode(AjaxRequestTarget target){
 		contentExplorerPanel.pasteNode(target);
 	}
-	
+
 	void deleteNode(AjaxRequestTarget target){
 		contentExplorerPanel.deleteCurrentNode(target);
 	}
-	
+
 	void refreshDisplayPanel(String path){
 		contentDisplayPanel.refresh(path);
 	}

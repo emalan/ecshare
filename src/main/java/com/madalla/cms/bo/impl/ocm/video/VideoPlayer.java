@@ -9,7 +9,7 @@ import com.madalla.bo.video.VideoPlayerData;
 
 @Node
 public class VideoPlayer extends VideoPlayerData {
-    
+
     private static final long serialVersionUID = 1L;
 
     @Field(path=true) private String id;
@@ -17,20 +17,22 @@ public class VideoPlayer extends VideoPlayerData {
     @Field private int width;
     @Field private int height;
     @Field private int startSeconds;
-    
+
     public VideoPlayer(){
-        
+
     }
-    
+
     public VideoPlayer(final IPageData page, final String name){
         this.id = page.getId() + "/" + name;
     }
-    
-    public String getName(){
+
+    @Override
+	public String getName(){
         return StringUtils.substringAfterLast(getId(), "/");
     }
-    
-    public String getId() {
+
+    @Override
+	public String getId() {
         return id;
     }
 
@@ -61,6 +63,6 @@ public class VideoPlayer extends VideoPlayerData {
     public void setStartSeconds(int startSeconds) {
         this.startSeconds = startSeconds;
     }
-    
+
 
 }

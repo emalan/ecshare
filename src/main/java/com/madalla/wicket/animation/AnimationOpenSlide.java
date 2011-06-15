@@ -10,11 +10,11 @@ import org.apache.wicket.Component;
  */
 public class AnimationOpenSlide extends AnimationEventBehavior {
 	private static final long serialVersionUID = 1L;
-	
+
 	private final Component target;
 	private final int height;
 	private final String unit;
-	
+
 	public AnimationOpenSlide(Component target, int height, String unit) {
 		this("onclick", target, height, unit);
 	}
@@ -26,7 +26,7 @@ public class AnimationOpenSlide extends AnimationEventBehavior {
 		this.unit = unit;
 		target.setOutputMarkupId(true);
 	}
-	
+
 	@Override
 	protected void addAnimatorSubjects(IAnimator animator) {
 		animator.addSubject(AnimatorSubject.discrete(target.getMarkupId(), "display", "none","", 0.1));

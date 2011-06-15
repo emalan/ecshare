@@ -12,29 +12,30 @@ import com.madalla.bo.email.IEmailData;
 public class EmailEntry extends EmailEntryData {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Field(path=true) private String id;
 	@Field private String senderName;
 	@Field private String senderEmailAddress;
 	@Field private String senderComment;
 	@Field private DateTime dateTime;
-	
+
 	public EmailEntry(){
-		
+
 	}
-	
+
 	public EmailEntry(final IEmailData parent, final String dateTime){
 		this.id = parent.getId() + "/" + dateTime;
 	}
-	
+
 	@Override
 	public String getName() {
 		return StringUtils.substringAfterLast(getId(), "/");
 	}
-	
+
 	public void setId(String id) {
 		this.id = id;
 	}
+	@Override
 	public String getId() {
 		return id;
 	}

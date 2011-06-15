@@ -16,10 +16,10 @@ import com.madalla.wicket.animation.IAnimatorActions;
 
 public class AjaxConfigureIcon extends WebMarkupContainer{
 	private static final long serialVersionUID = 1L;
-	
+
 	public static final HeaderContributor SCRIPT_UTILS = JavascriptPackageResource.getHeaderContribution(
 			new CompressedResourceReference(AjaxConfigureIcon.class, "resourcelink.js"));
-	
+
 	public AjaxConfigureIcon(String id, final Component configureArea, final int size){
 		this(id, null, configureArea, size);
 	}
@@ -29,20 +29,20 @@ public class AjaxConfigureIcon extends WebMarkupContainer{
 		if (displayArea != null) {
 			displayArea.setOutputMarkupId(true);
 		}
-		
+
 		add(Css.CSS_ICON);
 		add(SCRIPT_UTILS);
-		
+
 		add(new AnimationEventBehavior("onclick", 1000){
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			protected void addAnimatorSubjects(IAnimator animator) {
 				if (displayArea != null) {
 					animator.addSubject(AnimatorSubject.discrete(displayArea.getMarkupId(),"display", "", "none", 0.05));
-				} 
+				}
 				animator.addSubjects(AnimatorSubject.slideOpen(configureArea.getMarkupId(),size));
-				
+
 			}
 
 			@Override
@@ -76,10 +76,10 @@ public class AjaxConfigureIcon extends WebMarkupContainer{
 			}
 
 		});
-		
+
 		setOutputMarkupId(true);
 	}
-	
+
 	@Override
 	protected void onComponentTag(ComponentTag tag) {
 		tag.put("title", getString("label.configure"));

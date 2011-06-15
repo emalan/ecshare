@@ -16,8 +16,8 @@ import org.springmodules.jcr.JcrTemplate;
 public class JcrUtils {
 
 	private static Log log = LogFactory.getLog(JcrUtils.class);
-	
-	
+
+
     /**
      *  returns the class name node -- creates it if its not there
      */
@@ -34,9 +34,9 @@ public class JcrUtils {
             node = parent.addNode(nodeName);
         }
         return node;
-        
+
     }
-    
+
     public static void deleteNode(JcrTemplate template, final String path) {
         if (StringUtils.isEmpty(path)) {
             log.error("deleteNode - path is required.");
@@ -51,5 +51,5 @@ public class JcrUtils {
             });
         }
     }
-    
+
 }

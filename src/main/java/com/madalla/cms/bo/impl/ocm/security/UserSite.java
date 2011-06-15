@@ -13,23 +13,25 @@ public class UserSite extends UserSiteData{
 
 	@Field(path=true) private String id;
 	@Field private Boolean requiresAuthentication;
-	
+
 	public UserSite(){
-		
+
 	}
 
 	public UserSite(String parentPath, String name){
 		id = parentPath + "/" + name;
 	}
-	
+
+	@Override
 	public String getName(){
 	    return StringUtils.substringAfterLast(getId(), "/");
 	}
-	
+
+	@Override
 	public String getId() {
 		return id;
 	}
-	
+
 	public void setId(String id){
 		this.id = id;
 	}
@@ -37,7 +39,7 @@ public class UserSite extends UserSiteData{
 	public Boolean getRequiresAuthentication() {
 		return requiresAuthentication;
 	}
-	
+
 	public void setRequiresAuthentication(Boolean requiresAuthentication){
 		this.requiresAuthentication = requiresAuthentication;
 	}

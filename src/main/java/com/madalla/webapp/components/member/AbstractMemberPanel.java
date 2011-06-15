@@ -19,7 +19,7 @@ import com.madalla.webapp.CmsPanel;
 public abstract class AbstractMemberPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
 	private final static Log log = LogFactory.getLog(AbstractMemberPanel.class);
-	
+
 	public AbstractMemberPanel(String id) {
 		super(id);
 		if (!getCmsApplication().hasMemberService()){
@@ -35,23 +35,23 @@ public abstract class AbstractMemberPanel extends CmsPanel{
         saveMemberData(member);
         return password;
 	}
-	
+
 	protected boolean saveMemberData(MemberData member){
 		return getRepositoryService().saveMember(member);
 	}
-	
+
     final protected boolean sendRegistrationEmail(final MemberData member){
     	logEmail(member.getDisplayName(), member.getEmail(), getString("email.subject"));
         String body = getRegistrationEmail(member);
         return getEmailSender().sendUserEmail(getString("email.subject"), body, member.getEmail(), member.getFirstName(), true);
     }
-    
+
     protected boolean sendResetPasswordEmail(final MemberData member){
     	logEmail(member.getDisplayName(), member.getEmail(), getString("email.subject"));
         String body = getResetPasswordEmail(member);
         return getEmailSender().sendUserEmail(getString("email.subject"), body, member.getEmail(), member.getFirstName(), true);
     }
-    
+
     private void logEmail(String name, String email, String comment){
     	if (name.length() >= 25){
     		name = StringUtils.substring(name, 0, 23) + "..";
@@ -62,7 +62,7 @@ public abstract class AbstractMemberPanel extends CmsPanel{
     		log.error("Data Access Exception while logging registration email.", e);
     	}
     }
-    
+
     protected String getRegistrationEmail(final MemberData member){
     	Map<String, String> map = new HashMap<String, String>();
     	SiteData site = getRepositoryService().getSiteData();
@@ -75,18 +75,18 @@ public abstract class AbstractMemberPanel extends CmsPanel{
 		String url = StringUtils.defaultString(site.getUrl());
 		map.put("url", url );
     	map.put("passwordChangePage", CmsApplication.MEMBER_PASSWORD);
-		
+
 		MapModel<String, String> values = new MapModel<String, String>(map);
 		String message = getString("email.registration", values);
-		
+
 		message = message + getString("message.password", values);
 
 		message = message + getString("message.note") + getString("message.closing");
-		
+
 		log.debug("formatMessage - " + message);
     	return message;
     }
-    
+
     protected String getResetPasswordEmail(final MemberData member){
     	Map<String, String> map = new HashMap<String, String>();
     	SiteData site = getRepositoryService().getSiteData();
@@ -99,14 +99,14 @@ public abstract class AbstractMemberPanel extends CmsPanel{
 		String url = StringUtils.defaultString(site.getUrl());
 		map.put("url", url );
     	map.put("passwordChangePage", CmsApplication.MEMBER_PASSWORD);
-		
+
 		MapModel<String, String> values = new MapModel<String, String>(map);
 		String message = getString("email.reset", values);
-		
+
 		message = message + getString("message.password", values);
 
 		message = message + getString("message.note") + getString("message.closing");
-		
+
 		log.debug("formatMessage - " + message);
     	return message;
 

@@ -13,64 +13,64 @@ import com.madalla.bo.log.LogData;
 import com.madalla.bo.member.MemberData;
 
 public class DaoTester extends AbstractDependencyInjectionSpringContextTests{
-	
+
 	private EmailEntryDao emailEntryDao;
 	private TransactionLogDao transactionLogDao;
 	private MemberDao memberDao;
-	
+
 	public DaoTester(){
 		super();
 		setAutowireMode(AUTOWIRE_BY_NAME);
 	}
-	
+
 	@Override
 	protected String[] getConfigLocations() {
 		List<String> configLocations = new ArrayList<String>();
         configLocations.add("classpath:com/madalla/db/dao/applicationContext-dao.xml");
         configLocations.add("classpath:com/madalla/db/dao/applicationContext-test.xml");
-		return  (String[])configLocations.toArray(new String[configLocations.size()]);
+		return  configLocations.toArray(new String[configLocations.size()]);
 	}
-	
+
 	public void testMemberDao(){
 		String firstName = RandomStringUtils.randomAlphabetic(10);
 		String lastName = RandomStringUtils.randomAlphabetic(10);
 		String memberId = RandomStringUtils.randomAlphabetic(12);
-		
+
 		Member data = new Member();
 		data.setFirstName(firstName);
 		data.setLastName(lastName);
 		data.setMemberId(memberId);
 		data.setEmail("testEmail");
 		memberDao.save(data);
-		
+
 		List<? extends MemberData> list = memberDao.fetch();
 		for(MemberData item : list){
 			System.out.println(item);
 		}
-		
+
 		DateTime testAuthDate = new DateTime();
 		String password = "test";
 		data.setPassword(password);
 		memberDao.save(data);
 		MemberData testDate = memberDao.findbyMemberId(data.getMemberId());
 		assertEquals(password, testDate.getPassword());
-		
+
 		MemberData test = memberDao.findbyMemberId(memberId);
 		assertNotNull(test);
 		assertEquals(firstName, test.getFirstName());
-		
+
 		String password1 = "password1";
 		test.setPassword(password1);
 		memberDao.save(test);
 		MemberData testSave = memberDao.findbyMemberId(memberId);
 		assertNotNull(testSave);
 		assertEquals(password1, test.getPassword());
-		
+
 		memberDao.delete(test);
 
-		
+
 	}
-	
+
 	public void testSaveLogDao(){
 		DateTime key = new DateTime();
 		TransactionLog log = new TransactionLog();
@@ -78,23 +78,23 @@ public class DaoTester extends AbstractDependencyInjectionSpringContextTests{
 		log.setUser("testUser");
 		log.setType("TEST");
 		log.setCmsId("ID");
-		
+
 		transactionLogDao.create(log);
-		
+
 		List<LogData> list = transactionLogDao.fetch();
 		for (LogData item: list){
 			System.out.println(item);
-			
+
 			transactionLogDao.find(item.getId());
 			transactionLogDao.delete(item);
 		}
 		List<LogData> check = transactionLogDao.fetch();
 		assertTrue(check.isEmpty());
-		
+
 	}
-	
-	
-	
+
+
+
 	public void testEmailDao(){
 		DateTime key = new DateTime();
 		EmailEntry email = new EmailEntry();
@@ -102,17 +102,17 @@ public class DaoTester extends AbstractDependencyInjectionSpringContextTests{
 		email.setSenderName("Eugene Malan");
 		email.setSenderEmailAddress("ee@emalan.com");
 		email.setSenderComment("Cooment goes here");
-		
+
 		emailEntryDao.fetch();
-		
+
 		emailEntryDao.create(email);
-		
+
 		List<EmailEntryData> list = emailEntryDao.fetch();
 		for (EmailEntryData item: list){
 			System.out.println(item);
 			System.out.println("DATE DISPLAY UTC : " + item.getDateTime().toString());
 			System.out.println("DATE DISPLAY US/Central : " + item.getDateTime().toDateTime(DateTimeZone.forID("US/Central")));
-			
+
 			emailEntryDao.find(item.getId());
 			emailEntryDao.delete(item);
 		}
@@ -123,7 +123,7 @@ public class DaoTester extends AbstractDependencyInjectionSpringContextTests{
 	public void setEmailEntryDao(EmailEntryDao emailEntryDao) {
 		this.emailEntryDao = emailEntryDao;
 	}
-	
+
 	public void setTransactionLogDao(TransactionLogDao transactionLogDao) {
 		this.transactionLogDao = transactionLogDao;
 	}
@@ -132,7 +132,7 @@ public class DaoTester extends AbstractDependencyInjectionSpringContextTests{
 		for (Object id : DateTimeZone.getAvailableIDs()){
 			System.out.println(id);
 		}
-			
+
 	}
 
 	public void setMemberDao(MemberDao memberDao) {

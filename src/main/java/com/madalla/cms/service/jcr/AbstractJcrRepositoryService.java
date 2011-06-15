@@ -13,9 +13,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springmodules.jcr.JcrTemplate;
 
 abstract class AbstractJcrRepositoryService {
-	
+
 	private static final Log log = LogFactory.getLog(AbstractJcrRepositoryService.class);
-	
+
     private String site ;
 	protected JcrTemplate template;
     protected List<Locale> locales;
@@ -32,8 +32,8 @@ abstract class AbstractJcrRepositoryService {
     	Node appNode = getApplicationNode(session);
     	return getCreateNode(site, appNode);
 	}
-	
-    
+
+
     /**
      *  returns the class name node -- creates it if its not there
      */
@@ -50,9 +50,9 @@ abstract class AbstractJcrRepositoryService {
             node = parent.addNode(nodeName);
         }
         return node;
-        
+
     }
-    
+
     public void setTemplate(JcrTemplate template) {
         this.template = template;
     }
@@ -60,11 +60,11 @@ abstract class AbstractJcrRepositoryService {
 	public void setLocales(List<Locale> locales) {
 		this.locales = locales;
 	}
-	
+
 	public void setSite(String site) {
 		this.site = site;
 	}
-	
+
 	public String getSite(){
 		return site;
 	}

@@ -17,36 +17,36 @@ import com.madalla.webapp.security.PasswordAuthenticator;
 public class MemberService {
 
 	private static final Log log = LogFactory.getLog(MemberService.class);
-	
+
 	private PasswordAuthenticator authenticator;
 	private MemberDao memberDao;
-	
+
 	public boolean isMemberExists(String name){
 		return memberDao.exists(name);
 	}
-	
+
     public boolean saveMember(MemberData member){
     	log.debug("saveMember - "+ member);
     	authenticator.clearUser(member.getName());
     	return memberDao.save(member);
     }
-    
+
     public MemberData getMember(String name){
     	return memberDao.findbyMemberId(name);
     }
-    
+
     public MemberData getMemberById(String id){
     	return memberDao.get(id);
     }
-    
+
     public List<Member> getMembers(){
     	return memberDao.fetch();
     }
-    
+
     public void deleteMember(MemberData data){
     	memberDao.delete(data);
     }
-	
+
 	public IPasswordAuthenticator getPasswordAuthenticator(final String name){
 		if (name == null){
 			throw new WicketRuntimeException("Username Argument may not be null");
@@ -64,18 +64,18 @@ public class MemberService {
 				public String getPassword() {
 					return null;
 				}
-				
+
 			};
 		}
 		authenticator.addUser(name, userValidate);
 		return authenticator;
-		
+
 	}
-	
+
 	public void setAuthenticator(PasswordAuthenticator authenticator) {
 		this.authenticator = authenticator;
 	}
-	
+
 	public void setMemberDao(MemberDao memberDao){
 		this.memberDao = memberDao;
 	}

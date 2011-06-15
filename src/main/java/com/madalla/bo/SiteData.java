@@ -8,9 +8,9 @@ import org.apache.commons.lang.StringUtils;
 public abstract class SiteData  extends AbstractData implements ISiteData{
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private List<SiteLanguage> localeList = new ArrayList<SiteLanguage>();
-	
+
 	public List<SiteLanguage> getLocaleList(){
 		localeList.clear();
 		String localeString = getLocales();
@@ -22,7 +22,7 @@ public abstract class SiteData  extends AbstractData implements ISiteData{
 		}
         return localeList;
 	}
-	
+
 	public void setLocaleList(List<SiteLanguage> locales){
 		String localeString = "";
 		for (SiteLanguage language: locales){
@@ -30,7 +30,7 @@ public abstract class SiteData  extends AbstractData implements ISiteData{
 		}
 		setLocales(localeString);
 	}
-	
+
 	public static List<SiteLanguage> getAvailableLocales(){
 		return SiteLanguage.getLanguages();
 	}

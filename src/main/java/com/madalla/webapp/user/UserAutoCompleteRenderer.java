@@ -8,7 +8,7 @@ import com.madalla.bo.security.UserData;
 public class UserAutoCompleteRenderer extends AbstractAutoCompleteTextRenderer<UserData> {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * A singleton instance
 	 */
@@ -17,6 +17,7 @@ public class UserAutoCompleteRenderer extends AbstractAutoCompleteTextRenderer<U
 	/**
 	 * @see AbstractAutoCompleteTextRenderer#getTextValue(Object)
 	 */
+	@Override
 	protected String getTextValue(UserData user)
 	{
 		return user.getName();

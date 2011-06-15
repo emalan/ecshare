@@ -22,7 +22,7 @@ import org.springframework.core.io.Resource;
 /**
  * An instance represents a File that holds backup data. There are static utility
  * methods to handle backup files.
- * 
+ *
  * @author Eugene Malan
  *
  */
@@ -33,26 +33,26 @@ public class BackupFile implements Serializable, Comparable<BackupFile> {
 	private static final String FILE_SUFFIX = ".xml";
 	private static final Log log = LogFactory.getLog(BackupFile.class);
 	private File file;
-	
+
 	public BackupFile(File file) {
 		this.file = file;
 	}
-	
+
 	/**
 	 * @param fileName - String to be appended to file name
-	 * @param repositoryHome 
+	 * @param repositoryHome
 	 * @return backupFile
 	 * @throws IOException
 	 */
 	public static File getBackupFile(String fileName, String repositoryHome) throws IOException {
-		
+
         String dateTimeString = ISODateTimeFormat.basicDateTime().print(new LocalDateTime());
 
 		File backupFile = new File(getRepositoryHomeDir(repositoryHome),fileName+BACKUP+dateTimeString+FILE_SUFFIX);
-        
+
 		return backupFile;
 	}
-	
+
 	/**
 	 * @param fileStart
 	 * @param repositoryHome
@@ -83,7 +83,7 @@ public class BackupFile implements Serializable, Comparable<BackupFile> {
         }
     	return ret;
     }
-	
+
 	/**
 	 * @param repositoryHome
 	 * @return
@@ -94,11 +94,11 @@ public class BackupFile implements Serializable, Comparable<BackupFile> {
         Resource resource = loader.getResource(repositoryHome);
         return resource.getFile();
 	}
-	
+
 	public File getFile(){
 		return file;
 	}
-	
+
 	/**
 	 * @return - display String for application i.e.  yesterday - 14:00
 	 */
@@ -123,7 +123,7 @@ public class BackupFile implements Serializable, Comparable<BackupFile> {
 		}
 		return rt;
 	}
-	
+
 	public String getName(){
 		return file.getName();
 	}
@@ -131,7 +131,7 @@ public class BackupFile implements Serializable, Comparable<BackupFile> {
 	public int compareTo(BackupFile o) {
 		return o.getFile().compareTo(file);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;

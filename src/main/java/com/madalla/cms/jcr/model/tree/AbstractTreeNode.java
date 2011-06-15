@@ -42,7 +42,7 @@ public abstract class AbstractTreeNode extends NodeModelWrapper implements Mutab
     }
 
     public TreeNode getChildAt(int i) {
-        return (TreeNode) children.get(i);
+        return children.get(i);
     }
 
     public int getChildCount() {
@@ -67,6 +67,6 @@ public abstract class AbstractTreeNode extends NodeModelWrapper implements Mutab
 		this.children = children;
 		this.childcount = children.size();
 	}
-	
+
 
 }

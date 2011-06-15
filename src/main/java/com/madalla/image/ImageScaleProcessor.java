@@ -12,7 +12,7 @@ import javax.imageio.stream.ImageOutputStream;
 abstract class ImageScaleProcessor {
 	InputStream process(InputStream inputStream, LoggingImageObserver observer,
 			int width, int height){
-		
+
 	    observer.logInfo("ImageScaleProcessor starting process.");
 		BufferedImage bufferedImage;
 		try {
@@ -30,18 +30,18 @@ abstract class ImageScaleProcessor {
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			ImageOutputStream imageOut = ImageIO.createImageOutputStream(out);
-		
+
 			ImageIO.write(scaledImage, "JPG", imageOut);
 			out.flush();
 			out.close();
-			
+
 			return new ByteArrayInputStream(out.toByteArray());
 		} catch (Exception e) {
 			observer.logError("scaleImage - failed.", e);
 			return new ByteArrayInputStream(new byte[] {});
 		}
 	}
-	
-	abstract BufferedImage processScaling(BufferedImage bufferedImage, 
+
+	abstract BufferedImage processScaling(BufferedImage bufferedImage,
 			int targetWidth, int targetHeight, ImageObserver imageObserver);
 }

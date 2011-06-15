@@ -20,7 +20,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 /**
  * Admin Link that will switch admin Panels
- * 
+ *
  * Usage - implement onClick() method like such...
  * <pre>
  *	public void onClick() {
@@ -35,11 +35,11 @@ public class AdminPanelLink extends Link<Object> {
 	private static final long serialVersionUID = 1L;
 	protected static final String ID = "adminPanel";
 	private Log log = LogFactory.getLog(this.getClass());
-	
+
 	final private String key;
 	final private String titleKey;
 	final private Class<? extends Panel> panelClass;
-	
+
 	public AdminPanelLink(final String id, Class<? extends Panel> panelClass, final String key, String titleKey){
 		super(id);
 		this.key = key;
@@ -47,15 +47,15 @@ public class AdminPanelLink extends Link<Object> {
 		this.panelClass = panelClass;
 		setAuthorization();
 	}
-	
+
 	public AdminPanelLink(final String id, Class<? extends Panel> panelClass, final String key){
 		this(id, panelClass, key, "");
 	}
-	
+
     public AdminPanelLink(String id, Class<? extends Panel> panelClass) {
 		this(id, panelClass, "");
 	}
-    
+
     private void setAuthorization(){
     	final Application application = Application.get();
 		InstantiationPermissions permissions = application.getMetaData(MetaDataRoleAuthorizationStrategy.INSTANTIATION_PERMISSIONS);
@@ -82,7 +82,7 @@ public class AdminPanelLink extends Link<Object> {
 			return true;
 		}
 	}
-	
+
 	@Override
 	protected void onComponentTag(ComponentTag tag) {
 		if (StringUtils.isNotEmpty(titleKey)){
@@ -113,8 +113,8 @@ public class AdminPanelLink extends Link<Object> {
 			log.error("Error while creating admin panel.", e);
 			throw new WicketRuntimeException("Error while Creating new Admin Panel.", e);
 		}
-		
+
 	}
 
-	
+
 }

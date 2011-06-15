@@ -32,20 +32,20 @@ import com.madalla.webapp.admin.pages.AdminPanelLink;
  * Panel uses the TinyMCE (Javascript WYSIWYG Editor). Note: The Wicket
  * application must implement the IContentServiceProvider interface.
  * </p>
- * 
+ *
  * @author Eugene Malan
- * 
+ *
  */
 public class ContentEntryPanel extends CmsPanel {
 	private static final long serialVersionUID = 1L;
 
 	private Log log = LogFactory.getLog(this.getClass());
-	
+
 	/**
 	 * @param id - wicket id
 	 * @param nodeName - Node/Group/Page Name
 	 * @param contentId - Actual Content Id
-	 * 
+	 *
 	 */
 	public ContentEntryPanel(String id, final String nodeName, final String contentId) {
 		super(id);
@@ -53,19 +53,19 @@ public class ContentEntryPanel extends CmsPanel {
 
 		//tabs style sheet
 		add(CSSPackageResource.getHeaderContribution(ContentEntryPanel.class, "tabs.css"));
-		
+
 		// Supported Languages
 		List<SiteLanguage> locales = getRepositoryService().getSiteData().getLocaleList();
 		Locale currentLocale = getSession().getLocale();
-		
+
 		//setup Javascript template
 		Map<String, Object> vars = EditorSetup.setupTemplateVariables((CmsSession) getSession());
 		add(TextTemplateHeaderContributor.forJavaScript(EditorSetup.class,"EditorSetup.js", Model.ofMap(vars)));
-		
+
         PageData page = getRepositoryService().getPage(nodeName);
         final ContentData content = getRepositoryService().getContent(page, contentId);
         log.debug("init - content" + content);
-        
+
 		//setup tabs
 		int selectedTab = 0;
 		List<ITab> tabs = new ArrayList<ITab>();
@@ -103,7 +103,7 @@ public class ContentEntryPanel extends CmsPanel {
 
 		tabPanel.setSelectedTab(selectedTab);
 		add(tabPanel);
-		
+
 		// Link to translate panel
         add(new AdminPanelLink("translateLink", TranslatePanel.class){
 			private static final long serialVersionUID = 1L;
@@ -112,7 +112,7 @@ public class ContentEntryPanel extends CmsPanel {
 			public void onClick() {
 				getPage().replace(new TranslatePanel(ID, nodeName, contentId));
 			}
-        	
+
         });
 	}
 

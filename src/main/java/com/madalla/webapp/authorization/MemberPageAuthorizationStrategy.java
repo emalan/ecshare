@@ -8,9 +8,9 @@ import com.madalla.webapp.admin.member.IMemberAuthPage;
 public class MemberPageAuthorizationStrategy extends AbstractPageAuthorizationStrategy {
 
 	private static Class<?> MEMBER_AUTH_PAGE = IMemberAuthPage.class;
-	
+
 	private ICmsRoleAuthorizedCheck authorizedCheck;
-	
+
 	public MemberPageAuthorizationStrategy(ICmsRoleAuthorizedCheck memberAuthorizedCheck) {
 		this.authorizedCheck = memberAuthorizedCheck;
 	}
@@ -26,9 +26,9 @@ public class MemberPageAuthorizationStrategy extends AbstractPageAuthorizationSt
 		// Allow construction by default
 		return true;
 	}
-	
-	
-	
-	
+
+
+
+
 
 }

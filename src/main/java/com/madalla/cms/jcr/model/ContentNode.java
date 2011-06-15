@@ -29,7 +29,7 @@ public class ContentNode extends AbstractReadOnlyModel<String>  implements Seria
 	public String getPath() {
 		return path;
 	}
-	
+
 	public void setPath(String path){
 		this.path = path;
 	}
@@ -37,6 +37,7 @@ public class ContentNode extends AbstractReadOnlyModel<String>  implements Seria
 	/* (non-Javadoc)
      * @see com.madalla.util.jcr.model.IContentNode#getObject()
      */
+	@Override
 	public String getObject() {
 		return path;
 	}
@@ -44,15 +45,16 @@ public class ContentNode extends AbstractReadOnlyModel<String>  implements Seria
 	public String getName() {
 		return name;
 	}
-    
+
     /* (non-Javadoc)
      * @see com.madalla.util.jcr.model.IContentNode#render()
      */
     public String render(){
         return name;
     }
-	
-    public String toString() {
+
+    @Override
+	public String toString() {
         return new ToStringBuilder(this).append("path",path).append("name", name).toString();
     }
 }

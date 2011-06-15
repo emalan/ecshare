@@ -11,16 +11,16 @@ import com.madalla.bo.blog.IBlogEntryData;
 public class BlogEntryView implements Serializable{
 
 	private static final long serialVersionUID = -6278544701328724786L;
-	
-	private String id; 
-    private String blog; 
+
+	private String id;
+    private String blog;
 	private String text;
     private Date date;
     private String category;
     private String title;
     private String description;
     private String keywords;
-    
+
     public void init(IBlogEntryData newData){
     	setId(newData.getId());
 		setTitle(newData.getTitle());

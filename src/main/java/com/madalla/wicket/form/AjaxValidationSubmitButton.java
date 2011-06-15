@@ -13,11 +13,11 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
  * Add to form to enable Ajax submit of form. Use for forms only validate when button
  * is clicked. For Components that self-validate (AjaxValidationBehaviour), rather use
  * AjaxValidationForm. {@link AjaxValidationForm}
- * 
+ *
  * Make sure to add setoutputmarkup to true and to add ValidationBehaviour if wanted.
- * 
- * 
- * 
+ *
+ *
+ *
  * @author Eugene Malan
  *
  */
@@ -25,9 +25,9 @@ public abstract class AjaxValidationSubmitButton extends IndicatingAjaxButton{
 
 	private static final long serialVersionUID = 5857888282264283281L;
 	private static final Log log = LogFactory.getLog(AjaxValidationSubmitButton.class);
-	
+
 	private final FeedbackPanel feedbackPanel;
-	
+
 	public AjaxValidationSubmitButton(String id, Form<?> form, FeedbackPanel feedbackPanel) {
 	    super(id, form);
 	    this.feedbackPanel = feedbackPanel;
@@ -50,13 +50,13 @@ public abstract class AjaxValidationSubmitButton extends IndicatingAjaxButton{
                     target.addComponent(component);
                 }
             }
-            
+
         };
         if (feedbackPanel != null){
             target.addComponent(feedbackPanel);
         }
 	}
-	
+
     @Override
 	protected void onError(final AjaxRequestTarget target, Form<?> form){
         log.debug("Ajax onError called");
@@ -71,24 +71,24 @@ public abstract class AjaxValidationSubmitButton extends IndicatingAjaxButton{
                     target.addComponent(component);
                     log.debug("Ajax onError - Component is valid. "+component);
                 }
-                
+
             }
-            
+
         };
         if (feedbackPanel != null){
             target.addComponent(feedbackPanel);
         }
 
     }
-    
+
     private abstract class AjaxValidationTemplate {
-        
+
         private final Log log = LogFactory.getLog(AjaxValidationTemplate.class);
-        
+
         public AjaxValidationTemplate(AjaxRequestTarget target, Form<?> form){
             processEvent(target, form);
         }
-        
+
         abstract void eventAction(final AjaxRequestTarget target, FormComponent<?> component);
 
         private void processEvent(final AjaxRequestTarget target, Form<?> form){
@@ -105,10 +105,10 @@ public abstract class AjaxValidationSubmitButton extends IndicatingAjaxButton{
                 }
             });
         }
-        
-        
-        
+
+
+
     }
 
-	
+
 }

@@ -10,20 +10,22 @@ import com.madalla.bo.email.EmailData;
 public class Email extends EmailData  {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Field(path=true) private String id;
-	
+
 	public Email(){
-		
+
 	}
 
 	public Email(String parentPath, String name){
 		id = parentPath + "/" + name;
 	}
+	@Override
 	public String getName(){
 		return StringUtils.substringAfterLast(getId(), "/");
 	}
-	
+
+	@Override
 	public String getId() {
 		return id;
 	}
@@ -31,5 +33,5 @@ public class Email extends EmailData  {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
 }

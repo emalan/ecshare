@@ -23,18 +23,18 @@ import com.madalla.service.ISessionDataServiceProvider;
 import com.madalla.util.security.SecurityUtils;
 
 /**
- * Factory for creating Repository Services. Will also do some repository setup 
+ * Factory for creating Repository Services. Will also do some repository setup
  * if neccessary.
- * 
+ *
  * NOTE : At present this class is not used
- * 
+ *
  * @author Eugene Malan
  *
  */
 public class RepositoryServiceFactory implements ISessionDataServiceProvider{
-	
+
 	private static final Log log = LogFactory.getLog(RepositoryServiceFactory.class);
-    
+
 	private String site ;
 	private JcrTemplate template;
     private ObjectContentManager ocm;
@@ -51,12 +51,12 @@ public class RepositoryServiceFactory implements ISessionDataServiceProvider{
 			throw new WicketRuntimeException("Exception getting Session from JcrTemplate", e);
 		}
 		ocm =  JcrOcmUtils.getObjectContentManager(session);
-		
+
     	repositoryTemplate = new RepositoryTemplate(template, ocm, site);
-    	
+
     	//Process data migration if necessary
     	//RepositoryDataMigration.transformData(template, site);
-    	
+
     	ImageUtilities.validateImageIO();
 
     	//Create Repository Service
@@ -65,10 +65,10 @@ public class RepositoryServiceFactory implements ISessionDataServiceProvider{
     	repositoryService.setTemplate(template);
     	repositoryService.setRepositoryTemplate(repositoryTemplate);
     	//repositoryService.setOcm(ocm);
-    	
+
     	//Create site node
     	SiteData siteData = repositoryService.getSite(site);
-    	
+
     	//Create default Users if they don't exist yet
     	repositoryService.getNewUser("guest", SecurityUtils.encrypt("password"));
     	UserData adminUser = repositoryService.getNewUser("admin", SecurityUtils.encrypt("password"));
@@ -79,11 +79,11 @@ public class RepositoryServiceFactory implements ISessionDataServiceProvider{
     	}
         adminUser.setAdmin(true);
         repositoryService.saveDataObject(adminUser);
-        
+
         //setup locales
         locales = siteData.getLocaleList();
         locales.add(SiteLanguage.ENGLISH); // english is default
-        
+
         //repositoryService.setLocales(locales);
 	}
 
@@ -108,6 +108,6 @@ public class RepositoryServiceFactory implements ISessionDataServiceProvider{
 	public ISessionDataService getRepositoryService() {
 		return null;
 	}
-	
+
 
 }

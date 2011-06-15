@@ -7,10 +7,10 @@ import org.apache.wicket.markup.html.list.ListView;
 
 public class PanelListView extends ListView<PanelMenuItem>{
 	private static final long serialVersionUID = -8310833021413122278L;
-	
+
 	final private String menuLinkId;
 	final private String panelId;
-	
+
 	public PanelListView(final String id, final String panelId, final String menuLinkId, List<PanelMenuItem> items) {
 		super(id, items);
 		this.menuLinkId = menuLinkId;

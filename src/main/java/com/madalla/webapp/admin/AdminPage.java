@@ -24,28 +24,28 @@ import com.madalla.webapp.panelmenu.PanelMenuItem;
 import com.madalla.webapp.user.UserProfilePanel;
 
 public abstract class AdminPage extends WebPage {
-	
+
 	private static final long serialVersionUID = -2837757448336709448L;
 	protected static final String ID = "adminPanel";
-	
+
 	private String pageTitle = "(no title)";
-	
+
 	public AdminPage(PageParameters parameters){
 		super(parameters);
 		commonInit();
 	}
-	
+
 	public AdminPage(){
 		super();
 	    commonInit();
 	}
-	
+
 	private void commonInit(){
 	    setPageTitle(getString("page.title"));
         add(new Label("title", new PropertyModel<String>(this,"pageTitle")));
         add(new Label("version", getCmsApplication().getBuildInformation().getVersion()));
         add(new Label("webapp", getCmsApplication().getBuildInformation().getWebappVersion()));
-        
+
         add(Css.YUI_CORE);
         add(Css.BASE);
         add(CSSPackageResource.getHeaderContribution(AdminPage.class,"AdminPage.css"));
@@ -53,7 +53,7 @@ public abstract class AdminPage extends WebPage {
         add(Css.CSS_FORM);
         setupMenu();
 	}
-	
+
 	protected void setupMenu(){
 		List<PanelMenuItem> menuItems = getAdminMenu();
 		add(new PanelListView("menuList",ID,"menuLink",menuItems ));
@@ -64,9 +64,9 @@ public abstract class AdminPage extends WebPage {
 		} else {
 			add(new BookmarkablePageLink<Void>("returnLink", backPage.getPageClass(), backPage.getPage().getPageParameters()));
 		}
-		
+
 	}
-	
+
 	public List<PanelMenuItem> getAdminMenu() {
 		List<PanelMenuItem> menuList = new ArrayList<PanelMenuItem>();
 		menuList.add(new PanelMenuItem(UserProfilePanel.class, "label.profile","info.profile"));
@@ -74,14 +74,14 @@ public abstract class AdminPage extends WebPage {
 		menuList.add(new PanelMenuItem(MemberAdminPanel.class, "label.member", "info.member"));
 		menuList.add(new PanelMenuItem(ImageAdminPanel.class, "label.image","info.image"));
 		menuList.add(new PanelMenuItem(ContentAdminPanel.class, "label.content","info.content"));
-		
+
 		return Collections.unmodifiableList(menuList);
 	}
 
 	public CmsSession getAppSession(){
         return (CmsSession)getSession();
     }
-	
+
 	public CmsApplication getCmsApplication(){
         return (CmsApplication) getApplication();
     }

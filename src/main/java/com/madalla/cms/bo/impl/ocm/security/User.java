@@ -18,23 +18,25 @@ public class User extends UserData {
 	@Field private String lastName;
 	@Field private Boolean admin;
 	@Field private String displayName;
-	
+
 	public User(){
-		
+
 	}
 
 	public User(String parentPath, String name){
 		id = parentPath + "/" + name;
 	}
-	
+
+	@Override
 	public String getName(){
 	    return StringUtils.substringAfterLast(getId(), "/");
 	}
-	
+
+	@Override
 	public String getId() {
 		return id;
 	}
-	
+
 	public void setId(String id){
 		this.id = id;
 	}

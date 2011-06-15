@@ -11,18 +11,19 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 public abstract class DialogContentPanel extends Panel {
 	private static final long serialVersionUID = 1L;
-	
+
 	public DialogContentPanel(String id, final Component content, final boolean closeButton, final boolean saveButton) {
         super(id);
-        
+
         Form<Void> form ;
         add(form = new Form<Void>("form"));
-        
+
         form.add(content);
-        
+
         form.add(new AjaxButton("close") {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 onCancel(target);
             }
@@ -31,15 +32,15 @@ public abstract class DialogContentPanel extends Panel {
 			public boolean isVisible() {
 				return closeButton;
 			}
-			
+
 			@Override
 			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
 				replaceComponentTagBody(markupStream, openTag, getCancelButtonString());
 			}
-			
-			
+
+
         }.setDefaultFormProcessing(false));
-        
+
         form.add(new IndicatingAjaxButton("save") {
 			private static final long serialVersionUID = 1L;
 
@@ -47,9 +48,9 @@ public abstract class DialogContentPanel extends Panel {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				onSave(target);
 			}
-			
-			
-			
+
+
+
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				target.addComponent(form);
@@ -63,15 +64,15 @@ public abstract class DialogContentPanel extends Panel {
 				return saveButton;
 			}
 
-        	
+
         });
 
     }
-	
+
 	abstract String getCancelButtonString();
 
     abstract void onCancel(AjaxRequestTarget target);
-    
+
     abstract void onSave(AjaxRequestTarget target);
 
 }

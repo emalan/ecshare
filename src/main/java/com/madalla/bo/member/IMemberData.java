@@ -37,9 +37,9 @@ public interface IMemberData {
 	DateTime getAuthorizedDate();
 
 	void setAuthorizedDate(DateTime authorizedDate);
-	
+
 	Date getSubscriptionEnd();
-	
+
 	void setSubscriptionEnd(Date subscriptionEnd);
 
 	boolean isMemberSubscribed();

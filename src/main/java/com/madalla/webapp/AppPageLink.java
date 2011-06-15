@@ -6,9 +6,9 @@ import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 
 public class AppPageLink extends BookmarkablePageLink<String> {
-	
+
 	private static final long serialVersionUID = -607174917270219309L;
-	
+
 	private final String body;
 	public AppPageLink(final String id, final Class<? extends Page> c, final String body){
         super(id,c);
@@ -19,6 +19,6 @@ public class AppPageLink extends BookmarkablePageLink<String> {
 
 	@Override
 	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-		replaceComponentTagBody(markupStream, openTag, body);	
+		replaceComponentTagBody(markupStream, openTag, body);
 	}
 }

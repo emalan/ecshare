@@ -1,5 +1,5 @@
 /**
- * Content Admin Pages functionality provided by Wicket Panels. 
+ * Content Admin Pages functionality provided by Wicket Panels.
  * <p>
  * Functionality includes :
  * <ul>
@@ -9,7 +9,7 @@
  * </ul>
  *
  * TODO UI and Style work
- * 
+ *
  * @author Eugene Malan
  */
 package com.madalla.webapp.admin.content;

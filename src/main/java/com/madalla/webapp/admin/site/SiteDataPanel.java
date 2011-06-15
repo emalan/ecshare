@@ -29,13 +29,13 @@ import com.madalla.wicket.LabelPagingNavigator;
 public class SiteDataPanel extends CmsPanel {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private final DateTimeZone dateTimeZone;
-	
+
 	private class SortableEmailEntryProvider extends SortableDataProvider<EmailEntryData> {
 
 		private static final long serialVersionUID = 1L;
-		
+
 		SortableEmailEntryProvider(){
 			setSort("id", true);
 		}
@@ -52,46 +52,46 @@ public class SiteDataPanel extends CmsPanel {
 			}
 			return list.listIterator(first);
 		}
-		
+
 		private Comparator<EmailEntryData> getNameComparator(){
 			return new Comparator<EmailEntryData>(){
 
 				public int compare(EmailEntryData o1, EmailEntryData o2) {
 					return o1.getSenderName().compareTo(o2.getSenderName());
 				}
-				
+
 			};
 		}
-		
+
 		private Comparator<EmailEntryData> getDateTimeComparator(){
 			return new Comparator<EmailEntryData>() {
 
 				public int compare(EmailEntryData o1, EmailEntryData o2) {
 					return o1.getDateTime().compareTo(o2.getDateTime());
 				}
-				
+
 			};
 		}
 
 		public IModel<EmailEntryData> model(EmailEntryData object) {
-			return new LoadableDetachableEmailEntryModel((EmailEntryData)object);
+			return new LoadableDetachableEmailEntryModel(object);
 		}
 
 		public int size() {
 			return getRepositoryService().getEmailEntries().size();
 		}
-		
+
 	}
-	
+
 	private class LoadableDetachableEmailEntryModel extends LoadableDetachableModel<EmailEntryData>{
 
 		private static final long serialVersionUID = 1L;
 		private String id;
-		
+
 		public LoadableDetachableEmailEntryModel(EmailEntryData emailEntry) {
 			this(emailEntry.getId());
 		}
-		
+
 		public LoadableDetachableEmailEntryModel(String id){
 			if (StringUtils.isEmpty(id)){
 				throw new IllegalArgumentException();
@@ -103,12 +103,14 @@ public class SiteDataPanel extends CmsPanel {
 		protected EmailEntryData load() {
 			return getRepositoryService().getEmailEntry(id);
 		}
-		
-	    public int hashCode()	    {
+
+	    @Override
+		public int hashCode()	    {
 	        return id.hashCode();
 	    }
 
-	    public boolean equals(final Object obj) {
+	    @Override
+		public boolean equals(final Object obj) {
 	        if (obj == this) {
 	            return true;
 	        } else if (obj == null) {
@@ -119,13 +121,13 @@ public class SiteDataPanel extends CmsPanel {
 	        }
 	        return false;
 	    }
-		
+
 	}
-	
+
 	private class SortableLogProvider extends SortableDataProvider<LogData> {
 
 		private static final long serialVersionUID = 1L;
-		
+
 		SortableLogProvider(){
 			setSort("id", true);
 		}
@@ -142,24 +144,24 @@ public class SiteDataPanel extends CmsPanel {
 			}
 			return list.listIterator(first);
 		}
-		
+
 		private Comparator<LogData> getUserComparator(){
 			return new Comparator<LogData>(){
 
 				public int compare(LogData o1, LogData o2) {
 					return o1.getUser().compareTo(o2.getUser());
 				}
-				
+
 			};
 		}
-		
+
 		private Comparator<LogData> getDateTimeComparator(){
 			return new Comparator<LogData>() {
 
 				public int compare(LogData o1, LogData o2) {
 					return o1.getDateTime().compareTo(o2.getDateTime());
 				}
-				
+
 			};
 		}
 
@@ -170,18 +172,18 @@ public class SiteDataPanel extends CmsPanel {
 		public IModel<LogData> model(LogData object) {
 			return new LoadableDetachableLogModel(object);
 		}
-		
+
 	}
-	
+
 	private class LoadableDetachableLogModel extends LoadableDetachableModel<LogData>{
 
 		private static final long serialVersionUID = 1L;
 		private String id;
-		
+
 		public LoadableDetachableLogModel(LogData entry) {
 			this(entry.getId());
 		}
-		
+
 		public LoadableDetachableLogModel(String id){
 			if (StringUtils.isEmpty(id)){
 				throw new IllegalArgumentException();
@@ -193,12 +195,14 @@ public class SiteDataPanel extends CmsPanel {
 		protected LogData load() {
 			return getRepositoryService().getTransactionLog(id);
 		}
-		
-	    public int hashCode()	    {
+
+	    @Override
+		public int hashCode()	    {
 	        return id.hashCode();
 	    }
 
-	    public boolean equals(final Object obj) {
+	    @Override
+		public boolean equals(final Object obj) {
 	        if (obj == this) {
 	            return true;
 	        } else if (obj == null) {
@@ -209,17 +213,17 @@ public class SiteDataPanel extends CmsPanel {
 	        }
 	        return false;
 	    }
-		
+
 	}
-	
+
 	public SiteDataPanel(String id) {
 		super(id);
-		
+
 		dateTimeZone = getRepositoryService().getDateTimeZone();
-		
+
 		final MarkupContainer emailContainer;
 		add(emailContainer = new WebMarkupContainer("emailContainer"));
-		
+
 		SortableEmailEntryProvider provider = new SortableEmailEntryProvider();
 		final DataView<EmailEntryData> dataView;
 		emailContainer.add(dataView = new DataView<EmailEntryData>("emailSorting", provider){
@@ -236,24 +240,26 @@ public class SiteDataPanel extends CmsPanel {
 				item.add(new Label("name", emailEntry.getSenderName()));
 				item.add(new Label("email", emailEntry.getSenderEmailAddress()));
 				item.add(new Label("comment", emailEntry.getSenderComment()));
-				
+
 				item.add(new AttributeModifier("class", true, new AbstractReadOnlyModel<Object>() {
 					private static final long serialVersionUID = 1L;
 
+					@Override
 					public Object getObject() {
                         return (item.getIndex() % 2 == 1) ? "even" : "odd";
                     }
                 }));
-				
+
 			}
-			
+
 		});
-		
+
 		dataView.setItemsPerPage(10);
-		
+
 		emailContainer.add(new OrderByBorder("orderByDateTime", "dateTime", provider, NumericCssProvider.instance) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected void onSortChanged() {
                 dataView.setCurrentPage(0);
             }
@@ -262,20 +268,21 @@ public class SiteDataPanel extends CmsPanel {
 		emailContainer.add(new OrderByBorder("orderByName", "senderName", provider) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected void onSortChanged() {
                 dataView.setCurrentPage(0);
             }
         });
-		
+
 		add(new LabelPagingNavigator("emailNavigator", dataView));
-		
+
 		//////////////////////
 		// Transaction logs
 		//////////////////////
 		final MarkupContainer logContainer;
 		add(logContainer = new WebMarkupContainer("logContainer"));
 		logContainer.setOutputMarkupId(true);
-		
+
 		SortableLogProvider logProvider = new SortableLogProvider();
 		final DataView<LogData> logView;
 		logContainer.add(logView = new DataView<LogData>("logSorting", logProvider){
@@ -291,22 +298,24 @@ public class SiteDataPanel extends CmsPanel {
 				item.add(new Label("user", data.getUser()));
 				item.add(new Label("type", data.getType()));
 				item.add(new Label("cmsId", data.getCmsId()));
-				
+
 				item.add(new AttributeModifier("class", true, new AbstractReadOnlyModel<Object>() {
 					private static final long serialVersionUID = 1L;
 
+					@Override
 					public Object getObject() {
                         return (item.getIndex() % 2 == 1) ? "even" : "odd";
                     }
                 }));
-				
+
 			}
-			
+
 		});
-		
+
 		logContainer.add(new OrderByBorder("orderByDateTime", "dateTime", logProvider, NumericCssProvider.instance) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected void onSortChanged() {
                 logView.setCurrentPage(0);
             }
@@ -315,19 +324,20 @@ public class SiteDataPanel extends CmsPanel {
 		logContainer.add(new OrderByBorder("orderByUser", "user", logProvider) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected void onSortChanged() {
                 logView.setCurrentPage(0);
             }
         });
-		
+
 		logView.setItemsPerPage(10);
-		
+
 		add(new LabelPagingNavigator("logNavigator", logView));
 	}
-	
+
 	/**
 	 * Default implementation of ICssProvider
-	 * 
+	 *
 	 * @author Igor Vaynberg ( ivaynberg )
 	 */
 	public static class NumericCssProvider extends CssProvider

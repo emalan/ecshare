@@ -10,7 +10,7 @@ import com.madalla.bo.page.PageMetaLangData;
 @Node
 public class PageMetaLang extends PageMetaLangData {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Field(path=true) private String id;
 	@Field private String lang;
 	@Field private String displayName;
@@ -18,9 +18,9 @@ public class PageMetaLang extends PageMetaLangData {
 	@Field private String description;
 	@Field private String keywords;
 	@Field private String author;
-    
+
     public PageMetaLang(){
-    	
+
     }
     public PageMetaLang(IPageMetaData parent, String name){
     	setId(parent.getId() + "/" + name);
@@ -28,7 +28,8 @@ public class PageMetaLang extends PageMetaLangData {
     /* (non-Javadoc)
 	 * @see com.madalla.cms.bo.impl.ocm.page.IPageMetaLangData#getName()
 	 */
-    public String getName() {
+    @Override
+	public String getName() {
     	return StringUtils.substringAfterLast(getId(), "/");
     }
 	/* (non-Javadoc)
@@ -40,6 +41,7 @@ public class PageMetaLang extends PageMetaLangData {
 	/* (non-Javadoc)
 	 * @see com.madalla.cms.bo.impl.ocm.page.IPageMetaLangData#getId()
 	 */
+	@Override
 	public String getId() {
 		return id;
 	}
@@ -56,7 +58,7 @@ public class PageMetaLang extends PageMetaLangData {
 			return lang + "/" + StringUtils.deleteWhitespace(displayName);
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.madalla.cms.bo.impl.ocm.page.IPageMetaLangData#getTitle()
 	 */

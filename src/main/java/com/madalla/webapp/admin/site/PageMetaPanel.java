@@ -26,65 +26,65 @@ import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 
 public abstract class PageMetaPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
-	
+
 	private Log log = LogFactory.getLog(this.getClass());
 
     public class MetaDataForm extends AjaxValidationForm<PageMetaLangData> {
-    	
+
     	private static final long serialVersionUID = 1L;
-    	
+
     	final private String existingMount;
     	final private String pageName;
-        
+
     	public MetaDataForm(String id, IModel<PageMetaLangData> model, final String pageName) {
             super(id, model);
-            
+
             this.existingMount = model.getObject().getMountName(pageName);
             this.pageName = pageName;
-            
+
             add(new AjaxValidationRequiredTextField("displayName"));
-            
+
             add(new TextField<String>("title"));
-           
+
             add(new TextField<String>("author"));
-            
+
             add(new TextArea<String>("description"));
-            
-            add(new TextArea<String>("keywords")); 
-            
+
+            add(new TextArea<String>("keywords"));
+
         }
 
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
 			PageMetaLangData data = getModelObject();
-			
+
 			preSaveProcessing(existingMount, data.getMountName(pageName));
-			
+
 			saveData(data);
 			info(getString("message.success"));
 		}
-		
+
     }
 
 	public PageMetaPanel(String id, final PageData pageData, List<SiteLanguage> siteLanguages, Locale defaultLocale) {
 		super(id);
 
 		add(new Label("pageName", pageData.getName()));
-		
+
 		// Base Lang
 		PageMetaLangData pageMetaLang = getRepositoryService().getPageMetaLang(SiteLanguage.BASE_LOCALE, pageData);
 		log.debug("Constructing base lang Form.  " + pageMetaLang );
-		
+
 		final Form<PageMetaLangData> homeBaseForm = new MetaDataForm("homeBaseForm", new CompoundPropertyModel<PageMetaLangData>(pageMetaLang), pageData.getName());
 	    add(homeBaseForm);
-	    
+
 		// Other Langs
 	    log.debug("Constructing other langs. default=" + defaultLocale );
 		final CompoundPropertyModel<PageMetaLangData> homeOtherModel = new CompoundPropertyModel<PageMetaLangData>(getRepositoryService().getPageMetaLang(defaultLocale, pageData, false));
 		log.debug("Constructing other lang Form. Model: " + homeOtherModel );
 	    final Form<PageMetaLangData> homeOtherForm = new MetaDataForm("homeOtherForm", homeOtherModel, pageData.getName());
 		add(homeOtherForm);
-		    
+
 		SiteLanguage selectedLanguage = SiteLanguage.getLanguage(defaultLocale.getLanguage());
 		final DropDownChoice<SiteLanguage> select = new DropDownChoice<SiteLanguage>("langSelect",
 				new Model<SiteLanguage>(selectedLanguage), siteLanguages, new ChoiceRenderer<SiteLanguage>(
@@ -107,7 +107,7 @@ public abstract class PageMetaPanel extends CmsPanel{
 		add(select);
 
 	}
-	
+
 	abstract void preSaveProcessing(String existingMount, String newMount);
-	
+
 }

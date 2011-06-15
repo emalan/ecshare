@@ -17,12 +17,14 @@ public class PropertyEditableColumn extends PropertyRenderableColumn{
 	        super(location, header, propertyExpression);
 	    }
 
-	    public Component newCell(MarkupContainer parent, String id, TreeNode node, int level)
+	    @Override
+		public Component newCell(MarkupContainer parent, String id, TreeNode node, int level)
 	    {
 	        return new EditablePanel(id, new PropertyModel<String>(node, getPropertyExpression()));
 	    }
 
-	    public IRenderable newCell(TreeNode node, int level)
+	    @Override
+		public IRenderable newCell(TreeNode node, int level)
 	    {
 	        if (getTreeTable().getTreeState().isNodeSelected(node))
 	            return null;

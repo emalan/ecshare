@@ -19,7 +19,7 @@ public class JdbcDatabaseSetup {
 	private DataSource dataSource;
 	private InputStream schema;
 	private boolean alterDb = true;
-	
+
 	public void setSchema(InputStream schema) {
 		this.schema = schema;
 	}
@@ -27,7 +27,7 @@ public class JdbcDatabaseSetup {
 	public void init(){
 		setupDatabase(dataSource);
 	}
-	
+
 	public void setupDatabase(DataSource dataSource) {
         try {
         	Database database = new DatabaseIO().read(new InputSource(schema));

@@ -8,6 +8,9 @@
 	<name>Control My Site</name>
 	<description>Wicket Framework code for multi-lingual Content Management system</description>
 	<url>http://www.controlmysite.net</url>
+	<scm>
+	   <connection>scm:git:/Users/emalan/workspace/ecshare/.git</connection>
+	</scm>
     <organization> 
         <name>emalan consulting, inc</name> 
         <url>http://www.emalan.com</url>
@@ -266,45 +269,61 @@
 		        <artifactId>maven-site-plugin</artifactId>
 		        <version>3.0-beta-3</version>
 		        <configuration>
-		          <reportPlugins>
-		            <plugin>
-		              <groupId>org.apache.maven.plugins</groupId>
-		              <artifactId>maven-project-info-reports-plugin</artifactId>
-		              <version>2.2</version>
-		              <configuration>
-		                <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-		                <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-		              </configuration>
-		              <reports>
-		                <report>dependencies</report>
-		                <report>project-team</report>
-		                <report>license</report>
-		                <report>scm</report>
-		              </reports>
-		            </plugin>
-		            <plugin>
-		              <groupId>org.apache.maven.plugins</groupId>
-		              <artifactId>maven-javadoc-plugin</artifactId>
-		              <version>2.7</version>
-		              <configuration>
-                        <copyright>Copyright &amp;copy; Eugene Malan. All Rights Reserved.</copyright>
-                        <title>Web application framework API</title>
-                        <overview>src/main/java/overview.html</overview>
-                      </configuration>
-                      <reportSets>
-                        <reportSet>
-                        <id>default</id>
-                        <reports>
-                            <report>javadoc</report>
-                        </reports>
-                        </reportSet>
-                      </reportSets>
-		            </plugin>
-		          </reportPlugins>
+		          <locales>en</locales>
 		        </configuration>
 		    </plugin>
+		    <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.6</version>
+            </plugin>
 		</plugins>
 	</build>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.4</version>
+				<reportSets>
+				    <reportSet>
+				        <reports>
+                            <report>dependencies</report>
+                            <report>project-team</report>
+                            <report>license</report>
+                            <report>scm</report>
+				        </reports>
+				    </reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<copyright>Copyright &amp;copy; Eugene Malan. All Rights Reserved.</copyright>
+					<title>Web application framework API</title>
+					<overview>src/main/java/overview.html</overview>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<id>default</id>
+						<reports>
+							<report>javadoc</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <!-- your example configuration here -->
+                </configuration>
+            </plugin>
+		</plugins>
+	</reporting>
 	<distributionManagement>
         <site>
             <id>ecprod</id>
@@ -318,4 +337,4 @@
         <jackrabbit.version>1.5.5</jackrabbit.version>
         <spring.version>2.5.6</spring.version>
 	</properties>
-	</project>
+</project>

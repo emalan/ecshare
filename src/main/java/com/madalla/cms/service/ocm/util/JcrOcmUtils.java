@@ -30,14 +30,14 @@ import org.joda.time.DateTime;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 
 public class JcrOcmUtils {
-    
-	
+
+
 	/** namespace prefix constant */
     public static final String OCM_NAMESPACE_PREFIX   = "ocm";
 
     /** namespace constant */
     public static final String OCM_NAMESPACE = "http://jackrabbit.apache.org/ocm";
-    
+
     public static ObjectContentManager getObjectContentManager(Session session){
 
 //TODO remove code ???  Do we need to setup ocm node type in new Repository ???
@@ -46,17 +46,17 @@ public class JcrOcmUtils {
 //		} catch (RepositoryException e) {
 //			throw new WicketRuntimeException("Error setting up OCM ObjectContentManager.",e);
 //		}
-		
+
 		Mapper mapper = setupMappers();
 		ObjectContentManagerImpl ocm =  new ObjectContentManagerImpl(session, mapper);
-		
+
 		AtomicTypeConverterProvider convertors = setupConvertors();
 		ObjectConverterImpl converterImpl = new ObjectConverterImpl(mapper, convertors);
 		ocm.setObjectConverter(converterImpl);
-		
+
 		return ocm;
     }
-    
+
     @SuppressWarnings("unchecked") //need to interact with non-generics code
 	private static Mapper setupMappers(){
     	//Setup OCM annotated classes
@@ -73,10 +73,10 @@ public class JcrOcmUtils {
 		convertors.put(DynamicImageResource.class, DynamicImageResourceConvertor.class);
 		return new DefaultAtomicTypeConverterProvider(convertors);
     }
-    
+
 	/**
     * Create the ocm namespace
-    * 
+    *
     */
     private static void createNamespace(Session session) throws RepositoryException
     {
@@ -103,12 +103,12 @@ public class JcrOcmUtils {
             throw new RepositoryException(e.getMessage());
         }
     }
-	
+
 	private static void registerOcmNodeType(Session session) throws RepositoryException{
 		InputStream xml = JcrOcmUtils.class.getResourceAsStream("ocm-discriminator.xml");
 		registerNodeTypes(session, xml );
 	}
-	
+
 	private static void registerNodeTypes(Session session, InputStream xml) throws RepositoryException{
         try {
 			NodeTypeDef[] types = NodeTypeReader.read(xml);
@@ -129,12 +129,12 @@ public class JcrOcmUtils {
 			    }
 
 			}
-		} 
-        catch (Exception e) 
+		}
+        catch (Exception e)
 		{
         	throw new RepositoryException("Impossible to register node types", e);
 		}
-		
+
 	}
 
 	private static void registerNodeTypes(Session session, String nodeTypeFile) throws RepositoryException
@@ -143,10 +143,10 @@ public class JcrOcmUtils {
 			InputStream xml = new FileInputStream(nodeTypeFile);
 			registerNodeTypes(session, xml);
 
-		} 
-        catch (Exception e) 
+		}
+        catch (Exception e)
 		{
         	throw new RepositoryException("Impossible to register node types", e);
 		}
-    }		
+    }
 }

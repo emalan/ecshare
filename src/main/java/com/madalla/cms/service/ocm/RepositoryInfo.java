@@ -31,31 +31,31 @@ import com.madalla.cms.jcr.JcrUtils;
 /**
  * Information regarding the Schema in the Content repository System.
  * <p>
- * The schema is depicted below. The data regarding the parent nodes and 
+ * The schema is depicted below. The data regarding the parent nodes and
  * the classes that are children is all stored here. The RepositoryType
  * Enum holds all the required schema data for each object that needs
  * to be stored in the repository.
  * <p>
  * <pre>
- *            ec:apps 
- *         -----|------------------------------                 
+ *            ec:apps
+ *         -----|------------------------------
  *        |                                    |
- *     [site1]                              [site2]                               
+ *     [site1]                              [site2]
  *        |                                    |
  *                       --------------------------------------------------------------------------------
  *                      |                         |                             |                        |
  *                    ec:pages                 ec:data                      ec:images                 ec:blogs
  *                      |                         |                             |                        |
  *               Pages and Content              Email                   Albums and Images        Blogs and Blog Entries
- *               
+ *
  *           ec:users
  *              |
  *            Users
  *              |
  *           UserData (encrypted passwords)
- *            
+ *
  * </pre>
- * 
+ *
  * @author Eugene Malan
  *
  */
@@ -76,7 +76,7 @@ public class RepositoryInfo {
 	 * for persistence in the repository as well as the general structure of the data tree.
 	 * For Parent classes there is information about where they are positioned in the
 	 * tree. Other classes are aware of who there parent are by way of their constructors.
-	 * 
+	 *
 	 * @author Eugene Malan
 	 *
 	 */
@@ -98,8 +98,8 @@ public class RepositoryInfo {
 		EMAIL(Email.class, true, true, EC_NODE_DATA),
 		EMAILENTRY(EmailEntry.class, true, false, EC_NODE_DATA),
 		USERPROFILE(Profile.class, false, false, EC_NODE_USERS);
-		
-		
+
+
 		/**
 		 * This is the class that is to be registered for persistence
 		 */
@@ -108,22 +108,22 @@ public class RepositoryInfo {
 		/**
 		 * Set to true if the class and group is positioned under the site node.
 		 */
-		public final boolean site;  
+		public final boolean site;
 
 		/**
 		 * If true, then this Node is positioned as a child to the group Node.
 		 */
-		public final boolean parent;  
-		
+		public final boolean parent;
+
 		/**
 		 * This is the group or category Node for this class
 		 */
 		public String groupName;
-		
+
 		public String getGroupPath(){
 			return "/" + EC_NODE_APP + "/" + groupName;
 		}
-		
+
 		RepositoryType(Class<? extends AbstractData> typeClass, boolean site, boolean parent, String groupName){
 			this.typeClass = typeClass;
 			this.site = site;
@@ -132,31 +132,31 @@ public class RepositoryInfo {
 		}
 	}
 
- 
+
     public static Node getApplicationNode(Session session) throws RepositoryException{
     	return JcrUtils.getCreateNode(EC_NODE_APP, session.getRootNode());
     }
-    
+
     public static Node getGroupNode(Session session, String site, RepositoryType type) throws RepositoryException{
   		return getCreateParentNode(session, site, type);
     }
-    
+
 	public static boolean isBlogNodeType(final String path){
     	return isNodeType(path, EC_NODE_BLOGS);
     }
-	
+
 	public static boolean isImagesNodeType(final String path){
     	return isNodeType(path, EC_NODE_IMAGES);
     }
-	
+
 	public static boolean isContentNodeType(final String path){
         return isNodeType(path, EC_NODE_PAGES);
     }
-	
+
 	public static boolean isDataNodeType(final String path){
         return isNodeType(path, EC_NODE_DATA);
     }
-	
+
 	public static boolean isContentCopyable(JcrTemplate template, final String path){
 		Boolean rt = (Boolean) template.execute(new JcrCallback(){
 
@@ -174,11 +174,11 @@ public class RepositoryInfo {
 					return Boolean.FALSE;
 				}
 			}
-	    	
+
 	    });
 	    return rt;
 	}
-	
+
 	public static boolean isContentPasteNode(JcrTemplate template, final String path){
 	    Boolean rt = (Boolean) template.execute(new JcrCallback(){
 
@@ -196,11 +196,11 @@ public class RepositoryInfo {
 					return Boolean.FALSE;
 				}
 			}
-	    	
+
 	    });
 	    return rt;
 	}
-	
+
 	public static boolean isDeletableNode(JcrTemplate template, final String path){
     	Node result = (Node) template.execute(new JcrCallback(){
 
@@ -218,21 +218,21 @@ public class RepositoryInfo {
 
 				return null;
 			}
-    		
+
     	});
     	if (result == null){
     		return false;
     	} else {
     		return true;
     	}
-    	
+
     }
 
 	private static boolean isNodeType(final String path, String type){
     	String[] pathArray = path.split("/");
     	return type.equals(pathArray[pathArray.length - 3]);
     }
-	
+
 	private static Node getCreateParentNode(Session session, String site, RepositoryType type) throws RepositoryException {
     	Node appNode = getApplicationNode(session);
     	Node parentNode;
@@ -241,7 +241,7 @@ public class RepositoryInfo {
     	} else {
     		parentNode = appNode;
     	}
-    	
+
     	Node ret;
     	if (type.groupName.equals(EC_NODE_APP)){
     		ret = appNode;
@@ -251,7 +251,7 @@ public class RepositoryInfo {
     	session.save();
     	return ret;
 	}
-	
+
 
 
 }

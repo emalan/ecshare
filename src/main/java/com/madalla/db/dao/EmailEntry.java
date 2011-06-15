@@ -14,12 +14,12 @@ public class EmailEntry extends EmailEntryData implements IEmailEntryData {
 	private String senderComment;
 	private String senderName;
 	private String senderEmailAddress;
-	
+
 	@Override
 	public String getId() {
 		return String.valueOf(id);
 	}
-	
+
 	public void setId(int id){
 		this.id = id;
 	}
@@ -46,15 +46,15 @@ public class EmailEntry extends EmailEntryData implements IEmailEntryData {
 	}
 
 	public void setDateTime(DateTime dateTime) {
-		this.dateTime = dateTime;		
+		this.dateTime = dateTime;
 	}
 
 	public void setSenderComment(String senderComment) {
-		this.senderComment = senderComment;		
+		this.senderComment = senderComment;
 	}
 
 	public void setSenderEmailAddress(String senderEmailAddress) {
-		this.senderEmailAddress = senderEmailAddress;		
+		this.senderEmailAddress = senderEmailAddress;
 	}
 
 	public void setSenderName(String senderName) {

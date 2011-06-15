@@ -17,7 +17,7 @@ public abstract class AuthenticatedCmsApplication extends WebApplication
 	implements
 		IUnauthorizedComponentInstantiationListener,
 		ICmsRoleAuthorizedCheck{
-	
+
 	private static Class<?> MEMBER_AUTH_PAGE = IMemberAuthPage.class;
 
 	@Override
@@ -29,31 +29,31 @@ public abstract class AuthenticatedCmsApplication extends WebApplication
 		getSecuritySettings().setAuthorizationStrategy(new CmsAuthorizationStrategy(this));
 		getSecuritySettings().setUnauthorizedComponentInstantiationListener(this);
 	}
-	
+
 	public abstract boolean isMemberAuthorized();
-	
+
 	public final boolean hasAnyRole(final Roles roles)
 	{
 		final Roles sessionRoles = AuthenticatedWebSession.get().getRoles();
 		return sessionRoles != null && sessionRoles.hasAnyRole(roles);
 	}
-	
+
 	public final void onUnauthorizedInstantiation(final Component component){
-		
+
 		if (component instanceof Page) {
-			
+
 			// Member Security
 			if (MEMBER_AUTH_PAGE.isAssignableFrom(component.getClass())) {
-				
+
 				if (!CmsSession.get().getMemberSession().isSignedIn()){
 					throw new RestartResponseAtInterceptPageException(getMemberRegistrationPage());
 				} else {
 					onUnauthorizedPage((Page)component);
 				}
-			
+
 			// If there is a sign in page class declared, and the unauthorized
 			// component is a page, but it's not the sign in page
-			} else { 
+			} else {
 				if (!AuthenticatedWebSession.get().isSignedIn()) {
 					// Redirect to intercept page to let the user sign in
 					throw new RestartResponseAtInterceptPageException(getSignInPageClass());
@@ -66,17 +66,17 @@ public abstract class AuthenticatedCmsApplication extends WebApplication
 			throw new UnauthorizedInstantiationException(component.getClass());
 		}
 	}
-	
+
 	protected abstract Class<? extends AuthenticatedWebSession> getWebSessionClass();
-	
+
 	protected abstract Class<? extends WebPage> getSignInPageClass();
-	
+
 	protected abstract Class<? extends WebPage> getMemberRegistrationPage();
-	
+
 	protected void onUnauthorizedPage(final Page page)
 	{
 		// The component was not a page, so throw an exception
 		throw new UnauthorizedInstantiationException(page.getClass());
 	}
-	
+
 }

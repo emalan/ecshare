@@ -44,7 +44,7 @@ public class BlogEntryPanel extends CmsPanel {
     private static final CompressedResourceReference JAVASCRIPT = new CompressedResourceReference(BlogEntryPanel.class, "BlogEntryPanel.js");
     private Log log = LogFactory.getLog(this.getClass());
     private final BlogEntryView blogEntry = new BlogEntryView();
-    
+
     /**
      * Constructor for creating a new Blog Entry
      * @param id
@@ -56,7 +56,7 @@ public class BlogEntryPanel extends CmsPanel {
         log.debug("Created new Blog Entry");
         init();
     }
-    
+
     /**
      * Constructor for editing an existing blog entry
      * @param id
@@ -70,7 +70,7 @@ public class BlogEntryPanel extends CmsPanel {
         log.debug("Retrieved Blog Entry from Service."+blogEntry);
         init();
     }
-    
+
     private void init(){
     	Form<Object> form = new BlogEntryForm("blogForm");
         final FeedbackPanel feedbackPanel = new ComponentFeedbackPanel("feedback",form);
@@ -78,17 +78,17 @@ public class BlogEntryPanel extends CmsPanel {
         form.add(feedbackPanel);
         add(form);
     }
-    
+
     private BlogEntryPanel(String id){
     	super(id);
     	add(JavascriptPackageResource.getHeaderContribution(TinyMce.class,"tiny_mce.js"));
         add(JavascriptPackageResource.getHeaderContribution(JAVASCRIPT));
         add(Css.CSS_FORM);
     }
-    
+
     final class BlogEntryForm extends Form<Object>{
         private static final long serialVersionUID = 1L;
-        
+
         public BlogEntryForm(final String name) {
             super(name);
 
@@ -116,18 +116,19 @@ public class BlogEntryPanel extends CmsPanel {
 					widgetProperties.put("title", Boolean.FALSE);
 					widgetProperties.put("close", Boolean.FALSE);
 				}
-            	
+
             });
-            
+
 
             //Category select
-            List<String> categories = BlogEntry.getBlogCategories();
+            List<String> categories = BlogEntryData.getBlogCategories();
             FormComponent<String> categoryDropDown = new DropDownChoice<String>("category", new PropertyModel<String>(blogEntry,"category"), categories);
             categoryDropDown.setRequired(true);
             categoryDropDown.add(new ValidationStyleBehaviour());
             categoryDropDown.add(new AjaxFormComponentUpdatingBehavior("onblur"){
 				private static final long serialVersionUID = 6968995998493101488L;
 
+				@Override
 				protected void onUpdate(AjaxRequestTarget target){
             		target.addComponent(getFormComponent());
             	}
@@ -142,14 +143,14 @@ public class BlogEntryPanel extends CmsPanel {
             TextField<String> title = new AjaxValidationRequiredTextField("title",new PropertyModel<String>(blogEntry,"title"), titleFeedback);
             title.setLabel(new Model<String>(BlogEntryPanel.this.getString("label.title")));
             add(title);
-            
+
             add(new TextArea<String>("description",new PropertyModel<String>(blogEntry,"description")).setConvertEmptyInputStringToNull(false));
             add(new TextField<String>("keywords",new PropertyModel<String>(blogEntry,"keywords")).setConvertEmptyInputStringToNull(false));
-            
+
             add(new TextArea<String>("text", new PropertyModel<String>(blogEntry, "text")));
-            
+
             add(new SubmitLink("submitButton"));
-            
+
             add(new Link<Object>("cancelButton"){
 				private static final long serialVersionUID = 1L;
 
@@ -159,14 +160,15 @@ public class BlogEntryPanel extends CmsPanel {
 				}
             });
         }
-        
-        public void onSubmit() {
+
+        @Override
+		public void onSubmit() {
             log.debug("onSubmit - Saving populated Blog Entry to Blog service. " + blogEntry);
             try {
                 saveBlogEntry(blogEntry);
                 info("Success");
                 log.info("Blog Entry successfully saved. " + blogEntry);
-                
+
             } catch (Exception e) {
                 error("There was a problem saving Entry.");
                 error(e.getMessage());
@@ -175,12 +177,12 @@ public class BlogEntryPanel extends CmsPanel {
         }
 
     }
-    
+
     private void saveBlogEntry(BlogEntryView view){
     	BlogEntryData blogEntry;
     	if (StringUtils.isEmpty(view.getId())){
     		IBlogData blog = getRepositoryService().getBlog(view.getBlog());
-    		blogEntry = getRepositoryService().getNewBlogEntry(blog, view.getTitle(), new DateTime(view.getDate())); 
+    		blogEntry = getRepositoryService().getNewBlogEntry(blog, view.getTitle(), new DateTime(view.getDate()));
     		view.populate(blogEntry);
     	} else {
     		blogEntry = getRepositoryService().getBlogEntry(view.getId());

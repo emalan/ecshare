@@ -28,17 +28,17 @@ import org.w3c.dom.NodeList;
 
 
 public class Rpx {
-	
+
 	private final Log log = LogFactory.getLog(this.getClass());
 
 	private String apiKey;
 	private String baseUrl;
 	private String callback;
-	
+
 	public Rpx(){
-		
+
 	}
-    
+
     public Rpx(String apiKey, String baseUrl) {
         while (baseUrl.endsWith("/"))
             baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
@@ -136,17 +136,17 @@ public class Rpx {
                 conn.getOutputStream(), "UTF-8");
             osw.write(data);
             osw.close();
-            
+
 //            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 //            String line;
 //            while ((line = reader.readLine()) != null) {
 //            	log.debug(line);
 //            }
-            
+
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setIgnoringElementContentWhitespace(true);
             DocumentBuilder db = dbf.newDocumentBuilder();
-            
+
             Document doc = db.parse(conn.getInputStream());
             Element response = (Element)doc.getFirstChild();
             if (!response.getAttribute("stat").equals("ok")) {
@@ -157,7 +157,7 @@ public class Rpx {
         } catch (Exception e) {
             log.error("Exception during RPX authentication.", e);
             return null;
-        } 
+        }
     }
     public static void main(String [] args) {
         if (args.length < 3) {
@@ -182,7 +182,7 @@ public class Rpx {
             System.out.println(r.allMappings().toString());
         }
     }
-    
+
     public void setApiKey(String apiKey) {
 		this.apiKey = apiKey;
 	}

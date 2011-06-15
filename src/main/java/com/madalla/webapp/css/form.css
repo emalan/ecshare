@@ -67,7 +67,7 @@ form.floatDiv select {
  Input specific
 */
 
-form input[type="text"], form input[type="password"] {
+form input[type="text"], form input[type="password"], form input[type="file"] {
     border: 1px solid #8E8E8E;
     margin: 10px 0 0 0;
     color: #444444;

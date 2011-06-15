@@ -50,16 +50,17 @@ var Crossfade = Class.create({
 				return me.rndm(-1,1);
 			});
 		}
+		if(this.slides.length > 1) {
+			this.loadSlide(this.slides[0],function() {
+				me.transition.prepare(me);
+			});
+			this.loadSlide(this.slides[1]);
+			
 		
-		this.loadSlide(this.slides[0],function() {
-			me.transition.prepare(me);
-		});
-		this.loadSlide(this.slides[1]);
-		
-		if(this.options.autoStart) { 
-            setTimeout(this.start.bind(this),this.rndm((this.options.interval-1)*1000,(this.options.interval+1)*1000)); 
-        }
-		
+			if(this.options.autoStart) { 
+            	setTimeout(this.start.bind(this),this.rndm((this.options.interval-1)*1000,(this.options.interval+1)*1000)); 
+        	}
+		}
 		
 	},
 	start : function() {

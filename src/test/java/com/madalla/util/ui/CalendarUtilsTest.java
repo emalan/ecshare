@@ -17,16 +17,17 @@ import org.joda.time.DateTime;
 public class CalendarUtilsTest extends TestCase{
 	private Log log = LogFactory.getLog(this.getClass());
 
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 	}
 
 	public void testCreateMonthlyTree(){
 		TreeModel treeModel = CalendarUtils.createMonthlyTree("Root node", createList());
-		
+
 		MutableTreeNode node = (MutableTreeNode) treeModel.getRoot();
 		log.debug("root = "+node);
-		
+
 		for (Enumeration e = node.children(); e.hasMoreElements();) {
 			MutableTreeNode month = (MutableTreeNode)e.nextElement();
 			log.debug("Month = "+month);
@@ -41,7 +42,7 @@ public class CalendarUtilsTest extends TestCase{
 			MutableTreeNode currentMonth = (MutableTreeNode)e.nextElement();
 			assertNotNull(currentMonth);
 			assertEquals(3, currentMonth.getChildCount());
-			
+
 			MutableTreeNode twoMonthOld = (MutableTreeNode)e.nextElement();
 			assertNotNull(twoMonthOld);
 			assertEquals(2, twoMonthOld.getChildCount());
@@ -52,14 +53,14 @@ public class CalendarUtilsTest extends TestCase{
 
 		}
 	}
-	
+
 	private List<TreeEntry> createList(){
         List<TreeEntry> list = new ArrayList<TreeEntry>();
         DateTime dateTime = new DateTime();
         String description = "Description Test";
-        
+
         list.add(new TreeEntry(dateTime,"Current","Description test"));
-        
+
         list.add(new TreeEntry(dateTime.plusMonths(1),"future",description));
         list.add(new TreeEntry(dateTime.plusMonths(1).withDayOfMonth(1),"first of this month", description));
         list.add(new TreeEntry(dateTime.minusMonths(2),"2 month old", description));
@@ -68,21 +69,21 @@ public class CalendarUtilsTest extends TestCase{
         list.add(new TreeEntry(dateTime.minusMonths(3).withDayOfMonth(1),"3 month old - last day of month", description));
         list.add(new TreeEntry(dateTime.minusYears(1),"1 year old", description));
         list.add(new TreeEntry(dateTime.minusYears(3),"3 years old", description));
-        
+
         return list;
 	}
-	
+
 	public class TreeEntry implements ICalendarTreeInput{
 		DateTime date;
 		String description;
 		String title;
-		
+
 		public TreeEntry(DateTime date, String title, String description){
 			this.date = date;
 			this.title = title;
 			this.description = description;
 		}
-		
+
 		public String getDescription() {
 			return description;
 		}
@@ -92,7 +93,7 @@ public class CalendarUtilsTest extends TestCase{
 		public DateTime getDateTime() {
 			return date;
 		}
-		
+
 	}
 
 }

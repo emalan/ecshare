@@ -20,24 +20,24 @@ public class Profile extends ProfileData implements IProfile{
 	@Field private String email;
 	@Field private String birthday;
 	@Field private String utcOffset;
-	
+
 	public Profile(){
-		
+
 	}
-	
+
 	public Profile(String parentPath, String name){
 		id = parentPath + "/" + name;
 	}
-	
+
 	@Override
 	public String getId() {
 		return id;
 	}
-	
+
 	public void setId(String id){
 		this.id = id;
 	}
-	
+
 	@Override
 	public String getName() {
 		return StringUtils.substringAfterLast(getId(), "/");

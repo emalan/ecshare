@@ -1,7 +1,12 @@
 package com.madalla.webapp.components.image.exhibit;
 
-import org.apache.wicket.markup.html.panel.Panel;
+import java.util.List;
 
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+
+import com.madalla.bo.image.AlbumData;
+import com.madalla.bo.image.ImageData;
 import com.madalla.webapp.cms.ContentPanel;
 import com.madalla.webapp.components.image.album.AlbumPanel;
 
@@ -11,16 +16,16 @@ public class ExhibitPanel extends Panel {
     private static final String CONTENT = "content";
     private static final String NODE = "Exhibit";
 
-    public ExhibitPanel(String id) {
+    public ExhibitPanel(String id, AlbumData album, IModel<List<ImageData>> imagesModel) {
         super(id);
         add(new ContentPanel(CONTENT + "1", id+"first", NODE));
-        
-        
-        Panel album =  new AlbumPanel("nested", id);
-        Panel para2 = new ContentPanel(CONTENT + "2", id+"next", NODE, album);
+
+
+        Panel albumPanel =  new AlbumPanel("nested", album, imagesModel);
+        Panel para2 = new ContentPanel(CONTENT + "2", id+"next", NODE, albumPanel);
         add(para2);
     }
 
 
-    
+
 }

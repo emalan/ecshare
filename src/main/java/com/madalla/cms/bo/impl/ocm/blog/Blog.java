@@ -14,19 +14,21 @@ public class Blog extends BlogData{
 	@Field private String title;
 	@Field private String keywords;
 	@Field private String description;
-	
+
 	public Blog(){
-		
+
 	}
-	
+
 	public Blog(String parentPath, String blogName){
 		id = parentPath + "/" + blogName;
 	}
-	
+
+	@Override
 	public String getName(){
 	    return StringUtils.substringAfterLast(getId(), "/");
 	}
-	
+
+	@Override
 	public String getId() {
 		return id;
 	}
@@ -57,6 +59,6 @@ public class Blog extends BlogData{
 
 	public void setDescription(String description) {
 		this.description = description;
-		
+
 	}
 }

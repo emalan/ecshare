@@ -13,7 +13,7 @@ import org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter
 import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
 
 public class DynamicImageResourceConvertor implements AtomicTypeConverter {
-    
+
     public Value getValue(ValueFactory valueFactory, Object propValue)
     {
         if (propValue == null)
@@ -30,8 +30,8 @@ public class DynamicImageResourceConvertor implements AtomicTypeConverter {
     }
 
     /**
-     * 
-     * 
+     *
+     *
      */
     public Object getObject(Value value)
     {
@@ -64,11 +64,11 @@ public class DynamicImageResourceConvertor implements AtomicTypeConverter {
 
 
     /**
-     * 
-     * 
+     *
+     *
      */
     public String getXPathQueryValue(ValueFactory valueFactory,Object object)
-    {       
+    {
         throw new IncorrectAtomicTypeException("Binary cannot be used in queries");
     }
 }

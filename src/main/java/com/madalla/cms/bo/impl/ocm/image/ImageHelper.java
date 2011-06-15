@@ -15,8 +15,8 @@ import com.madalla.image.ImageUtilities;
 import com.madalla.image.LoggingImageObserver;
 
 /**
- * Utility class for processing Images 
- * 
+ * Utility class for processing Images
+ *
  * @author Eugene Malan
  *
  */
@@ -25,14 +25,14 @@ public class ImageHelper {
     private static final int MAX_HEIGHT = 600;
     private static final int THUMB_WIDTH = 90;
     private static final int THUMB_HEIGHT = 60;
-    
+
     private static final Log log = LogFactory.getLog(ImageHelper.class);
-	
+
 	private static final String IMAGE_FULL = "imageFull";
 	private static final String IMAGE_THUMB = "imageThumb";
 	private static final String WIDTH = "imageWidth";
 	private static final String HEIGHT = "imageHeight";
-	
+
 	public static void resizeAlbumImage(JcrTemplate template, final String path, final int width, final int height){
 	    template.execute(new JcrCallback(){
 
@@ -43,10 +43,10 @@ public class ImageHelper {
                 session.save();
                 return null;
             }
-	        
+
 	    });
 	}
-	
+
 	public static void saveImageFull(JcrTemplate template, final String path, final InputStream inputStream){
 	    log.info("saveImageFull - path="+path);
 	        template.execute(new JcrCallback(){
@@ -80,12 +80,12 @@ public class ImageHelper {
    private static InputStream scaleOriginalImage(InputStream inputStream, LoggingImageObserver observer){
         return ImageUtilities.scaleImageDownProportionately(inputStream, observer, MAX_WIDTH, MAX_HEIGHT);
     }
-    
+
     private static InputStream scaleThumbnailImage(InputStream inputStream){
         LoggingImageObserver observer = new LoggingImageObserver(log);
         return ImageUtilities.scaleImageDownProportionately(inputStream, observer, THUMB_WIDTH, THUMB_HEIGHT);
     }
-    
+
     private static InputStream scaleAlbumImage(InputStream inputStream, int width, int height){
         LoggingImageObserver observer = new LoggingImageObserver(log);
         return ImageUtilities.scaleImageDownProportionately(inputStream, observer, width, height );

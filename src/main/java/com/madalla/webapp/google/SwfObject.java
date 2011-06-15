@@ -14,7 +14,7 @@ public class SwfObject extends AbstractBehavior{
 	private final String url ;
 	private int height;
 	private int width;
-	
+
 	public SwfObject(String url, int width, int height){
 		this.url = url;
 		this.height = height;
@@ -35,7 +35,7 @@ public class SwfObject extends AbstractBehavior{
 	@Override
 	public void onRendered(Component component) {
 		Response response = component.getResponse();
-		
+
 		response.write(JavascriptUtils.SCRIPT_OPEN_TAG);
 		StringBuffer sb = new StringBuffer();
 		sb.append("var params = { allowScriptAccess: \"always\" };");

@@ -26,19 +26,19 @@ public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester 
 	private static final String NS = "ec:";
 	private static final String NS_APP = NS+"apps";
 	protected static final String NS_TEST = "test";
-	
+
 	Log log = LogFactory.getLog(this.getClass());
 	protected JcrTemplate jcrTemplate;
 	protected ObjectContentManager ocm;
-	
+
 	@Override
 	protected void onSetUp() throws Exception {
 		super.onSetUp();
-		
+
 		Session session = jcrTemplate.getSessionFactory().getSession();
 		ocm =  JcrOcmUtils.getObjectContentManager(session);
 	}
-	
+
 	protected Node getTestNode(Session session) throws RepositoryException{
 		Node root = session.getRootNode();
 		Node app = JcrUtils.getCreateNode(NS_APP, root);
@@ -56,7 +56,7 @@ public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester 
 		configLocations.add("classpath:com/madalla/db/dao/applicationContext-dao.xml");
 		return configLocations;
 	}
-	
+
 	public void setJcrTemplate(JcrTemplate jcrTemplate) {
 		this.jcrTemplate = jcrTemplate;
 	}
@@ -64,28 +64,28 @@ public abstract class AbstractContentOcmTest extends AbstractSpringWicketTester 
 	public JcrTemplate getJcrTemplate() {
 		return jcrTemplate;
 	}
-	
+
 	protected String getRandomName(String post){
 	    return RandomStringUtils.randomAlphabetic(5)+post;
 	}
-	
+
     protected String getCreateParentNode(final RepositoryType type){
         return (String) jcrTemplate.execute(new JcrCallback(){
 
             public Object doInJcr(Session session) throws IOException,
                     RepositoryException {
-                
+
                 Node parent = RepositoryInfo.getGroupNode(session, NS_TEST, type);
                 session.save();
                 return parent.getPath();
             }
-            
+
         });
     }
-    
+
     protected String getApplicationNode(){
     	return (String) jcrTemplate.execute(new JcrCallback(){
-    		
+
     		public Object doInJcr(Session session) throws IOException,
             RepositoryException {
     			Node node = RepositoryInfo.getApplicationNode(session);

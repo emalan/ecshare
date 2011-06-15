@@ -8,7 +8,7 @@ public class SecureCredentials implements ICredentialHolder{
 
 	private String password;
 	private String username;
-	
+
 	public String getPassword() {
 		return password;
 	}

@@ -10,5 +10,5 @@ package com.madalla.service;
 public interface IDataServiceProvider {
 
 	IDataService getRepositoryService();
-	
+
 }

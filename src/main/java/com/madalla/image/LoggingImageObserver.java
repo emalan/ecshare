@@ -18,7 +18,7 @@ public class LoggingImageObserver implements ImageObserver {
 	private final Log log;
 	private int width;
 	private int height;
-	
+
 	public LoggingImageObserver(Log log){
 		this.log = log;
 	}

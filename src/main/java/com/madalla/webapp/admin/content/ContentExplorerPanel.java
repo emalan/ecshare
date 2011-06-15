@@ -41,11 +41,11 @@ abstract class ContentExplorerPanel extends Panel {
 	public ContentExplorerPanel(String name, final ContentAdminPanel parentPanel, final boolean adminMode) {
 		super(name);
 		this.adminMode = adminMode;
-		
+
 		// Create Content Tree Model
 		IModel<TreeModel> treeModelModel = new GenericBaseModel<TreeModel>(){
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			public TreeModel getObject() {
 				if (treeModel == null){
@@ -62,7 +62,7 @@ abstract class ContentExplorerPanel extends Panel {
                 return treeModel;
             }
 		};
-		
+
 		tree = new LinkTree("ContentTree", treeModelModel) {
             private static final long serialVersionUID = 1L;
 
@@ -71,7 +71,8 @@ abstract class ContentExplorerPanel extends Panel {
                 JcrTreeNode jcrTreeNode = (JcrTreeNode) nodeModel.getObject();
                 return new Model(jcrTreeNode.renderNode());
             }
-			
+
+			@Override
 			protected Component newNodeComponent(String id, IModel<Object> model) {
 				return new LinkIconPanel(id, model, this) {
 
@@ -82,11 +83,11 @@ abstract class ContentExplorerPanel extends Panel {
                             AjaxRequestTarget target) {
                         super.onNodeLinkClicked(node, tree, target);
                         log.debug("onNodeLinkClicked - " + node);
-                        
+
                         currentNode = (AbstractTreeNode) node;
                         onNodeClicked(currentNode, target);
 				    }
-					
+
 					@Override
 					protected Component newContentComponent(String componentId, BaseTree tree, IModel<Object> model) {
 						return new Label(componentId, getNodeTextModel(model));
@@ -105,7 +106,7 @@ abstract class ContentExplorerPanel extends Panel {
 
 		};
 		add(tree);
-		
+
 	}
 
     private IRepositoryAdminService getContentAdminService() {
@@ -119,35 +120,35 @@ abstract class ContentExplorerPanel extends Panel {
 			treeModel = getContentAdminService().getSiteContent();
 		}
 	}
-	
+
 	boolean isCopyable(){
 		return currentNode.isLeaf();
 	}
-	
+
 	boolean isPasteable(){
 		return copiedNode != null && !currentNode.isLeaf();
 	}
-	
+
 	void copyNode(){
 		copiedNode = currentNode;
 	}
-	
+
 	void pasteNode(AjaxRequestTarget target){
 		//move node in actual repository
 		String srcPath = copiedNode.getObject().getPath();
 		String destPath = currentNode.getObject().getPath() + "/" + copiedNode.getObject().getName();
 		getContentAdminService().pasteNode(srcPath, destPath);
 		copiedNode.getObject().setPath(destPath);
-		
+
 		//update tree
 		JcrTreeModel treeModel = currentNode.getTreeModel();
 		treeModel.removeNodeFromParent(copiedNode);
 		treeModel.insertNodeInto(copiedNode, currentNode, currentNode.getChildCount());
-		
+
 		tree.updateTree(target);
 		copiedNode = null;
 	}
-	
+
 	public void deleteCurrentNode(AjaxRequestTarget target){
 		getContentAdminService().deleteNode(currentNode.getObject().getPath());
 		TreeNode parentNode = currentNode.getParent();
@@ -156,10 +157,10 @@ abstract class ContentExplorerPanel extends Panel {
 		tree.getTreeState().selectNode(parentNode, true);
 		tree.updateTree(target);
 	}
-	
+
 	/**
 	 * Parent will most likely want to handle Node Clicked Event
-	 * 
+	 *
 	 * @param currentNode
 	 * @param target
 	 */

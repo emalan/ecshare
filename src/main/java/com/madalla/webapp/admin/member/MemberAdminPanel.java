@@ -61,9 +61,9 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 	private static final int ITEMS_PAGE = 10;
 
 	private class SortableMemberProvider extends SortableDataProvider<MemberData>{
-		
+
 		private static final long serialVersionUID = 1L;
-		
+
 		public SortableMemberProvider() {
 			setSort("id", true);
 		}
@@ -86,7 +86,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 			}
 			return list.listIterator(first);
 		}
-		
+
 		private Comparator<MemberData> getFirstNameComparator(){
 			return new Comparator<MemberData>() {
 
@@ -95,7 +95,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 				}
 			};
 		}
-		
+
 		private Comparator<MemberData> getMemberIdComparator(){
 			return new Comparator<MemberData>() {
 
@@ -104,7 +104,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 				}
 			};
 		}
-		
+
 		private Comparator<MemberData> getCompanyNameComparator(){
 			return new Comparator<MemberData>() {
 
@@ -113,7 +113,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 				}
 			};
 		}
-		
+
 		private Comparator<MemberData> getLastNameComparator(){
 			return new Comparator<MemberData>() {
 
@@ -131,32 +131,34 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 			return new LoadableDetachableMemberModel(object);
 		}
 	}
-	
+
 	private class LoadableDetachableMemberModel extends LoadableDetachableModel<MemberData>{
 		private static final long serialVersionUID = 1L;
 		private String id;
-		
+
 		public LoadableDetachableMemberModel(MemberData member){
 			this(member.getId());
 		}
-		
+
 		public LoadableDetachableMemberModel(String id){
 			if (StringUtils.isEmpty(id)){
 				throw new IllegalArgumentException();
 			}
 			this.id = id;
 		}
-		
+
 		@Override
 		protected MemberData load() {
 			return getRepositoryService().getMemberById(id);
 		}
-		
-	    public int hashCode()	    {
+
+	    @Override
+		public int hashCode()	    {
 	        return id.hashCode();
 	    }
 
-	    public boolean equals(final Object obj) {
+	    @Override
+		public boolean equals(final Object obj) {
 	        if (obj == this) {
 	            return true;
 	        } else if (obj == null) {
@@ -168,13 +170,13 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 	        return false;
 	    }
 	}
-	
+
 	public abstract class MemberForm extends AjaxValidationForm<MemberData> {
 		private static final long serialVersionUID = 1L;
-		
+
 		public MemberForm(String id, final IModel<MemberData> model){
 			super(id, model);
-			
+
 			MarkupContainer memberDiv;
 			add(memberDiv = new WebMarkupContainer("memberDiv"));
 			FeedbackPanel memberIdFeedback;
@@ -193,10 +195,10 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 						}
 					}
 				}
-				
+
 			});
 			memberDiv.add(getHideShowBehavior(true));
-			
+
 			MarkupContainer signupDiv;
 			add(signupDiv = new WebMarkupContainer("signupDiv"));
 			signupDiv.add(getHideShowBehavior(false));
@@ -208,9 +210,9 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 					DateTime signupDate = model.getObject().getSignupDate() == null? null : model.getObject().getSignupDate().toDateTime(dateTimeZone);
 					return signupDate == null? "" : signupDate.toString("yyyy-MM-dd HH:mm");
 				}
-				
+
 			}));
-			
+
 			MarkupContainer authDateDiv;
 			add(authDateDiv = new WebMarkupContainer("authDateDiv"));
 			authDateDiv.add(getHideShowBehavior(false));
@@ -222,14 +224,14 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 					DateTime authorizedDate = model.getObject().getAuthorizedDate() == null ? null : model.getObject().getAuthorizedDate().toDateTime(dateTimeZone);
 					return authorizedDate == null? "" : authorizedDate.toString("yyyy-MM-dd HH:mm");
 				}
-				
+
 			}));
-			
+
 			MarkupContainer authDiv;
 			add(authDiv = new WebMarkupContainer("authDiv"));
 			authDiv.add(getHideShowBehavior(false));
 			authDiv.add(new CheckBox("authorized"));
-			
+
 			FeedbackPanel emailFeedback;
 			add(emailFeedback = new FeedbackPanel("emailFeedback"));
 			TextField<String> emailField = new AjaxValidationRequiredTextField("email", emailFeedback);
@@ -239,13 +241,13 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 			FeedbackPanel firstNameFeedback;
 			add(firstNameFeedback = new FeedbackPanel("firstNameFeedback"));
 			add(new AjaxValidationRequiredTextField("firstName", firstNameFeedback));
-			
+
 			FeedbackPanel lastNameFeedback;
 			add(lastNameFeedback = new FeedbackPanel("lastNameFeedback"));
 			add(new AjaxValidationRequiredTextField("lastName", lastNameFeedback));
-			
+
 			add(new TextField<String>("companyName"));
-			
+
 			final DateTextField subscriptionEnd;
 			add(subscriptionEnd = DateTextField.forDatePattern("subscriptionEnd", "yyyy-MM-dd"));
 			subscriptionEnd.add(new DatePicker(){
@@ -258,9 +260,9 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 					widgetProperties.put("close", Boolean.FALSE);
 				}
 			});
-			
+
 		}
-		
+
 		private IBehavior getHideShowBehavior(boolean show){
 			return new ClassAppenderBehavior(show){
 				private static final long serialVersionUID = 1L;
@@ -269,7 +271,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 				protected boolean setClass() {
 					return getModelObject().getKey() == 0;
 				}
-				
+
 			};
 		}
 
@@ -289,40 +291,40 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 			target.addComponent(MemberForm.this);
 			processSubmit(target);
 		}
-		
+
 		protected abstract void processSubmit(AjaxRequestTarget target);
-		
+
 	}
-	
+
 	private DateTimeZone dateTimeZone;
 	private final IModel<MemberData> current;
-	
+
 	public MemberAdminPanel(String id) {
 		super(id);
-		
+
 		dateTimeZone = getRepositoryService().getDateTimeZone();
-		
+
 		add(Css.CSS_ICON);
 		add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.PROTOTYPE));
-		
+
 		current = new CompoundPropertyModel<MemberData>(new Member());
-		
+
 		final MarkupContainer editFormDiv;
 		add(editFormDiv = new WebMarkupContainer("editFormDiv"));
 		editFormDiv.setOutputMarkupId(true);
-		
+
 		////////////////////////
 		// Reset Password Button
 		////////////////////////
 		final MarkupContainer reset;
 		editFormDiv.add(reset = new WebMarkupContainer("reset"));
 		reset.setOutputMarkupId(true);
-		
+
 		final Component resetFeedback = new ComponentFeedbackPanel("resetFeedback", reset).setOutputMarkupId(true);
 		reset.add(resetFeedback);
 		resetFeedback.setOutputMarkupId(true);
-		
-		
+
+
 		reset.add(new ClassAppenderBehavior(true){
 			private static final long serialVersionUID = 1L;
 
@@ -330,15 +332,15 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 			protected boolean setClass() {
 				return current.getObject().getKey() == 0? false : true;
 			}
-			
+
 		});
-		
+
 		//////////////////////////////////////
 		// animator to open/close profile form
 		//////////////////////////////////////
 		final Animator hideShowForm = new Animator().addSubjects(AnimatorSubject.slideOpen(editFormDiv.getMarkupId(), 42));
 		add(hideShowForm);
-		
+
 		final MarkupContainer container ;
 		add(container = new WebMarkupContainer("memberContainer"));
 		container.setOutputMarkupId(true);
@@ -350,12 +352,12 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 			@Override
 			protected void processSubmit(AjaxRequestTarget target) {
 				target.addComponent(container);
-				
+
 			}
-			
+
 		});
 		editForm.setOutputMarkupId(true);
-		
+
 		add(new IndicatingAjaxButton("newItem", editForm){
 
 			private static final long serialVersionUID = 1L;
@@ -370,12 +372,12 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 				target.addComponent(editForm);
 				target.addComponent(reset);
 			}
-			
+
 		}.setDefaultFormProcessing(false));
-		
+
 		final SortableMemberProvider provider = new SortableMemberProvider();
 		final DataView<MemberData> dataView = new DataView<MemberData>("memberSorting", provider){
-			
+
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -388,7 +390,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 				item.add(new Label("companyName", entry.getCompanyName()));
 				item.add(new Label("auth", entry.isAuthorized()? "Yes":"No"));
 				item.add(new Label("subscribed", entry.isMemberSubscribed()? "Yes":"No"));
-				
+
 				item.add(new AjaxLink<Void>("selectRow") {
                     private static final long serialVersionUID = 1L;
 
@@ -402,7 +404,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 						target.addComponent(resetFeedback);
 					}
                 });
-				
+
 				item.add(new IndicatingAjaxLink<String>("delete", new Model<String>("")){
 					private static final long serialVersionUID = 1L;
 
@@ -411,12 +413,13 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 						getRepositoryService().deleteMember(entry);
 						target.addComponent(container);
 					}
-					
+
 				});
-				
+
 				item.add(new AttributeModifier("class", true, new AbstractReadOnlyModel<Object>() {
 					private static final long serialVersionUID = 1L;
 
+					@Override
 					public Object getObject() {
                         String rt =  (item.getIndex() % 2 == 1) ? "even" : "odd";
                         if (entry.equals(current.getObject())){
@@ -425,16 +428,16 @@ public class MemberAdminPanel extends AbstractMemberPanel {
                         return rt;
                     }
                 }));
-				
+
 				item.setOutputMarkupId(true);
 			}
 
 		};
-		
+
 		container.add(dataView);
-		
+
 		dataView.setItemsPerPage(ITEMS_PAGE);
-		
+
 //		container.add(new OrderByBorder("orderById", "id", provider) {
 //			private static final long serialVersionUID = 1L;
 //
@@ -442,27 +445,30 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 //				dataView.setCurrentPage(0);
 //            }
 //        });
-		
+
 		container.add(new OrderByBorder("orderByLoginId", "loginId", provider) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected void onSortChanged() {
 				dataView.setCurrentPage(0);
 				current.setObject(new Member());
             }
         });
-		
+
 		container.add(new OrderByBorder("orderByCompanyName", "companyName", provider) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected void onSortChanged() {
 				dataView.setCurrentPage(0);
             }
         });
-		
+
 		container.add(new OrderByBorder("orderByFirstName", "firstName", provider) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected void onSortChanged() {
 				dataView.setCurrentPage(0);
 				current.setObject(new Member());
@@ -472,6 +478,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 		container.add(new OrderByBorder("orderByLastName", "lastName", provider) {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected void onSortChanged() {
 				dataView.setCurrentPage(0);
 				current.setObject(new Member());
@@ -479,7 +486,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
         });
 
 		add(new LabelPagingNavigator("navigator", dataView));
-		
+
 		final AjaxLink<String> resetLink = new IndicatingAjaxLink<String>("resetLink"){
 			private static final long serialVersionUID = 1L;
 
@@ -505,7 +512,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 
 		};
 		reset.add(resetLink);
-		
+
 	}
 
 	@Override
@@ -513,7 +520,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 		current.setObject(new Member());
 		super.onBeforeRender();
 	}
-	
-	
-	
+
+
+
 }

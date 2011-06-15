@@ -9,17 +9,17 @@ import org.apache.wicket.model.IModel;
 public abstract class ClassAppenderBehavior extends AbstractBehavior {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private final boolean display;
 	private final String className;
-	
+
 	/**
-	 * @param show 
+	 * @param show
 	 */
 	public ClassAppenderBehavior(final boolean show){
 		this(show,"no");
 	}
-	
+
 	public ClassAppenderBehavior(final boolean display, final String className){
 		this.display = display;
 		this.className = className;
@@ -34,13 +34,13 @@ public abstract class ClassAppenderBehavior extends AbstractBehavior {
 			public String getObject() {
 				if (setClass()){
 					return display ? "" : className;
-				} 
+				}
 				return display ? className : "";
 			}
-	    	
+
 	    };
 	}
-	
+
 	@Override
 	public void bind(Component component) {
 		component.add(new AttributeAppender("class", true ,getClassAtributeModel(), " "));

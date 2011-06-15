@@ -16,12 +16,12 @@ import com.madalla.wicket.javascript.JavascriptBuilder;
 public abstract class PopupLoginPanel extends Panel{
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private final Log log = LogFactory.getLog(this.getClass());
-	
+
 	public PopupLoginPanel(final String id) {
 		super(id);
-		
+
         final MarkupContainer popup = new WebMarkupContainer("loginPopup");
         popup.setOutputMarkupId(true);
         popup.add(new AbstractTransformerBehavior(){
@@ -35,7 +35,7 @@ public abstract class PopupLoginPanel extends Panel{
 				boolean loggedIn = session.isLoggedIn();
 				return output + getJavascriptTemplate(component.getMarkupId(), loggedIn);
 			}
-			
+
 			private String getJavascriptTemplate(String id, boolean loggedIn){
 				JavascriptBuilder builder = new JavascriptBuilder();
 				builder.addLine("var elem = document.getElementById('"+id+"');");
@@ -46,15 +46,16 @@ public abstract class PopupLoginPanel extends Panel{
 				}
 				return builder.buildScriptTagString();
 			}
-        	
+
         });
         add(popup);
-		
+
         //Sign in Panel
         final Panel signinPanel = new LoginPanel("signInPanel", new SecureCredentials()){
             private static final long serialVersionUID = 1L;
 
-            public boolean signIn(String username, String password) {
+            @Override
+			public boolean signIn(String username, String password) {
                 CmsSession session = (CmsSession) getSession();
                 return session.signIn(username, password);
             }
@@ -72,20 +73,20 @@ public abstract class PopupLoginPanel extends Panel{
         signinPanel.setOutputMarkupId(true);
         popup.add(signinPanel);
 	}
-	
+
 	/**
 	 * Overide this to do own after Login stuff
 	 */
 	public void afterLogonSuccess(){
-		
+
 	}
-	
+
 	/**
 	 * Ajax after login stuff
 	 * @param target
 	 */
 	public void afterLogonSuccess(AjaxRequestTarget target){
-		
+
 	}
 
 }

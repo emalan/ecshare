@@ -9,7 +9,7 @@ import com.madalla.webapp.blog.admin.BlogEntryPanel;
 @AuthorizeInstantiation("USER")
 public class BlogEntryPage extends AbstractAdminPage {
     private static final long serialVersionUID = 1L;
-    
+
     public BlogEntryPage(PageParameters parameters){
     	super(parameters);
     	String blogName = PageUtils.getPageParameter("0", parameters, "BlogEntryPage");
@@ -19,8 +19,8 @@ public class BlogEntryPage extends AbstractAdminPage {
     	} else {
     		add(new BlogEntryPanel("adminPanel", blogName, blogEntryId));
     	}
-    	
-    	
+
+
     }
-    
+
 }

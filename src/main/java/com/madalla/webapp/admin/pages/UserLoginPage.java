@@ -7,13 +7,13 @@ import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.webapp.user.UserLoginPanel;
 
 public class UserLoginPage extends AbstractAdminPage{
-	
+
 	public static final String[] PARAMETERS = {"username"};
 
 	public UserLoginPage(PageParameters parameters){
 		super(parameters);
 		String username = PageUtils.getPageParameter(PARAMETERS[0], parameters, "UserLoginPage", "");
-		
+
 		init(username);
 	}
 	private void init(String username){
@@ -27,13 +27,13 @@ public class UserLoginPage extends AbstractAdminPage{
         		if (authenticator.requiresSecureAuthentication(username)){
         			setResponsePage(new SecureLoginPage(username));
         		}
-        		
+
 
 			}
-			
+
 		});
-		
+
 	}
-	
+
 
 }

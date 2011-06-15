@@ -29,15 +29,17 @@ public class TestJcrTreeNode extends AbstractJcrTester {
 	private String site = "test" ;
 	final String CONTENT = "Testcontent";
 
+	@Override
 	protected List getTestConfigLocations() {
 		List configLocations = new ArrayList();
 		configLocations.add("classpath:com/madalla/cms/service/ocm/applicationContext-cms.xml");
 		return configLocations;
 	}
-	
+
+	@Override
 	public void onSetUp() throws Exception{
 		super.onSetUp();
-		
+
 		//remove all children
 		template.execute(new JcrCallback(){
 
@@ -52,28 +54,28 @@ public class TestJcrTreeNode extends AbstractJcrTester {
 					}
 					session.save();
 				}
-				
+
 				//add some data for test
 				{
 					Node siteNode = session.getRootNode().getNode(site);
 					Node one = siteNode.addNode("PageOne");
 					one.addNode("para1").setProperty(CONTENT, "Some text");
 					one.addNode("para2").setProperty(CONTENT, "Other text");
-					
+
 					Node two = siteNode.addNode("PageTwo");
 					two.addNode("para1");
-					
+
 					Node three = siteNode.addNode("PageThree");
-					
+
 					session.save();
 				}
 
 				return null;
 			}
-			
+
 		});
 	}
-	
+
 	public void testJcrTreeNode(){
 		template.execute(new JcrCallback(){
 
@@ -87,14 +89,14 @@ public class TestJcrTreeNode extends AbstractJcrTester {
                 JcrTreeNode treeNode = new JcrTreeNode(nodeModel);
                 JcrTreeModel jcrTreeModel = new JcrTreeModel(treeNode);
                 assertNotNull(treeNode);
-                
+
                 boolean leaf = treeNode.isLeaf();
                 int testCount = treeNode.getChildCount();
                 assertEquals(count, testCount);
-                
+
                 Enumeration e = treeNode.children();
                 assertNotNull(e);
-                
+
                 e.nextElement();
                 AbstractTreeNode abstractTreeNode = (AbstractTreeNode)e.nextElement();
                 int i = treeNode.getIndex(abstractTreeNode);
@@ -104,7 +106,7 @@ public class TestJcrTreeNode extends AbstractJcrTester {
                 treeNode.renderNode();
 			    return null;
 			}
-			
+
 		});
 	}
 

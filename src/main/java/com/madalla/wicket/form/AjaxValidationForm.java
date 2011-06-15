@@ -22,9 +22,9 @@ import org.apache.wicket.model.IModel;
  * </p>
  * <p>
  * The Form will give you an Ajax submit button as well as enabling inputs and feedbacks
- * to work better with Ajax. 
+ * to work better with Ajax.
  * </p>
- * 
+ *
  * @author Eugene Malan
  *
  * @param <T>
@@ -33,9 +33,9 @@ public abstract class AjaxValidationForm<T> extends Form<T>  {
 
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Log log = LogFactory.getLog(this.getClass());
-	
+
 	public AjaxValidationForm(String id) {
 		super(id);
 		init();
@@ -45,7 +45,7 @@ public abstract class AjaxValidationForm<T> extends Form<T>  {
 		super(id, model);
 		init();
 	}
-	
+
 	protected FeedbackPanel addFeedbackPanel(){
 		IFeedbackMessageFilter filter = new ContainerFeedbackMessageFilter(this);
 		final FeedbackPanel formFeedback = new FeedbackPanel("formFeedback", filter);
@@ -53,7 +53,7 @@ public abstract class AjaxValidationForm<T> extends Form<T>  {
 		add(formFeedback);
 		return formFeedback;
 	}
-	
+
 	private void init(){
 
 		final FeedbackPanel formFeedback = addFeedbackPanel();
@@ -63,27 +63,27 @@ public abstract class AjaxValidationForm<T> extends Form<T>  {
 
 			@Override
 			protected void onSubmit(final AjaxRequestTarget target, Form<?> form) {
-				
+
 				form.visitFormComponents(new FormComponent.IVisitor(){
 
 					public Object formComponent(IFormVisitorParticipant component) {
 						FormComponent<?> formComponent = (FormComponent<?>) component;
 						log.debug("onSubmit.formVisiter - " + formComponent + formComponent.getModelObject());
-						
+
 						if (formComponent.isValid() && formComponent.getOutputMarkupId()){
 							target.addComponent(formComponent);
 						}
 						return null;
 					}
-					
+
 				});
 
 				target.addComponent(formFeedback);
 				AjaxValidationForm.this.onSubmit(target);
-				
+
 			}
 
-			
+
 			@Override
 			protected void onError(final AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax onError called");
@@ -105,13 +105,13 @@ public abstract class AjaxValidationForm<T> extends Form<T>  {
 			}
 		});
 	}
-	
+
 	public void reset(final AjaxRequestTarget target){
-		
+
 		this.visitChildren(new Component.IVisitor<Component>(){
 
 			public Object component(Component component) {
-				
+
 				if (component instanceof FormComponent && component.getOutputMarkupId()) {
 					log.debug("reset.formVisiter - " + component);
 					FormComponent<?> formComponent = (FormComponent<?>) component;
@@ -126,15 +126,15 @@ public abstract class AjaxValidationForm<T> extends Form<T>  {
                 }
 				return null;
 			}
-			
+
 		});
-		
+
 		//target.prependJavascript("var f Wicket.$(" + getMarkupId() + "); if (f != null){ f.reset();}");
 	}
 
 	@Override
 	protected void onBeforeRender() {
-		
+
 		this.visitChildren(new Component.IVisitor<Component>(){
 
 			public Object component(Component component) {
@@ -149,15 +149,15 @@ public abstract class AjaxValidationForm<T> extends Form<T>  {
                 }
 				return null;
 			}
-			
+
 		});
 
 		super.onBeforeRender();
 	}
-	
-	protected abstract void onSubmit(final AjaxRequestTarget target) ;
-	
 
-	
+	protected abstract void onSubmit(final AjaxRequestTarget target) ;
+
+
+
 
 }

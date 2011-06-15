@@ -30,7 +30,7 @@ public class SlideshowPanel extends CmsPanel implements IHeaderContributor {
 
     private static final long serialVersionUID = 1L;
     //private WebMarkupContainer listContainer;
-    
+
     private class ImageListView extends ListView<ImageData> {
 
         private static final long serialVersionUID = 1L;
@@ -48,42 +48,43 @@ public class SlideshowPanel extends CmsPanel implements IHeaderContributor {
             DynamicImageResource fullsize = imageData.getImageFull();
             listItem.add(new Label("fullsize", new Model<String>(imageData.getMountUrl())));
         }
-        
+
     }
 
     public SlideshowPanel(String id, final String albumName) {
         super(id);
         add(ScriptUtils.SLIDESHOW_CSS);
         add(JavascriptPackageResource.getHeaderContribution(ScriptUtils.SLIDESHOW));
-        
+
         //link to album configure page
         Component adminPageLink;
         add(adminPageLink = new AdminPageLink("adminLink", AlbumAdminPage.class, new PageParameters("0="+albumName)));
         MetaDataRoleAuthorizationStrategy.authorize(adminPageLink, ENABLE, "ADMIN");
-        
+
         final AlbumData album = getRepositoryService().getAlbum(albumName);
-        
+
         // Add folder view
         ImageListView imageListView = new ImageListView("slideshowImage", new LoadableDetachableModel<List<ImageData>>() {
             private static final long serialVersionUID = 1L;
 
-            protected List<ImageData> load() {
+            @Override
+			protected List<ImageData> load() {
                 return getAlbumImages(album);
             }
-            
-            
+
+
         });
-        
+
         //listContainer = new WebMarkupContainer("slideshow");
         //listContainer.setOutputMarkupId(true);
         //add(listContainer);
-        
+
         add(imageListView);
-        
+
 
         //listContainer.add(new AttributeAppender("style", true, new Model<String>("display:none"), ";"));
     }
-    
+
 	private List<ImageData> getAlbumImages() {
         List<ImageData> images;
         try {
@@ -94,7 +95,7 @@ public class SlideshowPanel extends CmsPanel implements IHeaderContributor {
         }
         return images;
     }
-	
+
 	private List<ImageData> getAlbumImages(AlbumData albumData){
 	    List<ImageData> images;
 	    try {
@@ -105,10 +106,10 @@ public class SlideshowPanel extends CmsPanel implements IHeaderContributor {
 	    }
 	    return images;
 	}
-    
+
 	public void renderHead(IHeaderResponse response) {
 		//response.renderOnLoadJavascript("var slideshow = new TINY.slideshow('slideshow'); TINY.load();");
-		
+
 	}
 
 }

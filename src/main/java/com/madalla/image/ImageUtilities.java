@@ -19,12 +19,12 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Graphics Utilities class that provide default application methods.
- * 
+ *
  * @author Eugene Malan
  *
  */
 public class ImageUtilities {
-	
+
     private static Log log = LogFactory.getLog(ImageUtilities.class);
     @SuppressWarnings("unused")
 	private static final String JPEG = "image/jpeg";
@@ -32,23 +32,23 @@ public class ImageUtilities {
 	private static final String PNG = "image/png";
 	@SuppressWarnings("unused")
 	private static final String GIF = "image/gif";
-    
+
     public static void validateImageIO(){
         log.info("ImageIO validation. If there is no Success message below, then validation has failed.");
-        
+
         // This code crashes jvm in OpenJava !!!!
         //validateImageIO(JPEG);
         //validateImageIO(PNG);
         //validateImageIO(GIF);
-        
+
         log.info("ImageIO reader formats :" + getImageIOReaderFormats());
         log.info("ImageIO reader MIME Types :" + getImageIOReaderMIMETypes());
         log.info("ImageIO writer formats :" + getImageIOWriterFormats());
         log.info("ImageIO writer MIME Types :" + getImageIOWriterMIMETypes());
         log.info("Success!! ImageIO validation completed.");
-        
+
     }
-    
+
     @SuppressWarnings("unused")
 	private static void validateImageIO(String type){
         boolean found = false;
@@ -80,7 +80,7 @@ public class ImageUtilities {
         String[] formatNames = ImageIO.getWriterMIMETypes();
         return unique(formatNames);
     }
-    
+
     private static Collection<String> unique(String[] strings) {
         Set<String> set = new HashSet<String>();
         for (int i=0; i<strings.length; i++) {
@@ -90,25 +90,25 @@ public class ImageUtilities {
         return set;
     }
 
-    
+
     public static InputStream scaleImageDownProportionately(InputStream inputStream, LoggingImageObserver observer,
 			int maxWidth, int maxHeight){
-		
+
 	    log.debug("scaleImageDownProportionately - maxWidth="+maxWidth+" maxHeight="+maxHeight);
-		
+
 		ImageScaleProcessor processor = new ImageScaleProcessor(){
-			
+
 		    @Override
 			BufferedImage processScaling(BufferedImage bufferedImage, int targetWidth, int targetHeight,
 					ImageObserver imageObserver) {
 				return getScaledDownProportionalInstance(bufferedImage, targetWidth, targetHeight, imageObserver);
 			}
-			
+
 		};
-		
+
 		return processor.process(inputStream, observer, maxWidth, maxHeight);
 	}
-	
+
 
 	/**
 	 * @param bufferedImage
@@ -117,9 +117,9 @@ public class ImageUtilities {
 	 * @return BufferedImage that has been scaled to the specified height and width.
 	 */
 	@SuppressWarnings("unused")
-	private static BufferedImage getScaledInstance(BufferedImage bufferedImage, 
+	private static BufferedImage getScaledInstance(BufferedImage bufferedImage,
 			int targetWidth, int targetHeight,ImageObserver imageObserver){
-		return getScaledInstance(bufferedImage, targetWidth, targetHeight, 
+		return getScaledInstance(bufferedImage, targetWidth, targetHeight,
 				RenderingHints.VALUE_INTERPOLATION_BICUBIC, true, imageObserver);
 	}
 
@@ -129,25 +129,25 @@ public class ImageUtilities {
 	 * @param targetHeight
 	 * @return BufferedImage that has been scaled down proportionately to within the specified height and width.
 	 */
-	private static BufferedImage getScaledDownProportionalInstance(BufferedImage bufferedImage, 
+	private static BufferedImage getScaledDownProportionalInstance(BufferedImage bufferedImage,
 			int targetWidth, int targetHeight, ImageObserver imageObserver){
 		double actualWidth = bufferedImage.getWidth();
 		double actualHeight = bufferedImage.getHeight();
-		double scaleFactor = (double)targetWidth / actualWidth;
+		double scaleFactor = targetWidth / actualWidth;
 		if (actualHeight * scaleFactor > targetHeight){
 			scaleFactor = targetHeight / actualHeight;
 		}
 		if (scaleFactor >= 1){
 			imageObserver.imageUpdate(bufferedImage, 0, 0, 0, (int)actualWidth, (int)actualHeight);
 			return bufferedImage;
-		} 
+		}
 		int adjWidth = (int) (scaleFactor * actualWidth);
 		int adjHeight = (int) (scaleFactor * actualHeight);
 
-		return getScaledInstance(bufferedImage, adjWidth, adjHeight, 
+		return getScaledInstance(bufferedImage, adjWidth, adjHeight,
 				RenderingHints.VALUE_INTERPOLATION_BICUBIC, true, imageObserver);
 	}
-	
+
 	/**
 	 * @param bufferedImage
 	 * @param targetWidth
@@ -155,21 +155,21 @@ public class ImageUtilities {
 	 * @return BufferedImage that has been scaled down proportionatly to within the specified height and width.
 	 */
 	@SuppressWarnings("unused")
-	private static BufferedImage getScaledProportinalInstance(BufferedImage bufferedImage, 
+	private static BufferedImage getScaledProportinalInstance(BufferedImage bufferedImage,
 			int targetWidth, int targetHeight, ImageObserver imageObserver){
 		double actualWidth = bufferedImage.getWidth();
 		double actualHeight = bufferedImage.getHeight();
-		double scaleFactor = (double)targetWidth / actualWidth;
+		double scaleFactor = targetWidth / actualWidth;
 		if (actualHeight * scaleFactor > targetHeight){
 			scaleFactor = targetHeight / actualHeight;
 		}
 		int adjWidth = (int) (scaleFactor * actualWidth);
 		int adjHeight = (int) (scaleFactor * actualHeight);
-		
-		return getScaledInstance(bufferedImage, adjWidth, adjHeight, 
+
+		return getScaledInstance(bufferedImage, adjWidth, adjHeight,
 				RenderingHints.VALUE_INTERPOLATION_BICUBIC, true, imageObserver);
 	}
-	
+
 	/**
      * Convenience method that returns a scaled instance of the
      * provided {@code BufferedImage}.
@@ -219,7 +219,7 @@ public class ImageUtilities {
             w = targetWidth;
             h = targetHeight;
         }
-        
+
         do {
             if (higherQuality && w > targetWidth) {
                 w /= 2;

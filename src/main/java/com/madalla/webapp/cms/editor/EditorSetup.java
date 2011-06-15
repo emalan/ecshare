@@ -22,7 +22,7 @@ public class EditorSetup {
 			map.put("button2", "");
 			map.put("button3", "");
 		}
-		
+
 		return map;
 	}
 

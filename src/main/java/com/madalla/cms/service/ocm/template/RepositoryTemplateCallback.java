@@ -6,7 +6,7 @@ import com.madalla.bo.AbstractData;
 
 /**
  * Callback used by Template for doing type specific tasks.
- * 
+ *
  * @author Eugene Malan
  *
  */

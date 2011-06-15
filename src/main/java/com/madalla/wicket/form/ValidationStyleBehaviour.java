@@ -9,16 +9,16 @@ import org.apache.wicket.markup.html.form.FormComponent;
 
 /**
  * Behaviour that sets the components class value based on validation result.
- * 
+ *
  * Note: Make sure to setoutputMarkupId if using with Ajax Submit
- * 
+ *
  * @author Eugene Malan
  *
  */
 public class ValidationStyleBehaviour extends AbstractBehavior {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Log log = LogFactory.getLog(this.getClass());
 	private String validClass;
 	private String invalidClass;

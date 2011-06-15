@@ -36,12 +36,12 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 	public final static String SUPERADMIN = "SUPERADMIN";
 	public final static String SECURE = "SECURE";
 	public final static String CONTENTADMIN = "CONTENTADMIN";
-	
+
 	public static CmsSession get()
 	{
 		return (CmsSession)Session.get();
 	}
-	
+
 	private Roles roles;
 	private ISessionDataService repositoryService;
 	private IPageMapEntry lastSitePage;
@@ -67,22 +67,22 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 	};
 
 	private volatile FileUploadStore fileUploadInfo = new FileUploadStore();
-    
+
     public CmsSession(Request request) {
         super(request);
         this.repositoryService = new SessionDataService();
     }
-    
-    
+
+
 
     public boolean isCmsAdminMode() {
         return getRoles().hasRole(Roles.ADMIN);
     }
-    
+
     public boolean isSuperAdmin() {
     	return getRoles().hasRole(SUPERADMIN);
     }
-    
+
     @Override
 	public void signOut() {
 		super.signOut();
@@ -103,17 +103,17 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
     	repositoryService.setUser(user);
     	setRoles(user);
 	}
-	
+
 	public boolean authenticate(HashMap<String, String> profileData){
 		String identifier = profileData.get("identifier");
 		String providerName = profileData.get("providerName");
 		String preferredUsername = profileData.get("preferredUsername");
 		String displayName = profileData.get("displayName");
-		
+
 		ProfileData profile = getDataService().getProfile(identifier);
 
 		if (profile == null){
-			
+
 			IUser user = null;
 			String username = StringUtils.defaultIfEmpty(StringUtils.defaultIfEmpty(preferredUsername, displayName),
 					RandomStringUtils.randomAlphabetic(6));
@@ -121,10 +121,10 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 				String uniqueUsername = (i == 0) ? username : username + i;
 				user = getDataService().getNewUser(uniqueUsername, "");
 			}
-			
+
 			profile = getDataService().getNewUserProfile(user, providerName, identifier);
-		} 
-		
+		}
+
 		//update profile data
 		profile.setDisplayName(displayName);
 		profile.setPreferredUsername(preferredUsername);
@@ -132,7 +132,7 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 		profile.setBirthday(profileData.get("birthday"));
 		profile.setUtcOffset(profileData.get("utcOffset"));
 		getDataService().saveDataObject(profile);
-		
+
 		signIn(true);
 		UserData user = getDataService().getUser(profile);
 		if (StringUtils.isEmpty(user.getEmail())){
@@ -142,12 +142,12 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 			user.setDisplayName(profile.getDisplayName());
 		}
 		getDataService().saveDataObject(user);
-		
+
 		repositoryService.setUser(user);
     	setRoles(user);
 		return true;
 	}
-    
+
 	/* (non-Javadoc)
 	 * @see org.apache.wicket.authentication.AuthenticatedWebSession#authenticate(java.lang.String, java.lang.String)
 	 */
@@ -157,22 +157,22 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
         IPasswordAuthenticator authenticator = getDataService().getPasswordAuthenticator(userName);
         if (authenticator.authenticate(userName, password)){
         	UserData user = service.getUser(userName);
-        	
+
         	if (service.isUserSite(user)){
             	//store user data in session
             	repositoryService.setUser(user);
             	setRoles(user);
-                
+
                 return true;
         	}
         }
         return false;
 	}
-	
+
 	public void setUser(IUser user){
 		repositoryService.setUser(user);
 	}
-	
+
 	private void setRoles(UserData user){
 		StringBuilder sb = new StringBuilder(Roles.USER);
 		if ((user.getAdmin()==null) ? false : user.getAdmin()){
@@ -187,28 +187,28 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 		}
 
 		roles = new Roles(sb.toString());
-		
+
 	}
-	
+
 	@Override
 	public Roles getRoles() {
 		return roles == null? new Roles() : roles;
 	}
-	
+
 	// Member
-	
+
 	public MemberSession getMemberSession(){
 		return memberSession;
 	}
-	
+
 	private IDataService getDataService(){
 		return ((IDataServiceProvider) getApplication()).getRepositoryService();
 	}
-    
+
 	public ISessionDataService getRepositoryService() {
 		return repositoryService;
 	}
-	
+
 	public IFileUploadStatus getFileUploadStatus(String id) {
 		return fileUploadInfo.getFileUploadStatus(id);
 	}
@@ -220,7 +220,7 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 	public void setFileUploadComplete(String id) {
 		fileUploadInfo.setFileUploadComplete(id);
 	}
-	
+
 	public List<String> getFileUploadStatus(FileUploadGroup group) {
 		return fileUploadInfo.getFileUploadStatus(group);
 	}
@@ -244,7 +244,7 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 	public IPageMapEntry getLastSitePage() {
 		return lastSitePage ;
 	}
-	
+
 
 
 }

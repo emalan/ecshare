@@ -12,11 +12,11 @@ public class BlogHomePanel extends CmsPanel{
 
 	private static final long serialVersionUID = 1548972105193261539L;
 	private static Log log = LogFactory.getLog(BlogHomePanel.class);
-	
-	
+
+
 	public BlogHomePanel(String id, String blogName, String blogEntryId){
 		super(id);
-		
+
 		//Instantiation checks
 		if (!(getApplication() instanceof IDataServiceProvider)){
 			log.error("BlogHomePanel instanciation check failed on instanceof check.");

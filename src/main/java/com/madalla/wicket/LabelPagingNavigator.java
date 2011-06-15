@@ -11,14 +11,14 @@ import org.apache.wicket.markup.html.navigation.paging.IPageable;
 public class LabelPagingNavigator extends AjaxPagingNavigator{
 
 	private static final long serialVersionUID = 1L;
-	
+
 	public LabelPagingNavigator(String id, IPageable pageable) {
 		super(id, pageable);
-		
+
 	}
-	
-	
-	
+
+
+
 	@Override
 	protected void onComponentTag(ComponentTag tag) {
 		tag.append("class", "navigator"," ");
@@ -29,10 +29,10 @@ public class LabelPagingNavigator extends AjaxPagingNavigator{
 
 	@Override
 	protected Link<?> newPagingNavigationIncrementLink(final String id, IPageable pageable, int increment) {
-		
+
 		return new AjaxPagingNavigationIncrementLink(id, pageable, increment){
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
 				if (id.equals("prev")){
@@ -41,16 +41,16 @@ public class LabelPagingNavigator extends AjaxPagingNavigator{
 					replaceComponentTagBody(markupStream, openTag, getString("navigator.next"));
 				}
 			}
-			
+
 		};
 	}
 
 	@Override
 	protected Link<?> newPagingNavigationLink(final String id, IPageable pageable, int pageNumber) {
-		
+
 		return new AjaxPagingNavigationLink(id, pageable, pageNumber){
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
 				if (id.equals("first")){
@@ -58,7 +58,7 @@ public class LabelPagingNavigator extends AjaxPagingNavigator{
 				} else if (id.equals("last")){
 					replaceComponentTagBody(markupStream, openTag, getString("navigator.last"));
 				}
-				
+
 			}
 		};
 

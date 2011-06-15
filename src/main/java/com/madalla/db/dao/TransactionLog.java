@@ -12,7 +12,7 @@ public class TransactionLog extends LogData {
 	private String user;
 	private String type;
 	private String cmsId;
-	
+
 	@Override
 	public String getId() {
 		return String.valueOf(id);
@@ -21,7 +21,7 @@ public class TransactionLog extends LogData {
 	public void setId(int id){
 		this.id = id;
 	}
-	
+
 	@Override
 	public String getName() {
 		return dateTime.toString("yyyy-MM-dd'T'HHmmssSSS");

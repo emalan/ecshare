@@ -28,10 +28,10 @@ public class EditablePanel extends Panel {
 
 	/**
      * Panel constructor.
-     * 
+     *
      * @param id
      *            Markup id
-     * 
+     *
      * @param propertyModel
      *            Model of the text field
      */
@@ -46,6 +46,7 @@ public class EditablePanel extends Panel {
         {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected void onUpdate(AjaxRequestTarget target)
             {
             }

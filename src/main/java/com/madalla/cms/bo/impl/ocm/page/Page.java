@@ -12,25 +12,28 @@ public class Page extends PageData {
     private static final long serialVersionUID = 1L;
 
     @Field(path=true) private String id;
-    
+
     public Page(){
-        
+
     }
     public Page(String parentPath, String name){
         id = parentPath + "/" + name;
     }
-    public String getName(){
+    @Override
+	public String getName(){
         return StringUtils.substringAfterLast(getId(), "/");
     }
-    public String getId() {
+    @Override
+	public String getId() {
         return id;
     }
     public void setId(String id) {
         this.id = id;
     }
-    
+
+	@Override
 	public String toString() {
         return ReflectionToStringBuilder.toString(this).toString();
     }
-    
+
 }

@@ -14,5 +14,5 @@ public class AlbumAdminPage extends AbstractAdminPage  {
 		super(parameters);
 		add(new AlbumAdminPanel("adminPanel", parameters.getString("0")));
 	}
-	
+
 }

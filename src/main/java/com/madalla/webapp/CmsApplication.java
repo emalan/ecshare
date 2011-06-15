@@ -61,9 +61,9 @@ import com.madalla.webapp.user.UserProfilePanel;
 import com.madalla.wicket.I18NBookmarkablePageRequestTargetUrlCodingStrategy;
 
 /**
- * Abstract Wicket Application class that needs to extended to enable usage 
+ * Abstract Wicket Application class that needs to extended to enable usage
  * of the Content Panels.
- *  
+ *
  * @author Eugene Malan
  *
  */
@@ -74,14 +74,14 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 	public static final String PASSWORD = "password";
 	public static final String MEMBER_REGISTRATION = "memberRegistration";
 	public static final String MEMBER_PASSWORD = "memberPassword";
-	
+
     private IRepositoryAdminService repositoryAdminService;
     private IEmailSender emailSender;
     private IDataService dataService;
     private Rpx rpxService;
     private BuildInformation buildInformation;
     private String configType;
-    
+
     @Override
     protected void init() {
     	super.init();
@@ -108,66 +108,85 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     		throw new WicketRuntimeException("Rpx service is not configured Correctly. Configure values using the 'override.properties' file.");
     	}
         setupApplicationSpecificConfiguration();
-       
+
     }
-    
-    public Session newSession(Request request, Response response) {
+
+    @Override
+	public Session newSession(Request request, Response response) {
         return new CmsSession(request);
     }
-    
+
     private void setupApplicationSpecificConfiguration(){
     	//getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
     	setupPageMounts();
     	setupErrorHandling();
     	setupSecurity();
     }
-    
+
     protected void setupPageMounts(){
-    	
+
     	final List<SiteLanguage> langs = SiteLanguage.getAllLanguages();
-		
-		//mount pages for all supported language
-		for (SiteLanguage lang : langs){
-			try {
-				mount(new I18NBookmarkablePageRequestTargetUrlCodingStrategy(lang.locale, lang.getLanguageCode(), getHomePage()));
-			} catch (WicketRuntimeException e) {
-				log.error("Error while mounting home landing page for language:" + lang, e);
-			}
-    	}
-		
-		//mount application pages
-		for (Class<? extends Page> page : getAppPages()) {
-			final PageData pageData = getRepositoryService().getPage(page.getSimpleName());
-			
-			//mount rest of application pages
+
+		if (isSiteMultilingual()) {
+			// mount a home page for each language
 			for (SiteLanguage lang : langs) {
-				PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(lang.locale, pageData, false);
-				final String mountName = pageInfo.getMountName(pageData.getName());
 				try {
-					mount(new I18NBookmarkablePageRequestTargetUrlCodingStrategy(lang.locale, mountName, page));
+					mount(new I18NBookmarkablePageRequestTargetUrlCodingStrategy(lang.locale, lang.getLanguageCode(),
+							getHomePage()));
+				} catch (WicketRuntimeException e) {
+					log.error("Error while mounting home landing page for language:" + lang, e);
+				}
+			}
+
+			// mount application pages
+			for (Class<? extends Page> page : getAppPages()) {
+				final PageData pageData = getRepositoryService().getPage(page.getSimpleName());
+
+				// mount rest of application pages
+				for (SiteLanguage lang : langs) {
+					PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(lang.locale, pageData, false);
+					final String mountName = pageInfo.getMountName(pageData.getName());
+					try {
+						mount(new I18NBookmarkablePageRequestTargetUrlCodingStrategy(lang.locale, mountName, page));
+					} catch (WicketRuntimeException e) {
+						log.error("Error while mounting Application Page with name:" + mountName, e);
+					}
+				}
+
+			}
+
+		} else {
+			//Multi-lingual not supported
+			for (Class<? extends Page> page : getAppPages()) {
+				final PageData pageData = getRepositoryService().getPage(page.getSimpleName());
+				PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(SiteLanguage.BASE_LOCALE, pageData,
+						false);
+				final String mountName = StringUtils.isEmpty(pageInfo.getDisplayName())? pageData.getName():
+					StringUtils.deleteWhitespace(pageInfo.getDisplayName());
+				try {
+					mountBookmarkablePage(mountName, page);
 				} catch (WicketRuntimeException e) {
 					log.error("Error while mounting Application Page with name:" + mountName, e);
 				}
 			}
-
 		}
-    	
+
     	mountBookmarkablePage(PASSWORD, UserPasswordPage.class);
     	mountBookmarkablePage(SECURE_PASSWORD, SecurePasswordPage.class);
-    	
+
     	mountBookmarkablePage("control", MainAdminPage.class);
     	mount(new IndexedParamUrlCodingStrategy("admin/album", AlbumAdminPage.class));
-    	
+
     	mount(new RpxCallbackUrlHandler("openid", getHomePage(),getSignInPageClass(), rpxService){
 
 			@Override
 			protected boolean rpxLogin(HashMap<String, String> personalData) {
 				return ((CmsSession)Session.get()).authenticate(personalData);
 			}
-    		
+
     	});
     	mount(new MixedParamHybridUrlCodingStrategy("login", UserLoginPage.class, UserLoginPage.PARAMETERS));
-    	
+
     	if (hasMemberService()){
     		if (getMemberPasswordPage() == null) {
         		log.fatal("Member Service not configured Correctly. Member Service Password Page is null.");
@@ -180,16 +199,16 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     		mountBookmarkablePage(MEMBER_PASSWORD, getMemberPasswordPage());
     		mountBookmarkablePage(MEMBER_REGISTRATION, getMemberRegistrationPage());
     	}
-    	
+
     	//mount images
     	for(AlbumData album : getRepositoryService().getAlbums()){
     		for (ImageData image : getRepositoryService().getAlbumImages(album)){
     			mountImage(image);
     		}
     	}
-    	
+
     }
-    
+
     /* (non-Javadoc)
      * @see org.apache.wicket.protocol.http.WebApplication#newRequestCycleProcessor()
      * Disable https when in development mode or when the application has no security certificate
@@ -217,26 +236,27 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 					return super.checkSecureOutgoing(target);
 				}
 			}
-			
-			
-        	
+
+
+
         };
     }
-    
-    public Class<? extends WebPage> getMemberRegistrationPage(){
+
+    @Override
+	public Class<? extends WebPage> getMemberRegistrationPage(){
     	return null;
     }
-    
+
     public Class<? extends WebPage> getMemberPasswordPage(){
     	return null;
     }
-    
+
 	protected void mountImage(ImageData image) {
     	getSharedResources().add(image.getResourceReference(), image.getImageFull());
 		mountSharedResource("/" + image.getMountUrl(), Application.class.getName() + "/" +image.getResourceReference());
     }
     private void setupErrorHandling(){
-    	
+
     	if (DEPLOYMENT.equalsIgnoreCase(getConfigurationType())) {
         	//TODO create page for access denied exceptions
     		//TODO figure out why we get unexpected exception instead of access denied for generalAdminPage
@@ -246,7 +266,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
         	getExceptionSettings().setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
 		}
     }
-    
+
     protected void setupSecurity(){
     	MetaDataRoleAuthorizationStrategy.authorize(UserProfilePanel.class, "USER");
     	MetaDataRoleAuthorizationStrategy.authorize(SiteAdminPanel.class, "USER");
@@ -260,12 +280,12 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     	MetaDataRoleAuthorizationStrategy.authorize(ContentEntryPanel.class, "USER");
     	MetaDataRoleAuthorizationStrategy.authorize(TranslatePanel.class, "USER");
     }
-    
+
 	@Override
 	protected Class<? extends WebPage> getSignInPageClass() {
 		return UserLoginPage.class;
 	}
-	
+
 	protected Class<? extends WebPage> getApplicationErrorPage(){
 		return AdminErrorPage.class;
 	}
@@ -274,7 +294,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 	protected Class<? extends AuthenticatedWebSession> getWebSessionClass() {
 		return CmsSession.class;
 	}
-	
+
     @Override
 	public boolean isMemberAuthorized() {
 		return CmsSession.get().getMemberSession().isSignedIn();
@@ -291,25 +311,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     		return configType;
     	}
 	}
-    
-    /**
-     * Supplies a Collection with Pages for the menu
-     * 
-     * @return List of Pages used in the menu OR Collections.emptyList() if no menu
-     */
-    final public Collection<Class<? extends Page>> getPageMenuList(){
-    	Collection<Class<? extends Page>> pages = new LinkedHashSet<Class<? extends Page>>();
-    	addPagesForMenu(pages);
-    	return pages;
-    }
-    
-    /**
-     * Implementing classes should add the menu pages to the supplied Collection so that they
-     * can be displayed on the menu
-     */
-    protected abstract void addPagesForMenu(Collection<Class<? extends Page>> pages);
-    
-    
+
     /**
      * @return all application pages, make sure to include home page
      */
@@ -318,17 +320,35 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     	addAppPages(pages);
     	return pages;
     }
-    
+
     protected abstract void addAppPages(Collection<Class<? extends Page>> pages);
-    
+
+    /**
+     * Supplies a Collection with Pages for the menu
+     *
+     * @return List of Pages used in the menu OR Collections.emptyList() if no menu
+     */
+    final public Collection<Class<? extends Page>> getPageMenuList(){
+    	Collection<Class<? extends Page>> pages = new LinkedHashSet<Class<? extends Page>>();
+    	addPagesForMenu(pages);
+    	return pages;
+    }
+
+    /**
+     * Implementing classes should add the menu pages to the supplied Collection so that they
+     * can be displayed on the menu
+     */
+    protected abstract void addPagesForMenu(Collection<Class<? extends Page>> pages);
     public boolean hasRpxService(){
     	return false;
     }
-    
+
+    protected abstract boolean isSiteMultilingual();
+
     public boolean hasMemberService(){
     	return false;
     }
-    
+
     public IEmailSender getEmailSender() {
         return emailSender;
     }
@@ -336,7 +356,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     public void setEmailSender(IEmailSender emailSender) {
         this.emailSender = emailSender;
     }
-    
+
     public IRepositoryAdminService getRepositoryAdminService() {
 		return repositoryAdminService;
 	}
@@ -345,11 +365,11 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 			IRepositoryAdminService repositoryAdminService) {
 		this.repositoryAdminService = repositoryAdminService;
 	}
-	
+
 	public IDataService getRepositoryService() {
 		return dataService;
 	}
-	
+
 	public void setRepositoryService(IDataService dataService){
 		this.dataService = dataService;
 	}
@@ -357,7 +377,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 	public void setBuildInformation(BuildInformation buildInformation) {
 		this.buildInformation = buildInformation;
 	}
-	
+
 	public BuildInformation getBuildInformation(){
 		return buildInformation;
 	}

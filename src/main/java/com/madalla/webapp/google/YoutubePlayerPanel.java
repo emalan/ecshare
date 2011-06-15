@@ -20,10 +20,10 @@ import com.madalla.wicket.configure.AjaxConfigureIcon;
 public class YoutubePlayerPanel extends CmsPanel {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param id wicket id
 	 * @param page Page Name
 	 */
@@ -38,7 +38,7 @@ public class YoutubePlayerPanel extends CmsPanel {
 		WebMarkupContainer playerDiv = new WebMarkupContainer("playerDiv");
 		playerDiv.setOutputMarkupId(true);
 		add(playerDiv);
-		
+
 		Form<VideoPlayerData> form = new Form<VideoPlayerData>("videoForm", new CompoundPropertyModel<VideoPlayerData>(videoData));
 		playerDiv.add(form);
 		form.setOutputMarkupId(true);
@@ -51,27 +51,27 @@ public class YoutubePlayerPanel extends CmsPanel {
 				saveVideo(videoData);
 				//AjaxConfigureIcon.hide(target, "formDiv");
 			}
-			
+
 		});
 		form.add(new RequiredTextField<String>("videoId"));
 		form.add(new RequiredTextField<Integer>("height").add(new RangeValidator<Integer>(10,700)));
 		form.add(new RequiredTextField<Integer>("width").add(new RangeValidator<Integer>(10,900)));
-		
+
 		if (((CmsSession)getSession()).isLoggedIn()){
-			add(new AjaxConfigureIcon("configureIcon", playerDiv, 14));	
+			add(new AjaxConfigureIcon("configureIcon", playerDiv, 14));
 		} else {
 			add(new Label("configureIcon"));
 		}
-		
+
 	}
 
 	private VideoPlayerData getVideo(String id, String page){
 		PageData pageData = getRepositoryService().getPage(page);
 		return getRepositoryService().getVideoPlayerData(pageData, id);
 	}
-	
+
 	private void saveVideo(VideoPlayerData data){
 		getRepositoryService().saveVideoPlayerData(data);
 	}
-	
+
 }

@@ -29,7 +29,7 @@ public class FileUploadTest extends TestCase {
 			IFileUploadStatus status = store.getFileUploadStatus(upload);
 			assertNotNull(status);
 			assertTrue(status.isUploading());
-			
+
 			store.setFileUploadComplete(upload);
 			status = store.getFileUploadStatus(upload);
 			assertNull(status);
@@ -43,21 +43,21 @@ public class FileUploadTest extends TestCase {
 			IFileUploadStatus status = store.getFileUploadStatus(upload);
 			assertNotNull(status);
 			assertTrue(status.isUploading());
-			
+
 			List<String> list = store.getFileUploadStatus(group);
 			assertTrue(list.size() == 1);
-			
+
 			list = store.getFileUploadStatus(new FileUploadGroup("none"));
 			assertTrue(list.isEmpty());
-			
+
 			store.setFileUploadStatus("upload3", group, new FileUploadStatus());
 			list = store.getFileUploadStatus(group);
 			assertTrue(list.size() == 2);
-			
+
 			store.setFileUploadStatus("upload3", group, new FileUploadStatus());
 			list = store.getFileUploadStatus(group);
 			assertTrue(list.size() == 2);
-			
+
 			store.setFileUploadComplete(upload);
 			status = store.getFileUploadStatus(upload);
 			assertNull(status);

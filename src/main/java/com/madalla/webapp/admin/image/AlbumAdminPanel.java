@@ -36,12 +36,12 @@ import com.madalla.wicket.DroppableAjaxBehaviour;
 import com.madalla.wicket.form.AjaxValidationSubmitButton;
 
 public class AlbumAdminPanel extends CmsPanel{
-	
+
 	private class ImageListView extends ListView<ImageData>{
 		private static final long serialVersionUID = 1L;
-		
+
 		private boolean draggable;
-		
+
 		public ImageListView(String id, final IModel<List<ImageData>> files, boolean draggable) {
 			super(id, files);
 			this.draggable = draggable;
@@ -62,7 +62,7 @@ public class AlbumAdminPanel extends CmsPanel{
             	listItem.add(new Label("delete").setVisible(false));
 
             } else {
-            	
+
                	listItem.add(new IndicatingAjaxFallbackLink<Object>("delete") {
     				private static final long serialVersionUID = 1L;
 
@@ -77,24 +77,24 @@ public class AlbumAdminPanel extends CmsPanel{
     			listItem.setOutputMarkupId(true);
 
             }
-            
+
 		}
-		
+
 	}
-	
+
 	private class AlbumForm extends Form<AlbumData>{
 		private static final long serialVersionUID = 1L;
 
 		public AlbumForm(String id, IModel<AlbumData> model) {
 			super(id, model);
-			
+
 			add(new TextField<String>("title").setOutputMarkupId(true));
-			
+
 			Component interval = new RequiredTextField<Integer>("interval").add(new RangeValidator<Integer>(1,30));
 			interval.setOutputMarkupId(true);
 			add(new ComponentFeedbackPanel("intervalFeedback",interval).setOutputMarkupId(true));
 			add(interval);
-			
+
 			Component height = new RequiredTextField<Integer>("height").add(new RangeValidator<Integer>(50,700));
 			height.setOutputMarkupId(true);
 			add(new ComponentFeedbackPanel("heightFeedback", height).setOutputMarkupId(true));
@@ -104,40 +104,41 @@ public class AlbumAdminPanel extends CmsPanel{
 			width.setOutputMarkupId(true);
 			add(new ComponentFeedbackPanel("widthFeedback", width).setOutputMarkupId(true));
 			add(width);
-			
+
 		}
-		
+
 	}
 
 	private static final long serialVersionUID = 1L;
 	private static final Log log = LogFactory.getLog(AlbumAdminPanel.class);
-	
+
 	public AlbumAdminPanel(String id, String albumName) {
 		super(id);
-		
+
 		add(Css.CSS_FORM);
 		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
 		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.EFFECTS));
 		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.DRAGDROP));
-		
+
         final AlbumData album = getRepositoryService().getAlbum(albumName);
-        
+
         // Available Images Display
         final WebMarkupContainer availableContainer = new WebMarkupContainer("availableContainer");
         availableContainer.setOutputMarkupId(true);
         add(availableContainer);
-        
+
         final ImageListView availableDisplay = new ImageListView("availableDisplay", new LoadableDetachableModel<List<ImageData>>() {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected List<ImageData> load() {
 			    log.info("ImageListView - load images.");
                 return getAvailableImages();
             }
-			
+
         }, true);
         availableContainer.add(availableDisplay);
-        
+
         // Album Display
         final WebMarkupContainer albumContainer = new WebMarkupContainer("albumContainer");
         albumContainer.setOutputMarkupId(true);
@@ -147,8 +148,8 @@ public class AlbumAdminPanel extends CmsPanel{
         albumContainer.add(displayForm);
         final Component displayFeedback = new ComponentFeedbackPanel("displayFeedback", displayForm).setOutputMarkupId(true);
         displayForm.add(displayFeedback);
-        
-        
+
+
         final ImageListView albumDisplay = new ImageListView("albumDisplay", new LoadableDetachableModel<List<ImageData>>() {
 			private static final long serialVersionUID = 1L;
 
@@ -156,14 +157,15 @@ public class AlbumAdminPanel extends CmsPanel{
 			protected List<ImageData> load() {
 				return getAlbumImages(album);
 			}
-			
+
 		}, false);
         displayForm.add(albumDisplay);
-        
+
 		// Drop functionality
 		final AbstractDefaultAjaxBehavior dropCallback = new AbstractDefaultAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected void respond(final AjaxRequestTarget target) {
 				String dragId = DraggableAjaxBehaviour.getDraggablesId(getRequest());
 				log.debug("something dropped. arg="+dragId);
@@ -175,7 +177,7 @@ public class AlbumAdminPanel extends CmsPanel{
 		};
 		albumContainer.add(new DroppableAjaxBehaviour(dropCallback));
 		albumContainer.add(dropCallback);
-		
+
 		// Album Form
 		final Form<AlbumData> albumForm = new AlbumForm("albumForm", new CompoundPropertyModel<AlbumData>(album));
 		albumContainer.add(albumForm);
@@ -195,7 +197,7 @@ public class AlbumAdminPanel extends CmsPanel{
 		albumForm.add(submitLink);
 		albumForm.add(new ComponentFeedbackPanel("albumFeedback", albumForm).setOutputMarkupId(true));
 	}
-	
+
 	private List<ImageData> getAvailableImages() {
         List<ImageData> images;
         try {
@@ -206,7 +208,7 @@ public class AlbumAdminPanel extends CmsPanel{
         }
         return images;
     }
-	
+
 	private List<ImageData> getAlbumImages(AlbumData album) {
         List<ImageData> images;
         try {
@@ -217,5 +219,5 @@ public class AlbumAdminPanel extends CmsPanel{
         }
         return images;
     }
-	
+
 }

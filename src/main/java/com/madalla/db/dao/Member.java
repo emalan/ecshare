@@ -20,15 +20,18 @@ public class Member extends MemberData {
 	private DateTime authorizedDate;
 	private Date subscriptionEnd;
 
+	@Override
 	public int getKey(){
 		return id;
 	}
+	@Override
 	public String getId() {
 		return String.valueOf(id);
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
+	@Override
 	public String getName() {
 		return memberId;
 	}

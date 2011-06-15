@@ -16,13 +16,13 @@ public class JavascriptFunction {
 	{
 		return function + "}";
 	}
-	
+
 	public JavascriptFunction addLine(String line)
 	{
 		function = function + line;
 		return this;
 	}
-	
+
 	/**
 	 * @param behavior
 	 * @param args  "'&amp;dragId=' + dragId"

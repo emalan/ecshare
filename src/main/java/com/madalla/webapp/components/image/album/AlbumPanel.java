@@ -1,196 +1,92 @@
 package com.madalla.webapp.components.image.album;
 
-import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
-import static com.madalla.webapp.scripts.utility.ScriptUtils.CROSSFADE;
-import static com.madalla.webapp.scripts.utility.ScriptUtils.FAST_INIT;
-
-import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.ResourceReference;
-import org.apache.wicket.ajax.AjaxEventBehavior;
-import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.RequestCycle;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.request.target.basic.RedirectRequestTarget;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.ImageData;
-import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.admin.pages.AdminPageLink;
 import com.madalla.webapp.admin.pages.AlbumAdminPage;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.scripts.JavascriptResources;
-import com.madalla.webapp.scripts.utility.ScriptUtils;
 
-public class AlbumPanel extends CmsPanel {
+public class AlbumPanel extends Panel {
 	private static final long serialVersionUID = 1L;
-	
-    private static final Log log = LogFactory.getLog(AlbumPanel.class);
-    
-    public AlbumPanel(String id, String albumName) {
-    	this(id, albumName, false);
+
+    public AlbumPanel(String id, AlbumData album, IModel<List<ImageData>> imagesModel) {
+    	this(id, album, imagesModel, false);
     }
 
-	public AlbumPanel(String id, final String albumName, final boolean navigation) {
+	public AlbumPanel(String id, final AlbumData album, final IModel<List<ImageData>> imagesModel, final boolean navigation) {
 		super(id);
-
+		
         add(Css.CSS_IMAGE);
 
         //link to album configure page
         Component adminPageLink;
-        add(adminPageLink = new AdminPageLink("adminLink", AlbumAdminPage.class, new PageParameters("0="+albumName)));
+        add(adminPageLink = new AdminPageLink("adminLink", AlbumAdminPage.class, new PageParameters("0="+album.getName())));
         MetaDataRoleAuthorizationStrategy.authorize(adminPageLink, ENABLE, "ADMIN");
-        
-        final AlbumData album = getRepositoryService().getAlbum(albumName);
-        final List<ImageData> images = getAlbumImages(album);
 
-        final WebMarkupContainer imageListContainer  = new WebMarkupContainer("images");
-        imageListContainer.setOutputMarkupId(true);
-        add(imageListContainer);
+        final AjaxLazyLoadPanel imageListContainer  = new AjaxLazyLoadPanel("imagesPanel"){
+			private static final long serialVersionUID = 1L;
 
-        if (images.size() <= 1) {
-        	//one or less images scenario
-        	
-        	WebMarkupContainer list = new WebMarkupContainer("image-list");
-        	imageListContainer.add(list);
-        	
-        	if (images.isEmpty()){
-        		ResourceReference emptyImage = new ResourceReference(this.getClass(), "images.png");
-        		list.add(createImageWrapper(album).add(new Image("id", emptyImage ){
+			@Override
+			public Component getLazyLoadComponent(String markupId) {
+				return new AlbumImagesPanel(markupId, album, imagesModel, false);
+			}
+
+			@Override
+			public Component getLoadingComponent(String markupId) {
+				MarkupContainer fragment = new Fragment(markupId, "loading", AlbumPanel.this) ;
+				
+				MarkupContainer container;
+				fragment.add(container = new WebMarkupContainer("container"){
 					private static final long serialVersionUID = 1L;
 
 					@Override
-        			protected void onComponentTag(ComponentTag tag) {
-        				super.onComponentTag(tag);
-        				tag.put("height", album.getHeight());
-        				tag.put("width", album.getWidth());
-        				tag.put("title", getString("label.image.empty"));
-        			}
-					
-        		}));
-        	} else {
-        		final ImageData imageData = images.get(0);
-        		list.add(createImage(album, imageData));
-        	}
-        	
-        } else {
-    		add(JavascriptPackageResource.getHeaderContribution(PROTOTYPE));
-    		add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.ANIMATOR));
-            add(JavascriptPackageResource.getHeaderContribution(FAST_INIT));
-            
-        	if (navigation) {
-        		add(JavascriptPackageResource.getHeaderContribution(CROSSFADE));
-        		add(JavascriptPackageResource.getHeaderContribution(ScriptUtils.BANNER));
-        		add(ScriptUtils.BANNER_CSS);
-        	} else {
-        		add(JavascriptPackageResource.getHeaderContribution(CROSSFADE));
-        		add(ScriptUtils.CROSSFADE_CSS);
-        	}
-        
-        	imageListContainer.add(new ListView<ImageData>("image-list", images) {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void populateItem(ListItem<ImageData> item) {
-					final ImageData imageData = item.getModelObject();
-					if (imageData.getImageFull() != null) {
-						item.add(createImage(album, imageData));
-					} else {
-						log.warn("Could not get Image from ImageData." + imageData);
+					protected void onComponentTag(ComponentTag tag) {
+						super.onComponentTag(tag);
+						tag.put("style", "height: " + (album.getHeight() + 15) + "px; width: " + (album.getWidth() + 15)
+								+ "px;");
 					}
+				});
+				container.add(new Label("image", "<img alt=\"Loading...\" class=\"bannerImage\"" + 
+						" src=\"" + RequestCycle.get().urlFor(AbstractDefaultAjaxBehavior.INDICATOR) + "\"/>"){
+					
+					private static final long serialVersionUID = 1L;
 
-				}
-
-				@Override
-				protected void onComponentTag(ComponentTag tag) {
-					super.onComponentTag(tag);
-				}
+					@Override
+					protected void onComponentTag(ComponentTag tag) {
+						super.onComponentTag(tag);
+						tag.put("style", "height: " + album.getHeight() + "px; width: " + album.getWidth()
+								+ "px;");
+					}
+					
+				}.setEscapeModelStrings(false));
 				
-				@Override
-				public void renderHead(HtmlHeaderContainer container) {
-					int interval = album.getInterval() ;
-			        int width = album.getWidth() ;
-			        int height = album.getHeight() ;
-			        String params = "{interval:"+interval+", height:"+height+", width: "+ width+"}";
-			        
-			        if (navigation) {
-			        	container.getHeaderResponse().renderOnLoadJavascript("new Banner($('"+ imageListContainer.getMarkupId() +"')," + params + ")");
-			        } else {
-			        	container.getHeaderResponse().renderOnLoadJavascript("new Crossfade($('"+ imageListContainer.getMarkupId() +"')," + params + ")");
-			        }
-					super.renderHead(container);
-				}
-
-
-			});
-        
-        }
-	}
-	
-	private WebMarkupContainer createImageWrapper(final AlbumData album){
-		return new WebMarkupContainer("imageWrapper"){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onComponentTag(ComponentTag tag) {
-				super.onComponentTag(tag);
-				tag.put("style", "height: "+ (album.getHeight()+ 15)+"px; width: "+ (album.getWidth()+15)+"px;");
+				return fragment;
 			}
-    	};
+        	
+			
+        };
+        imageListContainer.setOutputMarkupId(true);
+        add(imageListContainer);
+
+
 	}
 
-	private Component createImage(final AlbumData album, final ImageData imageData){
-		WebMarkupContainer imageWrapper = createImageWrapper(album);
-		
-    	Image image = new Image("id", imageData.getImageFull()) {
-			private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void onComponentTag(ComponentTag tag) {
-				super.onComponentTag(tag);
-				tag.put("height", album.getHeight());
-				tag.put("width", album.getWidth());
-				tag.put("title", imageData.getTitle());
-			}
-
-		};
-
-		if (StringUtils.isNotEmpty(imageData.getUrl())) {
-			image.add(new AjaxEventBehavior("onclick") {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onEvent(AjaxRequestTarget target) {
-					getRequestCycle().setRequestTarget(new RedirectRequestTarget(imageData.getUrl()));
-				}
-			});
-		}
-		imageWrapper.add(image);
-		
-		return imageWrapper;
-	}
-	
-	private List<ImageData> getAlbumImages(AlbumData albumData){
-	    List<ImageData> images;
-	    try {
-	        images = getRepositoryService().getAlbumImages(albumData);
-	    }catch (Exception e){
-	        images = Collections.emptyList();
-	        error("Images corrupt");
-	    }
-	    return images;
-	}
 
 }

@@ -19,19 +19,20 @@ public class Site extends SiteData{
 	@Field private String url;
 	@Field private Boolean securityCertificate;
 	@Field private String timeZone;
-	
+
 	public Site(){
-		
+
 	}
-	
+
 	public Site(String parentPath, String name){
 		id = parentPath + "/" + name;
 	}
-	
+
+	@Override
 	public String getName(){
 	    return StringUtils.substringAfterLast(getId(), "/");
 	}
-	
+
 	public void setId(String id){
 		this.id = id;
 	}
@@ -76,7 +77,7 @@ public class Site extends SiteData{
 	public String getUrl() {
 		return url;
 	}
-	
+
 	public void setUrl(String url){
 		this.url = url;
 	}

@@ -28,7 +28,7 @@ import com.madalla.wicket.animation.AnimationOpenSlide;
 public class UserLoginPanel extends CmsPanel {
 
 	private static final long serialVersionUID = 5349334518027160490L;
-	
+
 	public UserLoginPanel(String id) {
 		this(id, new SecureCredentials());
 	}
@@ -36,14 +36,14 @@ public class UserLoginPanel extends CmsPanel {
 	public UserLoginPanel(String id, String username) {
 		this(id, new SecureCredentials().setUsername(username));
 	}
-	
+
 	private UserLoginPanel(String id, ICredentialHolder credentials){
 		super(id);
 
 		add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.ANIMATOR));
-		
+
 		final CmsSession session = (CmsSession) getSession();
-		
+
 		final Component loginInfo = new Label("loginInfo", new StringResourceModel("login.info",new Model<IUser>(getSessionDataService().getUser()))){
 			private static final long serialVersionUID = 1L;
 
@@ -62,26 +62,26 @@ public class UserLoginPanel extends CmsPanel {
 
 		final Component panel = new LoginPanel("signInPanel", credentials){
             private static final long serialVersionUID = 1L;
-            
+
            	@Override
 			protected void preSignIn(String username) {
 				// TODO hide password login if user has no password
-				
+
 				IUser user = getRepositoryService().getUser(username);
 				getAppSession().setUser(user);
-				
+
         		if (getApplication().getConfigurationType().equals(Application.DEVELOPMENT)){
         			return;
         		}
         		preLogin(username);
 			}
-           	
+
             @Override
             public boolean signIn(String username, String password) {
             	CmsSession session = (CmsSession) getSession();
             	return session.signIn(username, password);
             }
-            
+
 			@Override
 			protected void onBeforeRender() {
 				setOutputMarkupId(true);
@@ -92,11 +92,11 @@ public class UserLoginPanel extends CmsPanel {
 				}
 				super.onBeforeRender();
 			}
-            
-            
+
+
         };
         add(panel);
-		
+
 		add(new AjaxFallbackLink<Object>("logout"){
 
 			private static final long serialVersionUID = 1L;
@@ -118,15 +118,15 @@ public class UserLoginPanel extends CmsPanel {
 				}
 				super.onBeforeRender();
 			}
-			
+
 		});
-		
+
 		Component emailLink = new Label("emailLink", new ResourceModel("label.support"));
 		add(emailLink);
-		
+
 		MarkupContainer emailDiv = new WebMarkupContainer("emailDiv");
 		add(emailDiv);
-		
+
 		SiteData site = getRepositoryService().getSiteData();
 		Component emailForm = new EmailFormPanel("supportEmail", "Support email - sent from " + site.getName()){
 			private static final long serialVersionUID = 1L;
@@ -135,22 +135,22 @@ public class UserLoginPanel extends CmsPanel {
 			protected boolean sendEmail(IEmailSender emailSender, SiteData site, String body, String subject) {
 				return emailSender.sendEmail(subject, body);
 			}
-			
+
 		};
 		emailDiv.add(emailForm);
-		
+
 		emailLink.add(new AnimationOpenSlide("onclick", emailDiv, 28,"em"));
-		
+
 		if (((CmsApplication)getApplication()).hasRpxService()){
 			add(new RpxPanel("rpxPanel"));
 		} else {
 			add(new Label("rpxPanel").setVisible(false));
 		}
-		
+
 	}
-	
+
 	protected void preLogin(String username){
-		
+
 	}
 
 }

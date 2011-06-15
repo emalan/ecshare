@@ -11,15 +11,15 @@ import org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter
 
 /**
  * Converter for InputStream
- * 
+ *
  * @author Eugene Malan
  *
  */
-public class ResourceTypeConvertor implements AtomicTypeConverter 
+public class ResourceTypeConvertor implements AtomicTypeConverter
 	{
 		/**
 		 * Converts the Property Object to a Value for inserting into CMS
-		 * 
+		 *
 		 */
 	    public Value getValue(ValueFactory valueFactory, Object propValue)
 	    {
@@ -32,7 +32,7 @@ public class ResourceTypeConvertor implements AtomicTypeConverter
 
 	    /**
 	     * Converts the CMS Value to an Object ready to be set to the property in the Java Bean
-	     * 
+	     *
 	     */
 	    public Object getObject(Value value)
 	    {
@@ -51,7 +51,7 @@ public class ResourceTypeConvertor implements AtomicTypeConverter
 	     *
 	     */
 		public String getXPathQueryValue(ValueFactory valueFactory,Object object)
-		{		
+		{
 			throw new IncorrectAtomicTypeException("Binary cannot be used in queries");
 		}
 }
