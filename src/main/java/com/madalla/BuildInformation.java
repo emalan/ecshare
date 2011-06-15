@@ -1,22 +1,38 @@
 package com.madalla;
 
-public class BuildInformation {
+/**
+ * @author Eugene Malan
+ *
+ */
+public final class BuildInformation {
 
 	private String version;
 	private String webappVersion;
 
-	public void setVersion(String version) {
+	/**
+	 * @param version
+	 */
+	public void setVersion(final String version) {
 		this.version = version;
 	}
 
-	public String getVersion(){
+	/**
+	 * @return
+	 */
+	public String getVersion() {
 		return version;
 	}
 
-	public void setWebappVersion(String webappVersion) {
+	/**
+	 * @param webappVersion
+	 */
+	public void setWebappVersion(final String webappVersion) {
 		this.webappVersion = webappVersion;
 	}
 
+	/**
+	 * @return
+	 */
 	public String getWebappVersion() {
 		return webappVersion;
 	}
