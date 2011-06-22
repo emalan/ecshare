@@ -4,7 +4,7 @@ package com.madalla;
  * @author Eugene Malan
  *
  */
-public final class BuildInformation {
+public class BuildInformation {
 
 	private String version;
 	private String webappVersion;
