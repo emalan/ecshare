@@ -11,14 +11,14 @@ public class PanelListView extends ListView<PanelMenuItem>{
 	final private String menuLinkId;
 	final private String panelId;
 
-	public PanelListView(final String id, final String panelId, final String menuLinkId, List<PanelMenuItem> items) {
+	public PanelListView(final String id, final String panelId, final String menuLinkId, final List<PanelMenuItem> items) {
 		super(id, items);
 		this.menuLinkId = menuLinkId;
 		this.panelId = panelId;
 	}
 
 	@Override
-	protected void populateItem(ListItem<PanelMenuItem> item) {
+	protected void populateItem(final ListItem<PanelMenuItem> item) {
 		final PanelMenuItem menu = item.getModelObject();
 		item.add(new PanelLink(menuLinkId, panelId, menu.c, menu.key, menu.titleKey));
 	}

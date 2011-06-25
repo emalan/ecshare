@@ -4,7 +4,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Application;
@@ -17,6 +16,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 
 /**
  * Menu Link that will switch form Panels
@@ -30,11 +30,12 @@ public class PanelLink extends Link<Object> {
 	private static final Log log = LogFactory.getLog(PanelLink.class);
 
 	final private String panelId;
-	final private String key;
-	final private String titleKey;
+	final private IModel<String> key;
+	final private IModel<String> titleKey;
 	final private Class<? extends Panel> panelClass;
 
-	public PanelLink(final String id, final String panelId, Class<? extends Panel> panelClass, final String key, String titleKey){
+	public PanelLink(final String id, final String panelId, Class<? extends Panel> panelClass, 
+			final IModel<String> key, IModel<String> titleKey){
 		super(id);
 		this.panelId = panelId;
 		this.key = key;
@@ -43,12 +44,13 @@ public class PanelLink extends Link<Object> {
 		setAuthorization();
 	}
 
-	public PanelLink(final String id, final String panelId, Class<? extends Panel> panelClass, final String key){
-		this(id, panelId, panelClass, key, "");
+	public PanelLink(final String id, final String panelId, Class<? extends Panel> panelClass, 
+			final IModel<String> key){
+		this(id, panelId, panelClass, key, null);
 	}
 
     public PanelLink(final String id, final String panelId, Class<? extends Panel> panelClass) {
-		this(id, panelId, panelClass, "");
+		this(id, panelId, panelClass, null);
 	}
 
     private void setAuthorization(){
@@ -80,16 +82,16 @@ public class PanelLink extends Link<Object> {
 
 	@Override
 	protected void onComponentTag(ComponentTag tag) {
-		if (StringUtils.isNotEmpty(titleKey)){
-			tag.put("title", getString(titleKey));
+		if (titleKey != null){
+			tag.put("title", titleKey.getObject());
 		}
 		super.onComponentTag(tag);
 	}
 
 	@Override
 	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-		if (StringUtils.isNotEmpty(key)){
-			replaceComponentTagBody(markupStream, openTag, getString(key));
+		if (key != null){
+			replaceComponentTagBody(markupStream, openTag, key.getObject());
 		} else {
 			super.onComponentTagBody(markupStream, openTag);
 		}

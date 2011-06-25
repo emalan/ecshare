@@ -10,13 +10,11 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.session.pagemap.IPageMapEntry;
 
 import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsSession;
-import com.madalla.webapp.admin.content.ContentAdminPanel;
-import com.madalla.webapp.admin.image.ImageAdminPanel;
-import com.madalla.webapp.admin.member.MemberAdminPanel;
 import com.madalla.webapp.admin.site.SiteAdminPanel;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.panelmenu.PanelListView;
@@ -69,11 +67,15 @@ public abstract class AdminPage extends WebPage {
 
 	public List<PanelMenuItem> getAdminMenu() {
 		List<PanelMenuItem> menuList = new ArrayList<PanelMenuItem>();
-		menuList.add(new PanelMenuItem(UserProfilePanel.class, "label.profile","info.profile"));
-		menuList.add(new PanelMenuItem(SiteAdminPanel.class, "label.site","info.site"));
-		menuList.add(new PanelMenuItem(MemberAdminPanel.class, "label.member", "info.member"));
-		menuList.add(new PanelMenuItem(ImageAdminPanel.class, "label.image","info.image"));
-		menuList.add(new PanelMenuItem(ContentAdminPanel.class, "label.content","info.content"));
+		menuList.add(new PanelMenuItem(UserProfilePanel.class, 
+				new StringResourceModel("label.profile", this, null),
+				new StringResourceModel("info.profile", this, null)));
+		menuList.add(new PanelMenuItem(SiteAdminPanel.class, 
+				new StringResourceModel("label.site", this, null),
+				new StringResourceModel("info.site", this, null)));
+		//menuList.add(new PanelMenuItem(MemberAdminPanel.class, "label.member", "info.member"));
+		//menuList.add(new PanelMenuItem(ImageAdminPanel.class, "label.image","info.image"));
+		//menuList.add(new PanelMenuItem(ContentAdminPanel.class, "label.content","info.content"));
 
 		return Collections.unmodifiableList(menuList);
 	}

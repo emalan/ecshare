@@ -124,7 +124,8 @@ public class RepositoryInfo {
 			return "/" + EC_NODE_APP + "/" + groupName;
 		}
 
-		RepositoryType(Class<? extends AbstractData> typeClass, boolean site, boolean parent, String groupName){
+		RepositoryType(final Class<? extends AbstractData> typeClass, final boolean site, 
+				final boolean parent, final String groupName){
 			this.typeClass = typeClass;
 			this.site = site;
 			this.parent = parent;
