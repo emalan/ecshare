@@ -33,15 +33,11 @@ public class PanelLink extends Link<Object> {
 	final private IModel<String> key;
 	final private IModel<String> titleKey;
 	final private Class<? extends Panel> panelClass;
+	final private Object constructorArg;
 
 	public PanelLink(final String id, final String panelId, Class<? extends Panel> panelClass, 
 			final IModel<String> key, IModel<String> titleKey){
-		super(id);
-		this.panelId = panelId;
-		this.key = key;
-		this.titleKey = titleKey;
-		this.panelClass = panelClass;
-		setAuthorization();
+		this(id, panelId, panelClass, key, titleKey, null);
 	}
 
 	public PanelLink(final String id, final String panelId, Class<? extends Panel> panelClass, 
@@ -53,7 +49,18 @@ public class PanelLink extends Link<Object> {
 		this(id, panelId, panelClass, null);
 	}
 
-    private void setAuthorization(){
+    public PanelLink(final String id, final String panelId, final Class<? extends Panel> panelClass, 
+    		final IModel<String> key, final IModel<String> titleKey, final Object constructorArg) {
+    	super(id);
+		this.panelId = panelId;
+		this.key = key;
+		this.titleKey = titleKey;
+		this.panelClass = panelClass;
+		this.constructorArg = constructorArg;
+		setAuthorization();
+	}
+
+	private void setAuthorization(){
     	final Application application = Application.get();
 		InstantiationPermissions permissions = application.getMetaData(MetaDataRoleAuthorizationStrategy.INSTANTIATION_PERMISSIONS);
 		if (permissions != null){
@@ -100,8 +107,15 @@ public class PanelLink extends Link<Object> {
 	@Override
 	public void onClick() {
 		try {
-			Constructor<? extends Panel> constructor = panelClass.getConstructor(String.class);
-			Panel panel = constructor.newInstance(new Object[]{panelId});
+			final Panel panel;
+			if (constructorArg != null){
+				Constructor<? extends Panel> constructor = panelClass.getConstructor(String.class, 
+						constructorArg.getClass());
+				panel = constructor.newInstance(new Object[]{panelId, constructorArg});
+			} else {
+				Constructor<? extends Panel> constructor = panelClass.getConstructor(String.class);
+				panel = constructor.newInstance(new Object[]{panelId});
+			}
 			getPage().replace(panel);
 		} catch (InvocationTargetException e){
 			log.error("Invocation Exception while creating admin panel. If this was caused by Authorized Exception, then take a look at why link was enabled???", e);

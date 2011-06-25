@@ -20,6 +20,6 @@ public class PanelListView extends ListView<PanelMenuItem>{
 	@Override
 	protected void populateItem(final ListItem<PanelMenuItem> item) {
 		final PanelMenuItem menu = item.getModelObject();
-		item.add(new PanelLink(menuLinkId, panelId, menu.c, menu.key, menu.titleKey));
+		item.add(new PanelLink(menuLinkId, panelId, menu.c, menu.key, menu.titleKey, menu.constructorArg));
 	}
 }
