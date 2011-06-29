@@ -19,7 +19,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 /**
- * Menu Link that will switch form Panels
+ * Menu Link that will switch form Panels.
  *
  * @author Eugene Malan
  *
@@ -78,7 +78,13 @@ public class PanelLink extends Link<Object> {
 		Component currentPanel = getPage().get(panelId);
 		if (currentPanel != null){
 			if (currentPanel.getClass().equals(panelClass) ){
-				log.debug(currentPanel);
+				if (constructorArg != null && currentPanel instanceof PanelMenuContructed) {
+					PanelMenuContructed menuConstructed = (PanelMenuContructed) currentPanel;
+					if (constructorArg.equals(menuConstructed.getConstructorArg())) {
+						return false;
+					}
+					return true;
+				}
 				return false;
 			}
 			return true;
