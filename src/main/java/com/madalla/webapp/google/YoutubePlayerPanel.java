@@ -64,6 +64,14 @@ public class YoutubePlayerPanel extends CmsPanel {
 		}
 
 	}
+	
+	
+
+	@Override
+	protected void onBeforeRender() {
+		setOutputMarkupId(true);
+		super.onBeforeRender();
+	}
 
 	private VideoPlayerData getVideo(String id, String page){
 		PageData pageData = getRepositoryService().getPage(page);
