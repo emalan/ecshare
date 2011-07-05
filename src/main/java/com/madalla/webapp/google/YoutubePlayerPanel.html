@@ -5,13 +5,14 @@
 		    float: left;
 	    	clear: both;
 	    	padding: 4px;  
-	    	border: thin solid darkgray;
-	    	background-color: gainsboro; 
 		}
 		
-		div#playerDiv {
-
+		div.playerDiv {
+	    	position: absolute;
+	    	background-color: gainsboro;
+	    	border: thin solid darkgray;
 	    }
+
 	    form div label {
 	       width: 4em;
         }
@@ -35,7 +36,7 @@
 		<span>Edit</span>
     </div>
 	
-	<div wicket:id="playerDiv" style="display:none; overflow: hidden;" >
+	<div class="playerDiv" wicket:id="playerDiv" style="display:none; overflow: hidden;" >
 	  <form class="playerForm" wicket:id="videoForm">
 	    <fieldset>
 		<div>
