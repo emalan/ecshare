@@ -6,6 +6,13 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
+/**
+ * Behavior that will add the specified class name depending on contruction boolean. Useful for 
+ * hide and show of components.
+ *  
+ * @author Eugene Malan
+ *
+ */
 public abstract class ClassAppenderBehavior extends AbstractBehavior {
 
 	private static final long serialVersionUID = 1L;
@@ -14,12 +21,17 @@ public abstract class ClassAppenderBehavior extends AbstractBehavior {
 	private final String className;
 
 	/**
-	 * @param show
+	 * This constructor ill use a default class of 'no'
+	 * @param display - add class when this is true and condition is true
 	 */
-	public ClassAppenderBehavior(final boolean show){
-		this(show,"no");
+	public ClassAppenderBehavior(final boolean display){
+		this(display,"no");
 	}
 
+	/**
+	 * @param display - add class when this is true and condition is true
+	 * @param className - class string to use
+	 */
 	public ClassAppenderBehavior(final boolean display, final String className){
 		this.display = display;
 		this.className = className;
