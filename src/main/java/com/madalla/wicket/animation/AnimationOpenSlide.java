@@ -2,9 +2,10 @@ package com.madalla.wicket.animation;
 
 import org.apache.wicket.Component;
 
-
-
 /**
+ * Convenience combined animation that reduces the size of an element as well as fading it to invisible, converse is 
+ * to slide open while fading to visible.
+ * 
  * @author Eugene Malan
  *
  */
