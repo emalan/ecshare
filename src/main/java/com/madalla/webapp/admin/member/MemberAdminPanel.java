@@ -1,5 +1,8 @@
 package com.madalla.webapp.admin.member;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -44,11 +47,11 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import com.madalla.bo.member.MemberData;
-import com.madalla.db.dao.Member;
 import com.madalla.webapp.components.member.AbstractMemberPanel;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.wicket.ClassAppenderBehavior;
+import com.madalla.wicket.DataDownloadLink;
 import com.madalla.wicket.LabelPagingNavigator;
 import com.madalla.wicket.animation.Animator;
 import com.madalla.wicket.animation.AnimatorSubject;
@@ -433,7 +436,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 			}
 
 		};
-
+		
 		container.add(dataView);
 
 		dataView.setItemsPerPage(ITEMS_PAGE);
@@ -512,6 +515,49 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 
 		};
 		reset.add(resetLink);
+		
+		
+		add(new DataDownloadLink<MemberData>("download", getRepositoryService().getMemberEntries()){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public List<String> getDataRowItems(MemberData data) {
+				List<String> list = new ArrayList<String>();
+				list.add(data.getMemberId());
+				list.add(data.getFirstName());
+				list.add(data.getLastName());
+				list.add(data.getCompanyName());
+				list.add(data.getEmail());
+				list.add(data.isAuthorized()? "Yes":"No");
+				if (data.getAuthorizedDate() == null) {
+					list.add("");
+				} else {
+					list.add(data.getAuthorizedDate().toString("yyyy-MM-dd"));
+				}
+				list.add(data.isMemberSubscribed()? "Yes":"No");
+				if (data.getSubscriptionEnd() == null) {
+					list.add("");
+				} else {
+					DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+					list.add(df.format(data.getSubscriptionEnd()));
+				}
+				return list;
+			}
+
+			@Override
+			public List<String> getDataRowHeaders() {
+				List<String> list = new ArrayList<String>();
+				list.add("Login Id");
+				list.add("First Name");
+				list.add("Last Name");
+				list.add("Company Name");
+				list.add("Email");
+				list.add("Authorized");
+				list.add("Authorized Date");
+				return list;
+			}
+			
+		});
 
 	}
 

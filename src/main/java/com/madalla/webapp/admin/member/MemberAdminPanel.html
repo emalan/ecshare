@@ -42,7 +42,9 @@
     
         <div id="siteadmin" class="adminSection">
             <h2><wicket:message key="heading.member">Label Contents</wicket:message></h2>
-            
+            <span class="buttonwrapper">
+                <a wicket:id="download" class="orangebutton"><span><wicket:message key="label.download">[label]</wicket:message></span></a>
+            </span>
             <div id="memberDiv">
                 <span wicket:id="navigator">[dataview navigator]</span>
                 <table cellspacing="0" class="dataview" wicket:id="memberContainer">

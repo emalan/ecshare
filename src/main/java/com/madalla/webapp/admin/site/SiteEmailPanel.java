@@ -1,6 +1,5 @@
 package com.madalla.webapp.admin.site;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

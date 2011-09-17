@@ -223,6 +223,7 @@ public class SiteDataPanel extends CmsPanel {
 
 		final MarkupContainer emailContainer;
 		add(emailContainer = new WebMarkupContainer("emailContainer"));
+		emailContainer.setOutputMarkupId(true);
 
 		SortableEmailEntryProvider provider = new SortableEmailEntryProvider();
 		final DataView<EmailEntryData> dataView;
