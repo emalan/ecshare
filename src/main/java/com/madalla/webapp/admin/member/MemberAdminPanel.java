@@ -517,7 +517,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 		reset.add(resetLink);
 		
 		
-		add(new DataDownloadLink<MemberData>("download", getRepositoryService().getMemberEntries()){
+		final DataDownloadLink<MemberData> download = new DataDownloadLink<MemberData>("download", getRepositoryService().getMemberEntries()){
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -557,7 +557,9 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 				return list;
 			}
 			
-		});
+		};
+		add(download);
+		download.setFileName("SiteMemberData.csv");
 
 	}
 
