@@ -48,26 +48,16 @@ public class DaoTester extends AbstractDependencyInjectionSpringContextTests{
 			System.out.println(item);
 		}
 
-		DateTime testAuthDate = new DateTime();
 		String password = "test";
-		data.setPassword(password);
+		memberDao.savePassword(data.getMemberId(), password);
 		memberDao.save(data);
-		MemberData testDate = memberDao.findbyMemberId(data.getMemberId());
-		assertEquals(password, testDate.getPassword());
+		assertEquals(password, memberDao.getPassword(data.getMemberId()));
 
 		MemberData test = memberDao.findbyMemberId(memberId);
 		assertNotNull(test);
 		assertEquals(firstName, test.getFirstName());
 
-		String password1 = "password1";
-		test.setPassword(password1);
-		memberDao.save(test);
-		MemberData testSave = memberDao.findbyMemberId(memberId);
-		assertNotNull(testSave);
-		assertEquals(password1, test.getPassword());
-
 		memberDao.delete(test);
-
 
 	}
 

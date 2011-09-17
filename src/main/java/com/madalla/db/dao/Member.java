@@ -6,12 +6,11 @@ import org.joda.time.DateTime;
 
 import com.madalla.bo.member.MemberData;
 
-public class Member extends MemberData {
+public final class Member extends MemberData {
 	private static final long serialVersionUID = 1L;
 
 	private int id;
 	private String memberId;
-	private String password;
 	private String firstName;
 	private String lastName;
 	private String companyName;
@@ -40,12 +39,6 @@ public class Member extends MemberData {
 	}
 	public void setMemberId(String memberId) {
 		this.memberId = memberId;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
 	}
 	public String getFirstName() {
 		return firstName;

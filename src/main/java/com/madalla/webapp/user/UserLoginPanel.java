@@ -29,15 +29,15 @@ public class UserLoginPanel extends CmsPanel {
 
 	private static final long serialVersionUID = 5349334518027160490L;
 
-	public UserLoginPanel(String id) {
+	public UserLoginPanel(final String id) {
 		this(id, new SecureCredentials());
 	}
 
-	public UserLoginPanel(String id, String username) {
+	public UserLoginPanel(final String id, final String username) {
 		this(id, new SecureCredentials().setUsername(username));
 	}
 
-	private UserLoginPanel(String id, ICredentialHolder credentials){
+	private UserLoginPanel(final String id, final ICredentialHolder credentials){
 		super(id);
 
 		add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.ANIMATOR));

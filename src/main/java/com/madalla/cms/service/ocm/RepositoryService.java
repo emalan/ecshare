@@ -524,6 +524,10 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
     public void deleteMember(MemberData data){
     	memberService.deleteMember(data);
     }
+    
+	public boolean saveMemberPassword(String memberId, String password) {
+		return memberService.saveMemberPassword(memberId, password);
+	}
 
     //**********************************
     // ******   Users             ******
@@ -622,6 +626,5 @@ public class RepositoryService extends AbstractRepositoryService implements IDat
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
-
 
 }

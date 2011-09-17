@@ -74,6 +74,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 	public static final String PASSWORD = "password";
 	public static final String MEMBER_REGISTRATION = "memberRegistration";
 	public static final String MEMBER_PASSWORD = "memberPassword";
+	public static final String LOGIN = "login";
 
     private IRepositoryAdminService repositoryAdminService;
     private IEmailSender emailSender;
@@ -185,7 +186,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 			}
 
     	});
-    	mount(new MixedParamHybridUrlCodingStrategy("login", UserLoginPage.class, UserLoginPage.PARAMETERS));
+    	mount(new MixedParamHybridUrlCodingStrategy(LOGIN, UserLoginPage.class, UserLoginPage.PARAMETERS));
 
     	if (hasMemberService()){
     		if (getMemberPasswordPage() == null) {

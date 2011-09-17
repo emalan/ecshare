@@ -30,6 +30,10 @@ public class MemberService {
     	authenticator.clearUser(member.getName());
     	return memberDao.save(member);
     }
+    
+	public boolean saveMemberPassword(String memberId, String password) {
+		return memberDao.savePassword(memberId, password);
+	}
 
     public MemberData getMember(String name){
     	return memberDao.findbyMemberId(name);
@@ -51,9 +55,9 @@ public class MemberService {
 		if (name == null){
 			throw new WicketRuntimeException("Username Argument may not be null");
 		}
-		IUserValidate userValidate;
+		final IUserValidate userValidate;
 		if (isMemberExists(name)){
-			userValidate = getMember(name);
+			userValidate = memberDao.getMemberValidator(name);
 		} else {
 			userValidate = new IUserValidate(){
 

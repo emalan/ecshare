@@ -33,17 +33,21 @@
         <property name="template" ref="jcrTemplate"/>
         <property name="site" value="${site.code}"/>
         <property name="transactionLogDao" ref="transactionLogDao"/>
-        <property name="authenticator" ref="authenticator"/>
+        <property name="authenticator" ref="authenticatorUser"/>
     </bean>    
     
     <bean id="memberService" class="com.madalla.cms.service.ocm.MemberService"
         scope="singleton">
         <property name="memberDao" ref="memberDao"/>
-        <property name="authenticator" ref="authenticator"/>
+        <property name="authenticator" ref="authenticatorMember"/>
     </bean>    
 
-    <bean id="authenticator" class="com.madalla.webapp.security.PasswordAuthenticator"
+    <bean id="authenticatorUser" class="com.madalla.webapp.security.PasswordAuthenticator"
     	scope="singleton">
+    </bean>
+    
+    <bean id="authenticatorMember" class="com.madalla.webapp.security.PasswordAuthenticator"
+        scope="singleton">
     </bean>
 	
 	<bean id="backupCreator" class="com.madalla.cms.service.jcr.RepositoryBackupCreator">

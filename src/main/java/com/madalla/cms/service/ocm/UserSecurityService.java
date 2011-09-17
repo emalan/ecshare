@@ -131,7 +131,7 @@ public class UserSecurityService extends AbstractRepositoryService{
 		if (username == null){
 			throw new WicketRuntimeException("Username Argument may not be null");
 		}
-		IUserValidate userData;
+		final IUserValidate userData;
 		if (isUserExists(username)){
 			userData = getUser(username);
 		} else {

@@ -28,7 +28,7 @@ import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.admin.member.MemberSession;
 import com.madalla.webapp.security.IPasswordAuthenticator;
-import com.madalla.webapp.security.PasswordAuthenticator.UserLoginTracker;
+import com.madalla.webapp.security.UserLoginTracker;
 import com.madalla.wicket.form.AjaxValidationSubmitButton;
 import com.madalla.wicket.form.ValidationStyleBehaviour;
 
@@ -92,8 +92,9 @@ public class MemberPasswordPanel extends CmsPanel{
 
 		this.credentials.setUsername(existing.getUsername());
 
-		MemberSession session = getAppSession().getMemberSession();
+		final MemberSession session = getAppSession().getMemberSession();
 
+		//we validate on construction as this page can be called via URL with valid login parameters
 		final boolean validated;
 		final boolean loggedIn = session.isSignedIn();
 		if (loggedIn) {
@@ -160,9 +161,8 @@ public class MemberPasswordPanel extends CmsPanel{
 				MemberData member = getRepositoryService().getMember(credentials.getUsername());
 				log.debug("process password change for : " + member);
 				//sign member in - we have already validated old password
-				if (getAppSession().getMemberSession().signIn(member.getMemberId(), member.getPassword())){
-					member.setPassword(credentials.getPassword());
-					getRepositoryService().saveMember(member);
+				if (getAppSession().getMemberSession().signIn(member.getMemberId())){
+					getRepositoryService().saveMemberPassword(member.getMemberId(), credentials.getPassword());
 					info(getString("message.success"));
 	                setResponsePage(getCmsApplication().getMemberRegistrationPage());
 				}

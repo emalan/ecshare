@@ -20,7 +20,6 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import com.madalla.bo.SiteData;
 import com.madalla.bo.member.MemberData;
-import com.madalla.db.dao.Member;
 import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsSession;
 import com.madalla.wicket.form.AjaxValidationForm;
@@ -86,7 +85,7 @@ public class MemberRegistrationPanel extends AbstractMemberPanel{
 			if (sendRegistrationEmail( member)){
                 info(getString("message.success"));
                 this.reset(target);
-                setModelObject(new Member());
+                setModelObject(instanciateMember());
             } else {
                 error(getString("message.fail.email"));
             }
@@ -99,7 +98,7 @@ public class MemberRegistrationPanel extends AbstractMemberPanel{
 		super(id);
 
 		Form<MemberData> form;
-		add(form = new MemberRegistrationForm("regForm", new CompoundPropertyModel<MemberData>(new Member())));
+		add(form = new MemberRegistrationForm("regForm", new CompoundPropertyModel<MemberData>(instanciateMember())));
 		form.setEnabled(!CmsSession.get().getMemberSession().isSignedIn());
 	}
 

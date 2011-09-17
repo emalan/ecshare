@@ -18,6 +18,11 @@ public abstract class MemberSession implements Serializable{
 	public boolean signIn(final String memberName, final String password){
 		return signedIn = authenticateMember(memberName, password);
 	}
+	
+	public boolean signIn(final String memberName) {
+		postAuthentication(memberName);
+		return signedIn = true;
+	}
 
 	public void signOut(){
 		signedIn = false;
@@ -32,6 +37,7 @@ public abstract class MemberSession implements Serializable{
 	}
 
 	protected abstract boolean authenticateMember(final String memberName, final String password);
-
+	
+	protected abstract void postAuthentication(final String memberName);
 
 }

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
@@ -30,23 +29,7 @@ public class PasswordAuthenticator implements IPasswordAuthenticator, Serializab
 
 	private Map<String, UserLoginTracker> users = new HashMap<String, UserLoginTracker>();
 
-	/**
-	 * @author Eugene Malan
-	 *
-	 */
-	public class UserLoginTracker implements Serializable{
-		private static final long serialVersionUID = 1L;
 
-		public int count = 0;
-		private final DateTime dateTimeAdded;
-		private final IUserValidate userData;
-
-		public UserLoginTracker(IUserValidate userData){
-			this.userData = userData;
-			this.dateTimeAdded = new DateTime();
-		}
-
-	}
 
 	public void clearUser(String username){
 		users.remove(username);
@@ -56,7 +39,7 @@ public class PasswordAuthenticator implements IPasswordAuthenticator, Serializab
 		if (!users.containsKey(username) ||
 				(users.containsKey(username) &&
 						users.get(username).dateTimeAdded.plusMinutes(REFRESH).isBefore(new DateTime()))){
-			users.put(userData.getName(), new UserLoginTracker(userData));
+			users.put(userData.getName(), new UserLoginTracker(userData, ATTEMPTS, DELAY));
 		}
 	}
 
@@ -70,30 +53,11 @@ public class PasswordAuthenticator implements IPasswordAuthenticator, Serializab
 
 	public boolean authenticate(String username, String password) {
 		log.debug("password authenticate - username="+username);
-		UserLoginTracker user = users.get(username);
-		if (user == null){
+		UserLoginTracker userTracker = users.get(username);
+		if (userTracker == null){
 			throw new RuntimeException("Authenticate failed. User not being tracked - " + username);
 		}
-		if (user.userData != null){
-			log.debug("tracking user: " + username);
-			log.debug("tracked user info: " + user.userData);
-			//validate password - non-existant user with Null password will always fail
-			if (StringUtils.isNotEmpty(user.userData.getPassword()) && user.userData.getPassword().equals(password)){
-				user.count = 0; //reset on successful login
-				return true;
-			} else {
-				log.info("password authenticate failed :" + username + ",count:"+user.count);
-				user.count++;
-				if(user.count > ATTEMPTS){
-					try {
-						Thread.sleep(DELAY);
-					} catch (InterruptedException e){
-
-					}
-				}
-			}
-		}
-		return false;
+		return userTracker.validate(username, password);
 	}
 
 }

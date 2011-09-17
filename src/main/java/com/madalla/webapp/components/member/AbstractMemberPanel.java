@@ -12,6 +12,7 @@ import org.springframework.dao.DataAccessException;
 
 import com.madalla.bo.SiteData;
 import com.madalla.bo.member.MemberData;
+import com.madalla.db.dao.Member;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsPanel;
@@ -31,11 +32,14 @@ public abstract class AbstractMemberPanel extends CmsPanel{
 	protected String resetPassword(MemberData member){
         String password = SecurityUtils.getGeneratedPassword();
         log.debug("resetPassword - memeber="+member.getName() + "password="+ password);
-        member.setPassword(SecurityUtils.encrypt(password));
-        saveMemberData(member);
+        saveMemberPassword(member.getMemberId(), SecurityUtils.encrypt(password) );
         return password;
 	}
 
+	protected boolean saveMemberPassword(final String memberId, final String password){
+		return getRepositoryService().saveMemberPassword(memberId, password);
+	}
+	
 	protected boolean saveMemberData(MemberData member){
 		return getRepositoryService().saveMember(member);
 	}
@@ -46,6 +50,13 @@ public abstract class AbstractMemberPanel extends CmsPanel{
         return getEmailSender().sendUserEmail(getString("email.subject"), body, member.getEmail(), member.getFirstName(), true);
     }
 
+    
+    /**
+     * Will reset password and send email
+     * 
+     * @param member
+     * @return
+     */
     protected boolean sendResetPasswordEmail(final MemberData member){
     	logEmail(member.getDisplayName(), member.getEmail(), getString("email.subject"));
         String body = getResetPasswordEmail(member);
@@ -87,6 +98,11 @@ public abstract class AbstractMemberPanel extends CmsPanel{
     	return message;
     }
 
+    /**
+     * Gets email message and resets password
+     * @param member
+     * @return
+     */
     protected String getResetPasswordEmail(final MemberData member){
     	Map<String, String> map = new HashMap<String, String>();
     	SiteData site = getRepositoryService().getSiteData();
@@ -111,5 +127,9 @@ public abstract class AbstractMemberPanel extends CmsPanel{
     	return message;
 
     }
+    
+	protected Member instanciateMember() {
+		return new Member();
+	}
 
 }

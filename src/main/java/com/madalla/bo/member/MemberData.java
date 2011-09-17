@@ -4,9 +4,8 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import com.madalla.bo.AbstractData;
-import com.madalla.bo.security.IUserValidate;
 
-public abstract class MemberData extends AbstractData implements IMemberData, IUserValidate, Comparable<MemberData>{
+public abstract class MemberData extends AbstractData implements IMemberData, Comparable<MemberData>{
 	private static final long serialVersionUID = -4830506791264979429L;
 
 	abstract public int getKey();

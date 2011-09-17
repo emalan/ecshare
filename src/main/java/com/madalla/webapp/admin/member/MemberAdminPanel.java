@@ -307,7 +307,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 		add(Css.CSS_ICON);
 		add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.PROTOTYPE));
 
-		current = new CompoundPropertyModel<MemberData>(new Member());
+		current = new CompoundPropertyModel<MemberData>(instanciateMember());
 
 		final MarkupContainer editFormDiv;
 		add(editFormDiv = new WebMarkupContainer("editFormDiv"));
@@ -364,7 +364,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				current.setObject(new Member());
+				current.setObject(instanciateMember());
 				target.appendJavascript("var e = $('"+ container.getMarkupId() + "'); e.select('tr').each(function(s){ s.removeClassName('selected')});");
 				form.modelChanged();
 				form.clearInput();
@@ -452,7 +452,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 			@Override
 			protected void onSortChanged() {
 				dataView.setCurrentPage(0);
-				current.setObject(new Member());
+				current.setObject(instanciateMember());
             }
         });
 
@@ -471,7 +471,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 			@Override
 			protected void onSortChanged() {
 				dataView.setCurrentPage(0);
-				current.setObject(new Member());
+				current.setObject(instanciateMember());
             }
         });
 
@@ -481,7 +481,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 			@Override
 			protected void onSortChanged() {
 				dataView.setCurrentPage(0);
-				current.setObject(new Member());
+				current.setObject(instanciateMember());
             }
         });
 
@@ -517,10 +517,8 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 
 	@Override
 	protected void onBeforeRender() {
-		current.setObject(new Member());
+		current.setObject(instanciateMember());
 		super.onBeforeRender();
 	}
-
-
-
+	
 }

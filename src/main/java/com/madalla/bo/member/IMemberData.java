@@ -10,10 +10,6 @@ public interface IMemberData {
 
 	void setMemberId(String memberId);
 
-	String getPassword();
-
-	void setPassword(String password);
-
 	String getFirstName();
 
 	void setFirstName(String firstName);

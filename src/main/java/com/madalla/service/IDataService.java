@@ -191,6 +191,8 @@ public interface IDataService {
 
     UserSiteData getUserSite(UserData user);
 
+	boolean saveMemberPassword(String memberId, String password);
+
 
 
 }

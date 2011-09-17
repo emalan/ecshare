@@ -28,7 +28,7 @@ import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.security.IPasswordAuthenticator;
-import com.madalla.webapp.security.PasswordAuthenticator.UserLoginTracker;
+import com.madalla.webapp.security.UserLoginTracker;
 import com.madalla.wicket.form.AjaxValidationSubmitButton;
 import com.madalla.wicket.form.ValidationStyleBehaviour;
 

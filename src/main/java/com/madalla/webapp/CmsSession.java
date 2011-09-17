@@ -53,16 +53,23 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 		protected boolean authenticateMember(String memberName, String password) {
 			IPasswordAuthenticator authenticator = getDataService().getMemberAuthenticator(memberName);
 			if (authenticator.authenticate(memberName, password)){
-				MemberData member = getDataService().getMember(memberName);
-				if (!member.isAuthorized()){
-					member.setAuthorized(true);
-					getDataService().saveMember(member);
-				}
-				setMember(member);
+				postAuthentication(memberName);
 				return true;
 			}
 			return false;
 		}
+
+		@Override
+		protected void postAuthentication(String memberName) {
+			MemberData member = getDataService().getMember(memberName);
+			if (!member.isAuthorized()){
+				member.setAuthorized(true);
+				getDataService().saveMember(member);
+			}
+			setMember(member);
+		}
+		
+		
 
 	};
 
@@ -104,6 +111,13 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
     	setRoles(user);
 	}
 
+	/**
+	 * Creates a user using the profile data. The assumption here is 
+	 * that authentication has already been done. Used by RPX login.
+	 * 
+	 * @param profileData
+	 * @return
+	 */
 	public boolean authenticate(HashMap<String, String> profileData){
 		String identifier = profileData.get("identifier");
 		String providerName = profileData.get("providerName");
