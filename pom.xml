@@ -9,7 +9,7 @@
 	<description>Wicket Framework code for multi-lingual Content Management system</description>
 	<url>http://www.controlmysite.net</url>
 	<scm>
-	   <connection>scm:git:/Users/emalan/workspace/ecshare/.git</connection>
+	   <connection>scm:git:ssh://ecprod/vol/devel/ecshare.git</connection>
 	</scm>
     <organization> 
         <name>emalan consulting, inc</name> 
@@ -239,6 +239,14 @@
 					<optimize>true</optimize>
 					<debug>true</debug>
 				</configuration>
+			</plugin>
+			<plugin>
+			     <groupId>org.apache.maven.plugins</groupId>
+			     <artifactId>maven-release-plugin</artifactId>
+			     <version>2.2.1</version>
+			     <configuration>
+			         <preperationGoals>clean verify install</preperationGoals>
+			     </configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
