@@ -3,8 +3,8 @@ package com.madalla.webapp.admin.image;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -110,7 +110,7 @@ public class AlbumAdminPanel extends CmsPanel{
 	}
 
 	private static final long serialVersionUID = 1L;
-	private static final Log log = LogFactory.getLog(AlbumAdminPanel.class);
+	private static final Logger log = LoggerFactory.getLogger(AlbumAdminPanel.class);
 
 	public AlbumAdminPanel(String id, String albumName) {
 		super(id);

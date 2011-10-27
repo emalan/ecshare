@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
@@ -31,7 +31,7 @@ public class BackupFile implements Serializable, Comparable<BackupFile> {
 	private static final long serialVersionUID = 1L;
 	private static final String BACKUP = "-backup-";
 	private static final String FILE_SUFFIX = ".xml";
-	private static final Log log = LogFactory.getLog(BackupFile.class);
+	private static final Logger log = LoggerFactory.getLogger(BackupFile.class);
 	private File file;
 
 	public BackupFile(File file) {

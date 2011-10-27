@@ -3,10 +3,10 @@ package com.madalla.image;
 import java.awt.Image;
 import java.awt.image.ImageObserver;
 
-import org.apache.commons.logging.Log;
+import org.slf4j.Logger;
 
 /**
- * Reports progress of Image Processing to Log
+ * Reports progress of Image Processing to Logger
  * <p>
  * TODO Link this up to some GUI progress indicator
  * </p>
@@ -15,11 +15,11 @@ import org.apache.commons.logging.Log;
  */
 public class LoggingImageObserver implements ImageObserver {
 
-	private final Log log;
+	private final Logger log;
 	private int width;
 	private int height;
 
-	public LoggingImageObserver(Log log){
+	public LoggingImageObserver(Logger log){
 		this.log = log;
 	}
 	public boolean imageUpdate(Image img, int infoflags, int x, int y,

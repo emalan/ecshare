@@ -1,7 +1,7 @@
 package com.madalla.webapp.user;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -35,7 +35,7 @@ import com.madalla.wicket.form.ValidationStyleBehaviour;
 public class UserPasswordPanel extends CmsPanel{
 
 	private static final long serialVersionUID = 3207705274626512033L;
-	private static final Log log = LogFactory.getLog(UserPasswordPanel.class);
+	private static final Logger log = LoggerFactory.getLogger(UserPasswordPanel.class);
 
 	private final ICredentialHolder credentials = new SecureCredentials();
 

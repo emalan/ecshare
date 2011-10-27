@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.joda.time.DateTime;
 
 import com.madalla.bo.security.IUserValidate;
@@ -25,7 +25,7 @@ public class PasswordAuthenticator implements IPasswordAuthenticator, Serializab
 	private static final int ATTEMPTS = 5; //after so many attempts implement deplay
 	private static final int DELAY = 10000; // delay in milliseconds
 
-	private Log log = LogFactory.getLog(this.getClass());
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	private Map<String, UserLoginTracker> users = new HashMap<String, UserLoginTracker>();
 

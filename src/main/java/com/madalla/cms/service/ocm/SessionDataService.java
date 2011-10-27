@@ -2,8 +2,8 @@ package com.madalla.cms.service.ocm;
 
 import java.io.Serializable;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.madalla.bo.AbstractData;
 import com.madalla.bo.security.IUser;
@@ -21,7 +21,7 @@ import com.madalla.service.ISessionDataService;
 public class SessionDataService implements ISessionDataService, Serializable {
 
 	private static final long serialVersionUID = 6043048251504290235L;
-	private static final Log log = LogFactory.getLog(SessionDataService.class);
+	private static final Logger log = LoggerFactory.getLogger(SessionDataService.class);
 
 	private IUser user;
 

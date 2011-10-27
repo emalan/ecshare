@@ -9,12 +9,12 @@ import javax.swing.text.html.parser.ParserDelegator;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.mutable.MutableInt;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HTMLParser {
 
-	private final static Log log = LogFactory.getLog(HTMLParser.class);
+	private final static Logger log = LoggerFactory.getLogger(HTMLParser.class);
 
 	private HTMLParser() {} // prevent instantiation
 

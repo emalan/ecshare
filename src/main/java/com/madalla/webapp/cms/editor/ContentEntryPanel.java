@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
@@ -39,7 +39,7 @@ import com.madalla.webapp.admin.pages.AdminPanelLink;
 public class ContentEntryPanel extends CmsPanel {
 	private static final long serialVersionUID = 1L;
 
-	private Log log = LogFactory.getLog(this.getClass());
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * @param id - wicket id
@@ -77,7 +77,7 @@ public class ContentEntryPanel extends CmsPanel {
 			@Override
 			public Panel getPanel(String panelId) {
 				ContentEntryData contentEntry = getRepositoryService().getContentEntry(content, Locale.ENGLISH);
-				log.debug(contentEntry);
+				log.debug(contentEntry.toString());
 				return new ContentFormPanel(panelId, contentEntry);
 			}
 

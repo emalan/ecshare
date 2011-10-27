@@ -5,8 +5,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.WicketRuntimeException;
@@ -34,7 +34,7 @@ public class AdminPanelLink extends Link<Object> {
 
 	private static final long serialVersionUID = 1L;
 	protected static final String ID = "adminPanel";
-	private Log log = LogFactory.getLog(this.getClass());
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	final private String key;
 	final private String titleKey;
@@ -74,7 +74,7 @@ public class AdminPanelLink extends Link<Object> {
 		Component currentPanel = getPage().get(ID);
 		if (currentPanel != null){
 			if (currentPanel.getClass().equals(panelClass) ){
-				log.debug(currentPanel);
+				log.debug(currentPanel.toString());
 				return false;
 			}
 			return true;

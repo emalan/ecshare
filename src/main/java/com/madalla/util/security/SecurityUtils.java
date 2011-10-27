@@ -5,14 +5,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import sun.misc.BASE64Encoder;
 
 public class SecurityUtils {
 
-	private static final Log log = LogFactory.getLog(SecurityUtils.class);
+	private static final Logger log = LoggerFactory.getLogger(SecurityUtils.class);
 
 	public static String encrypt(String string) {
 		if (string == null){

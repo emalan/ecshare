@@ -6,8 +6,8 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
@@ -26,7 +26,7 @@ public class ImageHelper {
     private static final int THUMB_WIDTH = 90;
     private static final int THUMB_HEIGHT = 60;
 
-    private static final Log log = LogFactory.getLog(ImageHelper.class);
+    private static final Logger log = LoggerFactory.getLogger(ImageHelper.class);
 
 	private static final String IMAGE_FULL = "imageFull";
 	private static final String IMAGE_THUMB = "imageThumb";

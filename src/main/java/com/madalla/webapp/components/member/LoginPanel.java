@@ -17,8 +17,8 @@
 package com.madalla.webapp.components.member;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
@@ -57,7 +57,7 @@ import com.madalla.wicket.form.FocusOnLoadBehavior;
 public abstract class LoginPanel extends CmsPanel
 {
 	private static final long serialVersionUID = 1L;
-	private static final Log log = LogFactory.getLog(LoginPanel.class);
+	private static final Logger log = LoggerFactory.getLogger(LoginPanel.class);
 
 	/** True if the panel should display a remember-me checkbox */
 	private boolean includeRememberMe = true;

@@ -4,8 +4,8 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
@@ -27,7 +27,7 @@ import com.madalla.service.IRepositoryAdminServiceProvider;
 abstract class ContentExplorerPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
-	private Log log = LogFactory.getLog(this.getClass());
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 	private DefaultTreeModel treeModel;
 	private boolean adminMode;
 	private final BaseTree tree;

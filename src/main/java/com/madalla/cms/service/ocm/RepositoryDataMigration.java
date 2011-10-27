@@ -8,8 +8,8 @@ import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
@@ -17,7 +17,7 @@ import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 
 public class RepositoryDataMigration {
 
-	private static final Log log = LogFactory.getLog(RepositoryDataMigration.class);
+	private static final Logger log = LoggerFactory.getLogger(RepositoryDataMigration.class);
 
 	public static void transformData(JcrTemplate template, final String site){
 
@@ -60,13 +60,13 @@ public class RepositoryDataMigration {
 	}
 
     private static void removeOldText(Node node) throws RepositoryException{
-    	log.warn( node);
+    	log.warn(node.toString());
     	for (Iterator<Node> iterator = node.getNodes(); iterator.hasNext();) {
 			Node page = iterator.next();
-			log.warn(page);
+			log.warn(page.toString());
 			for(Iterator<Node> iter1 = page.getNodes(); iter1.hasNext();){
 				Node content = iter1.next();
-				log.warn(content);
+				log.warn(content.toString());
 				if (content.hasProperty("text")){
 					content.getProperty("text").setValue("");
 					log.warn("Clearing text value...");

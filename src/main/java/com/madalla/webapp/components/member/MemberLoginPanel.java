@@ -1,8 +1,8 @@
 package com.madalla.webapp.components.member;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -31,7 +31,7 @@ import com.madalla.wicket.animation.AnimationOpenSlide;
 
 public class MemberLoginPanel extends AbstractMemberPanel{
 	private static final long serialVersionUID = 1L;
-	private final static Log log = LogFactory.getLog(MemberLoginPanel.class);
+	private final static Logger log = LoggerFactory.getLogger(MemberLoginPanel.class);
 
 	public abstract class SignInform extends Form<Object>{
 		private static final long serialVersionUID = 1L;

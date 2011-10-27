@@ -1,7 +1,7 @@
 package com.madalla.wicket.form;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.IBehavior;
@@ -34,7 +34,7 @@ public abstract class AjaxValidationForm<T> extends Form<T>  {
 
 	private static final long serialVersionUID = 1L;
 
-	private Log log = LogFactory.getLog(this.getClass());
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	public AjaxValidationForm(String id) {
 		super(id);

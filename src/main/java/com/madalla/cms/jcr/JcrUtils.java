@@ -8,14 +8,14 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
 public class JcrUtils {
 
-	private static Log log = LogFactory.getLog(JcrUtils.class);
+	private static Logger log = LoggerFactory.getLogger(JcrUtils.class);
 
 
     /**

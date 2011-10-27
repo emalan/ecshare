@@ -17,7 +17,7 @@ import org.apache.wicket.util.string.AppendingStringBuffer;
 public class Dialog extends ModalWindow implements IHeaderContributor{
 	private static final long serialVersionUID = 1L;
 
-	//private final Log log = LogFactory.getLog(this.getClass());
+	//private final Logger log = LoggerFactory.getLogger(this.getClass());
 	private final boolean saveButton;
 	private final boolean closeButton = true;
 	private Component component;

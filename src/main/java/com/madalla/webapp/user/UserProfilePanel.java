@@ -1,8 +1,8 @@
 package com.madalla.webapp.user;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.JavascriptPackageResource;
@@ -31,7 +31,7 @@ import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 public class UserProfilePanel extends CmsPanel{
 
 	private static final long serialVersionUID = 9027719184960390850L;
-	private static final Log log = LogFactory.getLog(UserProfilePanel.class);
+	private static final Logger log = LoggerFactory.getLogger(UserProfilePanel.class);
 
     public class ProfileForm extends AjaxValidationForm<UserData> {
         private static final long serialVersionUID = -2684823497770522924L;
@@ -68,7 +68,7 @@ public class UserProfilePanel extends CmsPanel{
 	@Override
 	protected void onBeforeRender() {
 		IUser user = getSessionDataService().getUser();
-        log.debug(user);
+        log.debug(user.toString());
 
 		//User Change Link - secure or not depending on authenticator
 		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();

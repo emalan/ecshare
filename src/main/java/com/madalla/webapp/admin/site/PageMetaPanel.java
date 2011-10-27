@@ -3,8 +3,8 @@ package com.madalla.webapp.admin.site;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
@@ -27,7 +27,7 @@ import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 public abstract class PageMetaPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
 
-	private Log log = LogFactory.getLog(this.getClass());
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 
     public class MetaDataForm extends AjaxValidationForm<PageMetaLangData> {
 

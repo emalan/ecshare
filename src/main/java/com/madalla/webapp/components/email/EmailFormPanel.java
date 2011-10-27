@@ -3,8 +3,8 @@ package com.madalla.webapp.components.email;
 import java.text.MessageFormat;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
@@ -36,7 +36,7 @@ import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 public class EmailFormPanel extends CmsPanel {
     private static final long serialVersionUID = -1643728343421366820L;
 
-    private Log log = LogFactory.getLog(this.getClass());
+    private Logger log = LoggerFactory.getLogger(this.getClass());
     private String imagePass = CaptchaUtils.randomString(4, 6);
     private Integer first = CaptchaUtils.randomInteger(1, 20);
     private Integer second = CaptchaUtils.randomInteger(1, 12);

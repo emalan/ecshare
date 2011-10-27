@@ -4,8 +4,8 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.RequestParameters;
@@ -28,7 +28,7 @@ import com.madalla.rpx.Rpx;
  */
 public abstract class RpxCallbackUrlHandler extends AbstractRequestTargetUrlCodingStrategy{
 
-	private final static Log log = LogFactory.getLog(RpxCallbackUrlHandler.class);
+	private final static Logger log = LoggerFactory.getLogger(RpxCallbackUrlHandler.class);
 
 	protected final WeakReference<Class<? extends Page>> successBookmarkablePageClassRef;
 	protected final WeakReference<Class<? extends Page>> failBookmarkablePageClassRef;
@@ -66,7 +66,7 @@ public abstract class RpxCallbackUrlHandler extends AbstractRequestTargetUrlCodi
 				Node node = nodes.item(i);
 				personalData.put(node.getNodeName(), node.getChildNodes().item(0).getNodeValue());
 			}
-			log.debug(personalData);
+			log.debug(personalData.toString());
 
 			if (rpxLogin(personalData)){
 				loginSuccess = true;

@@ -8,8 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
@@ -238,7 +238,7 @@ public class ImageAdminPanel extends CmsPanel{
 	}
 
 	private static final long serialVersionUID = 981631179962049451L;
-	private static final Log log = LogFactory.getLog(ImageAdminPanel.class);
+	private static final Logger log = LoggerFactory.getLogger(ImageAdminPanel.class);
 	private static final String IMAGE_FILE_UPLOAD_GROUP = "ImageAdmin";
 	private static final FileUploadGroup GROUP = new FileUploadGroup(IMAGE_FILE_UPLOAD_GROUP);
 

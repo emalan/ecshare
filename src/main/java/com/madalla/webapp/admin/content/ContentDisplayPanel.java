@@ -4,8 +4,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
@@ -23,7 +23,7 @@ import com.madalla.service.IRepositoryAdminServiceProvider;
 class ContentDisplayPanel extends Panel {
 
 	private static final long serialVersionUID = -3450362599578103637L;
-	private Log log = LogFactory.getLog(this.getClass());
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 	private Component nodePath;
 	private Component contentDisplay;
 	private String path = "";

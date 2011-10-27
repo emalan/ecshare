@@ -4,8 +4,8 @@ import java.io.InputStream;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
@@ -42,7 +42,7 @@ import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
  */
 public class ContentLinkPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
-	private static final Log log = LogFactory.getLog(ContentLinkPanel.class);
+	private static final Logger log = LoggerFactory.getLogger(ContentLinkPanel.class);
 
 	/**
 	 * This is used to pass data to {@link com.madalla.wicket.resourcelink.EditableResourceLink}

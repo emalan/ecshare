@@ -1,7 +1,7 @@
 package com.madalla.wicket.form;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 public abstract class AjaxValidationSubmitButton extends IndicatingAjaxButton{
 
 	private static final long serialVersionUID = 5857888282264283281L;
-	private static final Log log = LogFactory.getLog(AjaxValidationSubmitButton.class);
+	private static final Logger log = LoggerFactory.getLogger(AjaxValidationSubmitButton.class);
 
 	private final FeedbackPanel feedbackPanel;
 
@@ -83,7 +83,7 @@ public abstract class AjaxValidationSubmitButton extends IndicatingAjaxButton{
 
     private abstract class AjaxValidationTemplate {
 
-        private final Log log = LogFactory.getLog(AjaxValidationTemplate.class);
+        private final Logger log = LoggerFactory.getLogger(AjaxValidationTemplate.class);
 
         public AjaxValidationTemplate(AjaxRequestTarget target, Form<?> form){
             processEvent(target, form);

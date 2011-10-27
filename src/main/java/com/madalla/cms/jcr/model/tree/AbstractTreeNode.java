@@ -8,8 +8,8 @@ import java.util.List;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.madalla.cms.jcr.model.JcrNodeModel;
 import com.madalla.cms.jcr.model.NodeModelWrapper;
@@ -17,7 +17,7 @@ import com.madalla.cms.jcr.model.NodeModelWrapper;
 public abstract class AbstractTreeNode extends NodeModelWrapper implements MutableTreeNode {
 	private static final long serialVersionUID = 1L;
 
-	static final Log log = LogFactory.getLog(AbstractTreeNode.class);
+	static final Logger log = LoggerFactory.getLogger(AbstractTreeNode.class);
 
     private JcrTreeModel treeModel;
     private List<JcrTreeNode> children = new ArrayList<JcrTreeNode>();

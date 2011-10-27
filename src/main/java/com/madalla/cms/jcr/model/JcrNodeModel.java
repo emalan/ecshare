@@ -13,7 +13,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 public class JcrNodeModel implements IPluginModel {
     private static final long serialVersionUID = 1L;
-    //private static final Log log = LogFactory.getLog(JcrNodeModel.class);
+    //private static final Logger log = LoggerFactory.getLogger(JcrNodeModel.class);
 
     private ContentNode contentNode;
 

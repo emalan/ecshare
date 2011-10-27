@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
@@ -13,7 +13,7 @@ import org.apache.commons.mail.SimpleEmail;
 
 public class SimpleEmailSender implements IEmailSender, Serializable {
 	private static final long serialVersionUID = 1628736470390933607L;
-	private static final Log log = LogFactory.getLog(SimpleEmailSender.class);
+	private static final Logger log = LoggerFactory.getLogger(SimpleEmailSender.class);
     private String emailHost;
     private String emailFromName;
     private String emailFromEmail;

@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
@@ -35,7 +35,7 @@ import com.madalla.wicket.form.ValidationStyleBehaviour;
 public class SiteEmailPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
 
-	private static Log log = LogFactory.getLog(SiteEmailPanel.class);
+	private static Logger log = LoggerFactory.getLogger(SiteEmailPanel.class);
 
 	private abstract class EmailForm extends AjaxValidationForm<Object> {
 		private static final long serialVersionUID = 1L;

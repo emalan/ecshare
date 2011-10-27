@@ -1,7 +1,7 @@
 package com.madalla.webapp.cms;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
@@ -28,7 +28,7 @@ import com.madalla.webapp.css.Css;
 public class ContentPanel extends CmsPanel {
     private static final long serialVersionUID = 1L;
 
-    private Log log = LogFactory.getLog(this.getClass());
+    private Logger log = LoggerFactory.getLogger(this.getClass());
     private String nodeName;
     private String nodeId;
 

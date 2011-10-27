@@ -14,8 +14,8 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Graphics Utilities class that provide default application methods.
@@ -25,7 +25,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ImageUtilities {
 
-    private static Log log = LogFactory.getLog(ImageUtilities.class);
+    private static Logger log = LoggerFactory.getLogger(ImageUtilities.class);
     @SuppressWarnings("unused")
 	private static final String JPEG = "image/jpeg";
     @SuppressWarnings("unused")

@@ -3,13 +3,13 @@ package com.madalla.webapp.upload;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 
 public class FileUploadThread  extends Thread{
 
-	private static final Log log = LogFactory.getLog(FileUploadThread.class);
+	private static final Logger log = LoggerFactory.getLogger(FileUploadThread.class);
 
 	private final IFileUploadInfo uploadInfo;
 	private final IFileUploadProcess process;

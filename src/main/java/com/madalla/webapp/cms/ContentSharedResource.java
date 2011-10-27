@@ -3,8 +3,8 @@ package com.madalla.webapp.cms;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.Application;
 import org.apache.wicket.Resource;
 import org.apache.wicket.ResourceReference;
@@ -29,7 +29,7 @@ import com.madalla.wicket.resourcelink.EditableResourceLink.ResourceType;
 public class ContentSharedResource {
 
     public static final String RESOURCE_PATH = "resource/";
-    Log log = LogFactory.getLog(ContentSharedResource.class);
+    Logger log = LoggerFactory.getLogger(ContentSharedResource.class);
 
     public static void registerResource(WebApplication application, ILinkData data, String path, IDataService service){
         mountResource(application, data.getId(), data.getResourceType(), path, service);

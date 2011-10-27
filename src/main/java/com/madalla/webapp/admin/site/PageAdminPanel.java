@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -24,7 +24,7 @@ public class PageAdminPanel extends CmsPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Log log = LogFactory.getLog(PageAdminPanel.class);
+	private static final Logger log = LoggerFactory.getLogger(PageAdminPanel.class);
 
     public PageAdminPanel(String id){
 		super(id);

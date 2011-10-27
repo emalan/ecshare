@@ -4,8 +4,8 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springmodules.jcr.JcrTemplate;
 
 import com.madalla.bo.AbstractData;
@@ -17,7 +17,7 @@ import com.madalla.db.dao.TransactionLogDao;
 
 abstract class AbstractRepositoryService{
 
-	private final static Log log = LogFactory.getLog(AbstractRepositoryService.class);
+	private final static Logger log = LoggerFactory.getLogger(AbstractRepositoryService.class);
 
     protected String site ;
 	protected JcrTemplate template;

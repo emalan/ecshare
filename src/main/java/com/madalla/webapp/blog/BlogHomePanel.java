@@ -1,7 +1,7 @@
 package com.madalla.webapp.blog;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.WicketRuntimeException;
 
 import com.madalla.bo.blog.BlogData;
@@ -11,7 +11,7 @@ import com.madalla.webapp.CmsPanel;
 public class BlogHomePanel extends CmsPanel{
 
 	private static final long serialVersionUID = 1548972105193261539L;
-	private static Log log = LogFactory.getLog(BlogHomePanel.class);
+	private static Logger log = LoggerFactory.getLogger(BlogHomePanel.class);
 
 
 	public BlogHomePanel(String id, String blogName, String blogEntryId){

@@ -3,8 +3,8 @@ package com.madalla.cms.service.ocm;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.WicketRuntimeException;
 import org.springmodules.jcr.JcrTemplate;
 
@@ -29,7 +29,7 @@ import com.madalla.webapp.security.PasswordAuthenticator;
 
 public class UserSecurityService extends AbstractRepositoryService{
 
-	private static final Log log = LogFactory.getLog(UserSecurityService.class);
+	private static final Logger log = LoggerFactory.getLogger(UserSecurityService.class);
 
 	private PasswordAuthenticator authenticator;
 	private List<SiteData> siteEntries;

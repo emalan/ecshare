@@ -7,8 +7,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.Application;
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.Page;
@@ -25,6 +23,10 @@ import org.apache.wicket.request.IRequestCycleProcessor;
 import org.apache.wicket.request.target.coding.IndexedParamUrlCodingStrategy;
 import org.apache.wicket.request.target.coding.MixedParamHybridUrlCodingStrategy;
 import org.apache.wicket.settings.IExceptionSettings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 
 import com.madalla.BuildInformation;
 import com.madalla.bo.SiteLanguage;
@@ -69,14 +71,15 @@ import com.madalla.wicket.I18NBookmarkablePageRequestTargetUrlCodingStrategy;
  */
 public abstract class CmsApplication extends AuthenticatedCmsApplication implements IDataServiceProvider, IRepositoryAdminServiceProvider, IEmailServiceProvider {
 
-	protected final static Log log = LogFactory.getLog(CmsApplication.class);
 	public static final String SECURE_PASSWORD = "securePassword";
 	public static final String PASSWORD = "password";
 	public static final String MEMBER_REGISTRATION = "memberRegistration";
 	public static final String MEMBER_PASSWORD = "memberPassword";
 	public static final String LOGIN = "login";
 
-    private IRepositoryAdminService repositoryAdminService;
+	protected final Logger log = LoggerFactory.getLogger(CmsApplication.class);
+	private final Marker fatal = MarkerFactory.getMarker("FATAL");
+	private IRepositoryAdminService repositoryAdminService;
     private IEmailSender emailSender;
     private IDataService dataService;
     private Rpx rpxService;
@@ -87,25 +90,26 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     protected void init() {
     	super.init();
     	//initialization checks
+    	
     	if (buildInformation == null) {
-    		log.fatal("Build Information not configured Correctly.");
+    		log.error(fatal, "Build Information not configured Correctly.");
     		throw new WicketRuntimeException("Build Information not configured Correctly.");
     	}
     	log.info("Build Information. ecshare version:" + buildInformation.getVersion());
     	if (repositoryAdminService == null){
-    		log.fatal("Content Admin Service is not configured Correctly.");
+    		log.error(fatal, "Content Admin Service is not configured Correctly.");
     		throw new WicketRuntimeException("Repository Admin Service is not configured Correctly.");
     	}
     	if (dataService == null){
-    		log.fatal("Repository Data Service is not configured Correctly.");
+    		log.error(fatal, "Repository Data Service is not configured Correctly.");
     		throw new WicketRuntimeException("Repository Data Service is not configured Correctly.");
     	}
     	if (emailSender == null){
-    		log.fatal("Email Sender is not configured Correctly.");
+    		log.error(fatal, "Email Sender is not configured Correctly.");
     		throw new WicketRuntimeException("Email Service is not configured Correctly.");
     	}
     	if (hasRpxService() && (rpxService == null || StringUtils.isEmpty(rpxService.getCallback()))){
-    		log.fatal("Rpx service is not configured Correctly.");
+    		log.error(fatal, "Rpx service is not configured Correctly.");
     		throw new WicketRuntimeException("Rpx service is not configured Correctly. Configure values using the 'override.properties' file.");
     	}
         setupApplicationSpecificConfiguration();
@@ -190,11 +194,11 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 
     	if (hasMemberService()){
     		if (getMemberPasswordPage() == null) {
-        		log.fatal("Member Service not configured Correctly. Member Service Password Page is null.");
+        		log.error(fatal, "Member Service not configured Correctly. Member Service Password Page is null.");
         		throw new WicketRuntimeException("Member Service not configured Correctly. Member Service Password Page is null.");
         	}
     		if (getMemberRegistrationPage() == null) {
-        		log.fatal("Member Service not configured Correctly. Member Service Registration Page is null.");
+        		log.error(fatal, "Member Service not configured Correctly. Member Service Registration Page is null.");
         		throw new WicketRuntimeException("Member Service not configured Correctly. Member Service Registration Page is null.");
         	}
     		mountBookmarkablePage(MEMBER_PASSWORD, getMemberPasswordPage());

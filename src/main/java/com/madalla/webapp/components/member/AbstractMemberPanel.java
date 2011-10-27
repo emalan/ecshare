@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.model.util.MapModel;
 import org.springframework.dao.DataAccessException;
@@ -19,7 +19,7 @@ import com.madalla.webapp.CmsPanel;
 
 public abstract class AbstractMemberPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
-	private final static Log log = LogFactory.getLog(AbstractMemberPanel.class);
+	private final static Logger log = LoggerFactory.getLogger(AbstractMemberPanel.class);
 
 	public AbstractMemberPanel(String id) {
 		super(id);

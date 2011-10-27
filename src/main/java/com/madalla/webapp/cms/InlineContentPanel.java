@@ -1,7 +1,7 @@
 package com.madalla.webapp.cms;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
 import org.apache.wicket.markup.ComponentTag;
@@ -22,7 +22,7 @@ import com.madalla.webapp.CmsPanel;
 public class InlineContentPanel extends CmsPanel {
     private static final long serialVersionUID = 1L;
 
-    private Log log = LogFactory.getLog(this.getClass());
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Use this constructor for Border or application Level Content

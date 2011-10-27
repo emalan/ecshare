@@ -6,13 +6,13 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 
 public class ContentNode extends AbstractReadOnlyModel<String>  implements Serializable, IContentNode{
 	private static final long serialVersionUID = 6274872365809010643L;
-	private static Log log = LogFactory.getLog(ContentNode.class);
+	private static Logger log = LoggerFactory.getLogger(ContentNode.class);
 
 	private String path;
 	private String name;

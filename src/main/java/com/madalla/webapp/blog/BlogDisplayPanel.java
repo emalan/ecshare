@@ -4,8 +4,8 @@ import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -33,7 +33,7 @@ public class BlogDisplayPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static final String META_NAME = "<meta name=\"{0}\" content=\"{1}\"/>";
 
-	private final Log log = LogFactory.getLog(this.getClass());
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	private int displayCount = 5;
 	private final BlogEntryView blogEntry = new BlogEntryView();
 

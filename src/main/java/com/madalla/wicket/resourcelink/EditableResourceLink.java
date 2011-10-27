@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ResourceReference;
@@ -42,7 +42,7 @@ import com.madalla.wicket.configure.AjaxConfigureIcon;
 public class EditableResourceLink extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(5000);
-	private static final Log log = LogFactory.getLog(EditableResourceLink.class);
+	private static final Logger log = LoggerFactory.getLogger(EditableResourceLink.class);
 
 	private Form<Object> resourceForm;
 	private boolean editMode;

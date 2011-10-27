@@ -13,8 +13,8 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.apache.wicket.WicketRuntimeException;
 import org.joda.time.DateTime;
@@ -93,7 +93,7 @@ import com.madalla.webapp.security.IPasswordAuthenticator;
 public class RepositoryService extends AbstractRepositoryService implements IDataService, Serializable{
 
 	private static final long serialVersionUID = 795763276139305054L;
-	private static final Log log = LogFactory.getLog(RepositoryService.class);
+	private static final Logger log = LoggerFactory.getLogger(RepositoryService.class);
 
 
     private EmailEntryDao emailEntryDao;

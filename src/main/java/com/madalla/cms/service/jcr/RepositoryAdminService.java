@@ -14,8 +14,8 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.swing.tree.DefaultTreeModel;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
@@ -32,7 +32,7 @@ public class RepositoryAdminService extends AbstractJcrRepositoryService impleme
     private static final String APP = "applications";
     private JcrTemplate template;
     private String repositoryHome;
-    private final Log log = LogFactory.getLog(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     static final String EC_NODE_BACKUP = NS + "backup";
 

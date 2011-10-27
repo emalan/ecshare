@@ -6,8 +6,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -18,7 +18,7 @@ import com.madalla.bo.security.IUserValidate;
 
 public class MemberDao extends AbstractDao {
 
-	private static final Log log = LogFactory.getLog(MemberDao.class);
+	private static final Logger log = LoggerFactory.getLogger(MemberDao.class);
 
 	private static final String INSERT = "insert into MEMBER (SITE_NAME,MEMBER_ID,FIRST_NAME,LAST_NAME,COMPANY_NAME,MEMBER_EMAIL,SIGNUP_DATE) values (?, ?, ?, ?, ?, ?, ?)";
 	private static final String FIND = "select ID,SITE_NAME,MEMBER_ID,FIRST_NAME,LAST_NAME,COMPANY_NAME,MEMBER_EMAIL,SIGNUP_DATE,PASSWORD,AUTHORIZED_DATE,SUBSCRIPTION_END_DATE from MEMBER where MEMBER_ID = ?";

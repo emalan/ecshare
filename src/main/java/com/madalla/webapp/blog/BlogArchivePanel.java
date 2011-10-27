@@ -8,8 +8,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -36,7 +36,7 @@ import com.madalla.util.ui.ICalendarTreeInput;
 
 public class BlogArchivePanel extends Panel {
 	private static final long serialVersionUID = 1L;
-	private Log log = LogFactory.getLog(this.getClass());
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 	private static DateTimeFormatter df = DateTimeFormat.forPattern("MMM d");
 
 	BlogArchivePanel(final String id, final BlogData blog, final BlogDisplayPanel display ) {

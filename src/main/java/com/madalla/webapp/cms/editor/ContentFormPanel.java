@@ -1,7 +1,7 @@
 package com.madalla.webapp.cms.editor;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
@@ -17,7 +17,7 @@ import com.madalla.wicket.form.AjaxValidationSubmitButton;
 public class ContentFormPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
 
-	private Log log = LogFactory.getLog(this.getClass());
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	private ContentEntryData contentModel;
 
