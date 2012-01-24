@@ -36,6 +36,11 @@ public class DaoTester extends AbstractDependencyInjectionSpringContextTests{
 		String lastName = RandomStringUtils.randomAlphabetic(10);
 		String memberId = RandomStringUtils.randomAlphabetic(12);
 
+		List<? extends MemberData> list = memberDao.fetch();
+		for(MemberData item : list){
+			System.out.println(item);
+		}
+		
 		Member data = new Member();
 		data.setFirstName(firstName);
 		data.setLastName(lastName);
@@ -43,14 +48,14 @@ public class DaoTester extends AbstractDependencyInjectionSpringContextTests{
 		data.setEmail("testEmail");
 		memberDao.save(data);
 
-		List<? extends MemberData> list = memberDao.fetch();
-		for(MemberData item : list){
-			System.out.println(item);
-		}
+
 
 		String password = "test";
 		memberDao.savePassword(data.getMemberId(), password);
 		memberDao.save(data);
+		
+
+		
 		assertEquals(password, memberDao.getPassword(data.getMemberId()));
 
 		MemberData test = memberDao.findbyMemberId(memberId);

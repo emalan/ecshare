@@ -8,7 +8,7 @@
 	<description>Wicket Framework code for multi-lingual Content Management system</description>
 	<url>http://www.controlmysite.net</url>
 	<scm>
-	   <connection>scm:git:ssh://ecprod/vol/devel/ecshare.git</connection>
+	   <connection>scm:git:ssh://emalan.com/vol/devel/ecshare.git</connection>
 	</scm>
     <organization> 
         <name>emalan consulting, inc</name> 
@@ -29,6 +29,15 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+	<!-- 
+	 <pluginRepositories>
+                            
+                                      <pluginRepository>
+                                          <id>Wakaleo Repository</id>
+                                          <url>http://maven.wakaleo.com/repos/</url>
+                                      </pluginRepository>
+  </pluginRepositories>  
+   --> 
 	<dependencies>
 		<!--  WICKET DEPENDENCIES -->
 		<dependency>
@@ -352,13 +361,35 @@
                     <targetJdk>1.5</targetJdk>
                 </configuration>
             </plugin>
+            <!-- 
+            <plugin>
+                <groupId>com.wakaleo.maven.plugin.schemaspy</groupId>
+                <artifactId>maven-schemaspy-plugin</artifactId>
+                <version>1.0</version>
+                <configuration>
+                    <databaseType>derby</databaseType>
+                    <jdbcUrl>jdbc:derby:database;</jdbcUrl>
+                </configuration>
+            </plugin>
+             --> 
 		</plugins>
 	</reporting>
 	<distributionManagement>
+	   <repository>
+            <id>ecprod</id>
+            <name>Amazon ec2 - production</name>
+            <url>scp://:ubuntu@184.73.176.133:/vol/repo</url>
+            <layout>default</layout>
+        </repository>
+       <snapshotRepository>
+            <name>Amazon ec2 - test</name>
+            <url>:/vol/repo</url>
+            <layout>default</layout>
+        </snapshotRepository>
         <site>
             <id>ecprod</id>
             <name>Amazon ec2 - production</name>
-            <url>scp://:ubuntu@174.129.192.163:/vol/www/htdocs/controlmysite/project</url>
+            <url>scp://:ubuntu@emalan.com:/vol/www/htdocs/controlmysite/project</url>
         </site>
     </distributionManagement>
 	
