@@ -384,7 +384,7 @@
        <snapshotRepository>
             <id>snapshot</id>
             <name>Snapshot repository</name>
-	    <url>file://${basedir}/snapshots</url>
+	        <url>file://${basedir}/snapshots</url>
             <layout>default</layout>
         </snapshotRepository>
         <site>
