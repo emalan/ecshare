@@ -382,9 +382,9 @@
             <layout>default</layout>
         </repository>
        <snapshotRepository>
-            <id>local</id>
+            <id>snapshot</id>
             <name>Snapshot repository</name>
-            <url>file://Users/emalan/devel/repository/snapshots</url>
+	    <url>file://${basedir}/snapshots</url>
             <layout>default</layout>
         </snapshotRepository>
         <site>
