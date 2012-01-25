@@ -378,12 +378,12 @@
 	   <repository>
             <id>ecprod</id>
             <name>Amazon ec2 - production</name>
-            <url>scp://:ubuntu@184.73.176.133:/vol/repo</url>
+            <url>scp://:ubuntu@emalan.com:/vol/repo</url>
             <layout>default</layout>
         </repository>
        <snapshotRepository>
-            <name>Amazon ec2 - test</name>
-            <url>:/vol/repo</url>
+            <name>Snapshot repository</name>
+            <url>file:Users/emalan/devel/repository/snapshots</url>
             <layout>default</layout>
         </snapshotRepository>
         <site>
