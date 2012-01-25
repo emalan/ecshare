@@ -382,8 +382,9 @@
             <layout>default</layout>
         </repository>
        <snapshotRepository>
+            <id>local</id>
             <name>Snapshot repository</name>
-            <url>file:Users/emalan/devel/repository/snapshots</url>
+            <url>file://Users/emalan/devel/repository/snapshots</url>
             <layout>default</layout>
         </snapshotRepository>
         <site>
