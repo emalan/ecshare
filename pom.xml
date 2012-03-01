@@ -8,7 +8,7 @@
 	<description>Wicket Framework code for multi-lingual Content Management system</description>
 	<url>http://www.controlmysite.net</url>
 	<scm>
-	   <connection>scm:git:ssh://emalan.com/vol/devel/ecshare.git</connection>
+	   <developerConnection>scm:git:ssh://emalan.com/vol/devel/ecshare.git</developerConnection>
 	</scm>
     <organization> 
         <name>emalan consulting, inc</name> 
