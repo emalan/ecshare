@@ -355,17 +355,16 @@
 		</plugins>
 	</reporting>
 	<distributionManagement>
-	   <repository>
-            <id>ecprod</id>
-            <name>Amazon ec2 - production</name>
-            <url>scp://:ubuntu@emalan.com:/vol/repo</url>
+	    <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>releases</id>
+            <name>Server08 - nexus - releases</name>
+            <url>http://192.168.1.124:8081/nexus/content/repositories/releases/</url>
             <layout>default</layout>
         </repository>
-       <snapshotRepository>
-            <id>snapshot</id>
-            <name>Snapshot repository</name>
-	        <url>file://${basedir}/snapshots</url>
-            <layout>default</layout>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <url>http://192.168.1.124:8081/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
         <site>
             <id>ecprod</id>
