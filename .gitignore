@@ -9,3 +9,4 @@ derby.log
 src/build.properties
 #ignore backup files left from editors
 *~/pom.xml
+/.settings
