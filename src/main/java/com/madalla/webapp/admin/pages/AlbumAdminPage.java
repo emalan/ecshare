@@ -1,7 +1,8 @@
 package com.madalla.webapp.admin.pages;
 
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 
 import com.madalla.webapp.admin.AbstractAdminPage;
 import com.madalla.webapp.admin.image.AlbumAdminPanel;
@@ -12,7 +13,8 @@ public class AlbumAdminPage extends AbstractAdminPage  {
 
 	public AlbumAdminPage(PageParameters parameters){
 		super(parameters);
-		add(new AlbumAdminPanel("adminPanel", parameters.getString("0")));
+		StringValue param = parameters.get(0);
+		add(new AlbumAdminPanel("adminPanel", param.toString()));
 	}
 
 }

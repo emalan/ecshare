@@ -1,8 +1,8 @@
 package com.madalla.wicket;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.AbstractBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
@@ -13,7 +13,7 @@ import org.apache.wicket.model.IModel;
  * @author Eugene Malan
  *
  */
-public abstract class ClassAppenderBehavior extends AbstractBehavior {
+public abstract class ClassAppenderBehavior extends Behavior {
 
 	private static final long serialVersionUID = 1L;
 

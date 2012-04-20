@@ -10,21 +10,19 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.IBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -45,6 +43,8 @@ import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.madalla.bo.member.MemberData;
 import com.madalla.webapp.components.member.AbstractMemberPanel;
@@ -68,7 +68,9 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 		private static final long serialVersionUID = 1L;
 
 		public SortableMemberProvider() {
-			setSort("id", true);
+			
+			//TODO fix sort
+			//setSort("id", true);
 		}
 
 		public Iterator<? extends MemberData> iterator(int first, int count) {
@@ -257,16 +259,18 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				protected void configure(Map<String, Object> widgetProperties) {
-					super.configure(widgetProperties);
+				protected void configure(Map<String, Object> widgetProperties, IHeaderResponse response,
+						Map<String, Object> initVariables) {
+					super.configure(widgetProperties, response, initVariables);
 					widgetProperties.put("title", Boolean.FALSE);
 					widgetProperties.put("close", Boolean.FALSE);
 				}
+				
 			});
 
 		}
 
-		private IBehavior getHideShowBehavior(boolean show){
+		private Behavior getHideShowBehavior(boolean show){
 			return new ClassAppenderBehavior(show){
 				private static final long serialVersionUID = 1L;
 
@@ -306,9 +310,6 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 		super(id);
 
 		dateTimeZone = getRepositoryService().getDateTimeZone();
-
-		add(Css.CSS_ICON);
-		add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.PROTOTYPE));
 
 		current = new CompoundPropertyModel<MemberData>(instanciateMember());
 
@@ -374,6 +375,11 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 				target.appendJavaScript(hideShowForm.seekToEnd());
 				target.addComponent(editForm);
 				target.addComponent(reset);
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				
 			}
 
 		}.setDefaultFormProcessing(false));
@@ -560,6 +566,14 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 		};
 		add(download);
 		download.setFileName("SiteMemberData.csv");
+
+	}
+	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.renderCSSReference(Css.CSS_ICON);
+		response.renderJavaScriptReference(JavascriptResources.PROTOTYPE);
 
 	}
 

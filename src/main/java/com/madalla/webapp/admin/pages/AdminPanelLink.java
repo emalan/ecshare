@@ -5,18 +5,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.authorization.strategies.role.Roles;
-import org.apache.wicket.authorization.strategies.role.metadata.InstantiationPermissions;
-import org.apache.wicket.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
+import org.apache.wicket.authroles.authorization.strategies.role.Roles;
+import org.apache.wicket.authroles.authorization.strategies.role.metadata.InstantiationPermissions;
+import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Admin Link that will switch admin Panels
@@ -92,7 +92,7 @@ public class AdminPanelLink extends Link<Object> {
 	}
 
 	@Override
-	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+	public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
 		if (StringUtils.isNotEmpty(key)){
 			replaceComponentTagBody(markupStream, openTag, getString(key));
 		} else {
