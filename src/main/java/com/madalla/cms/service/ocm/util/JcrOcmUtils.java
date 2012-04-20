@@ -24,7 +24,7 @@ import org.apache.jackrabbit.ocm.manager.impl.ObjectContentManagerImpl;
 import org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImpl;
 import org.apache.jackrabbit.ocm.mapper.Mapper;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.AnnotationMapperImpl;
-import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
+import org.apache.wicket.request.resource.DynamicImageResource;
 import org.joda.time.DateTime;
 
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;

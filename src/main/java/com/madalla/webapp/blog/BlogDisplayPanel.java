@@ -4,22 +4,22 @@ import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
-import org.apache.wicket.behavior.StringHeaderContributor;
 import org.apache.wicket.datetime.StyleDateConverter;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.madalla.bo.blog.BlogData;
 import com.madalla.bo.blog.BlogEntryData;
@@ -42,7 +42,6 @@ public class BlogDisplayPanel extends Panel {
 		init(id, blog );
 		changeModel(blogEntryId);
 		add(new SimpleAttributeModifier("class","showBlog"));
-		add(new StringHeaderContributor(MessageFormat.format(META_NAME, "keywords", blogEntry.getKeywords())));
 	}
 	BlogDisplayPanel(final String id, final BlogData blog) {
 		super(id);
@@ -50,7 +49,7 @@ public class BlogDisplayPanel extends Panel {
 		//TODO Store the Blog Home Meatadata keywords in CMS
 		//TODO Change the Content Entry to a Blog intro and keywords
 		blogEntry.setKeywords("Eugene Malan, Eugene, Malan, Blog, CMS, Wicket, Java,"+blogEntry.getBlog());
-		add(new StringHeaderContributor(MessageFormat.format(META_NAME, "keywords", blogEntry.getKeywords())));
+		
 	}
 
 	private void init(final String id, final BlogData blog) {
@@ -118,6 +117,13 @@ public class BlogDisplayPanel extends Panel {
 		add(new Label("text", new PropertyModel<String>(blogEntry, "text")).setOutputMarkupId(true).setEscapeModelStrings(false));
 		add(new AdminPageLink("editBlogLink", BlogEntryPage.class, new PageParameters("0="+blog.getName()+",1="+blogEntry.getId())));
 
+	}
+	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		// TODO Auto-generated method stub
+		super.renderHead(response);
+		response.renderString(MessageFormat.format(META_NAME, "keywords", blogEntry.getKeywords()));
 	}
 
 	public void changeModel(String blogEntryId){

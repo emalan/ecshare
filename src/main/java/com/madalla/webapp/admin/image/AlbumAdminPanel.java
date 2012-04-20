@@ -10,7 +10,7 @@ import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -115,11 +115,6 @@ public class AlbumAdminPanel extends CmsPanel{
 	public AlbumAdminPanel(String id, String albumName) {
 		super(id);
 
-		add(Css.CSS_FORM);
-		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
-		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.EFFECTS));
-		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.DRAGDROP));
-
         final AlbumData album = getRepositoryService().getAlbum(albumName);
 
         // Available Images Display
@@ -196,6 +191,14 @@ public class AlbumAdminPanel extends CmsPanel{
 		submitLink.setOutputMarkupId(true);
 		albumForm.add(submitLink);
 		albumForm.add(new ComponentFeedbackPanel("albumFeedback", albumForm).setOutputMarkupId(true));
+	}
+	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		response.renderCSSReference(Css.CSS_FORM);
+		response.renderJavaScriptReference(Scriptaculous.PROTOTYPE);
+		response.renderJavaScriptReference(Scriptaculous.EFFECTS);
+		response.renderJavaScriptReference(Scriptaculous.DRAGDROP);
 	}
 
 	private List<ImageData> getAvailableImages() {

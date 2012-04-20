@@ -26,6 +26,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -123,9 +124,6 @@ public abstract class LoginPanel extends CmsPanel
 			// Show remember me checkbox?
 			rememberMeRow.setVisible(includeRememberMe);
 
-			// Make form values persistent
-			setPersistent(rememberMe);
-
 		}
 
 		/**
@@ -174,8 +172,6 @@ public abstract class LoginPanel extends CmsPanel
 			throw new RestartResponseAtInterceptPageException(destination);
 
 		}
-
-		add(Css.CSS_FORM);
 
 		this.includeRememberMe = includeRememberMe;
 
@@ -259,6 +255,11 @@ public abstract class LoginPanel extends CmsPanel
         username.setLabel(new Model<String>(getString("label.name")));
         password.setLabel(new Model<String>(getString("label.password")));
 	}
+	
+	 @Override
+	public void renderHead(IHeaderResponse response) {
+		 response.renderCSSReference(Css.CSS_FORM);
+	}
 
 	private void lockUserName(boolean lock){
 		username.setVisible(!lock);
@@ -277,16 +278,6 @@ public abstract class LoginPanel extends CmsPanel
 
 	private boolean isUserLocked(){
 		return !username.isVisible();
-	}
-
-	/**
-	 * Removes persisted form data for the signin panel (forget me)
-	 */
-	public final void forgetMe()
-	{
-		// Remove persisted user data. Search for child component
-		// of type SignInForm and remove its related persistence values.
-		getPage().removePersistedFormData(LoginPanel.SignInForm.class, true);
 	}
 
 	/**
@@ -320,17 +311,6 @@ public abstract class LoginPanel extends CmsPanel
 	}
 
 	/**
-	 * Convenience method set persistence for username and password.
-	 *
-	 * @param enable
-	 *            Whether the fields should be persistent
-	 */
-	public void setPersistent(final boolean enable)
-	{
-		username.setPersistent(enable);
-	}
-
-	/**
 	 * Set model object for rememberMe checkbox
 	 *
 	 * @param rememberMe
@@ -338,7 +318,6 @@ public abstract class LoginPanel extends CmsPanel
 	public void setRememberMe(final boolean rememberMe)
 	{
 		this.rememberMe = rememberMe;
-		this.setPersistent(rememberMe);
 	}
 
 	/**

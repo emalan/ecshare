@@ -3,9 +3,10 @@ package com.madalla.webapp.user;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
@@ -40,8 +41,6 @@ public class UserLoginPanel extends CmsPanel {
 	private UserLoginPanel(final String id, final ICredentialHolder credentials){
 		super(id);
 
-		add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.ANIMATOR));
-
 		final CmsSession session = (CmsSession) getSession();
 
 		final Component loginInfo = new Label("loginInfo", new StringResourceModel("login.info",new Model<IUser>(getSessionDataService().getUser()))){
@@ -70,7 +69,7 @@ public class UserLoginPanel extends CmsPanel {
 				IUser user = getRepositoryService().getUser(username);
 				getAppSession().setUser(user);
 
-        		if (getApplication().getConfigurationType().equals(Application.DEVELOPMENT)){
+        		if (getApplication().getConfigurationType().equals(RuntimeConfigurationType.DEPLOYMENT)){
         			return;
         		}
         		preLogin(username);
@@ -147,6 +146,11 @@ public class UserLoginPanel extends CmsPanel {
 			add(new Label("rpxPanel").setVisible(false));
 		}
 
+	}
+	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		response.renderJavaScriptReference(JavascriptResources.ANIMATOR);
 	}
 
 	protected void preLogin(String username){

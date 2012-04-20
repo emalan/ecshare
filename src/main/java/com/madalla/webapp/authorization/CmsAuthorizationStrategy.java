@@ -1,6 +1,6 @@
 package com.madalla.webapp.authorization;
 
-import org.apache.wicket.authorization.strategies.role.RoleAuthorizationStrategy;
+import org.apache.wicket.authroles.authorization.strategies.role.RoleAuthorizationStrategy;
 
 public class CmsAuthorizationStrategy extends RoleAuthorizationStrategy {
 

@@ -1,6 +1,7 @@
 package com.madalla.bo.image;
 
-import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
+import org.apache.wicket.request.resource.DynamicImageResource;
+
 
 public interface IImageData {
 	String getName();

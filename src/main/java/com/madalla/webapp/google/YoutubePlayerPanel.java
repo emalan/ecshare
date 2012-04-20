@@ -2,6 +2,7 @@ package com.madalla.webapp.google;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -29,8 +30,6 @@ public class YoutubePlayerPanel extends CmsPanel {
 	 */
 	public YoutubePlayerPanel(String id, String page) {
 		super(id);
-		add(Css.CSS_FORM);
-		add(Css.CSS_BUTTONS);
 		final VideoPlayerData videoData = getVideo(id, page);
 		String url = "http://www.youtube.com/v/"+videoData.getVideoId()+"&enablejsapi=1&playerapiid=ytplayer";
 		add(new SwfObject(url,videoData.getWidth(), videoData.getHeight()));
@@ -65,7 +64,12 @@ public class YoutubePlayerPanel extends CmsPanel {
 
 	}
 	
-	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.renderCSSReference(Css.CSS_FORM);
+		response.renderCSSReference(Css.CSS_BUTTONS);
+	}
 
 	@Override
 	protected void onBeforeRender() {

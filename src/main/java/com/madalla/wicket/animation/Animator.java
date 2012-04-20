@@ -6,7 +6,9 @@ import java.util.List;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
 
@@ -44,7 +46,7 @@ import com.madalla.webapp.scripts.JavascriptResources;
  * @author Eugene Malan
  * @see AnimationEventBehavior
  */
-public class Animator extends AbstractBehavior implements IAnimator, IAnimatorActions, IHeaderContributor, Serializable {
+public class Animator extends Behavior implements IAnimator, IAnimatorActions, IHeaderContributor, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private final static int DURATION = 400;
@@ -157,9 +159,9 @@ public class Animator extends AbstractBehavior implements IAnimator, IAnimatorAc
 	}
 
 	@Override
-	public void renderHead(IHeaderResponse response) {
-		response.renderJavascriptReference(JavascriptResources.ANIMATOR);
-		response.renderOnDomReadyJavascript(this.render());
+	public void renderHead(Component component, IHeaderResponse response) {
+		response.renderJavaScriptReference(JavascriptResources.ANIMATOR);
+		response.renderOnDomReadyJavaScript(this.render());
 	}
 
 }

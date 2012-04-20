@@ -5,12 +5,11 @@ import java.util.List;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.Application;
-import org.apache.wicket.Request;
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
-import org.apache.wicket.authentication.AuthenticatedWebSession;
-import org.apache.wicket.authorization.strategies.role.Roles;
-import org.apache.wicket.session.pagemap.IPageMapEntry;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authroles.authorization.strategies.role.Roles;
+import org.apache.wicket.request.Request;
 
 import com.madalla.bo.member.MemberData;
 import com.madalla.bo.security.IUser;
@@ -30,7 +29,7 @@ import com.madalla.webapp.upload.FileUploadStore;
 import com.madalla.webapp.upload.IFileUploadInfo;
 import com.madalla.webapp.upload.IFileUploadStatus;
 
-public class CmsSession  extends AuthenticatedWebSession implements IContentAdmin, ISessionDataServiceProvider, IFileUploadInfo{
+public class CmsSession extends AuthenticatedWebSession implements IContentAdmin, ISessionDataServiceProvider, IFileUploadInfo{
 
 	private static final long serialVersionUID = 652426659740076486L;
 	public final static String SUPERADMIN = "SUPERADMIN";
@@ -44,7 +43,7 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 
 	private Roles roles;
 	private ISessionDataService repositoryService;
-	private IPageMapEntry lastSitePage;
+	//private IPageMapEntry lastSitePage;
 	private MemberSession memberSession = new MemberSession() {
 
 		private static final long serialVersionUID = 1L;
@@ -103,7 +102,7 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 	 * NOTE: Make sure this is not used by the deployed application.
 	 */
 	public void authenticate(){
-		if (getApplication().getConfigurationType().equals(Application.DEPLOYMENT)){
+		if (getApplication().getConfigurationType().equals(RuntimeConfigurationType.DEPLOYMENT)){
     		throw new RuntimeException("this Login method only available for DEVELOPMENT environment.");
     	}
     	UserData user = getDataService().getUser("admin");
@@ -251,13 +250,13 @@ public class CmsSession  extends AuthenticatedWebSession implements IContentAdmi
 		return isSignedIn();
 	}
 
-	public void setLastSitePage(IPageMapEntry lastSitePage) {
-		this.lastSitePage = lastSitePage;
-	}
-
-	public IPageMapEntry getLastSitePage() {
-		return lastSitePage ;
-	}
+//	public void setLastSitePage(IPageMapEntry lastSitePage) {
+//		this.lastSitePage = lastSitePage;
+//	}
+//
+//	public IPageMapEntry getLastSitePage() {
+//		return lastSitePage ;
+//	}
 
 
 

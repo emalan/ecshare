@@ -1,15 +1,15 @@
 package com.madalla.webapp.css;
 
-import org.apache.wicket.behavior.HeaderContributor;
-import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 
 public class Css {
 
-	public static final HeaderContributor BASE = CSSPackageResource.getHeaderContribution(Css.class,"base.css");
-	public static final HeaderContributor YUI_CORE = CSSPackageResource.getHeaderContribution(Css.class,"reset-fonts-grid.css");
-	public static final HeaderContributor CSS_BUTTONS = CSSPackageResource.getHeaderContribution(Css.class,"button.css");
-	public static final HeaderContributor CSS_IMAGE = CSSPackageResource.getHeaderContribution(Css.class,"image.css");
-	public static final HeaderContributor CSS_FORM = CSSPackageResource.getHeaderContribution(Css.class,"form.css");
-	public static final HeaderContributor CSS_ICON = CSSPackageResource.getHeaderContribution(Css.class,"icon.css");
+	public static final ResourceReference BASE = new PackageResourceReference(Css.class, "base.css");
+	public static final ResourceReference YUI_CORE = new PackageResourceReference(Css.class,"reset-fonts-grid.css");
+	public static final ResourceReference CSS_BUTTONS = new PackageResourceReference(Css.class,"button.css");
+	public static final ResourceReference CSS_IMAGE = new PackageResourceReference(Css.class,"image.css");
+	public static final ResourceReference CSS_FORM = new PackageResourceReference(Css.class,"form.css");
+	public static final ResourceReference CSS_ICON = new PackageResourceReference(Css.class,"icon.css");
 
 }
