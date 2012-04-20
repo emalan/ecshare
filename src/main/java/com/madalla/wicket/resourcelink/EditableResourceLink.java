@@ -365,9 +365,9 @@ public class EditableResourceLink extends Panel {
 //				target.addComponent(feedback);
 //				String indicatorId = getIndicator();
 //				if (isFileUploading(data.getId()) != null && isFileUploading(data.getId())){
-//					target.appendJavascript("wicketShow('" + indicatorId +"');");
+//					target.appendJavaScript("wicketShow('" + indicatorId +"');");
 //				} else {
-//					target.appendJavascript("wicketHide('" + indicatorId +"');");
+//					target.appendJavaScript("wicketHide('" + indicatorId +"');");
 //				}
 //
 //			}

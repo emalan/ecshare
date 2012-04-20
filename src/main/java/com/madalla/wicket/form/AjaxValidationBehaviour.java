@@ -67,7 +67,7 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 		//refreshForm(getFormComponent().getForm(), target);
 		if (feedbackPanel != null){
 			target.addComponent(feedbackPanel);
-			target.appendJavascript(
+			target.appendJavaScript(
 				"$('"+feedbackPanel.getMarkupId()+"').parentNode.addClassName('"+validClass+"');"+
 				"$('"+feedbackPanel.getMarkupId()+"').parentNode.removeClassName('"+invalidClass+"');");
 		}
@@ -82,7 +82,7 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 
 		if (feedbackPanel != null){
 			target.addComponent(feedbackPanel);
-			target.appendJavascript(
+			target.appendJavaScript(
                 "$('"+feedbackPanel.getMarkupId()+"').parentNode.addClassName('"+invalidClass+"');"+
                 "$('"+feedbackPanel.getMarkupId()+"').parentNode.removeClassName('"+validClass+"');");
 		}
@@ -99,7 +99,7 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 
 	//animation to indicate to user that validation occured
 	private void animation(AjaxRequestTarget target) {
-		target.appendJavascript(animator.play()+animator.reverse());
+		target.appendJavaScript(animator.play()+animator.reverse());
 	}
 
 }

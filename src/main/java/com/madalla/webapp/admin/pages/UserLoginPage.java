@@ -1,6 +1,6 @@
 package com.madalla.webapp.admin.pages;
 
-import org.apache.wicket.PageParameters;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.madalla.webapp.admin.AbstractAdminPage;
 import com.madalla.webapp.security.IAuthenticator;

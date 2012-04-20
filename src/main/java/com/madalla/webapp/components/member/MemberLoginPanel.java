@@ -47,7 +47,6 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 			add(password = new PasswordTextField("password", new PropertyModel<String>(credentials,"password")));
             password.setRequired(true);
 
-			username.setPersistent(true);
 		}
 
 		public abstract boolean signIn(String username, String password);

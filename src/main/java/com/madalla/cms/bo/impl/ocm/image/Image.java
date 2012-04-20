@@ -3,7 +3,7 @@ package com.madalla.cms.bo.impl.ocm.image;
 import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Field;
 import org.apache.jackrabbit.ocm.mapper.impl.annotation.Node;
-import org.apache.wicket.markup.html.image.resource.DynamicImageResource;
+import org.apache.wicket.request.resource.DynamicImageResource;
 
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.ImageData;

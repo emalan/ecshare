@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
-import org.apache.wicket.session.pagemap.IPageMapEntry;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.PackageResourceReference;
 
 import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsSession;
@@ -44,24 +43,20 @@ public abstract class AdminPage extends WebPage {
         add(new Label("version", getCmsApplication().getBuildInformation().getVersion()));
         add(new Label("webapp", getCmsApplication().getBuildInformation().getWebappVersion()));
 
-        add(Css.YUI_CORE);
-        add(Css.BASE);
-        add(CSSPackageResource.getHeaderContribution(AdminPage.class,"AdminPage.css"));
-        add(Css.CSS_BUTTONS);
-        add(Css.CSS_FORM);
         setupMenu();
 	}
 
 	protected void setupMenu(){
 		List<PanelMenuItem> menuItems = getAdminMenu();
 		add(new PanelListView("menuList",ID,"menuLink",menuItems ));
-
-		IPageMapEntry backPage = getAppSession().getLastSitePage();
-		if (backPage == null){
-			add(new BookmarkablePageLink<Void>("returnLink", getApplication().getHomePage()));
-		} else {
-			add(new BookmarkablePageLink<Void>("returnLink", backPage.getPageClass(), backPage.getPage().getPageParameters()));
-		}
+		
+//TODO fix this
+//		IPageMapEntry backPage = getAppSession().getLastSitePage();
+//		if (backPage == null){
+//			add(new BookmarkablePageLink<Void>("returnLink", getApplication().getHomePage()));
+//		} else {
+//			add(new BookmarkablePageLink<Void>("returnLink", backPage.getPageClass(), backPage.getPage().getPageParameters()));
+//		}
 
 	}
 
@@ -78,6 +73,15 @@ public abstract class AdminPage extends WebPage {
 		//menuList.add(new PanelMenuItem(ContentAdminPanel.class, "label.content","info.content"));
 
 		return Collections.unmodifiableList(menuList);
+	}
+	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+	        response.renderCSSReference(Css.YUI_CORE);
+	        response.renderCSSReference(Css.BASE);
+	        response.renderCSSReference(new PackageResourceReference(AdminPage.class,"AdminPage.css"));
+	        response.renderCSSReference(Css.CSS_BUTTONS);
+	        response.renderCSSReference(Css.CSS_FORM);
 	}
 
 	public CmsSession getAppSession(){

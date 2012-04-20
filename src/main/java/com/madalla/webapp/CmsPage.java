@@ -1,8 +1,8 @@
 package com.madalla.webapp;
 
-import static com.madalla.webapp.blog.BlogParameters.BLOG_ENTRY_ID;
 import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.CROSSFADE;
+import static com.madalla.webapp.scripts.utility.ScriptUtils.CROSSFADE_CSS;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.FAST_INIT;
 
 import java.text.MessageFormat;
@@ -11,20 +11,17 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.Application;
 import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.StringHeaderContributor;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -33,6 +30,11 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.Url.QueryParameter;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.image.AlbumData;
@@ -44,7 +46,6 @@ import com.madalla.service.IDataServiceProvider;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.admin.pages.SecureLoginPage;
 import com.madalla.webapp.admin.pages.UserLoginPage;
-import com.madalla.webapp.blog.BlogHomePanel;
 import com.madalla.webapp.cms.ContentLinkPanel;
 import com.madalla.webapp.cms.ContentPanel;
 import com.madalla.webapp.cms.InlineContentPanel;
@@ -55,7 +56,6 @@ import com.madalla.webapp.css.Css;
 import com.madalla.webapp.login.LoginPanel;
 import com.madalla.webapp.modal.EcModalWindow;
 import com.madalla.webapp.scripts.JavascriptResources;
-import com.madalla.webapp.scripts.utility.ScriptUtils;
 import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.wicket.animation.Animator;
 import com.madalla.wicket.animation.AnimatorSubject;
@@ -75,6 +75,8 @@ import com.madalla.wicket.animation.AnimatorSubject;
  *
  */
 public abstract class CmsPage extends WebPage {
+	
+	private static final Logger log = LoggerFactory.getLogger(CmsPage.class);
 
 	private static final String META_NAME = "<meta name=\"{0}\" content=\"{1}\"/>";
 	private static final String META_HTTP = "<meta http-equiv=\"{0}\" content=\"{1}\"/>";
@@ -103,7 +105,7 @@ public abstract class CmsPage extends WebPage {
 		}
 
 		@Override
-		protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+		public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
 			if (session.isLoggedIn()) {
 				replaceComponentTagBody(markupStream, openTag, getString("label.logout"));
 			} else {
@@ -114,30 +116,33 @@ public abstract class CmsPage extends WebPage {
 		protected abstract void onClickAction(AjaxRequestTarget target);
 
 	}
+	
+	private final PageMetaLangData pageInfo;
 
 	public CmsPage(PageParameters parameters){
 		super(parameters);
+		PageData pageData = getRepositoryService().getPage(getPageName());
+		pageInfo = getRepositoryService().getPageMetaLang(getLocale(), pageData);
 		commonInit();
 	}
 
 	public CmsPage() {
 		super();
+		PageData pageData = getRepositoryService().getPage(getPageName());
+		pageInfo = getRepositoryService().getPageMetaLang(getLocale(), pageData);
 		commonInit();
 	}
 
 	private void commonInit(){
-		add(Css.YUI_CORE);
-		add(Css.BASE);
 
 		if (isHomePage()) {
-			setLocaleFromUrl(getRequest().getURL());
+			setLocaleFromUrl(getRequest().getUrl());
 		}
-		PageData pageData = getRepositoryService().getPage(getPageName());
-		PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(getLocale(), pageData);
-		processPageMetaInformation(pageInfo);
 
 		//used to return to Site from Admin Pages
-		getAppSession().setLastSitePage(getPageMapEntry());
+		//TODO fix this - maybe using PageReference
+		//getAppSession().setLastSitePage(getPageMapEntry());
+		getPageReference();
 
 		if (hasPopupLogin()) {
 			setupPopupLogin();
@@ -160,33 +165,40 @@ public abstract class CmsPage extends WebPage {
 			add(new Label("infoDialog").setVisible(false));
 		}
 
-		if (hasCrossfadeSupport()){
-	    	add(JavascriptPackageResource.getHeaderContribution(PROTOTYPE));
-			add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.ANIMATOR));
-	        add(JavascriptPackageResource.getHeaderContribution(FAST_INIT));
 
-	        add(JavascriptPackageResource.getHeaderContribution(CROSSFADE));
-			add(ScriptUtils.CROSSFADE_CSS);
-		}
 
 	}
+	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		response.renderCSSReference(Css.YUI_CORE);
+		response.renderCSSReference(Css.BASE);
+		
+		if (hasCrossfadeSupport()){
+			response.renderJavaScriptReference(PROTOTYPE);
+			response.renderJavaScriptReference(JavascriptResources.ANIMATOR);
+			response.renderJavaScriptReference(FAST_INIT);
+			response.renderJavaScriptReference(CROSSFADE);
+			response.renderCSSReference(CROSSFADE_CSS);
+		}
 
-	private void processPageMetaInformation(PageMetaLangData pageInfo){
+		response.renderJavaScriptReference(JavascriptResources.ANIMATOR);
+		
+		response.renderString(MessageFormat.format(META_HTTP, "lang", pageInfo.getLang()));
+		
 
-		add(new StringHeaderContributor(MessageFormat.format(META_HTTP, "lang", pageInfo.getLang())));
-
-		if (!isMetadataOveridden()) { //TODO Store this as field on Page
+		if (!isMetadataOveridden()) {
 			if (StringUtils.isNotEmpty(pageInfo.getTitle())){
-				add(new StringHeaderContributor("<title>" + pageInfo.getTitle() + "</title>"));
+				response.renderString("<title>" + pageInfo.getTitle() + "</title>");
 			}
 			if (StringUtils.isNotEmpty(pageInfo.getAuthor())){
-				add(new StringHeaderContributor(MessageFormat.format(META_NAME, "author", pageInfo.getAuthor())));
+				response.renderString(MessageFormat.format(META_NAME, "author", pageInfo.getAuthor()));
 			}
 			if (StringUtils.isNotEmpty(pageInfo.getDescription())) {
-				add(new StringHeaderContributor(MessageFormat.format(META_NAME, "description", pageInfo.getDescription())));
+				response.renderString(MessageFormat.format(META_NAME, "description", pageInfo.getDescription()));
 			}
 			if (StringUtils.isNotEmpty(pageInfo.getKeywords())) {
-				add(new StringHeaderContributor(MessageFormat.format(META_NAME, "keywords", pageInfo.getKeywords())));
+				response.renderString(MessageFormat.format(META_NAME, "keywords", pageInfo.getKeywords()));
 			}
 		}
 	}
@@ -212,8 +224,6 @@ public abstract class CmsPage extends WebPage {
 
 	private void setupPopupLogin(){
 
-		add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.ANIMATOR));
-
 		//Animator to open and close login popup
 		final Animator animator = new Animator(700)
 			.addSubject(AnimatorSubject.numeric("loginPopup","opacity", 0.0, 1.0))
@@ -226,7 +236,7 @@ public abstract class CmsPage extends WebPage {
 
 			@Override
 			protected void onClickAction(AjaxRequestTarget target) {
-				target.appendJavascript(animator.toggle());
+				target.appendJavaScript(animator.toggle());
 			}
 
 			@Override
@@ -249,7 +259,7 @@ public abstract class CmsPage extends WebPage {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				target.appendJavascript(animator.toggle());
+				target.appendJavaScript(animator.toggle());
 
 			}
 
@@ -262,7 +272,7 @@ public abstract class CmsPage extends WebPage {
 
 			@Override
 			protected void preSignIn(String username) {
-				if (getApplication().getConfigurationType().equals(Application.DEVELOPMENT)) {
+				if (getApplication().getConfigurationType().equals(RuntimeConfigurationType.DEVELOPMENT)) {
 					return;
 				}
 				IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
@@ -291,7 +301,9 @@ public abstract class CmsPage extends WebPage {
 				super.onSignInFailed(username);
 				count++;
 				if (count >= loginMax) {
-					redirectToInterceptPage(new UserLoginPage(new PageParameters("username="+username)));
+					PageParameters parameters = new PageParameters();
+					parameters.set("username", username);
+					redirectToInterceptPage(new UserLoginPage(parameters));
 				}
 			}
 
@@ -340,12 +352,14 @@ public abstract class CmsPage extends WebPage {
 		add(choice);
 	}
 
-	private void setLocaleFromUrl(String url){
-		String[] urlfrags = url.split("/");
-		String s = urlfrags[urlfrags.length - 1];
-		if (s.length() == 2){
-			getSession().setLocale(SiteLanguage.getLanguage(s).locale);
-		}
+	private void setLocaleFromUrl(Url url){
+		List<QueryParameter> params = url.getQueryParameters();
+		log.warn("TODO setLocaleFromUrl - Can we use this to set locale??");
+//		String[] urlfrags = url.split("/");
+//		String s = urlfrags[urlfrags.length - 1];
+//		if (s.length() == 2){
+//			getSession().setLocale(SiteLanguage.getLanguage(s).locale);
+//		}
 	}
 
 	private IDataService getRepositoryService() {
@@ -482,13 +496,6 @@ public abstract class CmsPage extends WebPage {
 		Panel panel = new ExhibitPanel(id, album, imagesModel);
 		add(panel);
 		return panel;
-	}
-
-	protected Panel addBlogPanel(String id, String blogName, PageParameters parameters){
-		String blogEntryId = parameters.getString(BLOG_ENTRY_ID);
-    	Panel panel = new BlogHomePanel("blogPanel", "mainBlog", blogEntryId);
-    	add(panel);
-    	return panel;
 	}
 
 	protected CmsSession getAppSession(){

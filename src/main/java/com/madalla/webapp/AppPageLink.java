@@ -18,7 +18,7 @@ public class AppPageLink extends BookmarkablePageLink<String> {
     }
 
 	@Override
-	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+	public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
 		replaceComponentTagBody(markupStream, openTag, body);
 	}
 }

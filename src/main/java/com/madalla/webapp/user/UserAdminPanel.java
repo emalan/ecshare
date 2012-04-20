@@ -259,7 +259,7 @@ public class UserAdminPanel extends CmsPanel {
 				target.addComponent(usernameField);
 				target.addComponent(userFeedback);
 				target.addComponent(userSelect);
-				target.appendJavascript(hideShowProfile.seekToEnd());
+				target.appendJavaScript(hideShowProfile.seekToEnd());
 
 			}
 
@@ -289,7 +289,7 @@ public class UserAdminPanel extends CmsPanel {
 
 				profileForm.clearInput();
 				populateUserData(userData, userView);
-				target.appendJavascript("$('" + usernameField.getMarkupId() + "').value='"+userData.getName()+"';");
+				target.appendJavaScript("$('" + usernameField.getMarkupId() + "').value='"+userData.getName()+"';");
 				lockUsername = true;
 
 				target.addComponent(profileForm);
@@ -297,7 +297,7 @@ public class UserAdminPanel extends CmsPanel {
 				target.addComponent(getComponent());
 				target.addComponent(userFeedback);
 
-				target.appendJavascript(hideShowProfile.seekToEnd());
+				target.appendJavaScript(hideShowProfile.seekToEnd());
 
 			}
 
@@ -435,7 +435,7 @@ public class UserAdminPanel extends CmsPanel {
 				target.addComponent(form);
 
 				// Clear usernamefield and reset form
-                target.appendJavascript(hideShowProfile.seekToBegin() + "$('" + usernameField.getMarkupId() + "').clear();"
+                target.appendJavaScript(hideShowProfile.seekToBegin() + "$('" + usernameField.getMarkupId() + "').clear();"
                         + "$('"+form.getMarkupId()+"').reset();");
 
 			}

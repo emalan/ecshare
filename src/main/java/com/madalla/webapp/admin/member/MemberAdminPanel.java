@@ -368,10 +368,10 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				current.setObject(instanciateMember());
-				target.appendJavascript("var e = $('"+ container.getMarkupId() + "'); e.select('tr').each(function(s){ s.removeClassName('selected')});");
+				target.appendJavaScript("var e = $('"+ container.getMarkupId() + "'); e.select('tr').each(function(s){ s.removeClassName('selected')});");
 				form.modelChanged();
 				form.clearInput();
-				target.appendJavascript(hideShowForm.seekToEnd());
+				target.appendJavaScript(hideShowForm.seekToEnd());
 				target.addComponent(editForm);
 				target.addComponent(reset);
 			}
@@ -401,7 +401,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 					public void onClick(AjaxRequestTarget target) {
 						current.setObject(entry);
 						target.addComponent(editForm);
-						target.appendJavascript("var e = $('"+ item.getMarkupId() + "'); e.adjacent('tr').each(function(s){ s.removeClassName('selected')}); e.addClassName(\"selected\");" + hideShowForm.seekToEnd());
+						target.appendJavaScript("var e = $('"+ item.getMarkupId() + "'); e.adjacent('tr').each(function(s){ s.removeClassName('selected')}); e.addClassName(\"selected\");" + hideShowForm.seekToEnd());
 						target.addComponent(item);
 						target.addComponent(reset);
 						target.addComponent(resetFeedback);

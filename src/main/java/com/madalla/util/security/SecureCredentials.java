@@ -1,7 +1,5 @@
 package com.madalla.util.security;
 
-
-
 public class SecureCredentials implements ICredentialHolder{
 
 	private static final long serialVersionUID = 461686839345197059L;
