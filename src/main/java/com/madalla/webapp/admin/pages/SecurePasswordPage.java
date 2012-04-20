@@ -1,7 +1,7 @@
 package com.madalla.webapp.admin.pages;
 
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.protocol.https.RequireHttps;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.admin.AbstractAdminPage;

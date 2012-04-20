@@ -37,7 +37,8 @@ public class SiteDataPanel extends CmsPanel {
 		private static final long serialVersionUID = 1L;
 
 		SortableEmailEntryProvider(){
-			setSort("id", true);
+			//TODO fix sort
+			//setSort("id", true);
 		}
 
 		public Iterator<? extends EmailEntryData> iterator(int first, int count) {
@@ -129,7 +130,8 @@ public class SiteDataPanel extends CmsPanel {
 		private static final long serialVersionUID = 1L;
 
 		SortableLogProvider(){
-			setSort("id", true);
+			//TODO fix sort
+			//setSort("id", true);
 		}
 
 		public Iterator<? extends LogData> iterator(int first, int count) {
