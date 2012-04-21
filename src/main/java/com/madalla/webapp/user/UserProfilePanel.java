@@ -1,11 +1,7 @@
 package com.madalla.webapp.user;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -14,7 +10,10 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.madalla.bo.SiteData;
 import com.madalla.bo.security.IUser;

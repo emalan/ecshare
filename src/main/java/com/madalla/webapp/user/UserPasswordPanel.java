@@ -114,7 +114,7 @@ public class UserPasswordPanel extends CmsPanel{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+			public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
 				if (validated){
 					replaceComponentTagBody(markupStream, openTag, getString("info.validated"));
 				} else {

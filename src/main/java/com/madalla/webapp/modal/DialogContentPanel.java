@@ -34,8 +34,13 @@ public abstract class DialogContentPanel extends Panel {
 			}
 
 			@Override
-			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+			public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
 				replaceComponentTagBody(markupStream, openTag, getCancelButtonString());
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				
 			}
 
 
@@ -53,8 +58,7 @@ public abstract class DialogContentPanel extends Panel {
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				target.addComponent(form);
-				super.onError(target, form);
+				target.add(form);
 			}
 
 

@@ -102,7 +102,7 @@ public class PanelLink extends Link<Object> {
 	}
 
 	@Override
-	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+	public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
 		if (key != null){
 			replaceComponentTagBody(markupStream, openTag, key.getObject());
 		} else {

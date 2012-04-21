@@ -34,7 +34,7 @@ public class LabelPagingNavigator extends AjaxPagingNavigator{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+			public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
 				if (id.equals("prev")){
 					replaceComponentTagBody(markupStream, openTag, getString("navigator.prev"));
 				} else if (id.equals("next")){
@@ -52,7 +52,7 @@ public class LabelPagingNavigator extends AjaxPagingNavigator{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+			public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
 				if (id.equals("first")){
 					replaceComponentTagBody(markupStream, openTag, getString("navigator.first"));
 				} else if (id.equals("last")){

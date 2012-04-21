@@ -3,11 +3,9 @@ package com.madalla.webapp.components.email;
 import java.text.MessageFormat;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -15,14 +13,13 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.protocol.http.ClientProperties;
-import org.apache.wicket.protocol.http.WebRequestCycle;
-import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 
 import com.madalla.bo.SiteData;
@@ -158,10 +155,14 @@ public class EmailFormPanel extends CmsPanel {
         super(id);
         this.subject = subject;
 
-        add(Css.CSS_FORM);
-
         add(new EmailForm("emailForm"));
 
+    }
+    
+    @Override
+    public void renderHead(IHeaderResponse response) {
+    	super.renderHead(response);
+    	response.renderCSSReference(Css.CSS_FORM);
     }
 
     private boolean sendEmail(final String site, final String name, final String email, final String comment){
@@ -190,19 +191,6 @@ public class EmailFormPanel extends CmsPanel {
     private String getEmailBody(String site, String from, String email, String comment){
         Object[] args = {site, from,email,(comment == null)?"":comment};
         String body = MessageFormat.format(getEmailtemplate(),args);
-        RequestCycle requestCycle = getRequestCycle();
-        if (requestCycle instanceof WebRequestCycle){
-            WebClientInfo clientInfo = (WebClientInfo)((WebRequestCycle) requestCycle).getClientInfo();
-            ClientProperties cp = clientInfo.getProperties();
-
-            StringBuffer sb = new StringBuffer(body).append(System.getProperty("line.separator"));
-            sb.append("NavigatorAppName : ").append(cp.getNavigatorAppName()).append(System.getProperty("line.separator"));
-            sb.append("NavigatorAppCodeName : ").append(cp.getNavigatorAppCodeName()).append(System.getProperty("line.separator"));
-            sb.append("NavigatorAppVersion : ").append(cp.getNavigatorAppVersion()).append(System.getProperty("line.separator"));
-            sb.append("BrowserVersionMajor : ").append(cp.getBrowserVersionMajor()).append(System.getProperty("line.separator"));
-            sb.append("BrowserVersionMinor : ").append(cp.getBrowserVersionMinor()).append(System.getProperty("line.separator"));
-            body = sb.toString();
-        }
         return body;
     }
 
