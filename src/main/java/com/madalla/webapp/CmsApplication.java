@@ -2,26 +2,21 @@ package com.madalla.webapp;
 
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
-import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.Page;
-import org.apache.wicket.Request;
-import org.apache.wicket.Response;
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
 import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.authentication.AuthenticatedWebSession;
-import org.apache.wicket.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.https.HttpsConfig;
-import org.apache.wicket.protocol.https.HttpsRequestCycleProcessor;
-import org.apache.wicket.request.IRequestCycleProcessor;
-import org.apache.wicket.request.target.coding.IndexedParamUrlCodingStrategy;
-import org.apache.wicket.request.target.coding.MixedParamHybridUrlCodingStrategy;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
 import org.apache.wicket.settings.IExceptionSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +31,6 @@ import com.madalla.bo.page.PageData;
 import com.madalla.bo.page.PageMetaLangData;
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
-import com.madalla.rpx.Rpx;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
 import com.madalla.service.IRepositoryAdminService;
@@ -55,12 +49,11 @@ import com.madalla.webapp.admin.site.SiteAdminPanel;
 import com.madalla.webapp.admin.site.SiteDataPanel;
 import com.madalla.webapp.admin.site.SiteEmailPanel;
 import com.madalla.webapp.authorization.AuthenticatedCmsApplication;
-import com.madalla.webapp.authorization.RpxCallbackUrlHandler;
 import com.madalla.webapp.cms.editor.ContentEntryPanel;
 import com.madalla.webapp.cms.editor.TranslatePanel;
 import com.madalla.webapp.user.UserAdminPanel;
 import com.madalla.webapp.user.UserProfilePanel;
-import com.madalla.wicket.I18NBookmarkablePageRequestTargetUrlCodingStrategy;
+import com.madalla.wicket.mount.I18NBookmarkablePageMapper;
 
 /**
  * Abstract Wicket Application class that needs to extended to enable usage
@@ -82,9 +75,8 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 	private IRepositoryAdminService repositoryAdminService;
     private IEmailSender emailSender;
     private IDataService dataService;
-    private Rpx rpxService;
     private BuildInformation buildInformation;
-    private String configType;
+    private RuntimeConfigurationType configType;
 
     @Override
     protected void init() {
@@ -108,14 +100,10 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     		log.error(fatal, "Email Sender is not configured Correctly.");
     		throw new WicketRuntimeException("Email Service is not configured Correctly.");
     	}
-    	if (hasRpxService() && (rpxService == null || StringUtils.isEmpty(rpxService.getCallback()))){
-    		log.error(fatal, "Rpx service is not configured Correctly.");
-    		throw new WicketRuntimeException("Rpx service is not configured Correctly. Configure values using the 'override.properties' file.");
-    	}
         setupApplicationSpecificConfiguration();
 
     }
-
+    
     @Override
 	public Session newSession(Request request, Response response) {
         return new CmsSession(request);
@@ -136,8 +124,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 			// mount a home page for each language
 			for (SiteLanguage lang : langs) {
 				try {
-					mount(new I18NBookmarkablePageRequestTargetUrlCodingStrategy(lang.locale, lang.getLanguageCode(),
-							getHomePage()));
+					mount(new I18NBookmarkablePageMapper(lang.locale, lang.getLanguageCode(), getHomePage()));
 				} catch (WicketRuntimeException e) {
 					log.error("Error while mounting home landing page for language:" + lang, e);
 				}
@@ -152,7 +139,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 					PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(lang.locale, pageData, false);
 					final String mountName = pageInfo.getMountName(pageData.getName());
 					try {
-						mount(new I18NBookmarkablePageRequestTargetUrlCodingStrategy(lang.locale, mountName, page));
+						mount(new I18NBookmarkablePageMapper(lang.locale, mountName, page));
 					} catch (WicketRuntimeException e) {
 						log.error("Error while mounting Application Page with name:" + mountName, e);
 					}
@@ -169,28 +156,23 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 				final String mountName = StringUtils.isEmpty(pageInfo.getDisplayName())? pageData.getName():
 					StringUtils.deleteWhitespace(pageInfo.getDisplayName());
 				try {
-					mountBookmarkablePage(mountName, page);
+					mountPage(mountName, page);
 				} catch (WicketRuntimeException e) {
 					log.error("Error while mounting Application Page with name:" + mountName, e);
 				}
 			}
 		}
 
-    	mountBookmarkablePage(PASSWORD, UserPasswordPage.class);
-    	mountBookmarkablePage(SECURE_PASSWORD, SecurePasswordPage.class);
+    	mountPage(PASSWORD, UserPasswordPage.class);
+    	mountPage(SECURE_PASSWORD, SecurePasswordPage.class);
 
-    	mountBookmarkablePage("control", MainAdminPage.class);
-    	mount(new IndexedParamUrlCodingStrategy("admin/album", AlbumAdminPage.class));
+    	mountPage("control", MainAdminPage.class);
+    	
+    	//TODO monunt album pages
+    	//mount(new IndexedParamUrlCodingStrategy("admin/album", AlbumAdminPage.class));
 
-    	mount(new RpxCallbackUrlHandler("openid", getHomePage(),getSignInPageClass(), rpxService){
-
-			@Override
-			protected boolean rpxLogin(HashMap<String, String> personalData) {
-				return ((CmsSession)Session.get()).authenticate(personalData);
-			}
-
-    	});
-    	mount(new MixedParamHybridUrlCodingStrategy(LOGIN, UserLoginPage.class, UserLoginPage.PARAMETERS));
+    	//TODO mount login page
+    	//mount(new MixedParamHybridUrlCodingStrategy(LOGIN, UserLoginPage.class, UserLoginPage.PARAMETERS));
 
     	if (hasMemberService()){
     		if (getMemberPasswordPage() == null) {
@@ -201,8 +183,8 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
         		log.error(fatal, "Member Service not configured Correctly. Member Service Registration Page is null.");
         		throw new WicketRuntimeException("Member Service not configured Correctly. Member Service Registration Page is null.");
         	}
-    		mountBookmarkablePage(MEMBER_PASSWORD, getMemberPasswordPage());
-    		mountBookmarkablePage(MEMBER_REGISTRATION, getMemberRegistrationPage());
+    		mountPage(MEMBER_PASSWORD, getMemberPasswordPage());
+    		mountPage(MEMBER_REGISTRATION, getMemberRegistrationPage());
     	}
 
     	//mount images
@@ -213,39 +195,41 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     	}
 
     }
+    
+    //TODO switch https off in development mode or if sertificate not found
 
     /* (non-Javadoc)
      * @see org.apache.wicket.protocol.http.WebApplication#newRequestCycleProcessor()
      * Disable https when in development mode or when the application has no security certificate
      */
-    @Override
-    protected IRequestCycleProcessor newRequestCycleProcessor()
-    {
-    	HttpsConfig config = new HttpsConfig(80,443);
-        return new HttpsRequestCycleProcessor(config){
-
-			@Override
-			protected IRequestTarget checkSecureIncoming(IRequestTarget target) {
-				if (getConfigurationType().equals(Application.DEVELOPMENT) || !getRepositoryService().getSiteData().getSecurityCertificate()){
-					return target;
-				} else {
-					return super.checkSecureIncoming(target);
-				}
-			}
-
-			@Override
-			protected IRequestTarget checkSecureOutgoing(IRequestTarget target) {
-				if (getConfigurationType().equals(Application.DEVELOPMENT) || !getRepositoryService().getSiteData().getSecurityCertificate()){
-					return target;
-				} else {
-					return super.checkSecureOutgoing(target);
-				}
-			}
-
-
-
-        };
-    }
+//    @Override
+//    protected IRequestCycleProcessor newRequestCycleProcessor()
+//    {
+//    	HttpsConfig config = new HttpsConfig(80,443);
+//        return new HttpsRequestCycleProcessor(config){
+//
+//			@Override
+//			protected IRequestTarget checkSecureIncoming(IRequestTarget target) {
+//				if (getConfigurationType().equals(Application.DEVELOPMENT) || !getRepositoryService().getSiteData().getSecurityCertificate()){
+//					return target;
+//				} else {
+//					return super.checkSecureIncoming(target);
+//				}
+//			}
+//
+//			@Override
+//			protected IRequestTarget checkSecureOutgoing(IRequestTarget target) {
+//				if (getConfigurationType().equals(Application.DEVELOPMENT) || !getRepositoryService().getSiteData().getSecurityCertificate()){
+//					return target;
+//				} else {
+//					return super.checkSecureOutgoing(target);
+//				}
+//			}
+//
+//
+//
+//        };
+//    }
 
     @Override
 	public Class<? extends WebPage> getMemberRegistrationPage(){
@@ -258,11 +242,13 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 
 	protected void mountImage(ImageData image) {
     	getSharedResources().add(image.getResourceReference(), image.getImageFull());
-		mountSharedResource("/" + image.getMountUrl(), Application.class.getName() + "/" +image.getResourceReference());
+		
+    	//TODO mount images
+    	//mountSharedResource("/" + image.getMountUrl(), Application.class.getName() + "/" +image.getResourceReference());
     }
     private void setupErrorHandling(){
 
-    	if (DEPLOYMENT.equalsIgnoreCase(getConfigurationType())) {
+    	if (RuntimeConfigurationType.DEPLOYMENT.equals(getConfigurationType())) {
         	//TODO create page for access denied exceptions
     		//TODO figure out why we get unexpected exception instead of access denied for generalAdminPage
         	//getApplicationSettings().setPageExpiredErrorPage(MyExpiredPage.class);
@@ -309,7 +295,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
      * @see org.apache.wicket.protocol.http.WebApplication#getConfigurationType()
      */
     @Override
-	public String getConfigurationType() {
+	public RuntimeConfigurationType getConfigurationType() {
     	if (configType == null){
     		return super.getConfigurationType();
     	} else {
@@ -388,15 +374,11 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 	}
 
 	public void setConfigType(String configType) {
-		this.configType = configType;
-	}
-
-	public void setRpxService(Rpx rpxService) {
-		this.rpxService = rpxService;
-	}
-
-	public Rpx getRpxService() {
-		return rpxService;
+		if ("DEVELOPMENT".equalsIgnoreCase(configType)) {
+			this.configType = RuntimeConfigurationType.DEVELOPMENT;
+		} else {
+			this.configType = RuntimeConfigurationType.DEVELOPMENT;
+		}
 	}
 
 }

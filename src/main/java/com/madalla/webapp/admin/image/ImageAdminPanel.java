@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
@@ -18,7 +16,7 @@ import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -27,6 +25,7 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.NonCachingImage;
+import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
@@ -35,6 +34,8 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.time.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.madalla.bo.image.IAlbumData;
 import com.madalla.bo.image.ImageData;
@@ -174,9 +175,9 @@ public class ImageAdminPanel extends CmsPanel{
 				@Override
 				protected void onPostProcessTarget(AjaxRequestTarget target) {
 					if (getStatus(text)){
-						target.appendJavascript("wicketShow('" + indicatorAppender.getMarkupId() +"');");
+						target.appendJavaScript("wicketShow('" + indicatorAppender.getMarkupId() +"');");
 					} else {
-						target.appendJavascript("wicketHide('" + indicatorAppender.getMarkupId() +"');");
+						target.appendJavaScript("wicketHide('" + indicatorAppender.getMarkupId() +"');");
 					}
 
 				}
@@ -184,7 +185,7 @@ public class ImageAdminPanel extends CmsPanel{
 		}
 
 		@Override
-		protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+		public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
 			String text = getDefaultModelObjectAsString();
 			String status = getStatusText(uploadId);
 			replaceComponentTagBody(markupStream, openTag, text + "<em>" + status + "</em>");
@@ -245,11 +246,6 @@ public class ImageAdminPanel extends CmsPanel{
 	public ImageAdminPanel(String id) {
 		super(id);
 
-		add(Css.CSS_FORM);
-		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
-		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.EFFECTS));
-		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.DRAGDROP));
-
 	    //Images Display
         final WebMarkupContainer availableContainer = new WebMarkupContainer("availableContainer");
         availableContainer.setOutputMarkupId(true);
@@ -306,6 +302,16 @@ public class ImageAdminPanel extends CmsPanel{
         add(new FileUploadListView("results"));
 	}
 
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		
+		response.renderCSSReference(Css.CSS_FORM);
+		response.renderJavaScriptReference(Scriptaculous.PROTOTYPE);
+		response.renderJavaScriptReference(Scriptaculous.EFFECTS);
+		response.renderJavaScriptReference(Scriptaculous.DRAGDROP);
+		
+	}
 
 
 }

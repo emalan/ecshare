@@ -4,8 +4,8 @@ import static com.madalla.webapp.PageParams.RETURN_PAGE;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * Utility functions for Wicket Pages

@@ -97,7 +97,7 @@ public class TranslatePanel extends CmsPanel {
 				log.debug("new Content Entry." + newContentEntry);
 				destPanel.changeContentEntry(newContentEntry);
 
-				target.appendJavascript("changeLanguage('"+ language.getLanguageCode()+"', '"+
+				target.appendJavaScript("changeLanguage('"+ language.getLanguageCode()+"', '"+
 						StringEscapeUtils.escapeJavaScript(newContentEntry.getText()) + "');");
 			}
 

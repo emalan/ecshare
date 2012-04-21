@@ -1,6 +1,8 @@
 package com.madalla.webapp.scripts.scriptaculous;
 
-import org.apache.wicket.markup.html.resources.CompressedResourceReference;
+import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
+
 
 /**
  * References to Scriptaculous resources
@@ -10,11 +12,11 @@ import org.apache.wicket.markup.html.resources.CompressedResourceReference;
  */
 public class Scriptaculous {
 
-    public static final CompressedResourceReference PROTOTYPE = new CompressedResourceReference(Scriptaculous.class,"prototype.js");
-    public static final CompressedResourceReference EFFECTS = new CompressedResourceReference(Scriptaculous.class,"effects.js");
-    public static final CompressedResourceReference DRAGDROP = new CompressedResourceReference(Scriptaculous.class,"dragdrop.js");
+    public static final ResourceReference PROTOTYPE = new PackageResourceReference(Scriptaculous.class,"prototype.js");
+    public static final ResourceReference EFFECTS = new PackageResourceReference(Scriptaculous.class,"effects.js");
+    public static final ResourceReference DRAGDROP = new PackageResourceReference(Scriptaculous.class,"dragdrop.js");
 
-    public static final CompressedResourceReference CONTROLS = new CompressedResourceReference(
+    public static final ResourceReference CONTROLS = new PackageResourceReference(
     		Scriptaculous.class, "scriptaculous.js?load=effects,controls");
 
 	private Scriptaculous(){}

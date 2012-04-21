@@ -1,5 +1,6 @@
 package com.madalla.wicket.animation;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -31,8 +32,8 @@ public abstract class AnimationEventBehavior extends AjaxEventBehavior  {
 	}
 
 	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
+	public void renderHead(Component component, IHeaderResponse response) {
+		super.renderHead(component, response);
 		animator.setUniqueId(getComponent().getMarkupId());
 		addAnimatorSubjects(animator);
 		animator.renderHead(response);
@@ -40,7 +41,7 @@ public abstract class AnimationEventBehavior extends AjaxEventBehavior  {
 
 	@Override
 	protected void onEvent(AjaxRequestTarget target) {
-		target.appendJavascript(onEventAnimatorActions(animator));
+		target.appendJavaScript(onEventAnimatorActions(animator));
 	}
 
 	abstract protected String onEventAnimatorActions(IAnimatorActions animator);

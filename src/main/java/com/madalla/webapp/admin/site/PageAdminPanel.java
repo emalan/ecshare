@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
@@ -28,7 +29,6 @@ public class PageAdminPanel extends CmsPanel {
 
     public PageAdminPanel(String id){
 		super(id);
-		add(Css.CSS_FORM);
 
 		final List<SiteLanguage> locales = SiteLanguage.getLanguages();
 		final Locale defaultLocale = getDefaultLocale(locales);
@@ -64,6 +64,11 @@ public class PageAdminPanel extends CmsPanel {
 		});
 
 	}
+    
+    @Override
+    public void renderHead(IHeaderResponse response) {
+    	response.renderCSSReference(Css.CSS_FORM);
+    }
 
     private Class<? extends Page> getPageClass(String name){
     	Collection<Class<? extends Page>> pages = ((CmsApplication)getApplication()).getAppPages();

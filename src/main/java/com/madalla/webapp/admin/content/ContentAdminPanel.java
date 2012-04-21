@@ -6,10 +6,11 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
+import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.IFeedbackMessageFilter;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.ListChoice;
@@ -48,8 +49,6 @@ public class ContentAdminPanel extends Panel {
 	private ContentAdminPanel(String name, final Boolean adminApp) {
 		super(name);
 		this.adminApp = adminApp;
-
-		add(Css.CSS_FORM);
 
 		Component adminPanelLink;
 		add(adminPanelLink = new AdminPanelLink("AllSitesLink", ContentAdminPanel.class){
@@ -192,6 +191,11 @@ public class ContentAdminPanel extends Panel {
 				target.addComponent(restoreMessages);
 				target.addComponent(rollBackLink);
 			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				warn("Restore failed!");
+			}
         });
 
         contentDisplayPanel = new ContentDisplayPanel("contentDisplayPanel", this);
@@ -216,6 +220,12 @@ public class ContentAdminPanel extends Panel {
         contentExplorerPanel.setOutputMarkupId(true);
         add(contentExplorerPanel);
 
+	}
+	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.renderCSSReference(Css.CSS_FORM);
 	}
 
 	public class RestoreForm extends Form<Object>{

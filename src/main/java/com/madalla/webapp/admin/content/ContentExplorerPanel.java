@@ -4,8 +4,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
@@ -17,6 +15,8 @@ import org.apache.wicket.markup.html.tree.LinkTree;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.GenericBaseModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.madalla.cms.jcr.model.tree.AbstractTreeNode;
 import com.madalla.cms.jcr.model.tree.JcrTreeModel;
@@ -67,31 +67,31 @@ abstract class ContentExplorerPanel extends Panel {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected IModel<Object> getNodeTextModel(IModel<Object> nodeModel) {
-                JcrTreeNode jcrTreeNode = (JcrTreeNode) nodeModel.getObject();
-                return new Model(jcrTreeNode.renderNode());
+            protected IModel<?> getNodeTextModel(IModel<?> nodeModel) {
+            	JcrTreeNode jcrTreeNode = (JcrTreeNode) nodeModel.getObject();
+            	return new Model(jcrTreeNode.renderNode());
             }
 
 			@Override
 			protected Component newNodeComponent(String id, IModel<Object> model) {
 				return new LinkIconPanel(id, model, this) {
 
-				    private static final long serialVersionUID = 1L;
-
-				    @Override
-                    protected void onNodeLinkClicked(Object node, BaseTree tree,
-                            AjaxRequestTarget target) {
-                        super.onNodeLinkClicked(node, tree, target);
-                        log.debug("onNodeLinkClicked - " + node);
-
-                        currentNode = (AbstractTreeNode) node;
-                        onNodeClicked(currentNode, target);
-				    }
+					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected Component newContentComponent(String componentId, BaseTree tree, IModel<Object> model) {
+					protected void onNodeLinkClicked(Object node, BaseTree tree, AjaxRequestTarget target) {
+						super.onNodeLinkClicked(node, tree, target);
+						log.debug("onNodeLinkClicked - " + node);
+
+						currentNode = (AbstractTreeNode) node;
+						onNodeClicked(currentNode, target);
+					}
+
+					@Override
+					protected Component newContentComponent(String componentId, BaseTree tree, IModel<?> model) {
 						return new Label(componentId, getNodeTextModel(model));
 					}
+
 				};
 			}
 

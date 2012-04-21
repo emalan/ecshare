@@ -10,7 +10,7 @@ import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
-import org.apache.wicket.Application;
+import org.apache.wicket.RuntimeConfigurationType;
 
 /**
  * Sets up environment on startup.
@@ -25,11 +25,11 @@ public class EnvironmentSetup implements Serializable {
 	private static final String LAYOUT_TOMCAT = "%d{ISO8601} %-5p - %-26.26c{1} - %m\n";
 
 	private String site;
-	private String configType;
+	private RuntimeConfigurationType configType;
 	private String logfile;
 
 	public void init(){
-		if (Application.DEPLOYMENT.equalsIgnoreCase(configType)){
+		if (RuntimeConfigurationType.DEPLOYMENT.equals(configType)){
 			setupLogging(logfile);
 		}
 	}
@@ -69,10 +69,14 @@ public class EnvironmentSetup implements Serializable {
 	}
 
 	public void setConfigType(String configType) {
-		this.configType = configType;
+		if ("DEVELOPMENT".equalsIgnoreCase(configType)) {
+			this.configType = RuntimeConfigurationType.DEVELOPMENT;
+		} else {
+			this.configType = RuntimeConfigurationType.DEVELOPMENT;
+		}
 	}
 
-	public String getConfigType() {
+	public RuntimeConfigurationType getConfigType() {
 		return configType;
 	}
 

@@ -1,4 +1,4 @@
-package com.madalla.wicket;
+package com.madalla.wicket.mount;
 
 import java.util.Locale;
 

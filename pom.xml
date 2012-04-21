@@ -33,7 +33,7 @@
 		<!--  WICKET DEPENDENCIES -->
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket</artifactId>
+			<artifactId>wicket-core</artifactId>
 			<version>${wicket.version}</version>
 		</dependency>
 		<dependency> 
@@ -125,17 +125,19 @@
             <version>1.6</version>
         </dependency>
 
+        <!-- database setup -->
+        <dependency>
+            <groupId>org.apache.ddlutils</groupId>
+            <artifactId>ddlutils</artifactId>
+            <version>1.0</version>
+        </dependency>
+
 		<!--  JUNIT DEPENDENCY FOR TESTING -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.2</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.ddlutils</groupId>
-			<artifactId>ddlutils</artifactId>
-			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -374,7 +376,7 @@
     </distributionManagement>
 	
 	<properties>
-		<wicket.version>1.4.16</wicket.version>
+		<wicket.version>1.5.5</wicket.version>
 		<jackrabbit.version>1.5.5</jackrabbit.version>
         <spring.version>2.5.6</spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
