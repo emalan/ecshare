@@ -3,11 +3,11 @@ package com.madalla.webapp.cms.editor;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.madalla.webapp.CmsSession;
+import com.madalla.webapp.cms.IContentAdmin;
 
 public class EditorSetup {
 
-	public static Map<String, Object> setupTemplateVariables(CmsSession session){
+	public static Map<String, Object> setupTemplateVariables(IContentAdmin session){
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (session.isSuperAdmin()) {
 			map.put("button1", "newdocument,fullscreen,cleanup,removeformat,code,help,|,undo,redo,|,paste,pastetext,pasteword,|,link,unlink,anchor,image,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,");

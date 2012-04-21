@@ -11,6 +11,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
@@ -18,6 +19,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 
 import com.madalla.bo.image.AlbumData;
 import com.madalla.bo.image.ImageData;
@@ -26,23 +28,13 @@ import com.madalla.webapp.scripts.utility.ScriptUtils;
 
 public class AlbumImagesPanel extends Panel{
 	private static final long serialVersionUID = 1L;
+	
+	private final boolean navigation;
 
 	public AlbumImagesPanel(String id, final AlbumData album, final IModel<List<ImageData>> imagesModel, final boolean navigation) {
 		super(id);
+		this.navigation = navigation;
 		
-		add(JavascriptPackageResource.getHeaderContribution(PROTOTYPE));
-		add(JavascriptPackageResource.getHeaderContribution(JavascriptResources.ANIMATOR));
-		add(JavascriptPackageResource.getHeaderContribution(FAST_INIT));
-
-		if (navigation) {
-			add(JavascriptPackageResource.getHeaderContribution(CROSSFADE));
-			add(JavascriptPackageResource.getHeaderContribution(ScriptUtils.BANNER));
-			add(ScriptUtils.BANNER_CSS);
-		} else {
-			add(JavascriptPackageResource.getHeaderContribution(CROSSFADE));
-			add(ScriptUtils.CROSSFADE_CSS);
-		}
-
 		final WebMarkupContainer imageListContainer  = new WebMarkupContainer("images");
         imageListContainer.setOutputMarkupId(true);
         add(imageListContainer);
@@ -69,10 +61,10 @@ public class AlbumImagesPanel extends Panel{
 				String params = "{interval:" + interval + ", height:" + height + ", width: " + width + "}";
 
 				if (navigation) {
-					container.getHeaderResponse().renderOnLoadJavascript(
+					container.getHeaderResponse().renderOnLoadJavaScript(
 							"new Banner($('" + imageListContainer.getMarkupId() + "')," + params + ")");
 				} else {
-					container.getHeaderResponse().renderOnLoadJavascript(
+					container.getHeaderResponse().renderOnLoadJavaScript(
 							"new Crossfade($('" + imageListContainer.getMarkupId() + "')," + params + ")");
 				}
 				super.renderHead(container);
@@ -80,6 +72,25 @@ public class AlbumImagesPanel extends Panel{
 
 		});
 		
+		
+	}
+	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+
+		response.renderJavaScriptReference(PROTOTYPE);
+		response.renderJavaScriptReference(JavascriptResources.ANIMATOR);
+		response.renderJavaScriptReference(FAST_INIT);
+
+		if (navigation) {
+			response.renderJavaScriptReference(CROSSFADE);
+			response.renderJavaScriptReference(ScriptUtils.BANNER);
+			response.renderCSSReference(ScriptUtils.BANNER_CSS);
+		} else {
+			response.renderJavaScriptReference(CROSSFADE);
+			response.renderCSSReference(ScriptUtils.CROSSFADE_CSS);
+		}
 		
 	}
 	
@@ -119,7 +130,7 @@ public class AlbumImagesPanel extends Panel{
 
 				@Override
 				protected void onEvent(AjaxRequestTarget target) {
-					getRequestCycle().setRequestTarget(new RedirectRequestTarget(imageData.getUrl()));
+					getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(imageData.getUrl()));
 				}
 			});
 		}
