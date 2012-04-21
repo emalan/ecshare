@@ -9,13 +9,8 @@ derby.log
 src/build.properties
 #ignore backup files left from editors
 *~/pom.xml
-<<<<<<< HEAD
 
 /.settings
 /.classpath
-=======
 /.settings
->>>>>>> a5396e5dc1e27609637d8a2d0097342d8d7254ec
-
-/.settings
-/.classpath
+/.project
