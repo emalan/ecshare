@@ -6,11 +6,12 @@ import java.io.InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wicket.Application;
-import org.apache.wicket.Resource;
-import org.apache.wicket.ResourceReference;
 import org.apache.wicket.SharedResources;
-import org.apache.wicket.markup.html.WebResource;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.resource.ByteArrayResource;
+import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.response.ByteArrayResponse;
 import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
@@ -21,7 +22,7 @@ import com.madalla.wicket.resourcelink.EditableResourceLink.ResourceType;
 
 /**
  * Utility methods for managing the mounting of resources, so that they can have URL's that the browser
- * can interepret correctly. For example : pdf's
+ * can interpret correctly. For example : pdf's
  *
  * @author Eugene Malan
  *
@@ -55,7 +56,15 @@ public class ContentSharedResource {
         application.mountSharedResource(path, resourceReference.getSharedResourceKey());
     }
 
-    private static Resource createDynamicResource(final String id, final String type, final IDataService service){
+    private static IResource createDynamicResource(final String id, final String type, final IDataService service){
+    	 ResourceType resourceType = ResourceType.valueOf(type);
+         if (resourceType != null){
+             resourceType.resourceType;
+         }
+         
+    	IResource resource = new ByteArrayResource() {
+    		
+    	};
         Resource resource = new WebResource() {
             private static final long serialVersionUID = 1L;
 

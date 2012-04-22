@@ -9,12 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.util.template.TextTemplateHeaderContributor;
+import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.resource.TextTemplateResourceReference;
 
 import tiny_mce.TinyMce;
 
@@ -40,18 +42,15 @@ public class TranslatePanel extends CmsPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private Logger log = LoggerFactory.getLogger(this.getClass());
+	private static final Logger log = LoggerFactory.getLogger(TranslatePanel.class);
 
+	final Map<String, Object> vars ;
 
 	public TranslatePanel(String name, final String nodeName, final String contentId) {
 		super(name);
 
-		add(JavascriptPackageResource.getHeaderContribution(TinyMce.class, "tiny_mce.js"));
-
-		//setup Javascript template
-		Map<String, Object> vars = EditorSetup.setupTemplateVariables((CmsSession) getSession());
-		add(TextTemplateHeaderContributor.forJavaScript(EditorSetup.class,"EditorSetup.js", Model.ofMap(vars)));
-
+		vars = EditorSetup.setupTemplateVariables((CmsSession) getSession());
+		
         PageData page = getRepositoryService().getPage(nodeName);
         final ContentData content = getRepositoryService().getContent(page, contentId);
         log.debug("init - content" + content);
@@ -74,11 +73,10 @@ public class TranslatePanel extends CmsPanel {
         final ContentFormPanel destPanel = new ContentFormPanel("contentEditor", contentEntry );
         destPanel.setOutputMarkupId(true);
 		add(destPanel);
-
+		
 		//add values to javascript
 		vars.put("sourceDiv", baseContentLabel.getMarkupId());
 		vars.put("destLang", selectedLang);
-		add(TextTemplateHeaderContributor.forJavaScript(this.getClass(),"TranslatePanel.js", Model.ofMap(vars)));
 
 		//Language Selector
 		SiteLanguage selectedLanguage = SiteLanguage.getLanguage(selectedLang.getLanguage());
@@ -104,6 +102,19 @@ public class TranslatePanel extends CmsPanel {
 		});
 		add(select);
 
+	}
+	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		response.renderJavaScriptReference(new PackageResourceReference(TinyMce.class, "tiny_mce.js"));
+
+		//setup Javascript template
+		Map<String, Object> vars = EditorSetup.setupTemplateVariables((CmsSession) getSession());
+		ResourceReference editorJs = new TextTemplateResourceReference(EditorSetup.class,"EditorSetup.js", Model.ofMap(vars));
+		response.renderJavaScriptReference(editorJs);
+		
+		ResourceReference translateJs = new TextTemplateResourceReference(EditorSetup.class, "TranslatePanel.js", Model.ofMap(vars));
+		response.renderJavaScriptReference(translateJs);
 	}
 
 	private Locale getDefaultLocale(List<SiteLanguage> locales){

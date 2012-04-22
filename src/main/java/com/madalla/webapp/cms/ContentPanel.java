@@ -2,6 +2,7 @@ package com.madalla.webapp.cms;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -60,7 +61,7 @@ public class ContentPanel extends CmsPanel {
         super(id);
         this.nodeName = node;
         this.nodeId = name;
-        add(Css.CSS_ICON);
+        
         log.debug("Content Panel being created for node=" + node + " id=" + id);
         PageData page = getRepositoryService().getPage(node);
         ContentData content = getRepositoryService().getContent(page, nodeId);
@@ -91,6 +92,12 @@ public class ContentPanel extends CmsPanel {
      */
     public ContentPanel(String id, String node) {
         this(id, id, node);
+    }
+    
+    @Override
+    public void renderHead(IHeaderResponse response) {
+    	super.renderHead(response);
+    	response.renderCSSReference(Css.CSS_ICON);
     }
 
     public class ContentContainer extends WebMarkupContainer {

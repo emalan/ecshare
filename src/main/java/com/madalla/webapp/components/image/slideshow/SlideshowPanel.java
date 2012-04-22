@@ -52,8 +52,6 @@ public class SlideshowPanel extends CmsPanel implements IHeaderContributor {
 
     public SlideshowPanel(String id, final String albumName) {
         super(id);
-        add(ScriptUtils.SLIDESHOW_CSS);
-        add(JavascriptPackageResource.getHeaderContribution(ScriptUtils.SLIDESHOW));
 
         //link to album configure page
         Component adminPageLink;
@@ -107,6 +105,9 @@ public class SlideshowPanel extends CmsPanel implements IHeaderContributor {
 	}
 
 	public void renderHead(IHeaderResponse response) {
+		response.renderCSSReference(ScriptUtils.SLIDESHOW_CSS);
+		response.renderJavaScriptReference(ScriptUtils.SLIDESHOW);
+        
 		//response.renderOnLoadJavascript("var slideshow = new TINY.slideshow('slideshow'); TINY.load();");
 
 	}

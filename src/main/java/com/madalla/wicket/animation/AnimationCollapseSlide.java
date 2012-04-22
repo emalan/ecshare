@@ -45,17 +45,23 @@ public class AnimationCollapseSlide extends AnimationEventBehavior {
 		// TODO Auto-generated method stub
 		return new IAjaxCallDecorator() {
 			
-			public CharSequence decorateScript(CharSequence script) {
+			@Override
+			public CharSequence decorateScript(Component component,
+					CharSequence script) {
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
-			public CharSequence decorateOnSuccessScript(CharSequence script) {
+
+			@Override
+			public CharSequence decorateOnSuccessScript(Component component,
+					CharSequence script) {
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
-			public CharSequence decorateOnFailureScript(CharSequence script) {
+
+			@Override
+			public CharSequence decorateOnFailureScript(Component component,
+					CharSequence script) {
 				// TODO Auto-generated method stub
 				return null;
 			}

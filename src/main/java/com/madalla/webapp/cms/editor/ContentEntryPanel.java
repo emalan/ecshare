@@ -111,7 +111,7 @@ public class ContentEntryPanel extends CmsPanel {
 	
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		response.renderCSSReference(new PackageResourceReference(TinyMce.class, "tiny_mce.js"));
+		response.renderJavaScriptReference(new PackageResourceReference(TinyMce.class, "tiny_mce.js"));
 		//tabs style sheet
 		response.renderCSSReference(new PackageResourceReference(ContentEntryPanel.class, "tabs.css"));
 
