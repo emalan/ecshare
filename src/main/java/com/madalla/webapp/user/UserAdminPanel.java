@@ -20,6 +20,7 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AbstractAutoCompleteTextRenderer;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.IAutoCompleteRenderer;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -106,9 +107,6 @@ public class UserAdminPanel extends CmsPanel {
 	public UserAdminPanel(String id) {
 
 		super(id);
-
-		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
-		add(Css.CSS_FORM);
 
 		///////////////////////
 		// Main User edit form
@@ -445,6 +443,13 @@ public class UserAdminPanel extends CmsPanel {
 			}
 
 		}.setDefaultFormProcessing(false));
+
+	}
+	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		response.renderJavaScriptReference(Scriptaculous.PROTOTYPE);
+		response.renderCSSReference(Css.CSS_FORM);
 
 	}
 

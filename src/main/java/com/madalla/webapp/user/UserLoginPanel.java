@@ -1,6 +1,5 @@
 package com.madalla.webapp.user;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.RuntimeConfigurationType;
@@ -18,7 +17,6 @@ import com.madalla.bo.security.IUser;
 import com.madalla.email.IEmailSender;
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
-import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.components.email.EmailFormPanel;
@@ -139,12 +137,6 @@ public class UserLoginPanel extends CmsPanel {
 		emailDiv.add(emailForm);
 
 		emailLink.add(new AnimationOpenSlide("onclick", emailDiv, 28,"em"));
-
-		if (((CmsApplication)getApplication()).hasRpxService()){
-			add(new RpxPanel("rpxPanel"));
-		} else {
-			add(new Label("rpxPanel").setVisible(false));
-		}
 
 	}
 	

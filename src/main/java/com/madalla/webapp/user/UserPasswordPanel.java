@@ -8,6 +8,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -98,8 +99,6 @@ public class UserPasswordPanel extends CmsPanel{
 
     	this.credentials.setUsername(existing.getUsername());
 
-		add(Css.CSS_FORM);
-
 		final boolean validated;
 		final boolean loggedIn = ((CmsSession)getSession()).isLoggedIn();
 		if (loggedIn) {
@@ -185,6 +184,11 @@ public class UserPasswordPanel extends CmsPanel{
 
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+    	response.renderCSSReference(Css.CSS_FORM);
+    }
+    
     @Override
 	protected void onBeforeRender() {
     	addOrReplace(new Label("heading", getString("heading.password", new Model<ICredentialHolder>(credentials))));

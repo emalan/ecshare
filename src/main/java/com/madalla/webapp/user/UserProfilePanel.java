@@ -2,6 +2,7 @@ package com.madalla.webapp.user;
 
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -54,19 +55,21 @@ public class UserProfilePanel extends CmsPanel{
 			info(getString("message.success"));
 		}
     }
-
-	public UserProfilePanel(String id){
-
+    
+	public UserProfilePanel(String id) {
 		super(id);
+	}
 
-		add(JavascriptPackageResource.getHeaderContribution(Scriptaculous.PROTOTYPE));
-		add(Css.CSS_FORM);
 
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		response.renderJavaScriptReference(Scriptaculous.PROTOTYPE);
+		response.renderCSSReference(Css.CSS_FORM);
 	}
 
 	@Override
 	protected void onBeforeRender() {
-		IUser user = getSessionDataService().getUser();
+		UserData user = getSessionDataService().getUser();
         log.debug(user.toString());
 
 		//User Change Link - secure or not depending on authenticator
@@ -92,7 +95,6 @@ public class UserProfilePanel extends CmsPanel{
 		}
 
 		add(new Label("profileHeading", getString("heading.profile", new Model<IUser>(user))));
-
 		add(new ProfileForm("profileForm", new CompoundPropertyModel<UserData>(user)));
 
 		super.onBeforeRender();

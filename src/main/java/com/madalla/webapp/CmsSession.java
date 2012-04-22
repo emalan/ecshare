@@ -182,7 +182,7 @@ public class CmsSession extends AuthenticatedWebSession implements IContentAdmin
         return false;
 	}
 
-	public void setUser(IUser user){
+	public void setUser(UserData user){
 		repositoryService.setUser(user);
 	}
 

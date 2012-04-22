@@ -12,7 +12,7 @@ public class DraggableAjaxBehaviour extends AbstractTransformerBehavior {
 	private static final long serialVersionUID = 1L;
 
 	public static String getDraggablesId(Request request){
-		return request.getRequestParameters("amp;dragId");
+		return request.getRequestParameters().getParameterValue("amp;dragId").toString();
 	}
 
 	private String dragId;

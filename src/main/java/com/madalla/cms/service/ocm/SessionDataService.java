@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.madalla.bo.AbstractData;
-import com.madalla.bo.security.IUser;
+import com.madalla.bo.security.UserData;
 import com.madalla.service.DataAccessException;
 import com.madalla.service.ISessionDataService;
 
@@ -23,7 +23,7 @@ public class SessionDataService implements ISessionDataService, Serializable {
 	private static final long serialVersionUID = 6043048251504290235L;
 	private static final Logger log = LoggerFactory.getLogger(SessionDataService.class);
 
-	private IUser user;
+	private UserData user;
 
 	public SessionDataService(){
 
@@ -39,11 +39,11 @@ public class SessionDataService implements ISessionDataService, Serializable {
 		log.info("User:" + user.getName() + ", Type:" + data.getClass().getSimpleName());
 	}
 
-	public IUser getUser() {
+	public UserData getUser() {
 		return user;
 	}
 
-	public void setUser(IUser user) {
+	public void setUser(UserData user) {
 		this.user = user;
 	}
 

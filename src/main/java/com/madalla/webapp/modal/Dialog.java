@@ -1,17 +1,16 @@
 package com.madalla.webapp.modal;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.ResourceReference;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 
 public class Dialog extends ModalWindow implements IHeaderContributor{
@@ -24,7 +23,7 @@ public class Dialog extends ModalWindow implements IHeaderContributor{
 	private String dataId;
 	private String cancelButtonLabel = "Done";
 
-	private static final ResourceReference OBO = new CompressedResourceReference(Dialog.class, "modal.css");
+	private static final ResourceReference OBO = new PackageResourceReference(Dialog.class, "modal.css");
 
 	public Dialog(final String id){
 		this(id, false);
@@ -32,14 +31,12 @@ public class Dialog extends ModalWindow implements IHeaderContributor{
 	public Dialog(final String id, boolean saveButton) {
 		super(id);
 		this.saveButton = saveButton;
-      	add(CSSPackageResource.getHeaderContribution(OBO));
        	setCssClassName("w_obo");
 
         setInitialWidth(450);
         setInitialHeight(300);
        	setResizable(false);
 	}
-
 
 	@Override
 	public ModalWindow setContent(final Component component) {
@@ -84,8 +81,9 @@ public class Dialog extends ModalWindow implements IHeaderContributor{
 
 
 	public void renderHead(IHeaderResponse response) {
-		response.renderOnDomReadyJavascript("Wicket.Window.unloadConfirmation = false;");
+		response.renderOnDomReadyJavaScript("Wicket.Window.unloadConfirmation = false;");
 
+		response.renderCSSReference(OBO);
 
 	}
 

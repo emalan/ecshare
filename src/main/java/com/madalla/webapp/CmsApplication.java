@@ -6,7 +6,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
@@ -14,7 +13,6 @@ import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.settings.IExceptionSettings;
@@ -39,7 +37,6 @@ import com.madalla.webapp.admin.content.ContentAdminPanel;
 import com.madalla.webapp.admin.image.ImageAdminPanel;
 import com.madalla.webapp.admin.member.MemberAdminPanel;
 import com.madalla.webapp.admin.pages.AdminErrorPage;
-import com.madalla.webapp.admin.pages.AlbumAdminPage;
 import com.madalla.webapp.admin.pages.MainAdminPage;
 import com.madalla.webapp.admin.pages.SecurePasswordPage;
 import com.madalla.webapp.admin.pages.UserLoginPage;
@@ -330,9 +327,6 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
      * can be displayed on the menu
      */
     protected abstract void addPagesForMenu(Collection<Class<? extends Page>> pages);
-    public boolean hasRpxService(){
-    	return false;
-    }
 
     protected abstract boolean isSiteMultilingual();
 

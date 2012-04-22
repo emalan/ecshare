@@ -45,6 +45,11 @@ public class YoutubePlayerPanel extends CmsPanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				
+			}
+
+			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				target.appendJavaScript("playVideo('"+videoData.getVideoId()+"','"+ videoData.getWidth()+"','"+videoData.getHeight()+"');");
 				saveVideo(videoData);
