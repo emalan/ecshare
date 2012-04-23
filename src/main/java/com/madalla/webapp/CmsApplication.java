@@ -121,7 +121,8 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 			// mount a home page for each language
 			for (SiteLanguage lang : langs) {
 				try {
-					mount(new I18NBookmarkablePageMapper(lang.locale, lang.getLanguageCode(), getHomePage()));
+					//TODO
+					//mount(new I18NBookmarkablePageMapper(lang.locale, lang.getLanguageCode(), getHomePage()));
 				} catch (WicketRuntimeException e) {
 					log.error("Error while mounting home landing page for language:" + lang, e);
 				}
@@ -136,7 +137,8 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 					PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(lang.locale, pageData, false);
 					final String mountName = pageInfo.getMountName(pageData.getName());
 					try {
-						mount(new I18NBookmarkablePageMapper(lang.locale, mountName, page));
+						//TODO
+						//mount(new I18NBookmarkablePageMapper(lang.locale, mountName, page));
 					} catch (WicketRuntimeException e) {
 						log.error("Error while mounting Application Page with name:" + mountName, e);
 					}
