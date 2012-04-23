@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Page;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 
 /**
  * Utility functions for Wicket Pages
@@ -41,7 +42,7 @@ public class PageUtils {
 
 	/** throws Exception if param not found */
 	public static String getPageParameter(String paramName, PageParameters parameters, String panel){
-		String paramValue = parameters.getString(paramName);
+		String paramValue = parameters.get(paramName).toString();
 		if (StringUtils.isEmpty(paramValue)){
 			error(panel + " - A pageParameter with value '"+ paramName+"' needs to be supplied.");
 		}
@@ -50,7 +51,7 @@ public class PageUtils {
 
 	/** supply default value if param not found */
 	public static String getPageParameter(String paramName, PageParameters parameters, String panel, String defaultValue){
-		String paramValue = parameters.getString(paramName);
+		String paramValue = parameters.get(paramName).toString();
 		if (StringUtils.isEmpty(paramValue)){
 			return defaultValue;
 		} else {

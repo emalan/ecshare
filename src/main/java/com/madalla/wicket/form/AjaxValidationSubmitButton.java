@@ -8,6 +8,8 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 
 /**
  * Add to form to enable Ajax submit of form. Use for forms only validate when button
@@ -92,17 +94,18 @@ public abstract class AjaxValidationSubmitButton extends IndicatingAjaxButton{
         abstract void eventAction(final AjaxRequestTarget target, FormComponent<?> component);
 
         private void processEvent(final AjaxRequestTarget target, Form<?> form){
-            form.visitChildren(new Component.IVisitor<Component>() {
-                public Object component(Component component){
-                    log.debug("formVisitor="+component);
-                    if ( component instanceof FormComponent<?>) {
+            form.visitChildren(new IVisitor<Component, Void>() {
+
+				public void component(Component component, IVisit<Void> visit) {
+					log.debug("formVisitor=" + component);
+                    if (component instanceof FormComponent<?>) {
                         FormComponent<?> formComponent = (FormComponent<?>) component;
                         eventAction(target, formComponent);
                     } else if (component instanceof FeedbackPanel){
                     	target.addComponent(component);
                     }
-                    return null;
-                }
+					
+				}
             });
         }
 

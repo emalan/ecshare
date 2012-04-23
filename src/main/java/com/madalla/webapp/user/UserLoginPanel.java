@@ -14,6 +14,7 @@ import org.apache.wicket.model.StringResourceModel;
 
 import com.madalla.bo.SiteData;
 import com.madalla.bo.security.IUser;
+import com.madalla.bo.security.UserData;
 import com.madalla.email.IEmailSender;
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
@@ -64,7 +65,7 @@ public class UserLoginPanel extends CmsPanel {
 			protected void preSignIn(String username) {
 				// TODO hide password login if user has no password
 
-				IUser user = getRepositoryService().getUser(username);
+				UserData user = getRepositoryService().getUser(username);
 				getAppSession().setUser(user);
 
         		if (getApplication().getConfigurationType().equals(RuntimeConfigurationType.DEPLOYMENT)){

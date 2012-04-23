@@ -1,6 +1,7 @@
 package com.madalla.wicket.resourcelink;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.lang.Bytes;
 import org.slf4j.Logger;
@@ -131,50 +133,27 @@ public class EditableResourceLink extends Panel {
 			this.choice = choice;
 		}
 
-		/*
-		 * (non-Javadoc) Script that translates the suffix of a selected file to
-		 * the Type value that is persisted in the CMS and used by the Type Drop
-		 * Down.
-		 *
-		 * @see
-		 * org.apache.wicket.ajax.AbstractDefaultAjaxBehavior#renderHead(org
-		 * .apache.wicket.markup.html.IHeaderResponse)
-		 */
-		@Override
-		public void renderHead(IHeaderResponse response) {
-			StringBuffer sb = new StringBuffer();
-			sb.append("Utils.translateSuffix = function(suffix){");
-			for (ResourceType type : ResourceType.values()) {
-				sb.append("if (suffix.toLowerCase() == '" + type.suffix + "') return '" + type + "';");
-			}
-			sb.append("return '';");
-			sb.append("};");
-
-			response.renderJavascript(sb.toString(), "translateSuffix");
-			super.renderHead(response);
-		}
-
 		@Override
 		protected IAjaxCallDecorator getAjaxCallDecorator() {
 			return new IAjaxCallDecorator() {
 
 				private static final long serialVersionUID = 1L;
 
-				public CharSequence decorateOnFailureScript(CharSequence script) {
-					return script;
-				}
-
-				public CharSequence decorateOnSuccessScript(CharSequence script) {
-					return script;
-				}
-
-				public CharSequence decorateScript(CharSequence script) {
+				public CharSequence decorateScript(Component component, CharSequence script) {
 					StringBuffer sb = new StringBuffer("var v = Wicket.$(" + getComponent().getMarkupId() + ").value;");
 					String suffixes = ResourceType.getResourceTypeSuffixes("|"); // doc|pdf|htm
 					sb.append("var file = Utils.xtractFile(v,'" + suffixes + "');");
 					sb.append("Wicket.$(" + name.getMarkupId() + ").value = file.filename + '.' + file.ext ;");
 					sb.append("Wicket.$(" + choice.getMarkupId() + ").value = Utils.translateSuffix(file.ext);");
 					return sb.toString() + script;
+				}
+
+				public CharSequence decorateOnSuccessScript(Component component, CharSequence script) {
+					return script;
+				}
+
+				public CharSequence decorateOnFailureScript(Component component, CharSequence script) {
+					return script;
 				}
 
 			};
@@ -187,6 +166,20 @@ public class EditableResourceLink extends Panel {
 				//target.addComponent(EditableResourceLink.this);
 			}
 
+		}
+		
+		@Override
+		public void renderHead(Component component, IHeaderResponse response) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("Utils.translateSuffix = function(suffix){");
+			for (ResourceType type : ResourceType.values()) {
+				sb.append("if (suffix.toLowerCase() == '" + type.suffix + "') return '" + type + "';");
+			}
+			sb.append("return '';");
+			sb.append("};");
+
+			response.renderJavaScript(sb.toString(), "translateSuffix");
+			super.renderHead(component, response);
 		}
 	}
 
@@ -229,14 +222,20 @@ public class EditableResourceLink extends Panel {
 	 */
 	public EditableResourceLink(String id, ILinkData data) {
 		super(id);
-		add(Css.CSS_BUTTONS);
 		super.setOutputMarkupId(true);
 		this.data = data;
 		if (data == null) {
 			String message = "The Constructor for AjaxEditableLink requires a value for data.";
 			throw new WicketRuntimeException(message);
 		}
+		
 	}
+	
+    @Override
+    public void renderHead(IHeaderResponse response) {
+    	super.renderHead(response);
+    	response.renderCSSReference(Css.CSS_BUTTONS);
+    }
 
 	/**
 	 * Lazy initialization of the label and editor components and set tempModel
@@ -266,7 +265,11 @@ public class EditableResourceLink extends Panel {
 		final Component name = newEditor("editor", new PropertyModel<String>(data, "name"));
 		resourceForm.add(newEditor("title-editor", new PropertyModel<String>(data, "title")));
 		resourceForm.add(new CheckBox("hide-link", new PropertyModel<Boolean>(data, "hideLink")));
-		final Component upload = newFileUpload(this, "file-upload", new PropertyModel<FileUpload>(data, "fileUpload"));
+		
+		//TODO make use of this for multiple uploads
+		List<FileUpload> fileUploads = new ArrayList<FileUpload>();
+		fileUploads.add(data.getFileUpload());
+		final Component upload = newFileUpload(this, "file-upload", new ListModel<FileUpload>(fileUploads));
 		upload.setOutputMarkupId(true);
 		final Component choice = newDropDownChoice(this, "type-select", new PropertyModel<String>(data, "resourceType"), Arrays
 				.asList(ResourceType.values()));
@@ -347,11 +350,6 @@ public class EditableResourceLink extends Panel {
             	super.onBeforeRender();
             }
 
-			@Override
-			protected boolean callOnBeforeRenderIfNotVisible() {
-				return true;
-			}
-
         };
 
         link.setVisibilityAllowed(true);
@@ -385,7 +383,7 @@ public class EditableResourceLink extends Panel {
 //        });
         return link;
 	}
-
+    
 	/**
 	 * Create the Form
 	 *
@@ -495,7 +493,7 @@ public class EditableResourceLink extends Panel {
 	 * @param model
 	 * @return
 	 */
-	protected FormComponent<FileUpload> newFileUpload(MarkupContainer parent, String componentId, IModel<FileUpload> model) {
+	protected FormComponent<List<FileUpload>> newFileUpload(MarkupContainer parent, String componentId, IModel<List<FileUpload>> model) {
 		final FileUploadField upload = new FileUploadField(componentId, model) {
 
 			private static final long serialVersionUID = 1L;
