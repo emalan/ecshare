@@ -2,14 +2,16 @@ package com.madalla.wicket.form;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
 import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.IFormVisitorParticipant;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,67 +65,73 @@ public abstract class AjaxValidationForm<T> extends Form<T>  {
 			@Override
 			protected void onSubmit(final AjaxRequestTarget target, Form<?> form) {
 
-				form.visitFormComponents(new FormComponent.IVisitor(){
+				IVisitor<FormComponent<?>, Void> visiter = new IVisitor<FormComponent<?>, Void>() {
 
-					public Object formComponent(IFormVisitorParticipant component) {
-						FormComponent<?> formComponent = (FormComponent<?>) component;
+					public void component(FormComponent<?> object, IVisit<Void> visit) {
+						// TODO Auto-generated method stub
+						
+					}
+				};
+				
+				//visit all form components and re-render by adding to target
+				form.visitFormComponents(new IVisitor<FormComponent<?>, Void>(){
+
+					public void component(FormComponent<?> formComponent, IVisit<Void> visit) {
 						log.debug("onSubmit.formVisiter - " + formComponent + formComponent.getModelObject());
 
 						if (formComponent.isValid() && formComponent.getOutputMarkupId()){
-							target.addComponent(formComponent);
+							target.add(formComponent);
 						}
-						return null;
+						
 					}
 
 				});
 
-				target.addComponent(formFeedback);
+				target.add(formFeedback);
 				AjaxValidationForm.this.onSubmit(target);
 
 			}
-
 
 			@Override
 			protected void onError(final AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax onError called");
 
-				form.visitFormComponents(new FormComponent.IVisitor() {
+				form.visitFormComponents(new IVisitor<FormComponent<?>, Void>() {
 
-					public Object formComponent(IFormVisitorParticipant component) {
-						FormComponent<?> formComponent = (FormComponent<?>) component;
+					public void component(FormComponent<?> formComponent, IVisit<Void> visit) {
 						log.debug("onSubmit.formVisiter - " + formComponent);
 
 						if (!formComponent.isValid() && formComponent.getOutputMarkupId()) {
-							target.addComponent(formComponent);
+							target.add(formComponent);
 						}
-						return null;
+						
 					}
 
 				});
-				target.addComponent(formFeedback);
+				target.add(formFeedback);
 			}
 		});
 	}
 
 	public void reset(final AjaxRequestTarget target){
 
-		this.visitChildren(new Component.IVisitor<Component>(){
+		this.visitChildren(new IVisitor<Component, Void>(){
 
-			public Object component(Component component) {
+			public void component(Component component, IVisit<Void> visit) {
 
 				if (component instanceof FormComponent && component.getOutputMarkupId()) {
 					log.debug("reset.formVisiter - " + component);
 					FormComponent<?> formComponent = (FormComponent<?>) component;
-					for (IBehavior item : formComponent.getBehaviors()){
+					for (Behavior item : formComponent.getBehaviors()){
 						if (item instanceof AjaxValidationBehaviour){
 							((AjaxValidationBehaviour) item).reset(target);
 						}
 					}
                 } else if (component instanceof FeedbackPanel && component.getOutputMarkupId()){
                 	log.debug("reset.formVisiter - " + component);
-					target.addComponent(component);
+					target.add(component);
                 }
-				return null;
+				
 			}
 
 		});
@@ -134,10 +142,10 @@ public abstract class AjaxValidationForm<T> extends Form<T>  {
 	@Override
 	protected void onBeforeRender() {
 
-		this.visitChildren(new Component.IVisitor<Component>(){
+		this.visitChildren(new IVisitor<Component, Void>(){
 
-			public Object component(Component component) {
-				log.debug("form visitChildren - "+component);
+			public void component(Component component, IVisit<Void> visit) {
+				log.debug("form visitChildren - "+ component);
 				if (component instanceof IAjaxValidationComponent && component instanceof FormComponent<?>) {
 					log.debug("adding validation style behaviour. " + component);
 					component.add(new ValidationStyleBehaviour());
@@ -146,7 +154,7 @@ public abstract class AjaxValidationForm<T> extends Form<T>  {
                     log.debug("keep reference to this feedbackPanel." + component);
                     component.setOutputMarkupId(true);
                 }
-				return null;
+				
 			}
 
 		});

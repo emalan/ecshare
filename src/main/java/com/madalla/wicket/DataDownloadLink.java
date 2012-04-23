@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.WildcardListModel;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
 
@@ -43,14 +44,7 @@ public abstract class DataDownloadLink<T> extends Link<List<? extends T>>{
 		}
 		
 		IResourceStream resourceStream = new StringResourceStream(sb.toString());
-		getRequestCycle().setRequestTarget(new ResourceStreamRequestTarget(resourceStream){
-
-			@Override
-			public String getFileName() {
-				return fileName;
-			}
-			
-		});
+		getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream, fileName));
 		
 	}
 	

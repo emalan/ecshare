@@ -164,4 +164,10 @@ public class Animator extends Behavior implements IAnimator, IAnimatorActions, I
 		response.renderOnDomReadyJavaScript(this.render());
 	}
 
+	public void renderHead(IHeaderResponse response) {
+		response.renderJavaScriptReference(JavascriptResources.ANIMATOR);
+		response.renderOnDomReadyJavaScript(this.render());
+		
+	}
+
 }

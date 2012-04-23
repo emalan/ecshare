@@ -53,7 +53,6 @@ public class AjaxConfigureIcon extends WebMarkupContainer{
 
 					private static final long serialVersionUID = 1L;
 
-					@Override
 					public CharSequence decorateScript(Component component,
 							CharSequence script) {
 						String post = "var e = Wicket.$('" + configureArea.getParent().getMarkupId()
@@ -63,13 +62,11 @@ public class AjaxConfigureIcon extends WebMarkupContainer{
 						return script + post;
 					}
 
-					@Override
 					public CharSequence decorateOnSuccessScript(
 							Component component, CharSequence script) {
 						return script;
 					}
 
-					@Override
 					public CharSequence decorateOnFailureScript(
 							Component component, CharSequence script) {
 						return script;

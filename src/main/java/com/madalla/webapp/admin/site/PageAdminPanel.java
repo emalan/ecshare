@@ -50,7 +50,7 @@ public class PageAdminPanel extends CmsPanel {
 						Class <? extends Page> page = getPageClass(item.getModelObject().getName());
 						if (page != null){
 							try {
-								getCmsApplication().mountBookmarkablePage(newMount, page);
+								getCmsApplication().mountPage(newMount, page);
 							} catch (WicketRuntimeException e){
 								log.error("Error while mounting Application Page.", e);
 							}
