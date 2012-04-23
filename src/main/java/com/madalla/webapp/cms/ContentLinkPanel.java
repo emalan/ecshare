@@ -23,6 +23,7 @@ import com.madalla.webapp.upload.IFileUploadInfo;
 import com.madalla.webapp.upload.IFileUploadProcess;
 import com.madalla.wicket.resourcelink.EditableResourceLink;
 import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
+import com.madalla.wicket.resourcelink.EditableResourceLink.LinkResourceType;
 
 /**
  * Editable Link to a Respository Resource.
@@ -63,7 +64,7 @@ public class ContentLinkPanel extends CmsPanel {
 		private String title;
 		private ResourceReference resourceReference;
 		private transient FileUpload fileUpload;
-		private String resourceType;
+		private LinkResourceType resourceType;
 		private Boolean hideLink;
 		private String url;
 
@@ -107,11 +108,11 @@ public class ContentLinkPanel extends CmsPanel {
 			return fileUpload;
 		}
 
-		public String getResourceType() {
+		public LinkResourceType getResourceType() {
 			return resourceType;
 		}
 
-		public void setResourceType(String resourceType) {
+		public void setResourceType(LinkResourceType resourceType) {
 			this.resourceType = resourceType;
 		}
 
@@ -135,6 +136,7 @@ public class ContentLinkPanel extends CmsPanel {
 		public void setUrl(String url) {
 			this.url = url;
 		}
+
 	}
 
 	public ContentLinkPanel(final String id, final String nodeName) {
@@ -228,7 +230,9 @@ public class ContentLinkPanel extends CmsPanel {
 		linkData.setId(resourceData.getId());
 		linkData.setName(resourceData.getUrlDisplay());
 		linkData.setTitle(resourceData.getUrlTitle());
-		linkData.setResourceType(resourceData.getType());
+		LinkResourceType type = LinkResourceType.getByMimeType(resourceData.getType());
+		//TODO handle null here
+		linkData.setResourceType(type);
 		linkData.setHideLink(resourceData.getHideLink());
 		linkData.setUrl(resourceData.getUrl());
 		return linkData;
@@ -257,7 +261,7 @@ public class ContentLinkPanel extends CmsPanel {
 
 			resourceData.setUrlDisplay(linkData.getName());
 			resourceData.setUrlTitle(linkData.getTitle());
-			resourceData.setType(linkData.getResourceType());
+			resourceData.setType(linkData.getResourceType().mimeType);
 			resourceData.setHideLink(linkData.getHideLink());
 
 			service.saveContentResource(resourceData);
