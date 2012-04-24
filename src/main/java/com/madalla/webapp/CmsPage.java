@@ -76,8 +76,8 @@ import com.madalla.wicket.animation.AnimatorSubject;
  */
 public abstract class CmsPage extends WebPage {
 	
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(CmsPage.class);
-
 	private static final String META_NAME = "<meta name=\"{0}\" content=\"{1}\"/>";
 	private static final String META_HTTP = "<meta http-equiv=\"{0}\" content=\"{1}\"/>";
 
@@ -139,9 +139,8 @@ public abstract class CmsPage extends WebPage {
 			setLocaleFromUrl(getRequest().getUrl());
 		}
 
-		//used to return to Site from Admin Pages
-		//TODO fix this - maybe using PageReference
-		//getAppSession().setLastSitePage(getPageMapEntry());
+		//store last page so we can return from Admin Pages to last used site page
+		getAppSession().setLastSitePage(getPageReference());
 		getPageReference();
 
 		if (hasPopupLogin()) {

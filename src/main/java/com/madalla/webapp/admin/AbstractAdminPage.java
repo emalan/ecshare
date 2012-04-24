@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.wicket.PageReference;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -57,13 +59,12 @@ public abstract class AbstractAdminPage extends WebPage{
 		List<PanelMenuItem> menuItems = getAdminMenu();
 		add(new PanelListView("menuList",ID,"menuLink",menuItems ));
 		
-//TODO fix this
-//		IPageMapEntry backPage = getAppSession().getLastSitePage();
-//		if (backPage == null){
-//			add(new BookmarkablePageLink<Void>("returnLink", getApplication().getHomePage()));
-//		} else {
-//			add(new BookmarkablePageLink<Void>("returnLink", backPage.getPageClass(), backPage.getPage().getPageParameters()));
-//		}
+		PageReference backPage = getAppSession().getLastSitePage();
+		if (backPage == null){
+			add(new BookmarkablePageLink<Void>("returnLink", getApplication().getHomePage()));
+		} else {
+			add(new BookmarkablePageLink<Void>("returnLink", backPage.getPage().getClass(), backPage.getPage().getPageParameters()));
+		}
 
 	}
 

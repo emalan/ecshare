@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.PageReference;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -43,7 +44,7 @@ public class CmsSession extends AuthenticatedWebSession implements IContentAdmin
 
 	private Roles roles;
 	private ISessionDataService repositoryService;
-	//private IPageMapEntry lastSitePage;
+	private PageReference lastSitePage;
 	private MemberSession memberSession = new MemberSession() {
 
 		private static final long serialVersionUID = 1L;
@@ -250,13 +251,13 @@ public class CmsSession extends AuthenticatedWebSession implements IContentAdmin
 		return isSignedIn();
 	}
 
-//	public void setLastSitePage(IPageMapEntry lastSitePage) {
-//		this.lastSitePage = lastSitePage;
-//	}
-//
-//	public IPageMapEntry getLastSitePage() {
-//		return lastSitePage ;
-//	}
+	public void setLastSitePage(PageReference lastSitePage) {
+		this.lastSitePage = lastSitePage;
+	}
+
+	public PageReference getLastSitePage() {
+		return lastSitePage ;
+	}
 
 
 

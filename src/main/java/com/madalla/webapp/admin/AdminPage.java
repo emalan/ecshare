@@ -20,6 +20,12 @@ import com.madalla.webapp.panelmenu.PanelListView;
 import com.madalla.webapp.panelmenu.PanelMenuItem;
 import com.madalla.webapp.user.UserProfilePanel;
 
+/**
+ * @author Eugene Malan
+ *
+ *	Class deprecated use AbstractAdminPage
+ */
+@Deprecated 
 public abstract class AdminPage extends WebPage {
 
 	private static final long serialVersionUID = -2837757448336709448L;

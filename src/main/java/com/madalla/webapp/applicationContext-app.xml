@@ -35,12 +35,6 @@
     <property name="logfile" value="${logfile}"></property>
 </bean>
 
-<bean id="rpxService" class="com.madalla.rpx.Rpx">
-    <property name='apiKey' value=""></property>
-    <property name='baseUrl' value=""></property>
-    <property name='callback' value=""></property>
-</bean>
-
 <bean id="buildInformation" class="com.madalla.BuildInformation">
     <property name="webappVersion" value="${appversion}"></property>
 	<property name="version" value="#[application.version]"></property>
@@ -50,7 +44,6 @@
     <property name="repositoryService" ref="dataService"/>
     <property name="repositoryAdminService" ref="repositoryAdminService"/>
     <property name="emailSender" ref="emailSender"/>
-    <property name="rpxService" ref="rpxService"/>
     <property name="buildInformation" ref="buildInformation"></property>
     <property name="configType" value="${wicket.configuration}"></property>
 </bean>

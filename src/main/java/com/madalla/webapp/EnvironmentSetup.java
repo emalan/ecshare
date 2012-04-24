@@ -72,11 +72,11 @@ public class EnvironmentSetup implements Serializable {
 		if ("DEVELOPMENT".equalsIgnoreCase(configType)) {
 			this.configType = RuntimeConfigurationType.DEVELOPMENT;
 		} else {
-			this.configType = RuntimeConfigurationType.DEVELOPMENT;
+			this.configType = RuntimeConfigurationType.DEPLOYMENT;
 		}
 	}
 
-	public RuntimeConfigurationType getConfigType() {
+	public RuntimeConfigurationType getRuntimeConfigType() {
 		return configType;
 	}
 

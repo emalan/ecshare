@@ -8,6 +8,7 @@ import com.madalla.webapp.user.UserLoginPanel;
 
 public class UserLoginPage extends AbstractAdminPage{
 
+	private static final long serialVersionUID = 1L;
 	public static final String[] PARAMETERS = {"username"};
 
 	public UserLoginPage(PageParameters parameters){
