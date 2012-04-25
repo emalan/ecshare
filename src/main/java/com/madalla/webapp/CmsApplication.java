@@ -12,6 +12,8 @@ import org.apache.wicket.Session;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
+import org.apache.wicket.markup.html.IPackageResourceGuard;
+import org.apache.wicket.markup.html.PackageResourceGuard;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
@@ -20,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
+
+import wicket.contrib.tinymce.TinyMceBehavior;
 
 import com.madalla.BuildInformation;
 import com.madalla.bo.SiteLanguage;
@@ -50,7 +54,6 @@ import com.madalla.webapp.cms.editor.ContentEntryPanel;
 import com.madalla.webapp.cms.editor.TranslatePanel;
 import com.madalla.webapp.user.UserAdminPanel;
 import com.madalla.webapp.user.UserProfilePanel;
-import com.madalla.wicket.mount.I18NBookmarkablePageMapper;
 
 /**
  * Abstract Wicket Application class that needs to extended to enable usage
@@ -107,7 +110,11 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     }
 
     private void setupApplicationSpecificConfiguration(){
-    	//getRequestCycleSettings().setGatherExtendedBrowserInfo(true);
+    	
+    	final IPackageResourceGuard packageResourceGuard = new PackageResourceGuard();
+    	getResourceSettings().setPackageResourceGuard(packageResourceGuard);
+    	packageResourceGuard.accept(TinyMceBehavior.class, "/tiny_mce/");
+    	
     	setupPageMounts();
     	setupErrorHandling();
     	setupSecurity();
@@ -195,6 +202,37 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 
     }
     
+	protected void mountImage(ImageData image) {
+    	getSharedResources().add(image.getResourceReference(), image.getImageFull());
+		
+    	//TODO mount images
+    	//mountSharedResource("/" + image.getMountUrl(), Application.class.getName() + "/" +image.getResourceReference());
+    }
+    private void setupErrorHandling(){
+
+    	if (RuntimeConfigurationType.DEPLOYMENT.equals(getConfigurationType())) {
+        	//TODO create page for access denied exceptions
+    		//TODO figure out why we get unexpected exception instead of access denied for generalAdminPage
+        	//getApplicationSettings().setPageExpiredErrorPage(MyExpiredPage.class);
+        	//getApplicationSettings().setAccessDeniedPage(MyAccessDeniedPage.class);
+        	getApplicationSettings().setInternalErrorPage(getApplicationErrorPage());
+        	getExceptionSettings().setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
+		}
+    }
+
+    protected void setupSecurity(){
+    	MetaDataRoleAuthorizationStrategy.authorize(UserProfilePanel.class, "USER");
+    	MetaDataRoleAuthorizationStrategy.authorize(SiteAdminPanel.class, "USER");
+    	MetaDataRoleAuthorizationStrategy.authorize(SiteDataPanel.class, "USER");
+    	MetaDataRoleAuthorizationStrategy.authorize(MemberAdminPanel.class, "USER");
+    	MetaDataRoleAuthorizationStrategy.authorize(ImageAdminPanel.class, "ADMIN");
+    	MetaDataRoleAuthorizationStrategy.authorize(ContentAdminPanel.class, "ADMIN");
+    	MetaDataRoleAuthorizationStrategy.authorize(PageAdminPanel.class, "USER");
+    	MetaDataRoleAuthorizationStrategy.authorize(SiteEmailPanel.class, "SUPERADMIN");
+    	MetaDataRoleAuthorizationStrategy.authorize(UserAdminPanel.class, "SUPERADMIN");
+    	MetaDataRoleAuthorizationStrategy.authorize(ContentEntryPanel.class, "USER");
+    	MetaDataRoleAuthorizationStrategy.authorize(TranslatePanel.class, "USER");
+    }
     //TODO switch https off in development mode or if sertificate not found
 
     /* (non-Javadoc)
@@ -237,38 +275,6 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 
     public Class<? extends WebPage> getMemberPasswordPage(){
     	return null;
-    }
-
-	protected void mountImage(ImageData image) {
-    	getSharedResources().add(image.getResourceReference(), image.getImageFull());
-		
-    	//TODO mount images
-    	//mountSharedResource("/" + image.getMountUrl(), Application.class.getName() + "/" +image.getResourceReference());
-    }
-    private void setupErrorHandling(){
-
-    	if (RuntimeConfigurationType.DEPLOYMENT.equals(getConfigurationType())) {
-        	//TODO create page for access denied exceptions
-    		//TODO figure out why we get unexpected exception instead of access denied for generalAdminPage
-        	//getApplicationSettings().setPageExpiredErrorPage(MyExpiredPage.class);
-        	//getApplicationSettings().setAccessDeniedPage(MyAccessDeniedPage.class);
-        	getApplicationSettings().setInternalErrorPage(getApplicationErrorPage());
-        	getExceptionSettings().setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
-		}
-    }
-
-    protected void setupSecurity(){
-    	MetaDataRoleAuthorizationStrategy.authorize(UserProfilePanel.class, "USER");
-    	MetaDataRoleAuthorizationStrategy.authorize(SiteAdminPanel.class, "USER");
-    	MetaDataRoleAuthorizationStrategy.authorize(SiteDataPanel.class, "USER");
-    	MetaDataRoleAuthorizationStrategy.authorize(MemberAdminPanel.class, "USER");
-    	MetaDataRoleAuthorizationStrategy.authorize(ImageAdminPanel.class, "ADMIN");
-    	MetaDataRoleAuthorizationStrategy.authorize(ContentAdminPanel.class, "ADMIN");
-    	MetaDataRoleAuthorizationStrategy.authorize(PageAdminPanel.class, "USER");
-    	MetaDataRoleAuthorizationStrategy.authorize(SiteEmailPanel.class, "SUPERADMIN");
-    	MetaDataRoleAuthorizationStrategy.authorize(UserAdminPanel.class, "SUPERADMIN");
-    	MetaDataRoleAuthorizationStrategy.authorize(ContentEntryPanel.class, "USER");
-    	MetaDataRoleAuthorizationStrategy.authorize(TranslatePanel.class, "USER");
     }
 
 	@Override

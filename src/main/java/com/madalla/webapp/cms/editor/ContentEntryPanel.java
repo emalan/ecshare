@@ -111,14 +111,15 @@ public class ContentEntryPanel extends CmsPanel {
 	
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		response.renderJavaScriptReference(new PackageResourceReference(TinyMce.class, "tiny_mce.js"));
+		//response.renderJavaScriptReference(new PackageResourceReference(TinyMce.class, "tiny_mce.js"));
+		
 		//tabs style sheet
 		response.renderCSSReference(new PackageResourceReference(ContentEntryPanel.class, "tabs.css"));
 
 		//setup Javascript template
 		Map<String, Object> map = EditorSetup.setupTemplateVariables((CmsSession) getSession());
 		ResourceReference editorJs = new TextTemplateResourceReference(EditorSetup.class,"EditorSetup.js", Model.ofMap(map));
-		response.renderJavaScriptReference(editorJs);
+		//response.renderJavaScriptReference(editorJs);
 
 	}
 

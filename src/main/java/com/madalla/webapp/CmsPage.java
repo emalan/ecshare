@@ -264,7 +264,7 @@ public abstract class CmsPage extends WebPage {
 
 		});
 
-		add(new LoginPanel("signInPanel", new SecureCredentials(), false) {
+		add(new LoginPanel("signInPanel", new SecureCredentials()) {
 			private static final long serialVersionUID = 1L;
 			private static final int loginMax = 4;
 			private int count = 0;

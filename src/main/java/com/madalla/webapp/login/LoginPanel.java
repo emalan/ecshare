@@ -17,8 +17,6 @@
 package com.madalla.webapp.login;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
@@ -27,9 +25,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -38,39 +34,23 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.css.Css;
 import com.madalla.wicket.form.FocusOnLoadBehavior;
 
-
-/**
- * Reusable user sign in panel with username and password as well as support for cookie persistence
- * of the both. When the SignInPanel's form is submitted, the method signIn(String, String) is
- * called, passing the username and password submitted. The signIn() method should authenticate the
- * user's session. The default implementation calls AuthenticatedWebSession.get().signIn().
- *
- * @author Jonathan Locke
- * @author Juergen Donnerstag
- * @author Eelco Hillenius
- */
-public abstract class LoginPanel extends CmsPanel
-{
+public abstract class LoginPanel extends CmsPanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(LoginPanel.class);
-
-	/** True if the panel should display a remember-me checkbox */
-	private boolean includeRememberMe = true;
 
 	private final Class<? extends Page> destination;
 
 	/** Field for password. */
 	private PasswordTextField password;
 	private FormComponentLabel passwordLabel;
-
-	/** True if the user should be remembered via form persistence (cookies) */
-	private boolean rememberMe = true;
 
 	/** Field for user name. */
 	private TextField<String> username;
@@ -82,47 +62,32 @@ public abstract class LoginPanel extends CmsPanel
 	/**
 	 * Sign in form.
 	 */
-	public final class SignInForm extends Form<Object>
-	{
+	public final class SignInForm extends Form<Object> {
 		private static final long serialVersionUID = 1L;
 
 		/**
 		 * Constructor.
-		 *
+		 * 
 		 * @param id
 		 *            id of the form component
 		 */
-		public SignInForm(final String id, ICredentialHolder credentials)
-		{
+		public SignInForm(final String id, ICredentialHolder credentials) {
 			super(id);
-			// Attach textfield components that edit properties map
-			// in lieu of a formal beans model
+
 			add(username = new TextField<String>("username", new PropertyModel<String>(credentials, "username")));
 			username.setRequired(true);
-			add(password = new PasswordTextField("password", new PropertyModel<String>(credentials,"password")));
+			add(password = new PasswordTextField("password", new PropertyModel<String>(credentials, "password")));
 
-            add(usernameLabel = new FormComponentLabel("usernameLabel",username));
-            usernameLabel.setOutputMarkupId(true);
+			add(usernameLabel = new FormComponentLabel("usernameLabel", username));
+			usernameLabel.setOutputMarkupId(true);
 
-            add(passwordLabel = new FormComponentLabel("passwordLabel",password));
-            passwordLabel.setVisibilityAllowed(true);
-            passwordLabel.setOutputMarkupId(true);
+			add(passwordLabel = new FormComponentLabel("passwordLabel", password));
+			passwordLabel.setVisibilityAllowed(true);
+			passwordLabel.setOutputMarkupId(true);
 
-            password.setRequired(false);
-            password.setOutputMarkupId(true);
-            password.setVisibilityAllowed(true);
-
-			// MarkupContainer row for remember me checkbox
-			final WebMarkupContainer rememberMeRow = new WebMarkupContainer("rememberMeRow");
-			rememberMeRow.setOutputMarkupId(true);
-			add(rememberMeRow);
-
-			// Add rememberMe checkbox
-			rememberMeRow.add(new CheckBox("rememberMe", new PropertyModel<Boolean>(LoginPanel.this,
-					"rememberMe")));
-
-			// Show remember me checkbox?
-			rememberMeRow.setVisible(includeRememberMe);
+			password.setRequired(false);
+			password.setOutputMarkupId(true);
+			password.setVisibilityAllowed(true);
 
 		}
 
@@ -130,50 +95,38 @@ public abstract class LoginPanel extends CmsPanel
 		 * @see org.apache.wicket.markup.html.form.Form#onSubmit()
 		 */
 		@Override
-		public void onSubmit()
-		{
-		    log.debug("Login with userName="+getUsername());
-		    //continue to Ajax submit
+		public void onSubmit() {
+			log.debug("Login with userName=" + getUsername());
+			// continue to Ajax submit
 
 		}
 	}
 
+	public LoginPanel(final String id, final ICredentialHolder credentials) {
+		this(id, credentials, null);
+	}
 
-    public LoginPanel(final String id, ICredentialHolder credentials)
-    {
-        this(id, credentials, true);
-    }
-
-    public LoginPanel(final String id, final ICredentialHolder credentials, final boolean includeRememberMe){
-    	this(id, credentials, includeRememberMe, null);
-    }
 	/**
 	 * @param id
 	 *            See Component constructor
-	 * @param includeRememberMe
-	 *            True if form should include a remember-me checkbox
 	 * @see org.apache.wicket.Component#Component(String)
 	 */
-	public LoginPanel(final String id, final ICredentialHolder credentials, final boolean includeRememberMe,
-			Class<? extends Page> destination)
-	{
+	public LoginPanel(final String id, final ICredentialHolder credentials, Class<? extends Page> destination) {
 		super(id);
 
-		if (destination == null){
+		if (destination == null) {
 			this.destination = getApplication().getHomePage();
 		} else {
 			this.destination = destination;
 		}
 
-		//if we have a valid populated credential then validate
-		if (StringUtils.isNotEmpty(credentials.getUsername()) && StringUtils.isNotEmpty(credentials.getPassword()) &&
-				signIn(credentials.getUsername(), credentials.getPassword())){
+		// if we have a valid populated credential then validate
+		if (StringUtils.isNotEmpty(credentials.getUsername()) && StringUtils.isNotEmpty(credentials.getPassword())
+				&& signIn(credentials.getUsername(), credentials.getPassword())) {
 
 			throw new RestartResponseAtInterceptPageException(destination);
 
 		}
-
-		this.includeRememberMe = includeRememberMe;
 
 		final Form<Object> form = new SignInForm("signInForm", credentials);
 
@@ -183,17 +136,18 @@ public abstract class LoginPanel extends CmsPanel
 		feedback.setOutputMarkupId(true);
 		form.add(feedback);
 
-		lockedLabel = new Label("lockedLabel", new StringResourceModel("label.locked", this, new Model<ICredentialHolder>(credentials)));
+		lockedLabel = new Label("lockedLabel", new StringResourceModel("label.locked", this,
+				new Model<ICredentialHolder>(credentials)));
 		lockedLabel.setVisibilityAllowed(true);
 		lockedLabel.setVisible(false);
 		form.add(lockedLabel);
 
-		unlockUser = new AjaxLink<String>("unlockUser"){
+		unlockUser = new AjaxLink<String>("unlockUser") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				target.addComponent(form);
+				target.add(form);
 				lockUserName(false);
 				credentials.setUsername("");
 			}
@@ -202,36 +156,36 @@ public abstract class LoginPanel extends CmsPanel
 		unlockUser.setVisibilityAllowed(true);
 		form.add(unlockUser);
 
-		//set up depending on if we have a username or not
+		// set up depending on if we have a username or not
 		lockUserName(StringUtils.isNotEmpty(credentials.getUsername()));
 
-		AjaxButton submit = new IndicatingAjaxButton("submitLink", form){
+		AjaxButton submit = new IndicatingAjaxButton("submitLink", form) {
 
-            private static final long serialVersionUID = 1L;
+			private static final long serialVersionUID = 1L;
 
-            @Override
+			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax onError called");
-				target.addComponent(feedback);
-				target.addComponent(form);
+				target.add(feedback);
+				target.add(form);
 				onSignInFailed(getUsername());
 			}
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax submit called");
-				target.addComponent(form);
+				target.add(form);
 				preSignIn(getUsername());
 
-				if (!isUserLocked()){
+				if (!isUserLocked()) {
 					lockUserName(true);
 				} else {
-					if (signIn(getUsername(), getPassword())){
+					if (signIn(getUsername(), getPassword())) {
 						feedback.info(getLocalizer().getString("signInFailed", this, "Success"));
 						onSignInSucceeded(target);
 					} else {
 						feedback.error(getLocalizer().getString("signInFailed", this, "Sign in failed"));
-						target.addComponent(feedback);
+						target.add(feedback);
 						onSignInFailed(getUsername());
 					}
 
@@ -242,26 +196,26 @@ public abstract class LoginPanel extends CmsPanel
 		};
 		submit.setEnabled(true);
 
-		//submit.setVisibilityAllowed(true);
+		// submit.setVisibilityAllowed(true);
 		form.add(submit);
-		form.add(new AttributeModifier("onSubmit", true, new Model<String>("document.getElementById('" + submit.getMarkupId() + "').onclick();return false;")));
+		form.add(new AttributeModifier("onSubmit", new Model<String>("document.getElementById('"
+				+ submit.getMarkupId() + "').onclick();return false;")));
 
 	}
-
 
 	@Override
 	protected void onBeforeRender() {
 		super.onBeforeRender();
-        username.setLabel(new Model<String>(getString("label.name")));
-        password.setLabel(new Model<String>(getString("label.password")));
-	}
-	
-	 @Override
-	public void renderHead(IHeaderResponse response) {
-		 response.renderCSSReference(Css.CSS_FORM);
+		username.setLabel(new Model<String>(getString("label.name")));
+		password.setLabel(new Model<String>(getString("label.password")));
 	}
 
-	private void lockUserName(boolean lock){
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		response.renderCSSReference(Css.CSS_FORM);
+	}
+
+	private void lockUserName(boolean lock) {
 		username.setVisible(!lock);
 		usernameLabel.setVisible(!lock);
 		unlockUser.setVisible(lock);
@@ -269,60 +223,38 @@ public abstract class LoginPanel extends CmsPanel
 		password.setRequired(lock);
 		passwordLabel.setVisible(lock);
 		lockedLabel.setVisible(lock);
-		if (lock){
+		if (lock) {
 			password.add(new FocusOnLoadBehavior());
 		} else {
 			username.add(new FocusOnLoadBehavior());
 		}
 	}
 
-	private boolean isUserLocked(){
+	private boolean isUserLocked() {
 		return !username.isVisible();
 	}
 
 	/**
 	 * Convenience method to access the password.
-	 *
+	 * 
 	 * @return The password
 	 */
-	public String getPassword()
-	{
+	public String getPassword() {
 		return password.getDefaultModelObjectAsString();
 	}
 
 	/**
-	 * Get model object of the rememberMe checkbox
-	 *
-	 * @return True if user should be remembered in the future
-	 */
-	public boolean getRememberMe()
-	{
-		return rememberMe;
-	}
-
-	/**
 	 * Convenience method to access the username.
-	 *
+	 * 
 	 * @return The user name
 	 */
-	public String getUsername()
-	{
+	public String getUsername() {
 		return username.getDefaultModelObjectAsString();
 	}
 
 	/**
-	 * Set model object for rememberMe checkbox
-	 *
-	 * @param rememberMe
-	 */
-	public void setRememberMe(final boolean rememberMe)
-	{
-		this.rememberMe = rememberMe;
-	}
-
-	/**
 	 * Sign in user if possible.
-	 *
+	 * 
 	 * @param username
 	 *            The username
 	 * @param password
@@ -331,11 +263,11 @@ public abstract class LoginPanel extends CmsPanel
 	 */
 	public abstract boolean signIn(String username, String password);
 
-	protected void preSignIn(String username){
+	protected void preSignIn(String username) {
 
 	}
 
-	protected void onSignInFailed(String username){
+	protected void onSignInFailed(String username) {
 		if (null == username) {
 			log.warn("onSignInFailed - no user name.");
 		} else {
@@ -343,21 +275,18 @@ public abstract class LoginPanel extends CmsPanel
 		}
 	}
 
-	protected void onSignInSucceeded(){
-	    // If login has been called because the user was not yet
-        // logged in, then continue to the original destination,
-        // otherwise to the Home page
-        if (!continueToOriginalDestination())   {
-            setResponsePage(destination);
-        }
+	protected void onSignInSucceeded() {
+		// If login has been called because the user was not yet
+		// logged in, then continue to the original destination,
+		// otherwise to the Home page
+		if (!continueToOriginalDestination()) {
+			setResponsePage(destination);
+		}
 	}
 
-	protected void onSignInSucceeded(AjaxRequestTarget target)
-	{
-	    onSignInSucceeded();
+	protected void onSignInSucceeded(AjaxRequestTarget target) {
+		onSignInSucceeded();
 
 	}
-
-
 
 }

@@ -1,30 +1,19 @@
 package com.madalla.wicket.form;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.request.Response;
 
-public class FocusOnLoadBehavior extends AbstractBehavior{
+public class FocusOnLoadBehavior extends Behavior{
 	private static final long serialVersionUID = 1L;
 
 		@Override
-		public void bind(Component component) {
-			super.bind(component);
-			component.setOutputMarkupId(true);
-			//TODO
-//			component.setComponentBorder(new IComponentBorder() {
-//				private static final long serialVersionUID = 1L;
-//
-//				public void renderBefore(Component component) {
-//				}
-//
-//				public void renderAfter(Component component) {
-//					final Response response = component.getResponse();
-//					response.write(
-//							"<script type=\"text/javascript\" language=\"javascript\">var elem = document.getElementById(\"" +
-//							component.getMarkupId() +
-//							"\"); if (elem.offsetWidth) elem.focus();</script>");
-//				}
-//			});
+		public void afterRender(Component component) {
+			final Response response = component.getResponse();
+			response.write("<script type=\"text/javascript\" language=\"javascript\">var elem = document.getElementById(\"" +
+					component.getMarkupId() +
+					"\"); if (elem.offsetWidth) elem.focus();</script>");
+			super.afterRender(component);
 		}
 
 }
