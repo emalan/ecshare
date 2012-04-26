@@ -1,7 +1,5 @@
 package com.madalla.webapp.cms.editor;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
@@ -9,13 +7,14 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import tiny_mce.TinyMce;
-import wicket.contrib.tinymce.TinyMceBehavior;
+import wicket.contrib.tinymce.ajax.TinyMceAjaxButton;
 
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.webapp.CmsPanel;
-import com.madalla.wicket.form.AjaxValidationSubmitButton;
+import com.madalla.wicket.tinyMce.TinyMceSetup;
 
 public class ContentFormPanel extends CmsPanel{
 	private static final long serialVersionUID = 1L;
@@ -46,7 +45,7 @@ public class ContentFormPanel extends CmsPanel{
 				}
 
             });
-            text.add(TinyMce.behavior(getAppSession().getLocale(), getAppSession()));
+            text.add(TinyMceSetup.createBehavior(getAppSession().getLocale(), getAppSession()));
             add(text);
         }
     }
@@ -79,41 +78,28 @@ public class ContentFormPanel extends CmsPanel{
         final FeedbackPanel feedback = new ComponentFeedbackPanel("feedback", form);
         feedback.setOutputMarkupId(true);
         form.add(feedback);
-
-        final AjaxValidationSubmitButton submitLink = new AjaxValidationSubmitButton("submitButton", form, feedback) {
-
+        
+        final TinyMceAjaxButton submit = new TinyMceAjaxButton("submitButton", form) {
+			
 			private static final long serialVersionUID = 1L;
-
-            @Override
-			protected void onBeforeRender() {
-				super.onBeforeRender();
-			}
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				super.onSubmit(target, form);
-
 				log.debug("Submiting populated Content object to Content service. " + form.getModelObject());
 				saveData((ContentEntryData)form.getModelObject());
-                target.addComponent(feedback);
+                target.add(feedback);
                 form.info(getString("message.success"));
+				
 			}
-
+			
 			@Override
-			protected String getOnClickScript() {
-
-				String message = getString("message.editor.fail");
-				String text = "<ul class=\"feedbackPanel\"><li class=\"feedbackPanelINFO\"><span class=\"feedbackPanelWARN\">"+message+"</span></li></ul>";
-				String error = "Wicket.$('"+feedback.getMarkupId()+"').innerHTML = '"+text+"';";
-
-				return "var ed = tinyMCE.get('text'); if (ed.isDirty()){ ed.save(); ed.isNotDirty = 1;} else {"+error+"return false;}";
-
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				log.error("Error while submitting Content. " + form.getModelObject());
+				form.error("");
 			}
+		};
 
-        };
-        submitLink.setOutputMarkupId(true);
-
-        form.add(submitLink);
+        form.add(submit);
 
         add(form);
 

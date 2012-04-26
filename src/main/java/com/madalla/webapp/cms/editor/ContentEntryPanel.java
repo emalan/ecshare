@@ -3,7 +3,6 @@ package com.madalla.webapp.cms.editor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
@@ -12,19 +11,14 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.PackageResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.resource.TextTemplateResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import tiny_mce.TinyMce;
 
 import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
 import com.madalla.webapp.CmsPanel;
-import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.admin.pages.AdminPanelLink;
 
 /**
@@ -111,15 +105,9 @@ public class ContentEntryPanel extends CmsPanel {
 	
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		//response.renderJavaScriptReference(new PackageResourceReference(TinyMce.class, "tiny_mce.js"));
 		
 		//tabs style sheet
 		response.renderCSSReference(new PackageResourceReference(ContentEntryPanel.class, "tabs.css"));
-
-		//setup Javascript template
-		Map<String, Object> map = EditorSetup.setupTemplateVariables((CmsSession) getSession());
-		ResourceReference editorJs = new TextTemplateResourceReference(EditorSetup.class,"EditorSetup.js", Model.ofMap(map));
-		//response.renderJavaScriptReference(editorJs);
 
 	}
 
