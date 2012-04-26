@@ -12,7 +12,7 @@ function init() {
 
 function changeLanguage(lang, text){
 	destLang = lang;
-	tinyMCE.get('text').setContent(text);
+	tinyMCE.activeEditor.setContent(text);
 }
 
 function translateContent(result) {
@@ -25,12 +25,12 @@ function translateContent(result) {
 
 function translateResult(result) {
     if (result.translation) {
-    	tinyMCE.get('text').setContent(result.translation);
+    	tinyMCE.activeEditor.setContent(result.translation);
     } else {
     	if (result.error){
-    		tinyMCE.get('text').setContent('<span style="color:red">Error Translating - ' + result.error.message + '</span>');
+    		tinyMCE.activeEditor.setContent('<span style="color:red">Error Translating - ' + result.error.message + '</span>');
     	} else {
-    		tinyMCE.get('text').setContent('<span style="color:red">Error Translating</span>');
+    		tinyMCE.activeEditor.setContent('<span style="color:red">Error Translating</span>');
     	}
     }
 }
