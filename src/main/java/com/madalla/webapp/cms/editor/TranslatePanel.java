@@ -18,7 +18,7 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.TextTemplateResourceReference;
 
-import tiny_mce.TinyMce;
+import tiny_mce.TinyMceSetup;
 
 import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.ContentData;
@@ -106,7 +106,7 @@ public class TranslatePanel extends CmsPanel {
 	
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		response.renderJavaScriptReference(new PackageResourceReference(TinyMce.class, "tiny_mce.js"));
+		response.renderJavaScriptReference(new PackageResourceReference(TinyMceSetup.class, "tiny_mce.js"));
 
 		//setup Javascript template
 		Map<String, Object> vars = EditorSetup.setupTemplateVariables((CmsSession) getSession());

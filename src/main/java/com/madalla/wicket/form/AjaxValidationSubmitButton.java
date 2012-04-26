@@ -12,7 +12,7 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
 /**
- * Add to form to enable Ajax submit of form. Use for forms only validate when button
+ * Add to form to enable Ajax submit of form. Use for forms that validate when button
  * is clicked. For Components that self-validate (AjaxValidationBehaviour), rather use
  * AjaxValidationForm. {@link AjaxValidationForm}
  *
@@ -49,13 +49,13 @@ public abstract class AjaxValidationSubmitButton extends IndicatingAjaxButton{
             @Override
             void eventAction(AjaxRequestTarget target, FormComponent<?> component) {
                 if (component.isValid() && component.getOutputMarkupId()){
-                    target.addComponent(component);
+                    target.add(component);
                 }
             }
 
         };
         if (feedbackPanel != null){
-            target.addComponent(feedbackPanel);
+            target.add(feedbackPanel);
         }
 	}
 
@@ -67,10 +67,10 @@ public abstract class AjaxValidationSubmitButton extends IndicatingAjaxButton{
             @Override
             void eventAction(AjaxRequestTarget target, FormComponent<?> component) {
                 if (!component.isValid() ){
-                    target.addComponent(component);
+                    target.add(component);
                     log.debug("Ajax onError - Component is invalid. Component MarkupId="+component.getMarkupId()+". Message is " +component.getFeedbackMessage().getMessage());
                 } else if (component.isValid()){
-                    target.addComponent(component);
+                    target.add(component);
                     log.debug("Ajax onError - Component is valid. "+component);
                 }
 
@@ -78,7 +78,7 @@ public abstract class AjaxValidationSubmitButton extends IndicatingAjaxButton{
 
         };
         if (feedbackPanel != null){
-            target.addComponent(feedbackPanel);
+            target.add(feedbackPanel);
         }
 
     }
@@ -102,7 +102,7 @@ public abstract class AjaxValidationSubmitButton extends IndicatingAjaxButton{
                         FormComponent<?> formComponent = (FormComponent<?>) component;
                         eventAction(target, formComponent);
                     } else if (component instanceof FeedbackPanel){
-                    	target.addComponent(component);
+                    	target.add(component);
                     }
 					
 				}

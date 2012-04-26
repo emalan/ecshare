@@ -9,15 +9,14 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.madalla.webapp.cms.IContentAdmin;
-
 import wicket.contrib.tinymce.TinyMceBehavior;
 import wicket.contrib.tinymce.settings.Button;
 import wicket.contrib.tinymce.settings.TinyMCESettings;
 import wicket.contrib.tinymce.settings.TinyMCESettings.Language;
-import wicket.contrib.tinymce.settings.TinyMCESettings.Position;
 import wicket.contrib.tinymce.settings.TinyMCESettings.Theme;
 import wicket.contrib.tinymce.settings.TinyMCESettings.Toolbar;
+
+import com.madalla.webapp.cms.IContentAdmin;
 
 /**
  * Tiny Mce javascript library - version 3.0. Placeholder class for javascript resources.
@@ -25,13 +24,13 @@ import wicket.contrib.tinymce.settings.TinyMCESettings.Toolbar;
  * @author Eugene Malan
  *
  */
-public class TinyMce {
+public class TinyMceSetup {
 
-	private TinyMce() {	}
+	private TinyMceSetup() {	}
 	
-	private static final Logger log = LoggerFactory.getLogger(TinyMce.class);
+	private static final Logger log = LoggerFactory.getLogger(TinyMceSetup.class);
 	
-	public static TinyMceBehavior behavior(final Locale locale, final IContentAdmin session)
+	public static TinyMceBehavior createBehavior(final Locale locale, final IContentAdmin session)
     {
 		//set language
 		Language language;
@@ -43,58 +42,62 @@ public class TinyMce {
 		}
 		TinyMCESettings settings = new TinyMCESettings(Theme.advanced, language);
 		
-		
-		settings.add(Button.bold, Toolbar.first, Position.after);
-		settings.add(Button.italic, Toolbar.first, Position.after);
-		settings.add(Button.underline, Toolbar.first, Position.after);
-		settings.add(Button.strikethrough, Toolbar.first, Position.after);
-		settings.add(Button.separator, Toolbar.first, Position.after);
-//		settings.add(Button., Toolbar.first, Position.after);
-//		settings.add(Button., Toolbar.first, Position.after);
-//		settings.add(Button., Toolbar.first, Position.after);
-//		settings.add(Button., Toolbar.first, Position.after);
-//		settings.add(Button., Toolbar.first, Position.after);
-//		settings.add(Button., Toolbar.first, Position.after);
-//		settings.add(Button., Toolbar.first, Position.after);
-//		settings.add(Button., Toolbar.first, Position.after);
-//		settings.add(Button., Toolbar.first, Position.after);
-//		settings.add(Button., Toolbar.first, Position.after);
-//		settings.add(Button., Toolbar.first, Position.after);
-//		settings.add(Button., Toolbar.first, Position.after);
-//		settings.add(Button., Toolbar.first, Position.after);
-//		settings.add(Button., Toolbar.first, Position.after);
-		
-		
-		//map.put("button1", "bold,italic,underline,strikethrough,|,undo,redo,|,cleanup,|,bullist,numlist,|,sub,sup,|,charmap,|,removeformat");
 		final List<Button> first = new ArrayList<Button>();
 		final List<Button> second = new ArrayList<Button>();
 		final List<Button> third = new ArrayList<Button>();
 		
 		if (session.isSuperAdmin()) {
-			//newdocument,fullscreen,cleanup,removeformat,code,help,|,undo,redo,|,paste,pastetext,pasteword,|,link,unlink,anchor,image,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,
-			//formatselect,fontselect,fontsizeselect|,forecolor,backcolor,|,tablecontrols
-			//bold,italic,underline,strikethrough,|,undo,redo,|,cleanup,|,bullist,numlist,|,sub,sup,|,charmap,|,removeformat,|blockquote
-			first.add(Button.bold);
-			first.add(Button.italic);
-			first.add(Button.underline);
-			first.add(Button.strikethrough);
+			//first toolbar
+			first.add(Button.newdocument);
+			first.add(Button.cleanup);
+			first.add(Button.removeformat);
+			first.add(Button.code);
+			first.add(Button.help);
 			first.add(Button.separator);
 			first.add(Button.undo);
 			first.add(Button.redo);
 			first.add(Button.separator);
-			first.add(Button.cleanup);
+			first.add(Button.copy);
+			first.add(Button.cut);
 			first.add(Button.separator);
-			first.add(Button.bullist);
-			first.add(Button.numlist);
+			first.add(Button.link);
+			first.add(Button.unlink);
+			first.add(Button.anchor);
+			first.add(Button.image);
 			first.add(Button.separator);
-			first.add(Button.sub);
-			first.add(Button.sup);
+			first.add(Button.styleselect);
 			first.add(Button.separator);
-			first.add(Button.charmap);
-			first.add(Button.separator);
-			first.add(Button.removeformat);
+			first.add(Button.visualaid);
+			//second toolbar
+			second.add(Button.formatselect);
+			second.add(Button.fontselect);
+			second.add(Button.fontsizeselect);
+			second.add(Button.separator);
+			second.add(Button.forecolor);
+			second.add(Button.backcolor);
+			second.add(Button.separator);
+			//third toolbar
+			third.add(Button.bold);
+			third.add(Button.italic);
+			third.add(Button.underline);
+			third.add(Button.strikethrough);
+			third.add(Button.separator);
+			third.add(Button.undo);
+			third.add(Button.redo);
+			third.add(Button.separator);
+			third.add(Button.cleanup);
+			third.add(Button.separator);
+			third.add(Button.bullist);
+			third.add(Button.numlist);
+			third.add(Button.separator);
+			third.add(Button.sub);
+			third.add(Button.sup);
+			third.add(Button.separator);
+			third.add(Button.charmap);
+			third.add(Button.separator);
+			third.add(Button.removeformat);
 		} else if (session.isCmsAdminMode()) {
-			//bold,italic,underline,strikethrough,|,sub,sup,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,|,image
+			//first toolbar
 			first.add(Button.bold);
 			first.add(Button.italic);
 			first.add(Button.underline);
@@ -112,7 +115,7 @@ public class TinyMce {
 			first.add(Button.formatselect);
 			first.add(Button.separator);
 			first.add(Button.image);
-			//bullist,numlist,|,hr,charmap,removeformat,|,outdent,indent,|,undo,redo,|,link,unlink,anchor,cleanup,code
+			//second toolbar
 			second.add(Button.bullist);
 			second.add(Button.numlist);
 			second.add(Button.separator);
@@ -131,7 +134,6 @@ public class TinyMce {
 			second.add(Button.anchor);
 			second.add(Button.cleanup);
 			second.add(Button.code);
-			
 		} else {
 			first.add(Button.bold);
 			first.add(Button.italic);
