@@ -13,6 +13,12 @@
   <logger name="com.madalla">
     <level value="trace"/>
   </logger>
+  <logger name="com.emalan">
+    <level value="trace"/>
+  </logger>
+  <logger name="org.emalan">
+    <level value="trace"/>
+  </logger>    
   <logger name="org.apache.ddlutils">
     <level value="debug"/>
   </logger>
@@ -28,7 +34,7 @@
   
   
   <root> 
-    <priority value="debug" /> 
+    <priority value="trace" /> 
     <appender-ref ref="console" /> 
   </root>
   
