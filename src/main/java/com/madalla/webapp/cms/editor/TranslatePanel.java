@@ -1,5 +1,6 @@
 package com.madalla.webapp.cms.editor;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -22,7 +23,6 @@ import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
 import com.madalla.webapp.CmsPanel;
-import com.madalla.webapp.CmsSession;
 
 /**
  * Translate Panel - View translate from text and edit the translate text. Also translate functionality.
@@ -46,8 +46,6 @@ public class TranslatePanel extends CmsPanel {
 	public TranslatePanel(String name, final String nodeName, final String contentId) {
 		super(name);
 
-		vars = EditorSetup.setupTemplateVariables((CmsSession) getSession());
-		
         PageData page = getRepositoryService().getPage(nodeName);
         final ContentData content = getRepositoryService().getContent(page, contentId);
         log.debug("init - content" + content);
@@ -72,6 +70,7 @@ public class TranslatePanel extends CmsPanel {
 		add(destPanel);
 		
 		//translate values
+		vars = new HashMap<String, Object>();
 		vars.put("sourceDiv", baseContentLabel.getMarkupId());
 		vars.put("destLang", selectedLang);
 
@@ -91,9 +90,10 @@ public class TranslatePanel extends CmsPanel {
 				ContentEntryData newContentEntry = getRepositoryService().getContentEntry(content, language.locale.getDisplayName(), "");
 				log.debug("new Content Entry." + newContentEntry);
 				destPanel.changeContentEntry(newContentEntry);
-
-				target.appendJavaScript("changeLanguage('"+ language.getLanguageCode()+"', '"+
-						StringEscapeUtils.escapeJavaScript(newContentEntry.getText()) + "');");
+				final String changeLang = "changeLanguage('"+ language.getLanguageCode()+"', '"+
+						StringEscapeUtils.escapeJavaScript(newContentEntry.getText()) + "');";
+				log.trace("script run --> " + changeLang);		
+				target.appendJavaScript(changeLang);
 			}
 
 		});
@@ -104,7 +104,7 @@ public class TranslatePanel extends CmsPanel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 
-		final ResourceReference translateJs = new TextTemplateResourceReference(EditorSetup.class, "TranslatePanel.js", Model.ofMap(vars));
+		final ResourceReference translateJs = new TextTemplateResourceReference(TranslatePanel.class, "TranslatePanel.js", Model.ofMap(vars));
 		response.renderJavaScriptReference(translateJs);
 	}
 
