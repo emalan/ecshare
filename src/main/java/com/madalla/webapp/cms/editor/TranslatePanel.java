@@ -18,7 +18,6 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.TextTemplateResourceReference;
 
-
 import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.ContentData;
 import com.madalla.bo.page.ContentEntryData;
