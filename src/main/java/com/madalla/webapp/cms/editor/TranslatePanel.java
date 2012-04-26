@@ -5,8 +5,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -14,9 +12,10 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.TextTemplateResourceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.madalla.bo.SiteLanguage;
 import com.madalla.bo.page.ContentData;
@@ -24,7 +23,6 @@ import com.madalla.bo.page.ContentEntryData;
 import com.madalla.bo.page.PageData;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.CmsSession;
-import com.madalla.wicket.tinyMce.TinyMceSetup;
 
 /**
  * Translate Panel - View translate from text and edit the translate text. Also translate functionality.
@@ -73,7 +71,7 @@ public class TranslatePanel extends CmsPanel {
         destPanel.setOutputMarkupId(true);
 		add(destPanel);
 		
-		//add values to javascript
+		//translate values
 		vars.put("sourceDiv", baseContentLabel.getMarkupId());
 		vars.put("destLang", selectedLang);
 
@@ -105,14 +103,8 @@ public class TranslatePanel extends CmsPanel {
 	
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		response.renderJavaScriptReference(new PackageResourceReference(TinyMceSetup.class, "tiny_mce.js"));
 
-		//setup Javascript template
-		Map<String, Object> vars = EditorSetup.setupTemplateVariables((CmsSession) getSession());
-		ResourceReference editorJs = new TextTemplateResourceReference(EditorSetup.class,"EditorSetup.js", Model.ofMap(vars));
-		response.renderJavaScriptReference(editorJs);
-		
-		ResourceReference translateJs = new TextTemplateResourceReference(EditorSetup.class, "TranslatePanel.js", Model.ofMap(vars));
+		final ResourceReference translateJs = new TextTemplateResourceReference(EditorSetup.class, "TranslatePanel.js", Model.ofMap(vars));
 		response.renderJavaScriptReference(translateJs);
 	}
 
