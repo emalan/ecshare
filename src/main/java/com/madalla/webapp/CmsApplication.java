@@ -70,8 +70,10 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 	public static final String MEMBER_PASSWORD = "memberPassword";
 	public static final String LOGIN = "login";
 
-	protected final Logger log = LoggerFactory.getLogger(CmsApplication.class);
+	private static final Logger log = LoggerFactory.getLogger(CmsApplication.class);
+	
 	private final Marker fatal = MarkerFactory.getMarker("FATAL");
+	
 	private IRepositoryAdminService repositoryAdminService;
     private IEmailSender emailSender;
     private IDataService dataService;

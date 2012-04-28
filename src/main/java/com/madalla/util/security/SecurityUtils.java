@@ -36,5 +36,18 @@ public class SecurityUtils {
 	public static String getGeneratedPassword(){
 		return RandomStringUtils.randomAlphanumeric(6);
 	}
+//	
+//	public static String encrypt(String string) {
+//		if (string == null){
+//			throw new RuntimeException("encrypt - Cannot encrypt Null.");
+//		}
+//		BaseDigestPasswordEncoder encoder = new ShaPasswordEncoder(256);
+//		encoder.setEncodeHashAsBase64(true);
+//		return encoder.encodePassword(string, null);
+//	}
+//
+//	public static String getGeneratedPassword(){
+//		return RandomStringUtils.randomAlphanumeric(6);
+//	}
 
 }

@@ -6,9 +6,8 @@
     http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
-<import resource="classpath:com/madalla/cms/service/ocm/applicationContext-cms.xml"/>
+<import resource="classpath:org/emalan/cms/service/ocm/applicationContext-cms.xml"/>
 <import resource="classpath:com/madalla/email/applicationContext-email.xml"/>
-<import resource="classpath:com/madalla/cms/jcr/applicationContext-jcr.xml"/>
 <import resource="classpath:com/madalla/db/dao/applicationContext-dao.xml"/>
 
 <bean id="propertyConfigurerDefault" 
