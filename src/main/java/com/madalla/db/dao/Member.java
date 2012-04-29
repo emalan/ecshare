@@ -2,9 +2,8 @@ package com.madalla.db.dao;
 
 import java.util.Date;
 
+import org.emalan.cms.bo.member.MemberData;
 import org.joda.time.DateTime;
-
-import com.madalla.bo.member.MemberData;
 
 public final class Member extends MemberData {
 	private static final long serialVersionUID = 1L;

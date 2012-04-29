@@ -11,10 +11,10 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.emalan.cms.bo.SiteData;
+import org.emalan.cms.bo.security.IUser;
+import org.emalan.cms.bo.security.UserData;
 
-import com.madalla.bo.SiteData;
-import com.madalla.bo.security.IUser;
-import com.madalla.bo.security.UserData;
 import com.madalla.email.IEmailSender;
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;

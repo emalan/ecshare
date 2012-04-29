@@ -44,13 +44,13 @@ import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.emalan.cms.bo.SiteData;
+import org.emalan.cms.bo.security.UserData;
+import org.emalan.cms.bo.security.UserSiteData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
-import com.madalla.bo.SiteData;
-import com.madalla.bo.security.UserData;
-import com.madalla.bo.security.UserSiteData;
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
 import com.madalla.service.IDataService;

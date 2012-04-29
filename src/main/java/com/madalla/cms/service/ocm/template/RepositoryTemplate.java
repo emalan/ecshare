@@ -14,10 +14,10 @@ import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.apache.jackrabbit.ocm.query.Filter;
 import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
+import org.emalan.cms.bo.AbstractData;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
-import com.madalla.bo.AbstractData;
 import com.madalla.cms.service.ocm.RepositoryInfo;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 

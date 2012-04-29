@@ -2,8 +2,7 @@ package com.madalla.webapp.user;
 
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AbstractAutoCompleteTextRenderer;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.IAutoCompleteRenderer;
-
-import com.madalla.bo.security.UserData;
+import org.emalan.cms.bo.security.UserData;
 
 public class UserAutoCompleteRenderer extends AbstractAutoCompleteTextRenderer<UserData> {
 

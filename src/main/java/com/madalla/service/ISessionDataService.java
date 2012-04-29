@@ -1,7 +1,7 @@
 package com.madalla.service;
 
-import com.madalla.bo.AbstractData;
-import com.madalla.bo.security.UserData;
+import org.emalan.cms.bo.AbstractData;
+import org.emalan.cms.bo.security.UserData;
 
 public interface ISessionDataService {
 

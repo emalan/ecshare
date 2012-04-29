@@ -11,12 +11,12 @@ import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
+import org.emalan.cms.bo.member.MemberData;
+import org.emalan.cms.bo.security.IUser;
+import org.emalan.cms.bo.security.ProfileData;
+import org.emalan.cms.bo.security.UserData;
+import org.emalan.cms.bo.security.UserSiteData;
 
-import com.madalla.bo.member.MemberData;
-import com.madalla.bo.security.IUser;
-import com.madalla.bo.security.ProfileData;
-import com.madalla.bo.security.UserData;
-import com.madalla.bo.security.UserSiteData;
 import com.madalla.cms.service.ocm.SessionDataService;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;

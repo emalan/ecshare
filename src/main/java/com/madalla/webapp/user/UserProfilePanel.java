@@ -13,12 +13,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.emalan.cms.bo.SiteData;
+import org.emalan.cms.bo.security.IUser;
+import org.emalan.cms.bo.security.UserData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.madalla.bo.SiteData;
-import com.madalla.bo.security.IUser;
-import com.madalla.bo.security.UserData;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.admin.pages.SecurePasswordPage;
 import com.madalla.webapp.admin.pages.UserPasswordPage;

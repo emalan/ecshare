@@ -18,6 +18,15 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.settings.IExceptionSettings;
+import org.emalan.cms.IDataService;
+import org.emalan.cms.IDataServiceProvider;
+import org.emalan.cms.IRepositoryAdminService;
+import org.emalan.cms.IRepositoryAdminServiceProvider;
+import org.emalan.cms.bo.SiteLanguage;
+import org.emalan.cms.bo.image.AlbumData;
+import org.emalan.cms.bo.image.ImageData;
+import org.emalan.cms.bo.page.PageData;
+import org.emalan.cms.bo.page.PageMetaLangData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -26,17 +35,8 @@ import org.slf4j.MarkerFactory;
 import wicket.contrib.tinymce.TinyMceBehavior;
 
 import com.madalla.BuildInformation;
-import com.madalla.bo.SiteLanguage;
-import com.madalla.bo.image.AlbumData;
-import com.madalla.bo.image.ImageData;
-import com.madalla.bo.page.PageData;
-import com.madalla.bo.page.PageMetaLangData;
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
-import com.madalla.service.IDataService;
-import com.madalla.service.IDataServiceProvider;
-import com.madalla.service.IRepositoryAdminService;
-import com.madalla.service.IRepositoryAdminServiceProvider;
 import com.madalla.webapp.admin.content.ContentAdminPanel;
 import com.madalla.webapp.admin.image.ImageAdminPanel;
 import com.madalla.webapp.admin.member.MemberAdminPanel;
@@ -54,6 +54,8 @@ import com.madalla.webapp.cms.editor.ContentEntryPanel;
 import com.madalla.webapp.cms.editor.TranslatePanel;
 import com.madalla.webapp.user.UserAdminPanel;
 import com.madalla.webapp.user.UserProfilePanel;
+
+
 
 /**
  * Abstract Wicket Application class that needs to extended to enable usage

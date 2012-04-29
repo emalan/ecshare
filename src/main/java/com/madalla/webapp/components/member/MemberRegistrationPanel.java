@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -17,9 +15,11 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.emalan.cms.bo.SiteData;
+import org.emalan.cms.bo.member.MemberData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.madalla.bo.SiteData;
-import com.madalla.bo.member.MemberData;
 import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsSession;
 import com.madalla.wicket.form.AjaxValidationForm;

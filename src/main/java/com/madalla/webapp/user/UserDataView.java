@@ -1,6 +1,6 @@
 package com.madalla.webapp.user;
 
-import com.madalla.bo.security.UserData;
+import org.emalan.cms.bo.security.UserData;
 
 public class UserDataView extends UserData {
 	private static final long serialVersionUID = 1L;

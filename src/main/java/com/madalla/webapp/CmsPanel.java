@@ -1,9 +1,9 @@
 package com.madalla.webapp;
 
 import org.apache.wicket.markup.html.panel.Panel;
+import org.emalan.cms.bo.AbstractData;
 
 import com.madalla.BuildInformation;
-import com.madalla.bo.AbstractData;
 import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
 import com.madalla.service.IDataService;

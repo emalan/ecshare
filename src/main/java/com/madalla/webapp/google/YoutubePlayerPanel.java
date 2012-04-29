@@ -9,9 +9,9 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.validation.validator.RangeValidator;
+import org.emalan.cms.bo.page.PageData;
+import org.emalan.cms.bo.video.VideoPlayerData;
 
-import com.madalla.bo.page.PageData;
-import com.madalla.bo.video.VideoPlayerData;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.css.Css;

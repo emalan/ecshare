@@ -18,11 +18,11 @@ import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.emalan.cms.bo.SiteData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 
-import com.madalla.bo.SiteData;
 import com.madalla.email.IEmailSender;
 import com.madalla.util.captcha.CaptchaUtils;
 import com.madalla.webapp.CmsPanel;

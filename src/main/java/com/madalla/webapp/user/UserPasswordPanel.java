@@ -1,7 +1,5 @@
 package com.madalla.webapp.user;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -21,8 +19,10 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.AbstractValidator;
+import org.emalan.cms.bo.security.UserData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.madalla.bo.security.UserData;
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.CmsPanel;

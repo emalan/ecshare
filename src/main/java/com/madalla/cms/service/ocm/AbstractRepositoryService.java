@@ -4,15 +4,14 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.lang.StringUtils;
+import org.emalan.cms.bo.AbstractData;
+import org.emalan.cms.bo.log.LogData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springmodules.jcr.JcrTemplate;
 
-import com.madalla.bo.AbstractData;
-import com.madalla.bo.log.LogData;
 import com.madalla.cms.jcr.JcrUtils;
 import com.madalla.cms.service.ocm.template.RepositoryTemplate;
-import com.madalla.db.dao.TransactionLog;
 import com.madalla.db.dao.TransactionLogDao;
 
 abstract class AbstractRepositoryService{
@@ -31,7 +30,7 @@ abstract class AbstractRepositoryService{
     }
 
     protected void createTransactionLog(String user, AbstractData data){
-    	TransactionLog logData = new TransactionLog();
+    	final LogData logData = new LogData();
 		logData.setUser(user);
 		logData.setType(data.getClass().getSimpleName());
 		logData.setCmsId(data.getId());

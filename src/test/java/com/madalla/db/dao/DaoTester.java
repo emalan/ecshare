@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.emalan.cms.bo.email.EmailEntryData;
+import org.emalan.cms.bo.log.LogData;
+import org.emalan.cms.bo.member.MemberData;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
-
-import com.madalla.bo.email.EmailEntryData;
-import com.madalla.bo.log.LogData;
-import com.madalla.bo.member.MemberData;
 
 public class DaoTester extends AbstractDependencyInjectionSpringContextTests{
 

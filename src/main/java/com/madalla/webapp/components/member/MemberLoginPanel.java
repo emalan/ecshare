@@ -1,8 +1,6 @@
 package com.madalla.webapp.components.member;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -22,8 +20,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.emalan.cms.bo.member.MemberData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.madalla.bo.member.MemberData;
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.admin.member.MemberSession;
