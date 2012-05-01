@@ -158,11 +158,11 @@ public class MemberPasswordPanel extends CmsPanel{
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
-				MemberData member = getRepositoryService().getMember(credentials.getUsername());
+				MemberData member = getApplicationService().getMember(credentials.getUsername());
 				log.debug("process password change for : " + member);
 				//sign member in - we have already validated old password
 				if (getAppSession().getMemberSession().signIn(member.getMemberId())){
-					getRepositoryService().saveMemberPassword(member.getMemberId(), credentials.getPassword());
+					getApplicationService().saveMemberPassword(member.getMemberId(), credentials.getPassword());
 					info(getString("message.success"));
 	                setResponsePage(getCmsApplication().getMemberRegistrationPage());
 				}
@@ -197,7 +197,7 @@ public class MemberPasswordPanel extends CmsPanel{
     }
 
 	private IPasswordAuthenticator getAuthenticator(String name){
-		return getRepositoryService().getMemberAuthenticator(name);
+		return getApplicationService().getPasswordAuthenticator(name);
     }
 
 

@@ -36,9 +36,8 @@ import org.slf4j.MarkerFactory;
 
 import wicket.contrib.tinymce.TinyMceBehavior;
 
-import com.madalla.BuildInformation;
-import com.madalla.email.IEmailSender;
-import com.madalla.email.IEmailServiceProvider;
+import com.madalla.member.service.ApplicationService;
+import com.madalla.member.service.ApplicationServiceImpl;
 import com.madalla.webapp.admin.content.ContentAdminPanel;
 import com.madalla.webapp.admin.image.ImageAdminPanel;
 import com.madalla.webapp.admin.member.MemberAdminPanel;
@@ -66,7 +65,7 @@ import com.madalla.webapp.user.UserProfilePanel;
  * @author Eugene Malan
  *
  */
-public abstract class CmsApplication extends AuthenticatedCmsApplication implements IDataServiceProvider, IRepositoryAdminServiceProvider, IEmailServiceProvider {
+public abstract class CmsApplication extends AuthenticatedCmsApplication implements IDataServiceProvider, IRepositoryAdminServiceProvider {
 
 	public static final String SECURE_PASSWORD = "securePassword";
 	public static final String PASSWORD = "password";
@@ -78,34 +77,13 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 	
 	private final Marker fatal = MarkerFactory.getMarker("FATAL");
 	
-	private IRepositoryAdminService repositoryAdminService;
-    private IEmailSender emailSender;
-    private IDataService dataService;
-    private BuildInformation buildInformation;
+	private ApplicationService applicationService;
+	
     private RuntimeConfigurationType configType;
 
     @Override
     protected void init() {
     	super.init();
-    	//initialization checks
-    	
-    	if (buildInformation == null) {
-    		log.error(fatal, "Build Information not configured Correctly.");
-    		throw new WicketRuntimeException("Build Information not configured Correctly.");
-    	}
-    	log.info("Build Information. ecshare version:" + buildInformation.getVersion());
-    	if (repositoryAdminService == null){
-    		log.error(fatal, "Content Admin Service is not configured Correctly.");
-    		throw new WicketRuntimeException("Repository Admin Service is not configured Correctly.");
-    	}
-    	if (dataService == null){
-    		log.error(fatal, "Repository Data Service is not configured Correctly.");
-    		throw new WicketRuntimeException("Repository Data Service is not configured Correctly.");
-    	}
-    	if (emailSender == null){
-    		log.error(fatal, "Email Sender is not configured Correctly.");
-    		throw new WicketRuntimeException("Email Service is not configured Correctly.");
-    	}
         setupApplicationSpecificConfiguration();
 
     }
@@ -349,38 +327,21 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     	return false;
     }
 
-    public IEmailSender getEmailSender() {
-        return emailSender;
-    }
-
-    public void setEmailSender(IEmailSender emailSender) {
-        this.emailSender = emailSender;
-    }
-
     public IRepositoryAdminService getRepositoryAdminService() {
-		return repositoryAdminService;
-	}
-
-	public void setRepositoryAdminService(
-			IRepositoryAdminService repositoryAdminService) {
-		this.repositoryAdminService = repositoryAdminService;
+		return applicationService.getRepositoryAdminService();
 	}
 
 	public IDataService getRepositoryService() {
-		return dataService;
+		return applicationService.getRepositoryService();
 	}
-
-	public void setRepositoryService(IDataService dataService){
-		this.dataService = dataService;
+	
+	public ApplicationService getApplicationService() {
+		return applicationService;
 	}
-
-	public void setBuildInformation(BuildInformation buildInformation) {
-		this.buildInformation = buildInformation;
-	}
-
-	public BuildInformation getBuildInformation(){
-		return buildInformation;
-	}
+	
+	//////////////////////////////////////////////////////
+	//       Initializing methods
+	//////////////////////////////////////////////////////
 
 	public void setConfigType(String configType) {
 		if ("DEVELOPMENT".equalsIgnoreCase(configType)) {
@@ -388,6 +349,10 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 		} else {
 			this.configType = RuntimeConfigurationType.DEVELOPMENT;
 		}
+	}
+
+	public void setApplicationService(ApplicationServiceImpl applicationService) {
+		this.applicationService = applicationService;
 	}
 
 }

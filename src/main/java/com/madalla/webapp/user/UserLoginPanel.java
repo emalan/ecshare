@@ -16,6 +16,7 @@ import org.emalan.cms.bo.security.IUser;
 import org.emalan.cms.bo.security.UserData;
 
 import com.madalla.email.IEmailSender;
+import com.madalla.member.service.ApplicationService;
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.CmsPanel;
@@ -130,7 +131,7 @@ public class UserLoginPanel extends CmsPanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected boolean sendEmail(IEmailSender emailSender, SiteData site, String body, String subject) {
+			protected boolean sendEmail(ApplicationService emailSender, SiteData site, String body, String subject) {
 				return emailSender.sendEmail(subject, body);
 			}
 

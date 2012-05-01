@@ -14,6 +14,7 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
 
+import com.madalla.member.service.ApplicationService;
 import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.admin.content.ContentAdminPanel;
@@ -49,8 +50,8 @@ public abstract class AbstractAdminPage extends WebPage{
 	private void commonInit(){
 	    setPageTitle(getString("page.title"));
         add(new Label("title", new PropertyModel<String>(this,"pageTitle")));
-        add(new Label("version", getCmsApplication().getBuildInformation().getVersion()));
-        add(new Label("webapp", getCmsApplication().getBuildInformation().getWebappVersion()));
+        add(new Label("version", getApplicationService().getBuildInformation().getVersion()));
+        add(new Label("webapp", getApplicationService().getBuildInformation().getWebappVersion()));
 
          setupMenu();
 	}
@@ -119,6 +120,10 @@ public abstract class AbstractAdminPage extends WebPage{
 	public CmsApplication getCmsApplication(){
         return (CmsApplication) getApplication();
     }
+	
+	public ApplicationService getApplicationService() {
+		return getCmsApplication().getApplicationService();
+	}
 
     public void setPageTitle(String pageTitle) {
         this.pageTitle = pageTitle;

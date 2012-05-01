@@ -33,6 +33,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.Url.QueryParameter;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.emalan.cms.IDataService;
+import org.emalan.cms.IDataServiceProvider;
 import org.emalan.cms.bo.SiteLanguage;
 import org.emalan.cms.bo.image.AlbumData;
 import org.emalan.cms.bo.image.ImageData;
@@ -41,8 +43,6 @@ import org.emalan.cms.bo.page.PageMetaLangData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.madalla.service.IDataService;
-import com.madalla.service.IDataServiceProvider;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.admin.pages.SecureLoginPage;
 import com.madalla.webapp.admin.pages.UserLoginPage;

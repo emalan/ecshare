@@ -42,7 +42,7 @@ public class SiteDataPanel extends CmsPanel {
 		}
 
 		public Iterator<? extends EmailEntryData> iterator(int first, int count) {
-			List<EmailEntryData> list = getRepositoryService().getEmailEntries();
+			List<EmailEntryData> list = getApplicationService().getEmailEntries();
 			if ("senderName".equals(getSort().getProperty())){
 				Collections.sort(list, getNameComparator());
 			} else {
@@ -79,7 +79,7 @@ public class SiteDataPanel extends CmsPanel {
 		}
 
 		public int size() {
-			return getRepositoryService().getEmailEntries().size();
+			return getApplicationService().getEmailEntries().size();
 		}
 
 	}
@@ -102,7 +102,7 @@ public class SiteDataPanel extends CmsPanel {
 
 		@Override
 		protected EmailEntryData load() {
-			return getRepositoryService().getEmailEntry(id);
+			return getApplicationService().getEmailEntry(id);
 		}
 
 	    @Override

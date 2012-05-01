@@ -74,7 +74,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 		}
 
 		public Iterator<? extends MemberData> iterator(int first, int count) {
-			List<? extends MemberData> list = getRepositoryService().getMemberEntries();
+			List<? extends MemberData> list = getApplicationService().getMembers();
 			if("firstName".equals(getSort().getProperty())){
 				Collections.sort(list, getFirstNameComparator());
 			} else if ("loginId".equals(getSort().getProperty())){
@@ -129,7 +129,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 		}
 
 		public int size() {
-			return getRepositoryService().getMemberEntries().size();
+			return getApplicationService().getMembers().size();
 		}
 
 		public IModel<MemberData> model(MemberData object) {
@@ -154,7 +154,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 
 		@Override
 		protected MemberData load() {
-			return getRepositoryService().getMemberById(id);
+			return getApplicationService().getMember(id);
 		}
 
 	    @Override
@@ -195,7 +195,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 				protected void onValidate(IValidatable<String> validatable) {
 					if (model.getObject().getKey() <= 0) {
 						String memberId = validatable.getValue();
-						if (getRepositoryService().isMemberExist(memberId)) {
+						if (getApplicationService().isMemberExists(memberId)) {
 							validatable.error(new ValidationError().addMessageKey("message.invalidMemberID"));
 						}
 					}
@@ -285,7 +285,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
 			boolean newUser = (getModelObject().getKey() <= 0);
-			getRepositoryService().saveMember(getModelObject());
+			getApplicationService().saveMember(getModelObject());
 			if (newUser){
 				if (sendRegistrationEmail(getModelObject())){
 					info(getString("message.success.new"));
@@ -419,7 +419,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-						getRepositoryService().deleteMember(entry);
+						getApplicationService().deleteMember(entry);
 						target.addComponent(container);
 					}
 
@@ -523,7 +523,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 		reset.add(resetLink);
 		
 		
-		final DataDownloadLink<MemberData> download = new DataDownloadLink<MemberData>("download", getRepositoryService().getMemberEntries()){
+		final DataDownloadLink<MemberData> download = new DataDownloadLink<MemberData>("download", getApplicationService().getMembers()){
 			private static final long serialVersionUID = 1L;
 
 			@Override

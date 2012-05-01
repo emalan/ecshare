@@ -103,7 +103,7 @@ public class MemberRegistrationPanel extends AbstractMemberPanel{
 	}
 
 	private boolean memberExists(String memberId){
-		return getRepositoryService().isMemberExist(memberId);
+		return getApplicationService().isMemberExists(memberId);
 	}
 
     protected String getEmailBody(final MemberData member){

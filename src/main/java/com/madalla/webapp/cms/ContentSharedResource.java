@@ -3,17 +3,15 @@ package com.madalla.webapp.cms;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.SharedResources;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.request.resource.IResource;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.io.IOUtils;
+import org.emalan.cms.IDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.madalla.service.IDataService;
 import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
 import com.madalla.wicket.resourcelink.EditableResourceLink.LinkResourceType;
 

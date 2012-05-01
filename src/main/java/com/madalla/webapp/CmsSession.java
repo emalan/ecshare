@@ -11,6 +11,8 @@ import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
+import org.emalan.cms.IDataService;
+import org.emalan.cms.IDataServiceProvider;
 import org.emalan.cms.ISessionDataService;
 import org.emalan.cms.bo.security.IUser;
 import org.emalan.cms.bo.security.ProfileData;
@@ -18,8 +20,7 @@ import org.emalan.cms.bo.security.UserData;
 import org.emalan.cms.bo.security.UserSiteData;
 
 import com.madalla.bo.member.MemberData;
-import com.madalla.service.IDataService;
-import com.madalla.service.IDataServiceProvider;
+import com.madalla.member.service.ApplicationService;
 import com.madalla.webapp.admin.member.MemberSession;
 import com.madalla.webapp.cms.IContentAdmin;
 import com.madalla.webapp.security.IPasswordAuthenticator;
@@ -49,7 +50,7 @@ public class CmsSession extends AuthenticatedWebSession implements IContentAdmin
 
 		@Override
 		protected boolean authenticateMember(String memberName, String password) {
-			IPasswordAuthenticator authenticator = getDataService().getMemberAuthenticator(memberName);
+			IPasswordAuthenticator authenticator = getApplicationService().getPasswordAuthenticator(memberName);
 			if (authenticator.authenticate(memberName, password)){
 				postAuthentication(memberName);
 				return true;
@@ -59,10 +60,10 @@ public class CmsSession extends AuthenticatedWebSession implements IContentAdmin
 
 		@Override
 		protected void postAuthentication(String memberName) {
-			MemberData member = getDataService().getMember(memberName);
+			MemberData member = getApplicationService().getMember(memberName);
 			if (!member.isAuthorized()){
 				member.setAuthorized(true);
-				getDataService().saveMember(member);
+				getApplicationService().saveMember(member);
 			}
 			setMember(member);
 		}
@@ -211,6 +212,10 @@ public class CmsSession extends AuthenticatedWebSession implements IContentAdmin
 
 	public MemberSession getMemberSession(){
 		return memberSession;
+	}
+	
+	private ApplicationService getApplicationService() {
+		return ((CmsApplication)getApplication()).getApplicationService();
 	}
 
 	private IDataService getDataService(){

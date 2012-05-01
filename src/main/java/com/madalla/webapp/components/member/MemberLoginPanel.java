@@ -184,12 +184,12 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				target.addComponent(resetFeedback);
+				target.add(resetFeedback);
 
 				final String memberId = username.getModelObject();
 
 				if (memberExists(memberId)) {
-					final MemberData member = getRepositoryService().getMember(memberId);
+					final MemberData member = getApplicationService().getMember(memberId);
 					final String email = member.getEmail();
 					if (StringUtils.isNotEmpty(email)){
 						if (sendResetPasswordEmail(member)){
@@ -205,13 +205,13 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 				} else {
 					username.error(getString("error.reset"));
 				}
-				target.addComponent(resetFeedback);
+				target.add(resetFeedback);
 			}
 		});
 	}
 
 	private boolean memberExists(String memberId){
-		return getRepositoryService().isMemberExist(memberId);
+		return getApplicationService().isMemberExists(memberId);
 	}
 
 	protected void processSignOut(){

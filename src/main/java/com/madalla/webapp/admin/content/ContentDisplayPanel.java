@@ -10,15 +10,14 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.emalan.cms.IDataService;
+import org.emalan.cms.IDataServiceProvider;
 import org.emalan.cms.IRepositoryAdminService;
 import org.emalan.cms.IRepositoryAdminServiceProvider;
 import org.emalan.cms.jcr.NodeDisplay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataRetrievalFailureException;
-
-import com.madalla.service.IDataService;
-import com.madalla.service.IDataServiceProvider;
 
 class ContentDisplayPanel extends Panel {
 

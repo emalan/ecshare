@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 
 import com.madalla.email.IEmailSender;
+import com.madalla.member.service.ApplicationService;
 import com.madalla.util.captcha.CaptchaUtils;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.css.Css;
@@ -168,11 +169,11 @@ public class EmailFormPanel extends CmsPanel {
     private boolean sendEmail(final String site, final String name, final String email, final String comment){
     	logEmail(name, email, comment);
         String body = getEmailBody(site, name, email, comment);
-        return sendEmail(getEmailSender(), getSiteData(), body, subject);
+        return sendEmail(getApplicationService(), getSiteData(), body, subject);
     }
 
     //to allow override
-    protected boolean sendEmail(final IEmailSender emailSender, final SiteData site, final String body, final String subject){
+    protected boolean sendEmail(final ApplicationService emailSender, final SiteData site, final String body, final String subject){
         if (StringUtils.isEmpty(site.getAdminEmail())){
             return emailSender.sendEmail(subject, body);
         } else {
@@ -182,7 +183,7 @@ public class EmailFormPanel extends CmsPanel {
 
     private void logEmail(String name, String email, String comment){
     	try {
-    		getRepositoryService().createEmailEntry(name, email, comment);
+    		getApplicationService().createEmailEntry(name, email, comment);
     	} catch (DataAccessException e){
     		log.error("Data Access Exception while logging email.", e);
     	}

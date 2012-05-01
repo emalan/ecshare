@@ -37,17 +37,17 @@ public abstract class AbstractMemberPanel extends CmsPanel{
 	}
 
 	protected boolean saveMemberPassword(final String memberId, final String password){
-		return getRepositoryService().saveMemberPassword(memberId, password);
+		return getApplicationService().saveMemberPassword(memberId, password);
 	}
 	
 	protected boolean saveMemberData(MemberData member){
-		return getRepositoryService().saveMember(member);
+		return getApplicationService().saveMember(member);
 	}
 
     final protected boolean sendRegistrationEmail(final MemberData member){
     	logEmail(member.getDisplayName(), member.getEmail(), getString("email.subject"));
         String body = getRegistrationEmail(member);
-        return getEmailSender().sendUserEmail(getString("email.subject"), body, member.getEmail(), member.getFirstName(), true);
+        return getApplicationService().sendUserEmail(getString("email.subject"), body, member.getEmail(), member.getFirstName(), true);
     }
 
     
@@ -60,7 +60,7 @@ public abstract class AbstractMemberPanel extends CmsPanel{
     protected boolean sendResetPasswordEmail(final MemberData member){
     	logEmail(member.getDisplayName(), member.getEmail(), getString("email.subject"));
         String body = getResetPasswordEmail(member);
-        return getEmailSender().sendUserEmail(getString("email.subject"), body, member.getEmail(), member.getFirstName(), true);
+        return getApplicationService().sendUserEmail(getString("email.subject"), body, member.getEmail(), member.getFirstName(), true);
     }
 
     private void logEmail(String name, String email, String comment){
@@ -68,7 +68,7 @@ public abstract class AbstractMemberPanel extends CmsPanel{
     		name = StringUtils.substring(name, 0, 23) + "..";
     	}
     	try {
-    		getRepositoryService().createEmailEntry(name, email, comment);
+    		getApplicationService().createEmailEntry(name, email, comment);
     	} catch (DataAccessException e){
     		log.error("Data Access Exception while logging registration email.", e);
     	}

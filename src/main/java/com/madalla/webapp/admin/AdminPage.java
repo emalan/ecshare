@@ -46,8 +46,6 @@ public abstract class AdminPage extends WebPage {
 	private void commonInit(){
 	    setPageTitle(getString("page.title"));
         add(new Label("title", new PropertyModel<String>(this,"pageTitle")));
-        add(new Label("version", getCmsApplication().getBuildInformation().getVersion()));
-        add(new Label("webapp", getCmsApplication().getBuildInformation().getWebappVersion()));
 
         setupMenu();
 	}

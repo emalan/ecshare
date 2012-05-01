@@ -1,14 +1,13 @@
 package com.madalla.webapp;
 
 import org.apache.wicket.markup.html.panel.Panel;
+import org.emalan.cms.IDataService;
+import org.emalan.cms.IDataServiceProvider;
 import org.emalan.cms.ISessionDataService;
 import org.emalan.cms.bo.AbstractData;
 
 import com.madalla.BuildInformation;
-import com.madalla.email.IEmailSender;
-import com.madalla.email.IEmailServiceProvider;
-import com.madalla.service.IDataService;
-import com.madalla.service.IDataServiceProvider;
+import com.madalla.member.service.ApplicationService;
 
 public abstract class CmsPanel extends Panel {
 
@@ -23,18 +22,18 @@ public abstract class CmsPanel extends Panel {
 	protected CmsApplication getCmsApplication(){
 		return (CmsApplication) getApplication();
 	}
-
-	protected BuildInformation getBuildInfo(){
-		return ((CmsApplication)getApplication()).getBuildInformation();
+	
+	protected ApplicationService getApplicationService() {
+		return  ((CmsApplication)getApplication()).getApplicationService();
 	}
 
+	protected BuildInformation getBuildInfo(){
+		return getApplicationService().getBuildInformation();
+	}
+	
 	protected IDataService getRepositoryService(){
 		return ((IDataServiceProvider)getApplication()).getRepositoryService();
 	}
-
-    protected IEmailSender getEmailSender(){
-    	return ((IEmailServiceProvider)getApplication()).getEmailSender();
-    }
 
 	protected void saveData(AbstractData data){
 		getSessionDataService().validateTransaction(data);

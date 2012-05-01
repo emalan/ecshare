@@ -33,12 +33,12 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.time.Duration;
+import org.emalan.cms.IDataService;
 import org.emalan.cms.bo.image.IAlbumData;
 import org.emalan.cms.bo.image.ImageData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.madalla.service.IDataService;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.components.image.album.ImageDefaults;
 import com.madalla.webapp.css.Css;
