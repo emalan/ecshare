@@ -11,17 +11,15 @@ import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
-import org.emalan.cms.bo.member.MemberData;
+import org.emalan.cms.ISessionDataService;
 import org.emalan.cms.bo.security.IUser;
 import org.emalan.cms.bo.security.ProfileData;
 import org.emalan.cms.bo.security.UserData;
 import org.emalan.cms.bo.security.UserSiteData;
 
-import com.madalla.cms.service.ocm.SessionDataService;
+import com.madalla.bo.member.MemberData;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
-import com.madalla.service.ISessionDataService;
-import com.madalla.service.ISessionDataServiceProvider;
 import com.madalla.webapp.admin.member.MemberSession;
 import com.madalla.webapp.cms.IContentAdmin;
 import com.madalla.webapp.security.IPasswordAuthenticator;
@@ -30,7 +28,7 @@ import com.madalla.webapp.upload.FileUploadStore;
 import com.madalla.webapp.upload.IFileUploadInfo;
 import com.madalla.webapp.upload.IFileUploadStatus;
 
-public class CmsSession extends AuthenticatedWebSession implements IContentAdmin, ISessionDataServiceProvider, IFileUploadInfo{
+public class CmsSession extends AuthenticatedWebSession implements IContentAdmin, IFileUploadInfo{
 
 	private static final long serialVersionUID = 652426659740076486L;
 	public final static String SUPERADMIN = "SUPERADMIN";
@@ -75,9 +73,9 @@ public class CmsSession extends AuthenticatedWebSession implements IContentAdmin
 
 	private volatile FileUploadStore fileUploadInfo = new FileUploadStore();
 
-    public CmsSession(Request request) {
+    public CmsSession(Request request, ISessionDataService sessionService) {
         super(request);
-        this.repositoryService = new SessionDataService();
+        this.repositoryService = sessionService;
     }
 
 

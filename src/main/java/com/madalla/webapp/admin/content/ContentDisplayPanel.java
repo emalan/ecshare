@@ -4,21 +4,21 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.emalan.cms.IRepositoryAdminService;
+import org.emalan.cms.IRepositoryAdminServiceProvider;
+import org.emalan.cms.jcr.NodeDisplay;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataRetrievalFailureException;
 
-import com.madalla.cms.jcr.NodeDisplay;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
-import com.madalla.service.IRepositoryAdminService;
-import com.madalla.service.IRepositoryAdminServiceProvider;
 
 class ContentDisplayPanel extends Panel {
 

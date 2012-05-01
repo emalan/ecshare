@@ -17,7 +17,6 @@ import org.emalan.cms.bo.image.IAlbumData;
 import org.emalan.cms.bo.image.IImageData;
 import org.emalan.cms.bo.image.ImageData;
 import org.emalan.cms.bo.log.LogData;
-import org.emalan.cms.bo.member.MemberData;
 import org.emalan.cms.bo.page.ContentData;
 import org.emalan.cms.bo.page.ContentEntryData;
 import org.emalan.cms.bo.page.PageData;
@@ -31,6 +30,7 @@ import org.emalan.cms.bo.video.VideoPlayerData;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
+import com.madalla.bo.member.MemberData;
 import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.webapp.security.IPasswordAuthenticator;
 

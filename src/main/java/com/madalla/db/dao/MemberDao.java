@@ -6,7 +6,6 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.emalan.cms.bo.member.MemberData;
 import org.emalan.cms.bo.security.IUserValidate;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -14,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
+
+import com.madalla.bo.member.MemberData;
 
 public class MemberDao extends AbstractDao {
 

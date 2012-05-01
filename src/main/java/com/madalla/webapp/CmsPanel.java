@@ -1,6 +1,7 @@
 package com.madalla.webapp;
 
 import org.apache.wicket.markup.html.panel.Panel;
+import org.emalan.cms.ISessionDataService;
 import org.emalan.cms.bo.AbstractData;
 
 import com.madalla.BuildInformation;
@@ -8,8 +9,6 @@ import com.madalla.email.IEmailSender;
 import com.madalla.email.IEmailServiceProvider;
 import com.madalla.service.IDataService;
 import com.madalla.service.IDataServiceProvider;
-import com.madalla.service.ISessionDataService;
-import com.madalla.service.ISessionDataServiceProvider;
 
 public abstract class CmsPanel extends Panel {
 
@@ -45,7 +44,7 @@ public abstract class CmsPanel extends Panel {
 	}
 
 	protected ISessionDataService getSessionDataService(){
-		return ((ISessionDataServiceProvider) getSession()).getRepositoryService();
+		return getAppSession().getRepositoryService();
 	}
 
 	protected CmsSession getAppSession(){

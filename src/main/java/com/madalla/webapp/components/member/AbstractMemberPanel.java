@@ -7,11 +7,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.model.util.MapModel;
 import org.emalan.cms.bo.SiteData;
-import org.emalan.cms.bo.member.MemberData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 
+import com.madalla.bo.member.MemberData;
 import com.madalla.db.dao.Member;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.CmsApplication;

@@ -1,4 +1,4 @@
-package com.madalla.db.util;
+package com.madalla;
 
 import java.util.concurrent.CountDownLatch;
 

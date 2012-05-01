@@ -15,14 +15,13 @@ import org.apache.wicket.markup.html.tree.LinkTree;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.GenericBaseModel;
+import org.emalan.cms.IRepositoryAdminService;
+import org.emalan.cms.IRepositoryAdminServiceProvider;
+import org.emalan.cms.jcr.model.tree.AbstractTreeNode;
+import org.emalan.cms.jcr.model.tree.JcrTreeModel;
+import org.emalan.cms.jcr.model.tree.JcrTreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.madalla.cms.jcr.model.tree.AbstractTreeNode;
-import com.madalla.cms.jcr.model.tree.JcrTreeModel;
-import com.madalla.cms.jcr.model.tree.JcrTreeNode;
-import com.madalla.service.IRepositoryAdminService;
-import com.madalla.service.IRepositoryAdminServiceProvider;
 
 abstract class ContentExplorerPanel extends Panel {
 	private static final long serialVersionUID = 1L;
