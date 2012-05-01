@@ -7,7 +7,7 @@ import org.emalan.cms.ISessionDataService;
 import org.emalan.cms.bo.AbstractData;
 
 import com.madalla.BuildInformation;
-import com.madalla.member.service.ApplicationService;
+import com.madalla.service.ApplicationService;
 
 public abstract class CmsPanel extends Panel {
 

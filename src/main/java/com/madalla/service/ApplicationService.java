@@ -1,4 +1,4 @@
-package com.madalla.member.service;
+package com.madalla.service;
 
 import java.util.List;
 

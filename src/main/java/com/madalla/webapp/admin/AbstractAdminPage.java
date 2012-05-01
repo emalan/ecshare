@@ -14,7 +14,7 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
 
-import com.madalla.member.service.ApplicationService;
+import com.madalla.service.ApplicationService;
 import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.admin.content.ContentAdminPanel;

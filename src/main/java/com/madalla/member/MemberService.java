@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.madalla.bo.member.MemberData;
 import com.madalla.db.dao.Member;
 import com.madalla.db.dao.MemberDao;
-import com.madalla.member.service.ApplicationService;
+import com.madalla.service.ApplicationService;
 import com.madalla.webapp.security.IPasswordAuthenticator;
 import com.madalla.webapp.security.PasswordAuthenticator;
 

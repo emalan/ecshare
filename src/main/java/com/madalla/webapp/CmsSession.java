@@ -20,7 +20,7 @@ import org.emalan.cms.bo.security.UserData;
 import org.emalan.cms.bo.security.UserSiteData;
 
 import com.madalla.bo.member.MemberData;
-import com.madalla.member.service.ApplicationService;
+import com.madalla.service.ApplicationService;
 import com.madalla.webapp.admin.member.MemberSession;
 import com.madalla.webapp.cms.IContentAdmin;
 import com.madalla.webapp.security.IPasswordAuthenticator;

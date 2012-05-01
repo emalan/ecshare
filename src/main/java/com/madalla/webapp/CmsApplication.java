@@ -36,8 +36,8 @@ import org.slf4j.MarkerFactory;
 
 import wicket.contrib.tinymce.TinyMceBehavior;
 
-import com.madalla.member.service.ApplicationService;
-import com.madalla.member.service.ApplicationServiceImpl;
+import com.madalla.service.ApplicationService;
+import com.madalla.service.ApplicationServiceImpl;
 import com.madalla.webapp.admin.content.ContentAdminPanel;
 import com.madalla.webapp.admin.image.ImageAdminPanel;
 import com.madalla.webapp.admin.member.MemberAdminPanel;
