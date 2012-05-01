@@ -1,16 +1,16 @@
 package com.madalla.webapp.cms;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
+import org.emalan.cms.bo.page.ContentData;
+import org.emalan.cms.bo.page.ContentEntryData;
+import org.emalan.cms.bo.page.PageData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.madalla.bo.page.ContentData;
-import com.madalla.bo.page.ContentEntryData;
-import com.madalla.bo.page.PageData;
 import com.madalla.webapp.CmsPanel;
 
 /**

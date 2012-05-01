@@ -8,11 +8,11 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.emalan.cms.bo.page.ContentData;
+import org.emalan.cms.bo.page.PageData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.madalla.bo.page.ContentData;
-import com.madalla.bo.page.PageData;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.admin.pages.AdminPageLink;
 import com.madalla.webapp.admin.pages.ContentEditPage;

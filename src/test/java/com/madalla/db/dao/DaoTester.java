@@ -67,7 +67,7 @@ public class DaoTester extends AbstractDependencyInjectionSpringContextTests{
 
 	public void testSaveLogDao(){
 		DateTime key = new DateTime();
-		TransactionLog log = new TransactionLog();
+		LogData log = new LogData();
 		log.setDateTime(key);
 		log.setUser("testUser");
 		log.setType("TEST");

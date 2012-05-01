@@ -6,28 +6,28 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+import org.emalan.cms.bo.AbstractData;
+import org.emalan.cms.bo.impl.ocm.Site;
+import org.emalan.cms.bo.impl.ocm.blog.Blog;
+import org.emalan.cms.bo.impl.ocm.blog.BlogEntry;
+import org.emalan.cms.bo.impl.ocm.email.Email;
+import org.emalan.cms.bo.impl.ocm.image.Album;
+import org.emalan.cms.bo.impl.ocm.image.Image;
+import org.emalan.cms.bo.impl.ocm.page.Content;
+import org.emalan.cms.bo.impl.ocm.page.ContentEntry;
+import org.emalan.cms.bo.impl.ocm.page.Page;
+import org.emalan.cms.bo.impl.ocm.page.PageMeta;
+import org.emalan.cms.bo.impl.ocm.page.PageMetaLang;
+import org.emalan.cms.bo.impl.ocm.page.Resource;
+import org.emalan.cms.bo.impl.ocm.security.Profile;
+import org.emalan.cms.bo.impl.ocm.security.User;
+import org.emalan.cms.bo.impl.ocm.security.UserSite;
+import org.emalan.cms.bo.impl.ocm.video.VideoPlayer;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
-import com.madalla.bo.AbstractData;
-import com.madalla.cms.bo.impl.ocm.Site;
-import com.madalla.cms.bo.impl.ocm.blog.Blog;
-import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
-import com.madalla.cms.bo.impl.ocm.email.Email;
-import com.madalla.cms.bo.impl.ocm.email.EmailEntry;
-import com.madalla.cms.bo.impl.ocm.image.Album;
-import com.madalla.cms.bo.impl.ocm.image.Image;
-import com.madalla.cms.bo.impl.ocm.page.Content;
-import com.madalla.cms.bo.impl.ocm.page.ContentEntry;
-import com.madalla.cms.bo.impl.ocm.page.Page;
-import com.madalla.cms.bo.impl.ocm.page.PageMeta;
-import com.madalla.cms.bo.impl.ocm.page.PageMetaLang;
-import com.madalla.cms.bo.impl.ocm.page.Resource;
-import com.madalla.cms.bo.impl.ocm.security.Profile;
-import com.madalla.cms.bo.impl.ocm.security.User;
-import com.madalla.cms.bo.impl.ocm.security.UserSite;
-import com.madalla.cms.bo.impl.ocm.video.VideoPlayer;
 import com.madalla.cms.jcr.JcrUtils;
+import com.madalla.db.dao.EmailEntry;
 /**
  * Information regarding the Schema in the Content repository System.
  * <p>

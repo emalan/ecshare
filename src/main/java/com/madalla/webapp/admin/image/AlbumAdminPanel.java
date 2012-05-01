@@ -3,8 +3,6 @@ package com.madalla.webapp.admin.image;
 import java.util.Collections;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -25,9 +23,11 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.validation.validator.RangeValidator;
+import org.emalan.cms.bo.image.AlbumData;
+import org.emalan.cms.bo.image.ImageData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.madalla.bo.image.AlbumData;
-import com.madalla.bo.image.ImageData;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;

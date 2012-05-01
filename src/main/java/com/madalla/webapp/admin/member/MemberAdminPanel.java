@@ -41,12 +41,12 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.emalan.cms.bo.member.MemberData;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.madalla.bo.member.MemberData;
 import com.madalla.webapp.components.member.AbstractMemberPanel;
 import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.JavascriptResources;

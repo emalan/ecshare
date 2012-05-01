@@ -18,11 +18,11 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.emalan.cms.bo.email.EmailEntryData;
+import org.emalan.cms.bo.log.LogData;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
-import com.madalla.bo.email.EmailEntryData;
-import com.madalla.bo.log.LogData;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.wicket.LabelPagingNavigator;
 

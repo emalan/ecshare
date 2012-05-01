@@ -1,6 +1,6 @@
 package com.madalla.cms.service.ocm.template;
 
-import com.madalla.bo.AbstractData;
+import org.emalan.cms.bo.AbstractData;
 
 
 

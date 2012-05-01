@@ -18,10 +18,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.UrlValidator;
+import org.emalan.cms.bo.SiteData;
+import org.emalan.cms.bo.SiteLanguage;
 import org.joda.time.DateTimeZone;
 
-import com.madalla.bo.SiteData;
-import com.madalla.bo.SiteLanguage;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.css.Css;
 import com.madalla.wicket.form.AjaxValidationBehaviour;

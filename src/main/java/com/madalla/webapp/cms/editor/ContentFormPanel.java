@@ -7,12 +7,12 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
+import org.emalan.cms.bo.page.ContentEntryData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import wicket.contrib.tinymce.ajax.TinyMceAjaxButton;
 
-import com.madalla.bo.page.ContentEntryData;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.wicket.tinyMce.TinyMceSetup;
 

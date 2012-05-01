@@ -2,11 +2,11 @@ package com.madalla.cms.service.ocm;
 
 import java.io.Serializable;
 
+import org.emalan.cms.bo.AbstractData;
+import org.emalan.cms.bo.security.UserData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.madalla.bo.AbstractData;
-import com.madalla.bo.security.UserData;
 import com.madalla.service.DataAccessException;
 import com.madalla.service.ISessionDataService;
 

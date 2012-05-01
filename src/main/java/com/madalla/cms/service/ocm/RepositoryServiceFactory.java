@@ -5,16 +5,16 @@ import java.util.List;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.apache.wicket.WicketRuntimeException;
+import org.emalan.cms.bo.SiteData;
+import org.emalan.cms.bo.SiteLanguage;
+import org.emalan.cms.bo.impl.ocm.security.UserSite;
+import org.emalan.cms.bo.security.UserData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springmodules.jcr.JcrTemplate;
 
-import com.madalla.bo.SiteData;
-import com.madalla.bo.SiteLanguage;
-import com.madalla.bo.security.UserData;
-import com.madalla.cms.bo.impl.ocm.security.UserSite;
 import com.madalla.cms.service.ocm.template.RepositoryTemplate;
 import com.madalla.cms.service.ocm.util.JcrOcmUtils;
 import com.madalla.image.ImageUtilities;

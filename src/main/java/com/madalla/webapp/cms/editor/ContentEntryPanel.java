@@ -11,13 +11,13 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.emalan.cms.bo.SiteLanguage;
+import org.emalan.cms.bo.page.ContentData;
+import org.emalan.cms.bo.page.ContentEntryData;
+import org.emalan.cms.bo.page.PageData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.madalla.bo.SiteLanguage;
-import com.madalla.bo.page.ContentData;
-import com.madalla.bo.page.ContentEntryData;
-import com.madalla.bo.page.PageData;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.admin.pages.AdminPanelLink;
 

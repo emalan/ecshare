@@ -1,9 +1,8 @@
 package com.madalla.db.dao;
 
+import org.emalan.cms.bo.email.EmailEntryData;
+import org.emalan.cms.bo.email.IEmailEntryData;
 import org.joda.time.DateTime;
-
-import com.madalla.bo.email.EmailEntryData;
-import com.madalla.bo.email.IEmailEntryData;
 
 public class EmailEntry extends EmailEntryData implements IEmailEntryData {
 

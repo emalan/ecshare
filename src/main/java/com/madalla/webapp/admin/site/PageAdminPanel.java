@@ -6,16 +6,16 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.emalan.cms.bo.SiteLanguage;
+import org.emalan.cms.bo.page.PageData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.madalla.bo.SiteLanguage;
-import com.madalla.bo.page.PageData;
 import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsPage;
 import com.madalla.webapp.CmsPanel;

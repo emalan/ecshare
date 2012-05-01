@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.emalan.cms.bo.image.AlbumData;
+import org.emalan.cms.bo.image.ImageData;
 
-import com.madalla.bo.image.AlbumData;
-import com.madalla.bo.image.ImageData;
 import com.madalla.webapp.cms.ContentPanel;
 import com.madalla.webapp.components.image.album.AlbumPanel;
 

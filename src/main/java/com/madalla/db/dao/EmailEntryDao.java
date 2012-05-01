@@ -4,11 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.emalan.cms.bo.email.EmailEntryData;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
-
-import com.madalla.bo.email.EmailEntryData;
 
 public class EmailEntryDao  extends AbstractDao{
 

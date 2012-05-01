@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
@@ -24,10 +22,12 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.emalan.cms.bo.SiteData;
+import org.emalan.cms.bo.security.UserData;
+import org.emalan.cms.bo.security.UserSiteData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.madalla.bo.SiteData;
-import com.madalla.bo.security.UserData;
-import com.madalla.bo.security.UserSiteData;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationForm;
 import com.madalla.wicket.form.ValidationStyleBehaviour;

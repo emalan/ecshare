@@ -4,6 +4,8 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.emalan.cms.bo.SiteLanguage;
+
 public class SiteLanguageTest extends TestCase {
 
 	public void testSiteLanguage(){

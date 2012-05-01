@@ -10,11 +10,11 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.emalan.cms.bo.page.PageData;
+import org.emalan.cms.bo.page.ResourceData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.madalla.bo.page.PageData;
-import com.madalla.bo.page.ResourceData;
 import com.madalla.service.IDataService;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.css.Css;

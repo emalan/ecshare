@@ -19,7 +19,7 @@ public class TransactionLogDao extends AbstractDao {
 	private ParameterizedRowMapper<LogData> mapper = new ParameterizedRowMapper<LogData>() {
 
 		public LogData mapRow(ResultSet rs, int rowNum) throws SQLException {
-			TransactionLog data = new TransactionLog();
+			LogData data = new LogData();
 			data.setId(rs.getInt("ID"));
 			data.setDateTime(new DateTime(rs.getTimestamp("LOG_DATE"), DateTimeZone.UTC));
 			data.setUser(rs.getString("USER_ID"));

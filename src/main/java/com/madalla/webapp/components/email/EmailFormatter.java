@@ -1,8 +1,7 @@
 package com.madalla.webapp.components.email;
 
 import org.apache.commons.lang.StringUtils;
-
-import com.madalla.bo.security.UserData;
+import org.emalan.cms.bo.security.UserData;
 
 public class EmailFormatter {
 

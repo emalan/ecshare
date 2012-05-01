@@ -3,8 +3,6 @@ package com.madalla.webapp.admin.site;
 import java.util.List;
 import java.util.Locale;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
@@ -16,10 +14,12 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.emalan.cms.bo.SiteLanguage;
+import org.emalan.cms.bo.page.PageData;
+import org.emalan.cms.bo.page.PageMetaLangData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.madalla.bo.SiteLanguage;
-import com.madalla.bo.page.PageData;
-import com.madalla.bo.page.PageMetaLangData;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.wicket.form.AjaxValidationForm;
 import com.madalla.wicket.form.AjaxValidationRequiredTextField;

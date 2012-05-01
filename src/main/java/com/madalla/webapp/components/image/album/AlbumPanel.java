@@ -16,9 +16,9 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.emalan.cms.bo.image.AlbumData;
+import org.emalan.cms.bo.image.ImageData;
 
-import com.madalla.bo.image.AlbumData;
-import com.madalla.bo.image.ImageData;
 import com.madalla.webapp.admin.pages.AdminPageLink;
 import com.madalla.webapp.admin.pages.AlbumAdminPage;
 import com.madalla.webapp.css.Css;

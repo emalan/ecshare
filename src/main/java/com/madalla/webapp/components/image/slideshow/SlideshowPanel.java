@@ -17,9 +17,9 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.DynamicImageResource;
+import org.emalan.cms.bo.image.AlbumData;
+import org.emalan.cms.bo.image.ImageData;
 
-import com.madalla.bo.image.AlbumData;
-import com.madalla.bo.image.ImageData;
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.admin.pages.AdminPageLink;
 import com.madalla.webapp.admin.pages.AlbumAdminPage;

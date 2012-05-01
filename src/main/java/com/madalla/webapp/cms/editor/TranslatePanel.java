@@ -15,13 +15,13 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.TextTemplateResourceReference;
+import org.emalan.cms.bo.SiteLanguage;
+import org.emalan.cms.bo.page.ContentData;
+import org.emalan.cms.bo.page.ContentEntryData;
+import org.emalan.cms.bo.page.PageData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.madalla.bo.SiteLanguage;
-import com.madalla.bo.page.ContentData;
-import com.madalla.bo.page.ContentEntryData;
-import com.madalla.bo.page.PageData;
 import com.madalla.webapp.CmsPanel;
 
 /**

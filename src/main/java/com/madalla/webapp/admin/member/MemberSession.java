@@ -2,7 +2,7 @@ package com.madalla.webapp.admin.member;
 
 import java.io.Serializable;
 
-import com.madalla.bo.member.MemberData;
+import org.emalan.cms.bo.member.MemberData;
 
 public abstract class MemberSession implements Serializable{
 

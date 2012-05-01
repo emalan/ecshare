@@ -9,21 +9,22 @@ import javax.jcr.RepositoryException;
 import org.apache.jackrabbit.ocm.query.Filter;
 import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
+import org.emalan.cms.bo.SiteLanguage;
+import org.emalan.cms.bo.impl.ocm.Site;
+import org.emalan.cms.bo.impl.ocm.blog.Blog;
+import org.emalan.cms.bo.impl.ocm.blog.BlogEntry;
+import org.emalan.cms.bo.impl.ocm.image.Album;
+import org.emalan.cms.bo.impl.ocm.image.Image;
+import org.emalan.cms.bo.impl.ocm.image.ImageHelper;
+import org.emalan.cms.bo.impl.ocm.page.Content;
+import org.emalan.cms.bo.impl.ocm.page.ContentEntry;
+import org.emalan.cms.bo.impl.ocm.page.Page;
+import org.emalan.cms.bo.impl.ocm.page.PageMeta;
+import org.emalan.cms.bo.impl.ocm.page.PageMetaLang;
+import org.emalan.cms.bo.impl.ocm.page.Resource;
+import org.emalan.cms.bo.impl.ocm.security.User;
 import org.joda.time.DateTime;
 
-import com.madalla.bo.SiteLanguage;
-import com.madalla.cms.bo.impl.ocm.blog.Blog;
-import com.madalla.cms.bo.impl.ocm.blog.BlogEntry;
-import com.madalla.cms.bo.impl.ocm.image.Album;
-import com.madalla.cms.bo.impl.ocm.image.Image;
-import com.madalla.cms.bo.impl.ocm.image.ImageHelper;
-import com.madalla.cms.bo.impl.ocm.page.Content;
-import com.madalla.cms.bo.impl.ocm.page.ContentEntry;
-import com.madalla.cms.bo.impl.ocm.page.Page;
-import com.madalla.cms.bo.impl.ocm.page.PageMeta;
-import com.madalla.cms.bo.impl.ocm.page.PageMetaLang;
-import com.madalla.cms.bo.impl.ocm.page.Resource;
-import com.madalla.cms.bo.impl.ocm.security.User;
 import com.madalla.cms.service.ocm.RepositoryInfo.RepositoryType;
 
 
