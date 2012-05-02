@@ -37,7 +37,6 @@ import org.slf4j.MarkerFactory;
 import wicket.contrib.tinymce.TinyMceBehavior;
 
 import com.madalla.service.ApplicationService;
-import com.madalla.service.ApplicationServiceImpl;
 import com.madalla.webapp.admin.content.ContentAdminPanel;
 import com.madalla.webapp.admin.image.ImageAdminPanel;
 import com.madalla.webapp.admin.member.MemberAdminPanel;
@@ -78,7 +77,6 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 	private final Marker fatal = MarkerFactory.getMarker("FATAL");
 	
 	private ApplicationService applicationService;
-	
     private RuntimeConfigurationType configType;
 
     @Override
@@ -351,7 +349,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 		}
 	}
 
-	public void setApplicationService(ApplicationServiceImpl applicationService) {
+	public void setApplicationService(ApplicationService applicationService) {
 		this.applicationService = applicationService;
 	}
 

@@ -4,8 +4,6 @@ import java.util.Collection;
 
 import org.apache.wicket.Page;
 
-import com.madalla.email.IEmailSender;
-
 public class TestCmsApplication extends CmsApplication{
 
 	@Override

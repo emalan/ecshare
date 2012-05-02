@@ -60,7 +60,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	 * Shutdown method
 	 */
 	public void destroy() {
-		
+		log.info("shutting down application service...");
 	}
 	
     public IRepositoryAdminService getRepositoryAdminService() {

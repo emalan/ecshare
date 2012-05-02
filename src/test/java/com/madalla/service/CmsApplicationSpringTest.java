@@ -1,4 +1,4 @@
-package com.madalla.webapp;
+package com.madalla.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
  */
 public class CmsApplicationSpringTest extends AbstractDependencyInjectionSpringContextTests{
 
-	private CmsApplication wicketApplication;
+	private ApplicationService applicationService;
 
 	public CmsApplicationSpringTest() {
 		super();
@@ -24,16 +24,21 @@ public class CmsApplicationSpringTest extends AbstractDependencyInjectionSpringC
 	protected String[] getConfigLocations() {
     	List<String> configLocations = new ArrayList<String>();
 		configLocations.add("classpath:com/madalla/webapp/applicationContext-app.xml");
-        configLocations.add("classpath:com/madalla/webapp/applicationContext-test.xml");
+        configLocations.add("classpath:com/madalla/service/applicationContext-test.xml");
         return configLocations.toArray(new String[configLocations.size()]);
     }
 	
 	public void testSpringConfig() {
-		assertNotNull(wicketApplication);
+		assertNotNull(applicationService);
 	}
 
-	public void setWicketApplication(CmsApplication wicketApplication) {
-		this.wicketApplication = wicketApplication;
+
+	public ApplicationService getApplicationService() {
+		return applicationService;
+	}
+
+	public void setApplicationService(ApplicationService applicationService) {
+		this.applicationService = applicationService;
 	}
 	
 
