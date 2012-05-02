@@ -119,8 +119,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 		return emailSender.sendUserEmail(subject, body, email, name, copyEmailAdmin);
 	}
 
-	public boolean sendUserHtmlEmail(String subject, String body, String userEmail, String userName) {
-		return emailSender.sendUserHtmlEmail(subject, body, userEmail, userName);
+	public boolean sendUserHtmlEmail(String subject, String body, String email, String name) {
+		return emailSender.sendUserHtmlEmail(subject, body, email, name);
 	}
 
 	public void createEmailEntry(String name, String email, String comment) {

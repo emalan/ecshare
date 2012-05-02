@@ -4,6 +4,7 @@ package com.madalla.webapp.user;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -26,7 +27,6 @@ import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.wicket.form.AjaxValidationForm;
-import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 
 public class UserProfilePanel extends CmsPanel{
 
@@ -41,7 +41,8 @@ public class UserProfilePanel extends CmsPanel{
 
             FeedbackPanel emailFeedback = new FeedbackPanel("emailFeedback");
             add(emailFeedback);
-            TextField<String> email = new AjaxValidationRequiredTextField("email", emailFeedback);
+            //TextField<String> email = new AjaxValidationRequiredTextField("email", emailFeedback);
+            TextField<String> email = new TextField("email");
             email.add(EmailAddressValidator.getInstance());
             add(email);
             add(new TextField<String>("displayName"));

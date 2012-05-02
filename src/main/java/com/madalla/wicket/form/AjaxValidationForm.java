@@ -65,14 +65,6 @@ public abstract class AjaxValidationForm<T> extends Form<T>  {
 			@Override
 			protected void onSubmit(final AjaxRequestTarget target, Form<?> form) {
 
-				IVisitor<FormComponent<?>, Void> visiter = new IVisitor<FormComponent<?>, Void>() {
-
-					public void component(FormComponent<?> object, IVisit<Void> visit) {
-						// TODO Auto-generated method stub
-						
-					}
-				};
-				
 				//visit all form components and re-render by adding to target
 				form.visitFormComponents(new IVisitor<FormComponent<?>, Void>(){
 
@@ -99,7 +91,7 @@ public abstract class AjaxValidationForm<T> extends Form<T>  {
 				form.visitFormComponents(new IVisitor<FormComponent<?>, Void>() {
 
 					public void component(FormComponent<?> formComponent, IVisit<Void> visit) {
-						log.debug("onSubmit.formVisiter - " + formComponent);
+						log.debug("onError.formVisiter - " + formComponent);
 
 						if (!formComponent.isValid() && formComponent.getOutputMarkupId()) {
 							target.add(formComponent);
