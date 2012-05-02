@@ -10,6 +10,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByLink.CssProvider;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -37,8 +38,7 @@ public class SiteDataPanel extends CmsPanel {
 		private static final long serialVersionUID = 1L;
 
 		SortableEmailEntryProvider(){
-			//TODO fix sort
-			//setSort("id", true);
+			setSort("id", SortOrder.ASCENDING);
 		}
 
 		public Iterator<? extends EmailEntryData> iterator(int first, int count) {
@@ -244,7 +244,7 @@ public class SiteDataPanel extends CmsPanel {
 				item.add(new Label("email", emailEntry.getSenderEmailAddress()));
 				item.add(new Label("comment", emailEntry.getSenderComment()));
 
-				item.add(new AttributeModifier("class", true, new AbstractReadOnlyModel<Object>() {
+				item.add(new AttributeModifier("class", new AbstractReadOnlyModel<Object>() {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -302,7 +302,7 @@ public class SiteDataPanel extends CmsPanel {
 				item.add(new Label("type", data.getType()));
 				item.add(new Label("cmsId", data.getCmsId()));
 
-				item.add(new AttributeModifier("class", true, new AbstractReadOnlyModel<Object>() {
+				item.add(new AttributeModifier("class", new AbstractReadOnlyModel<Object>() {
 					private static final long serialVersionUID = 1L;
 
 					@Override
