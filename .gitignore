@@ -4,6 +4,7 @@ target/
 repository/
 database/
 bin/
+deployer/
 # ignored files
 derby.log
 src/build.properties
