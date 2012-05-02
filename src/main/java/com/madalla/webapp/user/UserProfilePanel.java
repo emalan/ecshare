@@ -4,7 +4,6 @@ package com.madalla.webapp.user;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -27,6 +26,7 @@ import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.wicket.form.AjaxValidationForm;
+import com.madalla.wicket.form.AjaxValidationRequiredTextField;
 
 public class UserProfilePanel extends CmsPanel{
 
@@ -41,8 +41,7 @@ public class UserProfilePanel extends CmsPanel{
 
             FeedbackPanel emailFeedback = new FeedbackPanel("emailFeedback");
             add(emailFeedback);
-            //TextField<String> email = new AjaxValidationRequiredTextField("email", emailFeedback);
-            TextField<String> email = new TextField("email");
+            TextField<String> email = new AjaxValidationRequiredTextField("email", emailFeedback);
             email.add(EmailAddressValidator.getInstance());
             add(email);
             add(new TextField<String>("displayName"));
@@ -67,7 +66,7 @@ public class UserProfilePanel extends CmsPanel{
 		response.renderJavaScriptReference(Scriptaculous.PROTOTYPE);
 		response.renderCSSReference(Css.CSS_FORM);
 	}
-
+	
 	@Override
 	protected void onBeforeRender() {
 		UserData user = getSessionDataService().getUser();
@@ -80,11 +79,12 @@ public class UserProfilePanel extends CmsPanel{
 		final String username = user.getName();
 		if (siteData.getSecurityCertificate() && authenticator.requiresSecureAuthentication(username)){
 
-			PageParameters parameters = new PageParameters("user=" + username);
-			add(new BookmarkablePageLink<String>("PasswordChange", SecurePasswordPage.class, parameters));
+			final PageParameters parameters = new PageParameters();
+			parameters.add("user", username);
+			addOrReplace(new BookmarkablePageLink<String>("PasswordChange", SecurePasswordPage.class, parameters));
 
 		} else {
-			add(new Link<Object>("PasswordChange"){
+			addOrReplace(new Link<Object>("PasswordChange"){
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -95,12 +95,10 @@ public class UserProfilePanel extends CmsPanel{
 			});
 		}
 
-		add(new Label("profileHeading", getString("heading.profile", new Model<IUser>(user))));
-		add(new ProfileForm("profileForm", new CompoundPropertyModel<UserData>(user)));
+		addOrReplace(new Label("profileHeading", getString("heading.profile", new Model<IUser>(user))));
+		addOrReplace(new ProfileForm("profileForm", new CompoundPropertyModel<UserData>(user)));
 
 		super.onBeforeRender();
 	}
-
-
 
 }
