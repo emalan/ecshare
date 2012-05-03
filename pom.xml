@@ -326,6 +326,8 @@
                             <report>project-team</report>
                             <report>license</report>
                             <report>scm</report>
+                            <report>plugins</report>
+                            <report>summary</report>
 				        </reports>
 				    </reportSet>
 				</reportSets>

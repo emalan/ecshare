@@ -21,13 +21,6 @@
 		</property>
 	</bean>
 
-	<bean id="environmentsetup" class="com.madalla.webapp.EnvironmentSetup"
-		init-method="init">
-		<property name="configType" value="${wicket.configuration}"></property>
-		<property name="site" value="${site.code}"></property>
-		<property name="logfile" value="${logfile}"></property>
-	</bean>
-
 	<bean id="buildInformation" class="com.madalla.BuildInformation">
 		<property name="webappVersion" value="${appversion}"></property>
 		<property name="version" value="#[application.version]"></property>
