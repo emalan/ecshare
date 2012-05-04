@@ -29,6 +29,10 @@
 	<bean id="authenticatorMember" class="com.madalla.webapp.security.PasswordAuthenticator"
 		scope="singleton">
 	</bean>
+	
+	<bean id="authenticatorUser" class="com.madalla.webapp.security.PasswordAuthenticator"
+        scope="singleton">
+    </bean>
 
 	<bean id="memberService" class="com.madalla.member.MemberService"
 		scope="singleton">

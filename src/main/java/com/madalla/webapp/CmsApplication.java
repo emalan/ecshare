@@ -23,7 +23,7 @@ import org.emalan.cms.IDataServiceProvider;
 import org.emalan.cms.IRepositoryAdminService;
 import org.emalan.cms.IRepositoryAdminServiceProvider;
 import org.emalan.cms.ISessionDataService;
-import org.emalan.cms.RepositoryServiceFactory;
+import org.emalan.cms.RepositoryServiceManager;
 import org.emalan.cms.bo.SiteLanguage;
 import org.emalan.cms.bo.image.AlbumData;
 import org.emalan.cms.bo.image.ImageData;
@@ -88,7 +88,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     
     @Override
 	public Session newSession(Request request, Response response) {
-    	ISessionDataService sessionService = RepositoryServiceFactory.getSessionDataService();
+    	ISessionDataService sessionService = RepositoryServiceManager.getSessionDataService();
         return new CmsSession(request, sessionService);
     }
 
