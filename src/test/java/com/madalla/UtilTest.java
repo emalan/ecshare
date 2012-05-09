@@ -11,7 +11,6 @@ public class UtilTest extends TestCase{
 
 	public void testLocales(){
 		String[] languages = Locale.getISOLanguages();
-		Locale locale = new Locale("EN");
 		System.out.println(languages);
 
 		Locale[] locales = Locale.getAvailableLocales();

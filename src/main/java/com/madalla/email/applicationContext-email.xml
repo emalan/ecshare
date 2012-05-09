@@ -7,13 +7,13 @@
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
 	<bean id="emailSender" class="com.madalla.email.SimpleEmailSender">
-    	<property name="emailHost" value="env{email.host}"/>
-    	<property name="emailFromName" value="env{email.from.name}"/>
-    	<property name="emailFromEmail" value="env{email.from.email}"/>
-    	<property name="emailToName" value="env{email.to.name}"/>
-    	<property name="emailToEmail" value="env{email.to.email}"/>
-    	<property name="mailAuthName" value="env{mail.auth.name}"/>
-    	<property name="mailAuthPassword" value="env{mail.auth.password}"/>
+    	<property name="emailHost" value="${email.host}"/>
+    	<property name="emailFromName" value="${email.from.name}"/>
+    	<property name="emailFromEmail" value="${email.from.email}"/>
+    	<property name="emailToName" value="${email.to.name}"/>
+    	<property name="emailToEmail" value="${email.to.email}"/>
+    	<property name="mailAuthName" value="${mail.auth.name}"/>
+    	<property name="mailAuthPassword" value="${mail.auth.password}"/>
 	</bean>
 
 </beans>
