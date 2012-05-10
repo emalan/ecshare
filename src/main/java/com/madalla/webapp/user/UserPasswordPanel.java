@@ -16,6 +16,7 @@ import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.AbstractValidator;
@@ -33,74 +34,75 @@ import com.madalla.webapp.security.UserLoginTracker;
 import com.madalla.wicket.form.AjaxValidationSubmitButton;
 import com.madalla.wicket.form.ValidationStyleBehaviour;
 
-public class UserPasswordPanel extends CmsPanel{
+public class UserPasswordPanel extends CmsPanel {
 
 	private static final long serialVersionUID = 3207705274626512033L;
 	private static final Logger log = LoggerFactory.getLogger(UserPasswordPanel.class);
 
 	private final ICredentialHolder credentials = new SecureCredentials();
 
-    public class PasswordForm extends Form<UserData> {
+	public class PasswordForm extends Form<UserData> {
 
-        private static final long serialVersionUID = 9033980585192727266L;
+		private static final long serialVersionUID = 9033980585192727266L;
 
-        public PasswordForm(String id, boolean validated) {
-            super(id);
+		public PasswordForm(final String id, final boolean validated) {
+			super(id);
 
-            PasswordTextField existingPassword = new PasswordTextField("existingPassword",new Model<String>(""));
+			PasswordTextField existingPassword = new PasswordTextField("existingPassword", new Model<String>(""));
 
-            existingPassword.add(new ValidationStyleBehaviour());
-            existingPassword.setOutputMarkupId(true);
-            if (validated) {
-            	existingPassword.setEnabled(false);
-            }
-            add(existingPassword);
-            existingPassword.add(new AbstractValidator<String>(){
-                private static final long serialVersionUID = 1L;
+			existingPassword.add(new ValidationStyleBehaviour());
+			existingPassword.setOutputMarkupId(true);
+			if (validated) {
+				existingPassword.setEnabled(false);
+			}
+			add(existingPassword);
+			existingPassword.add(new AbstractValidator<String>() {
+				private static final long serialVersionUID = 1L;
 
-                @Override
-                protected void onValidate(IValidatable<String> validatable) {
-                	log.debug("Validating existing password.");
-                	if (!validateUser(new SecureCredentials().setUsername(credentials.getUsername()).setPassword(validatable.getValue()))) {
-                		error(validatable,"error.existing");
-                	}
-                }
+				@Override
+				protected void onValidate(IValidatable<String> validatable) {
+					log.debug("Validating existing password.");
+					if (!validateUser(new SecureCredentials().setUsername(credentials.getUsername()).setPassword(
+							validatable.getValue()))) {
+						error(validatable, "error.existing");
+					}
+				}
 
-            });
+			});
 
-            add(new ComponentFeedbackPanel("existingFeedback", existingPassword).setOutputMarkupId(true));
+			add(new ComponentFeedbackPanel("existingFeedback", existingPassword).setOutputMarkupId(true));
 
-            PasswordTextField newPassword = new PasswordTextField("newPassword",
-                    new PropertyModel<String>(credentials,"password"));
-            newPassword.add(new ValidationStyleBehaviour());
-            newPassword.setOutputMarkupId(true);
-            add(newPassword);
-            add(new ComponentFeedbackPanel("newFeedback", newPassword).setOutputMarkupId(true));
+			PasswordTextField newPassword = new PasswordTextField("newPassword", new PropertyModel<String>(credentials,
+					"password"));
+			newPassword.add(new ValidationStyleBehaviour());
+			newPassword.setOutputMarkupId(true);
+			add(newPassword);
+			add(new ComponentFeedbackPanel("newFeedback", newPassword).setOutputMarkupId(true));
 
-            TextField<String> confirmPassword = new PasswordTextField("confirmPassword", new Model<String>(""));
-            confirmPassword.add(new ValidationStyleBehaviour());
-            confirmPassword.setOutputMarkupId(true);
-            add(confirmPassword);
-            add(new ComponentFeedbackPanel("confirmFeedback",confirmPassword).setOutputMarkupId(true));
+			TextField<String> confirmPassword = new PasswordTextField("confirmPassword", new Model<String>(""));
+			confirmPassword.add(new ValidationStyleBehaviour());
+			confirmPassword.setOutputMarkupId(true);
+			add(confirmPassword);
+			add(new ComponentFeedbackPanel("confirmFeedback", confirmPassword).setOutputMarkupId(true));
 
-            //Validate that new and confirm are equal
-            add(new EqualPasswordInputValidator(newPassword, confirmPassword));
+			// Validate that new and confirm are equal
+			add(new EqualPasswordInputValidator(newPassword, confirmPassword));
 
-        }
+		}
 
-    }
+	}
 
-    public UserPasswordPanel(final String id, final String username){
-    	this(id, new SecureCredentials().setUsername(username));
-    }
+	public UserPasswordPanel(final String id, final String username) {
+		this(id, new SecureCredentials().setUsername(username));
+	}
 
-    public UserPasswordPanel(final String id, final ICredentialHolder existing){
-    	super(id);
+	public UserPasswordPanel(final String id, final ICredentialHolder existing) {
+		super(id);
 
-    	this.credentials.setUsername(existing.getUsername());
+		this.credentials.setUsername(existing.getUsername());
 
 		final boolean validated;
-		final boolean loggedIn = ((CmsSession)getSession()).isLoggedIn();
+		final boolean loggedIn = ((CmsSession) getSession()).isLoggedIn();
 		if (loggedIn) {
 			validated = false;
 		} else {
@@ -109,31 +111,48 @@ public class UserPasswordPanel extends CmsPanel{
 
 		final UserLoginTracker tracker = getUserLoginInfo(existing);
 
-		add(new Label("processing"){
+		add(new Label("processing") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
-				if (validated){
+				if (validated) {
 					replaceComponentTagBody(markupStream, openTag, getString("info.validated"));
 				} else {
-					if (loggedIn) { //from inside application
-						replaceComponentTagBody(markupStream, openTag, getString("info.existing", new Model<UserLoginTracker>(tracker)));
-					} else { //from URL
-						replaceComponentTagBody(markupStream, openTag, getString("info.validation.failed", new Model<UserLoginTracker>(tracker)));
+					if (loggedIn) { // from inside application
+						replaceComponentTagBody(markupStream, openTag,
+								getString("info.existing", new Model<UserLoginTracker>(tracker)));
+					} else { // from URL
+						replaceComponentTagBody(markupStream, openTag,
+								getString("info.validation.failed", new Model<UserLoginTracker>(tracker)));
 					}
 				}
 			}
 
 		});
+		
+		final Label loginCountExceeded = new Label("loginCountExceeded", new ResourceModel("info.logincountexceed")) {
+			private static final long serialVersionUID = 1L;
 
-		final Label loginCount = new Label("loginCount", new StringResourceModel("info.logincount", this, new Model<UserLoginTracker>(tracker))){
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				log.trace("onConfigure - loginCountExceeded. visibility=" + tracker.isAttemptCountExceeded());
+				setVisible(tracker.isAttemptCountExceeded());
+			}
+			
+		};
+		loginCountExceeded.setOutputMarkupPlaceholderTag(true);
+		add(loginCountExceeded);
+
+		final Label loginCount = new Label("loginCount", new StringResourceModel("info.logincount", this,
+				new Model<UserLoginTracker>(tracker))) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onBeforeRender() {
 				setVisibilityAllowed(true);
-				if (validated){
+				if (validated) {
 					setVisible(false);
 				}
 				super.onBeforeRender();
@@ -143,67 +162,69 @@ public class UserPasswordPanel extends CmsPanel{
 		loginCount.setOutputMarkupId(true);
 		add(loginCount);
 
+		Form<UserData> form = new PasswordForm("passwordForm", validated);
+		add(form);
 
-        Form<UserData> form = new PasswordForm("passwordForm", validated);
-        add(form);
+		// if validated set class of form to validated
+		if (validated) {
+			form.add(new AttributeAppender("class", new Model<String>("validated"), " "));
+		}
 
-        //if validated set class of form to validated
-        if (validated) {
-        	form.add(new AttributeAppender("class", new Model<String>("validated"), " "));
-        }
+		FeedbackPanel formFeedback = new ComponentFeedbackPanel("formFeedback", form);
+		form.add(formFeedback);
 
-        FeedbackPanel formFeedback = new ComponentFeedbackPanel("formFeedback", form);
-        form.add(formFeedback);
-
-        Component passwordSubmit = new AjaxValidationSubmitButton("formSubmit", form, formFeedback){
-        	private static final long serialVersionUID = 1L;
+		Component passwordSubmit = new AjaxValidationSubmitButton("formSubmit", form, formFeedback) {
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
 				UserData user = getRepositoryService().getUser(credentials.getUsername());
-				if (((CmsSession)getSession()).signIn(user.getName(), user.getPassword())){
-	                user.setPassword(credentials.getPassword());
-	                saveData(user);
-	                info(getString("message.success"));
-	                setResponsePage(getApplication().getHomePage());
+				if (((CmsSession) getSession()).signIn(user.getName(), user.getPassword())) {
+					user.setPassword(credentials.getPassword());
+					saveData(user);
+					info(getString("message.success"));
+					setResponsePage(getApplication().getHomePage());
 				}
 			}
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				target.addComponent(loginCount);
+				target.add(loginCount);
+				target.add(loginCountExceeded);
 				super.onError(target, form);
 			}
 
-        };
+		};
 
-        form.add(passwordSubmit);
+		form.add(passwordSubmit);
 
-        form.add(new AttributeModifier("onSubmit", true, new Model<String>("document.getElementById('" + passwordSubmit.getMarkupId() + "').onclick();return false;")));
+		form.add(new AttributeModifier("onSubmit", new Model<String>("document.getElementById('"
+				+ passwordSubmit.getMarkupId() + "').onclick();return false;")));
 
-    }
+	}
 
-    @Override
-    public void renderHead(IHeaderResponse response) {
-    	response.renderCSSReference(Css.CSS_FORM);
-    }
-    
-    @Override
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		response.renderCSSReference(Css.CSS_FORM);
+	}
+
+	@Override
 	protected void onBeforeRender() {
-    	addOrReplace(new Label("heading", getString("heading.password", new Model<ICredentialHolder>(credentials))));
+		addOrReplace(new Label("heading", getString("heading.password", new Model<ICredentialHolder>(credentials))));
 		super.onBeforeRender();
 	}
 
-    private UserLoginTracker getUserLoginInfo(ICredentialHolder credentials){
-    	return getAuthenticator(credentials.getUsername()).getUserLoginTracker(credentials.getUsername());
-    }
+	private UserLoginTracker getUserLoginInfo(ICredentialHolder credentials) {
+		return getAuthenticator(credentials.getUsername()).getUserLoginTracker(credentials.getUsername());
+	}
 
-	private boolean validateUser(ICredentialHolder credentials){
-		return getAuthenticator(credentials.getUsername()).authenticate(credentials.getUsername(), credentials.getPassword());
-    }
+	private boolean validateUser(ICredentialHolder credentials) {
+		return getAuthenticator(credentials.getUsername()).authenticate(credentials.getUsername(),
+				credentials.getPassword());
+	}
 
-	private IPasswordAuthenticator getAuthenticator(String username){
+	private IPasswordAuthenticator getAuthenticator(String username) {
 		return getRepositoryService().getPasswordAuthenticator(credentials.getUsername());
 	}
 

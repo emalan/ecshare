@@ -12,7 +12,7 @@ public class UserLoginTracker implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(UserLoginTracker.class);
 	
-	public int count = 0;
+	private int count = 0;
 	public final DateTime dateTimeAdded;
 	public final IUserValidate validate;
 	private final int attempts;
@@ -50,5 +50,13 @@ public class UserLoginTracker implements Serializable{
 		}
 		} 
 		return false;
+	}
+	
+	public boolean isAttemptCountExceeded() {
+		return count > attempts ;
+	}
+	
+	public int getCount() {
+		return count;
 	}
 }

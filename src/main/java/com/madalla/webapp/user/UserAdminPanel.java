@@ -52,7 +52,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
-import com.madalla.email.IEmailSender;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.CmsApplication;
 import com.madalla.webapp.CmsPanel;
@@ -250,18 +249,18 @@ public class UserAdminPanel extends CmsPanel {
 				log.debug("selected user: "+ userName);
 				populateUserData(userName, userView);
 
-				target.addComponent(profileForm);
+				target.add(profileForm);
 				lockUsername = true;
-				target.addComponent(usernameField);
-				target.addComponent(userFeedback);
-				target.addComponent(userSelect);
+				target.add(usernameField);
+				target.add(userFeedback);
+				target.add(userSelect);
 				target.appendJavaScript(hideShowProfile.seekToEnd());
 
 			}
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				target.addComponent(userFeedback);
+				target.add(userFeedback);
 			}
 
 		};
@@ -269,7 +268,7 @@ public class UserAdminPanel extends CmsPanel {
 		userForm.add(newUserSubmit);
 		userForm.setDefaultButton(newUserSubmit);
 
-		usernameField.add(new AttributeModifier("onchange", true, new Model<String>(
+		usernameField.add(new AttributeModifier("onchange", new Model<String>(
 				"document.getElementById('"+ newUserSubmit.getMarkupId()
 				+ "').onclick();return false;")));
 
@@ -288,10 +287,10 @@ public class UserAdminPanel extends CmsPanel {
 				target.appendJavaScript("$('" + usernameField.getMarkupId() + "').value='"+userData.getName()+"';");
 				lockUsername = true;
 
-				target.addComponent(profileForm);
-				target.addComponent(usernameField);
-				target.addComponent(getComponent());
-				target.addComponent(userFeedback);
+				target.add(profileForm);
+				target.add(usernameField);
+				target.add(getComponent());
+				target.add(userFeedback);
 
 				target.appendJavaScript(hideShowProfile.seekToEnd());
 
@@ -318,7 +317,7 @@ public class UserAdminPanel extends CmsPanel {
            		} else {
            			welcomeFeedback.setDefaultModelObject(getString("welcome.fail"));
            		}
-         		target.addComponent(welcomeFeedback);
+         		target.add(welcomeFeedback);
             }
 
             @Override
@@ -353,7 +352,7 @@ public class UserAdminPanel extends CmsPanel {
                 } else {
                 	resetFeedback.setDefaultModelObject(getString("reset.fail"));
                 }
-                target.addComponent(resetFeedback);
+                target.add(resetFeedback);
             }
 
             @Override
@@ -385,17 +384,17 @@ public class UserAdminPanel extends CmsPanel {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
-				target.addComponent(profileFeedback);
+				target.add(profileFeedback);
 				saveUserData(userView, userView.getRequiresAuth());
 				form.info(getString("message.success"));
-				target.addComponent(welcomeLink);
-				target.addComponent(resetPasswordLink);
+				target.add(welcomeLink);
+				target.add(resetPasswordLink);
 			}
 
 			@Override
 			protected void onError(final AjaxRequestTarget target, Form<?> form) {
 				super.onError(target, form);
-				target.addComponent(profileFeedback);
+				target.add(profileFeedback);
 
 			}
 		};
@@ -425,10 +424,10 @@ public class UserAdminPanel extends CmsPanel {
 				usernameField.setDefaultModelObject("");
 				usernameField.clearInput();
 
-				target.addComponent(usernameField);
-				target.addComponent(userFeedback);
-				target.addComponent(userSelect);
-				target.addComponent(form);
+				target.add(usernameField);
+				target.add(userFeedback);
+				target.add(userSelect);
+				target.add(form);
 
 				// Clear usernamefield and reset form
                 target.appendJavaScript(hideShowProfile.seekToBegin() + "$('" + usernameField.getMarkupId() + "').clear();"

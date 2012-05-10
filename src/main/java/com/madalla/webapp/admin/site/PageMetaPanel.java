@@ -100,7 +100,7 @@ public abstract class PageMetaPanel extends CmsPanel{
 				PageMetaLangData newMetaLang = getRepositoryService().getPageMetaLang(language.locale, pageData, false);
 				log.debug("new Meta Lang. " + newMetaLang);
 				homeOtherModel.setObject(newMetaLang);
-				target.addComponent(homeOtherForm);
+				target.add(homeOtherForm);
 			}
 
 		});
