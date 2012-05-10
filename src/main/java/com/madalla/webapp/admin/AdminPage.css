@@ -8,11 +8,17 @@ body {
     border-right:1px solid #AFBFD8;
 }
 
-/* Header */
-#hd {
+.primary {
     background-color: #FFFFFF;
-    color:#444444;
+    color: #444444;
 }
+
+.secondary {
+    background-color: transparent;
+    color: #1F75CC;
+}
+
+/* Header */
 
 #hd h1{ 
     
@@ -75,12 +81,10 @@ div.adminSection {
 }
 
 h2{
-	color: blue; 
 	font-size: 138.5%;
 }
 
 h3 {
-	color:blue;
 	font-size: 116%;
 	font-weight: bold;
 }
@@ -94,11 +98,13 @@ p.info {
 ----------------------------------------------------------------------------*/
 a {
     font-family:"lucida grande",tahoma,verdana,arial,sans-serif;
-    color: #1F75CC;
     text-decoration: none;
     outline: medium none;
+    color: #1F75CC;
+    text-decoration: underline;
 }
 a:hover {
+    color: #212ECC;
     text-decoration: underline;
 }
 
@@ -125,7 +131,7 @@ ul.menu li a {
 }
     
 ul.menu li a:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 ul.menu li a, ul.menu li span{
@@ -137,9 +143,6 @@ ul.menu li span {
     color: #777777;
 }
 
-ul.menu li a {
-    color: #1F75CC;
-}
 
 /* =box
 -----------------------------------------------------------------------------*/

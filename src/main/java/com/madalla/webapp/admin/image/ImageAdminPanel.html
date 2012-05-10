@@ -5,11 +5,14 @@
         div#fileUpload {
        		float: left;
        	}
-		div.results{
-		    float: right;
-		    clear: none;
-		    border: thin solid blue;
-		    width: 35%;
+		div.wicket-mfu-container{
+		  border: thin solid blue;
+		}
+		
+		div.results {
+            float: right;
+            clear: none;
+            border: thin solid blue;
 		}
 		
 		div.results ul {
@@ -71,7 +74,9 @@
     <div id="fileUpload">
         <form wicket:id="simpleUpload">
             <fieldset>
-            	<legend><wicket:message key="label.images.upload">[label]</wicket:message></legend>
+                <h3>
+            	<wicket:message key="label.images.upload">[label]</wicket:message>
+            	</h3>
             	<p><wicket:message key="label.upload.info">[label]</wicket:message></p>
            		<div wicket:id="fileInput" class="mfuex"/>
             </fieldset>
@@ -80,7 +85,7 @@
                     <wicket:message key="label.images.submit">[label]</wicket:message>
                 </h3>
             	<span class="buttonwrapper">
-                	<a class="orangebutton" wicket:id="formSubmit"><span><wicket:message key="label.submit">[label]</wicket:message></span></a>
+                	<a class="orangebutton" wicket:id="formSubmit"><span><wicket:message key="label.upload">[label]</wicket:message></span></a>
                 </span>
                 <span class="feedback" wicket:id="uploadFeedback"/>
             </div>

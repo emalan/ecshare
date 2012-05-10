@@ -227,7 +227,7 @@ public class ImageAdminPanel extends CmsPanel{
 				public void onClick(AjaxRequestTarget target) {
                     getRepositoryService().deleteNode(imageData.getId());
                     //repaint the container that contains the list
-                    target.addComponent(listItem.getParent().getParent());
+                    target.add(listItem.getParent().getParent());
 				}
             });
 			listItem.setOutputMarkupId(true);
@@ -280,7 +280,7 @@ public class ImageAdminPanel extends CmsPanel{
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				target.addComponent(availableContainer);
+				target.add(availableContainer);
 			}
 
         });
@@ -291,7 +291,7 @@ public class ImageAdminPanel extends CmsPanel{
 
 			@Override
 			protected void refreshImageList(AjaxRequestTarget target) {
-				target.addComponent(availableContainer);
+				target.add(availableContainer);
 			}
 
         };

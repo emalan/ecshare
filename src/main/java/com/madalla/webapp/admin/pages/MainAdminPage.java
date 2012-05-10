@@ -14,7 +14,9 @@ import com.madalla.webapp.user.UserProfilePanel;
 @AuthorizeInstantiation("USER")
 public class MainAdminPage extends AbstractAdminPage {
 
-	public MainAdminPage(){
+	private static final long serialVersionUID = 1L;
+
+    public MainAdminPage(){
 		super();
 		add(new UserProfilePanel(ID));
 	}
