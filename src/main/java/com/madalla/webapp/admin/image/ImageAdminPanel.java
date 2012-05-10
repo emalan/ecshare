@@ -9,10 +9,12 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
@@ -20,7 +22,6 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.markup.html.image.Image;
@@ -41,7 +42,6 @@ import org.slf4j.LoggerFactory;
 
 import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.components.image.album.ImageDefaults;
-import com.madalla.webapp.css.Css;
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.webapp.upload.FileUploadGroup;
 import com.madalla.webapp.upload.FileUploadThread;
@@ -57,8 +57,8 @@ public class ImageAdminPanel extends CmsPanel{
 
 		public FileUploadForm(String name) {
             super(name);
-
-            add(new MultiFileUploadField("fileInput", new PropertyModel<Collection<FileUpload>>(this, "uploads"), 5){
+            
+            final MultiFileUploadField fileUpload = new MultiFileUploadField("fileInput", new PropertyModel<Collection<FileUpload>>(this, "uploads"), 5){
 				private static final long serialVersionUID = 1L;
 
 				//Hack to prevent fileUploads being trashed, we will close them ourselves....
@@ -66,17 +66,34 @@ public class ImageAdminPanel extends CmsPanel{
             	protected void onDetach()
             	{
             		setConvertedInput(null);
-
             		super.onDetach();
             	}
-            });
+            };
+            fileUpload.setOutputMarkupId(true);
+            add(fileUpload);
+            
             setMaxSize(ImageDefaults.MAX_UPLOAD_SIZE);
 
             final Component uploadFeedback = new ComponentFeedbackPanel("uploadFeedback", this);
             uploadFeedback.setOutputMarkupId(true);
             add(uploadFeedback);
+            
+            add(new IndicatingAjaxButton("formSubmit") {
+				private static final long serialVersionUID = 1L;
 
-            add(new SubmitLink("formSubmit"));
+				@Override
+				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+					log.trace("ajax OnSubmit called.");
+					target.add(fileUpload);
+					ImageAdminPanel.this.refreshResults(target);
+				}
+				
+				@Override
+				protected void onError(AjaxRequestTarget target, Form<?> form) {
+					log.trace("ajax OnError called.");
+					
+				}
+			});
 
         }
 
@@ -142,9 +159,14 @@ public class ImageAdminPanel extends CmsPanel{
 
 		public FileUploadListView(String id) {
 			super(id);
-
 		}
 
+		@Override
+		protected void onConfigure() {
+			super.onConfigure();
+			setOutputMarkupId(true);
+		}
+		
 		@Override
 		protected void populateItem(ListItem<String> item) {
 			item.add(new AjaxIndicatingStatusLabel("file", item.getModelObject()));
@@ -241,6 +263,8 @@ public class ImageAdminPanel extends CmsPanel{
 	private static final Logger log = LoggerFactory.getLogger(ImageAdminPanel.class);
 	private static final String IMAGE_FILE_UPLOAD_GROUP = "ImageAdmin";
 	private static final FileUploadGroup GROUP = new FileUploadGroup(IMAGE_FILE_UPLOAD_GROUP);
+	
+	final MarkupContainer resultsContainer;
 
 	public ImageAdminPanel(String id) {
 		super(id);
@@ -295,17 +319,23 @@ public class ImageAdminPanel extends CmsPanel{
 			}
 
         };
-
         add(simpleUploadForm);
 
-        add(new FileUploadListView("results"));
+        add(resultsContainer = new WebMarkupContainer("resultsContainer"));
+        resultsContainer.setOutputMarkupId(true);
+        resultsContainer.add(new FileUploadListView("results"));
+        
+	}
+	
+	private void refreshResults(AjaxRequestTarget target) {
+		target.add(resultsContainer);
 	}
 
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		
-		response.renderCSSReference(Css.CSS_FORM);
+		//response.renderCSSReference(Css.CSS_FORM);
 		response.renderJavaScriptReference(Scriptaculous.PROTOTYPE);
 		response.renderJavaScriptReference(Scriptaculous.EFFECTS);
 		response.renderJavaScriptReference(Scriptaculous.DRAGDROP);

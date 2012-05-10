@@ -3,15 +3,33 @@
     <style type="text/css">
        
         div#fileUpload {
-       		float: left;
        	}
 		div.wicket-mfu-container{
-		  border: thin solid blue;
+		      background-color: #E9F4FF;
+    			border: 1px solid #AACCEE;
+    			-moz-border-radius: 5px; 
+    			-webkit-border-radius: 5px;
+   				 border-radius: 5px 5px 5px 5px;
+   				 padding: 2px;
+		}
+		
+		.wicket-mfu-container input {
+			background-color: #E9F4FF;
+			text-decoration: underline;
+			color: grey;
+		}
+		
+		.wicket-mfu-container input:hover {
+			cursor: pointer;			
+		}
+		
+		.wicket-mfu-caption {
+			margin-bottom: 2px;
+			text-decoration: underline;
 		}
 		
 		div.results {
-            float: right;
-            clear: none;
+			clear: both;
             border: thin solid blue;
 		}
 		
@@ -27,17 +45,11 @@
 		}
 
        div#fileUpload form {
-       	   float: left;
-       	   width: 60%;
        }
        
        div#fileUpload form input {
-            float: none;
             border: none;
        }
-        #fileUpload p {
-            color: blue;
-        }
 
 		div.mfuex {
 		    width: 45%;
@@ -45,8 +57,6 @@
 		
 		        
         #availableImages {
-            float: left;
-            clear: both;
             width: 98%;
         }
         
@@ -77,7 +87,7 @@
                 <h3>
             	<wicket:message key="label.images.upload">[label]</wicket:message>
             	</h3>
-            	<p><wicket:message key="label.upload.info">[label]</wicket:message></p>
+            	<p class="info"><wicket:message key="label.upload.info">[label]</wicket:message></p>
            		<div wicket:id="fileInput" class="mfuex"/>
             </fieldset>
             <div class="submit">
@@ -90,7 +100,7 @@
                 <span class="feedback" wicket:id="uploadFeedback"/>
             </div>
         </form>
-        <div class="results">
+        <div wicket:id="resultsContainer" class="results">
             <span><wicket:message key="label.upload.status">[label]</wicket:message></span>
             <ul>
                 <li wicket:id="results">
@@ -101,7 +111,7 @@
         </div> 
     </div>
      
-    <div id="availableImages">
+    <div id="availableImages" class="section">
         <h3><wicket:message key="label.images.available">[label]</wicket:message></h3>
         <span wicket:id="availableFeedback">[feedback]</span>
         <a wicket:id="refreshList"><wicket:message key="label.images.refresh">[label]</wicket:message></a>
