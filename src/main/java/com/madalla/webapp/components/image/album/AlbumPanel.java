@@ -37,7 +37,9 @@ public class AlbumPanel extends Panel {
 
         //link to album configure page
         Component adminPageLink;
-        add(adminPageLink = new AdminPageLink("adminLink", AlbumAdminPage.class, new PageParameters("0="+album.getName())));
+        final PageParameters pageParameters = new PageParameters();
+        pageParameters.set(0, album.getName());
+        add(adminPageLink = new AdminPageLink("adminLink", AlbumAdminPage.class, pageParameters));
         MetaDataRoleAuthorizationStrategy.authorize(adminPageLink, ENABLE, "ADMIN");
 
         final AjaxLazyLoadPanel imageListContainer  = new AjaxLazyLoadPanel("imagesPanel"){

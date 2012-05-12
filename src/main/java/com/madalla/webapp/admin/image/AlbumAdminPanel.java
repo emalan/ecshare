@@ -115,6 +115,7 @@ public class AlbumAdminPanel extends CmsPanel{
 	public AlbumAdminPanel(String id, String albumName) {
 		super(id);
 
+		log.trace("albumName=" + albumName);
         final AlbumData album = getRepositoryService().getAlbum(albumName);
 
         // Available Images Display

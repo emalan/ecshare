@@ -4,7 +4,7 @@
        
         div#fileUpload {
        	}
-		div.wicket-mfu-container{
+		.results, div.wicket-mfu-container{
 		      background-color: #E9F4FF;
     			border: 1px solid #AACCEE;
     			-moz-border-radius: 5px; 
@@ -25,12 +25,15 @@
 		
 		.wicket-mfu-caption {
 			margin-bottom: 2px;
-			text-decoration: underline;
+			font-weight: bold;
 		}
 		
 		div.results {
 			clear: both;
-            border: thin solid blue;
+		}
+		
+		.resultsHeading {
+			font-weight: bold;
 		}
 		
 		div.results ul {
@@ -101,7 +104,7 @@
             </div>
         </form>
         <div wicket:id="resultsContainer" class="results">
-            <span><wicket:message key="label.upload.status">[label]</wicket:message></span>
+            <span class="resultsHeading"><wicket:message key="label.upload.status">[label]</wicket:message></span>
             <ul>
                 <li wicket:id="results">
                     <span wicket:id="file"></span>

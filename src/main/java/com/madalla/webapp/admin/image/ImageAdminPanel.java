@@ -155,7 +155,6 @@ public class ImageAdminPanel extends CmsPanel{
 
 	private class FileUploadListView extends ListView<String>{
 		private static final long serialVersionUID = 1L;
-		List<String> files;
 
 		public FileUploadListView(String id) {
 			super(id);
@@ -193,6 +192,7 @@ public class ImageAdminPanel extends CmsPanel{
 			add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(3)){
 				private static final long serialVersionUID = 1L;
 
+				
 				@Override
 				protected void onPostProcessTarget(AjaxRequestTarget target) {
 					if (getStatus(text)){
@@ -202,6 +202,7 @@ public class ImageAdminPanel extends CmsPanel{
 					}
 
 				}
+				
 			});
 		}
 

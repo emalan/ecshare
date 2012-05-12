@@ -7,6 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 
+/**
+ * Thread to perform the file upload.
+ * 
+ * @author Eugene Malan
+ *
+ */
 public class FileUploadThread  extends Thread{
 
 	private static final Logger log = LoggerFactory.getLogger(FileUploadThread.class);
@@ -17,9 +23,25 @@ public class FileUploadThread  extends Thread{
 	private final FileUploadGroup group;
 	private transient final FileUpload fileUpload;
 
+	/**
+	 * @param uploadInfo
+	 * @param fileUpload
+	 * @param process
+	 * @param id
+	 */
 	public FileUploadThread(IFileUploadInfo uploadInfo, FileUpload fileUpload, IFileUploadProcess process, final String id) {
 		this(uploadInfo, fileUpload, process, id, null);
 	}
+	
+	/**
+	 * Main constructor.
+	 * 
+	 * @param uploadInfo - This object will be informed of the status of the upload.
+	 * @param fileUpload - The details of the file to be processed
+	 * @param process - Actual process that will be executed to run the upload.
+	 * @param id - The id to be assigned to the uploaded stream.
+	 * @param group - 
+	 */
 	public FileUploadThread(IFileUploadInfo uploadInfo,FileUpload fileUpload, IFileUploadProcess process, final String id, FileUploadGroup group) {
 		this.uploadInfo = uploadInfo;
 		this.process = process;
@@ -59,11 +81,11 @@ public class FileUploadThread  extends Thread{
         	}
 
         	// Sleep to simulate time-consuming work
-//			try {
-//				Thread.sleep(20000);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
+			try {
+				Thread.sleep(20000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 
 			uploadStatus.uploading = false;
 
