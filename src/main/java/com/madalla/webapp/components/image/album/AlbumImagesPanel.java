@@ -22,12 +22,15 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.emalan.cms.bo.image.AlbumData;
 import org.emalan.cms.bo.image.ImageData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.webapp.scripts.utility.ScriptUtils;
 
 public class AlbumImagesPanel extends Panel{
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = LoggerFactory.getLogger(AlbumImagesPanel.class);
 	
 	private final boolean navigation;
 

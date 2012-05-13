@@ -18,6 +18,8 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.emalan.cms.bo.image.AlbumData;
 import org.emalan.cms.bo.image.ImageData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.madalla.webapp.admin.pages.AdminPageLink;
 import com.madalla.webapp.admin.pages.AlbumAdminPage;
@@ -25,6 +27,7 @@ import com.madalla.webapp.css.Css;
 
 public class AlbumPanel extends Panel {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = LoggerFactory.getLogger(AlbumPanel.class);
 
     public AlbumPanel(String id, AlbumData album, IModel<List<ImageData>> imagesModel) {
     	this(id, album, imagesModel, false);
@@ -33,8 +36,6 @@ public class AlbumPanel extends Panel {
 	public AlbumPanel(String id, final AlbumData album, final IModel<List<ImageData>> imagesModel, final boolean navigation) {
 		super(id);
 		
-       
-
         //link to album configure page
         Component adminPageLink;
         final PageParameters pageParameters = new PageParameters();
@@ -47,11 +48,13 @@ public class AlbumPanel extends Panel {
 
 			@Override
 			public Component getLazyLoadComponent(String markupId) {
+			    log.trace("getLazyLoadComponent - " + markupId);
 				return new AlbumImagesPanel(markupId, album, imagesModel, false);
 			}
 
 			@Override
 			public Component getLoadingComponent(String markupId) {
+			    log.trace("getLoadingComponent - " + markupId);
 				MarkupContainer fragment = new Fragment(markupId, "loading", AlbumPanel.this) ;
 				
 				MarkupContainer container;
