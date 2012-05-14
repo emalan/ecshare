@@ -13,6 +13,7 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.IComponentAwareHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -30,6 +31,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.lang.Bytes;
 import org.slf4j.Logger;
@@ -45,6 +47,8 @@ public class EditableResourceLink extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(5000);
 	private static final Logger log = LoggerFactory.getLogger(EditableResourceLink.class);
+	
+	public static final ResourceReference SCRIPT_UTILS = new PackageResourceReference(EditableResourceLink.class,"resourcelink.js");
 
 	private Form<Object> resourceForm;
 	private boolean editMode;
@@ -122,6 +126,41 @@ public class EditableResourceLink extends Panel {
 		}
 
 	}
+	
+	private class FileUploadCallDecorator implements IAjaxCallDecorator, IComponentAwareHeaderContributor {
+		private static final long serialVersionUID = 1L;
+		private final String componentMarkupId;
+		private final String nameMarkupId;
+		private final String choiceMarkupId;
+		
+		public FileUploadCallDecorator(final String componentMarkupId, final String nameMarkupId, final String choiceMarkupId) {
+			this.componentMarkupId = componentMarkupId;
+			this.nameMarkupId = nameMarkupId;
+			this.choiceMarkupId = choiceMarkupId;
+		}
+		
+		public CharSequence decorateScript(Component component, CharSequence script) {
+			StringBuffer sb = new StringBuffer("var v = Wicket.$(" + componentMarkupId + ").value;");
+			String suffixes = LinkResourceType.getResourceTypeSuffixes("|"); // doc|pdf|htm
+			sb.append("var file = Utils.xtractFile(v,'" + suffixes + "');");
+			sb.append("Wicket.$(" + nameMarkupId + ").value = file.filename + '.' + file.ext ;");
+			sb.append("Wicket.$(" + choiceMarkupId + ").value = Utils.translateSuffix(file.ext);");
+			return sb.toString() + script;
+		}
+
+		public CharSequence decorateOnSuccessScript(Component component, CharSequence script) {
+			return script;
+		}
+
+		public CharSequence decorateOnFailureScript(Component component, CharSequence script) {
+			return script;
+		}
+
+		public void renderHead(Component component, IHeaderResponse response) {
+			response.renderJavaScriptReference(SCRIPT_UTILS);
+		}
+		
+	}
 
 	/**
 	 * Adds Behavior to the File Upload Form
@@ -144,28 +183,7 @@ public class EditableResourceLink extends Panel {
 
 		@Override
 		protected IAjaxCallDecorator getAjaxCallDecorator() {
-			return new IAjaxCallDecorator() {
-
-				private static final long serialVersionUID = 1L;
-
-				public CharSequence decorateScript(Component component, CharSequence script) {
-					StringBuffer sb = new StringBuffer("var v = Wicket.$(" + getComponent().getMarkupId() + ").value;");
-					String suffixes = LinkResourceType.getResourceTypeSuffixes("|"); // doc|pdf|htm
-					sb.append("var file = Utils.xtractFile(v,'" + suffixes + "');");
-					sb.append("Wicket.$(" + name.getMarkupId() + ").value = file.filename + '.' + file.ext ;");
-					sb.append("Wicket.$(" + choice.getMarkupId() + ").value = Utils.translateSuffix(file.ext);");
-					return sb.toString() + script;
-				}
-
-				public CharSequence decorateOnSuccessScript(Component component, CharSequence script) {
-					return script;
-				}
-
-				public CharSequence decorateOnFailureScript(Component component, CharSequence script) {
-					return script;
-				}
-
-			};
+			return new FileUploadCallDecorator(getComponent().getMarkupId(), name.getMarkupId(), choice.getMarkupId());
 		}
 
 		@Override
@@ -179,6 +197,7 @@ public class EditableResourceLink extends Panel {
 		
 		@Override
 		public void renderHead(Component component, IHeaderResponse response) {
+			response.renderJavaScriptReference(SCRIPT_UTILS);
 			StringBuffer sb = new StringBuffer();
 			sb.append("Utils.translateSuffix = function(suffix){");
 			for (LinkResourceType type : LinkResourceType.values()) {
