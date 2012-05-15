@@ -50,7 +50,7 @@ import com.madalla.webapp.upload.IFileUploadProcess;
 
 public class ImageAdminPanel extends CmsPanel{
 
-	private abstract class FileUploadForm extends Form<Object>{
+	private abstract class FileUploadForm extends Form<Object> {
 		private static final long serialVersionUID = 1L;
 
 		private final Collection<FileUpload> uploads = new ArrayList<FileUpload>();

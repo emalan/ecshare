@@ -44,230 +44,230 @@ import com.madalla.wicket.resourcelink.EditableResourceLink.LinkResourceType;
  * 
  */
 public class ContentLinkPanel extends CmsPanel {
-	private static final long serialVersionUID = 1L;
-	private static final Logger log = LoggerFactory
-			.getLogger(ContentLinkPanel.class);
+    private static final long serialVersionUID = 1L;
+    private static final Logger log = LoggerFactory.getLogger(ContentLinkPanel.class);
 
-	/**
-	 * This is used to pass data to
-	 * {@link com.madalla.wicket.resourcelink.EditableResourceLink}
-	 * 
-	 * @author Eugene Malan
-	 * 
-	 */
-	public class LinkData implements ILinkData {
+    /**
+     * This is used to pass data to
+     * {@link com.madalla.wicket.resourcelink.EditableResourceLink}
+     * 
+     * @author Eugene Malan
+     * 
+     */
+    public class LinkData implements ILinkData {
 
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-		private String id;
-		private String name;
-		private String title;
-		private ResourceReference resourceReference;
-		private transient FileUpload fileUpload;
-		private LinkResourceType resourceType;
-		private Boolean hideLink;
-		private String url;
+        private String id;
+        private String name;
+        private String title;
+        private ResourceReference resourceReference;
+        private transient FileUpload fileUpload;
+        private LinkResourceType resourceType;
+        private Boolean hideLink;
+        private String url;
+        private String status;
 
-		public String getId() {
-			return id;
-		}
+        public String getId() {
+            return id;
+        }
 
-		public void setId(String id) {
-			this.id = id;
-		}
+        public void setId(String id) {
+            this.id = id;
+        }
 
-		public String getName() {
-			return name;
-		}
+        public String getName() {
+            return name;
+        }
 
-		public String getTitle() {
-			return title;
-		}
+        public String getTitle() {
+            return title;
+        }
 
-		public void setResourceReference(ResourceReference resourceReference) {
-			this.resourceReference = resourceReference;
-		}
+        public void setResourceReference(ResourceReference resourceReference) {
+            this.resourceReference = resourceReference;
+        }
 
-		public ResourceReference getResourceReference() {
-			return resourceReference;
-		}
+        public ResourceReference getResourceReference() {
+            return resourceReference;
+        }
 
-		public void setName(String name) {
-			this.name = name;
-		}
+        public void setName(String name) {
+            this.name = name;
+        }
 
-		public void setTitle(String title) {
-			this.title = title;
-		}
+        public void setTitle(String title) {
+            this.title = title;
+        }
 
-		public void setFileUpload(FileUpload fileUpload) {
-			this.fileUpload = fileUpload;
-		}
+        public void setFileUpload(FileUpload fileUpload) {
+            this.fileUpload = fileUpload;
+        }
 
-		public FileUpload getFileUpload() {
-			return fileUpload;
-		}
+        public FileUpload getFileUpload() {
+            return fileUpload;
+        }
 
-		public LinkResourceType getResourceType() {
-			return resourceType;
-		}
+        public LinkResourceType getResourceType() {
+            return resourceType;
+        }
 
-		public void setResourceType(LinkResourceType resourceType) {
-			this.resourceType = resourceType;
-		}
+        public void setResourceType(LinkResourceType resourceType) {
+            this.resourceType = resourceType;
+        }
 
-		public Boolean getHideLink() {
-			return hideLink;
-		}
+        public Boolean getHideLink() {
+            return hideLink;
+        }
 
-		public void setHideLink(Boolean hideLink) {
-			this.hideLink = hideLink;
-		}
+        public void setHideLink(Boolean hideLink) {
+            this.hideLink = hideLink;
+        }
 
-		@Override
-		public String toString() {
-			return ReflectionToStringBuilder.toString(this).toString();
-		}
+        @Override
+        public String toString() {
+            return ReflectionToStringBuilder.toString(this).toString();
+        }
 
-		public String getUrl() {
-			return url;
-		}
+        public String getUrl() {
+            return url;
+        }
 
-		public void setUrl(String url) {
-			this.url = url;
-		}
+        public void setUrl(String url) {
+            this.url = url;
+        }
 
-	}
+        public String getStatus() {
+            return status;
+        }
 
-	public ContentLinkPanel(final String id, final String nodeName) {
-		super(id);
+        public void setStatus(String status) {
+            this.status = status;
+        }
 
-		log.debug("Editable Link Panel being created for node=" + nodeName
-				+ " id=" + id);
+    }
 
-		PageData page = getRepositoryService().getPage(nodeName);
-		final ResourceData resourceData = getRepositoryService()
-				.getContentResource(page, id);
-		log.debug("retrieved Resource data. " + resourceData);
-		final LinkData linkData = createView(resourceData);
-		if (!StringUtils.isEmpty(resourceData.getUrl())) {
-			ContentSharedResource.registerResource(
-					(WebApplication) getApplication(), linkData,
-					resourceData.getUrl(), getRepositoryService());
-		}
+    public ContentLinkPanel(final String id, final String nodeName) {
+        super(id);
 
-		final EditableResourceLink editableLink = new EditableResourceLink(
-				"contentLink", linkData) {
-			private static final long serialVersionUID = 1L;
+        log.debug("Editable Link Panel being created for node=" + nodeName + " id=" + id);
 
-			@Override
-			protected void onSubmit() {
-				String mountPath = "";
+        PageData page = getRepositoryService().getPage(nodeName);
+        final ResourceData resourceData = getRepositoryService().getContentResource(page, id);
+        log.debug("retrieved Resource data. " + resourceData);
+        final LinkData linkData = createView(resourceData);
+        if (!StringUtils.isEmpty(resourceData.getUrl())) {
+            ContentSharedResource.registerResource((WebApplication) getApplication(), linkData, resourceData.getUrl(),
+                    getRepositoryService());
+        }
 
-				IFileUploadProcess process = new ContentLinkUploadProcess(
-						getRepositoryService(), linkData);
+        final EditableResourceLink editableLink = new EditableResourceLink("contentLink", linkData) {
+            private static final long serialVersionUID = 1L;
 
-				if (linkData.getFileUpload() != null) {
-					mountPath = ContentSharedResource.registerResource(
-							(WebApplication) getApplication(), linkData,
-							getRepositoryService());
-					linkData.setUrl(mountPath);
+            @Override
+            protected void onSubmit() {
+                log.trace("onSubmit called");
+                String mountPath = "";
 
-					// Start separate thread so upload can continue if user
-					// navigates away
-					// final SubmitThread it = new SubmitThread(getAppSession(),
-					// linkData, getRepositoryService());
-					// it.start();
+                IFileUploadProcess process = new ContentLinkUploadProcess(getRepositoryService(), linkData);
 
-					IFileUploadInfo uploadInfo = (IFileUploadInfo) getSession();
+                if (linkData.getFileUpload() != null) {
+                    mountPath = ContentSharedResource.registerResource((WebApplication) getApplication(), linkData,
+                            getRepositoryService());
+                    linkData.setUrl(mountPath);
 
-					final Thread submit = new FileUploadThread(uploadInfo,
-							linkData.fileUpload, process, linkData.id);
-					submit.start();
+                    // Start separate thread so upload can continue if user
+                    // navigates away
+                    // final SubmitThread it = new SubmitThread(getAppSession(),
+                    // linkData, getRepositoryService());
+                    // it.start();
 
-				} else {
-					log.debug("onSubmit - setting InputStream to null");
-					process.execute(null, "");
-				}
-			}
+                    IFileUploadInfo uploadInfo = (IFileUploadInfo) getSession();
 
-			@Override
-			protected void onBeforeRender() {
-				if (((IContentAdmin) getSession()).isLoggedIn()) {
-					setEditMode(true);
-				} else {
-					setEditMode(false);
-				}
-				super.onBeforeRender();
-			}
+                    final Thread submit = new FileUploadThread(uploadInfo, linkData.fileUpload, process, linkData.id);
+                    submit.start();
 
-		};
-		editableLink.add(new AttributeModifier("class",
-				new AbstractReadOnlyModel<String>() {
-					private static final long serialVersionUID = -3131361470864509715L;
+                } else {
+                    log.debug("onSubmit - setting InputStream to null");
+                    process.execute(null, "");
+                }
+            }
 
-					@Override
-					public String getObject() {
-						String cssClass;
-						if (((IContentAdmin) getSession()).isLoggedIn()) {
-							cssClass = "contentLinkEdit";
-						} else {
-							cssClass = "contentLink";
-						}
-						return cssClass;
-					}
-				}));
-		add(editableLink);
-	}
+            @Override
+            protected void onBeforeRender() {
+                if (((IContentAdmin) getSession()).isLoggedIn()) {
+                    setEditMode(true);
+                } else {
+                    setEditMode(false);
+                }
+                super.onBeforeRender();
+            }
 
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		response.renderCSSReference(Css.CSS_FORM);
-	}
+        };
+        editableLink.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
+            private static final long serialVersionUID = -3131361470864509715L;
 
-	private LinkData createView(final ResourceData resourceData) {
-		LinkData linkData = new LinkData();
-		linkData.setId(resourceData.getId());
-		linkData.setName(resourceData.getUrlDisplay());
-		linkData.setTitle(resourceData.getUrlTitle());
-		LinkResourceType type = LinkResourceType.getByMimeType(resourceData.getType());
-		//TODO handle null here
-		linkData.setResourceType(type);
-		linkData.setHideLink(resourceData.getHideLink());
-		linkData.setUrl(resourceData.getUrl());
-		return linkData;
-	}
+            @Override
+            public String getObject() {
+                String cssClass;
+                if (((IContentAdmin) getSession()).isLoggedIn()) {
+                    cssClass = "contentLinkEdit";
+                } else {
+                    cssClass = "contentLink";
+                }
+                return cssClass;
+            }
+        }));
+        add(editableLink);
+    }
 
-	private class ContentLinkUploadProcess implements IFileUploadProcess {
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference(Css.CSS_FORM);
+    }
 
-		final private IDataService service;
-		final private LinkData linkData;
+    private LinkData createView(final ResourceData resourceData) {
+        LinkData linkData = new LinkData();
+        linkData.setId(resourceData.getId());
+        linkData.setName(resourceData.getUrlDisplay());
+        linkData.setTitle(resourceData.getUrlTitle());
+        LinkResourceType type = LinkResourceType.getByMimeType(resourceData.getType());
+        // TODO handle null here
+        linkData.setResourceType(type);
+        linkData.setHideLink(resourceData.getHideLink());
+        linkData.setUrl(resourceData.getUrl());
+        return linkData;
+    }
 
-		public ContentLinkUploadProcess(IDataService service, LinkData linkData) {
-			this.service = service;
-			this.linkData = linkData;
-		}
+    private class ContentLinkUploadProcess implements IFileUploadProcess {
 
-		public void execute(InputStream inputStream, String fileName) {
+        final private IDataService service;
+        final private LinkData linkData;
 
-			ResourceData resourceData = service.getContentResource(linkData
-					.getId());
-			resourceData.setUrl(linkData.getUrl());
+        public ContentLinkUploadProcess(IDataService service, LinkData linkData) {
+            this.service = service;
+            this.linkData = linkData;
+        }
 
-			resourceData.setInputStream(inputStream);
-			if (StringUtils.isEmpty(linkData.getName())) {
-				linkData.setName(fileName);
-			}
+        public void execute(InputStream inputStream, String fileName) {
 
-			resourceData.setUrlDisplay(linkData.getName());
-			resourceData.setUrlTitle(linkData.getTitle());
-			resourceData.setType(linkData.getResourceType().mimeType);
-			resourceData.setHideLink(linkData.getHideLink());
+            ResourceData resourceData = service.getContentResource(linkData.getId());
+            resourceData.setUrl(linkData.getUrl());
 
-			service.saveContentResource(resourceData);
+            resourceData.setInputStream(inputStream);
+            if (StringUtils.isEmpty(linkData.getName())) {
+                linkData.setName(fileName);
+            }
 
-		}
+            resourceData.setUrlDisplay(linkData.getName());
+            resourceData.setUrlTitle(linkData.getTitle());
+            resourceData.setType(linkData.getResourceType().mimeType);
+            resourceData.setHideLink(linkData.getHideLink());
 
-	}
+            service.saveContentResource(resourceData);
+
+        }
+
+    }
 
 }
