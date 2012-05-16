@@ -5,12 +5,15 @@ if (typeof(Utils) == "undefined")
 //Extract fileName and suffix from a full path and name.
 //allowed example : doc|pdf|odt|htm|shtml|php	
 xtractFile : function(data, allowed){
-	data = data.replace(/^\s|\s$/g, ""); //trims string
-
-	if (data.match(/([^\/\\]+)\.(doc|pdf|odt|htm|shtml|php)$/i) )
-		return {filename: RegExp.$1, ext: RegExp.$2};
-	else
-		return {filename: "invalid", ext: null};
+	var f = data.replace(/^.*[\\\/]/, '');
+	console.log(f);
+	var suffix = f.split('.').pop();
+	var expr = RegExp("^(" + allowed + ")$","i");
+	if (suffix.match(expr) ) {
+		return {filename: f.substring(0, f.lastIndexOf('.' + suffix)) , ext: suffix};
+	} else {
+		return {filename: data, ext: ""};
+	}
 }
 ,
 position : function(e){
@@ -41,6 +44,12 @@ removeClassName : function(element, className) {
 ,
 strip : function() {
      return this.replace(/^\s+/, '').replace(/\s+$/, '');
+}
+,
+setTextContent : function(element, text) {
+    while (element.firstChild!==null)
+        element.removeChild(element.firstChild); // remove all existing content
+    element.appendChild(document.createTextNode(text));
 }
 };
 

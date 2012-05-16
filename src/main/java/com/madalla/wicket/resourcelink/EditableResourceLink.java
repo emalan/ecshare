@@ -22,10 +22,11 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -34,10 +35,13 @@ import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.lang.Bytes;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.validator.AbstractValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.webapp.upload.IFileUploadInfo;
 import com.madalla.webapp.upload.IFileUploadStatus;
 import com.madalla.wicket.configure.AjaxConfigureIcon;
@@ -135,32 +139,45 @@ public class EditableResourceLink extends Panel {
         public ResourceForm(final String id, final IModel<ILinkData> model) {
             super(id, model);
 
-            final Component name = new TextField<String>("editor", new PropertyModel<String>(model.getObject(), "name"))
+            final Component name = new RequiredTextField<String>("editor", new PropertyModel<String>(model.getObject(), "name"))
                     .setOutputMarkupId(true);
+            name.add(new AbstractValidator<String>() {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                protected void onValidate(IValidatable<String> validatable) {
+                    if (validatable.getValue().equals("invalid")) {
+                        error(validatable, "error.invalidFile");
+                    }
+                }
+                
+            });
+            add(name);
             
             add(new TextField<String>("title-editor", new PropertyModel<String>(model.getObject(), "title"))
                     .setOutputMarkupId(true));
             
             add(new CheckBox("hide-link", new PropertyModel<Boolean>(model.getObject(), "hideLink")));
 
-            // Wicket file upload supports multiple files - we are only
-            // supporting one file here.
-            final List<FileUpload> fileUploads = new ArrayList<FileUpload>();
-            fileUploads.add(model.getObject().getFileUpload());
-            final Component upload = newFileUpload(this, "file-upload", new ListModel<FileUpload>(fileUploads));
+            final Component upload = newFileUpload(this, "file-upload", model.getObject().getFileUpload());
             upload.setOutputMarkupId(true);
+            add(upload);
+            
             final Component choice = newDropDownChoice(this, "type-select", new PropertyModel<String>(model.getObject(),
                     "resourceType"), Arrays.asList(LinkResourceType.values()));
-
-            // AjaxBehaviour to update fields once file is selected
-            upload.add(new FileUploadBehavior("onchange", name, choice));
-            add(name);
-            add(upload);
             add(choice);
-            
-            final Component uploadFeedback = new ComponentFeedbackPanel("uploadFeedback", this);
+
+            final Component uploadFeedback = new FeedbackPanel("uploadFeedback");
             uploadFeedback.setOutputMarkupId(true);
             add(uploadFeedback);
+            
+            final Label selected = new Label("selected");
+            selected.setOutputMarkupId(true);
+            add(selected);
+
+            // Ajax process file selection
+            upload.add(new FileUploadBehavior("onchange", name, choice, selected));
+            
 
 
             add(new IndicatingAjaxButton("submit") {
@@ -219,11 +236,13 @@ public class EditableResourceLink extends Panel {
 
         final Component name;
         final Component choice;
+        final Component selected;
 
-        public FileUploadBehavior(final String event, final Component name, final Component choice) {
+        public FileUploadBehavior(final String event, final Component name, final Component choice, final Label selected) {
             super(event);
             this.name = name;
             this.choice = choice;
+            this.selected = selected;
         }
 
         @Override
@@ -233,11 +252,11 @@ public class EditableResourceLink extends Panel {
 
                 public CharSequence decorateScript(Component component, CharSequence script) {
                     StringBuffer sb = new StringBuffer("var v = Wicket.$(" + getComponent().getMarkupId() + ").value;");
-                    sb.append("console.log(v);");
                     String suffixes = LinkResourceType.getResourceTypeSuffixes("|"); // doc|pdf|htm
                     sb.append("var file = Utils.xtractFile(v,'" + suffixes + "');");
-                    sb.append("console.log(file);");
-                    sb.append("Wicket.$(" + name.getMarkupId() + ").value = file.filename == 'invalid' ? file.filename : file.filename + '.' + file.ext ;");
+                    sb.append("var display = file.filename + '.' + file.ext;");
+                    sb.append("Utils.setTextContent(Wicket.$('" + selected.getMarkupId() + "'),display) ;");
+                    sb.append("Wicket.$(" + name.getMarkupId() + ").value = display ;");
                     sb.append("Wicket.$(" + choice.getMarkupId() + ").value = Utils.translateSuffix(file.ext);");
                     return sb.toString() + script;
                 }
@@ -265,6 +284,8 @@ public class EditableResourceLink extends Panel {
         @Override
         public void renderHead(Component component, IHeaderResponse response) {
             response.renderJavaScriptReference(SCRIPT_UTILS);
+            
+            //translate the suffix to a value in dropdown if possible
             StringBuffer sb = new StringBuffer();
             sb.append("Utils.translateSuffix = function(suffix){");
             for (LinkResourceType type : LinkResourceType.values()) {
@@ -529,7 +550,8 @@ public class EditableResourceLink extends Panel {
         @SuppressWarnings("rawtypes")   
         final DropDownChoice choice = new DropDownChoice(componentId, model, choices, renderer);
         choice.setOutputMarkupId(true);
-        choice.setNullValid(true);
+        choice.setNullValid(false);
+        choice.setRequired(true);
         return choice;
     }
 
@@ -538,12 +560,16 @@ public class EditableResourceLink extends Panel {
      * 
      * @param parent
      * @param componentId
-     * @param model
+     * @param fileUpload
      * @return
      */
     protected FormComponent<List<FileUpload>> newFileUpload(MarkupContainer parent, String componentId,
-            IModel<List<FileUpload>> model) {
-        final FileUploadField upload = new FileUploadField(componentId, model) {
+            FileUpload fileUpload) {
+        
+        final List<FileUpload> fileUploads = new ArrayList<FileUpload>();
+        fileUploads.add(fileUpload);
+        
+        final FileUploadField upload = new FileUploadField(componentId, new ListModel<FileUpload>(fileUploads)) {
 
             private static final long serialVersionUID = 1L;
 
