@@ -5,7 +5,6 @@ import java.io.InputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.wicket.markup.html.form.upload.FileUpload;
 
 /**
  * Thread to perform the file upload.
@@ -21,7 +20,7 @@ public class FileUploadThread  extends Thread{
 	private final IFileUploadProcess process;
 	private final String id;
 	private final FileUploadGroup group;
-	private transient final FileUpload fileUpload;
+	private transient final InputStream inputStream;
 
 	/**
 	 * @param uploadInfo
@@ -29,8 +28,8 @@ public class FileUploadThread  extends Thread{
 	 * @param process
 	 * @param id
 	 */
-	public FileUploadThread(IFileUploadInfo uploadInfo, FileUpload fileUpload, IFileUploadProcess process, final String id) {
-		this(uploadInfo, fileUpload, process, id, null);
+	public FileUploadThread(IFileUploadInfo uploadInfo, InputStream inputStream, IFileUploadProcess process, final String id) {
+		this(uploadInfo, inputStream, process, id, null);
 	}
 	
 	/**
@@ -42,12 +41,12 @@ public class FileUploadThread  extends Thread{
 	 * @param id - The id to be assigned to the uploaded stream.
 	 * @param group - 
 	 */
-	public FileUploadThread(IFileUploadInfo uploadInfo,FileUpload fileUpload, IFileUploadProcess process, final String id, FileUploadGroup group) {
+	public FileUploadThread(IFileUploadInfo uploadInfo, InputStream inputStream, IFileUploadProcess process, final String id, FileUploadGroup group) {
 		this.uploadInfo = uploadInfo;
 		this.process = process;
 		this.id = id;
 		this.group = group;
-		this.fileUpload = fileUpload;
+		this.inputStream = inputStream;
 	}
 
 	@Override
@@ -55,16 +54,14 @@ public class FileUploadThread  extends Thread{
 
 		try {
 
-			String fileName = fileUpload.getClientFileName();
-
 			//Check for existing process
 			IFileUploadStatus status = uploadInfo.getFileUploadStatus(id);
 			if (status != null && status.isUploading()){
-				log.warn("Cannot upload submitted file. There is an existing process with the same name that is uploading. Name: " + fileName);
+				log.warn("Cannot upload submitted file. There is an existing process with the same name that is uploading. Name: " + id);
 				return;
 			}
 
-			log.debug("Start processing: " + fileName);
+			log.debug("Start processing: " + id);
 
 			FileUploadStatus uploadStatus = new FileUploadStatus();
 			if (group == null){
@@ -73,11 +70,10 @@ public class FileUploadThread  extends Thread{
 				uploadInfo.setFileUploadStatus(id, group, uploadStatus);
 			}
 
-        	InputStream inputStream = fileUpload.getInputStream();
         	if (inputStream == null){
         		log.error("file upload - Input resource invalid.");
         	} else {
-        		process.execute(inputStream, fileName);
+        		process.execute(inputStream, id);
         	}
 
         	// Sleep to simulate time-consuming work
@@ -89,11 +85,14 @@ public class FileUploadThread  extends Thread{
 
 			uploadStatus.uploading = false;
 
-			log.debug("Done processing: " + fileName);
-		} catch (IOException e) {
-		//	session.error(e.getMessage());
+			log.debug("Done processing: " + id);
+			
 		} finally {
-			fileUpload.closeStreams();
+			try {
+                inputStream.close();
+            } catch (IOException e) {
+                // nothing to do here
+            }
 
 		}
 	}

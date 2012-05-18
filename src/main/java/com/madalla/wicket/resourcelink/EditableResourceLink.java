@@ -41,12 +41,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.webapp.upload.IFileUploadInfo;
 import com.madalla.webapp.upload.IFileUploadStatus;
 import com.madalla.wicket.configure.AjaxConfigureIcon;
 
-public class EditableResourceLink extends Panel {
+public abstract class EditableResourceLink extends Panel {
     private static final long serialVersionUID = 1L;
     private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(5000);
     private static final Logger log = LoggerFactory.getLogger(EditableResourceLink.class);
@@ -95,9 +94,9 @@ public class EditableResourceLink extends Panel {
 
     public enum LinkResourceType {
 
-        TYPE_PDF("application/pdf", "pdf", "Adobe PDF"), TYPE_DOC("application/msword", "doc", "Word document");
-        // TYPE_ODT("application/vnd.oasis.opendocument.text", "odt",
-        // "ODT document");
+        TYPE_PDF("application/pdf", "pdf", "Adobe PDF"), 
+        TYPE_DOC("application/msword", "doc", "Word document");
+        // TYPE_ODT("application/vnd.oasis.opendocument.text", "odt", "ODT document");
 
         public final String mimeType; // Mime Type
         public final String suffix; // File suffix
@@ -139,7 +138,10 @@ public class EditableResourceLink extends Panel {
         public ResourceForm(final String id, final IModel<ILinkData> model) {
             super(id, model);
 
-            final Component name = new RequiredTextField<String>("editor", new PropertyModel<String>(model.getObject(), "name"))
+            final Component upload = newFileUpload(this, "fileUpload", model.getObject().getFileUpload());
+            add(upload);
+
+            final Component name = new RequiredTextField<String>("fileName", new PropertyModel<String>(model.getObject(), "name"))
                     .setOutputMarkupId(true);
             name.add(new AbstractValidator<String>() {
                 private static final long serialVersionUID = 1L;
@@ -154,21 +156,18 @@ public class EditableResourceLink extends Panel {
             });
             add(name);
             
-            add(new TextField<String>("title-editor", new PropertyModel<String>(model.getObject(), "title"))
+            add(new TextField<String>("fileTitle", new PropertyModel<String>(model.getObject(), "title"))
                     .setOutputMarkupId(true));
             
-            add(new CheckBox("hide-link", new PropertyModel<Boolean>(model.getObject(), "hideLink")));
+            add(new CheckBox("hideLink", new PropertyModel<Boolean>(model.getObject(), "hideLink")));
 
-            final Component upload = newFileUpload(this, "file-upload", model.getObject().getFileUpload());
-            upload.setOutputMarkupId(true);
-            add(upload);
-            
-            final Component choice = newDropDownChoice(this, "type-select", new PropertyModel<String>(model.getObject(),
+            final Component choice = newDropDownChoice(this, "fileType", new PropertyModel<String>(model.getObject(),
                     "resourceType"), Arrays.asList(LinkResourceType.values()));
             add(choice);
 
-            final Component uploadFeedback = new FeedbackPanel("uploadFeedback");
+            final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
             uploadFeedback.setOutputMarkupId(true);
+            uploadFeedback.setMaxMessages(1);
             add(uploadFeedback);
             
             final Label selected = new Label("selected");
@@ -177,8 +176,6 @@ public class EditableResourceLink extends Panel {
 
             // Ajax process file selection
             upload.add(new FileUploadBehavior("onchange", name, choice, selected));
-            
-
 
             add(new IndicatingAjaxButton("submit") {
                 private static final long serialVersionUID = 1L;
@@ -201,26 +198,39 @@ public class EditableResourceLink extends Panel {
         protected void onConfigure() {
             setOutputMarkupId(true);
             setMaxSize(MAX_FILE_SIZE);
+            setMultiPart(true);
         }
 
         @Override
         protected void onSubmit() {
-            log.trace("onSubmit - " + getModelObject());
-            if (isFileUploading(getId()) != null && isFileUploading(getId())) {
+            ILinkData modelObj = getModelObject();
+            log.trace("onSubmit - " + modelObj);
+            if (isFileUploading(getId())) {
                 log.warn("File Upload cancelled. Session is busy uploading file.");
+                error(getString("error.fileUploading"));
                 return;
             }
-            if (getModelObject().getFileUpload() != null) {
-                if (!validateFile(getModelObject().getFileUpload().getClientFileName())) {
-                    getModelObject().setStatus("Selected file invalid.");
+            final FileUpload fileUpload = modelObj.getFileUpload();
+            if (fileUpload == null) {
+                error(getString("error.fail"));
+                return;
+            } else {
+                if (!validateFile(fileUpload.getClientFileName())) {
+                    modelObj.setStatus("Selected file invalid.");
+                    error(getString("error.invalidFile"));
                     return;
                 }
+                //TODO get Resource
+                
             }
-            //EditableResourceLink.this.onSubmit();
-
+            
+            info(getString("info.submit"));
+            processSubmit(modelObj);
         }
         
         abstract void refreshDisplay(AjaxRequestTarget target);
+        
+        abstract void processSubmit(ILinkData iLinkData);
 
     }
 
@@ -356,11 +366,10 @@ public class EditableResourceLink extends Panel {
     }
 
     /**
-     * Lazy initialization of the label and editor components and set tempModel
-     * to null.
+     * Lazy initialization of the Form 
      * 
      * @param model
-     *            The model for the label and editor
+     *            The model for the form components
      */
     private void initLabelForm(IModel<ILinkData> model) {
 
@@ -368,6 +377,7 @@ public class EditableResourceLink extends Panel {
         add(displayArea);
 
         // display : link and feedback
+        // TODO delete status model use object 
         final StatusModel statusModel = new StatusModel(data.getId());
         final Component statusLabel = new Label("uploadstatus", statusModel);
         statusLabel.setOutputMarkupId(true);
@@ -385,14 +395,19 @@ public class EditableResourceLink extends Panel {
 
             @Override
             void refreshDisplay(AjaxRequestTarget target) {
-                // TODO Auto-generated method stub
+                // any display that needs updating on submit
                 
+            }
+
+            @Override
+            void processSubmit(ILinkData iLinkData) {
+                EditableResourceLink.this.processSubmit(iLinkData);
             }
 
         };
         formDiv.add(resourceForm);
 
-        add(new AjaxConfigureIcon("configureIcon", displayArea, formDiv, 17));
+        add(new AjaxConfigureIcon("configureIcon", displayArea, formDiv, 18));
 
     }
 
@@ -455,7 +470,7 @@ public class EditableResourceLink extends Panel {
                 }
 
                 if (StringUtils.isEmpty(data.getUrl())
-                        || (isFileUploading(data.getId()) != null && isFileUploading(data.getId()))) {
+                        || (isFileUploading(data.getId()))) {
                     setEnabled(false);
                 } else {
                     setEnabled(true);
@@ -579,6 +594,7 @@ public class EditableResourceLink extends Panel {
             }
 
         };
+        upload.setRequired(true);
         upload.setOutputMarkupId(true);
         return upload;
     }
@@ -612,21 +628,6 @@ public class EditableResourceLink extends Panel {
     }
 
     /**
-     * Invoked when the label is in edit mode, received a new input, but that
-     * input didn't validate
-     * 
-     * @param target
-     *            the ajax request target
-     */
-    protected void onError(AjaxRequestTarget target) {
-        // form is safe
-    }
-
-    protected void onSubmit() {
-        // override
-    }
-
-    /**
      * Override this to display a different value when the model object is null.
      * Default is <code>...</code>
      * 
@@ -657,22 +658,22 @@ public class EditableResourceLink extends Panel {
         super.onModelChanging();
     }
 
-    public Boolean isFileUploading(String id) {
-        if (StringUtils.isEmpty(id)) {
-            return null;
-        }
-        IFileUploadStatus status = ((IFileUploadInfo) getSession()).getFileUploadStatus(id);
-        if (status == null) {
-            return null;
-        } else if (status.isUploading()) {
-            return true;
-        } else {
-            return false;
-        }
+    public boolean isFileUploading(String id) {
+        IFileUploadStatus status = getFileUploadInfo().getFileUploadStatus(id);
+        return (status != null && status.isUploading());
     }
 
     public void setEditMode(boolean editMode) {
         this.editMode = editMode;
     }
+    
+    protected abstract void processSubmit(ILinkData data);
+
+    /**
+     * Should return the information about upload. Typically stored in session.
+     * 
+     * @return
+     */
+    protected abstract IFileUploadInfo getFileUploadInfo();
 
 }

@@ -22,6 +22,8 @@
 	    	float: left;
 	    	clear: both;
 	    	padding: 4px;  
+	    	width: 25em;
+	    	max-width: 27em;
 	    }
 	    
 	    div#resourceLink {
@@ -38,16 +40,24 @@
 	    	width: 3em;
 	    }
 	    
+	    form.resourceForm div input{
+	       width: 15em;
+	    }
+	    
+	    form.resourceForm div input[type="checkbox"]{
+	       width: 2em;
+	    }
+	    
 	    form.resourceForm div.checkbox label{
 	    	width: 5em;
 	    }
 	    
 	    form.resourceForm p.info {
-	    	width: 19em;
+	    	width: 25em;
 	    }
 	    
 	    form.resourceForm .buttonwrapper {
-	       margin-left: 5em;
+	       margin-left: 1em;
 	    }
 	    
 		div.configure span{
@@ -75,25 +85,25 @@
 	  		  <fieldset>
 				<p class="info"><wicket:message key="info.upload">[label]</wicket:message></p>
 		
-				<input type="file" wicket:id="file-upload" /><br/>
+				<input type="file" wicket:id="fileUpload" /><br/>
 				<div>
 				    <span><wicket:message key="label.selected">[label]</wicket:message><span wicket:id="selected">[label]</span></span>
 				</div>
 				<div>
 					<label><wicket:message key="label.type">[label]</wicket:message></label>
-					<select wicket:id="type-select"></select>
+					<select wicket:id="fileType"></select>
 				</div>
 				<div>
 					<label><wicket:message key="label.name">[label]</wicket:message></label>
-					<input type="text" wicket:id="editor"/>
+					<input type="text" wicket:id="fileName"/>
 				</div>
 				<div>
 					<label><wicket:message key="label.title">[label]</wicket:message></label>
-					<input type="text" wicket:id="title-editor"/>
+					<input type="text" wicket:id="fileTitle"/>
 				</div>
 				<div class="checkbox">
 					<label><wicket:message key="label.hide">[label]</wicket:message></label>
-					<input type="checkbox" wicket:id="hide-link"/>
+					<input type="checkbox" wicket:id="hideLink"/>
 				</div>
 			  </fieldset>	
 		      <div class="submit">

@@ -165,16 +165,26 @@ public class ContentLinkPanel extends CmsPanel {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onSubmit() {
+            protected void onBeforeRender() {
+                if (((IContentAdmin) getSession()).isLoggedIn()) {
+                    setEditMode(true);
+                } else {
+                    setEditMode(false);
+                }
+                super.onBeforeRender();
+            }
+
+            @Override
+            protected void processSubmit(ILinkData data) {
                 log.trace("onSubmit called");
                 String mountPath = "";
 
-                IFileUploadProcess process = new ContentLinkUploadProcess(getRepositoryService(), linkData);
+                IFileUploadProcess process = new ContentLinkUploadProcess(getRepositoryService(), data);
 
-                if (linkData.getFileUpload() != null) {
-                    mountPath = ContentSharedResource.registerResource((WebApplication) getApplication(), linkData,
+                if (data.getFileUpload() != null) {
+                    mountPath = ContentSharedResource.registerResource((WebApplication) getApplication(), data,
                             getRepositoryService());
-                    linkData.setUrl(mountPath);
+                    data.setUrl(mountPath);
 
                     // Start separate thread so upload can continue if user
                     // navigates away
@@ -184,7 +194,7 @@ public class ContentLinkPanel extends CmsPanel {
 
                     IFileUploadInfo uploadInfo = (IFileUploadInfo) getSession();
 
-                    final Thread submit = new FileUploadThread(uploadInfo, linkData.fileUpload, process, linkData.id);
+                    final Thread submit = new FileUploadThread(uploadInfo, data.getFileUpload(), process, data.getId());
                     submit.start();
 
                 } else {
@@ -194,13 +204,8 @@ public class ContentLinkPanel extends CmsPanel {
             }
 
             @Override
-            protected void onBeforeRender() {
-                if (((IContentAdmin) getSession()).isLoggedIn()) {
-                    setEditMode(true);
-                } else {
-                    setEditMode(false);
-                }
-                super.onBeforeRender();
+            protected IFileUploadInfo getFileUploadInfo() {
+                return (IFileUploadInfo) getSession();
             }
 
         };
@@ -242,21 +247,21 @@ public class ContentLinkPanel extends CmsPanel {
     private class ContentLinkUploadProcess implements IFileUploadProcess {
 
         final private IDataService service;
-        final private LinkData linkData;
+        final private ILinkData linkData;
 
-        public ContentLinkUploadProcess(IDataService service, LinkData linkData) {
+        public ContentLinkUploadProcess(IDataService service, ILinkData linkData) {
             this.service = service;
             this.linkData = linkData;
         }
 
-        public void execute(InputStream inputStream, String fileName) {
+        public void execute(InputStream inputStream, String id) {
 
             ResourceData resourceData = service.getContentResource(linkData.getId());
             resourceData.setUrl(linkData.getUrl());
 
             resourceData.setInputStream(inputStream);
             if (StringUtils.isEmpty(linkData.getName())) {
-                linkData.setName(fileName);
+                linkData.setName(id);
             }
 
             resourceData.setUrlDisplay(linkData.getName());
