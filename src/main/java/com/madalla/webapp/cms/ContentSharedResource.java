@@ -12,8 +12,9 @@ import org.emalan.cms.IDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.madalla.wicket.resourcelink.EditableResourceLink.ILinkData;
-import com.madalla.wicket.resourcelink.EditableResourceLink.LinkResourceType;
+import com.madalla.wicket.fileupload.FileUploadTypeType;
+import com.madalla.wicket.fileupload.ILinkData;
+
 
 /**
  * Utility methods for managing the mounting of resources, so that they can have URL's that the browser
@@ -32,18 +33,12 @@ public class ContentSharedResource {
     }
 
     public static String registerResource(WebApplication application, ILinkData data, IDataService service){
-        if (data.getFileUpload() == null){
-            return "";
-        }
-        String mountPath = RESOURCE_PATH + data.getFileUpload().getClientFileName();
+        String mountPath = RESOURCE_PATH + data.getFileName();
         mountResource(application, data.getId(), data.getResourceType(), mountPath, service);
         return mountPath;
     }
 
-    private static void mountResource(WebApplication application, String id, LinkResourceType type, String path, IDataService service){
-    	
-    	
-    	
+    private static void mountResource(WebApplication application, String id, FileUploadTypeType type, String path, IDataService service){
     	
         SharedResources sharedResources = application.getSharedResources();
         IResource resource = createDynamicResource(id, type, service);
@@ -74,7 +69,7 @@ public class ContentSharedResource {
 //        application.mountResource(path, reference);
     }
 
-    private static IResource createDynamicResource(final String id, final LinkResourceType type, final IDataService service){
+    private static IResource createDynamicResource(final String id, final FileUploadTypeType type, final IDataService service){
 
     	return new ByteArrayResource(type.mimeType) {
 			private static final long serialVersionUID = 1L;

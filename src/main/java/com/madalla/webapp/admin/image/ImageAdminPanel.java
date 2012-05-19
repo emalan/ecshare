@@ -120,7 +120,7 @@ public class ImageAdminPanel extends CmsPanel{
                 	IFileUploadInfo uploadInfo = (IFileUploadInfo)getSession();
                 	IFileUploadProcess process = new ImageUploadProcess(getRepositoryService());
 
-                	final Thread submit = new FileUploadThread(uploadInfo, fileUpload, process,imageName, GROUP);
+                	final Thread submit = new FileUploadThread(uploadInfo, fileUpload.getInputStream(), process,imageName, GROUP);
                 	submit.start();
 
                 	log.info("finished submitting file for uploading: "+ imageName);

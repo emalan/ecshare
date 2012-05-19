@@ -1,9 +1,76 @@
 <wicket:head>
-    <style type="text/css">
-        contentLink input {color: inherit; font: inherit;}
-        contentLinkEdit input {color: inherit; font: inherit;}
+	<style type="text/css">
+
+contentLink input {
+    color: inherit;
+    font: inherit;
+}
+
+contentLinkEdit input {
+    color: inherit;
+    font: inherit;
+}    
+
+        div.configure span{
+            visibility: hidden;
+        }
+
+        .contentLink .configure{
+           display: none;
+        }
+        .contentLinkEdit .configure {
+           display: inline;
+        }
+        
+        div.editing .displayArea {
+            display: none;
+        }
+    
+        div.resourceFormDiv {
+            position: absolute;
+            background-color: gainsboro;
+            border: thin solid darkgray;
+        }
+        form.resourceForm {
+            float: left;
+            clear: both;
+            padding: 4px;  
+            width: 25em;
+            max-width: 27em;
+        }
+        form.resourceForm div label{
+            width: 3em;
+        }
+        
+        form.resourceForm div input{
+           width: 15em;
+        }
+        
+        form.resourceForm div input[type="checkbox"]{
+           width: 2em;
+        }
+        
+        form.resourceForm div.checkbox label{
+            width: 5em;
+        }
+        
+        form.resourceForm p.info {
+            width: 25em;
+        }
+        
+        form.resourceForm .buttonwrapper {
+           margin-left: 1em;
+        }
+        
+
     </style>
 </wicket:head>
 <wicket:panel>
-		<div class="contentLink" wicket:id="contentLink"></div>
+	<div class="contentLink" >
+	    <div wicket:id="configureIcon" class="configure">
+            <span>Edit</span>
+        </div>  
+		<span wicket:id="uploadLink">[label]</span> 
+		<span style="display:none; overflow: hidden;" wicket:id="fileUpload">[label]</span>
+	</div>
 </wicket:panel>
