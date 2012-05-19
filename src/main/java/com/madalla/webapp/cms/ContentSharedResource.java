@@ -3,10 +3,12 @@ package com.madalla.webapp.cms;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.SharedResources;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.io.IOUtils;
 import org.emalan.cms.IDataService;
 import org.slf4j.Logger;
@@ -41,32 +43,30 @@ public class ContentSharedResource {
     private static void mountResource(WebApplication application, String id, FileUploadTypeType type, String path, IDataService service){
     	
         SharedResources sharedResources = application.getSharedResources();
-        IResource resource = createDynamicResource(id, type, service);
+        final IResource resource = createDynamicResource(id, type, service);
         
         log.error("TODO - load resource");
         
-        //TODO load one shared resource and use parameter to load image.
+        //remove existing
+        ResourceReference existing = sharedResources.get(Application.class, id, null, null, null, false);
+        if (existing != null) {
+            sharedResources.remove(existing.getKey());
+        }
         
-//        ResourceReference resourceReference = new ResourceReference(id);
-//        
-//        ResourceReference existing = sharedResources.get(Application.class, id, null, null, null, false);
-//        sharedResources.remove(existing.)
-//        
-//        add(Application.class, name, null, null, null, resource);
-//        
-//        sharedResources.remove(key);
-//        
-//        sharedResources.add(name, resource);
-//        
-//        
-//        ResourceReference resourceReference = new ResourceReference(id);
-//        //remove previous
-//        sharedResources.remove(id);
-//        application.unmount(path);
-//
-//        sharedResources.add(Application.class, id, null, null, createDynamicResource(id, resourceType, service));
-//        application.mountResource(path, resourceReference.getSharedResourceKey());
-//        application.mountResource(path, reference);
+        sharedResources.add(Application.class, id, null, null, null, resource);
+        
+        application.unmount(path);
+
+        ResourceReference resourceReference = new ResourceReference(Application.class, id){
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public IResource getResource() {
+                return resource;
+            }
+            
+        };
+        application.mountResource(path, resourceReference);
     }
 
     private static IResource createDynamicResource(final String id, final FileUploadTypeType type, final IDataService service){
