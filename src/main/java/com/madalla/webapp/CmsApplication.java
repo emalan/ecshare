@@ -216,7 +216,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     	MetaDataRoleAuthorizationStrategy.authorize(ContentEntryPanel.class, "USER");
     	MetaDataRoleAuthorizationStrategy.authorize(TranslatePanel.class, "USER");
     }
-    //TODO switch https off in development mode or if sertificate not found
+    //TODO switch https off in development mode or if certificate not found
 
     /* (non-Javadoc)
      * @see org.apache.wicket.protocol.http.WebApplication#newRequestCycleProcessor()
@@ -345,7 +345,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 		if ("DEVELOPMENT".equalsIgnoreCase(configType)) {
 			this.configType = RuntimeConfigurationType.DEVELOPMENT;
 		} else {
-			this.configType = RuntimeConfigurationType.DEVELOPMENT;
+			this.configType = RuntimeConfigurationType.DEPLOYMENT;
 		}
 	}
 

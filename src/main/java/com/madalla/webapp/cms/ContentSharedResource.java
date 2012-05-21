@@ -45,8 +45,6 @@ public class ContentSharedResource {
         SharedResources sharedResources = application.getSharedResources();
         final IResource resource = createDynamicResource(id, type, service);
         
-        log.error("TODO - load resource");
-        
         //remove existing
         ResourceReference existing = sharedResources.get(Application.class, id, null, null, null, false);
         if (existing != null) {

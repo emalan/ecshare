@@ -52,7 +52,7 @@
 
 	<bean abstract="true" id="wicketApplicationParent" class="com.madalla.webapp.CmsApplication">
 		<property name="applicationService" ref="applicationService" />
-		<property name="configType" value="env{wicket.configuration}"></property>
+		<property name="configType" value="${wicket.configuration}"></property>
 	</bean>
 
 

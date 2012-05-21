@@ -5,6 +5,13 @@ import java.io.Serializable;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
+/**
+ * Has all the info needed to instantiate the relevant panel
+ * for that menu item.
+ * 
+ * @author Eugene Malan
+ *
+ */
 public class PanelMenuItem implements Serializable{
 	private static final long serialVersionUID = 1L;
 

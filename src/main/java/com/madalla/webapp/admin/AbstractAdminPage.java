@@ -69,6 +69,10 @@ public abstract class AbstractAdminPage extends WebPage{
 
 	}
 
+	/**
+	 * Builds menu list. Each item has all the info needed to switch panels.
+	 * @return
+	 */
 	public List<PanelMenuItem> getAdminMenu() {
 		List<PanelMenuItem> menuList = new ArrayList<PanelMenuItem>();
 		menuList.add(new PanelMenuItem(UserProfilePanel.class, 
