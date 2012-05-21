@@ -29,21 +29,19 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.resource.PackageResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.AbstractValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.madalla.webapp.scripts.JavascriptResources;
+
 public abstract class FileUploadPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
     private static Bytes MAX_FILE_SIZE = Bytes.kilobytes(5000);
     private static final Logger log = LoggerFactory.getLogger(FileUploadPanel.class);
-    public static final ResourceReference SCRIPT_UTILS = new PackageResourceReference(FileUploadPanel.class,
-            "resourcelink.js");
 
     public abstract class ResourceForm extends Form<ILinkData> {
         private static final long serialVersionUID = 1L;
@@ -286,7 +284,7 @@ public abstract class FileUploadPanel extends Panel {
 
         @Override
         public void renderHead(Component component, IHeaderResponse response) {
-            response.renderJavaScriptReference(SCRIPT_UTILS);
+            response.renderJavaScriptReference(JavascriptResources.SCRIPT_UTILS);
 
             // translate the suffix to a value in dropdown if possible
             StringBuffer sb = new StringBuffer();

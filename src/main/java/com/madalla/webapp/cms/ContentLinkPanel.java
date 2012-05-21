@@ -95,9 +95,7 @@ public class ContentLinkPanel extends CmsPanel {
                     getRepositoryService());
         }
         
-        final String fileUploadId = "fileUpload";
-
-        final FileUploadLink uploadLink = new FileUploadLink("uploadLink", fileUploadId, linkData){
+        final FileUploadLink uploadLink = new FileUploadLink("uploadLink", linkData){
 
             private static final long serialVersionUID = 1L;
 
@@ -113,7 +111,7 @@ public class ContentLinkPanel extends CmsPanel {
 
             @Override
             protected boolean isFileUploading() {
-                IFileUploadStatus status = getFileUploadInfo().getFileUploadStatus(fileUploadId);
+                IFileUploadStatus status = getFileUploadInfo().getFileUploadStatus(linkData.getId());
                 return (status != null && status.isUploading());
             }
             
@@ -122,7 +120,7 @@ public class ContentLinkPanel extends CmsPanel {
         
         add(uploadLink);
 
-        FileUploadPanel uploadForm = new FileUploadPanel(fileUploadId, linkData) {
+        FileUploadPanel uploadForm = new FileUploadPanel("fileUpload", linkData) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -138,14 +136,14 @@ public class ContentLinkPanel extends CmsPanel {
 
                 IFileUploadInfo uploadInfo = (IFileUploadInfo) getSession();
 
-                final Thread submit = new FileUploadThread(uploadInfo, data.getInputStream(), process, data.getId());
+                final Thread submit = new FileUploadThread(uploadInfo, data.getInputStream(), process, linkData.getId());
                 submit.start();
 
             }
 
             @Override
             protected boolean isFileUploading() {
-                IFileUploadStatus status = getFileUploadInfo().getFileUploadStatus(fileUploadId);
+                IFileUploadStatus status = getFileUploadInfo().getFileUploadStatus(linkData.getId());
                 return (status != null && status.isUploading());
             }
 

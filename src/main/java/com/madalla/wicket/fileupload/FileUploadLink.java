@@ -24,23 +24,9 @@ public abstract class FileUploadLink extends Panel {
 
     private class StatusModel extends Model<String> {
         private static final long serialVersionUID = 1L;
-        private String id;
-        private String status;
-
-        public void setStatus(String status) {
-            this.status = status;
-        }
-
-        public StatusModel(String id) {
-            this.id = id;
-        }
 
         @Override
         public String getObject() {
-            // log.debug("StatusModel - checking status for id=" + id);
-            if (StringUtils.isNotEmpty(status)) {
-                return status;
-            }
             if (isFileUploading()) {
                 return getString("uploading");
             } else {
@@ -52,7 +38,7 @@ public abstract class FileUploadLink extends Panel {
     private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
     private boolean editMode;
 
-    public FileUploadLink(final String id, final String uploadId, final ILinkData data) {
+    public FileUploadLink(final String id, final ILinkData data) {
         super(id);
 
         if (data == null) {
@@ -62,7 +48,7 @@ public abstract class FileUploadLink extends Panel {
         WebMarkupContainer displayArea = new WebMarkupContainer("fileUploadLink");
         add(displayArea);
 
-        final StatusModel statusModel = new StatusModel(uploadId);
+        final StatusModel statusModel = new StatusModel();
         final Component statusLabel = new Label("uploadstatus", statusModel);
         statusLabel.setOutputMarkupId(true);
         displayArea.add(statusLabel);
@@ -140,31 +126,31 @@ public abstract class FileUploadLink extends Panel {
         add(indicatorAppender);
 
         // Ajax indicator
-//        add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(6)) {
-//
-//            private static final long serialVersionUID = 1L;
-//
-//            @Override
-//            protected void onPostProcessTarget(AjaxRequestTarget target) {
-//                log.trace("onPostProcessTarget");
-//                target.add(statusLabel);
-//                target.add(link);
-//                String indicatorId = getIndicator();
-//                if (isFileUploading()) {
-//                    log.trace("onPostProcessTarget - file uploading");
-//                    target.appendJavaScript("wicketShow('" + indicatorId + "');");
-//                } else {
-//                    log.trace("onPostProcessTarget - file not uploading");
-//                    target.appendJavaScript("wicketHide('" + indicatorId + "');");
-//                }
-//
-//            }
-//
-//            protected String getIndicator() {
-//                return indicatorAppender.getMarkupId();
-//            }
-//
-//        });
+        add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(6)) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void onPostProcessTarget(AjaxRequestTarget target) {
+                log.trace("onPostProcessTarget");
+                target.add(statusLabel);
+                target.add(link);
+                String indicatorId = getIndicator();
+                if (isFileUploading()) {
+                    log.trace("onPostProcessTarget - file uploading");
+                    target.appendJavaScript("wicketShow('" + indicatorId + "');");
+                } else {
+                    log.trace("onPostProcessTarget - file not uploading");
+                    target.appendJavaScript("wicketHide('" + indicatorId + "');");
+                }
+
+            }
+
+            protected String getIndicator() {
+                return indicatorAppender.getMarkupId();
+            }
+
+        });
     }
 
     public void setEditMode(boolean editMode) {

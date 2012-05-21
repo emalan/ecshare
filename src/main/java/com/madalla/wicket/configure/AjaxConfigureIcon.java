@@ -8,11 +8,11 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import com.madalla.webapp.css.Css;
+import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.wicket.animation.AnimationEventBehavior;
 import com.madalla.wicket.animation.AnimatorSubject;
 import com.madalla.wicket.animation.IAnimator;
 import com.madalla.wicket.animation.IAnimatorActions;
-import com.madalla.wicket.resourcelink.EditableResourceLink;
 
 public class AjaxConfigureIcon extends WebMarkupContainer{
 	private static final long serialVersionUID = 1L;
@@ -42,7 +42,7 @@ public class AjaxConfigureIcon extends WebMarkupContainer{
 		}
 
 		public void renderHead(Component component, IHeaderResponse response) {
-			response.renderJavaScriptReference(EditableResourceLink.SCRIPT_UTILS);
+			response.renderJavaScriptReference(JavascriptResources.SCRIPT_UTILS);
 		}
 		
 	}
