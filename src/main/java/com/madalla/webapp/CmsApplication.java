@@ -54,6 +54,7 @@ import com.madalla.webapp.cms.editor.ContentEntryPanel;
 import com.madalla.webapp.cms.editor.TranslatePanel;
 import com.madalla.webapp.user.UserAdminPanel;
 import com.madalla.webapp.user.UserProfilePanel;
+import com.madalla.wicket.mount.I18NBookmarkablePageMapper;
 
 
 
@@ -109,14 +110,16 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 
 		if (isSiteMultilingual()) {
 			// mount a home page for each language
-			for (SiteLanguage lang : langs) {
-				try {
-					//TODO
-					//mount(new I18NBookmarkablePageMapper(lang.locale, lang.getLanguageCode(), getHomePage()));
-				} catch (WicketRuntimeException e) {
-					log.error("Error while mounting home landing page for language:" + lang, e);
-				}
-			}
+//			for (SiteLanguage lang : langs) {
+//				try {
+//					mount(new I18NBookmarkablePageMapper(lang.locale, lang.getLanguageCode(), getHomePage()));
+//				} catch (WicketRuntimeException e) {
+//					log.error("Error while mounting home landing page for language:" + lang, e);
+//				}
+//			}
+		    
+		    //mount home page locale mapper
+		    //mount(new I18NBookmarkablePageMapper(langs, getHomePage()));
 
 			// mount application pages
 			for (Class<? extends Page> page : getAppPages()) {
