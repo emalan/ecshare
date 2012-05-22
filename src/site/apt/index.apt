@@ -1,12 +1,11 @@
 About Control My Site
 
-    A Java based framework for creating multi-lingual Content Managed Wicket web applications.
+    A Java wicket based GUI framework for creating multi-lingual Content Managed Wicket web applications. This project
+    depends on a {{{http://www.controlmysite.net/cms/}CMS persistent layer}}.
     
     Framework highlights include:
     
-    * Spring Configuration for JCR API to Content Repository and for application specific information.
-    
-    * Decoupled Data Objects for Content Storage and implementations of Data Objects for JCR API.
+    * Spring Configuration of Service Layer.
     
     * Abstract Wicket Application Classes for common functionality
     
@@ -48,13 +47,9 @@ About Control My Site
     
 Technology Stack
 
-    * Applications deployed on Linux Ubuntu server on Amazon's ec2 service.
-    
-    * Jackrabbit CMS with a MySql database for persistence.
-    
-    * All repository interactions are decoupled from the UI layer by using the Java JCR API.
-    
-    * Jackrabbit's OCM is used for Object to JCR conversion.
-    
     * The Java Wicket framework is used to create the web application and UI.
+    
+    * Prototype, JQuery are used.
+    
+    * A Wicket integrated animation framework using Bernie's Animator javascript code.
     

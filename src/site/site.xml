@@ -11,7 +11,6 @@
         <item name="Quickstart" href="quick.html" />
         <item name="CMS Components" href="components.html"/>
         <item name="Multi-lingual SEO" href="seo.html"/>
-        <item name="JCR Repository" href="jcr.html"/>
     </menu>
 
     <menu ref="reports"/>
