@@ -14,8 +14,9 @@ import org.apache.wicket.model.StringResourceModel;
 import org.emalan.cms.bo.SiteData;
 import org.emalan.cms.bo.security.IUser;
 import org.emalan.cms.bo.security.UserData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.madalla.email.IEmailSender;
 import com.madalla.service.ApplicationService;
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.util.security.SecureCredentials;
@@ -29,6 +30,7 @@ import com.madalla.wicket.animation.AnimationOpenSlide;
 public class UserLoginPanel extends CmsPanel {
 
 	private static final long serialVersionUID = 5349334518027160490L;
+	private static final Logger log = LoggerFactory.getLogger(UserLoginPanel.class);
 
 	public UserLoginPanel(final String id) {
 		this(id, new SecureCredentials());
@@ -103,9 +105,9 @@ public class UserLoginPanel extends CmsPanel {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				session.signOut();
-				target.addComponent(this);
-				target.addComponent(loginInfo);
-				target.addComponent(panel);
+				target.add(this);
+				target.add(loginInfo);
+				target.add(panel);
 			}
 
 			@Override

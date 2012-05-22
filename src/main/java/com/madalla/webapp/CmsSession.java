@@ -18,6 +18,8 @@ import org.emalan.cms.bo.security.IUser;
 import org.emalan.cms.bo.security.ProfileData;
 import org.emalan.cms.bo.security.UserData;
 import org.emalan.cms.bo.security.UserSiteData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.madalla.bo.member.MemberData;
 import com.madalla.service.ApplicationService;
@@ -32,6 +34,8 @@ import com.madalla.webapp.upload.IFileUploadStatus;
 public class CmsSession extends AuthenticatedWebSession implements IContentAdmin, IFileUploadInfo{
 
 	private static final long serialVersionUID = 652426659740076486L;
+	private static final Logger log = LoggerFactory.getLogger(CmsSession.class);
+	
 	public final static String SUPERADMIN = "SUPERADMIN";
 	public final static String SECURE = "SECURE";
 	public final static String CONTENTADMIN = "CONTENTADMIN";
@@ -122,9 +126,9 @@ public class CmsSession extends AuthenticatedWebSession implements IContentAdmin
 		String providerName = profileData.get("providerName");
 		String preferredUsername = profileData.get("preferredUsername");
 		String displayName = profileData.get("displayName");
-
+		log.trace("authenticate - " + profileData);
+		
 		ProfileData profile = getDataService().getProfile(identifier);
-
 		if (profile == null){
 
 			IUser user = null;
@@ -137,7 +141,7 @@ public class CmsSession extends AuthenticatedWebSession implements IContentAdmin
 
 			profile = getDataService().getNewUserProfile(user, providerName, identifier);
 		}
-
+		
 		//update profile data
 		profile.setDisplayName(displayName);
 		profile.setPreferredUsername(preferredUsername);
@@ -166,6 +170,7 @@ public class CmsSession extends AuthenticatedWebSession implements IContentAdmin
 	 */
 	@Override
 	public boolean authenticate(String userName, String password) {
+		log.trace("authenticate - " + userName + ":" + password);
 	   	IDataService service = getDataService();
         IPasswordAuthenticator authenticator = getDataService().getPasswordAuthenticator(userName);
         if (authenticator.authenticate(userName, password)){
@@ -175,9 +180,10 @@ public class CmsSession extends AuthenticatedWebSession implements IContentAdmin
             	//store user data in session
             	repositoryService.setUser(user);
             	setRoles(user);
-
+            	log.debug("authenticate - " + userName + "  passed authentication.");
                 return true;
         	}
+        	log.debug("authenticate - " + userName + "  failed site authentication.");
         }
         return false;
 	}
