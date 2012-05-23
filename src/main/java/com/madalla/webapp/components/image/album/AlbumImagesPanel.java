@@ -4,6 +4,7 @@ import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.CROSSFADE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.FAST_INIT;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -14,6 +15,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -113,8 +115,10 @@ public class AlbumImagesPanel extends Panel{
 
 	private Component createImage(final AlbumData album, final ImageData imageData) {
 		WebMarkupContainer imageWrapper = createImageWrapper(album);
+        BufferedDynamicImageResource resource = new BufferedDynamicImageResource();
+        resource.setImage(imageData.getImageFull());
 
-		Image image = new Image("id", imageData.getImageFull()) {
+		Image image = new Image("id", resource) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

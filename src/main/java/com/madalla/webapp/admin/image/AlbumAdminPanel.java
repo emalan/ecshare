@@ -1,5 +1,6 @@
 package com.madalla.webapp.admin.image;
 
+import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.NonCachingImage;
+import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
@@ -52,7 +54,11 @@ public class AlbumAdminPanel extends CmsPanel{
 			final ImageData imageData = listItem.getModelObject();
 			log.info("ImageListView - populateItem - "+imageData );
 			listItem.add(new Label("file", imageData.getName()));
-            Image image = new NonCachingImage("thumb",imageData.getImageThumb());
+	         BufferedImage bufferedImage = imageData.getImageThumb();
+	         BufferedDynamicImageResource resource = new BufferedDynamicImageResource();
+	         resource.setImage(bufferedImage);
+
+            Image image = new NonCachingImage("thumb",resource);
             listItem.add(image);
             image.setOutputMarkupId(true);
 

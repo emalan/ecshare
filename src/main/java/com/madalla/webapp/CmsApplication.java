@@ -1,6 +1,7 @@
 package com.madalla.webapp;
 
 
+import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDa
 import org.apache.wicket.markup.html.IPackageResourceGuard;
 import org.apache.wicket.markup.html.PackageResourceGuard;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.settings.IExceptionSettings;
@@ -189,7 +191,10 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     }
     
 	protected void mountImage(ImageData image) {
-    	getSharedResources().add(image.getResourceReference(), image.getImageFull());
+        BufferedImage bufferedImage = image.getImageFull();
+        BufferedDynamicImageResource resource = new BufferedDynamicImageResource();
+        resource.setImage(bufferedImage);
+    	getSharedResources().add(image.getResourceReference(), resource);
 		
     	//TODO mount images
     	//mountSharedResource("/" + image.getMountUrl(), Application.class.getName() + "/" +image.getResourceReference());
