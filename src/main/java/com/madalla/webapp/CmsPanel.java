@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.madalla.BuildInformation;
 import com.madalla.service.ApplicationService;
+import com.madalla.service.IApplicationServiceProvider;
 
 public abstract class CmsPanel extends Panel {
 
@@ -27,7 +28,7 @@ public abstract class CmsPanel extends Panel {
 	}
 	
 	protected ApplicationService getApplicationService() {
-		return  ((CmsApplication)getApplication()).getApplicationService();
+		return  ((IApplicationServiceProvider)getApplication()).getApplicationService();
 	}
 
 	protected BuildInformation getBuildInfo(){
@@ -35,14 +36,14 @@ public abstract class CmsPanel extends Panel {
 	}
 	
 	protected IDataService getRepositoryService(){
-		return ((IDataServiceProvider)getApplication()).getRepositoryService();
+		return getApplicationService().getRepositoryService();
 	}
 
 	protected void saveData(AbstractData data){
 		log.info("daveData - " + data);
 		getSessionDataService().validateTransaction(data);
 		getSessionDataService().logTransaction(data);
-		IDataService service = ((IDataServiceProvider)getApplication()).getRepositoryService();
+		IDataService service = getApplicationService().getRepositoryService();
 		service.saveDataObject(data, getSessionDataService().getUser().getName());
 	}
 

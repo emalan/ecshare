@@ -12,7 +12,6 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
 import org.emalan.cms.IDataService;
-import org.emalan.cms.IDataServiceProvider;
 import org.emalan.cms.ISessionDataService;
 import org.emalan.cms.bo.security.IUser;
 import org.emalan.cms.bo.security.ProfileData;
@@ -23,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import com.madalla.bo.member.MemberData;
 import com.madalla.service.ApplicationService;
+import com.madalla.service.IApplicationServiceProvider;
 import com.madalla.webapp.admin.member.MemberSession;
 import com.madalla.webapp.cms.IContentAdmin;
 import com.madalla.webapp.security.IPasswordAuthenticator;
@@ -221,11 +221,11 @@ public class CmsSession extends AuthenticatedWebSession implements IContentAdmin
 	}
 	
 	private ApplicationService getApplicationService() {
-		return ((CmsApplication)getApplication()).getApplicationService();
+		return ((IApplicationServiceProvider)getApplication()).getApplicationService();
 	}
 
 	private IDataService getDataService(){
-		return ((IDataServiceProvider) getApplication()).getRepositoryService();
+		return getApplicationService().getRepositoryService();
 	}
 
 	public ISessionDataService getRepositoryService() {

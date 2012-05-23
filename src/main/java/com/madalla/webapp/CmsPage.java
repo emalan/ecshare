@@ -43,6 +43,8 @@ import org.emalan.cms.bo.page.PageMetaLangData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.madalla.service.ApplicationService;
+import com.madalla.service.IApplicationServiceProvider;
 import com.madalla.util.security.SecureCredentials;
 import com.madalla.webapp.admin.pages.SecureLoginPage;
 import com.madalla.webapp.admin.pages.UserLoginPage;
@@ -360,9 +362,13 @@ public abstract class CmsPage extends WebPage {
 //			getSession().setLocale(SiteLanguage.getLanguage(s).locale);
 //		}
 	}
+	
+	private ApplicationService getApplicationService() {
+	    return ((IApplicationServiceProvider) getApplication()).getApplicationService();
+	}
 
 	private IDataService getRepositoryService() {
-		return ((IDataServiceProvider) getApplication()).getRepositoryService();
+		return getApplicationService().getRepositoryService();
 	}
 
 	private boolean isHomePage() {

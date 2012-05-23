@@ -20,6 +20,12 @@ import com.madalla.email.IEmailSender;
 import com.madalla.member.MemberService;
 import com.madalla.webapp.security.IPasswordAuthenticator;
 
+/**
+ * API for getting data. The intention is to keep this decoupled from the GUI for re-use and improved testing.
+ * 
+ * @author Eugene Malan
+ *
+ */
 public class ApplicationServiceImpl implements ApplicationService {
 
 	private static final Logger log = LoggerFactory.getLogger(ApplicationServiceImpl.class);

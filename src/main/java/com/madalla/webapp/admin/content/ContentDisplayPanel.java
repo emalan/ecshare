@@ -19,6 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataRetrievalFailureException;
 
+import com.madalla.service.ApplicationService;
+import com.madalla.service.IApplicationServiceProvider;
+
 class ContentDisplayPanel extends Panel {
 
 	private static final long serialVersionUID = -3450362599578103637L;
@@ -207,13 +210,17 @@ class ContentDisplayPanel extends Panel {
 		sb.append("<br/>");
     	return sb.toString();
     }
+    
+    protected ApplicationService getApplicationService() {
+        return ((IApplicationServiceProvider) getApplication()).getApplicationService();
+    }
 
 	protected IDataService getContentService() {
-		return ((IDataServiceProvider) getApplication()).getRepositoryService();
+		return getApplicationService().getRepositoryService();
 	}
 
 	protected IRepositoryAdminService getAdminService() {
-		return ((IRepositoryAdminServiceProvider) getApplication()).getRepositoryAdminService();
+		return getApplicationService().getRepositoryAdminService();
 	}
 
 }
