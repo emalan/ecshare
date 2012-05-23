@@ -19,11 +19,12 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 import org.emalan.cms.BackupFile;
 import org.emalan.cms.IRepositoryAdminService;
-import org.emalan.cms.IRepositoryAdminServiceProvider;
 import org.emalan.cms.jcr.model.ContentNode;
 import org.emalan.cms.jcr.model.IContentNode;
 import org.emalan.cms.jcr.model.tree.AbstractTreeNode;
 
+import com.madalla.service.ApplicationService;
+import com.madalla.service.IApplicationServiceProvider;
 import com.madalla.webapp.admin.pages.AdminPanelLink;
 import com.madalla.webapp.css.Css;
 import com.madalla.wicket.IndicatingAjaxSubmitLink;
@@ -117,7 +118,7 @@ public class ContentAdminPanel extends Panel {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-            	target.addComponent(listChoice);
+            	target.add(listChoice);
             	try {
             		IRepositoryAdminService service = getContentAdminService();
             		if (adminApp){
@@ -126,7 +127,7 @@ public class ContentAdminPanel extends Panel {
             			service.backupContentSite();
             		}
                     info("Content Repository backed up successfully");
-                    target.addComponent(backupMessages);
+                    target.add(backupMessages);
             	} catch (Exception e){
             	    error("Backup failed. "+ e.getLocalizedMessage());
             	}
@@ -162,7 +163,7 @@ public class ContentAdminPanel extends Panel {
 					service.rollbackSiteRestore();
 				}
 				info("Rolled back to before Restore.");
-				target.addComponent(restoreMessages);
+				target.add(restoreMessages);
 			}
 
 			@Override
@@ -188,8 +189,8 @@ public class ContentAdminPanel extends Panel {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				restoreContent();
 				info("Restore successful.");
-				target.addComponent(restoreMessages);
-				target.addComponent(rollBackLink);
+				target.add(restoreMessages);
+				target.add(rollBackLink);
 			}
 
 			@Override
@@ -211,7 +212,7 @@ public class ContentAdminPanel extends Panel {
                     IContentNode contentNode = currentNode.getObject();
                     String path = contentNode.getPath();
                     contentDisplayPanel.refresh(path);
-                    target.addComponent(contentDisplayPanel);
+                    target.add(contentDisplayPanel);
                 }
 
 			}
@@ -267,10 +268,13 @@ public class ContentAdminPanel extends Panel {
 			}
 		}
 	}
+	
+    private ApplicationService getApplicationService() {
+        return ((IApplicationServiceProvider) getApplication()).getApplicationService();
+    }
 
 	public IRepositoryAdminService getContentAdminService(){
-		IRepositoryAdminServiceProvider provider = (IRepositoryAdminServiceProvider)getApplication();
-		return provider.getRepositoryAdminService();
+	    return getApplicationService().getRepositoryAdminService();
 	}
 
 	public Boolean setBackupFileList(){

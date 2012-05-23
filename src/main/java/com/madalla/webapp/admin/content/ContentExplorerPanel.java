@@ -16,12 +16,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.GenericBaseModel;
 import org.emalan.cms.IRepositoryAdminService;
-import org.emalan.cms.IRepositoryAdminServiceProvider;
 import org.emalan.cms.jcr.model.tree.AbstractTreeNode;
 import org.emalan.cms.jcr.model.tree.JcrTreeModel;
 import org.emalan.cms.jcr.model.tree.JcrTreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.madalla.service.ApplicationService;
+import com.madalla.service.IApplicationServiceProvider;
 
 abstract class ContentExplorerPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -107,9 +109,14 @@ abstract class ContentExplorerPanel extends Panel {
 		add(tree);
 
 	}
+	
+   private ApplicationService getApplicationService() {
+        return ((IApplicationServiceProvider) getApplication()).getApplicationService();
+    }
+
 
     private IRepositoryAdminService getContentAdminService() {
-        return ((IRepositoryAdminServiceProvider) getApplication()).getRepositoryAdminService();
+        return getApplicationService().getRepositoryAdminService();
     }
 
 	private void loadTreeData() {
