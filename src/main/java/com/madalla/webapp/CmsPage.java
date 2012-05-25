@@ -34,7 +34,6 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.Url.QueryParameter;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.emalan.cms.IDataService;
-import org.emalan.cms.IDataServiceProvider;
 import org.emalan.cms.bo.SiteLanguage;
 import org.emalan.cms.bo.image.AlbumData;
 import org.emalan.cms.bo.image.ImageData;
@@ -276,7 +275,7 @@ public abstract class CmsPage extends WebPage {
 				if (getApplication().getConfigurationType().equals(RuntimeConfigurationType.DEVELOPMENT)) {
 					return;
 				}
-				IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
+				IAuthenticator authenticator = getApplicationService().getUserAuthenticator();
 				if (authenticator.requiresSecureAuthentication(username)) {
 					redirectToInterceptPage(new SecureLoginPage(username));
 				}

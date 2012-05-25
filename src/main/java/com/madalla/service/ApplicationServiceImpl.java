@@ -18,6 +18,8 @@ import com.madalla.db.dao.EmailEntryDao;
 import com.madalla.db.dao.Member;
 import com.madalla.email.IEmailSender;
 import com.madalla.member.MemberService;
+import com.madalla.service.user.UserSecurityService;
+import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.webapp.security.IPasswordAuthenticator;
 
 /**
@@ -34,6 +36,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	private BuildInformation buildInformation;
 	private IRepositoryAdminService repositoryAdminService;
 	private IDataService dataService;
+	private UserSecurityService userSecurityService;
 	private MemberService memberService;
 	private IEmailSender emailSender;
 	private EmailEntryDao emailEntryDao;
@@ -59,7 +62,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     		log.error(fatal, "Email Sender is not configured Correctly.");
     		throw new IllegalStateException("Email Service is not configured Correctly.");
     	}
-
+    	
+    	userSecurityService.init();
 	}
 	
 	/**
@@ -80,6 +84,16 @@ public class ApplicationServiceImpl implements ApplicationService {
 	public BuildInformation getBuildInformation() {
 		return buildInformation;
 	}
+	
+	//user
+	
+    public IAuthenticator getUserAuthenticator() {
+        return userSecurityService.getUserAuthenticator();
+    }
+	
+	///////////////////////////////////////////
+	// Member 
+	///////////////////////////////////////////
 	
 	public MemberData getMember(String id) {
 		return memberService.getMember(id);
@@ -109,6 +123,10 @@ public class ApplicationServiceImpl implements ApplicationService {
 		return memberService.getPasswordAuthenticator(name);
 	}
 
+	///////////////////////////
+	//  email
+	///////////////////////////
+	
 	public boolean sendEmail() {
 		return emailSender.sendEmail();
 	}
@@ -174,5 +192,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 	public void setEmailEntryDao(EmailEntryDao emailEntryDao) {
 		this.emailEntryDao = emailEntryDao;
 	}
+    public void setUserSecurityService(UserSecurityService userSecurityService) {
+        this.userSecurityService = userSecurityService;
+    }
 
 }

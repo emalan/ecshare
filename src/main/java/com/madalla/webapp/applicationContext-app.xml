@@ -30,21 +30,29 @@
 		scope="singleton">
 	</bean>
 	
-	<bean id="authenticatorUser" class="com.madalla.webapp.security.PasswordAuthenticator"
-        scope="singleton">
-    </bean>
-
 	<bean id="memberService" class="com.madalla.member.MemberService"
 		scope="singleton">
 		<property name="memberDao" ref="memberDao" />
-		<property name="authenticator" ref="authenticatorMember"></property>
+		<property name="authenticator" ref="authenticatorMember"/>
 	</bean>
+
+    <bean id="authenticatorUser" class="com.madalla.webapp.security.PasswordAuthenticator"
+        scope="singleton">
+    </bean>
+	
+	<bean id="userSecurityService" class="com.madalla.service.user.UserSecurityService"
+        scope="singleton" init-method="init">
+        <property name="site" value="${site.code}" />
+        <property name="dataService" ref="dataService" />
+        <property name="authenticator" ref="authenticatorUser" />
+    </bean>
 
 	<bean id="applicationService" class="com.madalla.service.ApplicationServiceImpl"
 		init-method="init" destroy-method="destroy">
 		<property name="buildInformation" ref="buildInformation"></property>
 		<property name="repositoryAdminService" ref="repositoryAdminService" />
 		<property name="dataService" ref="dataService" />
+		<property name="userSecurityService" ref="userSecurityService"/>
 		<property name="emailSender" ref="emailSender" />
 		<property name="memberService" ref="memberService" />
         <property name="emailEntryDao" ref="emailEntryDao"/>

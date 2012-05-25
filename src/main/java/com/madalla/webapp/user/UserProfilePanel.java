@@ -73,7 +73,7 @@ public class UserProfilePanel extends CmsPanel{
         log.debug(user.toString());
 
 		//User Change Link - secure or not depending on authenticator
-		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
+		IAuthenticator authenticator = getApplicationService().getUserAuthenticator();
 		SiteData siteData = getRepositoryService().getSiteData();
 
 		final String username = user.getName();

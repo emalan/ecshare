@@ -513,7 +513,7 @@ public class UserAdminPanel extends CmsPanel {
 		String message = getString(key, model);
 
     	if (service.isUserSite(userData) && StringUtils.isNotEmpty(url)){
-    		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
+    		IAuthenticator authenticator = getApplicationService().getUserAuthenticator();
     		if (site.getSecurityCertificate() && authenticator.requiresSecureAuthentication(userData.getName())){
     			map.put("passwordChangePage", CmsApplication.SECURE_PASSWORD);
     		} else {

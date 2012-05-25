@@ -9,11 +9,14 @@ import org.emalan.cms.bo.email.EmailEntryData;
 import com.madalla.BuildInformation;
 import com.madalla.bo.member.MemberData;
 import com.madalla.db.dao.Member;
+import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.webapp.security.IPasswordAuthenticator;
 
 public interface ApplicationService {
 
 	BuildInformation getBuildInformation();
+	
+	IAuthenticator getUserAuthenticator();
 	
 	boolean isMemberExists(String name);
 	

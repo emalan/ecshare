@@ -172,7 +172,7 @@ public class CmsSession extends AuthenticatedWebSession implements IContentAdmin
 	public boolean authenticate(String userName, String password) {
 		log.trace("authenticate - " + userName + ":" + password);
 	   	IDataService service = getDataService();
-        IPasswordAuthenticator authenticator = getDataService().getPasswordAuthenticator(userName);
+        IPasswordAuthenticator authenticator = getApplicationService().getPasswordAuthenticator(userName);
         if (authenticator.authenticate(userName, password)){
         	UserData user = service.getUser(userName);
 

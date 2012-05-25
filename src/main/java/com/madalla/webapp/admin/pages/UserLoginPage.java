@@ -24,7 +24,7 @@ public class UserLoginPage extends AbstractAdminPage{
 
 			@Override
 			protected void preLogin(String username) {
-        		IAuthenticator authenticator = getRepositoryService().getUserAuthenticator();
+        		IAuthenticator authenticator = getApplicationService().getUserAuthenticator();
         		if (authenticator.requiresSecureAuthentication(username)){
         			setResponsePage(new SecureLoginPage(username));
         		}
