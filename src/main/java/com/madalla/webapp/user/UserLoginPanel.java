@@ -2,7 +2,6 @@ package com.madalla.webapp.user;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -71,9 +70,6 @@ public class UserLoginPanel extends CmsPanel {
 				UserData user = getRepositoryService().getUser(username);
 				getAppSession().setUser(user);
 
-        		if (getApplication().getConfigurationType().equals(RuntimeConfigurationType.DEPLOYMENT)){
-        			return;
-        		}
         		preLogin(username);
 			}
 
