@@ -96,9 +96,7 @@ public abstract class LoginPanel extends CmsPanel {
 		 */
 		@Override
 		public void onSubmit() {
-			log.debug("Login with userName=" + getUsername());
-			// continue to Ajax submit
-
+			log.trace("onSubmit");
 		}
 	}
 
@@ -173,7 +171,7 @@ public abstract class LoginPanel extends CmsPanel {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				log.debug("Ajax submit called");
+				log.debug("Ajax onSubmit. userName=" + getUsername());
 				target.add(form);
 				preSignIn(getUsername());
 
@@ -264,7 +262,7 @@ public abstract class LoginPanel extends CmsPanel {
 	public abstract boolean signIn(String username, String password);
 
 	protected void preSignIn(String username) {
-
+	    
 	}
 
 	protected void onSignInFailed(String username) {

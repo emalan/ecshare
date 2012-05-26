@@ -66,7 +66,7 @@ public class UserLoginPanel extends CmsPanel {
 
            	@Override
 			protected void preSignIn(String username) {
-				// TODO hide password login if user has no password
+				log.trace("preSignIn - username=" + username);
 
 				UserData user = getRepositoryService().getUser(username);
 				getAppSession().setUser(user);

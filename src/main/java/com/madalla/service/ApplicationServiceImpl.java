@@ -90,6 +90,10 @@ public class ApplicationServiceImpl implements ApplicationService {
     public IAuthenticator getUserAuthenticator() {
         return userSecurityService.getUserAuthenticator();
     }
+    
+    public IPasswordAuthenticator getUserPasswordAuthenticator(String name) {
+        return userSecurityService.getPasswordAuthenticator(name);
+    }
 	
 	///////////////////////////////////////////
 	// Member 
@@ -119,9 +123,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 		return memberService.saveMemberPassword(memberId, password);
 	}
 	
-	public IPasswordAuthenticator getPasswordAuthenticator(String name) {
-		return memberService.getPasswordAuthenticator(name);
-	}
+    public IPasswordAuthenticator getMemberPasswordAuthenticator(String name) {
+        return memberService.getPasswordAuthenticator(name);
+    }
 
 	///////////////////////////
 	//  email

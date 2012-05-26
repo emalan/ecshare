@@ -225,7 +225,7 @@ public class UserPasswordPanel extends CmsPanel {
 	}
 
 	private IPasswordAuthenticator getAuthenticator(String username) {
-		return getApplicationService().getPasswordAuthenticator(credentials.getUsername());
+		return getApplicationService().getUserPasswordAuthenticator(credentials.getUsername());
 	}
 
 }

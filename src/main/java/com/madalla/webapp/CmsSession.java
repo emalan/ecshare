@@ -54,7 +54,7 @@ public class CmsSession extends AuthenticatedWebSession implements IContentAdmin
 
 		@Override
 		protected boolean authenticateMember(String memberName, String password) {
-			IPasswordAuthenticator authenticator = getApplicationService().getPasswordAuthenticator(memberName);
+			IPasswordAuthenticator authenticator = getApplicationService().getMemberPasswordAuthenticator(memberName);
 			if (authenticator.authenticate(memberName, password)){
 				postAuthentication(memberName);
 				return true;
@@ -172,7 +172,7 @@ public class CmsSession extends AuthenticatedWebSession implements IContentAdmin
 	public boolean authenticate(String userName, String password) {
 		log.trace("authenticate - " + userName + ":" + password);
 	   	IDataService service = getDataService();
-        IPasswordAuthenticator authenticator = getApplicationService().getPasswordAuthenticator(userName);
+        IPasswordAuthenticator authenticator = getApplicationService().getUserPasswordAuthenticator(userName);
         if (authenticator.authenticate(userName, password)){
         	UserData user = service.getUser(userName);
 

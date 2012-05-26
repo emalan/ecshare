@@ -72,8 +72,10 @@ public class UserSecurityService {
 		}
 		final IUserValidate userData;
 		if (dataService.isUserExists(username)){
+		    log.trace("getPasswordAuthenticator - user exists");
 			userData = dataService.getUser(username);
 		} else {
+		    log.trace("getPasswordAuthenticator - user doesn't exists, creating dummy authenticator.");
 			userData = new IUserValidate(){
 
 				public String getName() {

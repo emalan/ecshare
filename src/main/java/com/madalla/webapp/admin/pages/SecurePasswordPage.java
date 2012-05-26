@@ -10,7 +10,9 @@ import com.madalla.webapp.user.UserPasswordPanel;
 @RequireHttps
 public class SecurePasswordPage extends AbstractAdminPage {
 
-	public SecurePasswordPage(String username, String pwd){
+	private static final long serialVersionUID = 1L;
+
+    public SecurePasswordPage(String username, String pwd){
 		super();
 		init(username, pwd);
 	}

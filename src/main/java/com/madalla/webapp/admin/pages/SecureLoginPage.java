@@ -8,7 +8,9 @@ import com.madalla.webapp.user.UserLoginPanel;
 @RequireHttps
 public class SecureLoginPage extends AbstractAdminPage{
 
-	public SecureLoginPage(){
+	private static final long serialVersionUID = 1L;
+
+    public SecureLoginPage(){
 		this("");
 	}
 

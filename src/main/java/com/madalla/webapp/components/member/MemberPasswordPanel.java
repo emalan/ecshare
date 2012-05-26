@@ -197,7 +197,7 @@ public class MemberPasswordPanel extends CmsPanel{
     }
 
 	private IPasswordAuthenticator getAuthenticator(String name){
-		return getApplicationService().getPasswordAuthenticator(name);
+		return getApplicationService().getMemberPasswordAuthenticator(name);
     }
 
 

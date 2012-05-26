@@ -18,6 +18,8 @@ public interface ApplicationService {
 	
 	IAuthenticator getUserAuthenticator();
 	
+	IPasswordAuthenticator getUserPasswordAuthenticator(final String name);
+	
 	boolean isMemberExists(String name);
 	
 	boolean saveMember(MemberData member);
@@ -30,7 +32,7 @@ public interface ApplicationService {
 	
 	void deleteMember(MemberData data);
 	
-	IPasswordAuthenticator getPasswordAuthenticator(final String name);
+	IPasswordAuthenticator getMemberPasswordAuthenticator(final String name);
 	
     boolean sendEmail();
 

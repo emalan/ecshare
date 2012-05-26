@@ -1,6 +1,9 @@
 package com.madalla.webapp.admin.pages;
 
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.madalla.webapp.admin.AbstractAdminPage;
 import com.madalla.webapp.security.IAuthenticator;
@@ -9,7 +12,10 @@ import com.madalla.webapp.user.UserLoginPanel;
 public class UserLoginPage extends AbstractAdminPage{
 
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = LoggerFactory.getLogger(UserLoginPage.class);
+	
 	public static final String[] PARAMETERS = {"username"};
+	
 
 	public UserLoginPage(PageParameters parameters){
 		super(parameters);
@@ -17,6 +23,7 @@ public class UserLoginPage extends AbstractAdminPage{
 
 		init(username);
 	}
+	
 	private void init(String username){
 		add(new UserLoginPanel("adminPanel", username){
 
@@ -24,16 +31,26 @@ public class UserLoginPage extends AbstractAdminPage{
 
 			@Override
 			protected void preLogin(String username) {
+			    log.trace("preLogin - username-" + username);
         		IAuthenticator authenticator = getApplicationService().getUserAuthenticator();
         		if (authenticator.requiresSecureAuthentication(username)){
-        			setResponsePage(new SecureLoginPage(username));
+        		    log.debug("preLogin - secure authentication required.");
+        			redirectToSecurePage(username);
         		}
-
 
 			}
 
 		});
 
+	}
+	
+	private void redirectToSecurePage(final String username) {
+	    if (getApplication().getConfigurationType().equals(RuntimeConfigurationType.DEPLOYMENT)){
+            log.debug("redirectToSecurePage - redirecting to secure page.");
+            setResponsePage(new SecureLoginPage(username));
+	    } else {
+	        log.debug("redirectToSecurePage - bypassing redirect.");
+	    }
 	}
 
 
