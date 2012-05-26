@@ -1,6 +1,5 @@
 package com.madalla.webapp.admin.pages;
 
-import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,12 +44,8 @@ public class UserLoginPage extends AbstractAdminPage{
 	}
 	
 	private void redirectToSecurePage(final String username) {
-	    if (getApplication().getConfigurationType().equals(RuntimeConfigurationType.DEPLOYMENT)){
             log.debug("redirectToSecurePage - redirecting to secure page.");
             setResponsePage(new SecureLoginPage(username));
-	    } else {
-	        log.debug("redirectToSecurePage - bypassing redirect.");
-	    }
 	}
 
 

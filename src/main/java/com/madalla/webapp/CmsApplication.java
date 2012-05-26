@@ -101,6 +101,31 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
         setupPageMounts();
         setupErrorHandling();
         setupSecurity();
+        
+        boolean siteCertificate = getRepositoryService().getSiteData().getSecurityCertificate();
+        setRootRequestMapper(new AppHttpsMapper(getRootRequestMapper(), getConfigurationType(), 
+                siteCertificate));
+        
+        //TODO disable https if no certificate or in development mode
+//      @Override
+//      protected IRequestTarget checkSecureIncoming(IRequestTarget target) {
+//      if (getConfigurationType().equals(Application.DEVELOPMENT) ||
+//      !getRepositoryService().getSiteData().getSecurityCertificate()){
+//      return target;
+//      } else {
+//      return super.checkSecureIncoming(target);
+//      }
+//      }
+//     
+//      @Override
+//      protected IRequestTarget checkSecureOutgoing(IRequestTarget target) {
+//      if (getConfigurationType().equals(Application.DEVELOPMENT) ||
+//      !getRepositoryService().getSiteData().getSecurityCertificate()){
+//      return target;
+//      } else {
+//      return super.checkSecureOutgoing(target);
+//      }
+
     }
 
     protected void setupPageMounts() {
@@ -241,47 +266,6 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
         MetaDataRoleAuthorizationStrategy.authorize(ContentEntryPanel.class, "USER");
         MetaDataRoleAuthorizationStrategy.authorize(TranslatePanel.class, "USER");
     }
-
-    // TODO switch https off in development mode or if certificate not found
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.wicket.protocol.http.WebApplication#newRequestCycleProcessor()
-     * Disable https when in development mode or when the application has no
-     * security certificate
-     */
-    // @Override
-    // protected IRequestCycleProcessor newRequestCycleProcessor()
-    // {
-    // HttpsConfig config = new HttpsConfig(80,443);
-    // return new HttpsRequestCycleProcessor(config){
-    //
-    // @Override
-    // protected IRequestTarget checkSecureIncoming(IRequestTarget target) {
-    // if (getConfigurationType().equals(Application.DEVELOPMENT) ||
-    // !getRepositoryService().getSiteData().getSecurityCertificate()){
-    // return target;
-    // } else {
-    // return super.checkSecureIncoming(target);
-    // }
-    // }
-    //
-    // @Override
-    // protected IRequestTarget checkSecureOutgoing(IRequestTarget target) {
-    // if (getConfigurationType().equals(Application.DEVELOPMENT) ||
-    // !getRepositoryService().getSiteData().getSecurityCertificate()){
-    // return target;
-    // } else {
-    // return super.checkSecureOutgoing(target);
-    // }
-    // }
-    //
-    //
-    //
-    // };
-    // }
 
     @Override
     public Class<? extends WebPage> getMemberRegistrationPage() {
