@@ -12,10 +12,11 @@ public class AppHttpsMapper extends HttpsMapper {
 
     private final IRequestMapper delegate;
     private final RuntimeConfigurationType type;
-    final boolean securitySite; 
+    final boolean securitySite;
 
-    public AppHttpsMapper(final IRequestMapper delegate, RuntimeConfigurationType type, boolean securitySite) {
-        super(delegate, new HttpsConfig(80, 443));
+    public AppHttpsMapper(final IRequestMapper delegate, RuntimeConfigurationType type, boolean securitySite,
+            final HttpsConfig config) {
+        super(delegate, config);
         this.delegate = delegate;
         this.type = type;
         this.securitySite = securitySite;
@@ -26,7 +27,7 @@ public class AppHttpsMapper extends HttpsMapper {
      */
     @Override
     public IRequestHandler mapRequest(final Request request) {
-        if (type.equals(RuntimeConfigurationType.DEPLOYMENT) && !securitySite){
+        if (type.equals(RuntimeConfigurationType.DEPLOYMENT) && !securitySite) {
             return super.mapRequest(request);
         } else {
             return delegate.mapRequest(request);
@@ -38,7 +39,7 @@ public class AppHttpsMapper extends HttpsMapper {
      */
     @Override
     public Url mapHandler(IRequestHandler requestHandler) {
-        if (type.equals(RuntimeConfigurationType.DEPLOYMENT) && !securitySite){
+        if (type.equals(RuntimeConfigurationType.DEPLOYMENT) && !securitySite) {
             return super.mapHandler(requestHandler);
         } else {
             return delegate.mapHandler(requestHandler);

@@ -16,6 +16,7 @@ import org.apache.wicket.markup.html.IPackageResourceGuard;
 import org.apache.wicket.markup.html.PackageResourceGuard;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
+import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.resource.IResource;
@@ -71,6 +72,9 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     public static final String MEMBER_REGISTRATION = "memberRegistration";
     public static final String MEMBER_PASSWORD = "memberPassword";
     public static final String LOGIN = "login";
+    
+    private int http = 80;
+    private int https = 443;
 
     private static final Logger log = LoggerFactory.getLogger(CmsApplication.class);
 
@@ -103,29 +107,10 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
         setupSecurity();
         
         boolean siteCertificate = getRepositoryService().getSiteData().getSecurityCertificate();
+        HttpsConfig config = new HttpsConfig(http, https);
         setRootRequestMapper(new AppHttpsMapper(getRootRequestMapper(), getConfigurationType(), 
-                siteCertificate));
+                siteCertificate, config));
         
-        //TODO disable https if no certificate or in development mode
-//      @Override
-//      protected IRequestTarget checkSecureIncoming(IRequestTarget target) {
-//      if (getConfigurationType().equals(Application.DEVELOPMENT) ||
-//      !getRepositoryService().getSiteData().getSecurityCertificate()){
-//      return target;
-//      } else {
-//      return super.checkSecureIncoming(target);
-//      }
-//      }
-//     
-//      @Override
-//      protected IRequestTarget checkSecureOutgoing(IRequestTarget target) {
-//      if (getConfigurationType().equals(Application.DEVELOPMENT) ||
-//      !getRepositoryService().getSiteData().getSecurityCertificate()){
-//      return target;
-//      } else {
-//      return super.checkSecureOutgoing(target);
-//      }
-
     }
 
     protected void setupPageMounts() {
@@ -373,4 +358,8 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
         this.applicationService = applicationService;
     }
 
+    public void setHttp(int http) {
+        this.http = http;
+    }
+    
 }
