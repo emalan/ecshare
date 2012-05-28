@@ -51,10 +51,6 @@ public class UserSecurityService {
 			}
 
 			public boolean requiresSecureAuthentication(String username) {
-				if ("admin".equalsIgnoreCase(username)){
-					return true;
-				}
-
 				if (dataService.isUserExists(username)){
 					UserData user = dataService.getUser(username);
 					UserSiteData userSite= dataService.getUserSite(user);
