@@ -6,10 +6,10 @@
     http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
     
-    <bean id="propertyConfigurer" 
+    <bean id="AppPropertyConfigurer" parent="propertyConfigurer"
     	class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     	<property name="locations">
-    		<list>
+    		<list merge="true">
         		<value>classpath:com/madalla/service/test.properties</value>
         	</list>
         </property>
