@@ -119,6 +119,7 @@ public class UserSecurityService {
 	}
 	
 	private boolean requiresSecureAuthentication(final IUserSite userSite, final ApplicationSecurityType securityType) {
+	    log.debug("requiresSecureAuthentication - securityType=" + securityType);
 	    if (securityType.equals(ApplicationSecurityType.NONE)) {
 	        return false;
 	    } else if (securityType.equals(ApplicationSecurityType.SECURE)) {

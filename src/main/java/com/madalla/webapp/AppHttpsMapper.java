@@ -24,7 +24,7 @@ public abstract class AppHttpsMapper extends HttpsMapper {
      */
     @Override
     public IRequestHandler mapRequest(final Request request) {
-        if (type.equals(RuntimeConfigurationType.DEPLOYMENT) && !isSiteSecure()) {
+        if (type.equals(RuntimeConfigurationType.DEPLOYMENT) && isSiteSecure()) {
             return super.mapRequest(request);
         } else {
             return delegate.mapRequest(request);
@@ -36,7 +36,7 @@ public abstract class AppHttpsMapper extends HttpsMapper {
      */
     @Override
     public Url mapHandler(IRequestHandler requestHandler) {
-        if (type.equals(RuntimeConfigurationType.DEPLOYMENT) && !isSiteSecure()) {
+        if (type.equals(RuntimeConfigurationType.DEPLOYMENT) && isSiteSecure()) {
             return super.mapHandler(requestHandler);
         } else {
             return delegate.mapHandler(requestHandler);
