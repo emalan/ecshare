@@ -57,6 +57,7 @@
 		<property name="site" value="${site.code}" />
 		<property name="dataService" ref="dataService" />
 		<property name="authenticator" ref="authenticatorUser" />
+		<property name="securityType" value="${site.security}" />
 	</bean>
 
 	<bean id="applicationService" class="com.madalla.service.ApplicationServiceImpl"

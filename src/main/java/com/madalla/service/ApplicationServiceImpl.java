@@ -85,7 +85,12 @@ public class ApplicationServiceImpl implements ApplicationService {
 		return buildInformation;
 	}
 	
+	
 	//user
+	
+	public boolean isSiteSecure() {
+	    return userSecurityService.useSecurity();
+	}
 	
     public IAuthenticator getUserAuthenticator() {
         return userSecurityService.getUserAuthenticator();

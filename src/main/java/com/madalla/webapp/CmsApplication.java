@@ -106,10 +106,15 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
         setupErrorHandling();
         setupSecurity();
         
-        boolean siteCertificate = getRepositoryService().getSiteData().getSecurityCertificate();
         HttpsConfig config = new HttpsConfig(http, https);
-        setRootRequestMapper(new AppHttpsMapper(getRootRequestMapper(), getConfigurationType(), 
-                siteCertificate, config));
+        setRootRequestMapper(new AppHttpsMapper(getRootRequestMapper(), getConfigurationType(), config) {
+
+            @Override
+            boolean isSiteSecure() {
+                return applicationService.isSiteSecure();
+            }
+            
+        });
         
     }
 
@@ -361,5 +366,5 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     public void setHttp(int http) {
         this.http = http;
     }
-    
+
 }

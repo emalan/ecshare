@@ -2,6 +2,7 @@ package com.madalla.service.user;
 
 import org.emalan.cms.IDataService;
 import org.emalan.cms.bo.impl.ocm.security.UserSite;
+import org.emalan.cms.bo.security.IUserSite;
 import org.emalan.cms.bo.security.IUserValidate;
 import org.emalan.cms.bo.security.UserData;
 import org.emalan.cms.bo.security.UserSiteData;
@@ -10,11 +11,28 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 
+import com.madalla.service.ApplicationSecurityType;
 import com.madalla.util.security.SecurityUtils;
 import com.madalla.webapp.security.IAuthenticator;
 import com.madalla.webapp.security.IPasswordAuthenticator;
 import com.madalla.webapp.security.PasswordAuthenticator;
 
+/**
+ * Responsible for site user security. This class is configured with a security Type policy.
+ * 
+ * ApplicationSecurityType.DEFAULT
+ * This setting will consider the Site security setting and the user specific security settings to determine if the 
+ * user should be redirected to a secure page for login.
+ * 
+ * ApplicationSecurityType.SECURE
+ * All users are redirected to secure page, if the site is set to secure.
+ * 
+ * ApplicationSecurityType.NONE
+ * No redirect to secure page.
+ * 
+ * @author Eugene Malan
+ *
+ */
 public class UserSecurityService {
 
 	private static final Logger log = LoggerFactory.getLogger(UserSecurityService.class);
@@ -23,6 +41,7 @@ public class UserSecurityService {
 	private PasswordAuthenticator authenticator;
 	private IDataService dataService;
 	private String site ;
+	private ApplicationSecurityType securityType = ApplicationSecurityType.DEFAULT;
 	
     public void init() {
         if (dataService == null) {
@@ -42,6 +61,16 @@ public class UserSecurityService {
         dataService.saveDataObject(adminUser);
  
     }
+    
+    public boolean useSecurity() {
+        if (securityType.equals(ApplicationSecurityType.NONE)) {
+            return false;
+        } else if (securityType.equals(ApplicationSecurityType.SECURE)) {
+            return true;
+        } else { //default
+            return dataService.getSiteData().getSecurityCertificate();
+        }
+    }
 
 	public IAuthenticator getUserAuthenticator() {
 		return new IAuthenticator(){
@@ -54,7 +83,7 @@ public class UserSecurityService {
 				if (dataService.isUserExists(username)){
 					UserData user = dataService.getUser(username);
 					UserSiteData userSite= dataService.getUserSite(user);
-					return Boolean.TRUE.equals(userSite.getRequiresAuthentication());
+					return UserSecurityService.this.requiresSecureAuthentication(userSite, securityType);
 				}
 				return false;
 			}
@@ -88,7 +117,21 @@ public class UserSecurityService {
 		return authenticator;
 
 	}
+	
+	private boolean requiresSecureAuthentication(final IUserSite userSite, final ApplicationSecurityType securityType) {
+	    if (securityType.equals(ApplicationSecurityType.NONE)) {
+	        return false;
+	    } else if (securityType.equals(ApplicationSecurityType.SECURE)) {
+	        return true;
+	    } else { //default
+	        return Boolean.TRUE.equals(userSite.getRequiresAuthentication());
+	    }
+	}
 
+	////////////////////////////
+	//  Setter methods
+	////////////////////////////
+	
 	public void setAuthenticator(final PasswordAuthenticator authenticator) {
 		this.authenticator = authenticator;
 	}
@@ -99,6 +142,17 @@ public class UserSecurityService {
     
     public void setSite(final String site) {
         this.site = site;
+    }
+    
+    public void setSecurityType(String securityType) {
+        if ("SECURE".equalsIgnoreCase(securityType)) {
+            this.securityType = ApplicationSecurityType.SECURE;
+        } else if ("NONE".equalsIgnoreCase(securityType)) {
+            this.securityType = ApplicationSecurityType.NONE;
+        } else {
+            this.securityType = ApplicationSecurityType.DEFAULT;
+        }
+
     }
 
 }

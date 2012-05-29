@@ -16,6 +16,8 @@ public interface ApplicationService {
 
 	BuildInformation getBuildInformation();
 	
+	boolean isSiteSecure();
+	
 	IAuthenticator getUserAuthenticator();
 	
 	IPasswordAuthenticator getUserPasswordAuthenticator(final String name);

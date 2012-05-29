@@ -8,18 +8,15 @@ import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
 
-public class AppHttpsMapper extends HttpsMapper {
+public abstract class AppHttpsMapper extends HttpsMapper {
 
     private final IRequestMapper delegate;
     private final RuntimeConfigurationType type;
-    final boolean securitySite;
 
-    public AppHttpsMapper(final IRequestMapper delegate, RuntimeConfigurationType type, boolean securitySite,
-            final HttpsConfig config) {
+    public AppHttpsMapper(final IRequestMapper delegate, final RuntimeConfigurationType type, final HttpsConfig config) {
         super(delegate, config);
         this.delegate = delegate;
         this.type = type;
-        this.securitySite = securitySite;
     }
 
     /**
@@ -27,7 +24,7 @@ public class AppHttpsMapper extends HttpsMapper {
      */
     @Override
     public IRequestHandler mapRequest(final Request request) {
-        if (type.equals(RuntimeConfigurationType.DEPLOYMENT) && !securitySite) {
+        if (type.equals(RuntimeConfigurationType.DEPLOYMENT) && !isSiteSecure()) {
             return super.mapRequest(request);
         } else {
             return delegate.mapRequest(request);
@@ -39,10 +36,12 @@ public class AppHttpsMapper extends HttpsMapper {
      */
     @Override
     public Url mapHandler(IRequestHandler requestHandler) {
-        if (type.equals(RuntimeConfigurationType.DEPLOYMENT) && !securitySite) {
+        if (type.equals(RuntimeConfigurationType.DEPLOYMENT) && !isSiteSecure()) {
             return super.mapHandler(requestHandler);
         } else {
             return delegate.mapHandler(requestHandler);
         }
     }
+    
+    abstract boolean isSiteSecure();
 }
