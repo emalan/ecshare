@@ -72,7 +72,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
     public static final String MEMBER_REGISTRATION = "memberRegistration";
     public static final String MEMBER_PASSWORD = "memberPassword";
     public static final String LOGIN = "login";
-    
+
     private int http = 80;
     private int https = 443;
 
@@ -96,6 +96,36 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
         return new CmsSession(request, sessionService);
     }
 
+    public void mountApplicationPage(final PageData pageData, final PageMetaLangData newPageInfo,
+            final String oldName) {
+
+        final String pageName = pageData.getName();
+
+        final String mountName;
+        final String existingMount;
+        if (isSiteMultilingual()) {
+            String lang = newPageInfo.getLang();
+            mountName = StringUtils.isEmpty(newPageInfo.getDisplayName()) ? lang + "/" + pageName : lang + "/"
+                    + StringUtils.deleteWhitespace(newPageInfo.getDisplayName());
+            existingMount = lang + "/" + oldName;
+        } else {
+            mountName = StringUtils.isEmpty(newPageInfo.getDisplayName()) ? pageName : StringUtils
+                    .deleteWhitespace(newPageInfo.getDisplayName());
+            existingMount = oldName;
+        }
+
+        log.debug("mountApplicationPage - page:" + pageName + " existing:" + existingMount + " new:" + mountName);
+        if (StringUtils.isNotEmpty(existingMount)) {
+            unmount(existingMount);
+        }
+        try {
+            mountPage(mountName, getPageClass(pageName));
+        } catch (WicketRuntimeException e) {
+            log.error("Error while mounting Application Page.", e);
+        }
+
+    }
+
     private void setupApplicationSpecificConfiguration() {
 
         final IPackageResourceGuard packageResourceGuard = new PackageResourceGuard();
@@ -105,7 +135,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
         setupPageMounts();
         setupErrorHandling();
         setupSecurity();
-        
+
         HttpsConfig config = new HttpsConfig(http, https);
         setRootRequestMapper(new AppHttpsMapper(getRootRequestMapper(), getConfigurationType(), config) {
 
@@ -113,9 +143,9 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
             boolean isSiteSecure() {
                 return applicationService.isSiteSecure();
             }
-            
+
         });
-        
+
     }
 
     protected void setupPageMounts() {
@@ -144,31 +174,27 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
                 // mount rest of application pages
                 for (SiteLanguage lang : langs) {
                     PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(lang.locale, pageData, false);
-                    final String mountName = pageInfo.getMountName(pageData.getName());
+                    // final String mountName =
+                    // pageInfo.getMountName(pageData.getName());
                     try {
                         // TODO
                         // mount(new I18NBookmarkablePageMapper(lang.locale,
                         // mountName, page));
                     } catch (WicketRuntimeException e) {
-                        log.error("Error while mounting Application Page with name:" + mountName, e);
+                        // log.error("Error while mounting Application Page with name:"
+                        // + mountName, e);
                     }
                 }
 
             }
 
         } else {
-            // Multi-lingual not supported
+            // Multi-lingual not supported, mount app pages without locale path
             for (Class<? extends Page> page : getAppPages()) {
                 final PageData pageData = getRepositoryService().getPage(page.getSimpleName());
                 PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(SiteLanguage.BASE_LOCALE, pageData,
                         false);
-                final String mountName = StringUtils.isEmpty(pageInfo.getDisplayName()) ? pageData.getName()
-                        : StringUtils.deleteWhitespace(pageInfo.getDisplayName());
-                try {
-                    mountPage(mountName, page);
-                } catch (WicketRuntimeException e) {
-                    log.error("Error while mounting Application Page with name:" + mountName, e);
-                }
+                mountApplicationPage(pageData, pageInfo, null);
             }
         }
 
@@ -207,6 +233,16 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
             }
         }
 
+    }
+
+    private Class<? extends Page> getPageClass(String name) {
+        Collection<Class<? extends Page>> pages = getAppPages();
+        for (Class<? extends Page> page : pages) {
+            if (page.getSimpleName().equals(name)) {
+                return page;
+            }
+        }
+        return null;
     }
 
     protected void mountImage(ImageData image) {
@@ -329,7 +365,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
      */
     protected abstract void addPagesForMenu(Collection<Class<? extends Page>> pages);
 
-    protected abstract boolean isSiteMultilingual();
+    public abstract boolean isSiteMultilingual();
 
     public boolean hasMemberService() {
         return false;

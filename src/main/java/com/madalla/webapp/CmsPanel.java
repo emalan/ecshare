@@ -2,7 +2,6 @@ package com.madalla.webapp;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.emalan.cms.IDataService;
-import org.emalan.cms.IDataServiceProvider;
 import org.emalan.cms.ISessionDataService;
 import org.emalan.cms.bo.AbstractData;
 import org.slf4j.Logger;

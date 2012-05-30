@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.emalan.cms.bo.SiteLanguage;
 import org.emalan.cms.bo.page.PageData;
+import org.emalan.cms.bo.page.PageMetaLangData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,21 +42,14 @@ public class PageAdminPanel extends CmsPanel {
 				item.add(new PageMetaPanel("metaPanel", item.getModelObject(), locales, defaultLocale){
 					private static final long serialVersionUID = 1L;
 
-					@Override
-					void preSaveProcessing(String existingMount, String newMount) {
-						log.debug("changing mount. existing:" + existingMount + " new:" + newMount);
-						if (StringUtils.isNotEmpty(existingMount)){
-							getCmsApplication().unmount(existingMount);
-						}
-						Class <? extends Page> page = getPageClass(item.getModelObject().getName());
-						if (page != null){
-							try {
-								getCmsApplication().mountPage(newMount, page);
-							} catch (WicketRuntimeException e){
-								log.error("Error while mounting Application Page.", e);
-							}
-						}
-					}
+                    @Override
+                    void preSaveProcessing(final String oldDisplayName, final PageMetaLangData data) {
+                        String pageName = item.getModelObject().getName();
+                        final String mount = StringUtils.defaultIfEmpty(oldDisplayName, pageName);
+                        log.trace("preSaveProcessing - page=" + pageName);
+                        getCmsApplication().mountApplicationPage(item.getModelObject(), data, mount);
+                        
+                    }
 
 				});
 
@@ -70,19 +64,9 @@ public class PageAdminPanel extends CmsPanel {
     	response.renderCSSReference(Css.CSS_FORM);
     }
 
-    private Class<? extends Page> getPageClass(String name){
-    	Collection<Class<? extends Page>> pages = ((CmsApplication)getApplication()).getAppPages();
-		for (Class<? extends Page> page : pages){
-			if (getPageName(page).equals(name)){
-				return page;
-			}
-		}
-		return null;
-    }
-
 	private String getPageName(Class<? extends Page> page){
 		if (!CmsPage.class.isAssignableFrom(page)){
-			throw new WicketRuntimeException("Home page does not extends CmsPage class. Home Page is " + page);
+			throw new WicketRuntimeException("Page does not extends CmsPage class. Page is " + page);
 		}
 		return page.getSimpleName();
 	}

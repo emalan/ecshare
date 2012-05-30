@@ -34,13 +34,11 @@ public abstract class PageMetaPanel extends CmsPanel{
     	private static final long serialVersionUID = 1L;
 
     	final private String existingMount;
-    	final private String pageName;
 
     	public MetaDataForm(String id, IModel<PageMetaLangData> model, final String pageName) {
             super(id, model);
 
-            this.existingMount = model.getObject().getMountName(pageName);
-            this.pageName = pageName;
+            this.existingMount = model.getObject().getDisplayName();
 
             add(new AjaxValidationRequiredTextField("displayName"));
 
@@ -56,12 +54,16 @@ public abstract class PageMetaPanel extends CmsPanel{
 
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
-			PageMetaLangData data = getModelObject();
+			
+		}
+		@Override
+		protected void onSubmit() {
+		    PageMetaLangData data = getModelObject();
 
-			preSaveProcessing(existingMount, data.getMountName(pageName));
+            preSaveProcessing(existingMount, data);
 
-			saveData(data);
-			info(getString("message.success"));
+            saveData(data);
+            info(getString("message.success"));
 		}
 
     }
@@ -108,6 +110,6 @@ public abstract class PageMetaPanel extends CmsPanel{
 
 	}
 
-	abstract void preSaveProcessing(String existingMount, String newMount);
+	abstract void preSaveProcessing(String existingMount, PageMetaLangData data);
 
 }
