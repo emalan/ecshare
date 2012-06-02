@@ -1,4 +1,4 @@
-package org.emalan.cms.jcr.model.tree;
+package com.madalla.jcr.model.tree;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -14,9 +14,10 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.emalan.cms.jcr.model.JcrNodeModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.madalla.jcr.model.JcrNodeModel;
 
 
 public class JcrTreeNode extends AbstractTreeNode{

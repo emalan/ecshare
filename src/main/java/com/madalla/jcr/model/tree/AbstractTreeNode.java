@@ -1,4 +1,4 @@
-package org.emalan.cms.jcr.model.tree;
+package com.madalla.jcr.model.tree;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,10 +8,11 @@ import java.util.List;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import org.emalan.cms.jcr.model.JcrNodeModel;
-import org.emalan.cms.jcr.model.NodeModelWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.madalla.jcr.model.JcrNodeModel;
+import com.madalla.jcr.model.NodeModelWrapper;
 
 
 public abstract class AbstractTreeNode extends NodeModelWrapper implements MutableTreeNode {

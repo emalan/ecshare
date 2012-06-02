@@ -16,12 +16,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.GenericBaseModel;
 import org.emalan.cms.IRepositoryAdminService;
-import org.emalan.cms.jcr.model.tree.AbstractTreeNode;
-import org.emalan.cms.jcr.model.tree.JcrTreeModel;
-import org.emalan.cms.jcr.model.tree.JcrTreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.madalla.jcr.model.tree.AbstractTreeNode;
+import com.madalla.jcr.model.tree.JcrTreeModel;
+import com.madalla.jcr.model.tree.JcrTreeNode;
 import com.madalla.service.ApplicationService;
 import com.madalla.service.IApplicationServiceProvider;
 
@@ -121,9 +121,9 @@ abstract class ContentExplorerPanel extends Panel {
 
 	private void loadTreeData() {
 		if (adminMode){
-			treeModel = getContentAdminService().getRepositoryContent();
+			treeModel = getApplicationService().getRepositoryContent();
 		} else {
-			treeModel = getContentAdminService().getSiteContent();
+			treeModel =  getApplicationService().getSiteContent();
 		}
 	}
 

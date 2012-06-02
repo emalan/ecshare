@@ -2,6 +2,8 @@ package com.madalla.service;
 
 import java.util.List;
 
+import javax.swing.tree.DefaultTreeModel;
+
 import org.apache.commons.lang.StringUtils;
 import org.emalan.cms.IDataService;
 import org.emalan.cms.IRepositoryAdminService;
@@ -17,6 +19,7 @@ import com.madalla.db.dao.EmailEntry;
 import com.madalla.db.dao.EmailEntryDao;
 import com.madalla.db.dao.Member;
 import com.madalla.email.IEmailSender;
+import com.madalla.jcr.explorer.ExplorerService;
 import com.madalla.member.MemberService;
 import com.madalla.service.user.UserSecurityService;
 import com.madalla.webapp.security.IAuthenticator;
@@ -40,6 +43,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	private MemberService memberService;
 	private IEmailSender emailSender;
 	private EmailEntryDao emailEntryDao;
+	private ExplorerService explorerService;
 	
 	/**
 	 * Initializing method
@@ -204,5 +208,16 @@ public class ApplicationServiceImpl implements ApplicationService {
     public void setUserSecurityService(UserSecurityService userSecurityService) {
         this.userSecurityService = userSecurityService;
     }
+	public void setExplorerService(ExplorerService explorerService) {
+		this.explorerService = explorerService;
+	}
+
+	public DefaultTreeModel getRepositoryContent() {
+		return explorerService.getRepositoryContent();
+	}
+
+	public DefaultTreeModel getSiteContent() {
+		return explorerService.getSiteContent();
+	}
 
 }

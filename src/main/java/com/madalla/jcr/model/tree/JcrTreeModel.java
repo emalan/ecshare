@@ -1,4 +1,4 @@
-package org.emalan.cms.jcr.model.tree;
+package com.madalla.jcr.model.tree;
 
 import java.util.HashMap;
 import java.util.Map;

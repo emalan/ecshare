@@ -19,10 +19,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 import org.emalan.cms.BackupFile;
 import org.emalan.cms.IRepositoryAdminService;
-import org.emalan.cms.jcr.model.ContentNode;
-import org.emalan.cms.jcr.model.IContentNode;
-import org.emalan.cms.jcr.model.tree.AbstractTreeNode;
 
+import com.madalla.jcr.model.ContentNode;
+import com.madalla.jcr.model.IContentNode;
+import com.madalla.jcr.model.tree.AbstractTreeNode;
 import com.madalla.service.ApplicationService;
 import com.madalla.service.IApplicationServiceProvider;
 import com.madalla.webapp.admin.pages.AdminPanelLink;

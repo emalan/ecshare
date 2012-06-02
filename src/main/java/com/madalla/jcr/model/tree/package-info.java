@@ -3,4 +3,4 @@
  *
  * @author Eugene Malan
  */
-package org.emalan.cms.jcr.model.tree;
+package com.madalla.jcr.model.tree;

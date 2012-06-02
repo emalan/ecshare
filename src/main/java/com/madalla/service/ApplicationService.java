@@ -2,6 +2,8 @@ package com.madalla.service;
 
 import java.util.List;
 
+import javax.swing.tree.DefaultTreeModel;
+
 import org.emalan.cms.IDataService;
 import org.emalan.cms.IRepositoryAdminService;
 import org.emalan.cms.bo.email.EmailEntryData;
@@ -57,5 +59,9 @@ public interface ApplicationService {
 	IRepositoryAdminService getRepositoryAdminService();
 
 	IDataService getRepositoryService();
+	
+	DefaultTreeModel getRepositoryContent();
+	
+	DefaultTreeModel getSiteContent();
 	
 }

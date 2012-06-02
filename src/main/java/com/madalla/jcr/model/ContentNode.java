@@ -1,4 +1,4 @@
-package org.emalan.cms.jcr.model;
+package com.madalla.jcr.model;
 
 import java.io.Serializable;
 
@@ -6,9 +6,9 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 
 public class ContentNode extends AbstractReadOnlyModel<String>  implements Serializable, IContentNode{
 	private static final long serialVersionUID = 6274872365809010643L;

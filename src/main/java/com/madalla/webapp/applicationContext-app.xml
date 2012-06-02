@@ -60,6 +60,11 @@
 		<property name="securityType" value="${site.security}" />
 	</bean>
 
+    <bean id="explorerService" class="com.madalla.jcr.explorer.ExplorerService">
+        <property name="repositoryAdminService" ref="repositoryAdminService" />
+        <property name="template" ref="jcrTemplate" />
+    </bean>
+
 	<bean id="applicationService" class="com.madalla.service.ApplicationServiceImpl"
 		init-method="init" destroy-method="destroy">
 		<property name="buildInformation" ref="buildInformation"></property>
@@ -69,6 +74,7 @@
 		<property name="emailSender" ref="emailSender" />
 		<property name="memberService" ref="memberService" />
 		<property name="emailEntryDao" ref="emailEntryDao" />
+		<property name="explorerService" ref="explorerService" />
 	</bean>
 
 	<bean abstract="true" id="wicketApplicationParent" class="com.madalla.webapp.CmsApplication">

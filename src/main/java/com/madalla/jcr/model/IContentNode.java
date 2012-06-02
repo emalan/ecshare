@@ -1,4 +1,4 @@
-package org.emalan.cms.jcr.model;
+package com.madalla.jcr.model;
 
 public interface IContentNode {
 
