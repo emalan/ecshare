@@ -17,8 +17,11 @@ import org.apache.wicket.markup.html.PackageResourceGuard;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
 import org.apache.wicket.protocol.https.HttpsConfig;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.Url;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.settings.IExceptionSettings;
@@ -57,6 +60,7 @@ import com.madalla.webapp.cms.editor.ContentEntryPanel;
 import com.madalla.webapp.cms.editor.TranslatePanel;
 import com.madalla.webapp.user.UserAdminPanel;
 import com.madalla.webapp.user.UserProfilePanel;
+import com.madalla.wicket.request.AppHttpsMapper;
 
 /**
  * Abstract Wicket Application class that needs to extended to enable usage of
@@ -140,11 +144,29 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
         setRootRequestMapper(new AppHttpsMapper(getRootRequestMapper(), getConfigurationType(), config) {
 
             @Override
-            boolean isSiteSecure() {
+            public boolean isSiteSecure() {
                 return applicationService.isSiteSecure();
             }
 
         });
+        
+//        final IRequestMapper delegate = getRootRequestMapper();
+//        setRootRequestMapper(new IRequestMapper() {
+//			
+//			public IRequestHandler mapRequest(Request request) {
+//				return delegate.mapRequest(request);
+//			}
+//			
+//			public Url mapHandler(IRequestHandler requestHandler) {
+//				return delegate.mapHandler(requestHandler);
+//			}
+//			
+//			public int getCompatibilityScore(Request request) {
+//				return delegate.getCompatibilityScore(request);
+//			}
+//		});
+        
+//        setRootRequestMapper(new TestMapper(getRootRequestMapper()));
 
     }
 
