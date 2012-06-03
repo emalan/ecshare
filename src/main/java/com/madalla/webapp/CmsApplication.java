@@ -17,23 +17,20 @@ import org.apache.wicket.markup.html.PackageResourceGuard;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
 import org.apache.wicket.protocol.https.HttpsConfig;
-import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
-import org.apache.wicket.request.Url;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.settings.IExceptionSettings;
 import org.emalan.cms.IDataService;
 import org.emalan.cms.IRepositoryAdminService;
 import org.emalan.cms.ISessionDataService;
-import org.emalan.cms.RepositoryServiceManager;
 import org.emalan.cms.bo.SiteLanguage;
 import org.emalan.cms.bo.image.AlbumData;
 import org.emalan.cms.bo.image.ImageData;
 import org.emalan.cms.bo.page.PageData;
 import org.emalan.cms.bo.page.PageMetaLangData;
+import org.emalan.cms.ocm.SessionDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -60,6 +57,7 @@ import com.madalla.webapp.cms.editor.ContentEntryPanel;
 import com.madalla.webapp.cms.editor.TranslatePanel;
 import com.madalla.webapp.user.UserAdminPanel;
 import com.madalla.webapp.user.UserProfilePanel;
+import com.madalla.wicket.mount.I18NBookmarkablePageMapper;
 import com.madalla.wicket.request.AppHttpsMapper;
 
 /**
@@ -96,7 +94,7 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 
     @Override
     public Session newSession(Request request, Response response) {
-        ISessionDataService sessionService = RepositoryServiceManager.getSessionDataService();
+        ISessionDataService sessionService = new SessionDataService();
         return new CmsSession(request, sessionService);
     }
 
@@ -105,28 +103,35 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 
         final String pageName = pageData.getName();
 
-        final String mountName;
-        final String existingMount;
         if (isSiteMultilingual()) {
             String lang = newPageInfo.getLang();
-            mountName = StringUtils.isEmpty(newPageInfo.getDisplayName()) ? lang + "/" + pageName : lang + "/"
+            
+            String mountName = StringUtils.isEmpty(newPageInfo.getDisplayName()) ? lang + "/" + pageName : lang + "/"
                     + StringUtils.deleteWhitespace(newPageInfo.getDisplayName());
-            existingMount = lang + "/" + oldName;
+            
+            if (StringUtils.isNotEmpty(oldName)) {
+            	String existingMount = StringUtils.isEmpty(oldName) ? null : lang + "/" + oldName;
+            	unmount(existingMount);
+            }
+            
+            SiteLanguage siteLanguage = SiteLanguage.getLanguage(lang);
+            mount(new I18NBookmarkablePageMapper(mountName, siteLanguage.locale, getPageClass(pageName)));
         } else {
-            mountName = StringUtils.isEmpty(newPageInfo.getDisplayName()) ? pageName : StringUtils
+            String mountName = StringUtils.isEmpty(newPageInfo.getDisplayName()) ? pageName : StringUtils
                     .deleteWhitespace(newPageInfo.getDisplayName());
-            existingMount = oldName;
+            
+            log.debug("mountApplicationPage - page:" + pageName + " existing:" + oldName + " new:" + mountName);
+            if (StringUtils.isNotEmpty(oldName)) {
+                unmount(oldName);
+            }
+            try {
+                mountPage(mountName, getPageClass(pageName));
+            } catch (WicketRuntimeException e) {
+                log.error("Error while mounting Application Page.", e);
+            }
+
         }
 
-        log.debug("mountApplicationPage - page:" + pageName + " existing:" + existingMount + " new:" + mountName);
-        if (StringUtils.isNotEmpty(existingMount)) {
-            unmount(existingMount);
-        }
-        try {
-            mountPage(mountName, getPageClass(pageName));
-        } catch (WicketRuntimeException e) {
-            log.error("Error while mounting Application Page.", e);
-        }
 
     }
 
@@ -150,24 +155,6 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
 
         });
         
-//        final IRequestMapper delegate = getRootRequestMapper();
-//        setRootRequestMapper(new IRequestMapper() {
-//			
-//			public IRequestHandler mapRequest(Request request) {
-//				return delegate.mapRequest(request);
-//			}
-//			
-//			public Url mapHandler(IRequestHandler requestHandler) {
-//				return delegate.mapHandler(requestHandler);
-//			}
-//			
-//			public int getCompatibilityScore(Request request) {
-//				return delegate.getCompatibilityScore(request);
-//			}
-//		});
-        
-//        setRootRequestMapper(new TestMapper(getRootRequestMapper()));
-
     }
 
     protected void setupPageMounts() {
@@ -186,28 +173,16 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
             // }
             // }
 
-            // mount home page locale mapper
-            // mount(new I18NBookmarkablePageMapper(langs, getHomePage()));
-
-            // mount application pages
+            // mount a mapper for each page
             for (Class<? extends Page> page : getAppPages()) {
                 final PageData pageData = getRepositoryService().getPage(page.getSimpleName());
 
-                // mount rest of application pages
+                // get data for each lang
                 for (SiteLanguage lang : langs) {
                     PageMetaLangData pageInfo = getRepositoryService().getPageMetaLang(lang.locale, pageData, false);
-                    // final String mountName =
-                    // pageInfo.getMountName(pageData.getName());
-                    try {
-                        // TODO
-                        // mount(new I18NBookmarkablePageMapper(lang.locale,
-                        // mountName, page));
-                    } catch (WicketRuntimeException e) {
-                        // log.error("Error while mounting Application Page with name:"
-                        // + mountName, e);
-                    }
+                    log.trace("mounting page - " + pageInfo);
+                    mountApplicationPage(pageData, pageInfo, null);
                 }
-
             }
 
         } else {

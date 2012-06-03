@@ -23,43 +23,41 @@ public class I18NBookmarkablePageMapper extends MountedMapper {
 
     private static final Logger log = LoggerFactory.getLogger(I18NBookmarkablePageMapper.class);
     
-    private final Locale locale;
     private final ClassProvider<? extends IRequestablePage> pageClassProvider;
+    private final Locale locale;
 
-    public I18NBookmarkablePageMapper(final Locale locale, final String langCode, Class<? extends Page> pageClass) {
-        super(langCode, pageClass);
-
-        this.locale = locale;
+    public I18NBookmarkablePageMapper(final String mountName, Locale locale, Class<? extends Page> pageClass) {
+    	super(mountName, pageClass);
         this.pageClassProvider = ClassProvider.of(pageClass);
+        this.locale = locale;
+    }
+
+    public int getCompatibilityScore(Request request) {
+        int score = super.getCompatibilityScore(request);
+        log.trace("getCompatibilityScore - locale=" + locale + " page:"+ pageClassProvider.get().getSimpleName() + " url=" + request.getUrl() + " score=" + score);
+        return score;
     }
 
     public IRequestHandler mapRequest(Request request) {
-        log.trace("mapRequest - " + locale);
+        log.trace("mapRequest - " + request.getUrl());
         PageProvider provider = new PageProvider(pageClassProvider.get());
         provider.setPageSource(getContext());
         return new RenderPageRequestHandler(provider, RedirectPolicy.NEVER_REDIRECT);
     }
 
-    public int getCompatibilityScore(Request request) {
-        int score = super.getCompatibilityScore(request);
-        log.trace("getCompatibilityScore - " + locale + " url=" + request.getUrl() + " score=" + score);
-        return score;
-    }
-
     public Url mapHandler(IRequestHandler requestHandler) {
-        log.trace("mapHandler - " + locale);
-
+    	
         if (requestHandler instanceof BookmarkablePageRequestHandler) {
             BookmarkablePageRequestHandler handler = (BookmarkablePageRequestHandler) requestHandler;
-
+            log.trace("mapHandler - " + pageClassProvider.get().getSimpleName());
             if (!checkPageClass(handler.getPageClass())) {
                 return null;
             }
-
+            log.trace("mapHandler - page matches:" + handler.getPageClass().getSimpleName());
             if (!matches()) {
                 return null;
             }
-            
+            log.trace("mapHandler - locale matches:" + locale );
             PageInfo info = new PageInfo();
             UrlInfo urlInfo = new UrlInfo(new PageComponentInfo(info, null), handler.getPageClass(),
                     handler.getPageParameters());
