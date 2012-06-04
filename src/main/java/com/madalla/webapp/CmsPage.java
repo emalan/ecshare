@@ -351,7 +351,7 @@ public abstract class CmsPage extends WebPage {
 	private void setLocaleFromUrl(Url url){
 	    List<String> segments = url.getSegments();
 		log.info("setLocaleFromUrl - " + segments);
-		if (segments.get(0) != null) {
+		if (segments.size() > 0) {
 		    String s = segments.get(0);
 	        if (s.length() == 2){
 	            getSession().setLocale(SiteLanguage.getLanguage(s).locale);
