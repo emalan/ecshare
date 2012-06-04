@@ -349,13 +349,15 @@ public abstract class CmsPage extends WebPage {
 	}
 
 	private void setLocaleFromUrl(Url url){
-		List<QueryParameter> params = url.getQueryParameters();
-		log.warn("TODO setLocaleFromUrl - Can we use this to set locale??");
-//		String[] urlfrags = url.split("/");
-//		String s = urlfrags[urlfrags.length - 1];
-//		if (s.length() == 2){
-//			getSession().setLocale(SiteLanguage.getLanguage(s).locale);
-//		}
+	    List<String> segments = url.getSegments();
+		log.info("setLocaleFromUrl - " + segments);
+		if (segments.get(0) != null) {
+		    String s = segments.get(0);
+	        if (s.length() == 2){
+	            getSession().setLocale(SiteLanguage.getLanguage(s).locale);
+	        }
+		}
+		
 	}
 	
 	private ApplicationService getApplicationService() {
