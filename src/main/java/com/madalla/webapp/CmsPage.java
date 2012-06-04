@@ -322,10 +322,6 @@ public abstract class CmsPage extends WebPage {
 				//redirectToInterceptPage(new UserLoginPage(getPageClass()));
 			}
 
-			public void renderHead(IHeaderResponse response) {
-				// no contribution, Sorry!
-			}
-
 		});
 	}
 

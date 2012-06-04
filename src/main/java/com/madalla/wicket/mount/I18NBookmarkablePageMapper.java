@@ -15,6 +15,7 @@ import org.apache.wicket.request.handler.RenderPageRequestHandler.RedirectPolicy
 import org.apache.wicket.request.mapper.MountedMapper;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.info.PageInfo;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.ClassProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,29 +40,36 @@ public class I18NBookmarkablePageMapper extends MountedMapper {
     }
 
     public IRequestHandler mapRequest(Request request) {
-        log.trace("mapRequest - " + request.getUrl());
-        PageProvider provider = new PageProvider(pageClassProvider.get());
-        provider.setPageSource(getContext());
-        return new RenderPageRequestHandler(provider, RedirectPolicy.NEVER_REDIRECT);
+        log.debug("mapRequest - locale=" + locale + " page:"+ pageClassProvider.get().getSimpleName());
+//        return super.mapRequest(request);
+        UrlInfo urlInfo = parseRequest(request);
+        if (urlInfo != null) {
+            PageParameters pageParameters = urlInfo.getPageParameters();
+            PageProvider provider = new PageProvider(pageClassProvider.get(), pageParameters);
+            provider.setPageSource(getContext());
+            return new RenderPageRequestHandler(provider, RedirectPolicy.NEVER_REDIRECT);
+        }
+
+        return null;
     }
 
     public Url mapHandler(IRequestHandler requestHandler) {
     	
         if (requestHandler instanceof BookmarkablePageRequestHandler) {
             BookmarkablePageRequestHandler handler = (BookmarkablePageRequestHandler) requestHandler;
-            log.trace("mapHandler - " + pageClassProvider.get().getSimpleName());
+            //log.trace("mapHandler - locale=" + locale + " page:"+ pageClassProvider.get().getSimpleName());
             if (!checkPageClass(handler.getPageClass())) {
                 return null;
             }
-            log.trace("mapHandler - page matches:" + handler.getPageClass().getSimpleName());
+            //log.trace("mapHandler - page matches:" + handler.getPageClass().getSimpleName());
             if (!matches()) {
                 return null;
             }
-            log.trace("mapHandler - locale matches:" + locale );
+            log.debug("mapHandler - matched. locale=" + locale + " page:"+ pageClassProvider.get().getSimpleName());
             PageInfo info = new PageInfo();
             UrlInfo urlInfo = new UrlInfo(new PageComponentInfo(info, null), handler.getPageClass(),
                     handler.getPageParameters());
-
+            //log.trace("getCompatibilityScore - locale=" + locale + " page:"+ pageClassProvider.get().getSimpleName() + " url=" + requestHandler.);
             return buildUrl(urlInfo);
         } else {
             return null;

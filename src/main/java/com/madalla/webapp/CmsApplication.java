@@ -162,16 +162,6 @@ public abstract class CmsApplication extends AuthenticatedCmsApplication impleme
         final List<SiteLanguage> langs = SiteLanguage.getAllLanguages();
 
         if (isSiteMultilingual()) {
-            // mount a home page for each language
-            // for (SiteLanguage lang : langs) {
-            // try {
-            // mount(new I18NBookmarkablePageMapper(lang.locale,
-            // lang.getLanguageCode(), getHomePage()));
-            // } catch (WicketRuntimeException e) {
-            // log.error("Error while mounting home landing page for language:"
-            // + lang, e);
-            // }
-            // }
 
             // mount a mapper for each page
             for (Class<? extends Page> page : getAppPages()) {
