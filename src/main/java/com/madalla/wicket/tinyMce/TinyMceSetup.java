@@ -40,7 +40,14 @@ public class TinyMceSetup {
 			log.info("Editor does not support language. lang=" + locale.getLanguage() + ". Defaulting to english.");
 			language = Language.en;
 		}
-		TinyMCESettings settings = new TinyMCESettings(Theme.advanced, language);
+		TinyMCESettings settings = new TinyMCESettings(Theme.simple, language);
+		
+		if (true) {
+		    return new TinyMceBehavior(settings);
+		}
+		
+		//TODO this causes exception during mapRequest
+		//TinyMCESettings settings = new TinyMCESettings(Theme.advanced, language);
 		
 		final List<Button> first = new ArrayList<Button>();
 		final List<Button> second = new ArrayList<Button>();

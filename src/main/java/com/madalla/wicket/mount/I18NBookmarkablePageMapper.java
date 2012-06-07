@@ -33,15 +33,7 @@ public class I18NBookmarkablePageMapper extends MountedMapper {
         this.locale = locale;
     }
 
-    public int getCompatibilityScore(Request request) {
-        int score = super.getCompatibilityScore(request);
-        log.trace("getCompatibilityScore - locale=" + locale + " page:"+ pageClassProvider.get().getSimpleName() + " url=" + request.getUrl() + " score=" + score);
-        return score;
-    }
-
     public IRequestHandler mapRequest(Request request) {
-        log.debug("mapRequest - locale=" + locale + " page:"+ pageClassProvider.get().getSimpleName());
-//        return super.mapRequest(request);
         UrlInfo urlInfo = parseRequest(request);
         if (urlInfo != null) {
             PageParameters pageParameters = urlInfo.getPageParameters();
@@ -49,12 +41,10 @@ public class I18NBookmarkablePageMapper extends MountedMapper {
             provider.setPageSource(getContext());
             return new RenderPageRequestHandler(provider, RedirectPolicy.NEVER_REDIRECT);
         }
-
         return null;
     }
 
     public Url mapHandler(IRequestHandler requestHandler) {
-    	
         if (requestHandler instanceof BookmarkablePageRequestHandler) {
             BookmarkablePageRequestHandler handler = (BookmarkablePageRequestHandler) requestHandler;
             //log.trace("mapHandler - locale=" + locale + " page:"+ pageClassProvider.get().getSimpleName());

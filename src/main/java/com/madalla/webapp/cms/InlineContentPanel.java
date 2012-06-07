@@ -54,7 +54,6 @@ public class InlineContentPanel extends CmsPanel {
 				log.debug("onSubmit - value="+ getDefaultModel());
 	            log.debug("Submiting populated Content object to Content service.");
 	            saveData(contentEntry);
-	            info("Content saved to repository");
 			}
 
         	@Override
@@ -76,7 +75,7 @@ public class InlineContentPanel extends CmsPanel {
 			@Override
 			protected void onComponentTag(ComponentTag tag) {
 				if (((IContentAdmin)getSession()).isLoggedIn()) {
-					CharSequence s = tag.getString("class");
+					CharSequence s = tag.getAttribute("class");
                     tag.put("class", "editabel" + (s.length()<=0?"":" "+s));
                 }
 				super.onComponentTag(tag);
