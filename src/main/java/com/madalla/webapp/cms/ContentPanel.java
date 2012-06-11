@@ -6,6 +6,8 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.emalan.cms.bo.page.ContentData;
@@ -28,6 +30,24 @@ import com.madalla.webapp.css.Css;
  */
 public class ContentPanel extends CmsPanel {
     private static final long serialVersionUID = 1L;
+    
+    public class ContentModel extends LoadableDetachableModel<String> {
+
+        private static final long serialVersionUID = 1L;
+        
+        private final ContentData content;
+        
+        public ContentModel(final ContentData content) {
+            this.content = content;
+        }
+        @Override
+        protected String load() {
+            log.debug("load");
+            return getRepositoryService().getContentText(content, getSession().getLocale());
+
+        }
+        
+    };
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private String nodeName;
@@ -65,8 +85,7 @@ public class ContentPanel extends CmsPanel {
         log.debug("Content Panel being created for node=" + node + " id=" + id);
         PageData page = getRepositoryService().getPage(node);
         ContentData content = getRepositoryService().getContent(page, nodeId);
-        String contentBody = getRepositoryService().getContentText(content, getSession().getLocale());
-        Component contentBlock = new ContentContainer("contentBlock", nodeId, node, contentBody);
+        Component contentBlock = new ContentContainer("contentBlock", nodeId, node, new ContentModel(content));
         contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
             private static final long serialVersionUID = -3131361470864509715L;
 
@@ -99,14 +118,18 @@ public class ContentPanel extends CmsPanel {
     	super.renderHead(response);
     	response.renderCSSReference(Css.CSS_ICON);
     }
-
+    
+    @Override
+    protected void onBeforeRender() {
+        super.onBeforeRender();
+        log.debug("onBeforeRender");
+    }
+    
     public class ContentContainer extends WebMarkupContainer {
         private static final long serialVersionUID = 1L;
 
-        public ContentContainer(String id, final String contentId, final String contentNode, final String contentBody) {
+        public ContentContainer(String id, final String contentId, final String contentNode, final ContentModel contentModel) {
             super(id);
-
-            final Model<String> contentModel = new Model<String>(contentBody);
 
             // add content
             Component label = new Label("contentBody", contentModel){
@@ -114,12 +137,9 @@ public class ContentPanel extends CmsPanel {
 
 				@Override
 				protected void onBeforeRender(){
-                    PageData page = getRepositoryService().getPage(nodeName);
-                    ContentData content = getRepositoryService().getContent(page, nodeId);
-                    String contentBody = getRepositoryService().getContentText(content, getSession().getLocale());
-                    log.debug("onBeforeRender - setting new Content.");
-                    contentModel.setObject(contentBody);
+				    contentModel.detach();
                     super.onBeforeRender();
+                    log.debug("onBeforeRender");
                 }
             };
             label.setEscapeModelStrings(false);

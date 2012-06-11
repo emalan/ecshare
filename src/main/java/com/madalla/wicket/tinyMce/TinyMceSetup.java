@@ -6,6 +6,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.handler.resource.ResourceReferenceRequestHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,11 +30,47 @@ import com.madalla.webapp.cms.IContentAdmin;
  *
  */
 public class TinyMceSetup {
-
+    
 	private TinyMceSetup() {	}
 	
 	private static final Logger log = LoggerFactory.getLogger(TinyMceSetup.class);
-	
+
+    //Hack for this issue
+    //https://github.com/wicketstuff/core/issues/74
+    public static TinyMceBehavior createTinyMceBehavior(final TinyMCESettings settings)
+    {
+        return new TinyMceBehavior(settings)
+        {
+            private static final long serialVersionUID = 4802148816874932787L;
+            @Override
+            public void renderHead(Component c, IHeaderResponse response)
+            {
+//                response.renderJavaScript("var dlh = document.location.href; window.tinyMCEPreInit = {" +
+//                      "suffix:'', " +
+//                        "base: dlh.substring(0, dlh.indexOf('/',dlh.indexOf('://')+3))," +
+//                        "query:''};", "TinyMceBehavior.myhack");
+                
+                ResourceReferenceRequestHandler handler = new ResourceReferenceRequestHandler(
+                        TinyMCESettings.javaScriptReference(), null);
+
+                Url url = new Url();
+                List<String> segments = url.getSegments();
+                segments.add(Application.get().getMapperContext().getNamespace());
+                segments.add(Application.get().getMapperContext().getResourceIdentifier());
+                segments.add(handler.getResourceReference().getScope().getName());
+                
+                final String baseUrl = url.toString();
+                log.debug("createTinyMceBehavior - baseUrl=" + baseUrl);
+                
+                response.renderJavaScript("var dlh = document.location.href; window.tinyMCEPreInit = {" +
+                        "suffix:'', " +
+                        "base: dlh.substring(0, dlh.indexOf('/',dlh.indexOf('://')+3)) +'/"+ baseUrl +"' + '/tiny_mce/'," +
+                        "query:''};", "TinyMceBehavior.myhack");
+                super.renderHead(c, response);
+            }           
+        };
+    }
+
 	public static TinyMceBehavior createBehavior(final Locale locale, final IContentAdmin session)
     {
 		//set language
@@ -40,14 +81,9 @@ public class TinyMceSetup {
 			log.info("Editor does not support language. lang=" + locale.getLanguage() + ". Defaulting to english.");
 			language = Language.en;
 		}
-		TinyMCESettings settings = new TinyMCESettings(Theme.simple, language);
-		
-		if (true) {
-		    return new TinyMceBehavior(settings);
-		}
 		
 		//TODO this causes exception during mapRequest
-		//TinyMCESettings settings = new TinyMCESettings(Theme.advanced, language);
+		TinyMCESettings settings = new TinyMCESettings(Theme.advanced, language);
 		
 		final List<Button> first = new ArrayList<Button>();
 		final List<Button> second = new ArrayList<Button>();
@@ -167,7 +203,7 @@ public class TinyMceSetup {
 		settings.setToolbarButtons(Toolbar.second, second);
 		settings.setToolbarButtons(Toolbar.third, third);
 		
-        return new TinyMceBehavior(settings);
+		return createTinyMceBehavior(settings);
     }
 	
 	public static Map<String, Object> setupTemplateVariables(IContentAdmin session){

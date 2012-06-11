@@ -1,7 +1,9 @@
 package com.madalla.webapp.cms.editor;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
@@ -23,13 +25,15 @@ public class ContentFormPanel extends CmsPanel{
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	private ContentEntryData contentModel;
-
+	
     final class ContentForm extends Form<ContentEntryData> {
         private static final long serialVersionUID = -3526743712542402160L;
 
+        final TextArea<String> text;
+        
         public ContentForm(final String name, IModel<ContentEntryData> model) {
             super(name, model);
-            TextArea<String> text = new TextArea<String>("text", new IModel<String>(){
+            text = new TextArea<String>("text", new IModel<String>(){
 				private static final long serialVersionUID = 1L;
 
 				public String getObject() {
@@ -46,9 +50,15 @@ public class ContentFormPanel extends CmsPanel{
 				}
 
             });
-            text.add(TinyMceSetup.createBehavior(getAppSession().getLocale(), getAppSession()));
+            //text.add(TinyMceSetup.createBehavior(getAppSession().getLocale(), getAppSession()));
             //text.add(new TinyMceBehavior());
             add(text);
+        }
+        
+        @Override
+        protected void onInitialize() {
+            super.onInitialize();
+            text.add(TinyMceSetup.createBehavior(getAppSession().getLocale(), getAppSession()));
         }
     }
 

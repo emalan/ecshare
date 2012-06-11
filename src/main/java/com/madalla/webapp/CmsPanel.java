@@ -39,7 +39,7 @@ public abstract class CmsPanel extends Panel {
 	}
 
 	protected void saveData(AbstractData data){
-		log.info("daveData - " + data);
+		log.info("saveData - " + data);
 		getSessionDataService().validateTransaction(data);
 		getSessionDataService().logTransaction(data);
 		IDataService service = getApplicationService().getRepositoryService();
