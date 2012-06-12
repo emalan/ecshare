@@ -48,6 +48,14 @@ public class PageUtils {
 		}
 		return paramValue;
 	}
+	
+	public static String getPageParameter(int index, PageParameters parameters, String panel) {
+	    StringValue value = parameters.get(index);
+	    if(value.isEmpty()) {
+	        error(panel + " - The pageParameter at index '"+ index+"' needs to be supplied.");
+	    }
+	    return value.toString();
+	}
 
 	/** supply default value if param not found */
 	public static String getPageParameter(String paramName, PageParameters parameters, String panel, String defaultValue){

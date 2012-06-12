@@ -5,17 +5,11 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.emalan.cms.bo.page.ContentData;
-import org.emalan.cms.bo.page.PageData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.admin.pages.AdminPageLink;
 import com.madalla.webapp.admin.pages.ContentEditPage;
 import com.madalla.webapp.css.Css;
@@ -25,74 +19,59 @@ import com.madalla.webapp.css.Css;
  * <p>
  * Panel links to edit page when valid user is logged in.
  * </p>
+ * 
  * @author Eugene Malan
- *
+ * 
  */
-public class ContentPanel extends CmsPanel {
+public class ContentPanel extends Panel {
     private static final long serialVersionUID = 1L;
-    
-    public class ContentModel extends LoadableDetachableModel<String> {
-
-        private static final long serialVersionUID = 1L;
-        
-        private final ContentData content;
-        
-        public ContentModel(final ContentData content) {
-            this.content = content;
-        }
-        @Override
-        protected String load() {
-            log.debug("load");
-            return getRepositoryService().getContentText(content, getSession().getLocale());
-
-        }
-        
-    };
-
-    private Logger log = LoggerFactory.getLogger(this.getClass());
-    private String nodeName;
-    private String nodeId;
-
 
     /**
-     * Use this Constructor for Border or Application Level Content.
-     *
+     * 
      * @param id
+     *            - wicket id and name
+     * @param model
+     *            - parent node of Content
      */
-    public ContentPanel(String id){
-    	this(id, id, APPNODE);
+    public ContentPanel(final String id, final IModel<String> model, final PageParameters params) {
+        this(id, id, model, params);
     }
+
     /**
-     *
-     * @param id - wicket id
-     * @param name - storage name
-     * @param node - parent node of Content, typically Page Name
+     * 
+     * @param id
+     *            - wicket id
+     * @param name
+     *            - storage name
+     * @param node
+     *            - parent node of Content, typically Page Name
      */
-    public ContentPanel(String id, String name, String node){
-    	this(id, name, node, new Label("nested","stub").setVisible(false));
+    public ContentPanel(String id, String name, final IModel<String> model, final PageParameters params) {
+        this(id, model, params, new Label("nested", "stub").setVisible(false));
     }
+
     /**
-     *
-     * @param id - wicket id
-     * @param name - storage name
-     * @param node - parent node of Content
+     * 
+     * @param id
+     *            - wicket id
+     * @param name
+     *            - storage name
+     * @param node
+     *            - parent node of Content
+     * @param nested
+     *            - to support nesting of another component in the content panel
      */
-    public ContentPanel(String id, String name, String node, Component nested){
-        super(id);
-        this.nodeName = node;
-        this.nodeId = name;
-        
-        log.debug("Content Panel being created for node=" + node + " id=" + id);
-        PageData page = getRepositoryService().getPage(node);
-        ContentData content = getRepositoryService().getContent(page, nodeId);
-        Component contentBlock = new ContentContainer("contentBlock", nodeId, node, new ContentModel(content));
+    public ContentPanel(final String id, final IModel<String> model, final PageParameters params, final Component nested) {
+        super(id, model);
+
+        Component contentBlock = new ContentContainer("contentBlock", model, params);
         contentBlock.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
             private static final long serialVersionUID = -3131361470864509715L;
 
             @Override
-			public String getObject() {
+            public String getObject() {
                 String cssClass;
-                if (((IContentAdmin)getSession()).isLoggedIn()) {
+                if (((IContentAdmin) getSession()).isLoggedIn()) {
                     cssClass = "contentEdit textBlock edit";
                 } else {
                     cssClass = "contentBlock textBlock";
@@ -104,49 +83,26 @@ public class ContentPanel extends CmsPanel {
         add(nested);
 
     }
-    /**
-     *
-     * @param id - wicket id and name
-     * @param node - parent node of Content
-     */
-    public ContentPanel(String id, String node) {
-        this(id, id, node);
-    }
-    
+
     @Override
     public void renderHead(IHeaderResponse response) {
-    	super.renderHead(response);
-    	response.renderCSSReference(Css.CSS_ICON);
+        super.renderHead(response);
+        response.renderCSSReference(Css.CSS_ICON);
     }
-    
-    @Override
-    protected void onBeforeRender() {
-        super.onBeforeRender();
-        log.debug("onBeforeRender");
-    }
-    
+
     public class ContentContainer extends WebMarkupContainer {
         private static final long serialVersionUID = 1L;
 
-        public ContentContainer(String id, final String contentId, final String contentNode, final ContentModel contentModel) {
+        public ContentContainer(final String id, final IModel<String> contentModel, final PageParameters params) {
             super(id);
 
             // add content
-            Component label = new Label("contentBody", contentModel){
-				private static final long serialVersionUID = 6930776696843471636L;
-
-				@Override
-				protected void onBeforeRender(){
-				    contentModel.detach();
-                    super.onBeforeRender();
-                    log.debug("onBeforeRender");
-                }
-            };
+            Component label = new Label("contentBody", contentModel);
             label.setEscapeModelStrings(false);
             add(label);
 
             // add link to edit it
-            add(new AdminPageLink("editLink", ContentEditPage.class, new PageParameters("0="+ contentId + ",1=" + contentNode)));
+            add(new AdminPageLink("editLink", ContentEditPage.class, params));
 
         }
     }
