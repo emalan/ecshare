@@ -1,9 +1,7 @@
 package com.madalla.webapp.cms.editor;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
@@ -13,7 +11,6 @@ import org.emalan.cms.bo.page.ContentEntryData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import wicket.contrib.tinymce.TinyMceBehavior;
 import wicket.contrib.tinymce.ajax.TinyMceAjaxButton;
 
 import com.madalla.webapp.CmsPanel;
@@ -50,8 +47,6 @@ public class ContentFormPanel extends CmsPanel{
 				}
 
             });
-            //text.add(TinyMceSetup.createBehavior(getAppSession().getLocale(), getAppSession()));
-            //text.add(new TinyMceBehavior());
             add(text);
         }
         

@@ -4,17 +4,14 @@
 <beans>
 
     <bean id="emailEntryDao" class="com.madalla.db.dao.EmailEntryDao">
-        <property name="dataSource" ref="dataSource"/>
         <property name="site" value="${site.code}"/>
     </bean>
     
     <bean id="transactionLogDao" class="com.madalla.db.dao.TransactionLogDao">
-        <property name="dataSource" ref="dataSource"/>
         <property name="site" value="${site.code}"/>
     </bean>
     
     <bean id="memberDao" class="com.madalla.db.dao.MemberDao">
-        <property name="dataSource" ref="dataSource"/>
         <property name="site" value="${site.code}"/>
     </bean>
     

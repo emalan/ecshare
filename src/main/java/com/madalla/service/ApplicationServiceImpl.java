@@ -10,8 +10,8 @@ import org.emalan.cms.IRepositoryAdminService;
 import org.emalan.cms.bo.email.EmailEntryData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.Marker;
-import org.slf4j.MarkerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 
 import com.madalla.BuildInformation;
 import com.madalla.bo.member.MemberData;
@@ -34,7 +34,6 @@ import com.madalla.webapp.security.IPasswordAuthenticator;
 public class ApplicationServiceImpl implements ApplicationService {
 
 	private static final Logger log = LoggerFactory.getLogger(ApplicationServiceImpl.class);
-	private static final Marker fatal = MarkerFactory.getMarker("FATAL");
 	
 	private BuildInformation buildInformation;
 	private IRepositoryAdminService repositoryAdminService;
@@ -43,30 +42,14 @@ public class ApplicationServiceImpl implements ApplicationService {
 	private MemberService memberService;
 	private IEmailSender emailSender;
 	private EmailEntryDao emailEntryDao;
+	
+	
 	private ExplorerService explorerService;
 	
 	/**
 	 * Initializing method
 	 */
 	public void init() {
-    	if (buildInformation == null) {
-    		log.error(fatal, "Build Information not configured Correctly.");
-    		throw new IllegalStateException("Build Information not configured Correctly.");
-    	}
-    	log.info("Build Information. ecshare version:" + buildInformation.getVersion());
-    	if (repositoryAdminService == null){
-    		log.error(fatal, "Content Admin Service is not configured Correctly.");
-    		throw new IllegalStateException("Repository Admin Service is not configured Correctly.");
-    	}
-    	if (dataService == null){
-    		log.error(fatal, "Repository Data Service is not configured Correctly.");
-    		throw new IllegalStateException("Repository Data Service is not configured Correctly.");
-    	}
-    	if (emailSender == null){
-    		log.error(fatal, "Email Sender is not configured Correctly.");
-    		throw new IllegalStateException("Email Service is not configured Correctly.");
-    	}
-    	
     	userSecurityService.init();
 	}
 	
@@ -187,27 +170,35 @@ public class ApplicationServiceImpl implements ApplicationService {
 	///////////////////////////////////////////////
 	//    Initializing methods
 	///////////////////////////////////////////////
+	@Autowired
 	public void setBuildInformation(BuildInformation buildInformation) {
 		this.buildInformation = buildInformation;
 	}
+	@Autowired
 	public void setRepositoryAdminService(IRepositoryAdminService repositoryAdminService) {
 		this.repositoryAdminService = repositoryAdminService;
 	}
+	@Autowired
 	public void setDataService(IDataService dataService) {
 		this.dataService = dataService;
 	}
+	@Autowired
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
+	@Autowired
 	public void setEmailSender(IEmailSender emailSender) {
 		this.emailSender = emailSender;
 	}
+	@Autowired
 	public void setEmailEntryDao(EmailEntryDao emailEntryDao) {
 		this.emailEntryDao = emailEntryDao;
 	}
+	@Autowired
     public void setUserSecurityService(UserSecurityService userSecurityService) {
         this.userSecurityService = userSecurityService;
     }
+	@Autowired
 	public void setExplorerService(ExplorerService explorerService) {
 		this.explorerService = explorerService;
 	}

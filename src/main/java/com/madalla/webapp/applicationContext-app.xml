@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
-    http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-2.5.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
+    <context:annotation-config />
+    <context:component-scan base-package="com.madalla" />
+    
 	<import resource="classpath:org/emalan/cms/applicationContext-cms.xml" />
 	<import resource="classpath:com/madalla/email/applicationContext-email.xml" />
 	<import resource="classpath:com/madalla/db/dao/applicationContext-dao.xml" />
+	
+	<bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"/>
 
 	<bean id="propertyConfigurer" abstract="true"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -67,14 +76,6 @@
 
 	<bean id="applicationService" class="com.madalla.service.ApplicationServiceImpl"
 		init-method="init" destroy-method="destroy">
-		<property name="buildInformation" ref="buildInformation"></property>
-		<property name="repositoryAdminService" ref="repositoryAdminService" />
-		<property name="dataService" ref="dataService" />
-		<property name="userSecurityService" ref="userSecurityService" />
-		<property name="emailSender" ref="emailSender" />
-		<property name="memberService" ref="memberService" />
-		<property name="emailEntryDao" ref="emailEntryDao" />
-		<property name="explorerService" ref="explorerService" />
 	</bean>
 
 	<bean abstract="true" id="wicketApplicationParent" class="com.madalla.webapp.CmsApplication">
@@ -82,6 +83,5 @@
 		<property name="configType" value="${wicket.configuration}" />
 		<property name="http" value="${port.http}" />
 	</bean>
-
 
 </beans>

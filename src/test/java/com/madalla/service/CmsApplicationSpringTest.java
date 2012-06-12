@@ -47,6 +47,7 @@ public class CmsApplicationSpringTest extends TestCase {
 
     public void testSpringConfig() {
         assertNotNull(applicationService);
+        assertNotNull(applicationService.getBuildInformation());
     }
 
     public void testApplicationService() {

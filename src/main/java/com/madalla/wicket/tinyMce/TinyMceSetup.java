@@ -82,7 +82,6 @@ public class TinyMceSetup {
 			language = Language.en;
 		}
 		
-		//TODO this causes exception during mapRequest
 		TinyMCESettings settings = new TinyMCESettings(Theme.advanced, language);
 		
 		final List<Button> first = new ArrayList<Button>();
