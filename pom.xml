@@ -173,47 +173,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- JCR so we can use tags -->
-		<dependency>
-			<groupId>org.springmodules</groupId>
-			<artifactId>spring-modules-jcr</artifactId>
-			<version>0.8a</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.servlet</groupId>
-					<artifactId>servlet-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>aparzev</groupId>
-					<artifactId>commons</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>aparzev</groupId>
-					<artifactId>doka</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>jeceira</groupId>
-					<artifactId>jeceira</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>jsr170</groupId>
-					<artifactId>jsr170</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>jsr170</groupId>
-					<artifactId>jcr</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>jug</groupId>
-					<artifactId>jug-asl</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.jackrabbit</groupId>
-					<artifactId>jackrabbit-jca</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
 	</dependencies>
 	<build>
 		<resources>
