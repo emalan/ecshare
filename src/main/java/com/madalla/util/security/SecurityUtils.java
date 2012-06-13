@@ -1,8 +1,8 @@
 package com.madalla.util.security;
 
 import org.apache.commons.lang.RandomStringUtils;
-import org.springframework.security.providers.encoding.BaseDigestPasswordEncoder;
-import org.springframework.security.providers.encoding.ShaPasswordEncoder;
+import org.springframework.security.authentication.encoding.BaseDigestPasswordEncoder;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 
 public class SecurityUtils {
 
