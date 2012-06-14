@@ -2,6 +2,8 @@ package com.madalla.service;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.swing.tree.DefaultTreeModel;
 
 import org.apache.commons.lang.StringUtils;
@@ -48,6 +50,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	/**
 	 * Initializing method
 	 */
+	@PostConstruct
 	public void init() {
     	userSecurityService.init();
 	}
@@ -55,6 +58,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	/**
 	 * Shutdown method
 	 */
+	@PreDestroy
 	public void destroy() {
 		log.info("shutting down application service...");
 	}
@@ -165,6 +169,15 @@ public class ApplicationServiceImpl implements ApplicationService {
 	public List<EmailEntryData> getEmailEntries() {
 		return emailEntryDao.fetch();
 	}
+	
+	public DefaultTreeModel getRepositoryContent() {
+		return explorerService.getRepositoryContent();
+	}
+
+	public DefaultTreeModel getSiteContent() {
+		return explorerService.getSiteContent();
+	}
+
 
 	///////////////////////////////////////////////
 	//    Initializing methods
@@ -200,14 +213,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 	@Autowired
 	public void setExplorerService(ExplorerService explorerService) {
 		this.explorerService = explorerService;
-	}
-
-	public DefaultTreeModel getRepositoryContent() {
-		return explorerService.getRepositoryContent();
-	}
-
-	public DefaultTreeModel getSiteContent() {
-		return explorerService.getSiteContent();
 	}
 
 }

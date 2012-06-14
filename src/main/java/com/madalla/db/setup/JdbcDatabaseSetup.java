@@ -1,13 +1,18 @@
 package com.madalla.db.setup;
 
+import java.io.IOException;
 import java.io.InputStream;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.PlatformFactory;
 import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.model.Database;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
 import org.xml.sax.InputSource;
 
 /**
@@ -15,6 +20,7 @@ import org.xml.sax.InputSource;
  * @author Eugene Malan
  *
  */
+@Component
 public class JdbcDatabaseSetup {
 	private DataSource dataSource;
 	private InputStream schema;
@@ -24,7 +30,9 @@ public class JdbcDatabaseSetup {
 		this.schema = schema;
 	}
 
-	public void init(){
+	@PostConstruct
+	public void init() throws IOException{
+		schema = new ClassPathResource("db-schema.xml", JdbcDatabaseSetup.class).getInputStream();
 		setupDatabase(dataSource);
 	}
 
@@ -49,6 +57,7 @@ public class JdbcDatabaseSetup {
         }
     }
 
+    @Autowired
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}

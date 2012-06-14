@@ -5,15 +5,17 @@
     xmlns:util="http://www.springframework.org/schema/util"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
        http://www.springframework.org/schema/util 
        http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+    <context:component-scan base-package="com.madalla.db" />
     
 	<import resource="classpath:org/emalan/cms/applicationContext-cms.xml" />
 	<import resource="classpath:com/madalla/email/applicationContext-email.xml" />
 	<import resource="classpath:com/madalla/db/dao/applicationContext-dao.xml" />
 	
-	<bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"/>
-
 	<bean id="propertyConfigurer" abstract="true"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="ignoreResourceNotFound" value="true" />
@@ -69,17 +71,7 @@
         <property name="template" ref="jcrTemplate" />
     </bean>
 
-	<bean id="applicationService" class="com.madalla.service.ApplicationServiceImpl"
-		init-method="init" destroy-method="destroy">
-		<property name="buildInformation" ref="buildInformation"></property>
-		<property name="repositoryAdminService" ref="repositoryAdminService" />
-		<property name="dataService" ref="dataService" />
-		<property name="userSecurityService" ref="userSecurityService" />
-		<property name="emailSender" ref="emailSender" />
-		<property name="memberService" ref="memberService" />
-		<property name="emailEntryDao" ref="emailEntryDao" />
-		<property name="explorerService" ref="explorerService" />
-	</bean>
+	<bean id="applicationService" class="com.madalla.service.ApplicationServiceImpl" />
 
 	<bean abstract="true" id="wicketApplicationParent" class="com.madalla.webapp.CmsApplication">
 		<property name="applicationService" ref="applicationService" />

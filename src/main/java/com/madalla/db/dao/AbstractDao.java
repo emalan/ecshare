@@ -3,11 +3,11 @@ package com.madalla.db.dao;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 public class AbstractDao {
 
-	protected SimpleJdbcTemplate template;
+	protected JdbcTemplate template;
 	protected String site;
 
 	public AbstractDao() {
@@ -16,7 +16,7 @@ public class AbstractDao {
 
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
-		this.template = new SimpleJdbcTemplate(dataSource);
+		this.template = new JdbcTemplate(dataSource);
 	}
 
 	public void setSite(String site) {
