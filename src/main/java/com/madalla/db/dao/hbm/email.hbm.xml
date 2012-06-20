@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.madalla.db.dao.hbm">
+
+    <class name="EmailEntry" table="EMAIL_ENTRY">
+        <id name="id" column="ID">
+            <generator class="native"/>
+        </id>
+        <property name="site"/>
+        <property name="dateTime"/>
+        <property name="senderName"/>
+        <property name="senderEmailAddress"/>
+        <property name="senderComment"/>
+    </class>
+</hibernate-mapping>

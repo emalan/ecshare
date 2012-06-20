@@ -9,7 +9,6 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.emalan.cms.bo.email.EmailEntryData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.madalla.BuildInformation;

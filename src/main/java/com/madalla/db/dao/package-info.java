@@ -1,5 +1,5 @@
 /**
- * TODO Document me
+ * Data base layer API, beans and DAO interface.
  * <p>
  *
  * </p>

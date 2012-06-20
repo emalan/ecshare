@@ -1,4 +1,4 @@
-package com.madalla.db.dao;
+package com.madalla.db.dao.hbm;
 
 import org.emalan.cms.bo.email.EmailEntryData;
 import org.emalan.cms.bo.email.IEmailEntryData;
@@ -8,18 +8,23 @@ public class EmailEntry extends EmailEntryData implements IEmailEntryData {
 
 	private static final long serialVersionUID = 1L;
 
-	private int id;
+	private Long id;
 	private DateTime dateTime;
 	private String senderComment;
 	private String senderName;
 	private String senderEmailAddress;
+	private String site;
 
-	@Override
-	public String getId() {
-		return String.valueOf(id);
+    @Override
+    public String getIdAsString() {
+        return String.valueOf(id);
+    }
+    
+	public Long getId() {
+	    return id;
 	}
 
-	public void setId(int id){
+	public void setId(Long id){
 		this.id = id;
 	}
 
@@ -59,5 +64,15 @@ public class EmailEntry extends EmailEntryData implements IEmailEntryData {
 	public void setSenderName(String senderName) {
 		this.senderName = senderName;
 	}
+
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
+
+
 
 }

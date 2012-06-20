@@ -35,7 +35,7 @@
 		<dependency>
 			<groupId>org.emalan</groupId>
 			<artifactId>ec-cms</artifactId>
-			<version>3.0</version>
+			<version>3.1-SNAPSHOT</version>
 		</dependency>
 
 		<!-- WICKET DEPENDENCIES -->
@@ -87,6 +87,11 @@
 			<artifactId>spring-jdbc</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
@@ -133,7 +138,14 @@
 			<artifactId>joda-time</artifactId>
 			<version>1.6</version>
 		</dependency>
-
+		
+		<!-- database - hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>4.1.4.Final</version>
+        </dependency>
+        
 		<!-- database setup -->
 		<dependency>
 			<groupId>org.apache.ddlutils</groupId>
@@ -145,7 +157,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.2</version>
+			<version>4.9</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -171,6 +183,11 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.14</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.derby</groupId>
+		    <artifactId>derby</artifactId>
+		    <version>10.7.1.1</version>
 		</dependency>
 
 	</dependencies>

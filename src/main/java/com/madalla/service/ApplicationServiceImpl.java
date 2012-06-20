@@ -13,10 +13,10 @@ import org.emalan.cms.bo.email.EmailEntryData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.madalla.BuildInformation;
 import com.madalla.bo.member.MemberData;
-import com.madalla.db.dao.EmailEntry;
 import com.madalla.db.dao.EmailEntryDao;
 import com.madalla.db.dao.Member;
 import com.madalla.email.IEmailSender;
@@ -147,11 +147,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	}
 
 	public void createEmailEntry(String name, String email, String comment) {
-		EmailEntry data = new EmailEntry();
-		data.setSenderName(name);
-		data.setSenderEmailAddress(email);
-		data.setSenderComment(comment);
-		emailEntryDao.create(data);
+		emailEntryDao.create(name, email, comment);
 	}
 
 	public void deleteEmailEntry(EmailEntryData email) {
@@ -203,6 +199,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 		this.emailSender = emailSender;
 	}
 	@Autowired
+	@Qualifier("Hibernate")
 	public void setEmailEntryDao(EmailEntryDao emailEntryDao) {
 		this.emailEntryDao = emailEntryDao;
 	}

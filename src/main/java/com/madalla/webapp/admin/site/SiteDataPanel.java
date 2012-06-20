@@ -90,7 +90,7 @@ public class SiteDataPanel extends CmsPanel {
 		private String id;
 
 		public LoadableDetachableEmailEntryModel(EmailEntryData emailEntry) {
-			this(emailEntry.getId());
+			this(emailEntry.getIdAsString());
 		}
 
 		public LoadableDetachableEmailEntryModel(String id){

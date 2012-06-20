@@ -50,7 +50,7 @@
 
 	<bean id="memberService" class="com.madalla.member.MemberService"
 		scope="singleton">
-		<property name="memberDao" ref="memberDao" />
+		<property name="memberDao" ref="memberSpringDao" />
 		<property name="authenticator" ref="authenticatorMember" />
 	</bean>
 

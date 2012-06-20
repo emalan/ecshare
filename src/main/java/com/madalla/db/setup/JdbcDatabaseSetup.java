@@ -12,7 +12,6 @@ import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.model.Database;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Component;
 import org.xml.sax.InputSource;
 
 /**
@@ -20,7 +19,6 @@ import org.xml.sax.InputSource;
  * @author Eugene Malan
  *
  */
-@Component
 public class JdbcDatabaseSetup {
 	private DataSource dataSource;
 	private InputStream schema;
