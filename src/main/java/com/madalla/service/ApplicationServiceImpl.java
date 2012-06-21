@@ -154,7 +154,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 		emailEntryDao.delete(email);
 	}
 
-	public EmailEntryData getEmailEntry(String id) {
+	public EmailEntryData getEmailEntry(final String id) {
 		if (StringUtils.isEmpty(id)) {
 			return null;
 		} else {

@@ -14,6 +14,8 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.madalla.bo.member.MemberData;
@@ -21,6 +23,8 @@ import com.madalla.db.dao.springjdbc.MemberSpringDao;
 import com.madalla.db.dao.springjdbc.TransactionLogSpringDao;
 
 public class DaoHibernateTest {
+    
+    private static final Logger log = LoggerFactory.getLogger(DaoHibernateTest.class);
 
     private EmailEntryDao emailEntryDao;
     
@@ -103,12 +107,12 @@ public class DaoHibernateTest {
         List<EmailEntryData> list = emailEntryDao.fetch();
         assertTrue(list.size() >= 1);
         for (EmailEntryData item : list) {
-            System.out.println(item);
-            System.out.println("DATE DISPLAY UTC : " + item.getDateTime().toString());
-            System.out.println("DATE DISPLAY US/Central : "
+            log.debug(item.toString());
+            log.debug("DATE DISPLAY UTC : " + item.getDateTime().toString());
+            log.debug("DATE DISPLAY US/Central : "
                     + item.getDateTime().toDateTime(DateTimeZone.forID("US/Central")));
 
-            emailEntryDao.find(item.getIdAsString());
+            emailEntryDao.find(item.getId());
             emailEntryDao.delete(item);
         }
         List<EmailEntryData> check = emailEntryDao.fetch();

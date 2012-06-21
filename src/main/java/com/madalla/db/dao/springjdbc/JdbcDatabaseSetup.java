@@ -1,4 +1,4 @@
-package com.madalla.db.setup;
+package com.madalla.db.dao.springjdbc;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +22,7 @@ import org.xml.sax.InputSource;
 public class JdbcDatabaseSetup {
 	private DataSource dataSource;
 	private InputStream schema;
-	private boolean alterDb = true;
+	private boolean alterDb = false;
 
 	public void setSchema(InputStream schema) {
 		this.schema = schema;

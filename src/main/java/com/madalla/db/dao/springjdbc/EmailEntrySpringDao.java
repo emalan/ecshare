@@ -26,7 +26,7 @@ public class EmailEntrySpringDao  extends AbstractSpringDao implements EmailEntr
 
 		public EmailEntryData mapRow(ResultSet rs, int rowNum) throws SQLException {
 			EmailEntry email = new EmailEntry();
-			email.setId(rs.getInt("ID"));
+			email.setId(rs.getString("ID"));
 			email.setDateTime(new DateTime(rs.getTimestamp("SENT_DATE"), DateTimeZone.UTC));
 			email.setSenderName(rs.getString("SENDER_NAME"));
 			email.setSenderEmailAddress(rs.getString("SENDER_EMAIL"));

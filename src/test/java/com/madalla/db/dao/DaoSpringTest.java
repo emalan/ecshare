@@ -3,6 +3,8 @@ package com.madalla.db.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import junit.framework.TestCase;
 
 import org.apache.commons.lang.RandomStringUtils;
@@ -14,6 +16,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.madalla.bo.member.MemberData;
 import com.madalla.db.dao.springjdbc.EmailEntrySpringDao;
+import com.madalla.db.dao.springjdbc.JdbcDatabaseSetup;
 import com.madalla.db.dao.springjdbc.MemberSpringDao;
 import com.madalla.db.dao.springjdbc.TransactionLogSpringDao;
 
@@ -36,6 +39,11 @@ public class DaoSpringTest extends TestCase {
         emailEntryDao = context.getBean(EmailEntrySpringDao.class);
         transactionLogDao = context.getBean(TransactionLogSpringDao.class);
         memberDao = context.getBean(MemberSpringDao.class);
+        
+        DataSource dataSource = context.getBean(DataSource.class);
+        JdbcDatabaseSetup setup = new JdbcDatabaseSetup();
+        setup.setDataSource(dataSource);
+        setup.init();
     }
 
     public void testMemberDao() {
@@ -98,13 +106,14 @@ public class DaoSpringTest extends TestCase {
         emailEntryDao.create("Eugene Malan", "ee@emalan.com", "Cooment goes here");
 
         List<EmailEntryData> list = emailEntryDao.fetch();
+        assertTrue(list.size() >= 1);
         for (EmailEntryData item : list) {
             System.out.println(item);
             System.out.println("DATE DISPLAY UTC : " + item.getDateTime().toString());
             System.out.println("DATE DISPLAY US/Central : "
                     + item.getDateTime().toDateTime(DateTimeZone.forID("US/Central")));
 
-            emailEntryDao.find(item.getIdAsString());
+            emailEntryDao.find(item.getId());
             emailEntryDao.delete(item);
         }
         List<EmailEntryData> check = emailEntryDao.fetch();

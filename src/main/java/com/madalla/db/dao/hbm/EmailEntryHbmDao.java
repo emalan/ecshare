@@ -42,10 +42,10 @@ public class EmailEntryHbmDao extends AbstractDao implements EmailEntryDao {
     }
     
     @Override
-    @Transactional
-    public EmailEntryData find(String id) {
+    @Transactional(readOnly = true)
+    public EmailEntryData find(final String id) {
         log.trace("find - " + id);
-        EmailEntry data = (EmailEntry) getSession().load(EmailEntry.class, id);
+        EmailEntry data = (EmailEntry) getSession().load(EmailEntry.class, Long.valueOf(id));
         return data;
     }
 
@@ -59,7 +59,7 @@ public class EmailEntryHbmDao extends AbstractDao implements EmailEntryDao {
 
     @SuppressWarnings("unchecked")
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<EmailEntryData> fetch() {
         log.trace("fetch - " + site);
         return getSession().createCriteria(EmailEntry.class)
