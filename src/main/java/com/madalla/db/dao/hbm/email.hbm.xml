@@ -10,9 +10,9 @@
             <generator class="native"/>
         </id>
         <property name="site"/>
-        <property name="dateTime"/>
+        <property type="org.joda.time.DateTime" name="dateTime"/>
         <property name="senderName"/>
         <property name="senderEmailAddress"/>
-        <property name="senderComment"/>
+        <property name="senderComment" length="256"/>
     </class>
 </hibernate-mapping>

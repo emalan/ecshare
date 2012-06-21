@@ -17,13 +17,13 @@ import org.junit.Test;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.madalla.bo.member.MemberData;
-import com.madalla.db.dao.hbm.EmailEntryHbmDao;
 import com.madalla.db.dao.springjdbc.MemberSpringDao;
 import com.madalla.db.dao.springjdbc.TransactionLogSpringDao;
 
 public class DaoHibernateTest {
 
-    private EmailEntryHbmDao emailEntryDao;
+    private EmailEntryDao emailEntryDao;
+    
     private TransactionLogSpringDao transactionLogDao;
     private MemberSpringDao memberDao;
 
@@ -37,7 +37,7 @@ public class DaoHibernateTest {
 
         context = new FileSystemXmlApplicationContext(configLocations.toArray(new String[configLocations.size()]));
         
-        emailEntryDao = context.getBean(EmailEntryHbmDao.class);
+        emailEntryDao = context.getBean("EmailEntryHbmDao", EmailEntryDao.class);
     }
 
     public void testMemberDao() {
@@ -98,9 +98,10 @@ public class DaoHibernateTest {
 
         emailEntryDao.fetch();
 
-        emailEntryDao.create("Eugene Malan", "ee@emalan.com", "Cooment goes here");
+        emailEntryDao.create("Eugene Malan", "ee@emalan.com", "Comment");
 
         List<EmailEntryData> list = emailEntryDao.fetch();
+        assertTrue(list.size() >= 1);
         for (EmailEntryData item : list) {
             System.out.println(item);
             System.out.println("DATE DISPLAY UTC : " + item.getDateTime().toString());
@@ -114,19 +115,12 @@ public class DaoHibernateTest {
         assertTrue(check.isEmpty());
     }
 
-    public void setTransactionLogDao(TransactionLogSpringDao transactionLogDao) {
-        this.transactionLogDao = transactionLogDao;
-    }
-
-    private void listTimeZones() {
+    public void listTimeZones() {
         for (Object id : DateTimeZone.getAvailableIDs()) {
             System.out.println(id);
         }
 
     }
 
-    public void setMemberDao(MemberSpringDao memberDao) {
-        this.memberDao = memberDao;
-    }
 
 }
