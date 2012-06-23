@@ -74,8 +74,16 @@ public class SiteDataPanel extends CmsPanel {
 			};
 		}
 
-		public IModel<EmailEntryData> model(EmailEntryData object) {
-			return new LoadableDetachableEmailEntryModel(object);
+		public IModel<EmailEntryData> model(final EmailEntryData object) {
+			return new AbstractReadOnlyModel<EmailEntryData>() {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public EmailEntryData getObject() {
+					return object;
+				}
+			};
 		}
 
 		public int size() {
@@ -83,48 +91,7 @@ public class SiteDataPanel extends CmsPanel {
 		}
 
 	}
-
-	private class LoadableDetachableEmailEntryModel extends LoadableDetachableModel<EmailEntryData>{
-
-		private static final long serialVersionUID = 1L;
-		private String id;
-
-		public LoadableDetachableEmailEntryModel(EmailEntryData emailEntry) {
-			this(emailEntry.getId());
-		}
-
-		public LoadableDetachableEmailEntryModel(String id){
-			if (StringUtils.isEmpty(id)){
-				throw new IllegalArgumentException();
-			}
-			this.id = id;
-		}
-
-		@Override
-		protected EmailEntryData load() {
-			return getApplicationService().getEmailEntry(id);
-		}
-
-	    @Override
-		public int hashCode()	    {
-	        return id.hashCode();
-	    }
-
-	    @Override
-		public boolean equals(final Object obj) {
-	        if (obj == this) {
-	            return true;
-	        } else if (obj == null) {
-	            return false;
-	        } else if (obj instanceof LoadableDetachableEmailEntryModel) {
-	        	LoadableDetachableEmailEntryModel other = (LoadableDetachableEmailEntryModel)obj;
-	            return other.id == this.id;
-	        }
-	        return false;
-	    }
-
-	}
-
+	
 	private class SortableLogProvider extends SortableDataProvider<LogData> {
 
 		private static final long serialVersionUID = 1L;
