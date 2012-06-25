@@ -70,7 +70,7 @@ public class EmailEntryHbmDao extends AbstractDao implements EmailEntryDao {
         return sessionFactory.getCurrentSession();
     }
 
-    @Autowired
+    // @Autowired
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
