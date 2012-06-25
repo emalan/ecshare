@@ -1,6 +1,5 @@
 package com.madalla.webapp.admin.pages;
 
-import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
@@ -48,8 +47,6 @@ public class UserLoginPage extends AbstractAdminPage{
 	private void redirectToSecurePage(final String username) {
             log.debug("redirectToSecurePage - redirecting to secure page.");
             throw new RestartResponseException(SecureLoginPage.class, new PageParameters().set(PARAMETERS[0], username));
-            //throw new RestartResponseAtInterceptPageException(new SecureLoginPage(username));
-            //setResponsePage(new SecureLoginPage(username));
 	}
 
 

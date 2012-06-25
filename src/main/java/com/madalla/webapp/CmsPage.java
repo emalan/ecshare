@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Page;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
@@ -283,7 +284,7 @@ public abstract class CmsPage extends WebPage {
                 }
                 IAuthenticator authenticator = getApplicationService().getUserAuthenticator();
                 if (authenticator.requiresSecureAuthentication(username)) {
-                    redirectToInterceptPage(new SecureLoginPage(username));
+                    redirectToSecureLoginPage(username);
                 }
             }
 
@@ -315,6 +316,11 @@ public abstract class CmsPage extends WebPage {
 
         });
 
+    }
+    
+    private void redirectToSecureLoginPage(final String username) {
+        log.debug("redirectToSecurePage - redirecting to secure page.");
+        throw new RestartResponseException(SecureLoginPage.class, new PageParameters().set(UserLoginPage.PARAMETERS[0], username));
     }
 
     private void setupLoginLink() {
