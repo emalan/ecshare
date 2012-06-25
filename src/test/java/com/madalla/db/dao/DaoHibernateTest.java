@@ -8,6 +8,7 @@ import java.util.List;
 import org.emalan.cms.bo.email.EmailEntryData;
 import org.joda.time.DateTimeZone;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import com.madalla.db.dao.springjdbc.MemberSpringDao;
 import com.madalla.db.dao.springjdbc.TransactionLogSpringDao;
 
+@Ignore
 public class DaoHibernateTest {
     
     private static final Logger log = LoggerFactory.getLogger(DaoHibernateTest.class);
