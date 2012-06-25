@@ -1,25 +1,13 @@
 package com.madalla.jcr;
 
 
-import java.io.IOException;
-import java.util.Enumeration;
-
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springmodules.jcr.JcrCallback;
+import org.junit.Ignore;
 import org.springmodules.jcr.JcrTemplate;
 
-import com.madalla.jcr.model.JcrNodeModel;
-import com.madalla.jcr.model.tree.AbstractTreeNode;
-import com.madalla.jcr.model.tree.JcrTreeModel;
-import com.madalla.jcr.model.tree.JcrTreeNode;
-
-public class TestJcrTreeNode extends AbstractJcrTester {
+@Ignore
+public class JcrTreeNodeTest extends AbstractJcrTester {
 
 	Log log = LogFactory.getLog(this.getClass());
 	public JcrTemplate template;

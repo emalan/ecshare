@@ -1,8 +1,10 @@
 package com.madalla;
 
 import org.apache.wicket.protocol.http.WebApplication;
+import org.junit.Ignore;
 
-public class TestApplication extends WebApplication {
+@Ignore
+public class ApplicationTest extends WebApplication {
 
 	@Override
 	public Class getHomePage() {

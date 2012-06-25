@@ -62,7 +62,7 @@ public abstract class LoginPanel extends CmsPanel {
 	/**
 	 * Sign in form.
 	 */
-	public final class SignInForm extends Form<Object> {
+	public final class SignInForm extends Form<Void> {
 		private static final long serialVersionUID = 1L;
 
 		/**
@@ -126,7 +126,7 @@ public abstract class LoginPanel extends CmsPanel {
 
 		}
 
-		final Form<Object> form = new SignInForm("signInForm", credentials);
+		final Form<Void> form = new SignInForm("signInForm", credentials);
 
 		add(form);
 
