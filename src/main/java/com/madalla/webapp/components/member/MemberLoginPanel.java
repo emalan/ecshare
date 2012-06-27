@@ -112,20 +112,20 @@ public class MemberLoginPanel extends AbstractMemberPanel{
             @Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax onError called");
-				target.addComponent(signinFeedback);
+				target.add(signinFeedback);
 			}
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax submit called");
-				target.addComponent(signinFeedback);
+				target.add(signinFeedback);
 
 				if (session.signIn(credentials.getUsername(), credentials.getPassword())){
 					signinFeedback.info(getLocalizer().getString("signInFailed", this, "Success"));
 					setResponsePage(destination);
 				} else {
 					signinFeedback.error(getLocalizer().getString("signInFailed", this, "Sign in failed"));
-					target.addComponent(signinFeedback);
+					target.add(signinFeedback);
 				}
 
 			}
@@ -139,7 +139,7 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				session.signOut();
-				target.addComponent(loginInfo);
+				target.add(loginInfo);
 				processSignOut();
 			}
 
@@ -179,7 +179,7 @@ public class MemberLoginPanel extends AbstractMemberPanel{
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				target.addComponent(resetFeedback);
+				target.add(resetFeedback);
 			}
 
 			@Override

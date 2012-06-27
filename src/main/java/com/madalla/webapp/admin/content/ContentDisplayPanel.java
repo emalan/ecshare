@@ -88,9 +88,9 @@ class ContentDisplayPanel extends Panel {
 			public void onClick(AjaxRequestTarget target) {
             	//getContentService().deleteNode(path);
             	refresh("");
-            	//target.addComponent(getParent());
+            	//target.add(getParent());
             	parentPanel.deleteNode(target);
-            	//target.addComponent(parentPanel.getExplorerPanel());
+            	//target.add(parentPanel.getExplorerPanel());
 			}
         };
         delete.setOutputMarkupId(true);
@@ -138,7 +138,7 @@ class ContentDisplayPanel extends Panel {
 			@Override
             public void onClick(AjaxRequestTarget target) {
 				parentPanel.copyNode();
-				target.addComponent(paste);
+				target.add(paste);
 			}
         };
         copy.setOutputMarkupId(true);

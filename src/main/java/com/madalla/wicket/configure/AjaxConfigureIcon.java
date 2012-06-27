@@ -1,10 +1,12 @@
 package com.madalla.wicket.configure;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.IAjaxCallDecorator;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.IComponentAwareHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import com.madalla.webapp.css.Css;
@@ -16,37 +18,7 @@ import com.madalla.wicket.animation.IAnimatorActions;
 
 public class AjaxConfigureIcon extends WebMarkupContainer{
 	private static final long serialVersionUID = 1L;
-
-	private class AjaxConfigureCallDecorator implements IAjaxCallDecorator, IComponentAwareHeaderContributor {
-		private static final long serialVersionUID = 1L;
-		private final Component configureArea;
-		
-		public AjaxConfigureCallDecorator(final Component configureArea) {
-			this.configureArea = configureArea;
-		}
-		
-		public CharSequence decorateScript(Component component, CharSequence script) {
-			String post = "var e = Wicket.$('" + configureArea.getParent().getMarkupId()
-					+ "'); if (Utils.hasClassName(e, 'editing'))"
-					+ "{Utils.removeClassName(e, 'editing');} else "
-					+ "{Utils.addClassName(e, 'editing')};";
-			return script + post;
-		}
-
-		public CharSequence decorateOnSuccessScript(Component component, CharSequence script) {
-			return script;
-		}
-
-		public CharSequence decorateOnFailureScript(Component component, CharSequence script) {
-			return script;
-		}
-
-		public void renderHead(Component component, IHeaderResponse response) {
-			response.renderJavaScriptReference(JavascriptResources.SCRIPT_UTILS);
-		}
-		
-	}
-
+	
 	public AjaxConfigureIcon(String id, final Component configureArea, final int size){
 		this(id, null, configureArea, size);
 	}
@@ -74,11 +46,20 @@ public class AjaxConfigureIcon extends WebMarkupContainer{
 			protected String onEventAnimatorActions(final IAnimatorActions animator) {
 				return animator.toggle();
 			}
-
+			
 			@Override
-			protected IAjaxCallDecorator getAjaxCallDecorator() {
-				return new AjaxConfigureCallDecorator(configureArea);
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+			    super.updateAjaxAttributes(attributes);
+			    
+			    String post = "var e = Wicket.$('" + configureArea.getParent().getMarkupId()
+	                    + "'); if (Utils.hasClassName(e, 'editing'))"
+	                    + "{Utils.removeClassName(e, 'editing');} else "
+	                    + "{Utils.addClassName(e, 'editing')};";
+			    
+			    AjaxCallListener listener = new AjaxCallListener().onAfter(post);
+			    attributes.getAjaxCallListeners().add(listener);
 			}
+
 
 		});
 
@@ -87,7 +68,8 @@ public class AjaxConfigureIcon extends WebMarkupContainer{
 	
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		response.renderCSSReference(Css.CSS_ICON);
+		response.render(CssHeaderItem.forReference(Css.CSS_ICON));
+		response.render(JavaScriptHeaderItem.forReference(JavascriptResources.SCRIPT_UTILS));
 	}
 
 	@Override

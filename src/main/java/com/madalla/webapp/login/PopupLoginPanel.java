@@ -64,7 +64,7 @@ public abstract class PopupLoginPanel extends Panel{
             protected void onSignInSucceeded(AjaxRequestTarget target) {
             	super.onSignInSucceeded(target);
                 log.debug("onSignInSucceeded");
-                target.addComponent(popup);
+                target.add(popup);
                 afterLogonSuccess(target);
                 afterLogonSuccess();
             }

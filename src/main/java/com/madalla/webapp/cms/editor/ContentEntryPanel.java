@@ -7,7 +7,8 @@ import java.util.Locale;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.PackageResourceReference;
@@ -107,7 +108,7 @@ public class ContentEntryPanel extends CmsPanel {
 	public void renderHead(IHeaderResponse response) {
 		
 		//tabs style sheet
-		response.renderCSSReference(new PackageResourceReference(ContentEntryPanel.class, "tabs.css"));
+		response.render(CssHeaderItem.forReference(new PackageResourceReference(ContentEntryPanel.class, "tabs.css")));
 
 	}
 

@@ -16,10 +16,10 @@
  */
 package com.madalla.wicket.request;
 
+import org.apache.wicket.core.request.handler.IPageClassRequestHandler;
 import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.handler.IPageClassRequestHandler;
 
 
 /**

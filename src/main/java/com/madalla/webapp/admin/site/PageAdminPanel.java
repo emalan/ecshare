@@ -8,7 +8,8 @@ import java.util.Locale;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Page;
 import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.emalan.cms.bo.SiteLanguage;
@@ -61,7 +62,7 @@ public class PageAdminPanel extends CmsPanel {
     
     @Override
     public void renderHead(IHeaderResponse response) {
-    	response.renderCSSReference(Css.CSS_FORM);
+    	response.render(CssHeaderItem.forReference(Css.CSS_FORM));
     }
 
 	private String getPageName(Class<? extends Page> page){

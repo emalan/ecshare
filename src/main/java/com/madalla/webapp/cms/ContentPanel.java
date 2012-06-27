@@ -2,7 +2,8 @@ package com.madalla.webapp.cms;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -87,7 +88,7 @@ public class ContentPanel extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference(Css.CSS_ICON);
+        response.render(CssHeaderItem.forReference(Css.CSS_ICON));
     }
 
     public class ContentContainer extends WebMarkupContainer {

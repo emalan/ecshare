@@ -21,9 +21,9 @@ import java.util.List;
 public abstract class AnimatorSubject implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	private static final String TEMPLATE_COLOR = ".addSubject(new ColorStyleSubject(wicketGet('${target}'), '${property}', \"${from}\", \"${to}\"))";
-	private static final String TEMPLATE_DISCRETE = ".addSubject(new DiscreteStyleSubject(wicketGet('${target}'), '${property}', \"${from}\", \"${to}\", ${when}))";
-	private static final String TEMPLATE_NUMERIC = ".addSubject(new NumericalStyleSubject(wicketGet('${target}'), '${property}', ${from}, ${to},'${unit}'))";
+	private static final String TEMPLATE_COLOR = ".addSubject(new ColorStyleSubject($('#${target}'), '${property}', \"${from}\", \"${to}\"))";
+	private static final String TEMPLATE_DISCRETE = ".addSubject(new DiscreteStyleSubject($('#${target}'), '${property}', \"${from}\", \"${to}\", ${when}))";
+	private static final String TEMPLATE_NUMERIC = ".addSubject(new NumericalStyleSubject($('#${target}'), '${property}', ${from}, ${to},'${unit}'))";
 
 	public static final AnimatorSubject discrete(final String target, final String property, final String from, final String to){
 		return discrete(target, property, from, to, 0.5);

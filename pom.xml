@@ -63,7 +63,7 @@
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-tinymce</artifactId>
-			<version>1.5.5</version>
+			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
@@ -395,7 +395,7 @@
 	</distributionManagement>
 
 	<properties>
-		<wicket.version>1.5.7</wicket.version>
+		<wicket.version>6.0.0-beta1</wicket.version>
 		<jackrabbit.version>1.5.5</jackrabbit.version>
 		<spring.version>3.1.1.RELEASE</spring.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

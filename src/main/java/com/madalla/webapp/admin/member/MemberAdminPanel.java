@@ -22,7 +22,8 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -49,7 +50,6 @@ import org.slf4j.LoggerFactory;
 import com.madalla.bo.member.MemberData;
 import com.madalla.webapp.components.member.AbstractMemberPanel;
 import com.madalla.webapp.css.Css;
-import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.wicket.ClassAppenderBehavior;
 import com.madalla.wicket.DataDownloadLink;
 import com.madalla.wicket.LabelPagingNavigator;
@@ -73,7 +73,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 			//setSort("id", true);
 		}
 
-		public Iterator<? extends MemberData> iterator(int first, int count) {
+		public Iterator<? extends MemberData> iterator(long first, long count) {
 			List<? extends MemberData> list = getApplicationService().getMembers();
 			if("firstName".equals(getSort().getProperty())){
 				Collections.sort(list, getFirstNameComparator());
@@ -89,7 +89,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 			if (!getSort().isAscending()){
 				Collections.reverse(list);
 			}
-			return list.listIterator(first);
+			return list.listIterator((int) first);
 		}
 
 		private Comparator<MemberData> getFirstNameComparator(){
@@ -128,7 +128,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 			};
 		}
 
-		public int size() {
+		public long size() {
 			return getApplicationService().getMembers().size();
 		}
 
@@ -295,7 +295,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 			} else {
 				info(getString("message.success"));
 			}
-			target.addComponent(MemberForm.this);
+			target.add(MemberForm.this);
 			processSubmit(target);
 		}
 
@@ -355,7 +355,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 
 			@Override
 			protected void processSubmit(AjaxRequestTarget target) {
-				target.addComponent(container);
+				target.add(container);
 
 			}
 
@@ -373,8 +373,8 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 				form.modelChanged();
 				form.clearInput();
 				target.appendJavaScript(hideShowForm.seekToEnd());
-				target.addComponent(editForm);
-				target.addComponent(reset);
+				target.add(editForm);
+				target.add(reset);
 			}
 
 			@Override
@@ -406,11 +406,11 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						current.setObject(entry);
-						target.addComponent(editForm);
+						target.add(editForm);
 						target.appendJavaScript("var e = $('"+ item.getMarkupId() + "'); e.adjacent('tr').each(function(s){ s.removeClassName('selected')}); e.addClassName(\"selected\");" + hideShowForm.seekToEnd());
-						target.addComponent(item);
-						target.addComponent(reset);
-						target.addComponent(resetFeedback);
+						target.add(item);
+						target.add(reset);
+						target.add(resetFeedback);
 					}
                 });
 
@@ -420,7 +420,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						getApplicationService().deleteMember(entry);
-						target.addComponent(container);
+						target.add(container);
 					}
 
 				});
@@ -511,7 +511,7 @@ public class MemberAdminPanel extends AbstractMemberPanel {
         				reset.error(getString("message.reset.fail"));
         			}
         		}
-         		target.addComponent(resetFeedback);
+         		target.add(resetFeedback);
             }
 
             @Override
@@ -572,8 +572,8 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.renderCSSReference(Css.CSS_ICON);
-		response.renderJavaScriptReference(JavascriptResources.PROTOTYPE);
+		response.render(CssHeaderItem.forReference(Css.CSS_ICON));
+		//response.render(JavaScriptHeaderItem.forReference(JavascriptResources.PROTOTYPE));
 
 	}
 

@@ -9,7 +9,9 @@ import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -77,7 +79,7 @@ public class AlbumAdminPanel extends CmsPanel{
                         AlbumAdminPanel.this.info("Deleting original image. "+imageData);
                         getRepositoryService().deleteNode(imageData.getId());
                         //repaint the container that contains the list
-                        target.addComponent(listItem.getParent().getParent());
+                        target.add(listItem.getParent().getParent());
     				}
                 });
     			listItem.setOutputMarkupId(true);
@@ -173,8 +175,8 @@ public class AlbumAdminPanel extends CmsPanel{
 				log.debug("something dropped. arg="+dragId);
 		    	getRepositoryService().addImageToAlbum(album, dragId);
 		    	displayForm.info(getString("message.success"));
-		    	target.addComponent(albumContainer);
-		    	target.addComponent(displayFeedback);
+		    	target.add(albumContainer);
+		    	target.add(displayFeedback);
 		    }
 		};
 		albumContainer.add(new DroppableAjaxBehaviour(dropCallback));
@@ -202,10 +204,10 @@ public class AlbumAdminPanel extends CmsPanel{
 	
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		response.renderCSSReference(Css.CSS_FORM);
-		response.renderJavaScriptReference(Scriptaculous.PROTOTYPE);
-		response.renderJavaScriptReference(Scriptaculous.EFFECTS);
-		response.renderJavaScriptReference(Scriptaculous.DRAGDROP);
+		response.render(CssHeaderItem.forReference(Css.CSS_FORM));
+		response.render(JavaScriptHeaderItem.forReference(Scriptaculous.PROTOTYPE));
+		response.render(JavaScriptHeaderItem.forReference(Scriptaculous.EFFECTS));
+		response.render(JavaScriptHeaderItem.forReference(Scriptaculous.DRAGDROP));
 	}
 
 	private List<ImageData> getAvailableImages() {

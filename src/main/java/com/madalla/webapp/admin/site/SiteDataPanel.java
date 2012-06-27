@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByLink.CssProvider;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
@@ -41,7 +42,7 @@ public class SiteDataPanel extends CmsPanel {
 			setSort("id", SortOrder.ASCENDING);
 		}
 
-		public Iterator<? extends EmailEntryData> iterator(int first, int count) {
+		public Iterator<? extends EmailEntryData> iterator(long first, long count) {
 			List<EmailEntryData> list = getApplicationService().getEmailEntries();
 			if ("senderName".equals(getSort().getProperty())){
 				Collections.sort(list, getNameComparator());
@@ -51,7 +52,7 @@ public class SiteDataPanel extends CmsPanel {
 			if (!getSort().isAscending()){
 				Collections.reverse(list);
 			}
-			return list.listIterator(first);
+			return list.listIterator((int) first);
 		}
 
 		private Comparator<EmailEntryData> getNameComparator(){
@@ -86,7 +87,7 @@ public class SiteDataPanel extends CmsPanel {
 			};
 		}
 
-		public int size() {
+		public long size() {
 			return getApplicationService().getEmailEntries().size();
 		}
 
@@ -101,7 +102,7 @@ public class SiteDataPanel extends CmsPanel {
 			//setSort("id", true);
 		}
 
-		public Iterator<? extends LogData> iterator(int first, int count) {
+		public Iterator<? extends LogData> iterator(long first, long count) {
 			List<LogData> list = getRepositoryService().getTransactionLogEntries();
 			if ("user".equals(getSort().getProperty())){
 				Collections.sort(list, getUserComparator());
@@ -111,7 +112,7 @@ public class SiteDataPanel extends CmsPanel {
 			if (!getSort().isAscending()){
 				Collections.reverse(list);
 			}
-			return list.listIterator(first);
+			return list.listIterator((int) first);
 		}
 
 		private Comparator<LogData> getUserComparator(){
@@ -134,7 +135,7 @@ public class SiteDataPanel extends CmsPanel {
 			};
 		}
 
-		public int size() {
+		public long size() {
 			return getRepositoryService().getTransactionLogEntries().size();
 		}
 

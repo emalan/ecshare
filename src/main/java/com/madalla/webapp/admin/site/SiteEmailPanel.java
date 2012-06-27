@@ -133,7 +133,7 @@ public class SiteEmailPanel extends CmsPanel{
 				//start with all selected
 				selectedUsers.addAll(userList);
 
-				target.addComponent(userSelect);
+				target.add(userSelect);
 			}
 
 		});

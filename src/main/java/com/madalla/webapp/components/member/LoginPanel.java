@@ -17,8 +17,6 @@
 package com.madalla.webapp.components.member;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
@@ -26,7 +24,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -38,6 +37,8 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.madalla.util.security.ICredentialHolder;
 import com.madalla.webapp.CmsPanel;
@@ -195,7 +196,7 @@ public abstract class LoginPanel extends CmsPanel
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				target.addComponent(form);
+				target.add(form);
 				lockUserName(false);
 				credentials.setUsername("");
 			}
@@ -214,14 +215,14 @@ public abstract class LoginPanel extends CmsPanel
             @Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax onError called");
-				target.addComponent(feedback);
+				target.add(feedback);
 				onSignInFailed(getUsername());
 			}
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				log.debug("Ajax submit called");
-				target.addComponent(form);
+				target.add(form);
 				preSignIn(getUsername());
 
 				if (!isUserLocked()){
@@ -232,7 +233,7 @@ public abstract class LoginPanel extends CmsPanel
 						onSignInSucceeded(target);
 					} else {
 						feedback.error(getLocalizer().getString("signInFailed", this, "Sign in failed"));
-						target.addComponent(feedback);
+						target.add(feedback);
 						onSignInFailed(getUsername());
 					}
 
@@ -251,7 +252,7 @@ public abstract class LoginPanel extends CmsPanel
 	
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		response.renderCSSReference(Css.CSS_FORM);
+		response.render(CssHeaderItem.forReference(Css.CSS_FORM));
 	}
 
 
@@ -340,9 +341,8 @@ public abstract class LoginPanel extends CmsPanel
 	    // If login has been called because the user was not yet
         // logged in, then continue to the original destination,
         // otherwise to the Home page
-        if (!continueToOriginalDestination())   {
-            setResponsePage(destination);
-        }
+	    continueToOriginalDestination();
+	    setResponsePage(destination);
 	}
 
 	protected void onSignInSucceeded(AjaxRequestTarget target)

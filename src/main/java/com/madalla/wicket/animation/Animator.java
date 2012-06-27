@@ -7,10 +7,11 @@ import java.util.List;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.AbstractBehavior;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
 
 import com.madalla.webapp.scripts.JavascriptResources;
 
@@ -49,8 +50,9 @@ import com.madalla.webapp.scripts.JavascriptResources;
 public class Animator extends Behavior implements IAnimator, IAnimatorActions, IHeaderContributor, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private final static int DURATION = 400;
-	private final static String PREFIX = "anim_";
+	private static final int DURATION = 400;
+	private static final String SCRIPT_NAME = "AnimatorNamespace"; 
+	private final static String PREFIX = "ANI.anim_";
 	private static final String TEMPLATE = "${id} = new Animator({ duration: ${duration} })";
 
 	private final int duration;
@@ -160,13 +162,14 @@ public class Animator extends Behavior implements IAnimator, IAnimatorActions, I
 
 	@Override
 	public void renderHead(Component component, IHeaderResponse response) {
-		response.renderJavaScriptReference(JavascriptResources.ANIMATOR);
-		response.renderOnDomReadyJavaScript(this.render());
+		response.render(JavaScriptHeaderItem.forReference(JavascriptResources.ANIMATOR));
+		response.render(OnDomReadyHeaderItem.forScript(this.render()));
 	}
 
 	public void renderHead(IHeaderResponse response) {
-		response.renderJavaScriptReference(JavascriptResources.ANIMATOR);
-		response.renderOnDomReadyJavaScript(this.render());
+		response.render(JavaScriptHeaderItem.forReference(JavascriptResources.ANIMATOR));
+		response.render(JavaScriptHeaderItem.forScript("var ANI = {};", SCRIPT_NAME));
+		response.render(OnDomReadyHeaderItem.forScript(this.render()));
 		
 	}
 

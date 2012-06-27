@@ -5,7 +5,8 @@ import java.text.MessageFormat;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -162,7 +163,7 @@ public class EmailFormPanel extends CmsPanel {
     @Override
     public void renderHead(IHeaderResponse response) {
     	super.renderHead(response);
-    	response.renderCSSReference(Css.CSS_FORM);
+    	response.render(CssHeaderItem.forReference(Css.CSS_FORM));
     }
 
     private boolean sendEmail(final String site, final String name, final String email, final String comment){

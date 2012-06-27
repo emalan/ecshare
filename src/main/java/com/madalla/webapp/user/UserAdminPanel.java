@@ -20,7 +20,9 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AbstractAutoCompleteTextRenderer;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.IAutoCompleteRenderer;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -446,8 +448,8 @@ public class UserAdminPanel extends CmsPanel {
 	
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		response.renderJavaScriptReference(Scriptaculous.PROTOTYPE);
-		response.renderCSSReference(Css.CSS_FORM);
+		response.render(JavaScriptHeaderItem.forReference(Scriptaculous.PROTOTYPE));
+		response.render(CssHeaderItem.forReference(Css.CSS_FORM));
 
 	}
 

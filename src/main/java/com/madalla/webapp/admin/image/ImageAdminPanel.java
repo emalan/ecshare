@@ -19,7 +19,8 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -341,10 +342,10 @@ public class ImageAdminPanel extends CmsPanel{
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		
-		//response.renderCSSReference(Css.CSS_FORM);
-		response.renderJavaScriptReference(Scriptaculous.PROTOTYPE);
-		response.renderJavaScriptReference(Scriptaculous.EFFECTS);
-		response.renderJavaScriptReference(Scriptaculous.DRAGDROP);
+		//response.render(CssHeaderItem.forReference(Css.CSS_FORM);
+		response.render(JavaScriptHeaderItem.forReference(Scriptaculous.PROTOTYPE));
+		response.render(JavaScriptHeaderItem.forReference(Scriptaculous.EFFECTS));
+		response.render(JavaScriptHeaderItem.forReference(Scriptaculous.DRAGDROP));
 		
 	}
 

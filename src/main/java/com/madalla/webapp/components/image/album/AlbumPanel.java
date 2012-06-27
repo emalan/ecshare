@@ -8,7 +8,8 @@ import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -95,7 +96,7 @@ public class AlbumPanel extends Panel {
 
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		 response.renderCSSReference(Css.CSS_IMAGE);
+		 response.render(CssHeaderItem.forReference(Css.CSS_IMAGE));
 	}
 
 }

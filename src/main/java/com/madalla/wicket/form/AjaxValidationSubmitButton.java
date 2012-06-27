@@ -68,7 +68,7 @@ public abstract class AjaxValidationSubmitButton extends IndicatingAjaxButton{
             void eventAction(AjaxRequestTarget target, FormComponent<?> component) {
                 if (!component.isValid() ){
                     target.add(component);
-                    log.debug("Ajax onError - Component is invalid. Component MarkupId="+component.getMarkupId()+". Message is " +component.getFeedbackMessage().getMessage());
+                    log.debug("Ajax onError - Component is invalid. Component MarkupId="+component.getMarkupId()+". Message is " +component.getFeedbackMessages());
                 } else if (component.isValid()){
                     target.add(component);
                     log.debug("Ajax onError - Component is valid. "+component);

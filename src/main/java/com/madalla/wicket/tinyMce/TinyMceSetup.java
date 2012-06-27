@@ -8,7 +8,8 @@ import java.util.Map;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.handler.resource.ResourceReferenceRequestHandler;
 import org.slf4j.Logger;
@@ -42,6 +43,7 @@ public class TinyMceSetup {
         return new TinyMceBehavior(settings)
         {
             private static final long serialVersionUID = 4802148816874932787L;
+            
             @Override
             public void renderHead(Component c, IHeaderResponse response)
             {
@@ -62,10 +64,10 @@ public class TinyMceSetup {
                 final String baseUrl = url.toString();
                 log.debug("createTinyMceBehavior - baseUrl=" + baseUrl);
                 
-                response.renderJavaScript("var dlh = document.location.href; window.tinyMCEPreInit = {" +
+                response.render(JavaScriptHeaderItem.forScript("var dlh = document.location.href; window.tinyMCEPreInit = {" +
                         "suffix:'', " +
                         "base: dlh.substring(0, dlh.indexOf('/',dlh.indexOf('://')+3)) +'/"+ baseUrl +"' + '/tiny_mce/'," +
-                        "query:''};", "TinyMceBehavior.myhack");
+                        "query:''};", "TinyMceBehavior.myhack"));
                 super.renderHead(c, response);
             }           
         };

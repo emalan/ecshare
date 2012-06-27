@@ -1,12 +1,13 @@
 package com.madalla.wicket.form;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.animation.Animator;
@@ -93,7 +94,7 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 	public void renderHead(Component component, IHeaderResponse response) {
 		// TODO Auto-generated method stub
 		super.renderHead(component, response);
-		response.renderJavaScriptReference(Scriptaculous.PROTOTYPE);//TODO make sure this needs prototype ???
+		//response.render(JavaScriptHeaderItem.forReference(Scriptaculous.PROTOTYPE));//TODO make sure this needs prototype ???
 		animator.setUniqueId(getComponent().getMarkupId());
 		animator.addSubject(AnimatorSubject.numeric(getComponent().getMarkupId(),"opacity", 1, 0.25));
 		animator.renderHead(response);

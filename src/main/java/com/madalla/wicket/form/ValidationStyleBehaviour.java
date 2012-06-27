@@ -1,11 +1,11 @@
 package com.madalla.wicket.form;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Behaviour that sets the components class value based on validation result.
@@ -15,7 +15,7 @@ import org.apache.wicket.markup.html.form.FormComponent;
  * @author Eugene Malan
  *
  */
-public class ValidationStyleBehaviour extends AbstractBehavior {
+public class ValidationStyleBehaviour extends Behavior {
 
 	private static final long serialVersionUID = 1L;
 

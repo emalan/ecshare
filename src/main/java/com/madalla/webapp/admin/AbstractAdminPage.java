@@ -5,7 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.PageReference;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -110,11 +111,11 @@ public abstract class AbstractAdminPage extends WebPage{
 	
 	@Override
 	public void renderHead(IHeaderResponse response) {
-	        response.renderCSSReference(Css.YUI_CORE);
-	        response.renderCSSReference(Css.BASE);
-	        response.renderCSSReference(new PackageResourceReference(AbstractAdminPage.class, "AdminPage.css"));
-	        response.renderCSSReference(Css.CSS_BUTTONS);
-	        response.renderCSSReference(Css.CSS_FORM);
+	        response.render(CssHeaderItem.forReference(Css.YUI_CORE));
+	        response.render(CssHeaderItem.forReference(Css.BASE));
+	        response.render(CssHeaderItem.forReference(new PackageResourceReference(AbstractAdminPage.class, "AdminPage.css")));
+	        response.render(CssHeaderItem.forReference(Css.CSS_BUTTONS));
+	        response.render(CssHeaderItem.forReference(Css.CSS_FORM));
 	}
 
 	public CmsSession getAppSession(){

@@ -5,7 +5,8 @@ import java.io.InputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.emalan.cms.IDataService;
@@ -176,7 +177,7 @@ public class ContentLinkPanel extends CmsPanel {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference(Css.CSS_FORM);
+        response.render(CssHeaderItem.forReference(Css.CSS_FORM));
     }
     
     @Override

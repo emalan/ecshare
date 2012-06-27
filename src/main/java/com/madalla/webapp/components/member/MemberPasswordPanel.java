@@ -170,7 +170,7 @@ public class MemberPasswordPanel extends CmsPanel{
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				target.addComponent(loginCount);
+				target.add(loginCount);
 				super.onError(target, form);
 			}
 

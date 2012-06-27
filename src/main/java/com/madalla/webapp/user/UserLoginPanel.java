@@ -4,7 +4,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
@@ -23,7 +22,6 @@ import com.madalla.webapp.CmsPanel;
 import com.madalla.webapp.CmsSession;
 import com.madalla.webapp.components.email.EmailFormPanel;
 import com.madalla.webapp.login.LoginPanel;
-import com.madalla.webapp.scripts.JavascriptResources;
 import com.madalla.wicket.animation.AnimationOpenSlide;
 
 public class UserLoginPanel extends CmsPanel {
@@ -140,11 +138,6 @@ public class UserLoginPanel extends CmsPanel {
 
 	}
 	
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		response.renderJavaScriptReference(JavascriptResources.ANIMATOR);
-	}
-
 	protected void preLogin(String username){
 
 	}

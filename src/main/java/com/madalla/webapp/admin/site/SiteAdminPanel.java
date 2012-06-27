@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -87,7 +88,7 @@ public class SiteAdminPanel extends CmsPanel{
     @Override
     public void renderHead(IHeaderResponse response) {
     	super.renderHead(response);
-    	response.renderCSSReference(Css.CSS_FORM);
+    	response.render(CssHeaderItem.forReference(Css.CSS_FORM));
     }
 
     private SiteData getSiteData(){

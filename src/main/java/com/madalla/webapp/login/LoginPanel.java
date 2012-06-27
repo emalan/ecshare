@@ -24,7 +24,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
@@ -91,13 +92,6 @@ public abstract class LoginPanel extends CmsPanel {
 
 		}
 
-		/**
-		 * @see org.apache.wicket.markup.html.form.Form#onSubmit()
-		 */
-		@Override
-		public void onSubmit() {
-			log.trace("onSubmit");
-		}
 	}
 
 	public LoginPanel(final String id, final ICredentialHolder credentials) {
@@ -127,7 +121,6 @@ public abstract class LoginPanel extends CmsPanel {
 		}
 
 		final Form<Void> form = new SignInForm("signInForm", credentials);
-
 		add(form);
 
 		final FeedbackPanel feedback = new FeedbackPanel("loginFeedback");
@@ -210,7 +203,7 @@ public abstract class LoginPanel extends CmsPanel {
 
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		response.renderCSSReference(Css.CSS_FORM);
+		response.render(CssHeaderItem.forReference(Css.CSS_FORM));
 	}
 
 	private void lockUserName(boolean lock) {
@@ -277,9 +270,8 @@ public abstract class LoginPanel extends CmsPanel {
 		// If login has been called because the user was not yet
 		// logged in, then continue to the original destination,
 		// otherwise to the Home page
-		if (!continueToOriginalDestination()) {
-			setResponsePage(destination);
-		}
+	    continueToOriginalDestination();
+		setResponsePage(destination);
 	}
 
 	protected void onSignInSucceeded(AjaxRequestTarget target) {

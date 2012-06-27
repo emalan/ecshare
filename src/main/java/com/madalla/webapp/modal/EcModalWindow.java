@@ -1,8 +1,10 @@
 package com.madalla.webapp.modal;
 
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
@@ -20,8 +22,8 @@ public class EcModalWindow extends ModalWindow implements IHeaderContributor{
 	}
 
 	public void renderHead(IHeaderResponse response) {
-		response.renderOnDomReadyJavaScript("Wicket.Window.unloadConfirmation = false;");
-		response.renderCSSReference(CSS);
+	    response.render(OnDomReadyHeaderItem.forScript("Wicket.Window.unloadConfirmation = false;"));
+		response.render(CssHeaderItem.forReference(CSS));
 	}
 
 }

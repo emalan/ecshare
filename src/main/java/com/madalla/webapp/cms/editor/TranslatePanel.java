@@ -8,7 +8,8 @@ import java.util.Map;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -105,7 +106,7 @@ public class TranslatePanel extends CmsPanel {
 	public void renderHead(IHeaderResponse response) {
 
 		final ResourceReference translateJs = new TextTemplateResourceReference(TranslatePanel.class, "TranslatePanel.js", Model.ofMap(vars));
-		response.renderJavaScriptReference(translateJs);
+		response.render(JavaScriptHeaderItem.forReference(translateJs));
 	}
 
 	private Locale getDefaultLocale(List<SiteLanguage> locales){

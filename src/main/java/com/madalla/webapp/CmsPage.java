@@ -1,6 +1,5 @@
 package com.madalla.webapp;
 
-import static com.madalla.webapp.scripts.scriptaculous.Scriptaculous.PROTOTYPE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.CROSSFADE;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.CROSSFADE_CSS;
 import static com.madalla.webapp.scripts.utility.ScriptUtils.FAST_INIT;
@@ -21,8 +20,11 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.StringHeaderItem;
 import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -178,33 +180,32 @@ public abstract class CmsPage extends WebPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference(Css.YUI_CORE);
-        response.renderCSSReference(Css.BASE);
+        response.render(CssHeaderItem.forReference(Css.YUI_CORE));
+        response.render(CssHeaderItem.forReference(Css.BASE));
 
         if (hasCrossfadeSupport()) {
-            response.renderJavaScriptReference(PROTOTYPE);
-            response.renderJavaScriptReference(JavascriptResources.ANIMATOR);
-            response.renderJavaScriptReference(FAST_INIT);
-            response.renderJavaScriptReference(CROSSFADE);
-            response.renderCSSReference(CROSSFADE_CSS);
+            response.render(JavaScriptHeaderItem.forReference(JavascriptResources.ANIMATOR));
+            response.render(JavaScriptHeaderItem.forReference(FAST_INIT));
+            response.render(JavaScriptHeaderItem.forReference(CROSSFADE));
+            response.render(CssHeaderItem.forReference(CROSSFADE_CSS));
         }
 
-        response.renderJavaScriptReference(JavascriptResources.ANIMATOR);
+        response.render(JavaScriptHeaderItem.forReference(JavascriptResources.ANIMATOR));
 
-        response.renderString(MessageFormat.format(META_HTTP, "lang", pageInfo.getLang()));
+        response.render(StringHeaderItem.forString(MessageFormat.format(META_HTTP, "lang", pageInfo.getLang())));
 
         if (!isMetadataOveridden()) {
             if (StringUtils.isNotEmpty(pageInfo.getTitle())) {
-                response.renderString("<title>" + pageInfo.getTitle() + "</title>");
+                response.render(StringHeaderItem.forString("<title>" + pageInfo.getTitle() + "</title>"));
             }
             if (StringUtils.isNotEmpty(pageInfo.getAuthor())) {
-                response.renderString(MessageFormat.format(META_NAME, "author", pageInfo.getAuthor()));
+                response.render(StringHeaderItem.forString(MessageFormat.format(META_NAME, "author", pageInfo.getAuthor())));
             }
             if (StringUtils.isNotEmpty(pageInfo.getDescription())) {
-                response.renderString(MessageFormat.format(META_NAME, "description", pageInfo.getDescription()));
+                response.render(StringHeaderItem.forString(MessageFormat.format(META_NAME, "description", pageInfo.getDescription())));
             }
             if (StringUtils.isNotEmpty(pageInfo.getKeywords())) {
-                response.renderString(MessageFormat.format(META_NAME, "keywords", pageInfo.getKeywords()));
+                response.render(StringHeaderItem.forString(MessageFormat.format(META_NAME, "keywords", pageInfo.getKeywords())));
             }
         }
     }
@@ -298,9 +299,8 @@ public abstract class CmsPage extends WebPage {
                 // If login has been called because the user was not yet
                 // logged in, then continue to the original destination,
                 // otherwise to the Home page
-                if (!continueToOriginalDestination()) {
-                    setResponsePage(getPage());
-                }
+                continueToOriginalDestination();
+                redirectToInterceptPage(getPage());
             }
 
             @Override

@@ -10,9 +10,11 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.IAjaxCallDecorator;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -245,13 +247,17 @@ public abstract class FileUploadPanel extends Panel {
             this.choice = choice;
             this.selected = selected;
         }
-
+        
         @Override
-        protected IAjaxCallDecorator getAjaxCallDecorator() {
-            return new IAjaxCallDecorator() {
+        protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+            super.updateAjaxAttributes(attributes);
+            
+            AjaxCallListener callListener = new AjaxCallListener() {
+              
                 private static final long serialVersionUID = 1L;
 
-                public CharSequence decorateScript(Component component, CharSequence script) {
+                @Override
+                public CharSequence getPrecondition(Component component) {
                     StringBuffer sb = new StringBuffer("var v = Wicket.$(" + getComponent().getMarkupId() + ").value;");
                     String suffixes = FileUploadTypeType.getResourceTypeSuffixes("|"); // doc|pdf|htm
                     sb.append("var file = Utils.xtractFile(v,'" + suffixes + "');");
@@ -259,17 +265,10 @@ public abstract class FileUploadPanel extends Panel {
                     sb.append("Utils.setTextContent(Wicket.$('" + selected.getMarkupId() + "'),display) ;");
                     sb.append("Wicket.$(" + name.getMarkupId() + ").value = display ;");
                     sb.append("Wicket.$(" + choice.getMarkupId() + ").value = Utils.translateSuffix(file.ext);");
-                    return sb.toString() + script;
-                }
-
-                public CharSequence decorateOnSuccessScript(Component component, CharSequence script) {
-                    return script;
-                }
-
-                public CharSequence decorateOnFailureScript(Component component, CharSequence script) {
-                    return script;
+                    return sb.append(super.getPrecondition(component)).toString();
                 }
             };
+            attributes.getAjaxCallListeners().add(callListener);
         }
 
         @Override
@@ -277,14 +276,14 @@ public abstract class FileUploadPanel extends Panel {
             FileUpload fileUpload = ((FileUploadField) getComponent()).getFileUpload();
             if (fileUpload != null) {
                 log.trace("onEvent - " + fileUpload.getClientFileName());
-                // target.addComponent(EditableResourceLink.this);
+                // target.add(EditableResourceLink.this);
             }
 
         }
 
         @Override
         public void renderHead(Component component, IHeaderResponse response) {
-            response.renderJavaScriptReference(JavascriptResources.SCRIPT_UTILS);
+            response.render(JavaScriptHeaderItem.forReference(JavascriptResources.SCRIPT_UTILS));
 
             // translate the suffix to a value in dropdown if possible
             StringBuffer sb = new StringBuffer();
@@ -295,7 +294,7 @@ public abstract class FileUploadPanel extends Panel {
             sb.append("return '';");
             sb.append("};");
 
-            response.renderJavaScript(sb.toString(), "translateSuffix");
+            response.render(JavaScriptHeaderItem.forScript(sb.toString(), "translateSuffix"));
             super.renderHead(component, response);
         }
     }

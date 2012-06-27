@@ -5,8 +5,10 @@ import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.PackageResourceReference;
@@ -81,9 +83,9 @@ public class Dialog extends ModalWindow implements IHeaderContributor{
 
 
 	public void renderHead(IHeaderResponse response) {
-		response.renderOnDomReadyJavaScript("Wicket.Window.unloadConfirmation = false;");
+	    response.render(OnDomReadyHeaderItem.forScript("Wicket.Window.unloadConfirmation = false;"));
 
-		response.renderCSSReference(OBO);
+		response.render(CssHeaderItem.forReference(OBO));
 
 	}
 

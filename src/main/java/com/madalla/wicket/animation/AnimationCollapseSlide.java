@@ -1,7 +1,6 @@
 package com.madalla.wicket.animation;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.IAjaxCallDecorator;
 
 /**
  * Convenience combined animation that reduces the size of an element, will set height using javascript prior to
@@ -40,31 +39,5 @@ public class AnimationCollapseSlide extends AnimationEventBehavior {
 		return animator.toggle();
 	}
 
-	@Override
-	protected IAjaxCallDecorator getAjaxCallDecorator() {
-		// TODO Auto-generated method stub
-		return new IAjaxCallDecorator() {
-			
-			private static final long serialVersionUID = 1L;
-
-			public CharSequence decorateScript(Component component, CharSequence script) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			public CharSequence decorateOnSuccessScript(Component component, CharSequence script) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			public CharSequence decorateOnFailureScript(Component component, CharSequence script) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-		};
-	}
-	
-	
 
 }

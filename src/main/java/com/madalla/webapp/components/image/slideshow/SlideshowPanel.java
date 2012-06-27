@@ -7,8 +7,10 @@ import java.util.List;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
@@ -18,7 +20,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.DynamicImageResource;
 import org.emalan.cms.bo.image.AlbumData;
 import org.emalan.cms.bo.image.ImageData;
 
@@ -110,8 +111,8 @@ public class SlideshowPanel extends CmsPanel implements IHeaderContributor {
 	}
 
 	public void renderHead(IHeaderResponse response) {
-		response.renderCSSReference(ScriptUtils.SLIDESHOW_CSS);
-		response.renderJavaScriptReference(ScriptUtils.SLIDESHOW);
+		response.render(CssHeaderItem.forReference(ScriptUtils.SLIDESHOW_CSS));
+		response.render(JavaScriptHeaderItem.forReference(ScriptUtils.SLIDESHOW));
         
 		//response.renderOnLoadJavascript("var slideshow = new TINY.slideshow('slideshow'); TINY.load();");
 

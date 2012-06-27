@@ -2,7 +2,9 @@ package com.madalla.webapp.user;
 
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -63,8 +65,8 @@ public class UserProfilePanel extends CmsPanel{
 
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		response.renderJavaScriptReference(Scriptaculous.PROTOTYPE);
-		response.renderCSSReference(Css.CSS_FORM);
+		response.render(JavaScriptHeaderItem.forReference(Scriptaculous.PROTOTYPE));
+		response.render(CssHeaderItem.forReference(Css.CSS_FORM));
 	}
 	
 	@Override
