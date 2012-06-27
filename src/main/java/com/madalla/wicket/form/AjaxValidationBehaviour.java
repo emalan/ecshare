@@ -4,12 +4,10 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.madalla.webapp.scripts.scriptaculous.Scriptaculous;
 import com.madalla.wicket.animation.Animator;
 import com.madalla.wicket.animation.AnimatorSubject;
 
@@ -70,8 +68,8 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 		if (feedbackPanel != null){
 			target.add(feedbackPanel);
 			target.appendJavaScript(
-				"$('"+feedbackPanel.getMarkupId()+"').parentNode.addClassName('"+validClass+"');"+
-				"$('"+feedbackPanel.getMarkupId()+"').parentNode.removeClassName('"+invalidClass+"');");
+				"$('"+feedbackPanel.getMarkupId()+"').parent().addClass('"+validClass+"');"+
+				"$('"+feedbackPanel.getMarkupId()+"').parent().removeClass('"+invalidClass+"');");
 		}
 	}
 
@@ -85,16 +83,14 @@ public class AjaxValidationBehaviour extends AjaxFormComponentUpdatingBehavior {
 		if (feedbackPanel != null){
 			target.add(feedbackPanel);
 			target.appendJavaScript(
-                "$('"+feedbackPanel.getMarkupId()+"').parentNode.addClassName('"+invalidClass+"');"+
-                "$('"+feedbackPanel.getMarkupId()+"').parentNode.removeClassName('"+validClass+"');");
+                "$('#"+feedbackPanel.getMarkupId()+"').parent().addClass('"+invalidClass+"');"+
+                "$('#"+feedbackPanel.getMarkupId()+"').parent().removeClass('"+validClass+"');");
 		}
 	}
 	
 	@Override
 	public void renderHead(Component component, IHeaderResponse response) {
-		// TODO Auto-generated method stub
 		super.renderHead(component, response);
-		//response.render(JavaScriptHeaderItem.forReference(Scriptaculous.PROTOTYPE));//TODO make sure this needs prototype ???
 		animator.setUniqueId(getComponent().getMarkupId());
 		animator.addSubject(AnimatorSubject.numeric(getComponent().getMarkupId(),"opacity", 1, 0.25));
 		animator.renderHead(response);

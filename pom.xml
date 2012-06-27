@@ -32,7 +32,7 @@
 	</licenses>
 	<dependencies>
 
-		<!-- CMS persistence package -->
+		<!-- CMS persistence package - not publicly available-->
 		<dependency>
 			<groupId>org.emalan</groupId>
 			<artifactId>ec-cms</artifactId>
