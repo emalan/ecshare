@@ -91,7 +91,7 @@ public abstract class LoginPanel extends CmsPanel {
 			password.setVisibilityAllowed(true);
 
 		}
-
+		
 	}
 
 	public LoginPanel(final String id, final ICredentialHolder credentials) {
@@ -186,6 +186,7 @@ public abstract class LoginPanel extends CmsPanel {
 
 		};
 		submit.setEnabled(true);
+		form.setDefaultButton(submit);
 
 		// submit.setVisibilityAllowed(true);
 		form.add(submit);
