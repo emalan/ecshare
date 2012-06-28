@@ -29,7 +29,7 @@ public class PanelMenuItem implements Serializable{
 		this(c,null, key, titleKey);
 	}
 
-	public PanelMenuItem(final Class<? extends Panel> c, final Object constructorArg, final IModel<String> key,
+	private PanelMenuItem(final Class<? extends Panel> c, final Object constructorArg, final IModel<String> key,
 			final IModel<String> titleKey) {
 		this.key = key;
 		this.titleKey = titleKey;

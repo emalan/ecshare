@@ -2,10 +2,9 @@ package com.madalla.db.dao.hbm;
 
 import org.apache.commons.lang.StringUtils;
 import org.emalan.cms.bo.email.EmailEntryData;
-import org.emalan.cms.bo.email.IEmailEntryData;
 import org.joda.time.DateTime;
 
-public class EmailEntry extends EmailEntryData implements IEmailEntryData {
+public class EmailEntry extends EmailEntryData {
 
 	private static final long serialVersionUID = 1L;
 

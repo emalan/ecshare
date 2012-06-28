@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:util="http://www.springframework.org/schema/util"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context-3.0.xsd
        http://www.springframework.org/schema/util 
        http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-    <context:component-scan base-package="com.madalla.db" />
-    
+	<context:component-scan base-package="com.madalla.db" />
+
 	<import resource="classpath:org/emalan/cms/applicationContext-cms.xml" />
 	<import resource="classpath:com/madalla/email/applicationContext-email.xml" />
 	<import resource="classpath:com/madalla/db/dao/applicationContext-dao.xml" />
-	
+
 	<bean id="propertyConfigurer" abstract="true"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="ignoreResourceNotFound" value="true" />
 		<property name="systemPropertiesMode" value="2" />
 		<property name="locations">
 			<list>
-			    <value>classpath:ecshare.properties</value>
+				<value>classpath:ecshare.properties</value>
 			</list>
 		</property>
 
@@ -48,6 +48,8 @@
 		scope="singleton">
 	</bean>
 
+	<bean id="transactionService" class="com.madalla.db.dao.springjdbc.TransactionLogSpringDao" />
+
 	<bean id="memberService" class="com.madalla.member.MemberService"
 		scope="singleton">
 		<property name="memberDao" ref="memberSpringDao" />
@@ -66,10 +68,10 @@
 		<property name="securityType" value="${site.security}" />
 	</bean>
 
-    <bean id="explorerService" class="com.madalla.jcr.explorer.ExplorerService">
-        <property name="repositoryAdminService" ref="repositoryAdminService" />
-        <property name="template" ref="jcrTemplate" />
-    </bean>
+	<bean id="explorerService" class="com.madalla.jcr.explorer.ExplorerService">
+		<property name="repositoryAdminService" ref="repositoryAdminService" />
+		<property name="template" ref="jcrTemplate" />
+	</bean>
 
 	<bean id="applicationService" class="com.madalla.service.ApplicationServiceImpl" />
 

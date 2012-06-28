@@ -1,17 +1,20 @@
 package com.madalla.db.dao;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
 
-import junit.framework.TestCase;
-
 import org.apache.commons.lang.RandomStringUtils;
 import org.emalan.cms.bo.email.EmailEntryData;
 import org.emalan.cms.bo.log.LogData;
-import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.madalla.bo.member.MemberData;
@@ -20,7 +23,7 @@ import com.madalla.db.dao.springjdbc.JdbcDatabaseSetup;
 import com.madalla.db.dao.springjdbc.MemberSpringDao;
 import com.madalla.db.dao.springjdbc.TransactionLogSpringDao;
 
-public class DaoSpringTest extends TestCase {
+public class DaoSpringTest {
 
     private EmailEntrySpringDao emailEntryDao;
     private TransactionLogSpringDao transactionLogDao;
@@ -28,8 +31,8 @@ public class DaoSpringTest extends TestCase {
 
     private FileSystemXmlApplicationContext context;
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         final List<String> configLocations = new ArrayList<String>();
         configLocations.add("classpath:com/madalla/db/dao/applicationContext-dao.xml");
         configLocations.add("classpath:com/madalla/db/dao/applicationContext-test.xml");
@@ -46,6 +49,7 @@ public class DaoSpringTest extends TestCase {
         setup.init();
     }
 
+    @Test
     public void testMemberDao() {
         String firstName = RandomStringUtils.randomAlphabetic(10);
         String lastName = RandomStringUtils.randomAlphabetic(10);
@@ -77,28 +81,25 @@ public class DaoSpringTest extends TestCase {
 
     }
 
+    @Test
     public void testSaveLogDao() {
-        DateTime key = new DateTime();
-        LogData log = new LogData();
-        log.setDateTime(key);
-        log.setUser("testUser");
-        log.setType("TEST");
-        log.setCmsId("ID");
 
-        transactionLogDao.create(log);
+        transactionLogDao.create("testUser", "TEST", "ID");
 
-        List<LogData> list = transactionLogDao.fetch();
+        List<? extends LogData> list = transactionLogDao.fetch();
+        assertTrue(list.size() >= 1);
         for (LogData item : list) {
             System.out.println(item);
 
             transactionLogDao.find(item.getId());
             transactionLogDao.delete(item);
         }
-        List<LogData> check = transactionLogDao.fetch();
+        List<? extends LogData> check = transactionLogDao.fetch();
         assertTrue(check.isEmpty());
 
     }
 
+    @Test
     public void testEmailDao() {
 
         emailEntryDao.fetch();
@@ -126,13 +127,6 @@ public class DaoSpringTest extends TestCase {
 
     public void setTransactionLogDao(TransactionLogSpringDao transactionLogDao) {
         this.transactionLogDao = transactionLogDao;
-    }
-
-    private void listTimeZones() {
-        for (Object id : DateTimeZone.getAvailableIDs()) {
-            System.out.println(id);
-        }
-
     }
 
     public void setMemberDao(MemberSpringDao memberDao) {

@@ -10,6 +10,8 @@ import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.PlatformFactory;
 import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.model.Database;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.xml.sax.InputSource;
@@ -20,9 +22,12 @@ import org.xml.sax.InputSource;
  *
  */
 public class JdbcDatabaseSetup {
+    
+    private static final Logger log = LoggerFactory.getLogger(JdbcDatabaseSetup.class);
+    
 	private DataSource dataSource;
 	private InputStream schema;
-	private boolean alterDb = false;
+	private boolean alterDb = true;
 
 	public void setSchema(InputStream schema) {
 		this.schema = schema;
@@ -30,6 +35,7 @@ public class JdbcDatabaseSetup {
 
 	@PostConstruct
 	public void init() throws IOException{
+	    log.debug("init - intializing database schema.");
 		schema = new ClassPathResource("db-schema.xml", JdbcDatabaseSetup.class).getInputStream();
 		setupDatabase(dataSource);
 	}

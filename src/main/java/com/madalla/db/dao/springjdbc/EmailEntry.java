@@ -1,28 +1,30 @@
 package com.madalla.db.dao.springjdbc;
 
+import org.apache.commons.lang.StringUtils;
 import org.emalan.cms.bo.email.EmailEntryData;
-import org.emalan.cms.bo.email.IEmailEntryData;
-import org.hibernate.mapping.IdGenerator;
 import org.joda.time.DateTime;
 
-public class EmailEntry extends EmailEntryData implements IEmailEntryData {
+public class EmailEntry extends EmailEntryData {
 
 	private static final long serialVersionUID = 1L;
 
-	private String id ;
+	private Long key ;
 	private DateTime dateTime;
 	private String senderComment;
 	private String senderName;
 	private String senderEmailAddress;
 
-	@Override
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return StringUtils.defaultIfEmpty("", String.valueOf(key));
+    }
+    
+    public Long getKey() {
+        return key;
+    }
 
-	public void setId(String id){
-		this.id = id;
-	}
+    public void setKey(Long id){
+        this.key = id;
+    }
 
 	@Override
 	public String getName() {
