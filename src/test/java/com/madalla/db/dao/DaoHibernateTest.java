@@ -3,28 +3,28 @@ package com.madalla.db.dao;
 import static junit.framework.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.emalan.cms.bo.email.EmailEntryData;
+import org.emalan.cms.bo.log.LogData;
 import org.joda.time.DateTimeZone;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.madalla.db.dao.springjdbc.MemberSpringDao;
-import com.madalla.db.dao.springjdbc.TransactionLogSpringDao;
 
-@Ignore
 public class DaoHibernateTest {
     
     private static final Logger log = LoggerFactory.getLogger(DaoHibernateTest.class);
 
     private EmailEntryDao emailEntryDao;
+    private TransactionLogDao transactionLogDao;
     
-    private TransactionLogSpringDao transactionLogDao;
+    //TODO
     private MemberSpringDao memberDao;
 
     private FileSystemXmlApplicationContext context;
@@ -38,6 +38,7 @@ public class DaoHibernateTest {
         context = new FileSystemXmlApplicationContext(configLocations.toArray(new String[configLocations.size()]));
         
         emailEntryDao = context.getBean("EmailEntryHbmDao", EmailEntryDao.class);
+        transactionLogDao = context.getBean("TransactionLogHbmDao", TransactionLogDao.class);
     }
 
     @Test
@@ -60,6 +61,26 @@ public class DaoHibernateTest {
         }
         List<EmailEntryData> check = emailEntryDao.fetch();
         assertTrue(check.isEmpty());
+    }
+    
+    @Test
+    public void testTransactionLogDao() {
+        transactionLogDao.fetch();
+        
+        transactionLogDao.create("test user", "testType", "test/page/item/id");
+        
+        List<? extends LogData> list = transactionLogDao.fetch();
+        assertTrue(list.size() >= 1);
+        for (LogData logData : list) {
+            log.debug(logData.toString());
+            transactionLogDao.find(logData.getId());
+            transactionLogDao.delete(logData);
+        }
+        
+        List<? extends LogData> check = transactionLogDao.fetch();
+        assertTrue(check.isEmpty());
+        
+        
     }
 
     public void listTimeZones() {

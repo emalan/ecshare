@@ -16,7 +16,7 @@ import com.madalla.db.dao.TransactionLogDao;
 
 @Component
 @Qualifier("Spring")
-public class TransactionLogSpringDao extends AbstractSpringDao implements TransactionLogDao{
+public class TransactionLogSpringDao extends AbstractSpringDao implements TransactionLogDao {
 
 	private static final String INSERT = "insert into TRANSACTION_LOG (SITE_NAME,LOG_DATE,USER_ID,TYPE,OBJECT_ID) values (?, ?, ?, ?, ?)";
 	private static final String FIND = "select ID,SITE_NAME,LOG_DATE,USER_ID,TYPE,OBJECT_ID from TRANSACTION_LOG where ID = ?";

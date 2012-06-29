@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 import org.springframework.stereotype.Component;
 
+import com.madalla.db.dao.EmailEntry;
 import com.madalla.db.dao.EmailEntryDao;
 
 @Component()

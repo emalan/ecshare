@@ -5,7 +5,7 @@
 
 <hibernate-mapping package="com.madalla.db.dao">
 
-    <class name="EmailEntry" table="EMAIL_ENTRY">
+    <class name="TransactionLog" table="LOG_ENTRY">
         <id name="key" column="ID">
             <generator class="org.hibernate.id.TableHiLoGenerator">
                 <param name="table">uid_table</param>
@@ -14,8 +14,8 @@
         </id>
         <property name="site"/>
         <property type="org.joda.time.DateTime" name="dateTime"/>
-        <property name="senderName"/>
-        <property name="senderEmailAddress"/>
-        <property name="senderComment" length="256"/>
+        <property name="user" column="userName"/>
+        <property name="type"/>
+        <property name="cmsId"/>
     </class>
 </hibernate-mapping>

@@ -1,0 +1,33 @@
+<html xmlns:wicket>
+<wicket:head>
+    <style type="text/css">
+        div#emailDiv { clear : both;}
+    </style>
+</wicket:head>
+<body>
+    <wicket:panel>
+            <h2><wicket:message key="heading.email">Label Contents</wicket:message></h2>
+            
+            <div id="emailDiv">
+                <span wicket:id="emailNavigator">[dataview navigator]</span>
+                <table cellspacing="0" class="dataview" wicket:id="emailContainer">
+                    <tr>
+                        <th wicket:id="orderByDateTime"><wicket:message key="label.date">Label Contents</wicket:message></th>
+                        <th><wicket:message key="label.time">Label Contents</wicket:message></th>
+                        <th wicket:id="orderByName"><wicket:message key="label.name">Label Contents</wicket:message></th>
+                        <th><wicket:message key="label.email">Label Contents</wicket:message></th>
+                        <th><wicket:message key="label.comment">Label Contents</wicket:message></th>
+                    </tr>
+                    <tr wicket:id="emailSorting">
+                        <td><span wicket:id="date">[Label]</span></td>
+                        <td><span wicket:id="time">[Label]</span></td>
+                        <td><span wicket:id="name">[Label]</span></td>
+                        <td><span wicket:id="email">[Label]</span></td>
+                        <td><span wicket:id="comment">[Label]</span></td>
+                    </tr>
+                </table>
+            </div>
+    </wicket:panel>
+</body>
+</html>
+            

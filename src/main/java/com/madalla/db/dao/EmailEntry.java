@@ -1,4 +1,4 @@
-package com.madalla.db.dao.hbm;
+package com.madalla.db.dao;
 
 import org.apache.commons.lang.StringUtils;
 import org.emalan.cms.bo.email.EmailEntryData;
