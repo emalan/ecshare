@@ -199,7 +199,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 		this.emailSender = emailSender;
 	}
 	@Autowired
-	@Qualifier("Spring")
+	@Qualifier("Hibernate")
 	public void setEmailEntryDao(EmailEntryDao emailEntryDao) {
 		this.emailEntryDao = emailEntryDao;
 	}

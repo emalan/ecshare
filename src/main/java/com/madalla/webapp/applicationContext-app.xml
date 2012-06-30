@@ -48,7 +48,7 @@
 		scope="singleton">
 	</bean>
 
-	<bean id="transactionService" class="com.madalla.db.dao.springjdbc.TransactionLogSpringDao" />
+	<bean id="transactionService" class="com.madalla.db.dao.hbm.TransactionLogHbmDao" />
 
 	<bean id="memberService" class="com.madalla.member.MemberService"
 		scope="singleton">
