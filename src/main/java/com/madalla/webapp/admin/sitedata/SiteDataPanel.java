@@ -22,7 +22,7 @@ public class SiteDataPanel extends CmsPanel {
 
     private final DateTimeZone dateTimeZone;
 
-    private class SortableEmailEntryProvider extends SortableDataProvider<EmailEntryData> {
+    private class SortableEmailEntryProvider extends SortableDataProvider<EmailEntryData, String> {
 
         private static final long serialVersionUID = 1L;
         
@@ -81,7 +81,7 @@ public class SiteDataPanel extends CmsPanel {
 
     }
 
-    private class SortableLogProvider extends SortableDataProvider<LogData> {
+    private class SortableLogProvider extends SortableDataProvider<LogData, String> {
 
         private static final long serialVersionUID = 1L;
 

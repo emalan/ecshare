@@ -61,7 +61,9 @@ public class SlideshowPanel extends CmsPanel implements IHeaderContributor {
 
         //link to album configure page
         Component adminPageLink;
-        add(adminPageLink = new AdminPageLink("adminLink", AlbumAdminPage.class, new PageParameters("0="+albumName)));
+        PageParameters params = new PageParameters();
+        params.set(0, albumName);
+        add(adminPageLink = new AdminPageLink("adminLink", AlbumAdminPage.class, params));
         MetaDataRoleAuthorizationStrategy.authorize(adminPageLink, ENABLE, "ADMIN");
 
         final AlbumData album = getRepositoryService().getAlbum(albumName);

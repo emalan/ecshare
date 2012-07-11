@@ -21,7 +21,7 @@ public class EmailDataPanel extends Panel{
 
     private static final long serialVersionUID = 1L;
 
-    public EmailDataPanel(final String id, final DateTimeZone dateTimeZone, final SortableDataProvider<EmailEntryData> dataProvider) {
+    public EmailDataPanel(final String id, final DateTimeZone dateTimeZone, final SortableDataProvider<EmailEntryData, String> dataProvider) {
         super(id);
         
         final MarkupContainer emailContainer;

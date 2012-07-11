@@ -21,7 +21,7 @@ public class LogDataPanel extends Panel{
 
     private static final long serialVersionUID = 1L;
 
-    public LogDataPanel(final String id, final DateTimeZone dateTimeZone, final SortableDataProvider<LogData> dataProvider) {
+    public LogDataPanel(final String id, final DateTimeZone dateTimeZone, final SortableDataProvider<LogData, String> dataProvider) {
         super(id);
         
         final MarkupContainer logContainer;

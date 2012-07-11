@@ -20,6 +20,7 @@ import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -63,14 +64,13 @@ public class MemberAdminPanel extends AbstractMemberPanel {
 	private static final Logger log = LoggerFactory.getLogger(MemberAdminPanel.class);
 	private static final int ITEMS_PAGE = 10;
 
-	private class SortableMemberProvider extends SortableDataProvider<MemberData>{
+	private class SortableMemberProvider extends SortableDataProvider<MemberData, String>{
 
 		private static final long serialVersionUID = 1L;
 
 		public SortableMemberProvider() {
 			
-			//TODO fix sort
-			//setSort("id", true);
+		    setSort("id", SortOrder.ASCENDING);
 		}
 
 		public Iterator<? extends MemberData> iterator(long first, long count) {
