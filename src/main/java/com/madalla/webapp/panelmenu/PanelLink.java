@@ -122,7 +122,7 @@ public class PanelLink extends Link<Object> {
 				Constructor<? extends Panel> constructor = panelClass.getConstructor(String.class);
 				panel = constructor.newInstance(new Object[]{panelId});
 			}
-			getPage().replace(panel);
+			getPage().addOrReplace(panel);
 		} catch (InvocationTargetException e){
 			log.error("Invocation Exception while creating admin panel. If this was caused by Authorized Exception, then take a look at why link was enabled???", e);
 			throw new WicketRuntimeException("Error while Creating new Admin Panel.", e);
