@@ -11,6 +11,7 @@ public class AdminErrorPage extends AbstractAdminPage {
 	 */
 	public AdminErrorPage() {
 		add(homePageLink("homePageLink"));
+		add(new AdminPageLink("profilePageLink", MainAdminPage.class));
 	}
 
 
