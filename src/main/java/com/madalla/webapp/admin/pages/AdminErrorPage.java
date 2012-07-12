@@ -14,6 +14,7 @@ public class AdminErrorPage extends AbstractAdminPage {
 		add(new AdminPageLink("profilePageLink", MainAdminPage.class));
 	}
 
+	
 
 	/**
 	 * @see org.apache.wicket.Component#isVersioned()
