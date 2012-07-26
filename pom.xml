@@ -395,7 +395,7 @@
 	</distributionManagement>
 
 	<properties>
-		<wicket.version>6.0.0-beta2</wicket.version>
+		<wicket.version>6.0.0-beta3</wicket.version>
 		<jackrabbit.version>1.5.5</jackrabbit.version>
 		<spring.version>3.1.1.RELEASE</spring.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
