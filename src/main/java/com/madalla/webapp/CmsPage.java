@@ -219,7 +219,7 @@ public abstract class CmsPage extends WebPage {
         Panel infoPanel = new InfoPanel("content");
         
         infoPanel.add(getContentPanel("text", APPNODE));
-        modal.setContent(new InfoPanel("content"));
+        modal.setContent(infoPanel);
 
         add(new AjaxLink<Void>("infoDialogLink") {
             private static final long serialVersionUID = 1L;

@@ -138,10 +138,10 @@ public abstract class FileUploadLink extends Panel {
                 String indicatorId = getIndicator();
                 if (isFileUploading()) {
                     log.trace("onPostProcessTarget - file uploading");
-                    target.appendJavaScript("wicketShow('" + indicatorId + "');");
+                    target.appendJavaScript("$('" + indicatorId + "').show();");
                 } else {
                     log.trace("onPostProcessTarget - file not uploading");
-                    target.appendJavaScript("wicketHide('" + indicatorId + "');");
+                    target.appendJavaScript("$('" + indicatorId + "').hide();");
                 }
 
             }

@@ -22,6 +22,7 @@ public class EcModalWindow extends ModalWindow implements IHeaderContributor{
 	}
 
 	public void renderHead(IHeaderResponse response) {
+	    super.renderHead(response);
 	    response.render(OnDomReadyHeaderItem.forScript("Wicket.Window.unloadConfirmation = false;"));
 		response.render(CssHeaderItem.forReference(CSS));
 	}

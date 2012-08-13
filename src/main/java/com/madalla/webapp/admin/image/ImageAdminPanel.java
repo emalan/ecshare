@@ -199,9 +199,9 @@ public class ImageAdminPanel extends CmsPanel{
 				@Override
 				protected void onPostProcessTarget(AjaxRequestTarget target) {
 					if (getStatus(text)){
-						target.appendJavaScript("wicketShow('" + indicatorAppender.getMarkupId() +"');");
+						target.appendJavaScript("$('" + indicatorAppender.getMarkupId() +"').show();");
 					} else {
-						target.appendJavaScript("wicketHide('" + indicatorAppender.getMarkupId() +"');");
+						target.appendJavaScript("$('" + indicatorAppender.getMarkupId() +"').hide();");
 					}
 
 				}
