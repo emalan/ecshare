@@ -39,7 +39,7 @@
 			<version>3.1-SNAPSHOT</version>
 		</dependency>
 
-		<!-- WICKET DEPENDENCIES -->
+		<!-- Wicket dependencies -->
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-core</artifactId>
@@ -99,7 +99,7 @@
 			<version>3.1.0.RELEASE</version>
 		</dependency>
 
-		<!-- JACKRABBIT -->
+		<!-- Jackrabbit -->
 		<dependency>
 			<groupId>org.apache.jackrabbit</groupId>
 			<artifactId>jackrabbit-core</artifactId>
@@ -116,11 +116,11 @@
 			<version>1.0</version>
 		</dependency>
 
-		<!-- LOGGING DEPENDENCIES - LOG4J -->
+		<!-- Logging API  -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.6.3</version>
+			<version>1.6.4</version>
 		</dependency>
 
 		<!-- COMMON -->
