@@ -33,7 +33,7 @@ public class PanelLink extends Link<Object> {
 	final private IModel<String> key;
 	final private IModel<String> titleKey;
 	final private Class<? extends Panel> panelClass;
-	final private Object constructorArg;
+	final private IModel<?> model;
 
 	public PanelLink(final String id, final String panelId, Class<? extends Panel> panelClass, 
 			final IModel<String> key, IModel<String> titleKey){
@@ -50,13 +50,13 @@ public class PanelLink extends Link<Object> {
 	}
 
     public PanelLink(final String id, final String panelId, final Class<? extends Panel> panelClass, 
-    		final IModel<String> key, final IModel<String> titleKey, final Object constructorArg) {
+    		final IModel<String> key, final IModel<String> titleKey, final IModel<?> model) {
     	super(id);
 		this.panelId = panelId;
 		this.key = key;
 		this.titleKey = titleKey;
 		this.panelClass = panelClass;
-		this.constructorArg = constructorArg;
+		this.model = model;
 		setAuthorization();
 	}
 
@@ -78,9 +78,9 @@ public class PanelLink extends Link<Object> {
 		Component currentPanel = getPage().get(panelId);
 		if (currentPanel != null){
 			if (currentPanel.getClass().equals(panelClass) ){
-				if (constructorArg != null && currentPanel instanceof PanelMenuContructed) {
+				if (model != null && currentPanel instanceof PanelMenuContructed) {
 					PanelMenuContructed menuConstructed = (PanelMenuContructed) currentPanel;
-					if (constructorArg.equals(menuConstructed.getConstructorArg())) {
+					if (model.equals(menuConstructed.getConstructorArg())) {
 						return false;
 					}
 					return true;
@@ -114,10 +114,11 @@ public class PanelLink extends Link<Object> {
 	public void onClick() {
 		try {
 			final Panel panel;
-			if (constructorArg != null){
-				Constructor<? extends Panel> constructor = panelClass.getConstructor(String.class, 
-						constructorArg.getClass());
-				panel = constructor.newInstance(new Object[]{panelId, constructorArg});
+			if (model != null){
+//				Constructor<? extends Panel> constructor = panelClass.getConstructor(String.class, 
+//						model.getClass());
+				Constructor<?> constructor = panelClass.getConstructors()[0];
+				panel = (Panel) constructor.newInstance(new Object[]{panelId, model});
 			} else {
 				Constructor<? extends Panel> constructor = panelClass.getConstructor(String.class);
 				panel = constructor.newInstance(new Object[]{panelId});

@@ -1,0 +1,5 @@
+Site : Create site and read it. 'mvn site'
+
+
+TODO : Use Models for all data - instantiate them in the page and pass to panels. 
+

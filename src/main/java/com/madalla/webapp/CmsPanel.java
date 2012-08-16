@@ -11,6 +11,10 @@ import com.madalla.BuildInformation;
 import com.madalla.service.ApplicationService;
 import com.madalla.service.IApplicationServiceProvider;
 
+/**
+ * @author Eugene Malan
+ *
+ */
 public abstract class CmsPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;

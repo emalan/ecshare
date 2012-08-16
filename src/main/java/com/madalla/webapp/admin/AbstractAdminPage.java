@@ -11,10 +11,12 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.emalan.cms.ISessionDataService;
 
 import com.madalla.service.ApplicationService;
 import com.madalla.webapp.CmsApplication;
@@ -30,6 +32,7 @@ import com.madalla.webapp.css.Css;
 import com.madalla.webapp.panelmenu.PanelListView;
 import com.madalla.webapp.panelmenu.PanelMenuItem;
 import com.madalla.webapp.user.UserAdminPanel;
+import com.madalla.webapp.user.UserAdminPanelData;
 import com.madalla.webapp.user.UserProfilePanel;
 
 public abstract class AbstractAdminPage extends WebPage {
@@ -63,7 +66,7 @@ public abstract class AbstractAdminPage extends WebPage {
     }
 
     protected void setupMenu() {
-        List<PanelMenuItem> menuItems = getAdminMenu();
+        List<PanelMenuItem<?>> menuItems = getAdminMenu();
 
         final Component menu;
         add(menu = new PanelListView("menuList", ID, "menuLink", menuItems));
@@ -84,27 +87,47 @@ public abstract class AbstractAdminPage extends WebPage {
      * 
      * @return
      */
-    public List<PanelMenuItem> getAdminMenu() {
-        List<PanelMenuItem> menuList = new ArrayList<PanelMenuItem>();
-        menuList.add(new PanelMenuItem(UserProfilePanel.class, new StringResourceModel("label.profile", this, null),
+    public List<PanelMenuItem<?>> getAdminMenu() {
+        List<PanelMenuItem<?>> menuList = new ArrayList<PanelMenuItem<?>>();
+        menuList.add(new PanelMenuItem<Void>(UserProfilePanel.class, new StringResourceModel("label.profile", this, null),
                 new StringResourceModel("info.profile", this, null)));
-        menuList.add(new PanelMenuItem(UserAdminPanel.class, new StringResourceModel("label.user", this, null),
+        menuList.add(new PanelMenuItem<UserAdminPanelData>(UserAdminPanel.class, 
+                new Model<UserAdminPanelData>(new UserAdminPanelData() {
+
+                    private static final long serialVersionUID = 1L;
+
+                    public ApplicationService getApplicationService() {
+                        return AbstractAdminPage.this.getApplicationService();
+                    }
+
+                    public ISessionDataService getSessionService() {
+                        return AbstractAdminPage.this.getSessionService();
+                    }
+                } ), 
+                new StringResourceModel("label.user", this, null), 
                 new StringResourceModel("info.user", this, null)));
-        menuList.add(new PanelMenuItem(SiteAdminPanel.class, new StringResourceModel("label.site", this, null),
+        menuList.add(new PanelMenuItem<Void>(SiteAdminPanel.class, 
+                new StringResourceModel("label.site", this, null),
                 new StringResourceModel("info.site", this, null)));
-        menuList.add(new PanelMenuItem(PageAdminPanel.class, new StringResourceModel("label.page", this, null),
+        menuList.add(new PanelMenuItem<Void>(PageAdminPanel.class, 
+                new StringResourceModel("label.page", this, null),
                 new StringResourceModel("info.page", this, null)));
-        menuList.add(new PanelMenuItem(SiteEmailPanel.class, new StringResourceModel("label.email", this, null),
+        menuList.add(new PanelMenuItem<Void>(SiteEmailPanel.class, 
+                new StringResourceModel("label.email", this, null),
                 new StringResourceModel("info.email", this, null)));
-        menuList.add(new PanelMenuItem(SiteDataPanel.class, new StringResourceModel("label.siteData", this, null),
+        menuList.add(new PanelMenuItem<Void>(SiteDataPanel.class, 
+                new StringResourceModel("label.siteData", this, null),
                 new StringResourceModel("info.siteData", this, null)));
         if (getCmsApplication().hasMemberService()) {
-            menuList.add(new PanelMenuItem(MemberAdminPanel.class, new StringResourceModel("label.member", this, null),
+            menuList.add(new PanelMenuItem<Void>(MemberAdminPanel.class, 
+                    new StringResourceModel("label.member", this, null),
                     new StringResourceModel("info.member", this, null)));
         }
-        menuList.add(new PanelMenuItem(ImageAdminPanel.class, new StringResourceModel("label.image", this, null),
+        menuList.add(new PanelMenuItem<Void>(ImageAdminPanel.class, 
+                new StringResourceModel("label.image", this, null),
                 new StringResourceModel("info.image", this, null)));
-        menuList.add(new PanelMenuItem(ContentAdminPanel.class, new StringResourceModel("label.content", this, null),
+        menuList.add(new PanelMenuItem<Void>(ContentAdminPanel.class, 
+                new StringResourceModel("label.content", this, null),
                 new StringResourceModel("info.content", this, null)));
 
         return Collections.unmodifiableList(menuList);
@@ -118,6 +141,10 @@ public abstract class AbstractAdminPage extends WebPage {
                 "AdminPage.css")));
         response.render(CssHeaderItem.forReference(Css.CSS_BUTTONS));
         response.render(CssHeaderItem.forReference(Css.CSS_FORM));
+    }
+    
+    private ISessionDataService getSessionService() {
+        return getAppSession().getRepositoryService();
     }
 
     public CmsSession getAppSession() {

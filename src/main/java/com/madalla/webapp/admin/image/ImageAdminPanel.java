@@ -141,7 +141,9 @@ public class ImageAdminPanel extends CmsPanel{
 
 	private class ImageUploadProcess implements IFileUploadProcess {
 
-		final private IDataService service;
+		private static final long serialVersionUID = 1L;
+		
+        final private IDataService service;
 
 		public ImageUploadProcess(IDataService service){
 			this.service = service;

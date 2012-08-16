@@ -12,13 +12,13 @@ import org.apache.wicket.model.IModel;
  * @author Eugene Malan
  *
  */
-public class PanelMenuItem implements Serializable{
+public class PanelMenuItem<T> implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	public final IModel<String> key;
 	public final IModel<String> titleKey;
 	public final Class<? extends Panel> c;
-	public final Object constructorArg;
+	public final IModel<T> model;
 
 	/**
 	 * @param c - Panel that menu should link to, will replace existing panel
@@ -29,12 +29,12 @@ public class PanelMenuItem implements Serializable{
 		this(c,null, key, titleKey);
 	}
 
-	private PanelMenuItem(final Class<? extends Panel> c, final Object constructorArg, final IModel<String> key,
+	public PanelMenuItem(final Class<? extends Panel> c, final IModel<T> model, final IModel<String> key,
 			final IModel<String> titleKey) {
 		this.key = key;
 		this.titleKey = titleKey;
 		this.c = c;
-		this.constructorArg = constructorArg;
+		this.model = model;
 	}
 	
 }
